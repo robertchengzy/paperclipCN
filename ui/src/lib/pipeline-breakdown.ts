@@ -1,4 +1,5 @@
 import type { PipelineStage } from "../api/pipelines";
+import { t } from "@/i18n";
 
 /**
  * UI-side reader + copy helpers for the "Break into pieces" stage primitive.
@@ -125,8 +126,10 @@ export function joinWithAnd(items: string[]): string {
   const list = items.filter((item) => item.trim().length > 0);
   if (list.length === 0) return "";
   if (list.length === 1) return list[0]!;
-  if (list.length === 2) return `${list[0]} and ${list[1]}`;
-  return `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}`;
+  return t("app.pipelines.pipelineBreakdown.joinWithAnd", {
+    list: list.slice(0, -1).join(t("app.pipelines.pipelineBreakdown.listSeparator")),
+    last: list[list.length - 1],
+  });
 }
 
 export interface BreakdownCopyNames {
@@ -137,6 +140,18 @@ export interface BreakdownCopyNames {
   /** Human labels for the inherited fields, in config order. */
   inheritedFieldLabels: string[];
 }
+
+/** One full sentence per combination of optional clauses (carry over / move / wait). */
+const BREAKDOWN_SUMMARY_KEYS: Record<string, string> = {
+  "": "app.pipelines.pipelineBreakdown.summary",
+  c: "app.pipelines.pipelineBreakdown.summaryCarry",
+  m: "app.pipelines.pipelineBreakdown.summaryMove",
+  w: "app.pipelines.pipelineBreakdown.summaryWait",
+  cm: "app.pipelines.pipelineBreakdown.summaryCarryMove",
+  cw: "app.pipelines.pipelineBreakdown.summaryCarryWait",
+  mw: "app.pipelines.pipelineBreakdown.summaryMoveWait",
+  cmw: "app.pipelines.pipelineBreakdown.summaryCarryMoveWait",
+};
 
 /**
  * The single generated sentence shown in the settings card footer band.
@@ -149,21 +164,18 @@ export function breakdownSummarySentence(
   if (!config.targetPipelineId || !config.targetStageKey || !names.targetPipelineName) {
     return null;
   }
-  const noun = config.pieceNoun;
-  const parts: string[] = [
-    `Paperclip will create one ${noun} per item in ${names.targetPipelineName} → ${names.entryStageName}`,
-  ];
-  if (names.inheritedFieldLabels.length > 0) {
-    parts.push(`carry over ${joinWithAnd(names.inheritedFieldLabels)}`);
-  }
-  if (names.advanceToName) {
-    parts.push(`move this case to ${names.advanceToName}`);
-  }
-  let sentence = parts.join(", ");
-  if (config.waitForPieces && names.whenFinishedName) {
-    sentence += `, then wait until every ${noun} is finished before moving it to ${names.whenFinishedName}`;
-  }
-  return `${sentence}.`;
+  const carry = names.inheritedFieldLabels.length > 0;
+  const move = Boolean(names.advanceToName);
+  const wait = config.waitForPieces && Boolean(names.whenFinishedName);
+  const variant = `${carry ? "c" : ""}${move ? "m" : ""}${wait ? "w" : ""}`;
+  return t(BREAKDOWN_SUMMARY_KEYS[variant]!, {
+    noun: config.pieceNoun,
+    pipeline: names.targetPipelineName,
+    stage: names.entryStageName,
+    fields: joinWithAnd(names.inheritedFieldLabels),
+    advanceTo: names.advanceToName ?? "",
+    whenFinished: names.whenFinishedName ?? "",
+  });
 }
 
 /**
@@ -176,18 +188,22 @@ export function breakdownMechanicsBullets(
 ): string[] {
   const noun = config.pieceNoun;
   const bullets: string[] = [
-    `Creates one ${noun} per item the agent returns, in ${names.targetPipelineName || "the destination pipeline"} → ${names.entryStageName || "its entry step"}.`,
-    `Links every ${noun} to this case so progress rolls up here.`,
+    t("app.pipelines.pipelineBreakdown.bulletCreates", {
+      noun,
+      pipeline: names.targetPipelineName || t("app.pipelines.pipelineBreakdown.destinationPipelineFallback"),
+      stage: names.entryStageName || t("app.pipelines.pipelineBreakdown.entryStepFallback"),
+    }),
+    t("app.pipelines.pipelineBreakdown.bulletLinks", { noun }),
   ];
   if (names.inheritedFieldLabels.length > 0) {
-    bullets.push(`Carries over ${joinWithAnd(names.inheritedFieldLabels)} from this case onto each ${noun}.`);
+    bullets.push(t("app.pipelines.pipelineBreakdown.bulletCarries", { fields: joinWithAnd(names.inheritedFieldLabels), noun }));
   }
   if (names.advanceToName) {
-    bullets.push(`Moves this case to ${names.advanceToName} as soon as the pieces are created.`);
+    bullets.push(t("app.pipelines.pipelineBreakdown.bulletMoves", { stage: names.advanceToName }));
   }
   if (config.waitForPieces && names.whenFinishedName) {
-    bullets.push(`Waits until every ${noun} is finished, then moves this case to ${names.whenFinishedName}.`);
-    bullets.push(`If the agent returns an empty list, this case skips ahead to ${names.whenFinishedName}.`);
+    bullets.push(t("app.pipelines.pipelineBreakdown.bulletWaits", { noun, stage: names.whenFinishedName }));
+    bullets.push(t("app.pipelines.pipelineBreakdown.bulletEmptyList", { stage: names.whenFinishedName }));
   }
   return bullets;
 }

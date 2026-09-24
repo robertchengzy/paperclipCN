@@ -8,6 +8,7 @@ import type {
   PipelineStage,
 } from "../api/pipelines";
 import { assigneeValueFromSelection } from "./assignees";
+import { t } from "@/i18n";
 
 export const INTERNAL_FIELD_KEYS = new Set([
   "nextSuggestedStageId",
@@ -74,33 +75,34 @@ function humanizeKey(key: string) {
 }
 
 export function humanizePipelineItemStatus(status: string | null | undefined) {
-  if (!status) return "Open";
+  if (!status) return t("app.pipelines.pipelineItemDetail.statusOpen");
   const normalized = status.trim().toLowerCase();
-  if (!normalized) return "Open";
-  const labels: Record<string, string> = {
-    open: "Open",
-    working: "In progress",
-    done: "Done",
-    cancelled: "Removed",
-    in_review: "In review",
-    review: "In review",
-    in_progress: "In progress",
+  if (!normalized) return t("app.pipelines.pipelineItemDetail.statusOpen");
+  const labelKeys: Record<string, string> = {
+    open: "app.pipelines.pipelineItemDetail.statusOpen",
+    working: "app.common.states.inProgress",
+    done: "app.common.issueStatus.done",
+    cancelled: "app.pipelines.pipelineItemDetail.statusRemoved",
+    in_review: "app.common.states.inReview",
+    review: "app.common.states.inReview",
+    in_progress: "app.common.states.inProgress",
   };
-  return labels[normalized] ?? humanizeKey(normalized);
+  const labelKey = labelKeys[normalized];
+  return labelKey ? t(labelKey) : humanizeKey(normalized);
 }
 
 export function formatFieldValue(value: unknown): string {
   if (Array.isArray(value)) {
     const formatted = value.map(formatFieldValue).filter(Boolean);
-    return formatted.length ? formatted.join(", ") : "None";
+    return formatted.length ? formatted.join(", ") : t("app.common.none");
   }
-  if (value == null || value === "") return "None";
-  if (typeof value === "boolean") return value ? "Yes" : "No";
+  if (value == null || value === "") return t("app.common.none");
+  if (typeof value === "boolean") return value ? t("app.common.labels.yes") : t("app.common.labels.no");
   if (typeof value === "number") return String(value);
   if (typeof value === "string") return value;
   const record = readRecord(value);
   if (record) {
-    return readString(record.label) ?? readString(record.name) ?? readString(record.title) ?? "Added details";
+    return readString(record.label) ?? readString(record.name) ?? readString(record.title) ?? t("app.pipelines.pipelineItemDetail.addedDetails");
   }
   return String(value);
 }
@@ -121,7 +123,7 @@ const LONG_FIELD_CHARACTER_THRESHOLD = 180;
 
 export function isLongPipelineItemField(field: Pick<PipelineItemDisplayField, "value">) {
   const value = field.value.trim();
-  if (!value || value === "None") return false;
+  if (!value || value === t("app.common.none")) return false;
   return value.includes("\n") || value.length >= LONG_FIELD_CHARACTER_THRESHOLD;
 }
 
@@ -235,7 +237,7 @@ export function getPendingTransitionBannerState(item: Pick<PipelineCase, "pendin
     visible: true as const,
     suggestionId: suggestion?.id ?? null,
     toStageKey,
-    stageName: stageNameFromLookup(stages, toStageKey) ?? "the next stage",
+    stageName: stageNameFromLookup(stages, toStageKey) ?? t("app.pipelines.pipelineItemDetail.theNextStage"),
     rationale: suggestion?.rationale ?? null,
   };
 }
@@ -248,8 +250,8 @@ export function itemHasChangedNotice(item: Pick<PipelineCase, "fields"> & {
   if (item.changeAcknowledgedAt || fields.changeAcknowledgedAt) return null;
   if (item.thisChanged || fields.thisChanged || fields.upstreamChanged || fields.upstreamDrift) {
     return {
-      title: "This changed",
-      body: "Upstream work changed after this item was created. Review the latest details before continuing.",
+      title: t("app.pipelines.pipelineItemDetail.changedTitle"),
+      body: t("app.pipelines.pipelineItemDetail.changedBody"),
     };
   }
   return null;
@@ -272,8 +274,8 @@ export function eventsHaveUnacknowledgedDrift(events: PipelineCaseEvent[]) {
 export function changedNoticeFromEvents(events: PipelineCaseEvent[]) {
   if (!eventsHaveUnacknowledgedDrift(events)) return null;
   return {
-    title: "This changed",
-    body: "Upstream work changed after this item was created. Review the latest details before continuing.",
+    title: t("app.pipelines.pipelineItemDetail.changedTitle"),
+    body: t("app.pipelines.pipelineItemDetail.changedBody"),
   };
 }
 
@@ -290,7 +292,7 @@ function readDecision(payload: Record<string, unknown>) {
 
 function actorName(event: PipelineCaseEvent) {
   if (event.actorAgent?.name) return event.actorAgent.name;
-  if (event.actorType === "user") return "Board";
+  if (event.actorType === "user") return t("app.common.nouns.board");
   if (event.actorType === "system") return "Paperclip";
   return null;
 }
@@ -298,7 +300,7 @@ function actorName(event: PipelineCaseEvent) {
 function movementReason(payload: Record<string, unknown>) {
   const reason = readString(payload.reason);
   if (!reason) return null;
-  if (reason === "children_terminal") return "all child items done";
+  if (reason === "children_terminal") return t("app.pipelines.pipelineItemDetail.allChildItemsDone");
   return reason;
 }
 
@@ -323,67 +325,77 @@ function humanizeReason(reason: string) {
 export function formatPipelineItemEvent(event: PipelineCaseEvent, stages?: StageLookup) {
   const kind = event.type.startsWith("case.") ? event.type.slice("case.".length) : event.type;
   const payload = event.payload ?? {};
-  if (kind === "ingested") return "Item added.";
+  if (kind === "ingested") return t("app.pipelines.pipelineItemDetail.events.ingested");
   if (kind === "updated") {
-    if (payload.action === "stage_automation_rerun_requested") return "Stage automation re-run requested.";
-    return "Item details updated.";
+    if (payload.action === "stage_automation_rerun_requested") return t("app.pipelines.pipelineItemDetail.events.rerunRequested");
+    return t("app.pipelines.pipelineItemDetail.events.updated");
   }
   if (kind === "transitioned") {
     const from = stageName(event, stages, "from");
     const to = stageName(event, stages, "to");
-    const movement = from && to ? `Moved from ${from} to ${to}` : to ? `Moved to ${to}` : "Moved to another stage";
+    const movement = from && to
+      ? t("app.pipelines.pipelineItemDetail.events.movedFromTo", { from, to })
+      : to
+        ? t("app.pipelines.pipelineItemDetail.events.movedTo", { to })
+        : t("app.pipelines.pipelineItemDetail.events.movedElsewhere");
     const reason = movementReason(payload);
     const transitionClass = movementClass(event, payload);
     if (transitionClass === "automatic") {
-      return `${movement} — automatic${reason ? ` (${reason})` : ""}.`;
+      return reason
+        ? t("app.pipelines.pipelineItemDetail.events.movementAutomaticReason", { movement, reason })
+        : t("app.pipelines.pipelineItemDetail.events.movementAutomatic", { movement });
     }
     const actor = actorName(event);
-    if (reason && actor) return `${movement} — ${actor}: '${reason}'.`;
-    if (reason) return `${movement} — '${reason}'.`;
-    if (actor && event.actorType !== "system") return `${movement} — ${actor}.`;
-    return `${movement}.`;
+    if (reason && actor) return t("app.pipelines.pipelineItemDetail.events.movementActorReason", { movement, actor, reason });
+    if (reason) return t("app.pipelines.pipelineItemDetail.events.movementReason", { movement, reason });
+    if (actor && event.actorType !== "system") return t("app.pipelines.pipelineItemDetail.events.movementActor", { movement, actor });
+    return t("app.pipelines.pipelineItemDetail.events.movement", { movement });
   }
   if (kind === "suggested" || kind === "transition_suggested") {
     const suggestion = readRecord(payload.suggestion);
     const toStageKey = readString(suggestion?.toStageKey) ?? readString(payload.toStageKey);
-    const to = stageNameFromLookup(stages, toStageKey) ?? "the next stage";
-    return `Suggested moving to ${to}.`;
+    const to = stageNameFromLookup(stages, toStageKey) ?? t("app.pipelines.pipelineItemDetail.theNextStage");
+    return t("app.pipelines.pipelineItemDetail.events.suggested", { to });
   }
   if (kind === "suggestion_resolved") {
     const decision = readDecision(payload);
-    if (decision === "accept") return "Suggestion approved.";
-    if (decision === "dismiss") return "Suggestion dismissed.";
-    return "Suggestion resolved.";
+    if (decision === "accept") return t("app.pipelines.pipelineItemDetail.events.suggestionApproved");
+    if (decision === "dismiss") return t("app.pipelines.pipelineItemDetail.events.suggestionDismissed");
+    return t("app.pipelines.pipelineItemDetail.events.suggestionResolved");
   }
   if (kind === "reviewed" || kind === "review_decided") {
     const decision = readDecision(payload);
-    if (decision === "request_changes") return "Review requested changes.";
-    if (decision === "drop" || decision === "reject") return "Review removed this item.";
-    if (decision === "approve") return "Review approved this item.";
-    return "Review completed.";
+    if (decision === "request_changes") return t("app.pipelines.pipelineItemDetail.events.reviewRequestedChanges");
+    if (decision === "drop" || decision === "reject") return t("app.pipelines.pipelineItemDetail.events.reviewRemoved");
+    if (decision === "approve") return t("app.pipelines.pipelineItemDetail.events.reviewApproved");
+    return t("app.pipelines.pipelineItemDetail.events.reviewCompleted");
   }
-  if (kind === "conversation_opened") return "Conversation started.";
-  if (kind === "issue_linked") return "Linked to work.";
-  if (kind === "issue_unlinked") return "Work link removed.";
-  if (kind === "blockers_set") return "Waiting items updated.";
-  if (kind === "blockers_resolved") return "Waiting items cleared.";
-  if (kind === "children_terminal") return "Built-from items completed.";
+  if (kind === "conversation_opened") return t("app.pipelines.pipelineItemDetail.events.conversationOpened");
+  if (kind === "issue_linked") return t("app.pipelines.pipelineItemDetail.events.issueLinked");
+  if (kind === "issue_unlinked") return t("app.pipelines.pipelineItemDetail.events.issueUnlinked");
+  if (kind === "blockers_set") return t("app.pipelines.pipelineItemDetail.events.blockersSet");
+  if (kind === "blockers_resolved") return t("app.pipelines.pipelineItemDetail.events.blockersResolved");
+  if (kind === "children_terminal") return t("app.pipelines.pipelineItemDetail.events.childrenTerminal");
   if (kind === "upstream_drift") {
     const upstreamCaseKey = readString(payload.upstreamCaseKey);
-    if (upstreamCaseKey) return `Upstream change detected from ${upstreamCaseKey}.`;
-    return "Upstream change detected.";
+    if (upstreamCaseKey) return t("app.pipelines.pipelineItemDetail.events.upstreamDriftFrom", { key: upstreamCaseKey });
+    return t("app.pipelines.pipelineItemDetail.events.upstreamDrift");
   }
-  if (kind === "drift_acknowledged") return "Upstream change acknowledged.";
+  if (kind === "drift_acknowledged") return t("app.pipelines.pipelineItemDetail.events.driftAcknowledged");
   if (kind === "automation_executed") {
-    const routineName = event.automation?.routine?.title ?? "the automation";
+    const routineName = event.automation?.routine?.title ?? t("app.pipelines.pipelineItemDetail.theAutomation");
     const issueLabel = automationIssueLabel(event);
-    return `Automation completed — ran ${routineName}${issueLabel ? ` -> ${issueLabel}` : ""}.`;
+    return issueLabel
+      ? t("app.pipelines.pipelineItemDetail.events.automationExecutedIssue", { routine: routineName, issue: issueLabel })
+      : t("app.pipelines.pipelineItemDetail.events.automationExecuted", { routine: routineName });
   }
   if (kind === "automation_failed") {
     const reason = readString(payload.error);
-    return `Automation needs attention${reason ? ` — ${humanizeReason(reason)}` : ""}.`;
+    return reason
+      ? t("app.pipelines.pipelineItemDetail.events.automationFailedReason", { reason: humanizeReason(reason) })
+      : t("app.pipelines.pipelineItemDetail.events.automationFailed");
   }
-  if (kind === "claimed") return "Work started.";
-  if (kind === "lease_released" || kind === "lease_expired") return "Work handoff cleared.";
-  return "Activity recorded.";
+  if (kind === "claimed") return t("app.pipelines.pipelineItemDetail.events.claimed");
+  if (kind === "lease_released" || kind === "lease_expired") return t("app.pipelines.pipelineItemDetail.events.leaseReleased");
+  return t("app.pipelines.pipelineItemDetail.events.activity");
 }

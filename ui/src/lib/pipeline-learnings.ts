@@ -1,5 +1,6 @@
 import type { PipelineCompanyCaseEvent } from "../api/pipelines";
 import { formatShortDate } from "./utils";
+import { t } from "@/i18n";
 
 export type LearningEventPresentation = {
   sentence: string;
@@ -23,7 +24,7 @@ function eventItemTitle(event: PipelineCompanyCaseEvent): string {
     asString(payload.itemTitle) ??
     asString(payload.caseTitle) ??
     asString(payload.title) ??
-    "Untitled item"
+    t("app.pipelines.pipelineLearnings.untitledItem")
   );
 }
 
@@ -34,7 +35,7 @@ function eventActorName(event: PipelineCompanyCaseEvent): string {
     asString(payload.actorName) ??
     asString(payload.reviewerName) ??
     asString(payload.decidedByName) ??
-    "Someone"
+    t("app.common.labels.someone")
   );
 }
 
@@ -47,11 +48,39 @@ function payloadText(event: PipelineCompanyCaseEvent, ...keys: string[]): string
   return null;
 }
 
-function reviewVerb(decision: string | null): string {
-  if (decision === "request_changes") return "sent back";
+function reviewVerbKey(decision: string | null): string {
+  if (decision === "request_changes") return "sentBack";
   if (decision === "reject" || decision === "drop") return "declined";
   return "approved";
 }
+
+/** Static keys for every review sentence shape (verb × optional stage × optional note). */
+const REVIEW_SENTENCE_KEYS: Record<string, string> = {
+  "approved:": "app.pipelines.pipelineLearnings.review.approved",
+  "approved:n": "app.pipelines.pipelineLearnings.review.approvedNote",
+  "approved:s": "app.pipelines.pipelineLearnings.review.approvedStage",
+  "approved:sn": "app.pipelines.pipelineLearnings.review.approvedStageNote",
+  "sentBack:": "app.pipelines.pipelineLearnings.review.sentBack",
+  "sentBack:n": "app.pipelines.pipelineLearnings.review.sentBackNote",
+  "sentBack:s": "app.pipelines.pipelineLearnings.review.sentBackStage",
+  "sentBack:sn": "app.pipelines.pipelineLearnings.review.sentBackStageNote",
+  "declined:": "app.pipelines.pipelineLearnings.review.declined",
+  "declined:n": "app.pipelines.pipelineLearnings.review.declinedNote",
+  "declined:s": "app.pipelines.pipelineLearnings.review.declinedStage",
+  "declined:sn": "app.pipelines.pipelineLearnings.review.declinedStageNote",
+};
+
+/** Static keys for every forced-move sentence shape (optional from × to × reason). */
+const FORCED_MOVE_SENTENCE_KEYS: Record<string, string> = {
+  "": "app.pipelines.pipelineLearnings.forced.moved",
+  "r": "app.pipelines.pipelineLearnings.forced.movedReason",
+  "t": "app.pipelines.pipelineLearnings.forced.movedTo",
+  "tr": "app.pipelines.pipelineLearnings.forced.movedToReason",
+  "f": "app.pipelines.pipelineLearnings.forced.movedFrom",
+  "fr": "app.pipelines.pipelineLearnings.forced.movedFromReason",
+  "ft": "app.pipelines.pipelineLearnings.forced.movedFromTo",
+  "ftr": "app.pipelines.pipelineLearnings.forced.movedFromToReason",
+};
 
 export function formatLearningEvent(event: PipelineCompanyCaseEvent): LearningEventPresentation {
   const payload = asRecord(event.payload);
@@ -62,12 +91,11 @@ export function formatLearningEvent(event: PipelineCompanyCaseEvent): LearningEv
     const decision = asString(payload.decision);
     const toStageName =
       asString(event.toStage?.name) ?? payloadText(event, "toStageName", "stageName", "targetStageName");
-    const stageCopy = toStageName ? ` moving to ${toStageName}` : "";
     const note = payloadText(event, "reason", "note");
-    const noteCopy = note ? ` - note: ${note}` : "";
+    const shape = `${reviewVerbKey(decision)}:${toStageName ? "s" : ""}${note ? "n" : ""}`;
     return {
       kind: "review",
-      sentence: `${actor} ${reviewVerb(decision)} '${title}'${stageCopy}${noteCopy}.`,
+      sentence: t(REVIEW_SENTENCE_KEYS[shape]!, { actor, title, stage: toStageName ?? "", note: note ?? "" }),
     };
   }
 
@@ -75,19 +103,22 @@ export function formatLearningEvent(event: PipelineCompanyCaseEvent): LearningEv
     const fromStageName = asString(event.fromStage?.name) ?? payloadText(event, "fromStageName");
     const toStageName =
       asString(event.toStage?.name) ?? payloadText(event, "toStageName", "stageName", "targetStageName");
-    const fromCopy = fromStageName ? ` from ${fromStageName}` : "";
-    const toCopy = toStageName ? ` to ${toStageName}` : "";
     const reason = payloadText(event, "reason", "note");
-    const reasonCopy = reason ? ` - reason: ${reason}` : "";
+    const shape = `${fromStageName ? "f" : ""}${toStageName ? "t" : ""}${reason ? "r" : ""}`;
     return {
       kind: "forced_move",
-      sentence: `'${title}' was moved by hand${fromCopy}${toCopy}${reasonCopy}.`,
+      sentence: t(FORCED_MOVE_SENTENCE_KEYS[shape]!, {
+        title,
+        from: fromStageName ?? "",
+        to: toStageName ?? "",
+        reason: reason ?? "",
+      }),
     };
   }
 
   return {
     kind: "unknown",
-    sentence: `'${title}' changed.`,
+    sentence: t("app.pipelines.pipelineLearnings.changed", { title }),
   };
 }
 
@@ -99,13 +130,13 @@ export function learningDayKey(value: string | Date) {
 
 export function learningDayLabel(value: string | Date) {
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Unknown";
+  if (Number.isNaN(date.getTime())) return t("app.common.labels.unknown");
   const today = new Date();
   const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
   const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
   const diffDays = Math.round((startOfToday - startOfDay) / 86_400_000);
-  if (diffDays === 0) return "Today";
-  if (diffDays === 1) return "Yesterday";
+  if (diffDays === 0) return t("app.common.labels.today");
+  if (diffDays === 1) return t("app.pipelines.pipelineLearnings.yesterday");
   return formatShortDate(date);
 }
 
