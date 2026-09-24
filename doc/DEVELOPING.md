@@ -46,6 +46,23 @@ and is skipped in the fork, so they are intentionally left unchanged. For the
 self-hosted source deployment and upgrade procedure, see
 [SELF-HOSTED-DEPLOYMENT.md](SELF-HOSTED-DEPLOYMENT.md).
 
+## Fork branch workflow
+
+`master` in `paperclipCN` is the deployable line: the self-hosted instance is built
+from full SHAs on it (see [SELF-HOSTED-DEPLOYMENT.md](SELF-HOSTED-DEPLOYMENT.md)).
+
+| Branch | Purpose |
+|---|---|
+| `master` | Verified, deployable commits only; keep history linear. Docs-only or tiny locally verified fixes may land directly. |
+| `feat/i18n-<batch>`, `feat/<topic>`, `fix/<issue>` | Day-to-day work. Before merging back (fast-forward or squash), run the UI typecheck, `pnpm locales:check`, `pnpm check:token-gates` and the related tests (the full UI suite for large batches). |
+| `sync/upstream-<date>` | Merge `upstream/master` here, resolve conflicts, and re-check the lockfile, the manual-only fork workflows, the localization and fork patches. |
+| `release/cn-<version>` | Marks the commit deployed to the instance; rollback targets it. |
+
+Keep fork-only patches (for example the Codex `http_headers` fix) as separate,
+well-described commits and drop them once upstream ships an equivalent fix.
+Do not rely on PR CI in the fork: the PR caller uses the upstream
+`pr-trusted.yml` and upstream runners; rely on local checks instead.
+
 ## Trusted PR Workflow
 
 The PR caller uses `paperclipai/paperclip/.github/workflows/pr-trusted.yml@master`.
