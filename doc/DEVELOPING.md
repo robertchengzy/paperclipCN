@@ -40,6 +40,11 @@ lockfile refresh, and paid runner evaluations require an explicit
 automatically on fork `master` pushes or on a schedule. Check these triggers
 when merging upstream workflow changes; refresh the lockfile manually when
 needed. These fork-only trigger changes do not affect upstream workflows.
+`cloud-migrator-artifacts` and `cloud-readiness` still trigger on `master`
+pushes, but every job is guarded by `github.repository == 'paperclipai/paperclip'`
+and is skipped in the fork, so they are intentionally left unchanged. For the
+self-hosted source deployment and upgrade procedure, see
+[SELF-HOSTED-DEPLOYMENT.md](SELF-HOSTED-DEPLOYMENT.md).
 
 ## Trusted PR Workflow
 

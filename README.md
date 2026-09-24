@@ -30,6 +30,9 @@
 
 Open-source orchestration for teams of AI agents.
 
+> **paperclipCN fork**：在上游基础上增加了简体中文 Web UI 和 Codex MCP `http_headers` 修复，并以源码方式运行在自托管实例上。
+> 部署与维护流程见 [`doc/SELF-HOSTED-DEPLOYMENT.md`](doc/SELF-HOSTED-DEPLOYMENT.md)，fork 的工作流策略见 [`doc/DEVELOPING.md`](doc/DEVELOPING.md#fork-workflow-policy)。
+
 **If OpenClaw is an _employee_, Paperclip is the _company_.**
 
 Paperclip is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track work and costs from one dashboard.
