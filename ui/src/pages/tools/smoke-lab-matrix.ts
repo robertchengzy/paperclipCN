@@ -5,6 +5,7 @@ import {
   type SmokeRunStepPath,
   type SmokeRunStepStatus,
 } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 /**
  * Pure matrix/health helpers for the Smoke Lab tab (PAP-13347 / S2, plan §D3).
@@ -18,15 +19,18 @@ import {
  * always shown verbatim in the run drill-down, so nothing is hidden.
  */
 
-export const SMOKE_PATH_LABELS: Record<SmokeRunStepPath, { title: string; detail: string }> = {
-  P1: { title: "Remote HTTP · OAuth", detail: "HTTP MCP fixture behind the fake OAuth provider" },
-  P2: { title: "Remote HTTP · API key", detail: "HTTP MCP fixture with a static bearer key" },
-  P3: { title: "Local stdio (template)", detail: "stdio fixture via the runtime supervisor" },
-  P4: { title: "Plugin integration", detail: "plugin-provided catalog entry + install flow" },
-  P5: { title: "Paste-a-config import", detail: "prosumer import via Advanced setup" },
-  P6: { title: "Token broker / gateway", detail: "run-scoped connection token, TTL + scope checks" },
-  P7: { title: "Governance surfaces", detail: "profiles, ask-first rules, quarantine" },
-};
+/** Display labels per path, resolved in the current UI language at call time. */
+export function getSmokePathLabels(): Record<SmokeRunStepPath, { title: string; detail: string }> {
+  return {
+    P1: { title: t("app.tools.smokeLabMatrix.paths.remoteOauth.title"), detail: t("app.tools.smokeLabMatrix.paths.remoteOauth.detail") },
+    P2: { title: t("app.tools.smokeLabMatrix.paths.remoteApiKey.title"), detail: t("app.tools.smokeLabMatrix.paths.remoteApiKey.detail") },
+    P3: { title: t("app.tools.smokeLabMatrix.paths.localStdio.title"), detail: t("app.tools.smokeLabMatrix.paths.localStdio.detail") },
+    P4: { title: t("app.tools.smokeLabMatrix.paths.plugin.title"), detail: t("app.tools.smokeLabMatrix.paths.plugin.detail") },
+    P5: { title: t("app.tools.smokeLabMatrix.paths.pasteConfig.title"), detail: t("app.tools.smokeLabMatrix.paths.pasteConfig.detail") },
+    P6: { title: t("app.tools.smokeLabMatrix.paths.tokenBroker.title"), detail: t("app.tools.smokeLabMatrix.paths.tokenBroker.detail") },
+    P7: { title: t("app.tools.smokeLabMatrix.paths.governance.title"), detail: t("app.tools.smokeLabMatrix.paths.governance.detail") },
+  };
+}
 
 export interface LifecycleStage {
   key: string;
@@ -35,16 +39,64 @@ export interface LifecycleStage {
   match: string[];
 }
 
-/** The PAP-12373 governed lifecycle, in order (plan §3). */
+/** The PAP-12373 governed lifecycle, in order (plan §3). `label` resolves in the current UI language. */
 export const LIFECYCLE_STAGES: LifecycleStage[] = [
-  { key: "connect", label: "Connect", match: ["connect", "oauth", "login", "auth"] },
-  { key: "discover", label: "Discover catalog", match: ["discover", "catalog", "list-tools"] },
-  { key: "read", label: "Allowed read", match: ["read", "allowed"] },
-  { key: "write", label: "Ask-first write", match: ["write", "approve", "ask-first", "askfirst", "review"] },
-  { key: "deny", label: "Denied call", match: ["deny", "denied", "block", "forbidden"] },
-  { key: "quarantine", label: "Schema-change quarantine", match: ["quarantine", "schema"] },
-  { key: "revoke", label: "Revoke", match: ["revoke"] },
-  { key: "audit", label: "Audit evidence", match: ["audit", "activity", "evidence"] },
+  {
+    key: "connect",
+    get label() {
+      return t("app.common.actions.connect");
+    },
+    match: ["connect", "oauth", "login", "auth"],
+  },
+  {
+    key: "discover",
+    get label() {
+      return t("app.tools.smokeLabMatrix.stages.discover");
+    },
+    match: ["discover", "catalog", "list-tools"],
+  },
+  {
+    key: "read",
+    get label() {
+      return t("app.tools.smokeLabMatrix.stages.read");
+    },
+    match: ["read", "allowed"],
+  },
+  {
+    key: "write",
+    get label() {
+      return t("app.tools.smokeLabMatrix.stages.write");
+    },
+    match: ["write", "approve", "ask-first", "askfirst", "review"],
+  },
+  {
+    key: "deny",
+    get label() {
+      return t("app.tools.smokeLabMatrix.stages.deny");
+    },
+    match: ["deny", "denied", "block", "forbidden"],
+  },
+  {
+    key: "quarantine",
+    get label() {
+      return t("app.tools.smokeLabMatrix.stages.quarantine");
+    },
+    match: ["quarantine", "schema"],
+  },
+  {
+    key: "revoke",
+    get label() {
+      return t("app.common.actions.revoke");
+    },
+    match: ["revoke"],
+  },
+  {
+    key: "audit",
+    get label() {
+      return t("app.tools.smokeLabMatrix.stages.audit");
+    },
+    match: ["audit", "activity", "evidence"],
+  },
 ];
 
 /** Fold a free-form scenario step onto a canonical lifecycle stage, or null. */

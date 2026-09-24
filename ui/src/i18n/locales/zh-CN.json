@@ -4010,6 +4010,796 @@
           "next": "下一页"
         }
       }
+    },
+    "tools": {
+      "advancedToolsRoute": {
+        "adminOnlyTitle": "高级设置仅供管理员使用",
+        "adminOnlyBody": "管理员可以在这里接入应用库中没有的工具。如需连接新应用，请联系管理员，或返回<anchor>你的应用</anchor>。"
+      },
+      "agentToolsTab": {
+        "github": {
+          "title": "GitHub 身份",
+          "checking": "正在检查 GitHub 身份…",
+          "loadFailed": "无法加载 GitHub 身份",
+          "loadFailedBody": "Paperclip 无法验证此智能体当前的连接。现有设置未被更改。",
+          "dedicatedAccount": "专用 GitHub 账号",
+          "dedicatedBody": "仅供 {{name}} 使用。此专用连接优先于负责人的 GitHub。",
+          "useResponsible": "使用负责人的 GitHub",
+          "useResponsibleBody": "运行开始时，Paperclip 会使用任务负责人的个人 GitHub 连接。",
+          "connectedAs": "你的账号已以 @{{login}} 连接。",
+          "connected": "你的账号已连接。",
+          "manageIdentity": "管理 GitHub 身份",
+          "manageMine": "管理我的 GitHub",
+          "connectMine": "连接我的 GitHub",
+          "useDedicated": "使用专用账号"
+        },
+        "installed": {
+          "title": "已安装的应用",
+          "description": "已安装的应用会在每次运行时将工具加载到 {{name}} 的上下文中。仅获许可的应用不会增加上下文开销。",
+          "banner": "“有访问权限”表示应用已获许可；“已安装”表示其工具会添加到此智能体的运行时上下文中。",
+          "empty": "还没有获许可的应用。绑定访问配置档后，应用会显示在这里。",
+          "installOn": "在 {{agent}} 上安装 {{app}}",
+          "forAllHint": "已在应用页面为所有智能体安装。请在该页面移除全部智能体安装。",
+          "loadedHint": "已加载到此智能体的运行时上下文中。",
+          "openPermissions": "打开权限设置",
+          "notInstalledWarning": "已获许可但未安装——工具不会出现在运行中。"
+        },
+        "saving": "保存中…",
+        "badges": {
+          "installedForAll": "已为全部安装",
+          "permittedOnly": "仅获许可",
+          "notPermitted": "未获许可"
+        },
+        "resolving": "正在解析有效访问权限…",
+        "effectiveAccess": "有效访问权限",
+        "effectiveAccessBody": "这正是 Paperclip 会为 <b>{{name}}</b> 接受的工具集。配置档和策略的修改会在约 5 秒内生效。智能体的提示词可以缩小此列表，但<b>无法扩展</b>——其他所有工具默认都会被阻止。",
+        "noAllowedTools": "此智能体没有任何允许的工具。请绑定工具配置档以授予访问权限。",
+        "columns": {
+          "capability": "能力",
+          "risk": "风险"
+        },
+        "why": {
+          "title": "为什么是这些工具？",
+          "checkAccess": "检查访问权限",
+          "noProfiles": "没有适用于此智能体的有效配置档，因此它没有允许的工具。",
+          "activePolicies": "生效的策略",
+          "loadingPolicies": "正在加载策略…",
+          "noPolicies": "目前没有已启用的策略会更改此智能体的允许列表。",
+          "policyTitle": "策略 #{{order}}：{{name}}",
+          "unavailableTools": "不可用的工具",
+          "checkingTools": "正在检查工具…",
+          "allAllowed": "此智能体可以调用的所有已知工具均已允许。",
+          "blockedIntro": "智能体可以调用但会被 Paperclip 阻止的工具：",
+          "more": "还有 {{count}} 个"
+        }
+      },
+      "auditTab": {
+        "outcomes": {
+          "allowed": "已允许",
+          "blocked": "已阻止",
+          "askedFirst": "已先询问",
+          "waiting": "等待中",
+          "failed": "失败",
+          "recorded": "已记录"
+        },
+        "filters": {
+          "allOutcomes": "全部结果",
+          "allTime": "全部时间",
+          "last1h": "最近 1 小时",
+          "last24h": "最近 24 小时",
+          "last7d": "最近 7 天",
+          "last30d": "最近 30 天",
+          "allApps": "全部应用",
+          "allAgents": "全部智能体"
+        },
+        "lifecycle": {
+          "thisApp": "此应用",
+          "connected": "{{who}} 连接了 {{app}}",
+          "paused": "{{who}} 暂停了 {{app}}",
+          "resumed": "{{who}} 恢复了 {{app}}",
+          "reconnected": "{{who}} 重新连接了 {{app}}",
+          "disconnected": "{{who}} 断开了 {{app}}",
+          "addedOne": "{{who}} 在 {{app}} 中添加了 1 个允许项",
+          "addedMany": "{{who}} 在 {{app}} 中添加了 {{count}} 个允许项",
+          "removedOne": "{{who}} 在 {{app}} 中移除了 1 个允许项",
+          "removedMany": "{{who}} 在 {{app}} 中移除了 {{count}} 个允许项",
+          "allowlistUpdated": "{{who}} 更新了 {{app}} 的允许列表",
+          "quarantinedOne": "{{app}} 中有 1 个新操作需要审核",
+          "quarantinedMany": "{{app}} 中有 {{count}} 个新操作需要审核",
+          "updated": "{{who}} 更新了 {{app}}"
+        },
+        "reasons": {
+          "lifecycle": "此连接变更已记录在应用的活动历史中。",
+          "notInstalled": "允许的连接未安装，因此其工具未添加到此次运行。",
+          "allowed": "已按你的规则允许。",
+          "rateLimited": "由于短时间内运行次数过多，已阻止。",
+          "secret": "为防止敏感值外泄，已阻止。",
+          "blocked": "已被规则阻止。",
+          "askedFirst": "已挂起，需有人批准后才能运行。",
+          "waiting": "等待中——所需应用尚未就绪。",
+          "failed": "应用已获准运行，但返回了错误。",
+          "recorded": "由 Paperclip 记录。"
+        },
+        "anAgent": "某个智能体",
+        "anAction": "某个操作",
+        "deliveryOne": "<b>{{who}}</b> 的运行收到了 0 个 MCP 服务器——<b>{{count}}</b> 个允许的连接未安装",
+        "deliveryMany": "<b>{{who}}</b> 的运行收到了 0 个 MCP 服务器——<b>{{count}}</b> 个允许的连接未安装",
+        "usedIn": "<b>{{who}}</b> 在 <b>{{app}}</b> 中使用了 <b>{{action}}</b>",
+        "used": "<b>{{who}}</b> 使用了 <b>{{action}}</b>",
+        "viewTask": "查看任务",
+        "viewRun": "查看运行",
+        "facts": {
+          "actionName": "操作名称",
+          "reasonCode": "原因代码",
+          "actorType": "操作者类型",
+          "runId": "运行 ID",
+          "transport": "传输方式",
+          "httpRequest": "HTTP 请求",
+          "mcpMethod": "MCP 方法",
+          "requestId": "请求 ID",
+          "dispatched": "已发送",
+          "httpStatus": "HTTP 状态",
+          "contentType": "内容类型",
+          "responseSize": "响应大小",
+          "upstreamId": "上游 ID",
+          "deliveredServers": "已下发的 MCP 服务器"
+        },
+        "bytes": "{{count}} 字节",
+        "unnamedConnection": "未命名连接",
+        "notInstalled": "未安装",
+        "parameters": "参数（已脱敏）",
+        "description": "智能体实际使用应用的记录，最新的在前。每一行都是一次决策：允许、阻止、先询问、等待或失败。",
+        "searchPlaceholder": "搜索活动…",
+        "noMatchTitle": "没有符合这些筛选条件的活动",
+        "noMatchBody": "请尝试更大的时间范围或其他筛选条件。",
+        "emptyTitle": "这里还没有内容",
+        "emptyBody": "智能体一开始使用已连接的应用，它们的操作就会显示在这里。"
+      },
+      "connectionDialogs": {
+        "catalogTitle": "工具目录 — {{name}}",
+        "catalogEmpty": "尚未发现任何工具。请使用“刷新目录”从此连接中发现工具。",
+        "toasts": {
+          "createFailed": "无法创建连接",
+          "probeFailed": "探测失败",
+          "activated": "连接已激活",
+          "activationFailed": "激活失败"
+        },
+        "addTitle": "添加应用",
+        "addDescription": "选择一个已有应用，或在同一连接流程中新建应用。凭据始终以保管库引用的形式保存，连接会在激活前进行探测。",
+        "stepApplication": "1 应用",
+        "stepConnection": "2 连接",
+        "application": "应用",
+        "useExisting": "使用已有应用",
+        "createNew": "新建应用",
+        "existingApplication": "已有应用",
+        "selectApplication": "选择应用",
+        "newApplicationName": "新应用名称",
+        "applicationNamePlaceholder": "例如 GitHub Triage",
+        "applicationTypeHint": "应用类型会根据下一步选择的传输方式推断。",
+        "willBeCreatedAs": "<name>{{name}}</name> 将创建为 {{type}}。",
+        "connectionNamePlaceholder": "例如 Production GitHub",
+        "transport": "传输方式",
+        "transportRemote": "远程 HTTP（无本地进程）",
+        "transportLocal": "本地 stdio（已批准的模板）",
+        "endpointUrl": "端点 URL",
+        "commandTemplate": "命令模板",
+        "selectTemplate": "选择已批准的模板",
+        "templateHint": "只能运行管理员批准的命令模板，绝不接受任意命令。",
+        "credentialReferences": "凭据引用",
+        "removeCredential": "移除 {{name}} 的凭据引用",
+        "selectSecret": "选择保管库密钥",
+        "headerPlaceholder": "Header",
+        "headerName": "Header 名称",
+        "freeTextHint": "不接受自由文本密钥，请选择保管库条目；Paperclip 只保存<mono> vault://</mono> 引用，并在网关使用时解析。",
+        "probing": "正在探测连接…",
+        "probeResult": "探测结果",
+        "toolsDiscovered": "已发现工具",
+        "probeLatency": "探测延迟",
+        "quarantined": "已隔离",
+        "latencyHint": "探测延迟只是一次往返采样。连接上线后，全部流量的 p95 聚合延迟会在“运行时”标签页中跟踪。",
+        "creatingDraft": "正在创建草稿…",
+        "createAndProbe": "创建并探测",
+        "probingShort": "探测中…",
+        "reprobe": "重新探测",
+        "activating": "激活中…",
+        "activate": "激活"
+      },
+      "gatewaysTab": {
+        "oneToolAllowed": "允许 1 个工具",
+        "manyToolsAllowed": "允许 {{count}} 个工具",
+        "scope": {
+          "agent": "智能体 {{name}}",
+          "project": "项目 {{name}}",
+          "issue": "任务 {{id}}"
+        },
+        "owner": {
+          "boardUser": "管理员用户 {{id}}"
+        },
+        "profileUnavailable": "配置档不可用",
+        "noToolsAllowed": "不允许任何工具",
+        "toasts": {
+          "created": "网关已创建",
+          "createFailed": "网关未创建",
+          "tokenIssued": "Token 已签发",
+          "tokenIssuedBody": "{{name}} 已创建。请立即复制，之后不会再次显示。",
+          "tokenIssueFailed": "Token 未签发",
+          "tokenRevoked": "Token 已撤销",
+          "tokenRevokeFailed": "Token 未撤销",
+          "copied": "已复制到剪贴板",
+          "pickProfile": "请选择配置档",
+          "pickProfileBody": "创建网关前需要先指定访问配置档。",
+          "pickActions": "请选择 Token 操作",
+          "pickActionsBody": "网关 Token 至少需要一个允许的 MCP 操作。"
+        },
+        "loading": "正在加载网关…",
+        "title": "命名 MCP 网关",
+        "description": "为外部客户端提供的稳定端点，与智能体工具访问共用同一套配置档、规则和审计记录。",
+        "createGateway": "创建网关",
+        "gatewayName": "网关名称",
+        "gatewayNamePlaceholder": "工程团队笔记本",
+        "accessProfile": "访问配置档",
+        "loadingProfiles": "正在加载配置档…",
+        "chooseProfile": "选择配置档",
+        "descriptionPlaceholder": "此端点供谁使用，以及何时应轮换。",
+        "needProfile": "添加网关前请先创建访问配置档。",
+        "empty": "还没有命名网关。请在这里创建一个，再为要连接的客户端签发 Token。",
+        "copyLabels": {
+          "endpoint": "网关端点",
+          "token": "网关 bearer token",
+          "snippet": "{{label}} 代码片段"
+        },
+        "copyEndpoint": "复制端点",
+        "issueToken": "签发 Token",
+        "fields": {
+          "owner": "所有者",
+          "allowedTools": "允许的工具",
+          "lastActivity": "最近活动",
+          "tokenName": "Token 名称",
+          "clientLabel": "客户端标签",
+          "ownerNote": "所有者备注"
+        },
+        "allowedVia": "{{allowed}}（通过 {{name}}）",
+        "profileId": "配置档 {{id}}",
+        "neverUsed": "从未使用",
+        "tokenNamePlaceholder": "Dotta 的 MacBook",
+        "clientLabelPlaceholder": "工作笔记本上的 Cursor",
+        "ownerNotePlaceholder": "此 Token 归谁所有，以及为何存在",
+        "issuing": "签发中…",
+        "newTokenFor": "{{name}} 的新 Token",
+        "copyToken": "复制 Token",
+        "noTokens": "尚未签发 Token。",
+        "revokedWhen": "撤销于 <when></when>",
+        "expiresWhen": "过期于 <when></when>",
+        "noExpiry": "永不过期",
+        "revokeName": "撤销 {{name}}",
+        "confirmRevoke": "立即撤销此 Token？",
+        "clientSnippets": "客户端代码片段",
+        "noSnippets": "暂无可用代码片段。"
+      },
+      "mcpConfigHelpDialog": {
+        "triggerLabel": "获取创建 MCP 配置的帮助",
+        "title": "让智能体生成 MCP 配置",
+        "description": "不清楚工具需要的 URL 或 header？把这段请求交给智能体，再把它给出的结果粘贴回来。",
+        "promptLabel": "要发送的提示词",
+        "copyPrompt": "复制提示词",
+        "copied": "已复制到剪贴板。",
+        "copyFailed": "无法自动复制，请选中上方文本手动复制。"
+      },
+      "pasteConfigTab": {
+        "summary": {
+          "localNoKeys": "在你的工作区中运行  ·  无需密钥",
+          "remoteNoKeys": "通过网络连接  ·  无需密钥",
+          "localOneKey": "在你的工作区中运行  ·  需要 1 个密钥",
+          "remoteOneKey": "通过网络连接  ·  需要 1 个密钥",
+          "localManyKeys": "在你的工作区中运行  ·  需要 {{count}} 个密钥",
+          "remoteManyKeys": "通过网络连接  ·  需要 {{count}} 个密钥"
+        },
+        "oauthStartFailed": "Paperclip 无法启动安全登录，请重试。",
+        "remoteOnly": "粘贴的配置中只有远程 HTTP 草稿可以检查并激活。",
+        "manualClientRequired": "此服务器需要其提供方设置中的 OAuth 客户端信息，请在设置中继续添加。",
+        "importedApp": "导入的应用",
+        "invalidJson": "这还不是有效的 JSON，请粘贴完整片段，包括最外层的大括号。",
+        "intro": "粘贴工具 README 中的 MCP 配置片段，我们会把它转换成易用的设置流程。",
+        "justUrl": "只有 URL？请改为<anchor>浏览计划中的应用连接</anchor>。",
+        "pasteHint": "粘贴 MCP 配置，即 README 中让你复制的那段片段。",
+        "checkConfig": "检查配置",
+        "checkHint": "保存之前，我们会先读取并展示识别结果。",
+        "noApps": "在该配置中未找到应用，请确认粘贴了完整片段。",
+        "foundOne": "在该配置中找到 1 个应用",
+        "foundMany": "在该配置中找到 {{count}} 个应用",
+        "remoteCheckHint": "检查远程应用会创建一个草稿连接，将替换的 header 值保存为 Paperclip 密钥，并在激活前运行健康检查和目录发现。",
+        "localDraftHint": "我们已将配置中的字段名转换为易读名称。这些在工作区中运行的工具会保持草稿状态，直到管理员将其映射到已批准的模板。",
+        "checkActions": "检查操作",
+        "connectionName": "连接名称",
+        "replacementPlaceholder": "粘贴替换值",
+        "keysDraftOnly": "此配置中的密钥会保持草稿状态，直到管理员将其映射到已批准的模板。",
+        "noKeysNeeded": "此应用无需密钥。",
+        "reviewActionsFor": "审核 {{name}} 的操作",
+        "checksPassed": "健康检查和目录检查已通过。发现的所有操作默认允许，激活后可以再收紧访问权限。",
+        "activateCount": "激活 {{enabled}}/{{total}} 项",
+        "canMakeChanges": "可进行更改",
+        "activeForAll": "{{name}} 已对所有智能体启用。",
+        "turnAllOn": "全部开启",
+        "turnAllOff": "全部关闭",
+        "askFirstWhenEnabled": "启用后需先询问"
+      },
+      "profileActionDialog": {
+        "archiveTitle": "归档配置档",
+        "archiveBodyOne": "此配置档将不再应用于 1 个智能体。之后可以恢复。",
+        "archiveBodyMany": "此配置档将不再应用于 {{count}} 个智能体。之后可以恢复。",
+        "restoreTitle": "恢复配置档",
+        "restoreBody": "此配置档将重新生效，并可分配给智能体。",
+        "deleteTitle": "删除配置档",
+        "deleteBlockedBody": "此配置档是组织默认配置档。删除前请先将组织默认改为其他配置档。",
+        "deleteBodyOne": "这将永久删除此配置档，并移除 1 项分配。",
+        "deleteBodyMany": "这将永久删除此配置档，并移除 {{count}} 项分配。",
+        "deleteBlockedHint": "请先选择另一个访问配置档并将其设为组织默认。"
+      },
+      "profileDetail": {
+        "toasts": {
+          "updated": "配置档已更新",
+          "updateFailed": "无法更新配置档",
+          "assignmentRemoved": "分配已移除",
+          "removeAssignmentFailed": "无法移除分配",
+          "reviewed": "新工具已审核",
+          "reviewFailed": "无法提交审核"
+        },
+        "loading": "正在加载配置档…",
+        "notFoundTitle": "未找到配置档",
+        "notFoundBody": "此访问配置档可能已被删除。",
+        "backToProfiles": "返回配置档列表",
+        "noDescription": "暂无描述。",
+        "updatedWhen": "更新于 <when></when>",
+        "savedUnassigned": "分配给智能体后才会改变它们的访问权限。",
+        "savedAssigned": "分配现已生效。",
+        "archivedBanner": "此配置档已归档，恢复之前不会应用于智能体。",
+        "whatItAllows": "允许的内容",
+        "editTools": "编辑工具",
+        "whoHasIt": "分配对象",
+        "checkAgent": "检查智能体实际能做什么",
+        "review": {
+          "bannerLoading": "有新工具需要审核",
+          "bannerOne": "自上次审核以来，{{app}} 新增了 1 个工具",
+          "bannerMany": "自上次审核以来，{{app}} 新增了 {{count}} 个工具",
+          "bannerHint": "选择此配置档应允许哪些工具。",
+          "title": "审核新工具",
+          "description": "允许此配置档应使用的工具，其余保持禁用。",
+          "loading": "正在加载新工具…",
+          "empty": "没有等待审核的新工具。",
+          "addedOn": "{{app}} · 新增于 {{date}}",
+          "appTool": "应用工具",
+          "keepBlocked": "保持禁用",
+          "submit": "提交审核"
+        },
+        "allowList": {
+          "empty": "此配置档允许 0 个工具。只有此配置档的智能体将无法使用应用工具。",
+          "capabilities": "能力",
+          "disconnected": "{{app}} 已断开连接",
+          "autoAdded": "自动添加 · {{date}}",
+          "showing": "显示 {{count}} 个允许工具中的 80 个。",
+          "summary": "允许 {{total}} 个已知工具中的 {{count}} 个。"
+        },
+        "assignments": {
+          "emptyHint": "分配此配置档后才会改变访问权限。",
+          "organizationInitials": "组织"
+        },
+        "newTools": {
+          "denyTitle": "审核前保持禁用",
+          "denyBody": "新工具不会自动变为可用。",
+          "allowBody": "所选应用的新工具会立即可用。"
+        },
+        "dialogs": {
+          "editTitle": "编辑配置档",
+          "editDescription": "更新配置档名称和描述。",
+          "nameTaken": "已有其他配置档使用此名称。",
+          "duplicateTitle": "复制配置档",
+          "duplicateDescription": "除非选择同时复制分配，否则副本初始为未分配状态。",
+          "copyAssignments": "同时复制分配？",
+          "removeTitle": "移除分配",
+          "removeDefault": "移除组织默认会改变所有依赖它的智能体的访问权限。",
+          "removeFrom": "从 {{label}} 移除此配置档。"
+        },
+        "unknownApp": "未知应用",
+        "source": {
+          "direct": "直接添加",
+          "ruleApp": "按规则添加：全部 {{app}}",
+          "ruleRisk": "按规则添加：{{level}} 工具"
+        },
+        "capability": {
+          "write": "写入",
+          "read": "读取"
+        },
+        "apps": {
+          "anApp": "某个应用",
+          "two": "{{first}} 和 {{second}}",
+          "more": "{{first}} 等另外 {{count}} 个应用"
+        },
+        "unknownRoutine": "未知例程",
+        "scopedAssignment": "限定范围的分配"
+      },
+      "profileDetailRoute": {
+        "accessProfiles": "访问配置档",
+        "profileDetail": "配置档详情",
+        "selectOrganizationAndProfile": "请选择组织和配置档。"
+      },
+      "profileModel": {
+        "capability": {
+          "write": "会进行更改",
+          "destructive": "破坏性"
+        },
+        "selection": {
+          "none": "未选择",
+          "all": "全部 {{name}} 工具（{{total}}）",
+          "allExcept": "除 {{count}} 个外的全部 {{name}} 工具",
+          "some": "{{count}}/{{total}} 个 {{name}} 工具"
+        },
+        "templates": {
+          "readOnly": {
+            "description": "可以查看和获取，但不会更改任何内容。"
+          },
+          "everyday": {
+            "title": "日常工作",
+            "description": "可以读取并进行常规更改，不含破坏性工具。"
+          },
+          "fullAccess": {
+            "title": "完全访问",
+            "description": "所有已连接应用提供的全部工具。"
+          },
+          "scratch": {
+            "title": "从零开始",
+            "description": "一个空白配置档，逐个添加工具。"
+          },
+          "copy": {
+            "title": "复制已有配置档",
+            "description": "从已有的配置档开始。"
+          }
+        }
+      },
+      "profileSummary": {
+        "oneTool": "1 个工具",
+        "manyTools": "{{count}} 个工具",
+        "oneApp": "1 个应用",
+        "manyApps": "{{count}} 个应用",
+        "allTools": "全部工具",
+        "allExcept": "除 {{tools}} 外的全部工具",
+        "organizationDefault": "组织默认",
+        "oneAgent": "1 个智能体",
+        "manyAgents": "{{count}} 个智能体",
+        "oneAssignment": "1 项分配",
+        "manyAssignments": "{{count}} 项分配",
+        "notAssignedYet": "尚未分配",
+        "statusOff": "已关闭"
+      },
+      "profileWizard": {
+        "steps": {
+          "chooseTools": "选择工具",
+          "assign": "分配"
+        },
+        "toasts": {
+          "saveFailed": "无法保存",
+          "profileSaved": "配置档已保存",
+          "saveProfileFailed": "无法保存配置档",
+          "draftSaved": "草稿已保存",
+          "draftSavedBody": "可以在配置档列表中继续编辑。"
+        },
+        "errors": {
+          "noDraft": "没有可完成的草稿",
+          "assignmentFailedWithRollback": "无法更新分配 {{key}}；另有 {{count}} 个回滚操作也失败了",
+          "assignmentFailed": "无法更新分配 {{key}}"
+        },
+        "loadingDraft": "正在加载草稿…",
+        "liveCount": "允许 <count>{{allowed}}</count>/{{total}} 个工具",
+        "saveAndFinishLater": "保存，稍后完成",
+        "saveProfile": "保存配置档",
+        "startFrom": "起点",
+        "whichProfile": "选择哪个配置档？",
+        "noCopyOptions": "还没有其他可复制的配置档。",
+        "namePlaceholder": "例如：日常工作",
+        "descriptionLabel": "描述（可选）",
+        "descriptionPlaceholder": "这个配置档用于什么？",
+        "identifier": "标识符",
+        "identifierHint": "用于导出和 API，会根据名称自动填写。",
+        "makeDefault": "设为组织默认",
+        "makeDefaultHintReplaces": "所有没有自己配置档的智能体都会使用此配置档。将替换“{{name}}”。",
+        "makeDefaultHint": "所有没有自己配置档的智能体都会使用此配置档。",
+        "assignToAgents": "分配给智能体",
+        "agentContext": {
+          "organizationDefault": "组织默认",
+          "alreadyHas": "已有：{{profiles}}",
+          "none": "暂无配置档"
+        },
+        "overlapHint": "如果一个智能体有多个配置档，它可以使用其中任意一个允许的工具。",
+        "moreTargets": "更多目标",
+        "moreTargetsHint": "将此配置档分配给整个项目或计划例程，以替代（或补充）单个智能体。"
+      },
+      "profileWizardRoute": {
+        "resumeDraft": "继续编辑草稿",
+        "newProfile": "新建配置档",
+        "selectOrganization": "请选择一个组织以创建配置档。",
+        "finishTitle": "完成配置档",
+        "newTitle": "新建访问配置档",
+        "subtitle": "选择此配置档允许使用的工具，再分配给需要的智能体。"
+      },
+      "profilesIndex": {
+        "toasts": {
+          "duplicated": "配置档已复制",
+          "duplicatedBody": "副本尚未分配给任何人。",
+          "duplicateFailed": "无法复制",
+          "archived": "配置档已归档",
+          "archiveFailed": "无法归档",
+          "restored": "配置档已恢复",
+          "restoreFailed": "无法恢复",
+          "deleted": "配置档已删除",
+          "deleteFailed": "无法删除"
+        },
+        "description": "决定智能体可以使用哪些工具。创建一次配置档，再分配给需要的智能体。",
+        "checkAccess": "检查智能体的访问权限",
+        "checkAccessDescription": "准确查看智能体当前可以使用哪些工具，以及每个工具由哪个配置档允许。",
+        "loading": "正在加载配置档…",
+        "noArchived": "没有已归档的配置档。",
+        "columns": {
+          "allows": "允许",
+          "assignedTo": "分配给"
+        },
+        "newToolsCount": "{{count}} 个新工具",
+        "noEffect": "— 不会改变访问权限",
+        "rowActions": "配置档操作",
+        "duplicate": "复制",
+        "emptyTitle": "创建第一个访问配置档",
+        "emptyBody": "选择一个起点。下一步可以精确调整它允许的工具。"
+      },
+      "profilesTab": {
+        "selectorTypes": {
+          "toolName": "工具名称",
+          "catalogEntry": "目录条目 ID"
+        },
+        "targetTypes": {
+          "issueId": "任务 ID"
+        },
+        "bindings": {
+          "unbound": "未绑定",
+          "oneAgent": "已绑定到 1 个智能体",
+          "manyAgents": "已绑定到 {{count}} 个智能体",
+          "one": "1 个绑定",
+          "many": "{{count}} 个绑定"
+        },
+        "fields": {
+          "selector": "选择器",
+          "effect": "效果",
+          "include": "包含",
+          "exclude": "排除",
+          "selectConnection": "选择连接",
+          "toolNamePlaceholder": "例如 send_email 或 slack.list_*"
+        },
+        "effective": {
+          "pickAgent": "选择一个智能体，查看它当前可以使用什么。",
+          "checking": "正在检查访问权限…",
+          "canUse": "可以使用",
+          "toolCount": "{{count}} 个工具",
+          "none": "此智能体当前无法使用任何应用工具。",
+          "noProfiles": "没有适用于此智能体的有效配置档。"
+        },
+        "source": {
+          "explicit": "显式",
+          "defaultAllow": "默认允许",
+          "pattern": "模式 {{label}}"
+        },
+        "allowList": {
+          "explicitCount": "{{count}} 个显式",
+          "patternCount": "{{count}} 个经由模式",
+          "defaultCount": "{{count}} 个经由默认",
+          "title": "允许列表",
+          "resolving": "正在解析允许的工具…",
+          "empty": "此配置档没有解析出任何工具。请添加包含选择器或刷新工具目录。",
+          "patternHint": "标记为<b>模式</b>的工具是通过通配符、应用、连接或风险选择器引入的，而非显式指定——目录变化时请重新审核。"
+        },
+        "toasts": {
+          "created": "配置档已创建",
+          "createFailed": "无法创建配置档",
+          "entryAdded": "条目已添加",
+          "entryAddFailed": "无法添加条目",
+          "entryRemoved": "条目已移除",
+          "entryRemoveFailed": "无法移除条目",
+          "bound": "配置档已绑定",
+          "bindFailed": "无法绑定配置档",
+          "bindingRemoved": "绑定已移除",
+          "bindingRemoveFailed": "无法移除绑定",
+          "entryTargetRequired": "需要指定条目目标",
+          "bindingTargetRequired": "需要指定绑定目标"
+        },
+        "description": "可复用的允许应用、连接和工具组合，可分配给智能体、项目、例程或任务。",
+        "emptyTitle": "还没有访问配置档",
+        "emptyBody": "创建配置档来组合工具选择器，再将其绑定到组织或特定智能体。",
+        "railSubtitle": "{{tools}} · {{bindings}}",
+        "dialogDescription": "配置档规则由工具网关策略服务强制执行。",
+        "namePlaceholder": "工程写入工具",
+        "descriptionPlaceholder": "供审核者参考的可选说明。",
+        "defaultAction": "默认操作",
+        "defaultDeny": "除非包含，否则拒绝",
+        "defaultAllow": "除非排除，否则允许",
+        "addEntry": "添加条目",
+        "bindTitle": "绑定配置档",
+        "targetType": "目标类型",
+        "selectProject": "选择项目",
+        "selectRoutine": "选择例程",
+        "bind": "绑定",
+        "detail": {
+          "defaultBadge": "默认 {{action}}",
+          "updatedWhen": "更新于 <when></when>",
+          "entry": "条目",
+          "targets": "目标",
+          "noTargets": "未绑定任何目标。",
+          "removeBinding": "移除 {{type}} 绑定",
+          "effectiveScope": "有效范围",
+          "default": "默认 <b>{{action}}</b>",
+          "toolsAllowed": "允许 <b>{{count}}</b> 个工具",
+          "includeExclude": "<b>{{include}}</b> 个包含 / <b>{{exclude}}</b> 个排除",
+          "selectors": "选择器",
+          "noSelectors": "没有选择器。",
+          "deleteEntry": "删除 {{type}} 条目"
+        }
+      },
+      "shared": {
+        "forbidden": "没有查看权限。工具与访问需要管理员权限。",
+        "notAvailable": "此服务器暂不支持工具与访问，请在下次部署后刷新重试。",
+        "somethingWentWrong": "出错了。",
+        "couldNotLoad": "无法加载此视图",
+        "trackedIn": "跟踪任务：{{identifier}} →",
+        "never": "从未",
+        "justNow": "刚刚",
+        "inFuture": "{{value}} 后",
+        "ago": "{{value}} 前"
+      },
+      "smokeLabMatrix": {
+        "paths": {
+          "remoteOauth": {
+            "title": "远程 HTTP · OAuth",
+            "detail": "位于模拟 OAuth 提供方之后的 HTTP MCP fixture"
+          },
+          "remoteApiKey": {
+            "title": "远程 HTTP · API key",
+            "detail": "使用静态 bearer key 的 HTTP MCP fixture"
+          },
+          "localStdio": {
+            "title": "本地 stdio（模板）",
+            "detail": "通过运行时监管进程启动的 stdio fixture"
+          },
+          "plugin": {
+            "title": "插件集成",
+            "detail": "插件提供的目录条目 + 安装流程"
+          },
+          "pasteConfig": {
+            "title": "粘贴配置导入",
+            "detail": "通过高级设置进行的用户导入"
+          },
+          "tokenBroker": {
+            "title": "Token broker / 网关",
+            "detail": "运行级连接 token、TTL 与范围检查"
+          },
+          "governance": {
+            "title": "治理界面",
+            "detail": "配置档、先询问规则、隔离"
+          }
+        },
+        "stages": {
+          "discover": "发现目录",
+          "read": "允许的读取",
+          "write": "先询问的写入",
+          "deny": "被拒绝的调用",
+          "quarantine": "Schema 变更隔离",
+          "audit": "审计证据"
+        }
+      },
+      "smokeLabTab": {
+        "legend": {
+          "pass": "通过",
+          "fail": "失败",
+          "skipped": "已跳过",
+          "notRun": "未运行"
+        },
+        "toasts": {
+          "servicesStarted": "Smoke 服务已启动",
+          "startFailed": "无法启动服务",
+          "servicesStopped": "Smoke 服务已停止",
+          "stopFailed": "无法停止服务",
+          "fixturesInstalled": "Fixture 应用已安装",
+          "fixturesPresent": "Fixture 应用已存在",
+          "installFailed": "无法安装 fixture",
+          "reset": "Smoke Lab 已重置",
+          "resetFailed": "无法重置",
+          "runStarted": "Smoke 运行已开始",
+          "runStartedBody": "浏览器运行器会在每个步骤完成时记录结果。",
+          "runFailed": "无法开始运行"
+        },
+        "offTitle": "Smoke Lab 已关闭",
+        "offBody": "Smoke Lab 是一个实验性开发者界面，用于针对确定性的本地 fixture 演练各条集成路径。请在“设置 → 实验性”中开启 <code>Smoke Lab</code> 以启用它。",
+        "loading": "正在加载 Smoke Lab…",
+        "tutorial": "动手教程",
+        "intro": "针对确定性的本地 fixture（模拟 OAuth 提供方和回环 MCP 服务器）端到端演练每条集成路径（P1–P7）。这里不会接触任何真实供应商或真实凭据。先启动服务并安装 fixture 应用，再通过浏览器 smoke 运行驱动受治理的生命周期。第一次使用？请参考<anchor>动手教程</anchor>。",
+        "fixtureServices": "Fixture 服务",
+        "startServices": "启动服务",
+        "installFixtures": "安装 fixture 应用",
+        "notRunning": "未运行",
+        "noServices": "没有服务上报。请先启动上方的 fixture 服务。",
+        "demoCredentials": "模拟 OAuth 演示凭据",
+        "demoCredentialsHint": "在 P1（OAuth）smoke 过程中，将这些值填入模拟提供方的真实授权页面。它们是固定的 fixture 值，可以安全显示。",
+        "demoEmail": "邮箱：{{value}}",
+        "demoPassword": "密码：{{value}}",
+        "matrix": "集成矩阵",
+        "path": "路径",
+        "noStepsSelected": "所选运行尚未记录任何步骤。请运行一次浏览器 smoke 来填充矩阵。",
+        "noRunsYet": "暂无运行",
+        "failing": " · 失败：{{paths}}",
+        "runNow": "立即运行浏览器 smoke",
+        "noRuns": "尚未记录任何运行。",
+        "selectRun": "选择一次运行以查看其步骤。",
+        "runTimes": "开始于 {{started}} · 结束于 {{finished}}",
+        "noSteps": "此运行没有记录任何步骤。",
+        "viewScreenshot": "查看截图"
+      },
+      "toolTabs": {
+        "pasteConfig": "粘贴配置",
+        "gateways": "网关",
+        "profiles": "配置档",
+        "smokeLab": "Smoke Lab"
+      },
+      "toolsAccess": {
+        "breadcrumbCompany": "组织",
+        "advancedSetup": "高级设置",
+        "developerTools": "开发者工具",
+        "selectOrganization": "请选择一个组织以打开高级设置。",
+        "advancedSubtitle": "用于应用库中没有的工具，需要参考该工具文档中的信息。大多数人用不到这里——如果想要的应用在应用库中，<anchor>请直接在那里连接</anchor>。",
+        "developerSurfacePrompt": "在找开发者界面？",
+        "openDeveloperTools": "打开开发者工具"
+      },
+      "toolsAdminGate": {
+        "adminOnlyTitle": "访问配置档仅供管理员使用",
+        "adminOnlyBody": "访问配置档决定智能体可以使用哪些工具。请联系管理员进行设置，或返回<anchor>你的应用</anchor>。"
+      },
+      "wizardToolsStep": {
+        "loadingTools": "正在加载工具…",
+        "comingSoonTitle": "应用连接即将推出",
+        "comingSoonBody": "应用连接就绪后即可使用配置档。在此期间可以先浏览计划中的集成。",
+        "browseConnections": "浏览应用连接",
+        "searchPlaceholder": "搜索工具…",
+        "noMatch": "没有与“{{search}}”匹配的工具。",
+        "clearSearch": "清除搜索",
+        "allAppTools": "全部 {{name}} 工具",
+        "includesLater": "包含 {{name}} 之后新增的工具",
+        "newTools": {
+          "deny": {
+            "label": "保持禁用，直到有人允许",
+            "hint": "应用之后新增的工具在你审核之前无法使用。"
+          },
+          "allow": {
+            "label": "自动允许",
+            "hint": "应用之后新增的任何工具都会立即可用。"
+          },
+          "legend": "之后出现的新工具"
+        },
+        "recommended": "推荐",
+        "risky": "（有风险）",
+        "ruleKinds": {
+          "toolName": "工具名称模式",
+          "riskLevel": "风险等级",
+          "catalogEntry": "按工具 ID"
+        },
+        "ruleSummary": {
+          "allowMatching": "允许匹配 {{value}} 的工具",
+          "blockMatching": "禁用匹配 {{value}} 的工具",
+          "allowRisk": "允许 {{level}} 工具",
+          "blockRisk": "禁用 {{level}} 工具",
+          "allowTool": "允许工具 {{value}}",
+          "blockTool": "禁用工具 {{value}}"
+        },
+        "advancedRules": "高级规则",
+        "advancedRulesHint": "按名称模式、风险等级或具体工具 ID 匹配工具。这些规则会叠加在上方的选择之上。",
+        "removeRule": "移除规则",
+        "block": "禁用",
+        "patternPlaceholder": "例如 gmail.send*",
+        "toolIdPlaceholder": "工具 ID",
+        "addRule": "添加规则"
+      }
     }
   }
 }
