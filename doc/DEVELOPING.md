@@ -32,6 +32,15 @@ Codex requires `http_headers` for Streamable HTTP MCP authorization in its
 configuration with fake tokens, then test a read-only gateway call separately;
 parsing the configuration alone does not prove end-to-end authorization.
 
+## Fork workflow policy
+
+In `paperclipCN`, release publication, Docker and agent-runtime image builds,
+lockfile refresh, and paid runner evaluations require an explicit
+`workflow_dispatch` (or an existing reusable-workflow call). They must not run
+automatically on fork `master` pushes or on a schedule. Check these triggers
+when merging upstream workflow changes; refresh the lockfile manually when
+needed. These fork-only trigger changes do not affect upstream workflows.
+
 ## Trusted PR Workflow
 
 The PR caller uses `paperclipai/paperclip/.github/workflows/pr-trusted.yml@master`.
