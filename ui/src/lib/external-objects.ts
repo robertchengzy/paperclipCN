@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import {
   AlertCircle,
   AlertOctagon,
@@ -74,34 +75,34 @@ export function externalObjectIconForLiveness(liveness: string): LucideIcon | nu
   return null;
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  unknown: "Not yet resolved",
-  open: "Open",
-  waiting: "Waiting",
-  running: "Running",
-  succeeded: "Succeeded",
-  failed: "Failed",
-  blocked: "Blocked",
-  closed: "Closed",
-  archived: "Archived",
-  auth_required: "Authorization required",
-  unreachable: "Unreachable",
-};
+const categoryLabels = (): Record<string, string> => ({
+  unknown: t("app.shared.externalObjects.category.unknown"),
+  open: t("app.shared.externalObjects.category.open"),
+  waiting: t("app.shared.externalObjects.category.waiting"),
+  running: t("app.shared.externalObjects.category.running"),
+  succeeded: t("app.shared.externalObjects.category.succeeded"),
+  failed: t("app.shared.externalObjects.category.failed"),
+  blocked: t("app.shared.externalObjects.category.blocked"),
+  closed: t("app.shared.externalObjects.category.closed"),
+  archived: t("app.shared.externalObjects.category.archived"),
+  auth_required: t("app.shared.externalObjects.category.authRequired"),
+  unreachable: t("app.shared.externalObjects.category.unreachable"),
+});
 
 export function externalObjectCategoryLabel(category: string): string {
-  return CATEGORY_LABELS[category] ?? category.replace(/_/g, " ");
+  return categoryLabels()[category] ?? category.replace(/_/g, " ");
 }
 
-const LIVENESS_LABELS: Record<string, string> = {
-  unknown: "Not yet refreshed",
-  fresh: "Fresh",
-  stale: "Stale",
-  auth_required: "Requires auth",
-  unreachable: "Unreachable",
-};
+const livenessLabels = (): Record<string, string> => ({
+  unknown: t("app.shared.externalObjects.liveness.unknown"),
+  fresh: t("app.shared.externalObjects.liveness.fresh"),
+  stale: t("app.shared.externalObjects.liveness.stale"),
+  auth_required: t("app.shared.externalObjects.liveness.authRequired"),
+  unreachable: t("app.shared.externalObjects.liveness.unreachable"),
+});
 
 export function externalObjectLivenessLabel(liveness: string): string {
-  return LIVENESS_LABELS[liveness] ?? liveness.replace(/_/g, " ");
+  return livenessLabels()[liveness] ?? liveness.replace(/_/g, " ");
 }
 
 export function externalObjectDisplayStatusLabel(input: {
@@ -116,7 +117,7 @@ export function externalObjectDisplayStatusLabel(input: {
   const isGenericUrl = input.providerKey === "url" && input.objectType === "link";
   const hasKnownObjectType = Boolean(input.providerKey && input.objectType);
   if (input.statusCategory === "unknown" && hasKnownObjectType && !isGenericUrl) {
-    if (input.liveness === "fresh") return "Status unavailable";
+    if (input.liveness === "fresh") return t("app.shared.externalObjects.statusUnavailable");
     return externalObjectLivenessLabel(input.liveness);
   }
   return externalObjectCategoryLabel(input.statusCategory);
@@ -172,7 +173,7 @@ const PROVIDER_LABELS: Record<string, string> = {
 };
 
 export function externalObjectProviderLabel(providerKey: string | null | undefined): string {
-  if (!providerKey) return "External";
+  if (!providerKey) return t("app.shared.externalObjects.providerExternal");
   const lookup = PROVIDER_LABELS[providerKey];
   if (lookup) return lookup;
   return providerKey
@@ -181,19 +182,19 @@ export function externalObjectProviderLabel(providerKey: string | null | undefin
     .join(" ");
 }
 
-const OBJECT_TYPE_LABELS: Record<string, string> = {
-  pull_request: "pull request",
-  issue: "issue",
-  deployment: "deployment",
-  workflow_run: "workflow run",
-  ticket: "ticket",
-  lead: "lead",
+const objectTypeLabels = (): Record<string, string> => ({
+  pull_request: t("app.shared.externalObjects.type.pullRequest"),
+  issue: t("app.shared.externalObjects.type.issue"),
+  deployment: t("app.shared.externalObjects.type.deployment"),
+  workflow_run: t("app.shared.externalObjects.type.workflowRun"),
+  ticket: t("app.shared.externalObjects.type.ticket"),
+  lead: t("app.shared.externalObjects.type.lead"),
   url_link: "URL",
-};
+});
 
 export function externalObjectTypeLabel(objectType: string | null | undefined): string {
-  if (!objectType) return "object";
-  return OBJECT_TYPE_LABELS[objectType] ?? objectType.replace(/_/g, " ");
+  if (!objectType) return t("app.shared.externalObjects.type.object");
+  return objectTypeLabels()[objectType] ?? objectType.replace(/_/g, " ");
 }
 
 export function externalObjectDisplayLabel(
@@ -204,7 +205,10 @@ export function externalObjectDisplayLabel(
   const trimmedDisplayKey = displayKey?.trim();
   if (trimmedDisplayKey) return trimmedDisplayKey;
   if (providerKey === "url" && objectType === "link") return "URL";
-  return `${externalObjectProviderLabel(providerKey)} ${externalObjectTypeLabel(objectType)}`;
+  return t("app.shared.externalObjects.displayLabel", {
+    provider: externalObjectProviderLabel(providerKey),
+    type: externalObjectTypeLabel(objectType),
+  });
 }
 
 /**

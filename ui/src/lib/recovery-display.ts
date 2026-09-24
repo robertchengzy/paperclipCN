@@ -1,5 +1,6 @@
 import type { IssueRecoveryAction, IssueRecoveryActionKind } from "@paperclipai/shared";
 import { Eye, OctagonAlert, RefreshCw, TriangleAlert } from "lucide-react";
+import { t } from "@/i18n";
 import {
   readRecoveryRetryLineage,
   type RecoveryLivenessContext,
@@ -42,6 +43,13 @@ export const RECOVERY_CHIP_DEFAULT_TONE: Record<
     label: "Recovery escalated",
   },
 };
+
+export function recoveryStateLabel(state: ActiveRecoveryDisplayState): string {
+  if (state === "needed") return t("app.shared.recovery.needed");
+  if (state === "in_progress") return t("app.shared.recovery.inProgress");
+  if (state === "observe_only") return t("app.shared.recovery.observing");
+  return t("app.shared.recovery.escalated");
+}
 
 /**
  * Every surface derives its recovery tone from this one function, so a source issue and
@@ -107,7 +115,7 @@ export function recoveryChipLabel(
   lineage?: RecoveryRetryLineage | null,
 ): string {
   if (kind === "workspace_validation" && state === "needed") {
-    return "Workspace recovery needed";
+    return t("app.shared.recovery.workspaceNeeded");
   }
   if (
     state === "in_progress" &&
@@ -115,7 +123,10 @@ export function recoveryChipLabel(
     lineage.maxAttempts !== null &&
     lineage.attempt > 0
   ) {
-    return `Recovery in progress · ${Math.min(lineage.attempt, lineage.maxAttempts)}/${lineage.maxAttempts}`;
+    return t("app.shared.recovery.inProgressCount", {
+      attempt: Math.min(lineage.attempt, lineage.maxAttempts),
+      max: lineage.maxAttempts,
+    });
   }
-  return RECOVERY_CHIP_DEFAULT_TONE[state].label;
+  return recoveryStateLabel(state);
 }

@@ -1,3 +1,5 @@
+import { t } from "@/i18n";
+
 export type TaskDateGroup = "today" | "yesterday" | "earlier";
 
 export const taskDateGroupLabels: Record<TaskDateGroup, string> = {
@@ -5,6 +7,12 @@ export const taskDateGroupLabels: Record<TaskDateGroup, string> = {
   yesterday: "Yesterday",
   earlier: "Earlier",
 };
+
+export function taskDateGroupLabel(group: TaskDateGroup): string {
+  if (group === "today") return t("app.format.dateGroups.today");
+  if (group === "yesterday") return t("app.format.dateGroups.yesterday");
+  return t("app.format.dateGroups.earlier");
+}
 
 function localCalendarOrdinal(date: Date): number {
   return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
@@ -33,5 +41,5 @@ export function taskDateGroupSeparator(
 ): string | null {
   if (previous === current) return null;
   if (previous === null && current === "earlier") return null;
-  return taskDateGroupLabels[current];
+  return taskDateGroupLabel(current);
 }

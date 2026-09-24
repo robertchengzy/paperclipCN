@@ -32,7 +32,8 @@ describe("chat connector UI contract", () => {
     expect(issue).toMatch(
       /agentsApi\.retryFailedRun\(\s*failedRun\.agentId,\s*failedRun\.runId,\s*companyId/,
     );
-    expect(issue).toContain("Retry queued");
+    expect(issue).toMatch(/"Retry queued"|t\("app\.issueDetail\.toasts\.retryQueued"\)/);
+    expect(en.app.issueDetail.toasts.retryQueued).toBe("Retry queued");
     expect(en.app.inbox.errors.retryRunFailed).toBe("Run retry failed");
     for (const file of ["Inbox.tsx", "LegacyInbox.tsx"]) {
       const page = source(`../../${file}`);

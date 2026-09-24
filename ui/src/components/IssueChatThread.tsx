@@ -206,6 +206,9 @@ import {
 import { buildAgentMentionHref } from "@paperclipai/shared";
 import { useComposerStop } from "@/hooks/useComposerStop";
 import { cn, formatDateTime, formatShortDate } from "../lib/utils";
+import { i18n, t, useTranslation } from "@/i18n";
+import { Trans } from "react-i18next";
+import { statusLabel } from "@/i18n/labels";
 import { liveBlueBadge } from "../lib/status-colors";
 import {
   nextWorkMode,
@@ -406,7 +409,34 @@ function useLiveElapsed(
   // timer rather than one per element.
   useSecondTick(Boolean(active && startMs));
   if (!active || !startMs) return null;
-  return formatDurationWords(Date.now() - startMs);
+  return localizedDurationWords(Date.now() - startMs);
+}
+
+function localizedDurationWords(ms: number | null) {
+  if (formatDurationWords(ms) === null || ms === null) return null;
+  const totalSeconds = Math.max(1, Math.round(ms / 1000));
+  if (totalSeconds < 60) {
+    return totalSeconds === 1
+      ? t("app.issueChat.duration.secondsOne", { count: totalSeconds })
+      : t("app.issueChat.duration.secondsMany", { count: totalSeconds });
+  }
+  const totalMinutes = Math.round(totalSeconds / 60);
+  const minutesLabel = (count: number) =>
+    count === 1
+      ? t("app.issueChat.duration.minutesOne", { count })
+      : t("app.issueChat.duration.minutesMany", { count });
+  if (totalMinutes < 60) return minutesLabel(totalMinutes);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  const hoursLabel =
+    hours === 1
+      ? t("app.issueChat.duration.hoursOne", { count: hours })
+      : t("app.issueChat.duration.hoursMany", { count: hours });
+  if (minutes === 0) return hoursLabel;
+  return t("app.issueChat.duration.hoursMinutes", {
+    hours: hoursLabel,
+    minutes: minutesLabel(minutes),
+  });
 }
 
 function readCustomString(
@@ -442,14 +472,14 @@ function IssueChatLiveRunStatusLine({
   if (!active) return null;
 
   const primary = currentToolName
-    ? `Using ${currentToolName}`
+    ? t("app.issueChat.liveStatus.usingTool", { tool: currentToolName })
     : lastAssistantSnippet
       ? lastAssistantSnippet
       : currentStatusMessage;
   const activityText = lastActivityElapsed
     ? lastActivityAgeMs !== null && lastActivityAgeMs >= 15_000
-      ? `no output for ${lastActivityElapsed} - still running`
-      : `${lastActivityElapsed} ago`
+      ? t("app.issueChat.liveStatus.noOutputStillRunning", { elapsed: lastActivityElapsed })
+      : t("app.issueChat.liveStatus.ago", { elapsed: lastActivityElapsed })
     : "";
   const text = [primary, activityText].filter(Boolean).join(" · ");
   if (!text) return null;
@@ -786,16 +816,17 @@ export function IssueAssigneePausedNotice({
   onResume?: () => Promise<void> | void;
   resuming?: boolean;
 }) {
+  const { t } = useTranslation();
   if (!agent || agent.status !== "paused") return null;
 
   const pauseDetail =
     agent.pauseReason === "budget"
-      ? "It was paused by a budget hard stop."
+      ? t("app.issueChat.pausedNotice.budget")
       : agent.pauseReason === "import"
-        ? "It arrived paused from an organization import — imported agents stay parked until you resume them."
+        ? t("app.issueChat.pausedNotice.import")
         : agent.pauseReason === "system"
-          ? "It was paused by the system."
-          : "It was paused manually.";
+          ? t("app.issueChat.pausedNotice.system")
+          : t("app.issueChat.pausedNotice.manual");
   // Budget pauses clear on their own when the budget resets; resuming by hand
   // would fight the hard stop, so the action is only offered for the rest.
   const canResume = Boolean(onResume) && agent.pauseReason !== "budget";
@@ -807,9 +838,11 @@ export function IssueAssigneePausedNotice({
         icon={PauseCircle}
         compact
         title={
-          <>
-            <span className="font-medium">{agent.name}</span> is paused.
-          </>
+          <Trans
+            i18nKey="app.issueChat.pausedNotice.title"
+            values={{ name: agent.name }}
+            components={{ name: <span className="font-medium" /> }}
+          />
         }
         actions={
           canResume ? (
@@ -820,12 +853,12 @@ export function IssueAssigneePausedNotice({
               disabled={resuming}
               data-testid="issue-assignee-paused-resume"
             >
-              {resuming ? "Resuming…" : "Resume agent"}
+              {resuming ? t("app.issueChat.pausedNotice.resuming") : t("app.issueChat.pausedNotice.resume")}
             </Button>
           ) : undefined
         }
       >
-        New runs will not start until the agent is resumed. {pauseDetail}
+        {t("app.issueChat.pausedNotice.body", { detail: pauseDetail })}
       </InlineBanner>
     </div>
   );
@@ -837,9 +870,9 @@ function fallbackAuthorLabel(message: ThreadMessage) {
   if (typeof custom?.["authorName"] === "string") return custom["authorName"];
   if (typeof custom?.["runAgentName"] === "string")
     return custom["runAgentName"];
-  if (message.role === "assistant") return "Agent";
-  if (message.role === "user") return "You";
-  return "System";
+  if (message.role === "assistant") return t("app.issueChat.author.agent");
+  if (message.role === "user") return t("app.issueChat.author.you");
+  return t("app.issueChat.author.system");
 }
 
 function fallbackTextParts(message: ThreadMessage) {
@@ -881,6 +914,7 @@ function IssueChatFallbackThread({
   variant: "full" | "embedded";
   externalReferences?: MarkdownExternalReferenceMap;
 }) {
+  const { t } = useTranslation();
   return (
     <div className={cn(variant === "embedded" ? "space-y-3" : "space-y-4")}>
       <div className="rounded-xl border border-amber-300/60 bg-amber-50/80 px-4 py-3 text-sm text-amber-900 dark:border-amber-500/30 dark:bg-amber-950/20 dark:text-amber-200">
@@ -888,11 +922,10 @@ function IssueChatFallbackThread({
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <div className="space-y-1">
             <p className="font-medium">
-              Chat renderer hit an internal state error.
+              {t("app.issueChat.fallback.title")}
             </p>
             <p className="text-xs opacity-80">
-              Showing a safe fallback transcript instead of crashing the tasks
-              page.
+              {t("app.issueChat.fallback.description")}
             </p>
           </div>
         </div>
@@ -940,7 +973,7 @@ function IssueChatFallbackThread({
                     ))
                   ) : (
                     <p className="text-sm text-muted-foreground">
-                      No message content.
+                      {t("app.issueChat.fallback.noContent")}
                     </p>
                   )}
                 </div>
@@ -1035,7 +1068,7 @@ const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 function commentDateLabel(date: Date | string | undefined): string {
   if (!date) return "";
   const then = new Date(date).getTime();
-  if (Date.now() - then < WEEK_MS) return timeAgo(date);
+  if (Date.now() - then < WEEK_MS) return timeAgo(date, i18n.language);
   return formatShortDate(date);
 }
 
@@ -1118,8 +1151,8 @@ export function SuccessfulRunHandoffCommentCallout({
 }
 
 function humanizeValue(value: string | null) {
-  if (!value) return "None";
-  return value.replace(/_/g, " ");
+  if (!value) return t("app.common.none");
+  return statusLabel(i18n.t, value);
 }
 
 function initialsForName(name: string) {
@@ -1143,10 +1176,10 @@ function formatInteractionActorLabel(args: {
     return (
       userLabelMap?.get(userId) ??
       formatAssigneeUserLabel(userId, currentUserId, userLabelMap) ??
-      "Board"
+      t("app.issueChat.author.board")
     );
   }
-  return "System";
+  return t("app.issueChat.author.system");
 }
 
 export function resolveIssueChatHumanAuthor(args: {
@@ -1165,7 +1198,11 @@ export function resolveIssueChatHumanAuthor(args: {
   const resolvedAuthorName =
     profile?.label?.trim() ||
     authorName?.trim() ||
-    (authorUserId === "local-board" ? "Board" : isCurrentUser ? "You" : "User");
+    (authorUserId === "local-board"
+      ? t("app.issueChat.author.board")
+      : isCurrentUser
+        ? t("app.issueChat.author.you")
+        : t("app.issueChat.author.user"));
 
   return {
     isCurrentUser,
@@ -1184,9 +1221,18 @@ function toolCountSummary(toolParts: ToolCallMessagePart[]): string | null {
   }
   const parts: string[] = [];
   if (commands > 0)
-    parts.push(`ran ${commands} command${commands === 1 ? "" : "s"}`);
-  if (other > 0) parts.push(`called ${other} tool${other === 1 ? "" : "s"}`);
-  return parts.join(", ");
+    parts.push(
+      commands === 1
+        ? t("app.issueChat.cot.ranCommandsOne", { count: commands })
+        : t("app.issueChat.cot.ranCommandsMany", { count: commands }),
+    );
+  if (other > 0)
+    parts.push(
+      other === 1
+        ? t("app.issueChat.cot.calledToolsOne", { count: other })
+        : t("app.issueChat.cot.calledToolsMany", { count: other }),
+    );
+  return parts.join(t("app.issueChat.cot.summarySeparator"));
 }
 
 function cleanToolDisplayText(tool: ToolCallMessagePart): string {
@@ -1208,6 +1254,7 @@ function IssueChatChainOfThought({
   message: ThreadMessage;
   cotParts: readonly IssueChatCoTPart[];
 }) {
+  const { t } = useTranslation();
   const { agentMap } = useContext(IssueChatCtx);
   const custom = message.metadata.custom as Record<string, unknown>;
   const runAgentId =
@@ -1265,15 +1312,15 @@ function IssueChatChainOfThought({
   let headerVerb: string;
   let headerSuffix: string | null = null;
   if (isActive) {
-    headerVerb = "Working";
-    if (liveElapsed) headerSuffix = `for ${liveElapsed}`;
+    headerVerb = t("app.issueChat.cot.working");
+    if (liveElapsed) headerSuffix = t("app.issueChat.cot.forDuration", { duration: liveElapsed });
   } else if (segmentTiming) {
     const durationMs = segmentTiming.endMs - segmentTiming.startMs;
-    const durationText = formatDurationWords(durationMs);
-    headerVerb = "Worked";
-    if (durationText) headerSuffix = `for ${durationText}`;
+    const durationText = localizedDurationWords(durationMs);
+    headerVerb = t("app.issueChat.cot.worked");
+    if (durationText) headerSuffix = t("app.issueChat.cot.forDuration", { duration: durationText });
   } else {
-    headerVerb = "Worked";
+    headerVerb = t("app.issueChat.cot.worked");
   }
 
   const toolSummary = toolCountSummary(toolParts);
@@ -1544,6 +1591,7 @@ function CopyablePreBlock({
   children: string;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const toastActions = useOptionalToastActions();
   return (
@@ -1555,8 +1603,8 @@ function CopyablePreBlock({
           "absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded-md bg-background/80 text-muted-foreground opacity-0 backdrop-blur-sm transition-opacity hover:text-foreground group-hover/pre:opacity-100",
           copied && "opacity-100",
         )}
-        title="Copy"
-        aria-label="Copy"
+        title={t("app.common.actions.copy")}
+        aria-label={t("app.common.actions.copy")}
         onClick={() => {
           void copyTextToClipboard(children)
             .then(() => {
@@ -1565,11 +1613,11 @@ function CopyablePreBlock({
             })
             .catch((error) => {
               toastActions?.pushToast({
-                title: "Copy failed",
+                title: t("app.issueChat.copy.failed"),
                 body:
                   error instanceof Error
                     ? error.message
-                    : "Unable to copy text",
+                    : t("app.issueChat.copy.unableText"),
                 tone: "error",
               });
             });
@@ -1607,6 +1655,7 @@ function IssueChatToolPart({
   result?: unknown;
   isError?: boolean;
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   if (toolName === "paperclip_provider_activity") {
     return (
@@ -1675,7 +1724,7 @@ function IssueChatToolPart({
             {nonIntentDetails.length > 0 ? (
               <div>
                 <div className="mb-1 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground/60">
-                  Input
+                  {t("app.issueChat.tool.input")}
                 </div>
                 <dl className="space-y-1.5">
                   {nonIntentDetails.map((detail) => (
@@ -1699,7 +1748,7 @@ function IssueChatToolPart({
             ) : rawArgsText ? (
               <div>
                 <div className="mb-1 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground/60">
-                  Input
+                  {t("app.issueChat.tool.input")}
                 </div>
                 <CopyablePreBlock className="overflow-x-auto rounded-md bg-accent/30 p-2 text-(length:--text-micro) leading-4 text-foreground/70">
                   {rawArgsText}
@@ -1709,7 +1758,7 @@ function IssueChatToolPart({
             {result !== undefined ? (
               <div>
                 <div className="mb-1 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground/60">
-                  Result
+                  {t("app.issueChat.tool.result")}
                 </div>
                 <CopyablePreBlock className="overflow-x-auto rounded-md bg-accent/30 p-2 text-(length:--text-micro) leading-4 text-foreground/70">
                   {resultText}
@@ -1734,6 +1783,7 @@ function IssueChatProviderActivity({
   open: boolean;
   onToggle: () => void;
 }) {
+  const { t } = useTranslation();
   const value =
     typeof args === "object" && args !== null && !Array.isArray(args)
       ? (args as Record<string, unknown>)
@@ -1745,7 +1795,7 @@ function IssueChatProviderActivity({
       ? (value.payload as Record<string, unknown>)
       : {};
   const title =
-    typeof value.title === "string" ? value.title : "Provider activity";
+    typeof value.title === "string" ? value.title : t("app.issueChat.tool.providerActivity");
   const summary = typeof value.summary === "string" ? value.summary : "";
   const steps = Array.isArray(payload.steps) ? payload.steps.slice(0, 256) : [];
   const children = Array.isArray(payload.children)
@@ -1827,9 +1877,9 @@ function IssueChatProviderActivity({
               return (
                 <div key={String(child.childId ?? index)}>
                   <span className="font-medium">
-                    {String(child.role ?? "Child agent")}
+                    {String(child.role ?? t("app.issueChat.tool.childAgent"))}
                   </span>{" "}
-                  · {String(child.status ?? "unknown")}
+                  · {String(child.status ?? t("app.issueChat.tool.unknownStatus"))}
                   {child.summary ? ` — ${String(child.summary)}` : ""}
                 </div>
               );
@@ -1856,17 +1906,17 @@ function IssueChatProviderActivity({
                       {String(source.title ?? href)}
                     </a>
                   ) : (
-                    <span>{String(source.title ?? "Unavailable source")}</span>
+                    <span>{String(source.title ?? t("app.issueChat.tool.unavailableSource"))}</span>
                   )}{" "}
                   <span className="text-muted-foreground">
-                    (provider-reported)
+                    {t("app.issueChat.tool.providerReported")}
                   </span>
                 </div>
               );
             })}
             {effectiveModel ? (
               <div>
-                <span className="text-muted-foreground">Model</span>{" "}
+                <span className="text-muted-foreground">{t("app.issueChat.tool.model")}</span>{" "}
                 {requestedModel && requestedModel !== effectiveModel
                   ? `${requestedModel} → `
                   : ""}
@@ -1999,6 +2049,7 @@ function IssueChatUserMessage({
   message: ThreadMessage;
   isInterruptingQueuedRun: boolean;
 }) {
+  const { t } = useTranslation();
   const {
     onInterruptQueued,
     onCancelQueued,
@@ -2026,7 +2077,7 @@ function IssueChatUserMessage({
   const queueReason =
     typeof custom.queueReason === "string" ? custom.queueReason : null;
   const queueBadgeLabel =
-    queueReason === "hold" ? "\u23f8 Deferred wake" : "Queued";
+    queueReason === "hold" ? t("app.issueChat.queue.deferredWake") : t("app.issueChat.queue.queued");
   const pending = custom.clientStatus === "pending";
   const deleted = Boolean(custom.deletedAt);
   const queueTargetRunId =
@@ -2088,7 +2139,7 @@ function IssueChatUserMessage({
             variant="outline"
             className="text-(length:--text-nano) uppercase tracking-(--tracking-eyebrow)"
           >
-            Follow-up
+            {t("app.issueChat.message.followUp")}
           </Badge>
         ) : null}
       </div>
@@ -2126,7 +2177,7 @@ function IssueChatUserMessage({
                 disabled={isInterruptingQueuedRun}
                 onClick={() => void onInterruptQueued(queueTargetRunId)}
               >
-                {isInterruptingQueuedRun ? "Interrupting..." : "Interrupt"}
+                {isInterruptingQueuedRun ? t("app.issueChat.queue.interrupting") : t("app.issueChat.queue.interrupt")}
               </Button>
             ) : null}
             {onCancelQueued ? (
@@ -2136,14 +2187,14 @@ function IssueChatUserMessage({
                 className="h-6 border-amber-300 px-2 text-(length:--text-micro) text-amber-900 hover:bg-amber-100/80 hover:text-amber-950 dark:border-amber-500/40 dark:text-amber-100 dark:hover:bg-amber-500/10"
                 onClick={() => onCancelQueued(commentId)}
               >
-                Cancel
+                {t("app.common.actions.cancel")}
               </Button>
             ) : null}
           </div>
         ) : null}
         {deleted ? (
           <div className="text-sm italic text-muted-foreground">
-            Comment deleted
+            {t("app.issueChat.message.commentDeleted")}
           </div>
         ) : (
           <div className="min-w-0 max-w-full space-y-3">
@@ -2157,7 +2208,7 @@ function IssueChatUserMessage({
 
       {sentFromIMessage && !deleted ? (
         <div className="mt-1 px-1 text-xs text-muted-foreground">
-          Sent from iMessage
+          {t("app.issueChat.message.sentFromIMessage")}
         </div>
       ) : null}
       {pending ? (
@@ -2167,7 +2218,7 @@ function IssueChatUserMessage({
             isCurrentUser ? "justify-end" : "justify-start",
           )}
         >
-          Sending...
+          {t("app.issueChat.message.sending")}
         </div>
       ) : (
         <div
@@ -2193,8 +2244,8 @@ function IssueChatUserMessage({
             <button
               type="button"
               className="inline-flex h-6 w-6 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-              title="Copy message"
-              aria-label="Copy message"
+              title={t("app.issueChat.copy.message")}
+              aria-label={t("app.issueChat.copy.message")}
               onClick={() => {
                 const text = message.content
                   .filter(
@@ -2210,11 +2261,11 @@ function IssueChatUserMessage({
                   })
                   .catch((error) => {
                     toastActions?.pushToast({
-                      title: "Copy failed",
+                      title: t("app.issueChat.copy.failed"),
                       body:
                         error instanceof Error
                           ? error.message
-                          : "Unable to copy message",
+                          : t("app.issueChat.copy.unableMessage"),
                       tone: "error",
                     });
                   });
@@ -2231,8 +2282,8 @@ function IssueChatUserMessage({
             <button
               type="button"
               className="inline-flex h-6 w-6 items-center justify-center text-muted-foreground transition-colors hover:text-destructive"
-              title="Delete comment"
-              aria-label="Delete comment"
+              title={t("app.issueChat.deleteComment.action")}
+              aria-label={t("app.issueChat.deleteComment.action")}
               onClick={handleDeleteComment}
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -2268,9 +2319,9 @@ function IssueChatUserMessage({
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete comment?</DialogTitle>
+            <DialogTitle>{t("app.issueChat.deleteComment.title")}</DialogTitle>
             <DialogDescription>
-              This will replace the comment with a deleted-comment marker.
+              {t("app.issueChat.deleteComment.description")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -2278,10 +2329,10 @@ function IssueChatUserMessage({
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
             >
-              Cancel
+              {t("app.common.actions.cancel")}
             </Button>
             <Button variant="destructive" onClick={confirmDeleteComment}>
-              Delete comment
+              {t("app.issueChat.deleteComment.action")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -2301,14 +2352,15 @@ function IssueChatAssistantMessage({
   isRunActive: boolean;
   isStoppingRun: boolean;
 }) {
+  const { t } = useTranslation();
   const {
     feedbackDataSharingPreference,
     feedbackTermsUrl,
     onVote,
     agentMap,
     onStopRun,
-    stopRunLabel = "Stop run",
-    stoppingRunLabel = "Stopping...",
+    stopRunLabel = t("app.issueChat.run.stopRun"),
+    stoppingRunLabel = t("app.issueChat.run.stoppingRun"),
     stopRunVariant = "stop",
     runFinalizationActions = [],
     userLabelMap,
@@ -2322,7 +2374,7 @@ function IssueChatAssistantMessage({
       ? custom.authorName
       : typeof custom.runAgentName === "string"
         ? custom.runAgentName
-        : "Agent";
+        : t("app.issueChat.author.agent");
   const authorAgentId =
     typeof custom.authorAgentId === "string" ? custom.authorAgentId : null;
   const runId = typeof custom.runId === "string" ? custom.runId : null;
@@ -2433,8 +2485,8 @@ function IssueChatAssistantMessage({
       <button
         type="button"
         className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-        title="Copy message"
-        aria-label="Copy message"
+        title={t("app.issueChat.copy.message")}
+        aria-label={t("app.issueChat.copy.message")}
         onClick={() => {
           void copyTextToClipboard(copyText)
             .then(() => {
@@ -2443,11 +2495,11 @@ function IssueChatAssistantMessage({
             })
             .catch((error) => {
               toastActions?.pushToast({
-                title: "Copy failed",
+                title: t("app.issueChat.copy.failed"),
                 body:
                   error instanceof Error
                     ? error.message
-                    : "Unable to copy message",
+                    : t("app.issueChat.copy.unableMessage"),
                 tone: "error",
               });
             });
@@ -2486,8 +2538,8 @@ function IssueChatAssistantMessage({
             variant="ghost"
             size="icon-xs"
             className="text-muted-foreground hover:text-foreground"
-            title="More actions"
-            aria-label="More actions"
+            title={t("app.issueChat.message.moreActions")}
+            aria-label={t("app.issueChat.message.moreActions")}
           >
             <MoreHorizontal className="h-3.5 w-3.5" />
           </Button>
@@ -2497,18 +2549,18 @@ function IssueChatAssistantMessage({
             onClick={() => {
               void copyTextToClipboard(copyText).catch((error) => {
                 toastActions?.pushToast({
-                  title: "Copy failed",
+                  title: t("app.issueChat.copy.failed"),
                   body:
                     error instanceof Error
                       ? error.message
-                      : "Unable to copy message",
+                      : t("app.issueChat.copy.unableMessage"),
                   tone: "error",
                 });
               });
             }}
           >
             <Copy className="mr-2 h-3.5 w-3.5" />
-            Copy message
+            {t("app.issueChat.copy.message")}
           </DropdownMenuItem>
           {canStopRun && onStopRun && runId ? (
             <DropdownMenuItem
@@ -2534,7 +2586,7 @@ function IssueChatAssistantMessage({
             <DropdownMenuItem asChild>
               <Link to={runHref} target="_blank" rel="noreferrer noopener">
                 <Search className="mr-2 h-3.5 w-3.5" />
-                View run
+                {t("app.issueChat.run.viewRun")}
               </Link>
             </DropdownMenuItem>
           ) : null}
@@ -2581,7 +2633,7 @@ function IssueChatAssistantMessage({
                 variant="outline"
                 className="text-(length:--text-nano) uppercase tracking-(--tracking-eyebrow)"
               >
-                Follow-up
+                {t("app.issueChat.message.followUp")}
               </Badge>
             ) : null}
           </div>
@@ -2597,7 +2649,7 @@ function IssueChatAssistantMessage({
           >
             {deleted ? (
               <div className="text-sm italic text-muted-foreground">
-                Comment deleted
+                {t("app.issueChat.message.commentDeleted")}
               </div>
             ) : (
               <div className="min-w-0 max-w-full space-y-3">
@@ -2673,7 +2725,7 @@ function IssueChatAssistantMessage({
                   variant="outline"
                   className="text-(length:--text-nano) uppercase tracking-(--tracking-eyebrow)"
                 >
-                  Follow-up
+                  {t("app.issueChat.message.followUp")}
                 </Badge>
               ) : null}
               {isRunning ? (
@@ -2687,7 +2739,7 @@ function IssueChatAssistantMessage({
                   )}
                 >
                   <Loader2 className="h-3 w-3 animate-spin" />
-                  Running
+                  {t("app.issueChat.run.running")}
                 </Badge>
               ) : null}
             </div>
@@ -2695,7 +2747,7 @@ function IssueChatAssistantMessage({
 
           {deleted ? (
             <div className="rounded-sm bg-muted/40 px-3 py-2 text-sm italic text-muted-foreground">
-              Comment deleted
+              {t("app.issueChat.message.commentDeleted")}
             </div>
           ) : !folded ? (
             <>
@@ -2757,6 +2809,7 @@ function IssueChatFeedbackButtons({
     options?: { allowSharing?: boolean; reason?: string },
   ) => Promise<void>;
 }) {
+  const { t } = useTranslation();
   const [isSaving, setIsSaving] = useState(false);
   const [optimisticVote, setOptimisticVote] =
     useState<FeedbackVoteValue | null>(null);
@@ -2838,8 +2891,8 @@ function IssueChatFeedbackButtons({
             ? "text-green-600 dark:text-green-400"
             : "text-muted-foreground hover:bg-accent hover:text-foreground",
         )}
-        title="Helpful"
-        aria-label="Helpful"
+        title={t("app.issueChat.feedback.helpful")}
+        aria-label={t("app.issueChat.feedback.helpful")}
         onClick={handleThumbsUp}
       >
         <ThumbsUp className="h-3.5 w-3.5" />
@@ -2855,8 +2908,8 @@ function IssueChatFeedbackButtons({
                 ? "text-amber-600 dark:text-amber-400"
                 : "text-muted-foreground hover:bg-accent hover:text-foreground",
             )}
-            title="Needs work"
-            aria-label="Needs work"
+            title={t("app.issueChat.feedback.needsWork")}
+            aria-label={t("app.issueChat.feedback.needsWork")}
             onClick={handleThumbsDown}
           >
             <ThumbsDown className="h-3.5 w-3.5" />
@@ -2864,12 +2917,12 @@ function IssueChatFeedbackButtons({
         </PopoverTrigger>
         <PopoverContent side="top" align="start" className="w-80 p-3">
           <div className="mb-2 text-sm font-medium">
-            What could have been better?
+            {t("app.issueChat.feedback.whatCouldBeBetter")}
           </div>
           <Textarea
             value={downvoteReason}
             onChange={(event) => setDownvoteReason(event.target.value)}
-            placeholder="Add a short note"
+            placeholder={t("app.issueChat.feedback.notePlaceholder")}
             className="min-h-20 resize-y bg-background text-sm"
             disabled={isSaving}
           />
@@ -2884,7 +2937,7 @@ function IssueChatFeedbackButtons({
                 setDownvoteReason("");
               }}
             >
-              Dismiss
+              {t("app.issueChat.feedback.dismiss")}
             </Button>
             <Button
               type="button"
@@ -2892,7 +2945,7 @@ function IssueChatFeedbackButtons({
               disabled={isSaving || !downvoteReason.trim()}
               onClick={handleSubmitReason}
             >
-              {isSaving ? "Saving..." : "Save note"}
+              {isSaving ? t("app.issueChat.feedback.saving") : t("app.issueChat.feedback.saveNote")}
             </Button>
           </div>
         </PopoverContent>
@@ -2909,23 +2962,23 @@ function IssueChatFeedbackButtons({
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Save your feedback sharing preference</DialogTitle>
+            <DialogTitle>{t("app.issueChat.feedback.sharingTitle")}</DialogTitle>
             <DialogDescription>
-              Choose whether voted AI outputs can be shared with Paperclip Labs.
-              This answer becomes the default for future thumbs up and thumbs
-              down votes.
+              {t("app.issueChat.feedback.sharingDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 text-sm text-muted-foreground">
-            <p>This vote is always saved locally.</p>
+            <p>{t("app.issueChat.feedback.savedLocally")}</p>
             <p>
-              Choose{" "}
-              <span className="font-medium text-foreground">Always allow</span>{" "}
-              to share this vote and future voted AI outputs. Choose{" "}
-              <span className="font-medium text-foreground">Don't allow</span>{" "}
-              to keep this vote and future votes local.
+              <Trans
+                i18nKey="app.issueChat.feedback.sharingChoice"
+                components={{
+                  allow: <span className="font-medium text-foreground" />,
+                  deny: <span className="font-medium text-foreground" />,
+                }}
+              />
             </p>
-            <p>You can change this later in Settings &gt; General.</p>
+            <p>{t("app.issueChat.feedback.changeLater")}</p>
             {termsUrl ? (
               <a
                 href={termsUrl}
@@ -2933,7 +2986,7 @@ function IssueChatFeedbackButtons({
                 rel="noreferrer"
                 className="inline-flex text-sm text-foreground underline underline-offset-4"
               >
-                Read our terms of service
+                {t("app.issueChat.feedback.readTerms")}
               </a>
             ) : null}
           </div>
@@ -2952,7 +3005,7 @@ function IssueChatFeedbackButtons({
                 ).then(() => setPendingSharingDialog(null));
               }}
             >
-              {isSaving ? "Saving..." : "Don't allow"}
+              {isSaving ? t("app.issueChat.feedback.saving") : t("app.issueChat.feedback.dontAllow")}
             </Button>
             <Button
               type="button"
@@ -2967,7 +3020,7 @@ function IssueChatFeedbackButtons({
                 }).then(() => setPendingSharingDialog(null));
               }}
             >
-              {isSaving ? "Saving..." : "Always allow"}
+              {isSaving ? t("app.issueChat.feedback.saving") : t("app.issueChat.feedback.alwaysAllow")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -2985,6 +3038,7 @@ function ExpiredRequestConfirmationActivity({
   anchorId?: string;
   interaction: RequestConfirmationInteraction;
 }) {
+  const { t } = useTranslation();
   const {
     agentMap,
     currentUserId,
@@ -3032,12 +3086,12 @@ function ExpiredRequestConfirmationActivity({
         )}
       >
         <span className="font-medium text-foreground">{actorName}</span>
-        <span className="text-muted-foreground">updated this task</span>
+        <span className="text-muted-foreground">{t("app.issueChat.activity.updatedThisTask")}</span>
         <a
           href={anchorId ? `#${anchorId}` : undefined}
           className="text-xs text-muted-foreground transition-colors hover:text-foreground hover:underline"
         >
-          {timeAgo(message.createdAt)}
+          {timeAgo(message.createdAt, i18n.language)}
         </a>
         <button
           type="button"
@@ -3052,7 +3106,7 @@ function ExpiredRequestConfirmationActivity({
               expanded && "rotate-180",
             )}
           />
-          {expanded ? "Hide confirmation" : "Expired confirmation"}
+          {expanded ? t("app.issueChat.interaction.hideConfirmation") : t("app.issueChat.interaction.expiredConfirmation")}
         </button>
       </div>
       {expanded ? (
@@ -3304,10 +3358,11 @@ function StaleDispositionWarningDetails({
 }: {
   sections: SystemNoticeMetadataSection[];
 }) {
+  const { t } = useTranslation();
   if (sections.length === 0) {
     return (
       <div className="text-xs leading-5 text-muted-foreground">
-        No additional details.
+        {t("app.issueChat.systemNotice.noAdditionalDetails")}
       </div>
     );
   }
@@ -3346,6 +3401,7 @@ function StaleDispositionWarningRow({
   metadata: IssueCommentMetadata | null;
   runAgentId?: string | null;
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const detailsId = useId();
   const sections = mapCommentMetadataToSystemNoticeSections(metadata, {
@@ -3365,7 +3421,7 @@ function StaleDispositionWarningRow({
             onClick={() => setOpen((value) => !value)}
           >
             <span className="text-sm font-medium text-foreground/80">
-              Stale disposition warning
+              {t("app.issueChat.systemNotice.staleDispositionWarning")}
             </span>
             <span className="ml-auto flex items-center gap-1.5">
               {message.createdAt ? (
@@ -3494,6 +3550,7 @@ function SystemNoticeCommentContent({
   message: ThreadMessage;
   anchorId?: string;
 }) {
+  const { t } = useTranslation();
   const { onImageClick, agentMap, issueStatus, successfulRunHandoff } =
     useContext(IssueChatCtx);
   const toastActions = useOptionalToastActions();
@@ -3570,11 +3627,11 @@ function SystemNoticeCommentContent({
       })
       .catch((error) => {
         toastActions?.pushToast({
-          title: "Copy failed",
+          title: t("app.issueChat.copy.failed"),
           body:
             error instanceof Error
               ? error.message
-              : "Unable to copy system notice",
+              : t("app.issueChat.copy.unableSystemNotice"),
           tone: "error",
         });
       });
@@ -3590,11 +3647,11 @@ function SystemNoticeCommentContent({
       })
       .catch((error) => {
         toastActions?.pushToast({
-          title: "Copy failed",
+          title: t("app.issueChat.copy.failed"),
           body:
             error instanceof Error
               ? error.message
-              : "Unable to copy system notice link",
+              : t("app.issueChat.copy.unableSystemNoticeLink"),
           tone: "error",
         });
       });
@@ -3651,8 +3708,8 @@ function SystemNoticeCommentContent({
             <button
               type="button"
               className="inline-flex h-6 w-6 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-              title="Copy link"
-              aria-label="Copy link to system notice"
+              title={t("app.issueChat.copy.link")}
+              aria-label={t("app.issueChat.copy.linkToSystemNotice")}
               onClick={handleCopyLink}
             >
               {copiedLink ? (
@@ -3665,8 +3722,8 @@ function SystemNoticeCommentContent({
           <button
             type="button"
             className="inline-flex h-6 w-6 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-            title="Copy notice text"
-            aria-label="Copy system notice"
+            title={t("app.issueChat.copy.noticeText")}
+            aria-label={t("app.issueChat.copy.systemNotice")}
             onClick={handleCopy}
           >
             {copied ? (
@@ -3710,6 +3767,7 @@ function IssueChatMetadataRow({
 }
 
 function IssueChatSystemMessage({ message }: { message: ThreadMessage }) {
+  const { t } = useTranslation();
   const {
     agentMap,
     currentUserId,
@@ -3815,21 +3873,21 @@ function IssueChatSystemMessage({ message }: { message: ThreadMessage }) {
           <span className="font-medium text-foreground">{actorName}</span>
           <span className="text-muted-foreground">
             {custom.followUpRequested === true
-              ? "requested follow-up"
-              : "updated this task"}
+              ? t("app.issueChat.activity.requestedFollowUp")
+              : t("app.issueChat.activity.updatedThisTask")}
           </span>
           <a
             href={anchorId ? `#${anchorId}` : undefined}
             className="text-xs text-muted-foreground/70 transition-colors hover:text-foreground hover:underline"
           >
-            {timeAgo(message.createdAt)}
+            {timeAgo(message.createdAt, i18n.language)}
           </a>
         </div>
 
         {statusChange ? (
           <div className="flex flex-wrap items-center gap-1.5 text-xs">
             <span className="text-(length:--text-nano) font-medium uppercase tracking-wider text-muted-foreground/70">
-              Status
+              {t("app.issueChat.activity.status")}
             </span>
             <span className="text-muted-foreground">
               {humanizeValue(statusChange.from)}
@@ -3850,7 +3908,7 @@ function IssueChatSystemMessage({ message }: { message: ThreadMessage }) {
               )}
             >
               <span className="text-(length:--text-nano) font-medium uppercase tracking-wider text-muted-foreground/70">
-                Assignee
+                {t("app.issueChat.activity.assignee")}
               </span>
               <AssigneeChip
                 assignee={assigneeChange.from}
@@ -3875,7 +3933,7 @@ function IssueChatSystemMessage({ message }: { message: ThreadMessage }) {
         {workspaceChange ? (
           <div className="flex flex-wrap items-center gap-1.5 text-xs">
             <span className="text-(length:--text-nano) font-medium uppercase tracking-wider text-muted-foreground/70">
-              Workspace
+              {t("app.issueChat.activity.workspace")}
             </span>
             <span className="text-muted-foreground">
               {formatTimelineWorkspaceLabel(workspaceChange.from)}
@@ -3908,7 +3966,7 @@ function IssueChatSystemMessage({ message }: { message: ThreadMessage }) {
           >
             {displayedRunAgentName}
           </Link>
-          <span className="text-muted-foreground">run</span>
+          <span className="text-muted-foreground">{t("app.issueChat.run.runWord")}</span>
           <Link
             to={`/agents/${runAgentId}/runs/${runId}`}
             className="inline-flex items-center rounded-md border border-border bg-accent/40 px-1.5 py-0.5 font-mono text-(length:--text-nano) text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
@@ -3923,7 +3981,7 @@ function IssueChatSystemMessage({ message }: { message: ThreadMessage }) {
             href={anchorId ? `#${anchorId}` : undefined}
             className="text-xs text-muted-foreground/70 transition-colors hover:text-foreground hover:underline"
           >
-            {timeAgo(message.createdAt)}
+            {timeAgo(message.createdAt, i18n.language)}
           </a>
         </div>
       </IssueChatMetadataRow>
@@ -4525,11 +4583,12 @@ function IssueChatDeletedComment({
   message: ThreadMessage;
   deletedAt: string;
 }) {
+  const { t } = useTranslation();
   const custom = issueChatMessageCustom(message);
   const anchorId =
     typeof custom.anchorId === "string" ? custom.anchorId : undefined;
   const authorName =
-    typeof custom.authorName === "string" ? custom.authorName : "Comment";
+    typeof custom.authorName === "string" ? custom.authorName : t("app.issueChat.deleted.commentFallbackAuthor");
   const deletedDate = new Date(deletedAt);
   const deletedDateLabel = Number.isNaN(deletedDate.getTime())
     ? ""
@@ -4542,7 +4601,7 @@ function IssueChatDeletedComment({
       </div>
       <div className="min-w-0 rounded-md border border-dashed border-border bg-muted/20 px-3 py-2 text-sm text-muted-foreground">
         <span className="font-medium text-foreground/80">{authorName}</span>
-        <span> deleted this comment</span>
+        <span> {t("app.issueChat.deleted.deletedThisComment")}</span>
         {deletedDateLabel ? (
           <span className="text-xs"> · {deletedDateLabel}</span>
         ) : null}
@@ -4665,6 +4724,7 @@ const IssueChatComposer = forwardRef<
   },
   forwardedRef,
 ) {
+  const { t } = useTranslation();
   const stopControl = useComposerStop(onStop, stopPending);
   // Initialize before StrictMode's mount cleanup can flush an empty value over
   // the stored draft. The effect below handles subsequent task-key changes.
@@ -5080,7 +5140,7 @@ const IssueChatComposer = forwardRef<
       } else if (onAttachImage) {
         const attachment = await onAttachImage(file);
         if (!attachment?.contentPath)
-          throw new Error("Upload did not return a file URL");
+          throw new Error(t("app.issueChat.composer.uploadNoUrl"));
         if (
           !composerAttachmentsRef.current.some(
             (item) => item.id === attachmentId,
@@ -5112,7 +5172,7 @@ const IssueChatComposer = forwardRef<
               ? {
                   ...item,
                   status: "error",
-                  error: "This file type cannot be attached here",
+                  error: t("app.issueChat.composer.fileTypeNotAllowed"),
                 }
               : item,
           ),
@@ -5125,7 +5185,7 @@ const IssueChatComposer = forwardRef<
             ? {
                 ...item,
                 status: "error",
-                error: err instanceof Error ? err.message : "Upload failed",
+                error: err instanceof Error ? err.message : t("app.issueChat.composer.uploadFailed"),
               }
             : item,
         ),
@@ -5334,11 +5394,10 @@ const IssueChatComposer = forwardRef<
             </span>
             <div className="min-w-0">
               <div className="text-sm font-medium text-foreground">
-                Drop to upload
+                {t("app.issueChat.composer.dropToUpload")}
               </div>
               <div className="mt-0.5 text-xs leading-5 text-muted-foreground">
-                Images insert into the reply. Other files are added to this
-                task.
+                {t("app.issueChat.composer.dropHint")}
               </div>
             </div>
           </div>
@@ -5351,8 +5410,7 @@ const IssueChatComposer = forwardRef<
           className="mb-3 space-y-2 rounded-md border border-border bg-muted p-3 text-sm"
         >
           <p>
-            We couldn’t confirm whether this comment was saved. It may already
-            be in the conversation. Review it before starting another draft.
+            {t("app.issueChat.composer.uncertainSubmission")}
           </p>
           <Button
             type="button"
@@ -5362,7 +5420,7 @@ const IssueChatComposer = forwardRef<
               setReviewError(false);
               try {
                 if (!onReviewConversation)
-                  throw new Error("Review unavailable");
+                  throw new Error(t("app.issueChat.composer.reviewUnavailable"));
                 await onReviewConversation();
                 if (mountedTaskKey.current !== draftKey) return;
                 const reviewed = { ...uncertainSubmission, reviewed: true };
@@ -5378,16 +5436,15 @@ const IssueChatComposer = forwardRef<
               }
             }}
           >
-            Review conversation
+            {t("app.issueChat.composer.reviewConversation")}
           </Button>
           {reviewError ? (
-            <p>Couldn’t refresh the conversation. Try reviewing it again.</p>
+            <p>{t("app.issueChat.composer.reviewFailed")}</p>
           ) : null}
           {uncertainSubmission.reviewed ? (
             <>
               <p>
-                Discarding this draft does not remove any saved comment or
-                uploaded file.
+                {t("app.issueChat.composer.discardHint")}
               </p>
               <Button
                 type="button"
@@ -5402,7 +5459,7 @@ const IssueChatComposer = forwardRef<
                   setUncertainSubmission(null);
                 }}
               >
-                Discard draft and start new
+                {t("app.issueChat.composer.discardDraft")}
               </Button>
             </>
           ) : null}
@@ -5413,14 +5470,14 @@ const IssueChatComposer = forwardRef<
         readOnly={!!uncertainSubmission}
         value={body}
         onChange={changeBody}
-        placeholder="Reply"
+        placeholder={t("app.issueChat.composer.replyPlaceholder")}
         mentions={mentions}
         onSubmit={handleSubmit}
         imageUploadHandler={
           canAcceptFiles
             ? async (file) => {
                 const url = await attachFile(file, false);
-                if (!url) throw new Error("Upload did not return a file URL");
+                if (!url) throw new Error(t("app.issueChat.composer.uploadNoUrl"));
                 return url;
               }
             : undefined
@@ -5458,12 +5515,12 @@ const IssueChatComposer = forwardRef<
             const sizeLabel = formatAttachmentSize(attachment.size);
             const statusLabel =
               attachment.status === "uploading"
-                ? "Uploading to task"
+                ? t("app.issueChat.composer.uploadingToTask")
                 : attachment.status === "error"
-                  ? (attachment.error ?? "Upload failed")
+                  ? (attachment.error ?? t("app.issueChat.composer.uploadFailed"))
                   : attachment.inline
-                    ? "Inserted inline"
-                    : "Attached to task";
+                    ? t("app.issueChat.composer.insertedInline")
+                    : t("app.issueChat.composer.attachedToTask");
             return (
               <div
                 key={attachment.id}
@@ -5497,7 +5554,7 @@ const IssueChatComposer = forwardRef<
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={`Remove ${attachment.name}`}
+                    aria-label={t("app.issueChat.composer.removeAttachment", { name: attachment.name })}
                     disabled={!!uncertainSubmission}
                     onClick={() =>
                       setComposerAttachments((current) =>
@@ -5538,7 +5595,7 @@ const IssueChatComposer = forwardRef<
                 size="icon-sm"
                 onClick={() => attachInputRef.current?.click()}
                 disabled={attaching}
-                title="Attach file"
+                title={t("app.issueChat.composer.attachFile")}
               >
                 <Paperclip className="h-4 w-4" />
               </Button>
@@ -5601,7 +5658,7 @@ const IssueChatComposer = forwardRef<
                   );
                 })}
                 <div className="mt-1 border-t px-2 py-1.5 text-(length:--text-nano) text-muted-foreground">
-                  Cmd/Ctrl+. cycles modes
+                  {t("app.issueChat.composer.cycleModesHint")}
                 </div>
               </PopoverContent>
             </Popover>
@@ -5613,16 +5670,16 @@ const IssueChatComposer = forwardRef<
             ref={reassignTriggerRef}
             value={reassignTarget}
             options={reassignOptions}
-            placeholder="Responsible"
-            noneLabel="No responsible"
-            searchPlaceholder="Search responsible..."
-            emptyMessage="No responsible found."
+            placeholder={t("app.issueChat.composer.responsible")}
+            noneLabel={t("app.issueChat.composer.noResponsible")}
+            searchPlaceholder={t("app.issueChat.composer.searchResponsible")}
+            emptyMessage={t("app.issueChat.composer.noResponsibleFound")}
             onChange={setReassignTarget}
             className="h-8 text-xs"
             renderTriggerValue={(option) => {
               if (!option)
                 return (
-                  <span className="text-muted-foreground">Responsible</span>
+                  <span className="text-muted-foreground">{t("app.issueChat.composer.responsible")}</span>
                 );
               const agentId = option.id.startsWith("agent:")
                 ? option.id.slice("agent:".length)
@@ -5661,8 +5718,8 @@ const IssueChatComposer = forwardRef<
             size="icon-sm"
             disabled={stopControl.stopping}
             onClick={() => void stopControl.stop()}
-            aria-label={stopControl.stopping ? "Stopping…" : "Stop"}
-            title="Stop response"
+            aria-label={stopControl.stopping ? t("app.issueChat.composer.stopping") : t("app.issueChat.composer.stop")}
+            title={t("app.issueChat.composer.stopResponse")}
           >
             {stopControl.stopping ? (
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
@@ -5676,7 +5733,7 @@ const IssueChatComposer = forwardRef<
             disabled={!canSubmit}
             onClick={() => void handleSubmit()}
           >
-            {submitting ? "Posting..." : "Send"}
+            {submitting ? t("app.issueChat.composer.posting") : t("app.issueChat.composer.send")}
           </Button>
         )}
       </div>
@@ -5702,11 +5759,9 @@ const IssueChatComposer = forwardRef<
           }}
         >
           <AlertDialogHeader>
-            <AlertDialogTitle>No responsible selected</AlertDialogTitle>
+            <AlertDialogTitle>{t("app.issueChat.composer.noAssigneeTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This comment will be posted without an assignee, so no agent will
-              be woken to act on it. Go back to pick a responsible, or send
-              anyway.
+              {t("app.issueChat.composer.noAssigneeDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -5716,7 +5771,7 @@ const IssueChatComposer = forwardRef<
                 focusAssigneeOnDialogCloseRef.current = true;
               }}
             >
-              Go back
+              {t("app.issueChat.composer.goBack")}
             </AlertDialogCancel>
             <AlertDialogAction
               data-testid="issue-chat-no-assignee-send-anyway"
@@ -5724,7 +5779,7 @@ const IssueChatComposer = forwardRef<
                 void submitComment();
               }}
             >
-              Send anyway
+              {t("app.issueChat.composer.sendAnyway")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -5830,6 +5885,7 @@ export function IssueChatThread({
   externalReferences,
   linkCaseReferences = false,
 }: IssueChatThreadProps) {
+  const { t } = useTranslation();
   const location = useLocation();
   const lastScrolledHashRef = useRef<string | null>(null);
   const didInitialHashScrollDecisionRef = useRef(false);
@@ -6527,8 +6583,8 @@ export function IssueChatThread({
   const resolvedEmptyMessage =
     emptyMessage ??
     (variant === "embedded"
-      ? "No run output yet."
-      : "This task conversation is empty. Start with a message below.");
+      ? t("app.issueChat.thread.noRunOutput")
+      : t("app.issueChat.thread.emptyConversation"));
   const previousErrorBoundaryMessagesRef = useRef<
     readonly ThreadMessage[] | null
   >(null);
@@ -6550,7 +6606,7 @@ export function IssueChatThread({
                 onClick={handleJumpToLatest}
                 className="text-xs text-muted-foreground transition-colors hover:text-foreground"
               >
-                Jump to latest
+                {t("app.issueChat.thread.jumpToLatest")}
               </button>
             </div>
           ) : null}
@@ -6639,11 +6695,10 @@ export function IssueChatThread({
                     {legacyRecoverySourceIssue ? (
                       <SystemNotice
                         tone="info"
-                        label="Legacy recovery task"
+                        label={t("app.issueChat.legacyRecovery.label")}
                         body={
                           <span>
-                            Legacy recovery task. Newer recovery actions live on
-                            the source task
+                            {t("app.issueChat.legacyRecovery.body")}
                             {legacyRecoverySourceIssue.identifier ? (
                               <>
                                 {" — "}
@@ -6661,7 +6716,7 @@ export function IssueChatThread({
                                 </Link>
                               </>
                             ) : (
-                              "."
+                              t("app.issueChat.legacyRecovery.period")
                             )}
                           </span>
                         }

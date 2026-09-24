@@ -1,4 +1,7 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import type { TFunction } from "i18next";
+import { Trans } from "react-i18next";
+import { useTranslation } from "@/i18n";
 import {
   Tooltip,
   TooltipTrigger,
@@ -69,6 +72,51 @@ import { getAdapterLabels } from "../adapters/adapter-display-registry";
 export const adapterLabels = getAdapterLabels();
 
 export const roleLabels = AGENT_ROLE_LABELS as Record<string, string>;
+
+const helpValues: Record<string, Record<string, string>> = {
+  promptTemplate: {
+    agentId: "{{ agent.id }}",
+    agentName: "{{ agent.name }}",
+    agentRole: "{{ agent.role }}",
+  },
+  workspaceBranchTemplate: {
+    issueIdentifier: "{{issue.identifier}}",
+    issueTitle: "{{issue.title}}",
+    agentName: "{{agent.name}}",
+    projectId: "{{project.id}}",
+    workspaceRepoRef: "{{workspace.repoRef}}",
+    slug: "{{slug}}",
+  },
+};
+
+/** Localized help text for a `help` key; falls back to the English `help` entry. */
+export function helpText(t: TFunction, key: string): string {
+  const fallback = help[key];
+  if (fallback === undefined) return key;
+  return t(`app.agentSetup.help.${key}`, {
+    defaultValue: fallback,
+    ...helpValues[key],
+  });
+}
+
+/** Render-time localized counterpart of `help`, with the same keys. */
+export function useAgentConfigHelp(): Record<string, string> {
+  const { t } = useTranslation();
+  return useMemo(
+    () => Object.fromEntries(Object.keys(help).map((key) => [key, helpText(t, key)])),
+    [t],
+  );
+}
+
+/** Localized adapter display label; adapter type ids are never translated. */
+export function adapterLabel(t: TFunction, type: string): string {
+  return t(`app.agentSetup.adapterLabels.${type}`, { defaultValue: adapterLabels[type] ?? type });
+}
+
+/** Localized role label, backed by `app.agents.roles`. */
+export function roleLabel(t: TFunction, role: string): string {
+  return t(`app.agents.roles.${role}`, { defaultValue: roleLabels[role] ?? role });
+}
 
 /* ---- Primitive components ---- */
 
@@ -381,7 +429,10 @@ export function DraftNumberInput({
  * type the path due to browser security limitations.
  */
 export function ChoosePathButton() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const kbd = { kbd: <kbd /> };
+  const code = { code: <code /> };
   return (
     <>
       <button
@@ -389,54 +440,53 @@ export function ChoosePathButton() {
         className="inline-flex items-center rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground hover:bg-accent/50 transition-colors shrink-0"
         onClick={() => setOpen(true)}
       >
-        Choose
+        {t("app.agentSetup.choosePath.button")}
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Specify path manually</DialogTitle>
+            <DialogTitle>{t("app.agentSetup.choosePath.title")}</DialogTitle>
             <DialogDescription>
-              Browser security blocks apps from reading full local paths via a file picker.
-              Copy the absolute path and paste it into the input.
+              {t("app.agentSetup.choosePath.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 text-sm">
             <section className="space-y-1.5">
-              <p className="font-medium">macOS (Finder)</p>
+              <p className="font-medium">{t("app.agentSetup.choosePath.macTitle")}</p>
               <ol className="list-decimal space-y-1 pl-5 text-muted-foreground">
-                <li>Find the folder in Finder.</li>
-                <li>Hold <kbd>Option</kbd> and right-click the folder.</li>
-                <li>Click "Copy &lt;folder name&gt; as Pathname".</li>
-                <li>Paste the result into the path input.</li>
+                <li>{t("app.agentSetup.choosePath.macStep1")}</li>
+                <li><Trans i18nKey="app.agentSetup.choosePath.macStep2" components={kbd} /></li>
+                <li>{t("app.agentSetup.choosePath.macStep3")}</li>
+                <li>{t("app.agentSetup.choosePath.pasteStep")}</li>
               </ol>
               <p className="rounded-md bg-muted px-2 py-1 font-mono text-xs">
                 /Users/yourname/Documents/project
               </p>
             </section>
             <section className="space-y-1.5">
-              <p className="font-medium">Windows (File Explorer)</p>
+              <p className="font-medium">{t("app.agentSetup.choosePath.winTitle")}</p>
               <ol className="list-decimal space-y-1 pl-5 text-muted-foreground">
-                <li>Find the folder in File Explorer.</li>
-                <li>Hold <kbd>Shift</kbd> and right-click the folder.</li>
-                <li>Click "Copy as path".</li>
-                <li>Paste the result into the path input.</li>
+                <li>{t("app.agentSetup.choosePath.winStep1")}</li>
+                <li><Trans i18nKey="app.agentSetup.choosePath.winStep2" components={kbd} /></li>
+                <li>{t("app.agentSetup.choosePath.winStep3")}</li>
+                <li>{t("app.agentSetup.choosePath.pasteStep")}</li>
               </ol>
               <p className="rounded-md bg-muted px-2 py-1 font-mono text-xs">
                 C:\Users\yourname\Documents\project
               </p>
             </section>
             <section className="space-y-1.5">
-              <p className="font-medium">Terminal fallback (macOS/Linux)</p>
+              <p className="font-medium">{t("app.agentSetup.choosePath.terminalTitle")}</p>
               <ol className="list-decimal space-y-1 pl-5 text-muted-foreground">
-                <li>Run <code>cd /path/to/folder</code>.</li>
-                <li>Run <code>pwd</code>.</li>
-                <li>Copy the output and paste it into the path input.</li>
+                <li><Trans i18nKey="app.agentSetup.choosePath.terminalStep1" components={code} /></li>
+                <li><Trans i18nKey="app.agentSetup.choosePath.terminalStep2" components={code} /></li>
+                <li>{t("app.agentSetup.choosePath.terminalStep3")}</li>
               </ol>
             </section>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              OK
+              {t("app.agentSetup.choosePath.ok")}
             </Button>
           </DialogFooter>
         </DialogContent>

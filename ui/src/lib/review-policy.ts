@@ -1,5 +1,6 @@
 import { UserCheck, UserMinus, type LucideIcon } from "lucide-react";
 import { ISSUE_REVIEW_POLICIES, type IssueReviewPolicy } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 /**
  * Copy for an issue's `reviewPolicy` (PAP-16506 P4).
@@ -29,27 +30,27 @@ export interface IssueReviewPolicyBadge {
 }
 
 /** Only the constrained policies are shown; `anyone` is the silent default. */
-const BADGES: Partial<Record<IssueReviewPolicy, IssueReviewPolicyBadge>> = {
+const badges = (): Partial<Record<IssueReviewPolicy, IssueReviewPolicyBadge>> => ({
   not_creator: {
     value: "not_creator",
-    label: "Anyone else",
-    description: "Anyone except whoever asked for the review can approve it.",
+    label: t("app.shared.reviewPolicy.notCreatorLabel"),
+    description: t("app.shared.reviewPolicy.notCreatorDescription"),
     Icon: UserMinus,
   },
   human_only: {
     value: "human_only",
-    label: "Human only",
-    description: "Only a person can approve this review. Agents cannot give the verdict.",
+    label: t("app.shared.reviewPolicy.humanOnlyLabel"),
+    description: t("app.shared.reviewPolicy.humanOnlyDescription"),
     Icon: UserCheck,
   },
-};
+});
 
 /** Mid-sentence wording for activity lines and field-change receipts. */
-const VALUE_LABELS: Record<IssueReviewPolicy, string> = {
-  anyone: "anyone",
-  not_creator: "anyone else",
-  human_only: "human only",
-};
+const valueLabels = (): Record<IssueReviewPolicy, string> => ({
+  anyone: t("app.shared.reviewPolicy.valueAnyone"),
+  not_creator: t("app.shared.reviewPolicy.valueAnyoneElse"),
+  human_only: t("app.shared.reviewPolicy.valueHumanOnly"),
+});
 
 /**
  * The badge for a policy, or `null` when there is nothing to show — which is the
@@ -59,7 +60,7 @@ export function issueReviewPolicyBadge(
   policy: IssueReviewPolicy | null | undefined,
 ): IssueReviewPolicyBadge | null {
   if (typeof policy !== "string") return null;
-  return BADGES[policy as IssueReviewPolicy] ?? null;
+  return badges()[policy as IssueReviewPolicy] ?? null;
 }
 
 /**
@@ -67,10 +68,11 @@ export function issueReviewPolicyBadge(
  * cleared column must read "anyone" rather than "none".
  */
 export function formatReviewPolicyValue(value: unknown): string {
-  if (value === null || value === undefined) return VALUE_LABELS.anyone;
-  if (typeof value !== "string") return VALUE_LABELS.anyone;
+  const labels = valueLabels();
+  if (value === null || value === undefined) return labels.anyone;
+  if (typeof value !== "string") return labels.anyone;
   // Forward-compatible: a policy this build does not know reads as itself.
-  return VALUE_LABELS[value as IssueReviewPolicy] ?? value.replace(/_/g, " ");
+  return labels[value as IssueReviewPolicy] ?? value.replace(/_/g, " ");
 }
 
 /**

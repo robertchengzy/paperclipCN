@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { i18n, t } from "@/i18n";
 
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -64,32 +65,55 @@ function toTimestamp(value: MonitorDate): number {
 
 function formatDuration(durationMs: number): string {
   if (durationMs < MINUTE_MS) {
-    return `${Math.max(1, Math.ceil(durationMs / SECOND_MS))}s`;
+    return t("app.format.duration.s", { s: Math.max(1, Math.ceil(durationMs / SECOND_MS)) });
   }
   if (durationMs < HOUR_MS) {
-    return `${Math.floor(durationMs / MINUTE_MS)}m`;
+    return t("app.format.duration.m", { m: Math.floor(durationMs / MINUTE_MS) });
   }
   if (durationMs < DAY_MS) {
     const hours = Math.floor(durationMs / HOUR_MS);
     const minutes = Math.floor((durationMs % HOUR_MS) / MINUTE_MS);
-    return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
+    return minutes > 0
+      ? t("app.format.duration.hm", { h: hours, m: minutes })
+      : t("app.format.duration.h", { h: hours });
   }
 
   const days = Math.floor(durationMs / DAY_MS);
   const hours = Math.floor((durationMs % DAY_MS) / HOUR_MS);
-  return hours > 0 ? `${days}d ${hours}h` : `${days}d`;
+  return hours > 0
+    ? t("app.format.duration.dh", { d: days, h: hours })
+    : t("app.format.duration.d", { d: days });
+}
+
+type MonitorEta =
+  | { kind: "in"; durationMs: number }
+  | { kind: "due-now" }
+  | { kind: "overdue"; durationMs: number };
+
+function monitorEta(nextCheckAt: MonitorDate, now: MonitorDate): MonitorEta {
+  const deltaMs = toTimestamp(nextCheckAt) - toTimestamp(now);
+  if (deltaMs > 0) return { kind: "in", durationMs: deltaMs };
+  if (deltaMs > -DUE_NOW_GRACE_MS) return { kind: "due-now" };
+  return { kind: "overdue", durationMs: Math.abs(deltaMs) };
 }
 
 export function formatMonitorEta(nextCheckAt: MonitorDate, now: MonitorDate = new Date()): string {
-  const deltaMs = toTimestamp(nextCheckAt) - toTimestamp(now);
-  if (deltaMs > 0) return `in ${formatDuration(deltaMs)}`;
-  if (deltaMs > -DUE_NOW_GRACE_MS) return "due now";
-  return `overdue by ${formatDuration(Math.abs(deltaMs))}`;
+  const eta = monitorEta(nextCheckAt, now);
+  if (eta.kind === "in") return t("app.format.monitor.in", { duration: formatDuration(eta.durationMs) });
+  if (eta.kind === "due-now") return t("app.format.monitor.dueNow");
+  return t("app.format.monitor.overdueBy", { duration: formatDuration(eta.durationMs) });
 }
 
 export function formatMonitorEtaLabel(nextCheckAt: MonitorDate, now: MonitorDate = new Date()): string {
-  const eta = formatMonitorEta(nextCheckAt, now);
-  return `${eta.charAt(0).toUpperCase()}${eta.slice(1)}`;
+  const eta = monitorEta(nextCheckAt, now);
+  if (eta.kind === "in") return t("app.format.monitor.inLabel", { duration: formatDuration(eta.durationMs) });
+  if (eta.kind === "due-now") return t("app.format.monitor.dueNowLabel");
+  return t("app.format.monitor.overdueByLabel", { duration: formatDuration(eta.durationMs) });
+}
+
+function monitorDisplayLocale(locale: Intl.LocalesArgument): Intl.LocalesArgument {
+  if (locale !== undefined) return locale;
+  return i18n.language === "zh-CN" ? "zh-CN" : undefined;
 }
 
 function zonedYmd(
@@ -120,12 +144,13 @@ export function formatMonitorAbsolute(
   options: MonitorDateTimeFormatOptions = {},
   now: MonitorDate = new Date(),
 ): string {
+  const locale = monitorDisplayLocale(options.locale);
   const target = new Date(toTimestamp(nextCheckAt));
   const reference = new Date(toTimestamp(now));
-  const targetYmd = zonedYmd(target, options.locale, options.timeZone);
-  const referenceYmd = zonedYmd(reference, options.locale, options.timeZone);
+  const targetYmd = zonedYmd(target, locale, options.timeZone);
+  const referenceYmd = zonedYmd(reference, locale, options.timeZone);
 
-  const time = new Intl.DateTimeFormat(options.locale, {
+  const time = new Intl.DateTimeFormat(locale, {
     hour: "numeric",
     minute: "2-digit",
     timeZone: options.timeZone,
@@ -135,42 +160,43 @@ export function formatMonitorAbsolute(
     targetYmd.year === referenceYmd.year &&
     targetYmd.month === referenceYmd.month &&
     targetYmd.day === referenceYmd.day;
-  if (isToday) return `Today, ${time}`;
+  if (isToday) return t("app.format.monitor.todayAt", { time });
 
-  const weekday = new Intl.DateTimeFormat(options.locale, {
+  const weekday = new Intl.DateTimeFormat(locale, {
     weekday: "short",
     timeZone: options.timeZone,
   }).format(target);
-  const date = new Intl.DateTimeFormat(options.locale, {
+  const date = new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: targetYmd.year === referenceYmd.year ? undefined : "numeric",
     timeZone: options.timeZone,
   }).format(target);
 
-  return `${weekday} ${date}, ${time}`;
+  return t("app.format.monitor.weekdayDateTime", { weekday, date, time });
 }
 
 export function formatMonitorAbsoluteFull(
   nextCheckAt: MonitorDate,
   options: MonitorDateTimeFormatOptions = {},
 ): string {
+  const locale = monitorDisplayLocale(options.locale);
   const date = new Date(toTimestamp(nextCheckAt));
-  const datePart = new Intl.DateTimeFormat(options.locale, {
+  const datePart = new Intl.DateTimeFormat(locale, {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
     timeZone: options.timeZone,
   }).format(date);
-  const timePart = new Intl.DateTimeFormat(options.locale, {
+  const timePart = new Intl.DateTimeFormat(locale, {
     hour: "numeric",
     minute: "2-digit",
     second: "2-digit",
     timeZoneName: "short",
     timeZone: options.timeZone,
   }).format(date);
-  return `${datePart}, ${timePart}`;
+  return t("app.format.monitor.fullDateTime", { date: datePart, time: timePart });
 }
 
 export function deriveMonitorState(issue: MonitorIssueLike, now: MonitorDate = new Date()): DerivedMonitorState {
@@ -262,9 +288,9 @@ export function useMonitorCountdown(nextCheckAt: MonitorDate | null | undefined)
 export function formatMonitorOffset(nextCheckAt: MonitorDate): string {
   const now = new Date(Date.now());
   const deltaMs = toTimestamp(nextCheckAt) - now.getTime();
-  if (Math.round(Math.abs(deltaMs) / MINUTE_MS) === 0) return "now";
-  const eta = formatMonitorEta(nextCheckAt, now);
-  if (eta === "due now") return "now";
-  if (eta.startsWith("overdue by ")) return `${eta.slice("overdue by ".length)} ago`;
-  return eta;
+  if (Math.round(Math.abs(deltaMs) / MINUTE_MS) === 0) return t("app.format.monitor.offsetNow");
+  const eta = monitorEta(nextCheckAt, now);
+  if (eta.kind === "due-now") return t("app.format.monitor.offsetNow");
+  if (eta.kind === "overdue") return t("app.format.monitor.offsetAgo", { duration: formatDuration(eta.durationMs) });
+  return t("app.format.monitor.in", { duration: formatDuration(eta.durationMs) });
 }

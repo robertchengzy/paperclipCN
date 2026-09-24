@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n";
 
 export interface CollectionToolbarProps {
   /** Primary context such as tabs, a view title, or a result count. */
@@ -30,14 +31,15 @@ export function CollectionToolbar({
   actions,
   feedback,
   className,
-  ariaLabel = "Collection controls",
+  ariaLabel,
 }: CollectionToolbarProps) {
+  const { t } = useTranslation();
   return (
     <div
       data-slot="collection-toolbar"
       className={cn("flex flex-col gap-2", className)}
       role="toolbar"
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ?? t("app.shared.collectionToolbar.ariaLabel")}
     >
       <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
         {context ? (

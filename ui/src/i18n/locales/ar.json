@@ -1557,6 +1557,1051 @@
           "hint": "Hint: {{hint}}"
         }
       }
+    },
+    "format": {
+      "relative": {
+        "justNow": "just now",
+        "minutesAgo": "{{count}}m ago",
+        "hoursAgo": "{{count}}h ago",
+        "daysAgo": "{{count}}d ago"
+      },
+      "duration": {
+        "s": "{{s}}s",
+        "m": "{{m}}m",
+        "ms": "{{m}}m {{s}}s",
+        "h": "{{h}}h",
+        "hm": "{{h}}h {{m}}m",
+        "d": "{{d}}d",
+        "dh": "{{d}}d {{h}}h"
+      },
+      "monitor": {
+        "in": "in {{duration}}",
+        "inLabel": "In {{duration}}",
+        "dueNow": "due now",
+        "dueNowLabel": "Due now",
+        "overdueBy": "overdue by {{duration}}",
+        "overdueByLabel": "Overdue by {{duration}}",
+        "offsetNow": "now",
+        "offsetAgo": "{{duration}} ago",
+        "todayAt": "Today, {{time}}",
+        "weekdayDateTime": "{{weekday}} {{date}}, {{time}}",
+        "fullDateTime": "{{date}}, {{time}}"
+      },
+      "dateGroups": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "earlier": "Earlier"
+      }
+    },
+    "issueDetail": {
+      "errors": {
+        "runStoppedUpdateFailedWithMessage": "Run was stopped, but updating the task failed: {{message}}",
+        "runStoppedUpdateFailed": "Run was stopped, but updating the task failed. Retry the task status update.",
+        "failedRunUnavailable": "Failed run is no longer available.",
+        "taskStillLoading": "Task details are still loading. Please try again.",
+        "noAssigneeAgent": "No assignee agent",
+        "taskNotLoaded": "Task is not loaded yet."
+      },
+      "plan": {
+        "approved": "Approved plan",
+        "requestedChanges": "Requested changes"
+      },
+      "treeControl": {
+        "previewForbidden": "Only board users can preview subtree controls.",
+        "previewStale": "Preview is stale because subtree hold state changed. Retry to refresh.",
+        "previewInvalid": "This subtree action is currently invalid for the selected tasks.",
+        "previewLoadFailed": "Unable to load preview.",
+        "noActivePauseHold": "No active subtree pause hold is available to resume.",
+        "wakeFailuresOne": "Pause released, but {{count}} task could not start. {{message}} Check the affected agents and try starting them again.",
+        "wakeFailuresMany": "Pause released, but {{count}} tasks could not start. {{message}} Check the affected agents and try starting them again.",
+        "pausedBadge": "Paused"
+      },
+      "actors": {
+        "system": "System",
+        "board": "Board",
+        "unknown": "Unknown",
+        "user": "User",
+        "agent": "Agent"
+      },
+      "attribution": {
+        "assignee": "Assignee",
+        "originating": "Originating",
+        "aria": "{{label}}: {{name}}",
+        "ariaVia": "{{label}}: {{name}} · via {{via}}",
+        "via": "via {{via}}",
+        "taskPeople": "Task people"
+      },
+      "header": {
+        "routineExecutionTitle": "Routine execution from routine {{id}}",
+        "routine": "Routine",
+        "live": "Live",
+        "watchdogTitle": "This task is a generated watchdog task. It verifies whether stopped work in the watched task tree is legitimate.",
+        "watchdog": "Watchdog",
+        "workModeTitle": "This task is in {{mode}}.",
+        "parkedBlockerTitle": "Blocked by parked work — at least one assigned blocker is in backlog and will not wake its assignee.",
+        "parkedBlocker": "Blocked by parked work"
+      },
+      "mobile": {
+        "backToInbox": "Back to inbox",
+        "moreActions": "More actions",
+        "taskSidePanel": "Task side panel",
+        "plan": "Plan"
+      },
+      "actions": {
+        "archiveFromInbox": "Archive from inbox",
+        "copyAsMarkdown": "Copy as markdown",
+        "properties": "Properties",
+        "hideTask": "Hide this task",
+        "copyTaskAsMarkdown": "Copy task as markdown",
+        "openFileTitle": "Open file... (g f)",
+        "openFileAria": "Open file in this issue",
+        "moreTaskActions": "More task actions",
+        "addSubtask": "Add subtask"
+      },
+      "toasts": {
+        "retryQueued": "Retry queued",
+        "retryQueuedBody": "The exact request will retry when this task is ready.",
+        "taskRestoredToInbox": "Task restored to inbox",
+        "undoFailed": "Undo failed",
+        "undoFailedBody": "Unable to restore this task to the inbox",
+        "taskUpdateFailed": "Task update failed",
+        "taskUpdateFailedBody": "Unable to save task changes",
+        "recoveryResolutionFailed": "Recovery resolution failed",
+        "recoveryResolutionFailedBody": "Unable to resolve recovery action",
+        "runStoppedTaskDone": "Run stopped and task done",
+        "runStoppedTaskCancelled": "Run stopped and task cancelled",
+        "runStoppedTaskUpdateFailed": "Run stopped; task update failed",
+        "stopAndDoneFailed": "Stop and done failed",
+        "stopAndCancelFailed": "Stop and cancel failed",
+        "stopAndFinalizeFailedBody": "Unable to stop the run and update the task",
+        "subTaskUpdateFailedBody": "Unable to save sub-task changes",
+        "monitorCheckQueued": "Monitor check queued",
+        "monitorCheckFailed": "Monitor check failed",
+        "monitorCheckFailedBody": "Unable to trigger the monitor right now",
+        "approvalApproved": "Approval approved",
+        "approvalRejected": "Approval rejected",
+        "approvalFailed": "Approval failed",
+        "rejectionFailed": "Rejection failed",
+        "approvalFailedBody": "Unable to update approval",
+        "cancelFailed": "Cancel failed",
+        "cancelQueuedCommentFailedBody": "Unable to cancel the queued comment",
+        "commentSaveUnconfirmed": "Comment save unconfirmed",
+        "commentFailed": "Comment failed",
+        "commentFailedBody": "Unable to post comment",
+        "requestConfirmed": "Request confirmed",
+        "selectionConfirmed": "Selection confirmed",
+        "suggestedTasksAccepted": "Suggested tasks accepted",
+        "acceptFailed": "Accept failed",
+        "acceptFailedBody": "Unable to accept the suggested tasks",
+        "suggestionRejected": "Suggestion rejected",
+        "rejectFailed": "Reject failed",
+        "rejectFailedBody": "Unable to reject the suggested tasks",
+        "answersSubmitted": "Answers submitted",
+        "submitFailed": "Submit failed",
+        "submitFailedBody": "Unable to submit answers",
+        "allVerdictsApplied": "All verdicts applied",
+        "applyFailed": "Apply failed",
+        "applyFailedBody": "Unable to apply the verdicts",
+        "questionCancelled": "Question cancelled",
+        "cancelQuestionFailedBody": "Unable to cancel the question",
+        "skipFailed": "Skip failed",
+        "skipFailedBody": "Unable to skip this request",
+        "interruptRequested": "Interrupt requested",
+        "interruptRequestedBody": "Queued messages will be sent when the previous run has stopped.",
+        "interruptFailed": "Interrupt failed",
+        "interruptFailedBody": "Unable to interrupt the active run",
+        "queuedCommentCanceled": "Queued comment canceled",
+        "queuedCommentCanceledBody": "The queued message was restored to the composer.",
+        "commentDeleted": "Comment deleted",
+        "commentDeletedBody": "The thread now shows a deleted-comment marker.",
+        "deleteFailed": "Delete failed",
+        "deleteCommentFailedBody": "Unable to delete the comment",
+        "feedbackSavedWillShare": "Feedback saved. Future votes will share",
+        "feedbackSavedStayLocal": "Feedback saved. Future votes will stay local",
+        "feedbackSavedSharingEnabled": "Feedback saved and sharing enabled",
+        "feedbackSaved": "Feedback saved",
+        "feedbackSaveFailed": "Failed to save feedback",
+        "unknownError": "Unknown error",
+        "taskArchivedFromInbox": "Task archived from inbox",
+        "undo": "Undo",
+        "archiveFailed": "Archive failed",
+        "archiveFailedBody": "Unable to archive this task from the inbox",
+        "copiedToClipboard": "Copied to clipboard",
+        "copyFailed": "Copy failed",
+        "copyFailedBody": "Unable to copy task markdown",
+        "reissueCreated": "Isolated re-issue created",
+        "reissueCreatedBody": "A fresh isolated re-issue was created.",
+        "reissueFailed": "Re-issue failed",
+        "reissueFailedBody": "Unable to create an isolated re-issue.",
+        "workspaceRepaired": "Workspace repaired",
+        "workspaceRepairedBody": "Dirty changes were quarantined onto a rescue branch and the recorded branch restored; the task will resume.",
+        "workspaceReconciled": "Workspace branch reconciled",
+        "workspaceReconciledBody": "The recorded branch now matches the live branch; the task will resume.",
+        "reconcileFailed": "Reconcile failed",
+        "reconcileFailedBody": "Unable to reconcile the workspace branch.",
+        "noWorkspaceToReconcile": "This task has no execution workspace to reconcile.",
+        "repairFailed": "Repair failed",
+        "noWorkspaceToRepair": "This task has no execution workspace to repair.",
+        "acceptedDraftsSkippedOne": "Accepted {{count}} draft and skipped {{skipped}}",
+        "acceptedDraftsSkippedMany": "Accepted {{count}} drafts and skipped {{skipped}}",
+        "appliedDecisionsOne": "Applied {{count}} decision",
+        "appliedDecisionsMany": "Applied {{count}} decisions",
+        "reissueCreatedWithId": "{{identifier}} will run on a fresh isolated workspace."
+      },
+      "queue": {
+        "awaitingAckOne": "The queued message is awaiting server acknowledgement.",
+        "awaitingAckMany": "The queued messages are awaiting server acknowledgement.",
+        "noActiveRunTarget": "The queued message no longer has an active run target.",
+        "alreadySending": "Message is already being sent",
+        "alreadySendingBody": "The continuation started before the discard was confirmed, so Paperclip could not unsend it."
+      },
+      "comments": {
+        "loadingEarlier": "Loading earlier comments...",
+        "loadEarlier": "Load earlier comments"
+      },
+      "run": {
+        "pauseWork": "Pause work",
+        "pausing": "Pausing...",
+        "stopAndCancel": "Stop and cancel",
+        "stoppingAndCancelling": "Stopping and cancelling...",
+        "stopAndDone": "Stop and done",
+        "stoppingAndMarkingDone": "Stopping and marking done..."
+      },
+      "cost": {
+        "title": "Cost Summary",
+        "noData": "No cost data yet.",
+        "thisTask": "This task",
+        "tokens": "Tokens {{total}} (in {{input}}, out {{output}})",
+        "tokensWithCached": "Tokens {{total}} (in {{input}}, out {{output}}, cached {{cached}})",
+        "runtimeOne": "Runtime {{duration}} ({{count}} run)",
+        "runtimeMany": "Runtime {{duration}} ({{count}} runs)",
+        "noDirectData": "No direct cost data.",
+        "includingSubTasks": "Including sub-tasks {{amount}}",
+        "taskCountOne": "{{count}} task",
+        "taskCountMany": "{{count}} tasks"
+      },
+      "reassign": {
+        "me": "Me"
+      },
+      "breadcrumb": {
+        "task": "Task"
+      },
+      "attachments": {
+        "uploadFailed": "Upload failed",
+        "documentImportFailed": "Document import failed",
+        "uploading": "Uploading...",
+        "uploadAttachment": "Upload attachment",
+        "upload": "Upload"
+      },
+      "conversation": {
+        "configureAgent": "Configure {{name}}"
+      },
+      "composer": {
+        "isolatedWorkspaceArchivedHint": "This issue's isolated workspace was archived. Your next comment or resume reopens it and rebuilds the worktree.",
+        "agentChatDisabled": "Agent Chat is disabled in Experimental settings.",
+        "pauseStateUnknown": "Couldn’t check whether this task is paused. Refresh to try again."
+      },
+      "description": {
+        "placeholder": "Add a description..."
+      },
+      "status": {
+        "replySent": "Reply sent. Send a message to continue.",
+        "hidden": "This task is hidden"
+      },
+      "subTasks": {
+        "title": "Sub-tasks",
+        "createLabel": "Sub-task",
+        "newSubTask": "New Sub-task"
+      },
+      "artifacts": {
+        "title": "Artifacts"
+      },
+      "tabs": {
+        "chat": "Chat",
+        "activity": "Activity",
+        "relatedWork": "Related work"
+      }
+    },
+    "shared": {
+      "assignees": {
+        "you": "You",
+        "me": "Me",
+        "board": "Board"
+      },
+      "workMode": {
+        "auto": "Auto mode",
+        "plan": "Plan mode",
+        "ask": "Ask mode",
+        "pendingAsk": "Ask mode for this submission. Click to change. The responsible will answer in this thread; no implementation work.",
+        "pendingPlan": "Plan mode is on for this submission. Click to change.",
+        "pendingAuto": "Auto mode for this submission. Click to change."
+      },
+      "reviewPolicy": {
+        "notCreatorLabel": "Anyone else",
+        "notCreatorDescription": "Anyone except whoever asked for the review can approve it.",
+        "humanOnlyLabel": "Human only",
+        "humanOnlyDescription": "Only a person can approve this review. Agents cannot give the verdict.",
+        "valueAnyone": "anyone",
+        "valueAnyoneElse": "anyone else",
+        "valueHumanOnly": "human only"
+      },
+      "retry": {
+        "reasons": {
+          "transientFailure": "Transient failure",
+          "missingIssueComment": "Missing task comment",
+          "processLost": "Process lost",
+          "assignmentRecovery": "Assignment recovery",
+          "issueContinuationNeeded": "Continuation needed",
+          "maxTurnsContinuation": "Max-turn continuation"
+        },
+        "attempt": "Attempt {{attempt}}",
+        "continuationScheduled": "Continuation scheduled",
+        "retryScheduled": "Retry scheduled",
+        "nextContinuationAt": "Next continuation {{dueAt}}",
+        "nextRetryAt": "Next retry {{dueAt}}",
+        "nextContinuationPending": "Next continuation pending schedule",
+        "nextRetryPending": "Next retry pending schedule",
+        "continuationExhausted": "Continuation exhausted",
+        "retryExhausted": "Retry exhausted",
+        "automaticRetriesExhausted": "Automatic retries exhausted",
+        "manualInterventionRequired": "{{reason}} Manual intervention required.",
+        "continuedRun": "Continued run",
+        "retriedRun": "Retried run"
+      },
+      "recovery": {
+        "needed": "Recovery needed",
+        "inProgress": "Recovery in progress",
+        "observing": "Observing active run",
+        "escalated": "Recovery escalated",
+        "workspaceNeeded": "Workspace recovery needed",
+        "inProgressCount": "Recovery in progress · {{attempt}}/{{max}}",
+        "attemptOf": "Attempt {{attempt}} of {{max}}",
+        "attemptRunningNow": "attempt running now",
+        "retryMissedAt": "retry missed {{offset}}",
+        "retryMissed": "retry missed",
+        "nextTryNow": "next try now",
+        "nextTryAt": "next try {{offset}}",
+        "retriesUsedUp": "retries used up"
+      },
+      "externalObjects": {
+        "category": {
+          "unknown": "Not yet resolved",
+          "open": "Open",
+          "waiting": "Waiting",
+          "running": "Running",
+          "succeeded": "Succeeded",
+          "failed": "Failed",
+          "blocked": "Blocked",
+          "closed": "Closed",
+          "archived": "Archived",
+          "authRequired": "Authorization required",
+          "unreachable": "Unreachable"
+        },
+        "liveness": {
+          "unknown": "Not yet refreshed",
+          "fresh": "Fresh",
+          "stale": "Stale",
+          "authRequired": "Requires auth",
+          "unreachable": "Unreachable"
+        },
+        "statusUnavailable": "Status unavailable",
+        "providerExternal": "External",
+        "type": {
+          "pullRequest": "pull request",
+          "issue": "issue",
+          "deployment": "deployment",
+          "workflowRun": "workflow run",
+          "ticket": "ticket",
+          "lead": "lead",
+          "object": "object"
+        },
+        "displayLabel": "{{provider}} {{type}}",
+        "filter": {
+          "failed": "Any failed",
+          "waiting": "Any waiting",
+          "running": "Any running",
+          "authRequired": "Auth required",
+          "unreachable": "Unreachable",
+          "stale": "Stale",
+          "none": "No external objects"
+        }
+      },
+      "starToggle": {
+        "star": "Star {{name}}",
+        "unstar": "Unstar {{name}}",
+        "saveFailed": "Couldn't save — retry"
+      },
+      "membership": {
+        "join": "Join",
+        "leave": "Leave",
+        "joining": "Joining...",
+        "leaving": "Leaving...",
+        "joinResource": "Join {{name}}",
+        "leaveResource": "Leave {{name}}"
+      },
+      "pageTabBar": {
+        "ariaLabel": "Page section"
+      },
+      "collectionToolbar": {
+        "ariaLabel": "Collection controls"
+      }
+    },
+    "agentSetup": {
+      "help": {
+        "name": "Display name for this agent.",
+        "title": "Job title shown in the org chart.",
+        "role": "Organizational role. Determines position and capabilities.",
+        "reportsTo": "The agent this one reports to in the org hierarchy.",
+        "capabilities": "Describes what this agent can do. Shown in the org chart and used for task routing.",
+        "adapterType": "How this agent runs: local CLI (Claude/Codex/OpenCode), OpenClaw Gateway, spawned process, or generic HTTP webhook.",
+        "cwd": "Deprecated legacy working directory fallback for local adapters. Existing agents may still carry this value, but new configurations should use project workspaces instead.",
+        "promptTemplate": "Sent on every heartbeat. Keep this small and dynamic. Use it for current-task framing, not large static instructions. Supports {{agentId}}, {{agentName}}, {{agentRole}} and other template variables.",
+        "model": "Override the default model used by the adapter.",
+        "thinkingEffort": "Control model reasoning depth. Supported values vary by adapter/model.",
+        "chrome": "Enable Claude's Chrome integration by passing --chrome.",
+        "dangerouslySkipPermissions": "Run unattended by auto-approving adapter permission prompts when supported.",
+        "dangerouslyBypassSandbox": "Run Codex without sandbox restrictions. Required for filesystem/network access.",
+        "search": "Enable Codex web search capability during runs.",
+        "fastMode": "Enable Codex Fast mode. This burns credits/tokens much faster and is supported on GPT-6, GPT-5.6, GPT-5.5, GPT-5.4, and manual Codex model IDs.",
+        "workspaceStrategy": "How Paperclip should realize an execution workspace for this agent. Keep project_primary for normal cwd execution, or use git_worktree for issue-scoped isolated checkouts.",
+        "workspaceBaseRef": "Base git ref used when creating a worktree branch. Leave blank to use the resolved workspace ref or HEAD.",
+        "workspaceBranchTemplate": "Template for naming derived branches. Supports {{issueIdentifier}}, {{issueTitle}}, {{agentName}}, {{projectId}}, {{workspaceRepoRef}}, and {{slug}}.",
+        "worktreeParentDir": "Directory where derived worktrees should be created. Absolute, ~-prefixed, and repo-relative paths are supported.",
+        "runtimeServicesJson": "Optional workspace runtime service definitions. Use this for shared app servers, workers, or other long-lived companion processes attached to the workspace.",
+        "maxTurnsPerRun": "Maximum number of agentic turns (tool calls) per heartbeat run.",
+        "command": "The command to execute (e.g. node, python).",
+        "localCommand": "Override the path to the CLI command you want the adapter to call (e.g. /usr/local/bin/claude, codex, opencode).",
+        "args": "Command-line arguments, comma-separated.",
+        "extraArgs": "Extra CLI arguments for local adapters, comma-separated.",
+        "envVars": "Environment variables injected into the adapter process. Use plain values or secret references.",
+        "secretAccess": "Secrets this agent can reach. Env-var bindings are injected at run start; API-access bindings are fetched on demand via the run-bound agent API and never written to the environment.",
+        "bootstrapPrompt": "Only sent when Paperclip starts a fresh session. Use this for stable setup guidance that should not be repeated on every heartbeat.",
+        "payloadTemplateJson": "Optional JSON merged into remote adapter request payloads before Paperclip adds its standard wake and workspace fields.",
+        "webhookUrl": "The URL that receives POST requests when the agent is invoked.",
+        "heartbeatInterval": "Run this agent automatically on a timer. Useful for periodic tasks like checking for new work.",
+        "intervalSec": "Seconds between automatic heartbeat invocations.",
+        "timeoutSec": "Maximum seconds a run can take before being terminated. 0 means no timeout.",
+        "graceSec": "Seconds to wait after sending interrupt before force-killing the process.",
+        "wakeOnDemand": "Allow this agent to be woken by assignments, API calls, UI actions, or automated systems.",
+        "cooldownSec": "Minimum seconds between consecutive heartbeat runs.",
+        "maxConcurrentRuns": "Maximum number of heartbeat runs that can execute simultaneously for this agent.",
+        "maxTurnContinuationEnabled": "Automatically queue bounded continuation runs when an adapter stops because its per-run turn cap was exhausted.",
+        "maxTurnContinuationMaxAttempts": "Maximum automatic continuations after one max-turn stop. This is separate from max turns per run.",
+        "maxTurnContinuationDelaySec": "Seconds to wait before starting each max-turn continuation.",
+        "budgetMonthlyCents": "Monthly spending limit in cents. 0 means no limit."
+      },
+      "adapterLabels": {
+        "acpx_local": "ACPX (retired)",
+        "process": "Process"
+      },
+      "choosePath": {
+        "button": "Choose",
+        "title": "Specify path manually",
+        "description": "Browser security blocks apps from reading full local paths via a file picker. Copy the absolute path and paste it into the input.",
+        "macTitle": "macOS (Finder)",
+        "macStep1": "Find the folder in Finder.",
+        "macStep2": "Hold <kbd>Option</kbd> and right-click the folder.",
+        "macStep3": "Click \"Copy <folder name> as Pathname\".",
+        "pasteStep": "Paste the result into the path input.",
+        "winTitle": "Windows (File Explorer)",
+        "winStep1": "Find the folder in File Explorer.",
+        "winStep2": "Hold <kbd>Shift</kbd> and right-click the folder.",
+        "winStep3": "Click \"Copy as path\".",
+        "terminalTitle": "Terminal fallback (macOS/Linux)",
+        "terminalStep1": "Run <code>cd /path/to/folder</code>.",
+        "terminalStep2": "Run <code>pwd</code>.",
+        "terminalStep3": "Copy the output and paste it into the path input.",
+        "ok": "OK"
+      },
+      "setup": {
+        "selectOrg": "Select an organization to create an agent.",
+        "errors": {
+          "resolveEnvironment": "Could not resolve the environment.",
+          "modelFormat": "Choose or enter a model in provider/model format.",
+          "githubUrl": "Enter a GitHub repository URL.",
+          "cursorKey": "Enter a Cursor API key.",
+          "envKeyOrSecret": "Enter {{envKey}} or select an organization secret.",
+          "hermesUrl": "Enter the Hermes API base URL.",
+          "kimiModel": "Enter the Kimi API model name.",
+          "testFailed": "Could not test the agent.",
+          "createFailed": "Could not create the agent.",
+          "removeCredential": "Could not remove an unused setup credential. Remove it from Secrets before retrying.",
+          "loadCreated": "Could not load the created agent. Return to Agents to view it.",
+          "unavailable": "This adapter is unavailable. Choose an enabled adapter.",
+          "noManagedEnvironment": "No managed environment is available. Configure an environment before continuing.",
+          "loadModels": "Could not load models. Retry or enter a model ID manually."
+        },
+        "loadingAgent": "Loading your agent…",
+        "steps": {
+          "aria": "Agent setup steps",
+          "connect": "Connect",
+          "runtime": "Configure",
+          "saved": "Confirmation"
+        },
+        "localMachine": "Local machine",
+        "nativeRunner": "Native app server runner",
+        "connectTitle": "Connect a model",
+        "connectLede": "Connect {{name}} to {{provider}}.",
+        "submittedForApproval": "Agent submitted for approval",
+        "ready": "Your agent is ready",
+        "pendingApprovalNote": "An organization administrator must approve this agent before it can work.",
+        "readyNote": "Assign a task when you’re ready for this agent to work.",
+        "editConfiguration": "Edit configuration",
+        "assignTask": "Assign {{name}} a Task",
+        "configureTitle": "Configure your agent",
+        "runtime": "Runtime",
+        "usingConnection": "Using the connection selected in the Connect step.",
+        "changeConnection": "Change connection",
+        "thinkingEffort": "Thinking effort",
+        "auto": "Auto",
+        "modelsLoadHint": "Couldn’t load models. You can enter a model ID manually.",
+        "apiKeyProvider": "API key provider",
+        "usingSavedKey": "Using saved key",
+        "required": "Required",
+        "optionalIfConfigured": "Optional if already configured",
+        "getApiKey": "get api key",
+        "orgSecret": "Or use an organization secret",
+        "newKeysNote": "New keys are saved as organization secrets when you finish setup.",
+        "newKeysNoteWithProvider": "New keys are saved as organization secrets when you finish setup. Use a {{provider}}/model ID.",
+        "hermesUrl": "Hermes API base URL",
+        "kimiModel": "Kimi API model name",
+        "kimiProtocol": "Kimi API protocol",
+        "kimiBaseUrl": "Kimi API base URL",
+        "kimiBaseUrlHint": "Optional override for your provider endpoint.",
+        "providerDefault": "Provider default",
+        "githubRepository": "GitHub repository",
+        "branch": "Branch",
+        "repositoryDefault": "Repository default",
+        "connectionBack": "Connection",
+        "creating": "Creating…",
+        "finish": "Finish setup"
+      },
+      "basics": {
+        "progressAria": "New agent progress",
+        "stepName": "1. Name",
+        "stepAdapter": "2. Adapter",
+        "nameTitle": "Meet your next agent",
+        "adapterTitle": "Choose an adapter",
+        "nameDescription": "Start with a name. Make them your own.",
+        "adapterDescription": "How should {{name}} work?",
+        "agentName": "Agent name",
+        "namePlaceholder": "e.g. Darnold",
+        "invite": "Invite an external agent",
+        "loadingAdapters": "Loading adapters…",
+        "runner": "Runner",
+        "runnerCodex": "Codex (app server)",
+        "runnerClaude": "Claude (ACPX)",
+        "chooseAdapter": "Choose adapter",
+        "configureAgent": "Configure agent"
+      },
+      "connection": {
+        "noResponse": "The provider did not respond. Check the connection and try again.",
+        "connectFailed": "Could not connect to the provider.",
+        "sourcesLabel": "Connect your model provider",
+        "savedKeysOne": "{{n}} saved API key available.",
+        "savedKeysMany": "{{n}} saved API keys available.",
+        "chooseSavedKey": "Choose a saved API key or enter a new one",
+        "provideKey": "Provide your {{provider}} API key to connect",
+        "apiKey": "API key",
+        "keyEntered": "Key entered. Retry the connection.",
+        "enterKey": "Enter API key here",
+        "loginNoConnection": "The login did not return a saved connection. Try again.",
+        "retrieveFailed": "Could not retrieve the saved connection. Go back and retry.",
+        "useSavedClaude": "Use your saved Claude subscription for this agent.",
+        "useExisting": "Use the existing provider connection for this environment.",
+        "noBrowserSignIn": "This environment does not support browser sign-in. Choose a sign-in environment or connect with an API key.",
+        "checkClaudeFailed": "Could not check your saved Claude subscription. Try again.",
+        "prepareSignInFailed": "Could not prepare sign-in. Reload this page to try again.",
+        "waitingForCode": "Waiting for code",
+        "connecting": "Connecting",
+        "signIn": "Sign in to {{provider}}",
+        "useSavedSubscription": "Use saved subscription",
+        "useSavedApiKey": "Use saved API key",
+        "connect": "Connect"
+      },
+      "invite": {
+        "promptTitle": "Agent onboarding prompt",
+        "promptDescription": "Send this one-time prompt to the agent that should join your organization.",
+        "description": "Generate a one-time onboarding prompt for an external agent. An organization admin must approve its join request before it can claim an API key.",
+        "clipboardUnavailable": "Clipboard unavailable. Copy the prompt manually from the field above.",
+        "copiedPrompt": "Copied prompt",
+        "copyPrompt": "Copy prompt",
+        "optionalMessage": "Optional message for the agent",
+        "generating": "Generating…",
+        "generate": "Generate onboarding prompt"
+      }
+    },
+    "agentDetail": {
+      "invocation": {
+        "title": "Invocation",
+        "adapter": "Adapter: ",
+        "workingDir": "Working dir: ",
+        "details": "Details",
+        "command": "Command: ",
+        "commandNotes": "Command notes",
+        "prompt": "Prompt",
+        "context": "Context",
+        "environment": "Environment"
+      },
+      "workspaceOps": {
+        "phase": {
+          "worktreePrepare": "Worktree setup",
+          "configFreshness": "Config freshness",
+          "provision": "Provision",
+          "teardown": "Teardown",
+          "worktreeCleanup": "Worktree cleanup"
+        },
+        "hideFullLog": "Hide full log",
+        "showFullLog": "Show full log",
+        "loadingLog": "Loading log...",
+        "loadLogFailed": "Failed to load workspace operation log",
+        "noLogLines": "No persisted log lines.",
+        "title": "Workspace ({{count}})",
+        "timeRange": "{{start}} to {{end}}",
+        "branch": "Branch: ",
+        "baseRef": "Base ref: ",
+        "worktree": "Worktree: ",
+        "repoRoot": "Repo root: ",
+        "cleanup": "Cleanup: ",
+        "createdByRun": "Created by this run",
+        "reusedWorkspace": "Reused existing workspace",
+        "stderrExcerpt": "stderr excerpt",
+        "stdoutExcerpt": "stdout excerpt"
+      },
+      "source": {
+        "timer": "Timer",
+        "assignment": "Assignment",
+        "onDemand": "On-demand",
+        "automation": "Automation"
+      },
+      "nav": {
+        "overview": "Overview",
+        "instructions": "Instructions",
+        "skills": "Skills",
+        "runtime": "Harness / Runtime",
+        "secrets": "Secrets",
+        "tools": "Tools",
+        "channels": "Channels",
+        "permissions": "Permissions / Trust",
+        "apiKeys": "API Keys",
+        "revisions": "Revisions"
+      },
+      "discardConfigChanges": "Discard unsaved agent configuration changes?",
+      "errors": {
+        "updateBundleResource": "Failed to update bundle resource",
+        "runBuiltInRoutine": "Failed to run built-in routine",
+        "enableRoutineSchedule": "Failed to enable routine schedule",
+        "disableRoutineSchedule": "Failed to disable routine schedule",
+        "actionFailed": "Action failed",
+        "updatePermissions": "Failed to update permissions",
+        "noAgentReference": "No agent reference"
+      },
+      "breadcrumbs": {
+        "agents": "Agents",
+        "agent": "Agent",
+        "runs": "Runs",
+        "run": "Run {{id}}"
+      },
+      "leftNotice": "You left this agent. It no longer appears in your sidebar.",
+      "dismissLeftNotice": "Dismiss agent membership notice",
+      "escalationPaused": "Escalation path is paused",
+      "invalidChain": {
+        "body": "{{name}} cannot accept tasks or start runs until its reporting chain is repaired.",
+        "guidance": "Assign this agent to an active manager/root, or explicitly pause or terminate the affected agent/subtree."
+      },
+      "avatarAlt": "{{name}} avatar",
+      "header": {
+        "assignTask": "Assign Task",
+        "repairChainReason": "Repair this agent's reporting chain before assigning tasks or starting runs"
+      },
+      "builtIn": {
+        "pauseTitle": "Pause the {{name}}?",
+        "pauseDescription": "{{feature}} depends on this agent. While paused, {{featureLower}} generation is skipped and the {{feature}} page shows a warning.",
+        "title": "Built-in agent",
+        "resetting": "Resetting…",
+        "resetDefaults": "Reset to defaults",
+        "description": "Ships with Paperclip and powers <hl>{{feature}}</hl>. Configure it like any agent — model, instructions, budget. It can be paused but not deleted; pausing it pauses {{feature}}."
+      },
+      "pendingApproval": {
+        "body": "This agent is pending board approval and cannot be invoked yet.",
+        "approve": "Approve agent"
+      },
+      "secretsHeading": "Secrets & variables",
+      "footer": {
+        "savingChanges": "Saving changes…",
+        "unsavedChanges": "You have unsaved changes.",
+        "discard": "Discard",
+        "saveChanges": "Save changes"
+      },
+      "latestRun": {
+        "live": "Live Run",
+        "latest": "Latest Run"
+      },
+      "overview": {
+        "adapterDefault": "Adapter default",
+        "identity": "Identity",
+        "notSet": "Not set",
+        "board": "Board",
+        "directReports": "Direct reports",
+        "configure": "Configure",
+        "noSession": "No session",
+        "lastRun": "Last run",
+        "noRuns": "No runs",
+        "capabilities": "Capabilities",
+        "noCapabilities": "No capability summary has been added.",
+        "manage": "Manage",
+        "moreCount": "+{{count}} more",
+        "noSkills": "No skills enabled.",
+        "recentTasks": "Recent Tasks",
+        "seeAll": "See All →",
+        "noRecentTasks": "No recent tasks.",
+        "moreTasks": "+{{count}} more tasks",
+        "audit": "Audit",
+        "auditSections": {
+          "activity": "activity",
+          "runs": "runs",
+          "costs": "costs",
+          "budgets": "budgets"
+        }
+      },
+      "revisions": {
+        "title": "Configuration Revisions",
+        "total": "{{count}} total",
+        "empty": "No configuration revisions yet.",
+        "restore": "Restore",
+        "changed": "Changed: {{keys}}",
+        "noTrackedChanges": "no tracked changes"
+      },
+      "config": {
+        "saved": "Agent saved",
+        "saveFailedBody": "Could not save agent",
+        "saveFailed": "Save failed",
+        "agentIdentity": "Agent identity"
+      },
+      "permissions": {
+        "assignHint": {
+          "ceoRole": "Enabled automatically for CEO agents.",
+          "agentCreator": "Enabled automatically while this agent can create new agents.",
+          "explicitGrant": "Enabled via explicit organization permission grant.",
+          "simpleDefault": "Enabled by simple organization-wide task assignment defaults.",
+          "disabled": "Disabled unless explicitly granted."
+        },
+        "title": "Permissions",
+        "canCreateAgents": "Can create new agents",
+        "canCreateAgentsHint": "Lets this agent create or hire agents. This also grants task assignment authority.",
+        "canCreateSkills": "Can create/import skills",
+        "canCreateSkillsHint": "Lets this agent install, import, create, and scan organization skills without creating agents.",
+        "canAssignTasks": "Can assign tasks"
+      },
+      "instructions": {
+        "localOnly": "Instructions bundles are only available for local adapters.",
+        "saveNotice": "Saved instructions affect the next run. Active runs keep the instructions they started with, and instruction changes may start a fresh adapter session.",
+        "mode": "Mode",
+        "modeHelp": "Managed: Paperclip stores and serves the instructions bundle. External: you provide a path on disk where the instructions live.",
+        "managed": "Managed",
+        "external": "External",
+        "rootPath": "Root path",
+        "rootPathHelp": "The absolute directory on disk where the instructions bundle lives. In managed mode this is set by Paperclip automatically.",
+        "managedPlaceholder": "(managed)",
+        "entryFile": "Entry file",
+        "entryFileHelp": "The main file the agent reads first when loading instructions. Defaults to AGENTS.md.",
+        "files": "Files",
+        "virtualFile": "virtual file",
+        "virtualFileHelp": "Legacy inline prompt — this deprecated virtual file preserves the old promptTemplate content",
+        "entryBadge": "entry",
+        "deprecatedVirtualFile": "Deprecated virtual file",
+        "fileLanguage": "{{language}} file",
+        "newFileInBundle": "New file in this bundle",
+        "viewMode": "Instruction file view",
+        "modes": {
+          "read": "read",
+          "edit": "edit",
+          "raw": "raw"
+        },
+        "copyAria": "Copy instructions file as markdown",
+        "copyTitle": "Copy as markdown",
+        "deleteConfirm": "Delete {{path}}?",
+        "empty": "This instruction file is empty.",
+        "editorPlaceholder": "# Agent instructions",
+        "editorAria": "Instruction file editor",
+        "fileContents": "File contents"
+      },
+      "runs": {
+        "empty": "No runs yet.",
+        "backToRuns": "Back to runs"
+      },
+      "runDetail": {
+        "resumeSkipped": "Resume request was skipped.",
+        "traceRerunSkipped": "Trace re-run was skipped.",
+        "cancelling": "Cancelling…",
+        "resuming": "Resuming…",
+        "resume": "Resume",
+        "retrying": "Retrying…",
+        "inspectRun": "Inspect run",
+        "starting": "Starting…",
+        "rerunWithTrace": "Re-run with provider trace",
+        "onBehalfOf": "On behalf of <name>{{name}}</name>",
+        "identityHistory": "GitHub identity history",
+        "noResponsiblePerson": "No responsible person",
+        "noGithubOperation": "No GitHub operation recorded",
+        "resumeFailed": "Failed to resume run",
+        "retryFailed": "Failed to retry run",
+        "duration": "Duration: {{duration}}",
+        "claudeLoginRunning": "Running claude login...",
+        "claudeLogin": "Login to Claude Code",
+        "claudeLoginFailed": "Failed to run Claude login",
+        "loginUrl": "Login URL:",
+        "exitCode": "Exit code {{code}}",
+        "signal": "(signal: {{signal}})",
+        "metrics": {
+          "input": "Input",
+          "output": "Output",
+          "cached": "Cached",
+          "cost": "Cost"
+        },
+        "session": {
+          "changed": "(changed)",
+          "before": "Before",
+          "id": "ID",
+          "after": "After",
+          "clearConfirmOne": "Clear session for {{count}} issue touched by this run?",
+          "clearConfirmMany": "Clear session for {{count}} issues touched by this run?",
+          "clearing": "clearing session...",
+          "clear": "clear session for these tasks",
+          "clearFailed": "Failed to clear sessions"
+        },
+        "tasksTouched": "Tasks Touched ({{count}})"
+      },
+      "log": {
+        "loadFailed": "Failed to load run log",
+        "loadMoreFailed": "Failed to load more run log",
+        "loading": "Loading run logs...",
+        "noEvents": "No log events.",
+        "transcript": "Transcript ({{count}})",
+        "modes": {
+          "nice": "nice",
+          "raw": "raw"
+        },
+        "jumpToLive": "Jump to live",
+        "waitingTranscript": "Waiting for transcript...",
+        "noTranscript": "No persisted transcript for this run.",
+        "loadingMore": "Loading...",
+        "loadMore": "Load more log",
+        "showingFirst": "Showing the first {{shown}} KB",
+        "showingFirstOf": "Showing the first {{shown}} KB of {{total}} KB",
+        "failureDetails": "Failure details",
+        "error": "Error: ",
+        "adapterResultJson": "adapter result JSON",
+        "events": "Events ({{count}})"
+      },
+      "keys": {
+        "copyFailed": "Copy failed",
+        "clipboardUnavailable": "Clipboard access is unavailable.",
+        "created": "API key created — copy it now, it will not be shown again.",
+        "hide": "Hide",
+        "show": "Show",
+        "copied": "Copied!",
+        "dismiss": "Dismiss",
+        "createTitle": "Create API Key",
+        "description": "API keys allow this agent to authenticate calls to the Paperclip server.",
+        "namePlaceholder": "Key name (e.g. production)",
+        "loading": "Loading keys...",
+        "empty": "No active API keys.",
+        "active": "Active Keys",
+        "createdAt": "Created {{date}}",
+        "revoke": "Revoke",
+        "revoked": "Revoked Keys",
+        "revokedAt": "Revoked {{date}}"
+      }
+    },
+    "issueChat": {
+      "pausedNotice": {
+        "budget": "It was paused by a budget hard stop.",
+        "import": "It arrived paused from an organization import — imported agents stay parked until you resume them.",
+        "system": "It was paused by the system.",
+        "manual": "It was paused manually.",
+        "title": "<name>{{name}}</name> is paused.",
+        "resuming": "Resuming…",
+        "resume": "Resume agent",
+        "body": "New runs will not start until the agent is resumed. {{detail}}"
+      },
+      "author": {
+        "agent": "Agent",
+        "you": "You",
+        "system": "System",
+        "board": "Board",
+        "user": "User"
+      },
+      "fallback": {
+        "title": "Chat renderer hit an internal state error.",
+        "description": "Showing a safe fallback transcript instead of crashing the tasks page.",
+        "noContent": "No message content."
+      },
+      "liveStatus": {
+        "usingTool": "Using {{tool}}",
+        "noOutputStillRunning": "no output for {{elapsed}} - still running",
+        "ago": "{{elapsed}} ago"
+      },
+      "cot": {
+        "ranCommandsOne": "ran {{count}} command",
+        "ranCommandsMany": "ran {{count}} commands",
+        "calledToolsOne": "called {{count}} tool",
+        "calledToolsMany": "called {{count}} tools",
+        "summarySeparator": ", ",
+        "working": "Working",
+        "worked": "Worked",
+        "forDuration": "for {{duration}}"
+      },
+      "duration": {
+        "secondsOne": "{{count}} second",
+        "secondsMany": "{{count}} seconds",
+        "minutesOne": "{{count}} minute",
+        "minutesMany": "{{count}} minutes",
+        "hoursOne": "{{count}} hour",
+        "hoursMany": "{{count}} hours",
+        "hoursMinutes": "{{hours}} {{minutes}}"
+      },
+      "copy": {
+        "failed": "Copy failed",
+        "unableText": "Unable to copy text",
+        "message": "Copy message",
+        "unableMessage": "Unable to copy message",
+        "unableSystemNotice": "Unable to copy system notice",
+        "unableSystemNoticeLink": "Unable to copy system notice link",
+        "link": "Copy link",
+        "linkToSystemNotice": "Copy link to system notice",
+        "noticeText": "Copy notice text",
+        "systemNotice": "Copy system notice"
+      },
+      "tool": {
+        "providerActivity": "Provider activity",
+        "childAgent": "Child agent",
+        "unknownStatus": "unknown",
+        "unavailableSource": "Unavailable source",
+        "providerReported": "(provider-reported)",
+        "model": "Model",
+        "input": "Input",
+        "result": "Result"
+      },
+      "queue": {
+        "deferredWake": "⏸ Deferred wake",
+        "queued": "Queued",
+        "interrupting": "Interrupting...",
+        "interrupt": "Interrupt"
+      },
+      "message": {
+        "followUp": "Follow-up",
+        "commentDeleted": "Comment deleted",
+        "sentFromIMessage": "Sent from iMessage",
+        "sending": "Sending...",
+        "moreActions": "More actions"
+      },
+      "deleteComment": {
+        "action": "Delete comment",
+        "title": "Delete comment?",
+        "description": "This will replace the comment with a deleted-comment marker."
+      },
+      "run": {
+        "stopRun": "Stop run",
+        "stoppingRun": "Stopping...",
+        "viewRun": "View run",
+        "running": "Running",
+        "runWord": "run"
+      },
+      "feedback": {
+        "helpful": "Helpful",
+        "needsWork": "Needs work",
+        "whatCouldBeBetter": "What could have been better?",
+        "notePlaceholder": "Add a short note",
+        "dismiss": "Dismiss",
+        "saving": "Saving...",
+        "saveNote": "Save note",
+        "sharingTitle": "Save your feedback sharing preference",
+        "sharingDescription": "Choose whether voted AI outputs can be shared with Paperclip Labs. This answer becomes the default for future thumbs up and thumbs down votes.",
+        "savedLocally": "This vote is always saved locally.",
+        "sharingChoice": "Choose <allow>Always allow</allow> to share this vote and future voted AI outputs. Choose <deny>Don't allow</deny> to keep this vote and future votes local.",
+        "changeLater": "You can change this later in Settings > General.",
+        "readTerms": "Read our terms of service",
+        "dontAllow": "Don't allow",
+        "alwaysAllow": "Always allow"
+      },
+      "activity": {
+        "updatedThisTask": "updated this task",
+        "requestedFollowUp": "requested follow-up",
+        "status": "Status",
+        "assignee": "Assignee",
+        "workspace": "Workspace"
+      },
+      "interaction": {
+        "hideConfirmation": "Hide confirmation",
+        "expiredConfirmation": "Expired confirmation"
+      },
+      "systemNotice": {
+        "noAdditionalDetails": "No additional details.",
+        "staleDispositionWarning": "Stale disposition warning"
+      },
+      "deleted": {
+        "commentFallbackAuthor": "Comment",
+        "deletedThisComment": "deleted this comment"
+      },
+      "composer": {
+        "uploadNoUrl": "Upload did not return a file URL",
+        "fileTypeNotAllowed": "This file type cannot be attached here",
+        "uploadFailed": "Upload failed",
+        "dropToUpload": "Drop to upload",
+        "dropHint": "Images insert into the reply. Other files are added to this task.",
+        "uncertainSubmission": "We couldn’t confirm whether this comment was saved. It may already be in the conversation. Review it before starting another draft.",
+        "reviewUnavailable": "Review unavailable",
+        "reviewConversation": "Review conversation",
+        "reviewFailed": "Couldn’t refresh the conversation. Try reviewing it again.",
+        "discardHint": "Discarding this draft does not remove any saved comment or uploaded file.",
+        "discardDraft": "Discard draft and start new",
+        "replyPlaceholder": "Reply",
+        "uploadingToTask": "Uploading to task",
+        "insertedInline": "Inserted inline",
+        "attachedToTask": "Attached to task",
+        "removeAttachment": "Remove {{name}}",
+        "attachFile": "Attach file",
+        "cycleModesHint": "Cmd/Ctrl+. cycles modes",
+        "responsible": "Responsible",
+        "noResponsible": "No responsible",
+        "searchResponsible": "Search responsible...",
+        "noResponsibleFound": "No responsible found.",
+        "stopping": "Stopping…",
+        "stop": "Stop",
+        "stopResponse": "Stop response",
+        "posting": "Posting...",
+        "send": "Send",
+        "noAssigneeTitle": "No responsible selected",
+        "noAssigneeDescription": "This comment will be posted without an assignee, so no agent will be woken to act on it. Go back to pick a responsible, or send anyway.",
+        "goBack": "Go back",
+        "sendAnyway": "Send anyway"
+      },
+      "thread": {
+        "noRunOutput": "No run output yet.",
+        "emptyConversation": "This task conversation is empty. Start with a message below.",
+        "jumpToLatest": "Jump to latest"
+      },
+      "legacyRecovery": {
+        "label": "Legacy recovery task",
+        "body": "Legacy recovery task. Newer recovery actions live on the source task",
+        "period": "."
+      },
+      "commentThread": {
+        "copyAsMarkdown": "Copy comment as markdown",
+        "queueing": "Queueing...",
+        "noTimelineEntries": "No timeline entries yet.",
+        "environment": "Environment",
+        "provider": "Provider",
+        "lease": "Lease",
+        "failure": "Failure: {{reason}}",
+        "timelineHeading": "Timeline ({{count}})",
+        "queuedComments": "Queued Comments ({{count}})",
+        "leaveComment": "Leave a comment...",
+        "attachImage": "Attach image",
+        "comment": "Comment",
+        "runShort": "run {{id}}"
+      }
     }
   }
 }

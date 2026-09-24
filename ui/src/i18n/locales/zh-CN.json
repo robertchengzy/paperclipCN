@@ -1557,6 +1557,1051 @@
           "hint": "提示：{{hint}}"
         }
       }
+    },
+    "format": {
+      "relative": {
+        "justNow": "刚刚",
+        "minutesAgo": "{{count}} 分钟前",
+        "hoursAgo": "{{count}} 小时前",
+        "daysAgo": "{{count}} 天前"
+      },
+      "duration": {
+        "s": "{{s}} 秒",
+        "m": "{{m}} 分钟",
+        "ms": "{{m}} 分 {{s}} 秒",
+        "h": "{{h}} 小时",
+        "hm": "{{h}} 小时 {{m}} 分",
+        "d": "{{d}} 天",
+        "dh": "{{d}} 天 {{h}} 小时"
+      },
+      "monitor": {
+        "in": "{{duration}}后",
+        "inLabel": "{{duration}}后",
+        "dueNow": "现在到期",
+        "dueNowLabel": "现在到期",
+        "overdueBy": "已逾期 {{duration}}",
+        "overdueByLabel": "已逾期 {{duration}}",
+        "offsetNow": "现在",
+        "offsetAgo": "{{duration}}前",
+        "todayAt": "今天 {{time}}",
+        "weekdayDateTime": "{{date}} {{weekday}} {{time}}",
+        "fullDateTime": "{{date}} {{time}}"
+      },
+      "dateGroups": {
+        "today": "今天",
+        "yesterday": "昨天",
+        "earlier": "更早"
+      }
+    },
+    "issueDetail": {
+      "errors": {
+        "runStoppedUpdateFailedWithMessage": "运行已停止，但更新任务失败：{{message}}",
+        "runStoppedUpdateFailed": "运行已停止，但更新任务失败。请重试更新任务状态。",
+        "failedRunUnavailable": "失败的运行已不可用。",
+        "taskStillLoading": "任务详情仍在加载，请稍后重试。",
+        "noAssigneeAgent": "没有负责人智能体",
+        "taskNotLoaded": "任务尚未加载。"
+      },
+      "plan": {
+        "approved": "已同意计划",
+        "requestedChanges": "已要求修改"
+      },
+      "treeControl": {
+        "previewForbidden": "只有董事会用户可以预览子树控制。",
+        "previewStale": "子树暂停状态已变化，预览已过期。请重试以刷新。",
+        "previewInvalid": "该子树操作当前对所选任务无效。",
+        "previewLoadFailed": "无法加载预览。",
+        "noActivePauseHold": "没有可恢复的子树暂停。",
+        "wakeFailuresOne": "已解除暂停，但有 {{count}} 个任务未能启动。{{message}} 请检查相关智能体并重新启动。",
+        "wakeFailuresMany": "已解除暂停，但有 {{count}} 个任务未能启动。{{message}} 请检查相关智能体并重新启动。",
+        "pausedBadge": "已暂停"
+      },
+      "actors": {
+        "system": "系统",
+        "board": "董事会",
+        "unknown": "未知",
+        "user": "用户",
+        "agent": "智能体"
+      },
+      "attribution": {
+        "assignee": "负责人",
+        "originating": "发起人",
+        "aria": "{{label}}：{{name}}",
+        "ariaVia": "{{label}}：{{name}} · 经由 {{via}}",
+        "via": "经由 {{via}}",
+        "taskPeople": "任务相关人员"
+      },
+      "header": {
+        "routineExecutionTitle": "来自例程 {{id}} 的例程执行",
+        "routine": "例程",
+        "live": "运行中",
+        "watchdogTitle": "这是自动生成的看门狗任务，用于核实被监视任务树中停止的工作是否合理。",
+        "watchdog": "看门狗",
+        "workModeTitle": "此任务处于{{mode}}。",
+        "parkedBlockerTitle": "被搁置的工作阻塞——至少有一个已分配的阻塞项处于待规划状态，不会唤醒其负责人。",
+        "parkedBlocker": "被搁置的工作阻塞"
+      },
+      "mobile": {
+        "backToInbox": "返回收件箱",
+        "moreActions": "更多操作",
+        "taskSidePanel": "任务侧边栏",
+        "plan": "计划"
+      },
+      "actions": {
+        "archiveFromInbox": "从收件箱归档",
+        "copyAsMarkdown": "复制为 Markdown",
+        "properties": "属性",
+        "hideTask": "隐藏此任务",
+        "copyTaskAsMarkdown": "将任务复制为 Markdown",
+        "openFileTitle": "打开文件... (g f)",
+        "openFileAria": "打开此任务中的文件",
+        "moreTaskActions": "更多任务操作",
+        "addSubtask": "添加子任务"
+      },
+      "toasts": {
+        "retryQueued": "已加入重试队列",
+        "retryQueuedBody": "任务就绪后将按原请求重试。",
+        "taskRestoredToInbox": "任务已恢复到收件箱",
+        "undoFailed": "撤销失败",
+        "undoFailedBody": "无法将此任务恢复到收件箱",
+        "taskUpdateFailed": "任务更新失败",
+        "taskUpdateFailedBody": "无法保存任务修改",
+        "recoveryResolutionFailed": "恢复处理失败",
+        "recoveryResolutionFailedBody": "无法处理恢复操作",
+        "runStoppedTaskDone": "运行已停止，任务已完成",
+        "runStoppedTaskCancelled": "运行已停止，任务已取消",
+        "runStoppedTaskUpdateFailed": "运行已停止；任务更新失败",
+        "stopAndDoneFailed": "停止并完成失败",
+        "stopAndCancelFailed": "停止并取消失败",
+        "stopAndFinalizeFailedBody": "无法停止运行并更新任务",
+        "subTaskUpdateFailedBody": "无法保存子任务修改",
+        "monitorCheckQueued": "监控检查已加入队列",
+        "monitorCheckFailed": "监控检查失败",
+        "monitorCheckFailedBody": "暂时无法触发监控",
+        "approvalApproved": "已同意审批",
+        "approvalRejected": "已拒绝审批",
+        "approvalFailed": "同意失败",
+        "rejectionFailed": "拒绝失败",
+        "approvalFailedBody": "无法更新审批",
+        "cancelFailed": "取消失败",
+        "cancelQueuedCommentFailedBody": "无法取消排队中的评论",
+        "commentSaveUnconfirmed": "评论保存未确认",
+        "commentFailed": "评论失败",
+        "commentFailedBody": "无法发布评论",
+        "requestConfirmed": "请求已确认",
+        "selectionConfirmed": "选择已确认",
+        "suggestedTasksAccepted": "已接受建议的任务",
+        "acceptFailed": "接受失败",
+        "acceptFailedBody": "无法接受建议的任务",
+        "suggestionRejected": "已拒绝建议",
+        "rejectFailed": "拒绝失败",
+        "rejectFailedBody": "无法拒绝建议的任务",
+        "answersSubmitted": "回答已提交",
+        "submitFailed": "提交失败",
+        "submitFailedBody": "无法提交回答",
+        "allVerdictsApplied": "已应用全部裁决",
+        "applyFailed": "应用失败",
+        "applyFailedBody": "无法应用裁决",
+        "questionCancelled": "问题已取消",
+        "cancelQuestionFailedBody": "无法取消该问题",
+        "skipFailed": "跳过失败",
+        "skipFailedBody": "无法跳过此请求",
+        "interruptRequested": "已请求中断",
+        "interruptRequestedBody": "上一次运行停止后将发送排队消息。",
+        "interruptFailed": "中断失败",
+        "interruptFailedBody": "无法中断当前运行",
+        "queuedCommentCanceled": "已取消排队评论",
+        "queuedCommentCanceledBody": "排队消息已恢复到输入框。",
+        "commentDeleted": "评论已删除",
+        "commentDeletedBody": "对话中现在会显示已删除评论标记。",
+        "deleteFailed": "删除失败",
+        "deleteCommentFailedBody": "无法删除该评论",
+        "feedbackSavedWillShare": "反馈已保存。之后的投票将会共享",
+        "feedbackSavedStayLocal": "反馈已保存。之后的投票将仅保存在本地",
+        "feedbackSavedSharingEnabled": "反馈已保存，并已开启共享",
+        "feedbackSaved": "反馈已保存",
+        "feedbackSaveFailed": "保存反馈失败",
+        "unknownError": "未知错误",
+        "taskArchivedFromInbox": "任务已从收件箱归档",
+        "undo": "撤销",
+        "archiveFailed": "归档失败",
+        "archiveFailedBody": "无法从收件箱归档此任务",
+        "copiedToClipboard": "已复制到剪贴板",
+        "copyFailed": "复制失败",
+        "copyFailedBody": "无法复制任务 Markdown",
+        "reissueCreated": "已创建隔离的重新派发任务",
+        "reissueCreatedBody": "已创建新的隔离重新派发任务。",
+        "reissueFailed": "重新派发失败",
+        "reissueFailedBody": "无法创建隔离的重新派发任务。",
+        "workspaceRepaired": "工作区已修复",
+        "workspaceRepairedBody": "未提交的修改已隔离到救援分支，并已恢复记录的分支；任务将继续。",
+        "workspaceReconciled": "工作区分支已对齐",
+        "workspaceReconciledBody": "记录的分支现已与实际分支一致；任务将继续。",
+        "reconcileFailed": "对齐失败",
+        "reconcileFailedBody": "无法对齐工作区分支。",
+        "noWorkspaceToReconcile": "此任务没有可对齐的执行工作区。",
+        "repairFailed": "修复失败",
+        "noWorkspaceToRepair": "此任务没有可修复的执行工作区。",
+        "acceptedDraftsSkippedOne": "已接受 {{count}} 个草稿，跳过 {{skipped}} 个",
+        "acceptedDraftsSkippedMany": "已接受 {{count}} 个草稿，跳过 {{skipped}} 个",
+        "appliedDecisionsOne": "已应用 {{count}} 项决定",
+        "appliedDecisionsMany": "已应用 {{count}} 项决定",
+        "reissueCreatedWithId": "{{identifier}} 将在新的隔离工作区中运行。"
+      },
+      "queue": {
+        "awaitingAckOne": "排队消息正在等待服务器确认。",
+        "awaitingAckMany": "排队消息正在等待服务器确认。",
+        "noActiveRunTarget": "排队消息已没有活跃的目标运行。",
+        "alreadySending": "消息已在发送中",
+        "alreadySendingBody": "在确认丢弃前续写已开始，Paperclip 无法撤回该消息。"
+      },
+      "comments": {
+        "loadingEarlier": "正在加载更早的评论...",
+        "loadEarlier": "加载更早的评论"
+      },
+      "run": {
+        "pauseWork": "暂停工作",
+        "pausing": "正在暂停...",
+        "stopAndCancel": "停止并取消",
+        "stoppingAndCancelling": "正在停止并取消...",
+        "stopAndDone": "停止并完成",
+        "stoppingAndMarkingDone": "正在停止并标记为完成..."
+      },
+      "cost": {
+        "title": "成本汇总",
+        "noData": "暂无成本数据。",
+        "thisTask": "此任务",
+        "tokens": "Token {{total}}（输入 {{input}}，输出 {{output}}）",
+        "tokensWithCached": "Token {{total}}（输入 {{input}}，输出 {{output}}，缓存 {{cached}}）",
+        "runtimeOne": "运行时长 {{duration}}（{{count}} 次运行）",
+        "runtimeMany": "运行时长 {{duration}}（{{count}} 次运行）",
+        "noDirectData": "无直接成本数据。",
+        "includingSubTasks": "含子任务 {{amount}}",
+        "taskCountOne": "{{count}} 个任务",
+        "taskCountMany": "{{count}} 个任务"
+      },
+      "reassign": {
+        "me": "我"
+      },
+      "breadcrumb": {
+        "task": "任务"
+      },
+      "attachments": {
+        "uploadFailed": "上传失败",
+        "documentImportFailed": "文档导入失败",
+        "uploading": "正在上传...",
+        "uploadAttachment": "上传附件",
+        "upload": "上传"
+      },
+      "conversation": {
+        "configureAgent": "配置 {{name}}"
+      },
+      "composer": {
+        "isolatedWorkspaceArchivedHint": "此任务的隔离工作区已归档。你的下一条评论或恢复操作会重新打开它并重建工作树。",
+        "agentChatDisabled": "智能体对话已在实验性设置中关闭。",
+        "pauseStateUnknown": "无法确认此任务是否已暂停。请刷新后重试。"
+      },
+      "description": {
+        "placeholder": "添加描述..."
+      },
+      "status": {
+        "replySent": "回复已发送。发送消息以继续。",
+        "hidden": "此任务已隐藏"
+      },
+      "subTasks": {
+        "title": "子任务",
+        "createLabel": "子任务",
+        "newSubTask": "新建子任务"
+      },
+      "artifacts": {
+        "title": "工件"
+      },
+      "tabs": {
+        "chat": "对话",
+        "activity": "动态",
+        "relatedWork": "相关工作"
+      }
+    },
+    "shared": {
+      "assignees": {
+        "you": "你",
+        "me": "我",
+        "board": "董事会"
+      },
+      "workMode": {
+        "auto": "自动模式",
+        "plan": "规划模式",
+        "ask": "提问模式",
+        "pendingAsk": "本次提交使用提问模式。点击切换。负责人会在此对话中回答，不进行实现工作。",
+        "pendingPlan": "本次提交已开启规划模式。点击切换。",
+        "pendingAuto": "本次提交使用自动模式。点击切换。"
+      },
+      "reviewPolicy": {
+        "notCreatorLabel": "其他任何人",
+        "notCreatorDescription": "除发起审核的人之外，任何人都可以同意。",
+        "humanOnlyLabel": "仅限人工",
+        "humanOnlyDescription": "只有人可以同意此审核，智能体不能给出结论。",
+        "valueAnyone": "任何人",
+        "valueAnyoneElse": "其他任何人",
+        "valueHumanOnly": "仅限人工"
+      },
+      "retry": {
+        "reasons": {
+          "transientFailure": "临时故障",
+          "missingIssueComment": "缺少任务评论",
+          "processLost": "进程丢失",
+          "assignmentRecovery": "分配恢复",
+          "issueContinuationNeeded": "需要继续",
+          "maxTurnsContinuation": "达到最大轮次后继续"
+        },
+        "attempt": "第 {{attempt}} 次尝试",
+        "continuationScheduled": "已计划继续",
+        "retryScheduled": "已计划重试",
+        "nextContinuationAt": "下次继续：{{dueAt}}",
+        "nextRetryAt": "下次重试：{{dueAt}}",
+        "nextContinuationPending": "下次继续待安排",
+        "nextRetryPending": "下次重试待安排",
+        "continuationExhausted": "继续次数已用尽",
+        "retryExhausted": "重试次数已用尽",
+        "automaticRetriesExhausted": "自动重试已用尽",
+        "manualInterventionRequired": "{{reason}} 需要人工介入。",
+        "continuedRun": "继续的运行",
+        "retriedRun": "重试的运行"
+      },
+      "recovery": {
+        "needed": "需要恢复",
+        "inProgress": "恢复中",
+        "observing": "正在观察活动运行",
+        "escalated": "恢复已升级",
+        "workspaceNeeded": "需要恢复工作区",
+        "inProgressCount": "恢复中 · {{attempt}}/{{max}}",
+        "attemptOf": "第 {{attempt}} 次尝试，共 {{max}} 次",
+        "attemptRunningNow": "尝试正在运行",
+        "retryMissedAt": "重试已错过（{{offset}}）",
+        "retryMissed": "重试已错过",
+        "nextTryNow": "立即再次尝试",
+        "nextTryAt": "下次尝试：{{offset}}",
+        "retriesUsedUp": "重试次数已用完"
+      },
+      "externalObjects": {
+        "category": {
+          "unknown": "尚未解析",
+          "open": "打开",
+          "waiting": "等待中",
+          "running": "运行中",
+          "succeeded": "成功",
+          "failed": "失败",
+          "blocked": "受阻",
+          "closed": "已关闭",
+          "archived": "已归档",
+          "authRequired": "需要授权",
+          "unreachable": "无法访问"
+        },
+        "liveness": {
+          "unknown": "尚未刷新",
+          "fresh": "最新",
+          "stale": "已过时",
+          "authRequired": "需要认证",
+          "unreachable": "无法访问"
+        },
+        "statusUnavailable": "状态不可用",
+        "providerExternal": "外部",
+        "type": {
+          "pullRequest": "拉取请求",
+          "issue": "议题",
+          "deployment": "部署",
+          "workflowRun": "工作流运行",
+          "ticket": "工单",
+          "lead": "线索",
+          "object": "对象"
+        },
+        "displayLabel": "{{provider}} {{type}}",
+        "filter": {
+          "failed": "任一失败",
+          "waiting": "任一等待中",
+          "running": "任一运行中",
+          "authRequired": "需要认证",
+          "unreachable": "无法访问",
+          "stale": "已过时",
+          "none": "无外部对象"
+        }
+      },
+      "starToggle": {
+        "star": "收藏 {{name}}",
+        "unstar": "取消收藏 {{name}}",
+        "saveFailed": "保存失败，点击重试"
+      },
+      "membership": {
+        "join": "加入",
+        "leave": "离开",
+        "joining": "正在加入…",
+        "leaving": "正在离开…",
+        "joinResource": "加入 {{name}}",
+        "leaveResource": "离开 {{name}}"
+      },
+      "pageTabBar": {
+        "ariaLabel": "页面分区"
+      },
+      "collectionToolbar": {
+        "ariaLabel": "列表控件"
+      }
+    },
+    "agentSetup": {
+      "help": {
+        "name": "此智能体的显示名称。",
+        "title": "组织架构图中显示的职位。",
+        "role": "组织角色。决定职位和能力。",
+        "reportsTo": "此智能体在组织层级中的汇报对象。",
+        "capabilities": "描述此智能体能做什么。显示在组织架构图中，并用于任务路由。",
+        "adapterType": "此智能体的运行方式：本地 CLI（Claude/Codex/OpenCode）、OpenClaw Gateway、派生进程或通用 HTTP webhook。",
+        "cwd": "本地适配器已弃用的旧版工作目录回退。现有智能体可能仍带有此值，但新配置应改用项目工作区。",
+        "promptTemplate": "每次心跳都会发送。请保持简短、动态。用于描述当前任务背景，而不是大段静态指令。支持 {{agentId}}、{{agentName}}、{{agentRole}} 等模板变量。",
+        "model": "覆盖适配器使用的默认模型。",
+        "thinkingEffort": "控制模型推理深度。支持的取值因适配器/模型而异。",
+        "chrome": "通过传入 --chrome 启用 Claude 的 Chrome 集成。",
+        "dangerouslySkipPermissions": "在支持时自动同意适配器的权限提示，以无人值守方式运行。",
+        "dangerouslyBypassSandbox": "在没有沙箱限制的情况下运行 Codex。访问文件系统/网络时必需。",
+        "search": "在运行期间启用 Codex 的网页搜索能力。",
+        "fastMode": "启用 Codex Fast 模式。这会更快地消耗额度/token，支持 GPT-6、GPT-5.6、GPT-5.5、GPT-5.4 以及手动填写的 Codex 模型 ID。",
+        "workspaceStrategy": "Paperclip 如何为此智能体创建执行工作区。常规 cwd 执行保持 project_primary，或使用 git_worktree 为每个任务隔离检出。",
+        "workspaceBaseRef": "创建工作树分支时使用的基础 git ref。留空则使用解析出的工作区 ref 或 HEAD。",
+        "workspaceBranchTemplate": "派生分支的命名模板。支持 {{issueIdentifier}}、{{issueTitle}}、{{agentName}}、{{projectId}}、{{workspaceRepoRef}} 和 {{slug}}。",
+        "worktreeParentDir": "创建派生工作树的目录。支持绝对路径、~ 开头的路径和相对仓库的路径。",
+        "runtimeServicesJson": "可选的工作区运行时服务定义。用于共享应用服务器、worker 或其他挂在工作区上的长期伴随进程。",
+        "maxTurnsPerRun": "每次心跳运行的最大智能体轮次（工具调用）数。",
+        "command": "要执行的命令（例如 node、python）。",
+        "localCommand": "覆盖适配器调用的 CLI 命令路径（例如 /usr/local/bin/claude、codex、opencode）。",
+        "args": "命令行参数，以逗号分隔。",
+        "extraArgs": "本地适配器的额外 CLI 参数，以逗号分隔。",
+        "envVars": "注入适配器进程的环境变量。可使用明文值或密钥引用。",
+        "secretAccess": "此智能体可访问的密钥。环境变量绑定在运行开始时注入；API 访问绑定通过与运行绑定的智能体 API 按需获取，绝不写入环境。",
+        "bootstrapPrompt": "仅在 Paperclip 开启新会话时发送。用于不需要每次心跳重复的稳定初始化指引。",
+        "payloadTemplateJson": "可选 JSON，会在 Paperclip 添加标准唤醒和工作区字段之前合并到远程适配器的请求负载中。",
+        "webhookUrl": "调用智能体时接收 POST 请求的 URL。",
+        "heartbeatInterval": "按定时器自动运行此智能体。适合检查新工作等周期性任务。",
+        "intervalSec": "两次自动心跳调用之间的秒数。",
+        "timeoutSec": "运行被终止前允许的最长秒数。0 表示不超时。",
+        "graceSec": "发送中断后、强制结束进程前等待的秒数。",
+        "wakeOnDemand": "允许通过任务分配、API 调用、界面操作或自动化系统唤醒此智能体。",
+        "cooldownSec": "连续两次心跳运行之间的最短秒数。",
+        "maxConcurrentRuns": "此智能体可同时执行的最大心跳运行数。",
+        "maxTurnContinuationEnabled": "当适配器因单次运行轮次上限耗尽而停止时，自动排队有限次数的续跑运行。",
+        "maxTurnContinuationMaxAttempts": "一次达到最大轮次停止后的最大自动续跑次数。与单次运行最大轮次分开计算。",
+        "maxTurnContinuationDelaySec": "每次最大轮次续跑开始前等待的秒数。",
+        "budgetMonthlyCents": "每月支出上限（单位：美分）。0 表示不限。"
+      },
+      "adapterLabels": {
+        "acpx_local": "ACPX（已停用）",
+        "process": "进程"
+      },
+      "choosePath": {
+        "button": "选择",
+        "title": "手动指定路径",
+        "description": "出于浏览器安全限制，应用无法通过文件选择器读取完整的本地路径。请复制绝对路径并粘贴到输入框中。",
+        "macTitle": "macOS（访达）",
+        "macStep1": "在访达中找到该文件夹。",
+        "macStep2": "按住 <kbd>Option</kbd> 并右键点击该文件夹。",
+        "macStep3": "点击“将“<folder name>”拷贝为路径名称”。",
+        "pasteStep": "将结果粘贴到路径输入框中。",
+        "winTitle": "Windows（文件资源管理器）",
+        "winStep1": "在文件资源管理器中找到该文件夹。",
+        "winStep2": "按住 <kbd>Shift</kbd> 并右键点击该文件夹。",
+        "winStep3": "点击“复制为路径”。",
+        "terminalTitle": "终端备选方式（macOS/Linux）",
+        "terminalStep1": "运行 <code>cd /path/to/folder</code>。",
+        "terminalStep2": "运行 <code>pwd</code>。",
+        "terminalStep3": "复制输出并粘贴到路径输入框中。",
+        "ok": "确定"
+      },
+      "setup": {
+        "selectOrg": "请选择一个组织以创建智能体。",
+        "errors": {
+          "resolveEnvironment": "无法解析环境。",
+          "modelFormat": "请选择或输入 provider/model 格式的模型。",
+          "githubUrl": "请输入 GitHub 仓库 URL。",
+          "cursorKey": "请输入 Cursor API key。",
+          "envKeyOrSecret": "请输入 {{envKey}} 或选择一个组织密钥。",
+          "hermesUrl": "请输入 Hermes API base URL。",
+          "kimiModel": "请输入 Kimi API 模型名称。",
+          "testFailed": "无法测试智能体。",
+          "createFailed": "无法创建智能体。",
+          "removeCredential": "无法移除未使用的设置凭据。请先在密钥中将其移除，再重试。",
+          "loadCreated": "无法加载已创建的智能体。请返回智能体列表查看。",
+          "unavailable": "此适配器不可用。请选择一个已启用的适配器。",
+          "noManagedEnvironment": "没有可用的托管环境。请先配置环境再继续。",
+          "loadModels": "无法加载模型。请重试或手动输入模型 ID。"
+        },
+        "loadingAgent": "正在加载你的智能体…",
+        "steps": {
+          "aria": "智能体设置步骤",
+          "connect": "连接",
+          "runtime": "配置",
+          "saved": "确认"
+        },
+        "localMachine": "本机",
+        "nativeRunner": "原生 app server runner",
+        "connectTitle": "连接模型",
+        "connectLede": "将 {{name}} 连接到 {{provider}}。",
+        "submittedForApproval": "智能体已提交审批",
+        "ready": "你的智能体已就绪",
+        "pendingApprovalNote": "需要组织管理员同意后，此智能体才能开始工作。",
+        "readyNote": "准备好让此智能体工作时，给它分配一个任务。",
+        "editConfiguration": "编辑配置",
+        "assignTask": "给 {{name}} 分配任务",
+        "configureTitle": "配置你的智能体",
+        "runtime": "运行时",
+        "usingConnection": "正在使用“连接”步骤中选择的连接。",
+        "changeConnection": "更换连接",
+        "thinkingEffort": "思考深度",
+        "auto": "自动",
+        "modelsLoadHint": "无法加载模型。你可以手动输入模型 ID。",
+        "apiKeyProvider": "API key 提供方",
+        "usingSavedKey": "使用已保存的 key",
+        "required": "必填",
+        "optionalIfConfigured": "已配置时可不填",
+        "getApiKey": "获取 API key",
+        "orgSecret": "或使用组织密钥",
+        "newKeysNote": "完成设置时，新 key 会保存为组织密钥。",
+        "newKeysNoteWithProvider": "完成设置时，新 key 会保存为组织密钥。请使用 {{provider}}/model 格式的 ID。",
+        "hermesUrl": "Hermes API base URL",
+        "kimiModel": "Kimi API 模型名称",
+        "kimiProtocol": "Kimi API 协议",
+        "kimiBaseUrl": "Kimi API base URL",
+        "kimiBaseUrlHint": "可选，覆盖提供方的 endpoint。",
+        "providerDefault": "提供方默认",
+        "githubRepository": "GitHub 仓库",
+        "branch": "分支",
+        "repositoryDefault": "仓库默认",
+        "connectionBack": "连接",
+        "creating": "正在创建…",
+        "finish": "完成设置"
+      },
+      "basics": {
+        "progressAria": "新建智能体进度",
+        "stepName": "1. 名称",
+        "stepAdapter": "2. 适配器",
+        "nameTitle": "认识你的下一个智能体",
+        "adapterTitle": "选择适配器",
+        "nameDescription": "先起个名字，让它成为你的专属智能体。",
+        "adapterDescription": "{{name}} 应该如何工作？",
+        "agentName": "智能体名称",
+        "namePlaceholder": "例如 Darnold",
+        "invite": "邀请外部智能体",
+        "loadingAdapters": "正在加载适配器…",
+        "runner": "Runner",
+        "runnerCodex": "Codex（app server）",
+        "runnerClaude": "Claude（ACPX）",
+        "chooseAdapter": "选择适配器",
+        "configureAgent": "配置智能体"
+      },
+      "connection": {
+        "noResponse": "提供方没有响应。请检查连接后重试。",
+        "connectFailed": "无法连接到提供方。",
+        "sourcesLabel": "连接你的模型提供方",
+        "savedKeysOne": "有 {{n}} 个已保存的 API key 可用。",
+        "savedKeysMany": "有 {{n}} 个已保存的 API key 可用。",
+        "chooseSavedKey": "选择已保存的 API key 或输入新的 key",
+        "provideKey": "提供你的 {{provider}} API key 以连接",
+        "apiKey": "API key",
+        "keyEntered": "已输入 key。请重试连接。",
+        "enterKey": "在此输入 API key",
+        "loginNoConnection": "登录未返回已保存的连接。请重试。",
+        "retrieveFailed": "无法获取已保存的连接。请返回并重试。",
+        "useSavedClaude": "为此智能体使用你已保存的 Claude 订阅。",
+        "useExisting": "使用此环境现有的提供方连接。",
+        "noBrowserSignIn": "此环境不支持浏览器登录。请选择支持登录的环境，或使用 API key 连接。",
+        "checkClaudeFailed": "无法检查你已保存的 Claude 订阅。请重试。",
+        "prepareSignInFailed": "无法准备登录。请重新加载此页面后重试。",
+        "waitingForCode": "等待验证码",
+        "connecting": "正在连接",
+        "signIn": "登录 {{provider}}",
+        "useSavedSubscription": "使用已保存的订阅",
+        "useSavedApiKey": "使用已保存的 API key",
+        "connect": "连接"
+      },
+      "invite": {
+        "promptTitle": "智能体接入提示词",
+        "promptDescription": "将这条一次性提示词发送给要加入你组织的智能体。",
+        "description": "为外部智能体生成一次性接入提示词。组织管理员同意其加入请求后，它才能领取 API key。",
+        "clipboardUnavailable": "剪贴板不可用。请从上方输入框手动复制提示词。",
+        "copiedPrompt": "已复制提示词",
+        "copyPrompt": "复制提示词",
+        "optionalMessage": "给智能体的附言（可选）",
+        "generating": "正在生成…",
+        "generate": "生成接入提示词"
+      }
+    },
+    "agentDetail": {
+      "invocation": {
+        "title": "调用",
+        "adapter": "适配器：",
+        "workingDir": "工作目录：",
+        "details": "详情",
+        "command": "命令：",
+        "commandNotes": "命令备注",
+        "prompt": "提示词",
+        "context": "上下文",
+        "environment": "环境"
+      },
+      "workspaceOps": {
+        "phase": {
+          "worktreePrepare": "工作树准备",
+          "configFreshness": "配置新鲜度检查",
+          "provision": "预配",
+          "teardown": "拆除",
+          "worktreeCleanup": "工作树清理"
+        },
+        "hideFullLog": "隐藏完整日志",
+        "showFullLog": "显示完整日志",
+        "loadingLog": "正在加载日志…",
+        "loadLogFailed": "加载工作区操作日志失败",
+        "noLogLines": "没有已保存的日志行。",
+        "title": "工作区（{{count}}）",
+        "timeRange": "{{start}} 至 {{end}}",
+        "branch": "分支：",
+        "baseRef": "基准引用：",
+        "worktree": "工作树：",
+        "repoRoot": "仓库根目录：",
+        "cleanup": "清理：",
+        "createdByRun": "由本次运行创建",
+        "reusedWorkspace": "复用了已有工作区",
+        "stderrExcerpt": "stderr 摘录",
+        "stdoutExcerpt": "stdout 摘录"
+      },
+      "source": {
+        "timer": "定时",
+        "assignment": "分配",
+        "onDemand": "按需",
+        "automation": "自动化"
+      },
+      "nav": {
+        "overview": "概览",
+        "instructions": "指令",
+        "skills": "技能",
+        "runtime": "Harness / 运行时",
+        "secrets": "密钥",
+        "tools": "工具",
+        "channels": "频道",
+        "permissions": "权限 / 信任",
+        "apiKeys": "API 密钥",
+        "revisions": "修订历史"
+      },
+      "discardConfigChanges": "要放弃未保存的智能体配置更改吗？",
+      "errors": {
+        "updateBundleResource": "更新捆绑资源失败",
+        "runBuiltInRoutine": "运行内置例程失败",
+        "enableRoutineSchedule": "启用例程计划失败",
+        "disableRoutineSchedule": "停用例程计划失败",
+        "actionFailed": "操作失败",
+        "updatePermissions": "更新权限失败",
+        "noAgentReference": "缺少智能体引用"
+      },
+      "breadcrumbs": {
+        "agents": "智能体",
+        "agent": "智能体",
+        "runs": "运行",
+        "run": "运行 {{id}}"
+      },
+      "leftNotice": "你已离开此智能体，它不会再出现在你的侧边栏中。",
+      "dismissLeftNotice": "关闭智能体成员提示",
+      "escalationPaused": "升级路径已暂停",
+      "invalidChain": {
+        "body": "在修复汇报链之前，{{name}} 无法接收任务或启动运行。",
+        "guidance": "请将此智能体分配给一个活跃的上级/根节点，或明确暂停或终止受影响的智能体/子树。"
+      },
+      "avatarAlt": "{{name}} 的头像",
+      "header": {
+        "assignTask": "分配任务",
+        "repairChainReason": "请先修复此智能体的汇报链，再分配任务或启动运行"
+      },
+      "builtIn": {
+        "pauseTitle": "要暂停 {{name}} 吗？",
+        "pauseDescription": "{{feature}} 依赖此智能体。暂停期间将跳过 {{featureLower}} 生成，{{feature}} 页面会显示警告。",
+        "title": "内置智能体",
+        "resetting": "正在重置…",
+        "resetDefaults": "恢复默认设置",
+        "description": "随 Paperclip 提供，为 <hl>{{feature}}</hl> 提供支持。你可以像配置其他智能体一样配置它（模型、指令、预算）。它可以暂停但不能删除；暂停它会同时暂停 {{feature}}。"
+      },
+      "pendingApproval": {
+        "body": "此智能体正在等待董事会审批，暂时无法调用。",
+        "approve": "同意智能体"
+      },
+      "secretsHeading": "密钥与变量",
+      "footer": {
+        "savingChanges": "正在保存更改…",
+        "unsavedChanges": "你有未保存的更改。",
+        "discard": "放弃",
+        "saveChanges": "保存更改"
+      },
+      "latestRun": {
+        "live": "实时运行",
+        "latest": "最近运行"
+      },
+      "overview": {
+        "adapterDefault": "适配器默认",
+        "identity": "身份",
+        "notSet": "未设置",
+        "board": "董事会",
+        "directReports": "直接下属",
+        "configure": "配置",
+        "noSession": "无会话",
+        "lastRun": "最近运行",
+        "noRuns": "暂无运行",
+        "capabilities": "能力",
+        "noCapabilities": "尚未添加能力说明。",
+        "manage": "管理",
+        "moreCount": "另有 {{count}} 个",
+        "noSkills": "未启用技能。",
+        "recentTasks": "最近任务",
+        "seeAll": "查看全部 →",
+        "noRecentTasks": "暂无最近任务。",
+        "moreTasks": "另有 {{count}} 个任务",
+        "audit": "审计",
+        "auditSections": {
+          "activity": "活动",
+          "runs": "运行",
+          "costs": "成本",
+          "budgets": "预算"
+        }
+      },
+      "revisions": {
+        "title": "配置修订",
+        "total": "共 {{count}} 条",
+        "empty": "暂无配置修订。",
+        "restore": "恢复",
+        "changed": "变更：{{keys}}",
+        "noTrackedChanges": "无跟踪的变更"
+      },
+      "config": {
+        "saved": "智能体已保存",
+        "saveFailedBody": "无法保存智能体",
+        "saveFailed": "保存失败",
+        "agentIdentity": "智能体身份"
+      },
+      "permissions": {
+        "assignHint": {
+          "ceoRole": "CEO 智能体自动启用。",
+          "agentCreator": "此智能体可创建新智能体时自动启用。",
+          "explicitGrant": "通过组织的显式权限授予启用。",
+          "simpleDefault": "由组织范围的简易任务分配默认设置启用。",
+          "disabled": "除非显式授予，否则禁用。"
+        },
+        "title": "权限",
+        "canCreateAgents": "可创建新智能体",
+        "canCreateAgentsHint": "允许此智能体创建或招聘智能体，同时授予任务分配权限。",
+        "canCreateSkills": "可创建/导入技能",
+        "canCreateSkillsHint": "允许此智能体安装、导入、创建和扫描组织技能，而无需创建智能体。",
+        "canAssignTasks": "可分配任务"
+      },
+      "instructions": {
+        "localOnly": "指令包仅适用于本地适配器。",
+        "saveNotice": "保存的指令将在下一次运行时生效。进行中的运行会沿用启动时的指令，修改指令可能会开启新的适配器会话。",
+        "mode": "模式",
+        "modeHelp": "托管：由 Paperclip 存储并提供指令包。外部：由你提供指令所在的磁盘路径。",
+        "managed": "托管",
+        "external": "外部",
+        "rootPath": "根路径",
+        "rootPathHelp": "指令包所在的磁盘绝对目录。托管模式下由 Paperclip 自动设置。",
+        "managedPlaceholder": "（托管）",
+        "entryFile": "入口文件",
+        "entryFileHelp": "智能体加载指令时首先读取的主文件，默认为 AGENTS.md。",
+        "files": "文件",
+        "virtualFile": "虚拟文件",
+        "virtualFileHelp": "旧版内联提示词——此已弃用的虚拟文件保留了原 promptTemplate 的内容",
+        "entryBadge": "入口",
+        "deprecatedVirtualFile": "已弃用的虚拟文件",
+        "fileLanguage": "{{language}} 文件",
+        "newFileInBundle": "此指令包中的新文件",
+        "viewMode": "指令文件视图",
+        "modes": {
+          "read": "阅读",
+          "edit": "编辑",
+          "raw": "源码"
+        },
+        "copyAria": "以 Markdown 格式复制指令文件",
+        "copyTitle": "复制为 Markdown",
+        "deleteConfirm": "要删除 {{path}} 吗？",
+        "empty": "此指令文件为空。",
+        "editorPlaceholder": "# 智能体指令",
+        "editorAria": "指令文件编辑器",
+        "fileContents": "文件内容"
+      },
+      "runs": {
+        "empty": "暂无运行。",
+        "backToRuns": "返回运行列表"
+      },
+      "runDetail": {
+        "resumeSkipped": "恢复请求已被跳过。",
+        "traceRerunSkipped": "追踪重跑已被跳过。",
+        "cancelling": "正在取消…",
+        "resuming": "正在恢复…",
+        "resume": "恢复",
+        "retrying": "正在重试…",
+        "inspectRun": "检查运行",
+        "starting": "正在启动…",
+        "rerunWithTrace": "开启提供方追踪重新运行",
+        "onBehalfOf": "代表 <name>{{name}}</name>",
+        "identityHistory": "GitHub 身份历史",
+        "noResponsiblePerson": "无负责人",
+        "noGithubOperation": "未记录 GitHub 操作",
+        "resumeFailed": "恢复运行失败",
+        "retryFailed": "重试运行失败",
+        "duration": "时长：{{duration}}",
+        "claudeLoginRunning": "正在运行 claude login…",
+        "claudeLogin": "登录 Claude Code",
+        "claudeLoginFailed": "运行 Claude 登录失败",
+        "loginUrl": "登录 URL：",
+        "exitCode": "退出码 {{code}}",
+        "signal": "（信号：{{signal}}）",
+        "metrics": {
+          "input": "输入",
+          "output": "输出",
+          "cached": "缓存",
+          "cost": "成本"
+        },
+        "session": {
+          "changed": "（已变更）",
+          "before": "之前",
+          "id": "ID",
+          "after": "之后",
+          "clearConfirmOne": "要清除本次运行涉及的 {{count}} 个任务的会话吗？",
+          "clearConfirmMany": "要清除本次运行涉及的 {{count}} 个任务的会话吗？",
+          "clearing": "正在清除会话…",
+          "clear": "清除这些任务的会话",
+          "clearFailed": "清除会话失败"
+        },
+        "tasksTouched": "涉及的任务（{{count}}）"
+      },
+      "log": {
+        "loadFailed": "加载运行日志失败",
+        "loadMoreFailed": "加载更多运行日志失败",
+        "loading": "正在加载运行日志…",
+        "noEvents": "没有日志事件。",
+        "transcript": "对话记录（{{count}}）",
+        "modes": {
+          "nice": "美化",
+          "raw": "原始"
+        },
+        "jumpToLive": "跳到实时",
+        "waitingTranscript": "正在等待对话记录…",
+        "noTranscript": "此运行没有已保存的对话记录。",
+        "loadingMore": "正在加载…",
+        "loadMore": "加载更多日志",
+        "showingFirst": "已显示前 {{shown}} KB",
+        "showingFirstOf": "已显示前 {{shown}} KB，共 {{total}} KB",
+        "failureDetails": "失败详情",
+        "error": "错误：",
+        "adapterResultJson": "适配器结果 JSON",
+        "events": "事件（{{count}}）"
+      },
+      "keys": {
+        "copyFailed": "复制失败",
+        "clipboardUnavailable": "无法访问剪贴板。",
+        "created": "API 密钥已创建——请立即复制，之后将不会再显示。",
+        "hide": "隐藏",
+        "show": "显示",
+        "copied": "已复制！",
+        "dismiss": "关闭",
+        "createTitle": "创建 API 密钥",
+        "description": "API 密钥用于此智能体在调用 Paperclip 服务器时进行身份验证。",
+        "namePlaceholder": "密钥名称（例如 production）",
+        "loading": "正在加载密钥…",
+        "empty": "没有有效的 API 密钥。",
+        "active": "有效密钥",
+        "createdAt": "创建于 {{date}}",
+        "revoke": "吊销",
+        "revoked": "已吊销的密钥",
+        "revokedAt": "吊销于 {{date}}"
+      }
+    },
+    "issueChat": {
+      "pausedNotice": {
+        "budget": "因触发预算硬性上限而被暂停。",
+        "import": "它在组织导入时即处于暂停状态——导入的智能体会保持暂停，直到你恢复它们。",
+        "system": "已被系统暂停。",
+        "manual": "已被手动暂停。",
+        "title": "<name>{{name}}</name> 已暂停。",
+        "resuming": "正在恢复…",
+        "resume": "恢复智能体",
+        "body": "在恢复该智能体之前不会启动新的运行。{{detail}}"
+      },
+      "author": {
+        "agent": "智能体",
+        "you": "你",
+        "system": "系统",
+        "board": "董事会",
+        "user": "用户"
+      },
+      "fallback": {
+        "title": "对话渲染器遇到内部状态错误。",
+        "description": "已改为显示安全的备用记录，以免任务页面崩溃。",
+        "noContent": "无消息内容。"
+      },
+      "liveStatus": {
+        "usingTool": "正在使用 {{tool}}",
+        "noOutputStillRunning": "{{elapsed}} 无输出 - 仍在运行",
+        "ago": "{{elapsed}}前"
+      },
+      "cot": {
+        "ranCommandsOne": "运行了 {{count}} 条命令",
+        "ranCommandsMany": "运行了 {{count}} 条命令",
+        "calledToolsOne": "调用了 {{count}} 个工具",
+        "calledToolsMany": "调用了 {{count}} 个工具",
+        "summarySeparator": "，",
+        "working": "工作中",
+        "worked": "已工作",
+        "forDuration": "用时 {{duration}}"
+      },
+      "duration": {
+        "secondsOne": "{{count}} 秒",
+        "secondsMany": "{{count}} 秒",
+        "minutesOne": "{{count}} 分钟",
+        "minutesMany": "{{count}} 分钟",
+        "hoursOne": "{{count}} 小时",
+        "hoursMany": "{{count}} 小时",
+        "hoursMinutes": "{{hours}} {{minutes}}"
+      },
+      "copy": {
+        "failed": "复制失败",
+        "unableText": "无法复制文本",
+        "message": "复制消息",
+        "unableMessage": "无法复制消息",
+        "unableSystemNotice": "无法复制系统通知",
+        "unableSystemNoticeLink": "无法复制系统通知链接",
+        "link": "复制链接",
+        "linkToSystemNotice": "复制系统通知链接",
+        "noticeText": "复制通知文本",
+        "systemNotice": "复制系统通知"
+      },
+      "tool": {
+        "providerActivity": "提供方活动",
+        "childAgent": "子智能体",
+        "unknownStatus": "未知",
+        "unavailableSource": "来源不可用",
+        "providerReported": "（提供方报告）",
+        "model": "模型",
+        "input": "输入",
+        "result": "结果"
+      },
+      "queue": {
+        "deferredWake": "⏸ 延迟唤醒",
+        "queued": "排队中",
+        "interrupting": "正在中断...",
+        "interrupt": "中断"
+      },
+      "message": {
+        "followUp": "跟进",
+        "commentDeleted": "评论已删除",
+        "sentFromIMessage": "通过 iMessage 发送",
+        "sending": "正在发送...",
+        "moreActions": "更多操作"
+      },
+      "deleteComment": {
+        "action": "删除评论",
+        "title": "删除评论？",
+        "description": "该评论将被替换为“评论已删除”标记。"
+      },
+      "run": {
+        "stopRun": "停止运行",
+        "stoppingRun": "正在停止...",
+        "viewRun": "查看运行",
+        "running": "运行中",
+        "runWord": "运行"
+      },
+      "feedback": {
+        "helpful": "有帮助",
+        "needsWork": "需改进",
+        "whatCouldBeBetter": "哪些地方可以做得更好？",
+        "notePlaceholder": "添加简短说明",
+        "dismiss": "关闭",
+        "saving": "正在保存...",
+        "saveNote": "保存说明",
+        "sharingTitle": "保存你的反馈共享偏好",
+        "sharingDescription": "选择是否允许将已投票的 AI 输出分享给 Paperclip Labs。此选择将成为今后点赞和点踩的默认设置。",
+        "savedLocally": "此投票始终保存在本地。",
+        "sharingChoice": "选择<allow>始终允许</allow>可分享此投票及今后投票的 AI 输出。选择<deny>不允许</deny>则此投票及今后的投票仅保存在本地。",
+        "changeLater": "你之后可以在 设置 > 通用 中更改。",
+        "readTerms": "阅读我们的服务条款",
+        "dontAllow": "不允许",
+        "alwaysAllow": "始终允许"
+      },
+      "activity": {
+        "updatedThisTask": "更新了此任务",
+        "requestedFollowUp": "请求了跟进",
+        "status": "状态",
+        "assignee": "负责人",
+        "workspace": "工作区"
+      },
+      "interaction": {
+        "hideConfirmation": "隐藏确认",
+        "expiredConfirmation": "已过期的确认"
+      },
+      "systemNotice": {
+        "noAdditionalDetails": "没有更多详情。",
+        "staleDispositionWarning": "过期的处置警告"
+      },
+      "deleted": {
+        "commentFallbackAuthor": "评论",
+        "deletedThisComment": "删除了此评论"
+      },
+      "composer": {
+        "uploadNoUrl": "上传未返回文件 URL",
+        "fileTypeNotAllowed": "此处无法附加该类型的文件",
+        "uploadFailed": "上传失败",
+        "dropToUpload": "松开以上传",
+        "dropHint": "图片会插入到回复中，其他文件会添加到此任务。",
+        "uncertainSubmission": "无法确认这条评论是否已保存，它可能已出现在对话中。请先查看对话，再开始新的草稿。",
+        "reviewUnavailable": "无法查看",
+        "reviewConversation": "查看对话",
+        "reviewFailed": "无法刷新对话，请重新查看。",
+        "discardHint": "丢弃此草稿不会删除任何已保存的评论或已上传的文件。",
+        "discardDraft": "丢弃草稿并重新开始",
+        "replyPlaceholder": "回复",
+        "uploadingToTask": "正在上传到任务",
+        "insertedInline": "已内嵌插入",
+        "attachedToTask": "已附加到任务",
+        "removeAttachment": "移除 {{name}}",
+        "attachFile": "附加文件",
+        "cycleModesHint": "Cmd/Ctrl+. 切换模式",
+        "responsible": "负责人",
+        "noResponsible": "无负责人",
+        "searchResponsible": "搜索负责人...",
+        "noResponsibleFound": "未找到负责人。",
+        "stopping": "正在停止…",
+        "stop": "停止",
+        "stopResponse": "停止响应",
+        "posting": "正在发布...",
+        "send": "发送",
+        "noAssigneeTitle": "未选择负责人",
+        "noAssigneeDescription": "这条评论将在没有负责人的情况下发布，因此不会唤醒任何智能体来处理。你可以返回选择负责人，或仍然发送。",
+        "goBack": "返回",
+        "sendAnyway": "仍然发送"
+      },
+      "thread": {
+        "noRunOutput": "暂无运行输出。",
+        "emptyConversation": "此任务的对话为空。请在下方发送一条消息开始。",
+        "jumpToLatest": "跳到最新"
+      },
+      "legacyRecovery": {
+        "label": "旧版恢复任务",
+        "body": "旧版恢复任务。较新的恢复操作位于源任务上",
+        "period": "。"
+      },
+      "commentThread": {
+        "copyAsMarkdown": "以 Markdown 格式复制评论",
+        "queueing": "正在排队...",
+        "noTimelineEntries": "暂无时间线条目。",
+        "environment": "环境",
+        "provider": "提供方",
+        "lease": "租约",
+        "failure": "失败：{{reason}}",
+        "timelineHeading": "时间线（{{count}}）",
+        "queuedComments": "排队中的评论（{{count}}）",
+        "leaveComment": "发表评论...",
+        "attachImage": "附加图片",
+        "comment": "评论",
+        "runShort": "运行 {{id}}"
+      }
     }
   }
 }

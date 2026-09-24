@@ -1,4 +1,5 @@
 import type { ExternalObjectSummary, Issue } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export type IssueFilterWorkspaceLookup = {
   mode?: string | null;
@@ -62,18 +63,18 @@ export const externalObjectFilterOrder = [
   "none",
 ];
 
-const EXTERNAL_OBJECT_FILTER_LABELS: Record<string, string> = {
-  failed: "Any failed",
-  waiting: "Any waiting",
-  running: "Any running",
-  auth_required: "Auth required",
-  unreachable: "Unreachable",
-  stale: "Stale",
-  none: "No external objects",
-};
+const externalObjectFilterLabels = (): Record<string, string> => ({
+  failed: t("app.shared.externalObjects.filter.failed"),
+  waiting: t("app.shared.externalObjects.filter.waiting"),
+  running: t("app.shared.externalObjects.filter.running"),
+  auth_required: t("app.shared.externalObjects.filter.authRequired"),
+  unreachable: t("app.shared.externalObjects.filter.unreachable"),
+  stale: t("app.shared.externalObjects.filter.stale"),
+  none: t("app.shared.externalObjects.filter.none"),
+});
 
 export function externalObjectFilterLabel(value: string): string {
-  return EXTERNAL_OBJECT_FILTER_LABELS[value] ?? issueFilterLabel(value);
+  return externalObjectFilterLabels()[value] ?? issueFilterLabel(value);
 }
 
 export const issueStatusOrder = ["in_progress", "todo", "backlog", "in_review", "blocked", "done", "cancelled"];

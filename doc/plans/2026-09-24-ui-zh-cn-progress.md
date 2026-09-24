@@ -64,3 +64,25 @@
 验证记录（第二批）：`pnpm --filter @paperclipai/ui typecheck`、`pnpm check:token-gates`、
 `pnpm locales:check` 通过；全 UI 测试（2 worker）635 个文件 6662 条，唯一失败为上面的源码契约测试，修正后单独运行 13/13 通过。
 未做浏览器中文走查，未部署。
+
+## 第三批（2026-09-24 晚，分支 `feat/i18n-batch-3`）
+
+| 命名空间 | 覆盖 |
+|---|---|
+| `issueDetail` | 任务详情页 `IssueDetail.tsx`：头部、菜单、标签页、子任务、成本、附件、提示与错误 |
+| `issueChat` | 任务对话 `IssueChatThread.tsx`、`CommentThread.tsx`：输入框、消息外框、系统提示、运行块 |
+| `agentDetail` | 智能体详情页 `AgentDetail.tsx`：头部、暂停/恢复、概览、修订、权限、指令、运行、日志、API key |
+| `agentSetup` | 新建智能体流程 `components/new-agent/*`；`agent-config-primitives.tsx` 新增 `helpText` / `useAgentConfigHelp` / `adapterLabel` / `roleLabel`（原导出保持英文） |
+| `format`、`shared` | `lib/` 日期显示随界面语言、日期分组、监控 ETA、审核策略、重试原因、恢复标签、外部对象、工作模式、"你"；`PageTabBar`、`CollectionToolbar`、`StarToggle`、`MembershipAction` |
+
+词条：`en.json` / `zh-CN.json` 各 2123 个叶子词条，15 条与英文相同（ID、角色缩写、API key、纯占位符等）。
+`chat-ui-contract.test.ts` 对 IssueDetail 的 "Retry queued" 同样改为接受 `t(...)` 并断言英文值。
+
+仍为英文（下一批候选）：`AgentConfigForm` 与 `adapters/*/config-fields.tsx` 里仍直接读取英文 `help.*` 的调用点；
+`lib/issue-chat-messages.ts`、`transcriptPresentation`、`SystemNotice`、交接/提及相关小组件；
+智能体详情页的 `AgentActionButtons`、`AgentSkillsTab`、`AgentToolsTab`、运行详情子组件；
+任务详情页的 `TaskSidePanel`、`IssueRunLedger`、文档/工作区区块、`IssueRecoveryActionCard`；
+`LegacyInbox` / `LegacyIssuesList`；例程、流水线、设置、成本、密钥、技能等页面。
+
+验证记录（第三批）：UI typecheck、`pnpm check:token-gates`、`pnpm locales:check` 通过；
+全 UI 测试（2 worker）635 个文件 6662 条全部通过。未做浏览器中文走查，未部署。
