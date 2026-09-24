@@ -23,6 +23,15 @@ GitHub Actions owns `pnpm-lock.yaml`.
 - Pull request CI validates dependency resolution when manifests change.
 - Pushes to `master` regenerate `pnpm-lock.yaml` with `pnpm install --lockfile-only --no-frozen-lockfile`, commit it back if needed, and then run verification with `--frozen-lockfile`.
 
+## Managed Codex MCP gateways
+
+Codex requires `http_headers` for Streamable HTTP MCP authorization in its
+`config.toml`. The managed gateway writer in
+`packages/adapters/codex-local/src/server/codex-home.ts` must emit
+`http_headers = { Authorization = ... }`, not `headers`. Verify generated
+configuration with fake tokens, then test a read-only gateway call separately;
+parsing the configuration alone does not prove end-to-end authorization.
+
 ## Trusted PR Workflow
 
 The PR caller uses `paperclipai/paperclip/.github/workflows/pr-trusted.yml@master`.
