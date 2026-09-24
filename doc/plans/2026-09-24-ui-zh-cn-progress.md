@@ -39,3 +39,28 @@
 - [ ] 运行版本核对和实际使用验收（仅在部署后进行）。
 
 验证记录（2026-09-24）：`pnpm --filter @paperclipai/ui typecheck`、`pnpm check:token-gates`、6 个相关 UI 测试文件（55 条用例）和 `pnpm --filter @paperclipai/ui build` 通过。仓库级 `pnpm -r typecheck` 在 Runner 的 Rust 检查处因环境缺少 `cargo` 停止。`pnpm test:run` 在耗时较长的服务端串行套件中停止，未取得全量结果。4 worker 的全 UI 测试出现 3 条 `CompanySettings` 失败；该未修改文件单独运行 4/4 通过，全 UI 测试尚不能标记通过。
+
+## 第二批（2026-09-24 晚）
+
+| 项目 | 状态 |
+|---|---|
+| 工具 | 新增 `scripts/sync-locales.mjs`（`pnpm locales:sync` / `pnpm locales:check`，以 `en.json` 为准同步其余 39 个语言文件，缺失键填英文回退）；新增 `ui/src/i18n/key-reference.test.ts`（静态 `t("...")` 键必须存在于 `en.json`）；新增 `ui/src/i18n/labels.ts` 状态/优先级标签助手。两份工具移植自上游 PR #11373。 |
+| 公共 | `app.common`：任务/智能体/通用状态、优先级、受阻原因、常用按钮；`StatusIcon`、`StatusBadge`、`PriorityIcon`、`MobileBottomNav` 已接入。 |
+| 任务列表 | `app.issues`：`Issues`、`MyIssues`、`IssuesList`、`IssueFiltersPopover`、`IssueColumns`、`IssueRow`、`KanbanBoard`。 |
+| 新建任务与属性面板 | `app.newIssue`：`NewIssueDialog`、`issue-properties/*`。 |
+| 收件箱 | `app.inbox`：`Inbox`、`InboxAgentPolicyControl`、`BlockedInboxView`、`FeedCard`。 |
+| 项目与目标 | `app.projects`、`app.goals`：列表、详情、新建对话框、属性面板、目标树。 |
+| 智能体 | `app.agents`：`Agents` 列表、`NewAgent` 面包屑、`AgentProperties`、`AgentConfigForm`。 |
+| 词条 | `en.json` / `zh-CN.json` 各 1290 个叶子词条；仅 8 条与英文相同（ID、CEO/CTO 等角色缩写、纯占位符）。 |
+
+语言可运行时切换，本批不在模块顶层调用 `t()`；英文值与原字面量逐字一致，现有英文断言不变。
+`chat-ui-contract.test.ts` 的源码正则改为同时接受 `t("app.inbox.errors.retryRunFailed")`，并断言其英文值不变。
+
+仍为英文（下一批）：`IssueDetail`（8000+ 行）、`AgentDetail`、`new-agent/*` 创建流程、
+`agent-config-primitives` 帮助文本、`LegacyInbox` / `LegacyIssuesList`（关闭 Streamlined UI 时使用）、
+`lib/` 下的日期分组、相对时间、恢复/监控文案、`EmptyState`、`PageTabBar`、`CollectionToolbar`，
+以及例程、流水线、设置、成本、密钥、技能等页面。
+
+验证记录（第二批）：`pnpm --filter @paperclipai/ui typecheck`、`pnpm check:token-gates`、
+`pnpm locales:check` 通过；全 UI 测试（2 worker）635 个文件 6662 条，唯一失败为上面的源码契约测试，修正后单独运行 13/13 通过。
+未做浏览器中文走查，未部署。

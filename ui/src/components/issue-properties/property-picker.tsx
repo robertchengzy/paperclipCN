@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useStreamlinedUiEnabled } from "../../hooks/useStreamlinedUiEnabled";
 import { PropertyRow } from "./primitives";
+import { useTranslation } from "@/i18n";
 
 /** Renders a Popover on desktop, or an inline collapsible section on mobile (inline mode). */
 export function PropertyPicker({
@@ -35,6 +36,7 @@ export function PropertyPicker({
   separateTrigger?: boolean;
   children: ReactNode;
 }) {
+  const { t } = useTranslation();
   const { enabled: streamlinedUiEnabled } = useStreamlinedUiEnabled();
   const btnCn = cn(
     "inline-flex min-h-5 items-center gap-1.5 cursor-pointer hover:bg-accent/50 rounded px-1 -mx-1 py-0.5 transition-colors min-w-0 max-w-full text-left",
@@ -47,7 +49,7 @@ export function PropertyPicker({
       <button
         type="button"
         className={cn(btnCn, "shrink-0")}
-        aria-label={`Edit ${label.toLowerCase()}`}
+        aria-label={t("app.newIssue.properties.editLabel", { label: label.toLowerCase() })}
         aria-expanded={open}
         onClick={inline ? () => onOpenChange(!open) : undefined}
       >

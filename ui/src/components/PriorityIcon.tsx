@@ -4,6 +4,8 @@ import { cn } from "../lib/utils";
 import { priorityColor, priorityColorDefault } from "../lib/status-colors";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/i18n";
+import { priorityLabel } from "@/i18n/labels";
 
 const priorityConfig: Record<string, { icon: typeof ArrowUp; color: string; label: string }> = {
   critical: { icon: AlertTriangle, color: priorityColor.critical ?? priorityColorDefault, label: "Critical" },
@@ -23,7 +25,9 @@ interface PriorityIconProps {
 
 export function PriorityIcon({ priority, onChange, className, showLabel }: PriorityIconProps) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   const config = priorityConfig[priority] ?? priorityConfig.medium!;
+  const configLabel = priorityLabel(t, priorityConfig[priority] ? priority : "medium");
   const Icon = config.icon;
 
   const icon = (
@@ -39,22 +43,22 @@ export function PriorityIcon({ priority, onChange, className, showLabel }: Prior
     </span>
   );
 
-  if (!onChange) return showLabel ? <span className="inline-flex items-center gap-1.5">{icon}<span className="text-sm">{config.label}</span></span> : icon;
+  if (!onChange) return showLabel ? <span className="inline-flex items-center gap-1.5">{icon}<span className="text-sm">{configLabel}</span></span> : icon;
 
   const trigger = showLabel ? (
     <button
       type="button"
-      aria-label={`Change priority (current: ${config.label})`}
+      aria-label={t("app.common.changePriority", { label: configLabel })}
       className="inline-flex min-h-5 items-center gap-1.5 cursor-pointer hover:bg-accent/50 rounded px-1 -mx-1 py-0.5 transition-colors"
     >
       {icon}
-      <span className="text-sm">{config.label}</span>
+      <span className="text-sm">{configLabel}</span>
     </button>
   ) : (
     <button
       type="button"
       data-slot="icon-button"
-      aria-label={`Change priority (current: ${config.label})`}
+      aria-label={t("app.common.changePriority", { label: configLabel })}
       className="inline-flex cursor-pointer items-center justify-center rounded-sm focus-visible:outline-none focus-visible:ring-(length:--rad-3) focus-visible:ring-ring"
     >
       {icon}
@@ -80,7 +84,7 @@ export function PriorityIcon({ priority, onChange, className, showLabel }: Prior
               }}
             >
               <PIcon className={cn("h-3.5 w-3.5", c.color)} />
-              {c.label}
+              {priorityLabel(t, p)}
             </Button>
           );
         })}

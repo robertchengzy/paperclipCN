@@ -25,6 +25,8 @@ import { Identity } from "./Identity";
 import { StatusIcon } from "./StatusIcon";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useTranslation } from "@/i18n";
+import type { TFunction } from "i18next";
 
 interface BlockedInboxViewProps {
   companyId: string;
@@ -67,6 +69,7 @@ export function BlockedInboxView({
   showUpdatedColumn,
   presentation = "legacy",
 }: BlockedInboxViewProps) {
+  const { t } = useTranslation();
   const [collapsedVariants, setCollapsedVariants] = useState<Set<string>>(() => new Set());
 
   const {
@@ -149,7 +152,7 @@ export function BlockedInboxView({
 
   if (error) {
     const message =
-      error instanceof Error ? error.message : "Couldn't load the Blocked tab.";
+      error instanceof Error ? error.message : t("app.inbox.blocked.loadFailed");
     return (
       <div
         data-testid="blocked-inbox-error"
@@ -159,9 +162,9 @@ export function BlockedInboxView({
         <div className="flex items-start gap-2">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <div className="flex-1 space-y-1">
-            <p className="text-sm font-medium">Couldn't load the Blocked tab.</p>
+            <p className="text-sm font-medium">{t("app.inbox.blocked.loadFailed")}</p>
             <p className="text-xs opacity-80">
-              Other Inbox tabs still work. {message}
+              {t("app.inbox.blocked.otherTabsWork", { message })}
             </p>
           </div>
           <Button
@@ -172,7 +175,7 @@ export function BlockedInboxView({
             onClick={() => void refetch()}
             disabled={isFetching}
           >
-            {isFetching ? "Trying…" : "Try again"}
+            {isFetching ? t("app.inbox.blocked.trying") : t("app.inbox.blocked.tryAgain")}
           </Button>
         </div>
       </div>
@@ -189,9 +192,9 @@ export function BlockedInboxView({
           <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
         </span>
         <div className="space-y-1">
-          <p className="text-sm font-medium text-foreground">No work is stopped.</p>
+          <p className="text-sm font-medium text-foreground">{t("app.inbox.blocked.emptyTitle")}</p>
           <p className="text-xs text-muted-foreground">
-            Tasks that need a decision, recovery, or external action will appear here.
+            {t("app.inbox.blocked.emptyDescription")}
           </p>
         </div>
       </Card>
@@ -205,7 +208,7 @@ export function BlockedInboxView({
           data-testid="blocked-inbox-no-search-results"
           className="block border-border/70 bg-card/40 px-4 py-6 text-center text-sm text-muted-foreground"
         >
-          No stopped items match your search.
+          {t("app.inbox.blocked.noSearchResults")}
         </Card>
       </div>
     );
@@ -237,7 +240,7 @@ export function BlockedInboxView({
               <div key={group.variant} data-testid={`blocked-inbox-group-${group.variant}`}>
                 <div className={presentation === "task" ? "rounded-lg px-3 sm:pl-0 sm:pr-4" : "px-3 sm:px-4"}>
                   <IssueGroupHeader
-                    label={`${group.label} · ${group.rows.length}`}
+                    label={`${t(`app.inbox.blocked.variants.${group.variant}`, { defaultValue: group.label })} · ${group.rows.length}`}
                     collapsible
                     collapsed={isCollapsed}
                     onToggle={() => toggleVariant(group.variant)}
@@ -301,6 +304,27 @@ function resolveOwnerName(
   return { label: null, isAgent: false };
 }
 
+function localizedStoppedAge(t: TFunction, stoppedSinceAt: string | null): string {
+  const english = formatStoppedAge(stoppedSinceAt);
+  if (english === "stopped") return t("app.inbox.blocked.stoppedAge.unknown");
+  if (english === "stopped just now") return t("app.inbox.blocked.stoppedAge.justNow");
+  const match = /^stopped (\d+)(mo|m|h|d|w)$/.exec(english);
+  if (!match) return english;
+  const count = Number(match[1]);
+  switch (match[2]) {
+    case "m":
+      return t("app.inbox.blocked.stoppedAge.minutes", { count });
+    case "h":
+      return t("app.inbox.blocked.stoppedAge.hours", { count });
+    case "d":
+      return t("app.inbox.blocked.stoppedAge.days", { count });
+    case "w":
+      return t("app.inbox.blocked.stoppedAge.weeks", { count });
+    default:
+      return t("app.inbox.blocked.stoppedAge.months", { count });
+  }
+}
+
 function BlockedInboxRow({
   row,
   issueLinkState,
@@ -314,8 +338,9 @@ function BlockedInboxRow({
   showUpdatedColumn,
   presentation,
 }: BlockedInboxRowProps) {
+  const { t } = useTranslation();
   const { label: ownerName, isAgent } = resolveOwnerName(row, agentNameById, userLabelById);
-  const stoppedAge = formatStoppedAge(row.attention.stoppedSinceAt);
+  const stoppedAge = localizedStoppedAge(t, row.attention.stoppedSinceAt);
   const blockerAttention = resolveInboxIssueBlockerAttention(row.issue, {
     isLive: liveIssueIds.has(row.issue.id),
     loadedSubtreeLiveCount: subtreeLiveCounts.get(row.issue.id) ?? 0,

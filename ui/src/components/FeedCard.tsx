@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useTranslation } from "@/i18n";
+import type { TFunction } from "i18next";
 
 /* ------------------------------------------------------------------ */
 /*  Canonical verb table — one verb per action, used on every card.    */
@@ -37,92 +39,93 @@ function humanize(value: unknown): string {
 /** One verb per action. Pinned context (Tier 0) swaps a couple of verbs to
  *  emphasize that user action is needed. */
 function formatVerb(
+  t: TFunction,
   action: string,
   details: Record<string, unknown> | null | undefined,
   context: VerbContext = "chronological",
 ): string {
   switch (action) {
     case "issue.created":
-      return "opened";
+      return t("app.inbox.feedCard.verbs.opened");
     case "issue.updated": {
       const status = details?.status;
-      if (status === "in_review" && details?.externalConversationState === "waiting") return "moved to idle";
-      if (typeof status === "string") return `moved to ${humanize(status)}`;
+      if (status === "in_review" && details?.externalConversationState === "waiting") return t("app.inbox.feedCard.verbs.movedToIdle");
+      if (typeof status === "string") return t("app.inbox.feedCard.verbs.movedTo", { status: t(`app.common.status.${status}`, { defaultValue: humanize(status) }) });
       const priority = details?.priority;
-      if (typeof priority === "string") return `set priority to ${humanize(priority)} on`;
-      return "updated";
+      if (typeof priority === "string") return t("app.inbox.feedCard.verbs.setPriorityOn", { priority: t(`app.inbox.feedCard.priority.${priority}`, { defaultValue: humanize(priority) }) });
+      return t("app.inbox.feedCard.verbs.updated");
     }
     case "issue.document_created":
-      return "wrote doc on";
+      return t("app.inbox.feedCard.verbs.wroteDocOn");
     case "issue.document_updated":
-      return "edited doc on";
+      return t("app.inbox.feedCard.verbs.editedDocOn");
     case "issue.document_deleted":
-      return "deleted doc from";
+      return t("app.inbox.feedCard.verbs.deletedDocFrom");
     case "issue.work_product_created":
-      return "delivered work on";
+      return t("app.inbox.feedCard.verbs.deliveredWorkOn");
     case "issue.work_product_updated":
-      return "updated work on";
+      return t("app.inbox.feedCard.verbs.updatedWorkOn");
     case "issue.work_product_deleted":
-      return "removed work from";
+      return t("app.inbox.feedCard.verbs.removedWorkFrom");
     case "issue.checked_out":
-      return "picked up";
+      return t("app.inbox.feedCard.verbs.pickedUp");
     case "issue.released":
-      return "released";
+      return t("app.inbox.feedCard.verbs.released");
     case "issue.commented":
     case "issue.comment_added":
-      return "commented on";
+      return t("app.inbox.feedCard.verbs.commentedOn");
     case "issue.attachment_added":
-      return "attached a file to";
+      return t("app.inbox.feedCard.verbs.attachedFileTo");
     case "issue.attachment_removed":
-      return "removed attachment from";
+      return t("app.inbox.feedCard.verbs.removedAttachmentFrom");
     case "issue.deleted":
-      return "deleted";
+      return t("app.inbox.feedCard.verbs.deleted");
 
     case "approval.created":
-      return context === "pinned" ? "needs approval on" : "requested approval on";
+      return context === "pinned" ? t("app.inbox.feedCard.verbs.needsApprovalOn") : t("app.inbox.feedCard.verbs.requestedApprovalOn");
     case "approval.approved":
-      return "approved";
+      return t("app.inbox.feedCard.verbs.approved");
     case "approval.rejected":
-      return "rejected";
+      return t("app.inbox.feedCard.verbs.rejected");
     case "approval.revision_requested":
-      return "requested changes on";
+      return t("app.inbox.feedCard.verbs.requestedChangesOn");
 
     case "agent.created":
-      return context === "pinned" ? "wants to hire" : "hired";
+      return context === "pinned" ? t("app.inbox.feedCard.verbs.wantsToHire") : t("app.inbox.feedCard.verbs.hired");
     case "agent.paused":
-      return "paused";
+      return t("app.inbox.feedCard.verbs.paused");
     case "agent.resumed":
-      return "resumed";
+      return t("app.inbox.feedCard.verbs.resumed");
     case "agent.updated":
-      return "updated";
+      return t("app.inbox.feedCard.verbs.updated");
     case "agent.terminated":
-      return "terminated";
+      return t("app.inbox.feedCard.verbs.terminated");
 
     case "heartbeat.invoked":
-      return "started a run on";
+      return t("app.inbox.feedCard.verbs.startedRunOn");
     case "heartbeat.cancelled":
-      return "cancelled a run on";
+      return t("app.inbox.feedCard.verbs.cancelledRunOn");
 
     case "project.created":
-      return "created project";
+      return t("app.inbox.feedCard.verbs.createdProject");
     case "project.updated":
-      return "updated project";
+      return t("app.inbox.feedCard.verbs.updatedProject");
     case "project.deleted":
-      return "deleted project";
+      return t("app.inbox.feedCard.verbs.deletedProject");
     case "goal.created":
-      return "created goal";
+      return t("app.inbox.feedCard.verbs.createdGoal");
     case "goal.updated":
-      return "updated goal";
+      return t("app.inbox.feedCard.verbs.updatedGoal");
     case "goal.deleted":
-      return "deleted goal";
+      return t("app.inbox.feedCard.verbs.deletedGoal");
     case "company.created":
-      return "created organization";
+      return t("app.inbox.feedCard.verbs.createdOrganization");
     case "company.updated":
-      return "updated organization";
+      return t("app.inbox.feedCard.verbs.updatedOrganization");
     case "company.archived":
-      return "archived organization";
+      return t("app.inbox.feedCard.verbs.archivedOrganization");
     case "company.budget_updated":
-      return "updated organization budget";
+      return t("app.inbox.feedCard.verbs.updatedOrganizationBudget");
 
     default:
       return action.replace(/[._]/g, " ");
@@ -285,6 +288,7 @@ interface CardContent {
 }
 
 function resolveContent(
+  t: TFunction,
   event: ActivityEvent,
   agentMap: Map<string, Agent>,
   entityNameMap: Map<string, string>,
@@ -295,10 +299,10 @@ function resolveContent(
   const actorName =
     actor?.name ??
     (event.actorType === "system"
-      ? "System"
+      ? t("app.inbox.feedCard.actorSystem")
       : event.actorType === "user"
-        ? "Board"
-        : event.actorId || "Unknown");
+        ? t("app.inbox.feedCard.actorBoard")
+        : event.actorId || t("app.inbox.feedCard.actorUnknown"));
 
   const entityTitle = entityTitleMap?.get(`${event.entityType}:${event.entityId}`) ?? null;
 
@@ -353,7 +357,7 @@ function resolveContent(
     if (approvalAgentName) {
       identifier = approvalAgentName;
     } else {
-      identifier = approvalType ? humanize(approvalType) : "approval";
+      identifier = approvalType ? humanize(approvalType) : t("app.inbox.feedCard.approvalFallback");
       identifierMono = false;
     }
     title = entityTitle;
@@ -425,9 +429,10 @@ export function FeedCard({
   isPinned = false,
   className,
 }: FeedCardProps) {
+  const { t, i18n } = useTranslation();
   const details = event.details as Record<string, unknown> | null;
-  const content = resolveContent(event, agentMap, entityNameMap, entityTitleMap);
-  const verb = formatVerb(event.action, details, isPinned ? "pinned" : "chronological");
+  const content = resolveContent(t, event, agentMap, entityNameMap, entityTitleMap);
+  const verb = formatVerb(t, event.action, details, isPinned ? "pinned" : "chronological");
   const iconSpec = getIconSpec(event, details, isActive);
 
   const mutedTextBase = isMuted ? "text-muted-foreground/70" : "text-(--hex-959596)";
@@ -468,10 +473,10 @@ export function FeedCard({
         )}
       </span>
       {isPinned && (
-        <span className="shrink-0 text-xs text-muted-foreground">Review →</span>
+        <span className="shrink-0 text-xs text-muted-foreground">{t("app.inbox.feedCard.review")}</span>
       )}
       <span data-fc="time" className="shrink-0 text-muted-foreground">
-        {timeAgo(event.createdAt)}
+        {timeAgo(event.createdAt, i18n.language)}
       </span>
     </Card>
   );

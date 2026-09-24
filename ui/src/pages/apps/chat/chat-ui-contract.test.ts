@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import en from "../../../i18n/locales/en.json";
 
 function source(relativePath: string) {
   return readFileSync(new URL(relativePath, import.meta.url), "utf8");
@@ -32,10 +33,11 @@ describe("chat connector UI contract", () => {
       /agentsApi\.retryFailedRun\(\s*failedRun\.agentId,\s*failedRun\.runId,\s*companyId/,
     );
     expect(issue).toContain("Retry queued");
+    expect(en.app.inbox.errors.retryRunFailed).toBe("Run retry failed");
     for (const file of ["Inbox.tsx", "LegacyInbox.tsx"]) {
       const page = source(`../../${file}`);
       expect(page).toMatch(
-        /const retryRunMutation = useMutation\(\{[\s\S]*?onError: \(error\) => \{\s*pushToast\(\{\s*title: "Run retry failed"/,
+        /const retryRunMutation = useMutation\(\{[\s\S]*?onError: \(error\) => \{\s*pushToast\(\{\s*title: (?:"Run retry failed"|t\("app\.inbox\.errors\.retryRunFailed"\))/,
       );
     }
   });

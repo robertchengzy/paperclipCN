@@ -29,6 +29,8 @@ import { collectSubtreeLiveCounts } from "../lib/liveIssueIds";
 import { cn } from "../lib/utils";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "@/i18n";
+import { issueStatusLabel } from "@/i18n/labels";
 
 export const KANBAN_BOARD_HIGH_VOLUME_THRESHOLD = 100;
 export const KANBAN_COLUMN_PAGE_SIZE_OPTIONS = [10, 25, 50] as const;
@@ -131,10 +133,6 @@ export function getKanbanColumnTone(status: IssueStatus) {
   return kanbanColumnTones[status] ?? defaultKanbanColumnTone;
 }
 
-function statusLabel(status: string): string {
-  return status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 export function resolveKanbanTargetStatus(overId: string, issues: Issue[]): IssueStatus | null {
   if ((boardStatuses as readonly string[]).includes(overId)) {
     return overId as IssueStatus;
@@ -183,7 +181,9 @@ function KanbanColumn({
   revealIncrement: number;
   onShowMore: () => void;
 }) {
+  const { t } = useTranslation();
   const { setNodeRef, isOver } = useDroppable({ id: status });
+  const label = issueStatusLabel(t, status);
 
   const isEmpty = issues.length === 0;
   const visibleIssues = collapsed ? [] : issues.slice(0, visibleCount);
@@ -200,11 +200,11 @@ function KanbanColumn({
           tone.rail,
           isOver && tone.railOver,
         )}
-        title={`${statusLabel(status)}: ${issues.length}`}
+        title={t("app.issues.kanban.columnCount", { status: label, count: issues.length })}
       >
         <StatusIcon status={status} />
         <span className={cn("mt-2 [writing-mode:vertical-rl] rotate-180 text-(length:--text-nano) font-semibold uppercase tracking-wide", tone.header)}>
-          {statusLabel(status)}
+          {label}
         </span>
         <Badge variant="ghost" className={cn("mt-auto bg-background px-1.5 text-(length:--text-nano) tabular-nums", tone.header)}>
           {issues.length}
@@ -218,7 +218,7 @@ function KanbanColumn({
       <div className="flex items-center gap-2 px-3 py-2 mb-1">
         <StatusIcon status={status} />
         <span className={cn("text-xs font-semibold uppercase tracking-wide", tone.header)}>
-          {statusLabel(status)}
+          {label}
         </span>
         <span className={cn("ml-auto text-xs tabular-nums", tone.count)}>
           {issues.length}
@@ -254,12 +254,12 @@ function KanbanColumn({
             className="mt-1 flex w-full items-center justify-center rounded-md border border-dashed border-border bg-background/70 px-2 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
             onClick={onShowMore}
           >
-            Show {nextRevealCount} more
+            {t("app.issues.kanban.showMore", { count: nextRevealCount })}
           </button>
         ) : null}
         {issues.length > 0 && (hiddenCount > 0 || issues.length >= visibleCount) ? (
           <p className="px-1 pt-1 text-(length:--text-micro) text-muted-foreground">
-            Showing {visibleIssues.length} of {issues.length}
+            {t("app.issues.kanban.showingOf", { visible: visibleIssues.length, total: issues.length })}
           </p>
         ) : null}
       </div>
@@ -294,6 +294,7 @@ function KanbanCard({
     transition,
     isDragging,
   } = useSortable({ id: issue.id, data: { issue } });
+  const { t } = useTranslation();
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -335,11 +336,11 @@ function KanbanCard({
           {isSuccessfulRunHandoffRequired(issue) ? (
             <Badge variant="outline"
               className="border-amber-400/45 bg-amber-50/60 px-1.5 text-(length:--text-nano) text-amber-700 dark:border-amber-300/35 dark:bg-amber-400/10 dark:text-amber-300"
-              title="This task needs a next step"
-              aria-label="Needs next step"
+              title={t("app.issues.row.needsNextStepTitle")}
+              aria-label={t("app.issues.row.needsNextStep")}
             >
               <AlertTriangle className="h-3 w-3" />
-              Next step
+              {t("app.issues.row.nextStep")}
             </Badge>
           ) : null}
           {isLive && (
@@ -348,16 +349,18 @@ function KanbanCard({
                 <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
               </span>
-              {compact ? "Live" : null}
+              {compact ? t("app.issues.row.live") : null}
             </span>
           )}
           {!isLive && subtreeLiveCount > 0 && (
             <Badge variant="outline"
               className="border-border px-1.5 text-(length:--text-nano) text-muted-foreground"
-              title={`${subtreeLiveCount} sub-task${subtreeLiveCount === 1 ? "" : "s"} running below`}
+              title={subtreeLiveCount === 1
+                ? t("app.issues.row.subTaskRunningBelowOne", { count: subtreeLiveCount })
+                : t("app.issues.row.subTaskRunningBelowMany", { count: subtreeLiveCount })}
             >
               <span className="h-2 w-2 shrink-0 rounded-full border border-muted-foreground/60" aria-hidden="true" />
-              {subtreeLiveCount} live below
+              {t("app.issues.row.liveBelow", { count: subtreeLiveCount })}
             </Badge>
           )}
         </div>
