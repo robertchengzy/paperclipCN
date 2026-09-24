@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/i18n";
 import { remoteMcpProviders, type RemoteMcpProviderId } from "./providers";
 import { RemoteMcpConnectionSetup } from "./RemoteMcpConnectionSetup";
 import type { RemoteMcpSetupActions, RemoteMcpSetupState } from "./types";
 
 function ConnectExample({ providerId }: { providerId: RemoteMcpProviderId }) {
+  const { t } = useTranslation();
   const provider = remoteMcpProviders[providerId];
   const [state, setState] = useState<RemoteMcpSetupState>({
     step: "access", grantKind: "organization", setupComplete: false, url: provider.defaultUrl,
@@ -13,7 +15,7 @@ function ConnectExample({ providerId }: { providerId: RemoteMcpProviderId }) {
     tools: [], notice: null, refreshing: false,
   });
   const edit: RemoteMcpSetupActions["edit"] = (patch) => setState((value) => ({ ...value, ...patch }));
-  const explain = () => edit({ notice: "Design example only. Review the interactive states in Storybook → Apps / Connections. No credentials are saved or sent." });
+  const explain = () => edit({ notice: t("app.connections.remoteMcpDesignExample.notice") });
   const actions: RemoteMcpSetupActions = { edit, navigate: (step) => edit({ step }), connect: explain, cancelConnect: explain,
     openProvider: explain, saveExit: explain, resumeDraft: explain, finish: explain, refresh: explain, reconnect: explain, disconnect: explain,
   };

@@ -12,6 +12,7 @@ import { AiConnectionPicker } from "./AiConnectionPicker";
 import { AiConnectionLegacyNotice } from "./AiConnectionManagement";
 import { AiConnectionCredentialStep } from "./AiConnectionCredentialStep";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/i18n";
 import {
   Dialog,
   DialogContent,
@@ -56,6 +57,7 @@ export function AiConnectionField({
   legacy?: boolean;
   readOnly?: boolean;
 }) {
+  const { t } = useTranslation();
   const provider = aiProviderForAdapter(adapterType);
   const returnFocus = useRef<HTMLElement | null>(null);
   const restoreFocus = (event: Event) => { event.preventDefault(); returnFocus.current?.focus(); };
@@ -87,8 +89,7 @@ export function AiConnectionField({
     <div className="space-y-4">
       {value && (adapterType !== "opencode_local" || Boolean(model)) && !isAiConnectionCompatible(value, adapterType, model) && (
         <p role="alert" className="text-sm text-destructive">
-          This connection does not support the current harness and model. Choose
-          a compatible connection before saving.
+          {t("app.connections.aiConnectionField.incompatible")}
         </p>
       )}
       <AiConnectionPicker
@@ -115,30 +116,27 @@ export function AiConnectionField({
       >
         <DialogContent className="max-h-(--sz-85vh) overflow-y-auto sm:max-w-2xl" onCloseAutoFocus={restoreFocus}>
           <DialogHeader>
-            <DialogTitle>Adopt Connections for {agentName}</DialogTitle>
+            <DialogTitle>{t("app.connections.aiConnectionField.adoptTitle", { agent: agentName })}</DialogTitle>
             <DialogDescription>
-              Saving tests this account in {agentName}’s environment before
-              replacing its existing authentication. Other agents keep their
-              current configuration.
+              {t("app.connections.aiConnectionField.adoptDescription", { agent: agentName })}
             </DialogDescription>
           </DialogHeader>
           <p className="text-sm">
             {pendingAdoption?.mode === "responsible_user"
-              ? `Responsible user’s default. For you: ${accounts.data?.connections.find((account) => account.isDefault && account.provider === provider)?.name ?? "Not connected"}. Other users use their own default.`
+              ? t("app.connections.aiConnectionField.responsibleDefault", { name: accounts.data?.connections.find((account) => account.isDefault && account.provider === provider)?.name ?? t("app.common.states.notConnected") })
               : accounts.data?.connections.find(
                   (account) => account.id === pendingAdoption?.connectionId,
                 )?.name}
           </p>
           <p className="text-xs text-muted-foreground">
-            After adoption, missing credentials block execution. Previous
-            authentication will not be used as a fallback.
+            {t("app.connections.aiConnectionField.adoptionNote")}
           </p>
           <DialogFooter>
             <Button
               variant="ghost"
               onClick={() => setPendingAdoption(undefined)}
             >
-              Cancel
+              {t("app.common.actions.cancel")}
             </Button>
             <Button
               onClick={() => {
@@ -146,7 +144,7 @@ export function AiConnectionField({
                 setPendingAdoption(undefined);
               }}
             >
-              Use this binding when saved
+              {t("app.connections.aiConnectionField.useBinding")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -154,7 +152,7 @@ export function AiConnectionField({
       <Dialog open={connecting} onOpenChange={setConnecting}>
         <DialogContent className="max-h-(--sz-85vh) overflow-y-auto sm:max-w-2xl" onCloseAutoFocus={restoreFocus}>
           <DialogHeader>
-            <DialogTitle>Connect account</DialogTitle>
+            <DialogTitle>{t("app.connections.aiConnectionField.connectAccount")}</DialogTitle>
           </DialogHeader>
           <AiConnectionCredentialStep
             companyId={companyId}
