@@ -72,13 +72,13 @@
 
 | 英文 | 中文 |
 |---|---|
-| Save / Saving… | 保存 / 正在保存… |
+| Save / Saving… | 保存 / 保存中… |
 | Cancel | 取消 |
 | Delete / Remove | 删除 / 移除 |
 | Archive / Unarchive | 归档 / 取消归档 |
 | Retry / Try again | 重试 / 请重试 |
 | Copy / Copied | 复制 / 已复制 |
-| Loading… | 正在加载… |
+| Loading… | 加载中… |
 | Dismiss | 关闭 |
 | Revoke | 撤销 |
 | Install / Uninstall | 安装 / 卸载 |
