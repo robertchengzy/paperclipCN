@@ -1,3 +1,8 @@
+import { i18n } from "./src/i18n";
+
+// Keep existing UI assertions independent of the fork's default language.
+await i18n.changeLanguage("en");
+
 const storageEntries = new Map<string, string>();
 
 function installStorageMock(target: Record<string, unknown>) {

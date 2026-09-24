@@ -89,6 +89,19 @@ The vite dev server serves an unbundled module graph. This is fast to reload on 
 
 The preview server binds `0.0.0.0` and accepts any Host, so a tailnet or LAN address (e.g. `http://<host>.ts.net:3101/`) works out of the box. The `/api` proxy sets `x-forwarded-host` and `x-forwarded-proto`, which the server's board mutation guard uses to trust the browser's Origin — mutations from `:3101` succeed against the API on `:3100` without further configuration. An HTTPS tunnel in front of the preview server (ngrok, tailscale funnel) is also supported: the tunnel's `x-forwarded-proto` header is preserved when set.
 
+### UI language in this fork
+
+The UI defaults to Simplified Chinese and offers an English/Chinese switcher.
+The selected language is stored under `paperclip.ui.language` in the browser;
+the UI falls back to Chinese when no valid selection is stored. Translations
+live in `ui/src/i18n/locales/`; use `useTranslation` from `ui/src/i18n` for
+new interface copy. This is a UI localization pass, not a translation of
+server messages or user-generated content. The current coverage and next
+steps are tracked in [the Simplified Chinese UI plan](plans/2026-09-24-ui-zh-cn-progress.md).
+Git delivery does not establish runtime deployment or acceptance; building
+this fork also changes the server version and must not be treated as a
+drop-in UI replacement for an older installation.
+
 ## Storybook
 
 The board UI Storybook keeps stories and Storybook config under `ui/storybook/` so component review files stay out of the app source routes.

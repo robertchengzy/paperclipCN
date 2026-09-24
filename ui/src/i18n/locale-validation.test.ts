@@ -1,14 +1,43 @@
-import { describe, expect, it } from "vitest";
-import { t } from ".";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { LANGUAGE_STORAGE_KEY, setUiLanguage, t } from ".";
 import en from "./locales/en.json";
+import zh from "./locales/zh-CN.json";
 import { localeMessages } from "./locales";
 import { validateLocaleMessages } from "./locale-validation";
 
 describe("locale validation", () => {
-  it("resolves English messages with key and default fallbacks", () => {
+  beforeEach(async () => {
+    await setUiLanguage("zh-CN");
+  });
+
+  afterEach(async () => {
+    vi.unstubAllGlobals();
+    await setUiLanguage("en");
+  });
+
+  it("switches from Chinese to English with a stored preference", async () => {
+    expect(t("app.noCompanies.title")).toBe(zh.app.noCompanies.title);
+    const storage = { setItem: vi.fn() };
+    const documentElement = { lang: "zh-CN" };
+    vi.stubGlobal("window", { localStorage: storage });
+    vi.stubGlobal("document", { documentElement });
+
+    await setUiLanguage("en");
     expect(t("app.noCompanies.title")).toBe(en.app.noCompanies.title);
+    expect(documentElement.lang).toBe("en");
+    expect(storage.setItem).toHaveBeenCalledWith(LANGUAGE_STORAGE_KEY, "en");
     expect(t("app.missing", { defaultValue: "Fallback" })).toBe("Fallback");
     expect(t("app.missing")).toBe("app.missing");
+
+    await setUiLanguage("zh-CN");
+    expect(documentElement.lang).toBe("zh-CN");
+  });
+
+  it("can switch languages when browser storage is unavailable", async () => {
+    vi.stubGlobal("window", { get localStorage() { throw new Error("storage unavailable"); } });
+    await expect(setUiLanguage("en")).resolves.toBeUndefined();
+    expect(t("app.noCompanies.title")).toBe(en.app.noCompanies.title);
+    await setUiLanguage("zh-CN");
   });
 
   it("accepts registered locale files", () => {
