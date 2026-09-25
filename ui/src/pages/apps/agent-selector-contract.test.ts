@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import en from "../../i18n/locales/en.json";
 
 function source(relativePath: string) {
   return readFileSync(new URL(relativePath, import.meta.url), "utf8");
@@ -17,7 +18,8 @@ describe("Apps agent selector contract", () => {
     expect(appConnect).toContain("<ConnectionSetupFlow");
     expect(connectionSetupFlow).toContain("<AgentMultiSelect");
     expect(permissions).toContain("<AgentMultiSelect");
-    expect(tester).toContain('placeholder="Search agents…"');
+    expect(tester).toMatch(/placeholder="Search agents…"|placeholder=\{t\("app\.apps\.testPanel\.searchAgentsPlaceholder"\)\}/);
+    expect(en.app.apps.testPanel.searchAgentsPlaceholder).toBe("Search agents…");
 
     expect(profiles.match(/<AgentSelect/g)).toHaveLength(2);
     expect(profiles).not.toContain("<Select value={agentId}");
