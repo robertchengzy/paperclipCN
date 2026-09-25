@@ -86,3 +86,52 @@
 
 验证记录（第三批）：UI typecheck、`pnpm check:token-gates`、`pnpm locales:check` 通过；
 全 UI 测试（2 worker）635 个文件 6662 条全部通过。未做浏览器中文走查，未部署。
+
+## 全站中文化（2026-09-25～26，分支 `feat/i18n-full`）
+
+本轮把 `ui/src` 按 25 组全部接入 `t()`，并与上游 `c341588bd` 同步（合并提交 `e58070a6b`）。相对 `master` 只改 `ui/` 与 `doc/`（`doc/SPEC-implementation.md` 来自上游合并）；`server/`、`packages/db/src/migrations/`、`pnpm-lock.yaml` 无差异。
+
+| 项目 | 状态 |
+|---|---|
+| 词条 | `en.json` / `zh-CN.json` 各 14524 个叶子词条，其中 62 条与英文相同（品牌、产品名、第三方控制台字段名如 Slack `Signing Secret`、`Webhook URL` 等缩写术语）。其余 38 个语言文件由 `pnpm locales:sync` 同步，新键用英文回退。 |
+| 静态门禁 | `ui/src/i18n/hardcoded-strings.test.ts` 改为严格模式：整个 `ui/src` 扫描结果必须为空，删除按文件计数的基线。保留英文的项目在 `hardcoded-strings.exemptions.json` 逐项豁免（20 个文件级、66 个值、105 个精确条目），理由见 `2026-09-25-ui-zh-cn-exemptions.md`。 |
+| 语言行为 | 首次访问默认简体中文；登录页与侧边栏账户菜单可切换，写入 `paperclip.ui.language`，刷新保持；`<html lang>` 随切换更新。 |
+| 英文行为 | 英文词条值与原字面量一致，现有英文断言不改。少数原本直接显示原始值的位置（案例活动的状态流转、实例访问页的成员角色）在英文下仍显示原值，只在简中下翻译。 |
+
+### 浏览器走查发现并修复的漏译
+
+静态扫描覆盖不到 JSX 中插值两侧的英文文本和运行时拼接的值。隔离实例走查发现以下漏译，已修复（`1f3da4320`、`60d0ff512`）：
+
+- 插值计数：智能体技能页 “N of M enabled”、导入技能对话框的 workspace / scannable 计数、运行转录的日志行 / 系统消息分组、任务对话的待接管数、密钥提议人、技能工作室 “updated …”。
+- 原始枚举值：组织列表状态徽标、实例访问页的角色与状态、组织架构图的角色标签。
+- 相对时间：`lib/timeAgo.ts` 的语言参数原默认 `"en"`，约一半的调用（按 grep 统计，36 处中约 19 处）未传语言；改为默认当前界面语言，英文输出不变。
+- `app.common.labels.apiKey`、`app.agentSetup.connection.apiKey` 的简中值统一为 “API 密钥”。
+
+全 UI 测试首轮发现 3 条由本分支引起的英文回归（这 3 条在 `master` 上均通过），已修复（`5dd206564`）：案例活动的状态流转在英文下改回原始值；案例 “Children N” 标题恢复空格；`chat-ui-contract.test.ts` 接受 `LegacyInbox` 的 `translateCopy("app.issueUi.legacyInbox.runRetryFailed")`，并断言其英文值仍为 “Run retry failed”。
+
+### 验证记录
+
+在 `60d0ff512` 上运行（3 CPU，Vitest 2 worker）：
+
+| 检查 | 结果 |
+|---|---|
+| `pnpm --filter @paperclipai/ui typecheck` | 通过 |
+| `pnpm check:token-gates` | 全部通过 |
+| `pnpm locales:check` | 39 个语言文件与 `en.json` 结构一致 |
+| `cd ui && npx vitest run --maxWorkers=2 --testTimeout=60000` | 639 个文件、6709 条全部通过 |
+| `pnpm --filter @paperclipai/ui build` | 通过（仅有 chunk 体积警告） |
+
+浏览器走查在 `1f3da4320` 上运行，使用隔离的 `local_trusted` 实例（临时 `PAPERCLIP_HOME`，端口 3198），不连接现网实例。`60d0ff512` 只多改了技能工作室一行文案，未重跑走查。
+
+- 路由走查：streamlined 与 legacy 布局各 84 个路由，共 168 个页面，均无页面异常，`<html lang>` 均为 `zh-CN`。6 个重点页面在 390px 宽度下采样，`scrollWidth` 均等于视口宽度，无横向溢出。
+- 操作走查：侧边栏账户菜单切换中英文，刷新后保持，`localStorage` 值正确；用中文创建任务并发表评论；审批的同意与拒绝；修改智能体名称并保存。以上都通过 API 核对了结果。`local_trusted` 模式没有登录页（`/auth` 会跳转到新手引导），所以语言切换改从侧边栏账户菜单验证，登录页的切换入口未在浏览器中验证。
+- 页面上剩余的英文逐条归类如下，均保留：测试夹具名称（Sweep/Actions/Language Org 等）；本地 Board 用户名；品牌与产品名（GitHub、Slack、Claude Code 等）；适配器与插件 ID、npm 包名、技能 slug、搜索运算符（`status:todo`）、活动事件类型（`issue.created`）；服务端返回的内容（应用目录与插件的描述、技能描述、成员删除限制原因 “You cannot remove yourself.”、组织导出警告）；导出包里生成的 `README.md` 内容；运行转录中等宽显示的调试元数据（invocation/audit/card）。浏览器原生文件选择控件的 “Choose File” 由浏览器语言决定。
+
+走查脚本与报告在当时的临时目录中，未提交进仓库。
+
+### 未验证项
+
+- 登录页（authenticated 模式）的语言切换入口未在浏览器中验证。
+- 屏幕阅读器的实际朗读效果、无存储权限的浏览器环境。
+- 服务端返回的错误与提示消息、插件自带界面、CLI 仍是英文，不在本轮范围内。
+- 部署后的运行版本核对与现网验收。
