@@ -1,17 +1,17 @@
+import { t, useTranslation } from "@/i18n";
 import { useState } from "react";
 import { ArrowUp, ArrowDown, Minus, AlertTriangle } from "lucide-react";
 import { cn } from "../lib/utils";
 import { priorityColor, priorityColorDefault } from "../lib/status-colors";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "@/i18n";
 import { priorityLabel } from "@/i18n/labels";
 
 const priorityConfig: Record<string, { icon: typeof ArrowUp; color: string; label: string }> = {
-  critical: { icon: AlertTriangle, color: priorityColor.critical ?? priorityColorDefault, label: "Critical" },
-  high: { icon: ArrowUp, color: priorityColor.high ?? priorityColorDefault, label: "High" },
-  medium: { icon: Minus, color: priorityColor.medium ?? priorityColorDefault, label: "Medium" },
-  low: { icon: ArrowDown, color: priorityColor.low ?? priorityColorDefault, label: "Low" },
+  get critical() { return { icon: AlertTriangle, color: priorityColor.critical ?? priorityColorDefault, label: t("app.common.labels.critical") }; },
+  get high() { return { icon: ArrowUp, color: priorityColor.high ?? priorityColorDefault, label: t("app.common.labels.high") }; },
+  get medium() { return { icon: Minus, color: priorityColor.medium ?? priorityColorDefault, label: t("app.common.labels.medium") }; },
+  get low() { return { icon: ArrowDown, color: priorityColor.low ?? priorityColorDefault, label: t("app.common.labels.low") }; },
 };
 
 const allPriorities = ["critical", "high", "medium", "low"];

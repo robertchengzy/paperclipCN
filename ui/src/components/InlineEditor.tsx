@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "../lib/utils";
 import { MarkdownBody, type MarkdownExternalReferenceMap } from "./MarkdownBody";
@@ -60,7 +61,7 @@ export function InlineEditor({
   onSave,
   as: Tag = "span",
   className,
-  placeholder = "Click to edit...",
+  placeholder = t("app.shell.inlineEditor.clickToEdit"),
   multiline = false,
   nullable = false,
   imageUploadHandler,
@@ -71,6 +72,7 @@ export function InlineEditor({
   defaultEditing = false,
   onEditingChange,
 }: InlineEditorProps) {
+  const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
   const [multilineEditing, setMultilineEditing] = useState(multiline && defaultEditing);
   const [multilineFocused, setMultilineFocused] = useState(false);
@@ -121,7 +123,7 @@ export function InlineEditor({
     if (!el) return;
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight}px`;
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (editing && inputRef.current) {
@@ -183,7 +185,7 @@ export function InlineEditor({
     if (!multiline) {
       setEditing(false);
     }
-  }, [draft, multiline, nullable, onSave, value]);
+  }, [draft, multiline, nullable, onSave, value, t]);
 
   /** Multiline blur/submit: show autosave indicator when persisting */
   const finalizeMultilineBlurOrSubmit = useCallback(() => {
@@ -199,13 +201,13 @@ export function InlineEditor({
       return;
     }
     void runSave(() => commit());
-  }, [commit, draft, nullable, reset, runSave, value]);
+  }, [commit, draft, nullable, reset, runSave, value, t]);
 
   const cancelPendingBlurCommit = useCallback(() => {
     if (blurCommitFrameRef.current === null) return;
     blurCommitFrameRef.current();
     blurCommitFrameRef.current = null;
-  }, []);
+  }, [t]);
 
   const scheduleBlurCommit = useCallback((container: HTMLDivElement) => {
     cancelPendingBlurCommit();
@@ -217,7 +219,7 @@ export function InlineEditor({
       setMultilineFocused(false);
       finalizeMultilineBlurOrSubmit();
     });
-  }, [cancelPendingBlurCommit, finalizeMultilineBlurOrSubmit]);
+  }, [cancelPendingBlurCommit, finalizeMultilineBlurOrSubmit, t]);
 
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === "Enter" && !multiline) {
@@ -374,12 +376,12 @@ export function InlineEditor({
             )}
           >
             {autosaveState === "saving"
-              ? "Autosaving..."
+              ? t("app.shell.inlineEditor.autosaving")
               : autosaveState === "saved"
-                ? "Saved"
+                ? t("app.common.states.saved")
                 : autosaveState === "error"
-                  ? "Could not save"
-                  : "Idle"}
+                  ? t("app.shell.inlineEditor.couldNotSave")
+                  : t("app.common.issueStatus.idle")}
           </span>
         </div>
       </div>

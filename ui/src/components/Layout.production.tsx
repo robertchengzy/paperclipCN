@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { ChatSetupSidebarProvider } from "@/context/ChatSetupSidebarContext";
 import { PluginAppShellOverlays } from "./PluginAppShellOverlays";
 import {
@@ -116,6 +117,7 @@ function isSkillsStoreRoute(
 }
 
 export function Layout() {
+  const { t } = useTranslation();
   const {
     sidebarOpen,
     setSidebarOpen,
@@ -187,7 +189,7 @@ export function Layout() {
         (company) => company.issuePrefix.toUpperCase() === requestedPrefix,
       ) ?? null
     );
-  }, [companies, companyPrefix]);
+  }, [companies, companyPrefix, t]);
   const hasUnknownCompanyPrefix =
     Boolean(companyPrefix) &&
     !companiesLoading &&
@@ -197,7 +199,7 @@ export function Layout() {
     () =>
       matchedPluginRoutePath?.toLowerCase() ??
       getCompanyRouteSegment(location.pathname, companyPrefix),
-    [companyPrefix, location.pathname, matchedPluginRoutePath],
+    [companyPrefix, location.pathname, matchedPluginRoutePath, t],
   );
   const routeSidebarCompanyId = matchedCompany?.id ?? null;
   const routeSidebarCompanyPrefix = matchedCompany?.issuePrefix ?? null;
@@ -208,14 +210,14 @@ export function Layout() {
   });
   const routeSidebarSlot = useMemo(
     () => resolveRouteSidebarSlot(routeSidebarSlots, pluginRoutePath),
-    [pluginRoutePath, routeSidebarSlots],
+    [pluginRoutePath, routeSidebarSlots, t],
   );
   const sidebarContext = useMemo(
     () => ({
       companyId: routeSidebarCompanyId,
       companyPrefix: routeSidebarCompanyPrefix,
     }),
-    [routeSidebarCompanyId, routeSidebarCompanyPrefix],
+    [routeSidebarCompanyId, routeSidebarCompanyPrefix, t],
   );
   // Takeover routes (company settings, plugin `routeSidebar`) no longer replace
   // the app `<Sidebar/>`. Instead the host collapses it to its rail and renders
@@ -322,8 +324,8 @@ export function Layout() {
     });
     if (bounce) {
       pushToast?.({
-        title: `${matchedCompany.name} is archived`,
-        body: `Switched to ${bounce.name}.`,
+        title: t("app.shell.layout.archived", { name: matchedCompany.name }),
+        body: t("app.shell.layout.switchedTo", { value1: bounce.name }),
         tone: "info",
         dedupeKey: `archived-company-bounce:${matchedCompany.id}`,
       });
@@ -365,7 +367,7 @@ export function Layout() {
         cancelable: true,
       }),
     );
-  }, []);
+  }, [t]);
 
   // Peek (hover flyout) triggers for the collapsed rail. Opening has a tiny
   // delay so a pointer merely sweeping across the rail doesn't flash it open;
@@ -389,41 +391,41 @@ export function Layout() {
       window.clearTimeout(peekTimer.current);
       peekTimer.current = null;
     }
-  }, []);
+  }, [t]);
   const openPeek = useCallback(() => {
     clearPeekTimer();
     peekTimer.current = window.setTimeout(() => setPeeking(true), 50);
-  }, [clearPeekTimer, setPeeking]);
+  }, [clearPeekTimer, setPeeking, t]);
   const openPeekImmediate = useCallback(() => {
     clearPeekTimer();
     setPeeking(true);
-  }, [clearPeekTimer, setPeeking]);
+  }, [clearPeekTimer, setPeeking, t]);
   const closePeek = useCallback(() => {
     clearPeekTimer();
     peekTimer.current = window.setTimeout(() => setPeeking(false), 120);
-  }, [clearPeekTimer, setPeeking]);
+  }, [clearPeekTimer, setPeeking, t]);
   // Tracked even while expanded so that, at the moment of collapse, we know
   // whether the pointer is over the panel and should suppress the re-peek.
   const handlePanelPointerEnter = useCallback(() => {
     pointerInsidePanel.current = true;
     if (collapsed && !suppressPeekRef.current) openPeek();
-  }, [collapsed, openPeek]);
+  }, [collapsed, openPeek, t]);
   const handlePanelPointerLeave = useCallback(() => {
     pointerInsidePanel.current = false;
     suppressPeekRef.current = false; // pointer left — re-arm peek for the next hover
     closePeek();
-  }, [closePeek]);
+  }, [closePeek, t]);
   const handlePanelFocus = useCallback(() => {
     if (suppressPeekRef.current) return;
     openPeekImmediate();
-  }, [openPeekImmediate]);
+  }, [openPeekImmediate, t]);
   // Close on focus leaving the panel only when the pointer isn't hovering it.
   // Clicking a rail/peek nav item moves focus to <main> on navigation; if the
   // mouse is still over the flyout we keep it open until the pointer leaves.
   const handlePanelBlur = useCallback(() => {
     if (pointerInsidePanel.current) return;
     closePeek();
-  }, [closePeek]);
+  }, [closePeek, t]);
 
   // Tidy up any pending peek timer on unmount.
   useEffect(() => clearPeekTimer, [clearPeekTimer]);
@@ -541,7 +543,7 @@ export function Layout() {
     }
 
     lastMainScrollTop.current = currentTop;
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!isMobile) {
@@ -653,9 +655,7 @@ export function Layout() {
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-(--z-200) focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          Skip to Main Content
-        </a>
+        >{t("app.shell.layout.skipToMainContent")}</a>
         <WorktreeBanner />
         <DevRestartBanner devServer={health?.devServer} />
         <div
@@ -669,7 +669,7 @@ export function Layout() {
               type="button"
               className="fixed inset-0 z-40 bg-black/50"
               onClick={() => setSidebarOpen(false)}
-              aria-label="Close sidebar"
+              aria-label={t("app.shell.layout.closeSidebar")}
             />
           )}
 

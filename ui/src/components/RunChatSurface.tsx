@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { memo, useMemo } from "react";
 import type { TranscriptEntry } from "../adapters";
 import type { LiveRunForIssue } from "../api/heartbeats";
@@ -27,8 +28,9 @@ export const RunChatSurface = memo(function RunChatSurface({
   hasOutput,
   companyId,
 }: RunChatSurfaceProps) {
+  const { t } = useTranslation();
   const active = isRunActive(run);
-  const liveRuns = useMemo(() => (active ? [run] : EMPTY_LIVE_RUNS), [active, run]);
+  const liveRuns = useMemo(() => (active ? [run] : EMPTY_LIVE_RUNS), [active, run, t]);
   const linkedRuns = useMemo<IssueChatLinkedRun[]>(
     () =>
       active
@@ -42,11 +44,11 @@ export const RunChatSurface = memo(function RunChatSurface({
             startedAt: run.startedAt,
             finishedAt: run.finishedAt,
           }],
-    [active, run],
+    [active, run, t],
   );
   const transcriptsByRunId = useMemo(
     () => new Map([[run.id, transcript as readonly TranscriptEntry[]]]),
-    [run.id, transcript],
+    [run.id, transcript, t],
   );
   return (
     <IssueChatThread
@@ -59,7 +61,7 @@ export const RunChatSurface = memo(function RunChatSurface({
       showComposer={false}
       showJumpToLatest={false}
       variant="embedded"
-      emptyMessage={active ? "Waiting for run output..." : "No run output captured."}
+      emptyMessage={active ? t("app.shell.runChatSurface.waitingForRunOutput") : t("app.shell.runChatSurface.noRunOutputCaptured")}
       enableLiveTranscriptPolling={false}
       transcriptsByRunId={transcriptsByRunId}
       hasOutputForRun={(runId) => runId === run.id && hasOutput}

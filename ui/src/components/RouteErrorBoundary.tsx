@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { useLocation, useNavigate } from "@/lib/router";
 import { Button } from "@/components/ui/button";
@@ -38,31 +39,12 @@ class RouteErrorBoundaryInner extends Component<RouteErrorBoundaryInnerProps, Ro
     const { error } = this.state;
     if (!error) return this.props.children;
 
-    return (
-      <div className="mx-auto max-w-2xl space-y-4 px-4 py-10">
-        <div>
-          <h1 className="text-lg font-semibold">This page hit an error</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Something went wrong while rendering this page. You can go back and try again, or reload.
-          </p>
-        </div>
-        <pre className="overflow-auto rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive whitespace-pre-wrap">
-          {error.message}
-        </pre>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={this.props.onReset}>
-            Go back
-          </Button>
-          <Button size="sm" onClick={() => window.location.reload()}>
-            Reload page
-          </Button>
-        </div>
-      </div>
-    );
+    return <RouteErrorBoundaryFallback error={error} onReset={this.props.onReset} />;
   }
 }
 
 export function RouteErrorBoundary({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const resetKey = `${location.pathname}${location.search}`;
@@ -72,4 +54,23 @@ export function RouteErrorBoundary({ children }: { children: ReactNode }) {
       {children}
     </RouteErrorBoundaryInner>
   );
+}
+
+function RouteErrorBoundaryFallback({ error, onReset }: { error: Error; onReset: () => void }) {
+  const { t } = useTranslation();
+    return (
+      <div className="mx-auto max-w-2xl space-y-4 px-4 py-10">
+        <div>
+          <h1 className="text-lg font-semibold">{t("app.shell.routeErrorBoundary.thisPageHitAnError")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("app.shell.routeErrorBoundary.somethingWentWrongWhileRenderingThisPage")}</p>
+        </div>
+        <pre className="overflow-auto rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive whitespace-pre-wrap">
+          {error.message}
+        </pre>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={onReset}>{t("app.shell.routeErrorBoundary.goBack")}</Button>
+          <Button size="sm" onClick={() => window.location.reload()}>{t("app.shell.routeErrorBoundary.reloadPage")}</Button>
+        </div>
+      </div>
+    );
 }

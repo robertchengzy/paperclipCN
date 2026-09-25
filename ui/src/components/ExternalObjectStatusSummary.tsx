@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import type { ExternalObjectSummary } from "@paperclipai/shared";
 import {
   dominantExternalObjectTone,
@@ -34,9 +35,9 @@ function buildBreakdownTitle(summary: ExternalObjectSummary): string {
     if (!count) continue;
     parts.push(`${count} ${externalObjectCategoryLabel(category).toLowerCase()}`);
   }
-  if (summary.staleCount > 0) parts.push(`${summary.staleCount} stale`);
-  parts.push(`${summary.total} total`);
-  return `External objects: ${parts.join(", ")}`;
+  if (summary.staleCount > 0) parts.push(t("app.shell.externalObjectStatusSummary.stale", { count: summary.staleCount }));
+  parts.push(t("app.shell.externalObjectStatusSummary.total", { count: summary.total }));
+  return t("app.shell.externalObjectStatusSummary.externalObjects", { value1: parts.join(", ") });
 }
 
 /**
@@ -51,6 +52,7 @@ export function ExternalObjectStatusSummary({
   compact,
   className,
 }: ExternalObjectStatusSummaryProps) {
+  const { t } = useTranslation();
   const reducedMotion = usePrefersReducedMotion();
   const tone = dominantExternalObjectTone(summary);
   const total = summary?.total ?? 0;

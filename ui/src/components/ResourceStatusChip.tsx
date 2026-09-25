@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { brandChipBadge, type BrandChipColor } from "@/lib/status-colors";
@@ -33,41 +34,41 @@ interface VariantSpec {
 }
 
 const VARIANTS: Record<ResourceStatusVariant, VariantSpec> = {
-  ready: { color: "green", glyph: "●", label: "Ready", title: "Materialized and matches the shipped default" },
-  needs_setup: { color: "amber", glyph: "⚠", label: "Needs setup", title: "Present but not usable yet" },
-  missing: { color: "amber", glyph: "⚠", label: "Missing", title: "Expected resource absent; reconcile will recreate it" },
-  error: { color: "red", glyph: "✕", label: "Error", title: "Failed to load or reconcile" },
-  update_available: {
+  get ready(): VariantSpec { return { color: "green", glyph: "●", label: t("app.common.states.ready"), title: t("app.shell.resourceStatusChip.materializedAndMatchesTheShippedDefault") }; },
+  get needs_setup(): VariantSpec { return { color: "amber", glyph: "⚠", label: t("app.shell.resourceStatusChip.needsSetup"), title: t("app.shell.resourceStatusChip.presentButNotUsableYet") }; },
+  get missing(): VariantSpec { return { color: "amber", glyph: "⚠", label: t("app.shell.resourceStatusChip.missing"), title: t("app.shell.resourceStatusChip.expectedResourceAbsentReconcileWillRecreateIt") }; },
+  get error(): VariantSpec { return { color: "red", glyph: "✕", label: t("app.common.labels.error"), title: t("app.shell.resourceStatusChip.failedToLoadOrReconcile") }; },
+  get update_available(): VariantSpec { return {
     color: "blue",
     glyph: "↑",
-    label: "Update available",
-    title: "Unedited — a newer shipped default can be applied",
-  },
-  drifted: {
+    label: t("app.common.states.updateAvailable"),
+    title: t("app.shell.resourceStatusChip.uneditedANewerShippedDefaultCanBe"),
+  }; },
+  get drifted(): VariantSpec { return {
     color: "gray",
     glyph: "✎",
-    label: "Drifted",
-    title: "You've edited this; your changes are kept, not overwritten",
-  },
-  schedule_off: {
+    label: t("app.shell.resourceStatusChip.drifted"),
+    title: t("app.shell.resourceStatusChip.youVeEditedThisYourChangesAre"),
+  }; },
+  get schedule_off(): VariantSpec { return {
     color: "gray",
     glyph: "◌",
-    label: "Schedule off",
-    title: "No background work runs until you enable it — costs zero tokens",
-  },
-  schedule_on: { color: "green", glyph: "●", label: "Weekly", title: "Runs on the weekly schedule" },
-  pending_approval: {
+    label: t("app.shell.resourceStatusChip.scheduleOff"),
+    title: t("app.shell.resourceStatusChip.noBackgroundWorkRunsUntilYouEnable"),
+  }; },
+  get schedule_on(): VariantSpec { return { color: "green", glyph: "●", label: t("app.shell.resourceStatusChip.weekly"), title: t("app.shell.resourceStatusChip.runsOnTheWeeklySchedule") }; },
+  get pending_approval(): VariantSpec { return {
     color: "amber",
     glyph: "⚠",
-    label: "Pending approval",
-    title: "Waiting on board hire approval before it can run",
-  },
-  proposal_pending: {
+    label: t("app.shell.resourceStatusChip.pendingApproval"),
+    title: t("app.shell.resourceStatusChip.waitingOnBoardHireApprovalBeforeIt"),
+  }; },
+  get proposal_pending(): VariantSpec { return {
     color: "blue",
     glyph: "↑",
-    label: "Proposal pending",
-    title: "A proposed update is waiting for your review",
-  },
+    label: t("app.shell.resourceStatusChip.proposalPending"),
+    title: t("app.shell.resourceStatusChip.aProposedUpdateIsWaitingForYour"),
+  }; },
 };
 
 export function ResourceStatusChip({
@@ -82,6 +83,7 @@ export function ResourceStatusChip({
   compact?: boolean;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const spec = VARIANTS[variant];
   return (
     <Badge

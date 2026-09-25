@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { usePanel } from "../context/PanelContext";
@@ -9,6 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { SidePanelFrame, SidePanelWindowControls } from "@/components/side-panel";
 
 export function PropertiesPanel({ taskDetailLayout = false }: { taskDetailLayout?: boolean }) {
+  const { t } = useTranslation();
   const {
     panelContent,
     panelContentMode,
@@ -31,7 +33,7 @@ export function PropertiesPanel({ taskDetailLayout = false }: { taskDetailLayout
       >
         <div className="w-80 flex-1 flex flex-col min-w-(--sz-320px) min-h-0">
           <div className="flex items-center justify-between px-4 py-2 border-b border-border">
-            <span className="text-sm font-medium">Properties</span>
+            <span className="text-sm font-medium">{t("app.common.labels.properties")}</span>
             <Button variant="ghost" size="icon-xs" onClick={() => setPanelVisible(false)}>
               <X className="h-4 w-4" />
             </Button>
@@ -167,6 +169,7 @@ function ResizablePropertiesPanel({
   maximizeRequested,
   clearMaximizeRequest,
 }: ResizablePropertiesPanelProps) {
+  const { t } = useTranslation();
   const defaultPaneWidth = taskDetailLayout
     ? TASK_DETAIL_DEFAULT_PANE_WIDTH
     : DEFAULT_PANE_WIDTH;
@@ -194,12 +197,12 @@ function ResizablePropertiesPanel({
       window.clearTimeout(restoreTimerRef.current);
       restoreTimerRef.current = null;
     }
-  }, []);
+  }, [t]);
 
   const finishRestore = useCallback(() => {
     clearRestoreTimer();
     setFixedPane(null);
-  }, [clearRestoreTimer]);
+  }, [clearRestoreTimer, t]);
 
   // Hiding the panel keeps today's collapse-to-0 behavior; if it was
   // maximized (or mid-glide), just unmaximize instantly first.
@@ -226,7 +229,7 @@ function ResizablePropertiesPanel({
     setDragging(false);
     document.body.style.userSelect = previousBodyUserSelectRef.current;
     if (persist) persistPaneWidth(widthStorageKey, widthRef.current);
-  }, [widthStorageKey]);
+  }, [widthStorageKey, t]);
 
   const handleGripPointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
     // Primary button only (touch/pen report button 0 or -1 for down events).
@@ -241,14 +244,14 @@ function ResizablePropertiesPanel({
     previousBodyUserSelectRef.current = document.body.style.userSelect;
     document.body.style.userSelect = "none";
     setDragging(true);
-  }, []);
+  }, [t]);
 
   const handleGripPointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragStateRef.current;
     if (drag === null || drag.pointerId !== event.pointerId) return;
     // The grip sits on the panel's LEFT border: moving left widens the panel.
     setWidth(clampPaneWidth(drag.startWidth + (drag.startX - event.clientX)));
-  }, []);
+  }, [t]);
 
   const handleGripPointerUp = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
@@ -256,17 +259,17 @@ function ResizablePropertiesPanel({
       if (drag === null || drag.pointerId !== event.pointerId) return;
       endDrag(true);
     },
-    [endDrag],
+    [endDrag, t],
   );
 
   const handleGripLostPointerCapture = useCallback(() => {
     endDrag(true);
-  }, [endDrag]);
+  }, [endDrag, t]);
 
   const handleGripDoubleClick = useCallback(() => {
     setWidth(defaultPaneWidth);
     clearStoredPaneWidth(widthStorageKey);
-  }, [defaultPaneWidth, widthStorageKey]);
+  }, [defaultPaneWidth, widthStorageKey, t]);
 
   const handleMaximize = useCallback(() => {
     const aside = asideRef.current;
@@ -295,7 +298,7 @@ function ResizablePropertiesPanel({
       });
       return seeded;
     });
-  }, [clearRestoreTimer]);
+  }, [clearRestoreTimer, t]);
 
   const handleRestore = useCallback(() => {
     const row = asideRef.current?.parentElement;
@@ -313,7 +316,7 @@ function ResizablePropertiesPanel({
     });
     clearRestoreTimer();
     restoreTimerRef.current = window.setTimeout(finishRestore, RESTORE_FALLBACK_DELAY);
-  }, [clearRestoreTimer, finishRestore]);
+  }, [clearRestoreTimer, finishRestore, t]);
 
   // Deep-link maximize (LOOA-2181): the request may predate this mount (the
   // hash routes before the panel content commits), so it lives in context and
@@ -331,7 +334,7 @@ function ResizablePropertiesPanel({
       // Only the restore glide needs to unfix on arrival.
       if (!maximized) finishRestore();
     },
-    [maximized, finishRestore],
+    [maximized, finishRestore, t],
   );
 
   const isFixed = fixedPane !== null;
@@ -378,7 +381,7 @@ function ResizablePropertiesPanel({
           <div
             role="separator"
             aria-orientation="vertical"
-            aria-label="Resize panel"
+            aria-label={t("app.shell.propertiesPanel.resizePanel")}
             data-dragging={dragging ? "" : undefined}
             className="group absolute inset-y-0 z-10 cursor-col-resize touch-none"
             style={{ left: -4, width: 8 }}

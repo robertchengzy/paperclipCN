@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { AgentAvatar } from "./AgentAvatar";
 import {
   Component,
@@ -248,7 +249,7 @@ function isSafeMarkdownLinkUrl(url: string): boolean {
 function richEditorErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
   if (typeof error === "string") return error;
-  return "Rich editor failed to render";
+  return t("app.shell.markdownEditor.richEditorFailedToRender");
 }
 
 /**
@@ -321,7 +322,7 @@ const MAX_AUTOCOMPLETE_OPTIONS = 50;
 const MENTION_MENU_CARET_GAP = 10;
 
 const CODE_BLOCK_LANGUAGES: Record<string, string> = {
-  txt: "Text",
+  get txt() { return t("app.common.labels.text"); },
   md: "Markdown",
   js: "JavaScript",
   jsx: "JavaScript (JSX)",
@@ -718,11 +719,12 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
   onSubmit,
   readOnly = false,
 }: MarkdownEditorProps, forwardedRef) {
-  const editorValue = useMemo(() => prepareMarkdownForEditor(value), [value]);
+  const { t } = useTranslation();
+  const editorValue = useMemo(() => prepareMarkdownForEditor(value), [value, t]);
   const { slashCommands: sharedSlashCommands } = useEditorAutocomplete();
   const slashCommands = useMemo(
     () => [...actionCommands, ...sharedSlashCommands],
-    [actionCommands, sharedSlashCommands],
+    [actionCommands, sharedSlashCommands, t],
   );
   const containerRef = useRef<HTMLDivElement>(null);
   const ref = useRef<MDXEditorMethods>(null);
@@ -772,7 +774,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       }
     }
     return map;
-  }, [mentions]);
+  }, [mentions, t]);
 
   const setEditorRef = useCallback((instance: MDXEditorMethods | null) => {
     ref.current = instance;
@@ -785,7 +787,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       instance.setMarkdown(valueRef.current);
       latestValueRef.current = valueRef.current;
     }
-  }, []);
+  }, [t]);
 
   const filteredMentions = useMemo<AutocompleteOption[]>(() => {
     if (!mentionState) return [];
@@ -802,7 +804,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
     return mentions
       .filter((m) => m.name.toLowerCase().includes(q))
       .slice(0, MAX_AUTOCOMPLETE_OPTIONS);
-  }, [mentionState, mentions, slashCommands]);
+  }, [mentionState, mentions, slashCommands, t]);
 
   const insertMarkdown = useCallback((markdown: string) => {
     if (readOnly) return;
@@ -831,7 +833,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       const cursor = start + markdown.length;
       textarea.setSelectionRange(cursor, cursor);
     });
-  }, [onChange, readOnly, richEditorError, value]);
+  }, [onChange, readOnly, richEditorError, value, t]);
 
   useImperativeHandle(forwardedRef, () => ({
     focus: () => {
@@ -854,7 +856,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
     if (!element) return;
     element.style.height = "auto";
     element.style.height = `${element.scrollHeight}px`;
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!richEditorError) return;
@@ -895,7 +897,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
           if (!looksEmpty()) return;
           setRichEditorError({
             code: "MDE-EMPTY",
-            message: "Rich editor failed to load content",
+            message: t("app.shell.markdownEditor.richEditorFailedToLoadContent"),
           });
         }, RICH_EDITOR_EMPTY_CONFIRM_MS);
       }, RICH_EDITOR_EMPTY_CHECK_MS);
@@ -954,7 +956,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
             }, 100);
             return src;
           } catch (err) {
-            const message = err instanceof Error ? err.message : "Image upload failed";
+            const message = err instanceof Error ? err.message : t("app.shell.markdownEditor.imageUploadFailed");
             setUploadError(message);
             throw err;
           }
@@ -983,7 +985,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       all.push(imagePlugin({ imageUploadHandler: imageHandler, disableImageSettingsButton: true }));
     }
     return all;
-  }, [hasImageUpload]);
+  }, [hasImageUpload, t]);
 
   useEffect(() => {
     if (editorValue !== latestValueRef.current) {
@@ -1033,7 +1035,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
         icon: parsed.icon ?? option?.agentIcon ?? null,
       });
     }
-  }, [mentionOptionByKey]);
+  }, [mentionOptionByKey, t]);
 
   // Mention detection: listen for selection changes and input events
   const checkMention = useCallback(() => {
@@ -1072,7 +1074,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       setMentionIndex(0);
     }
     setMentionState(result);
-  }, [mentions, slashCommands.length]);
+  }, [mentions, slashCommands.length, t]);
 
   useEffect(() => {
     if ((!mentions || mentions.length === 0) && slashCommands.length === 0) return;
@@ -1211,7 +1213,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       setMentionState(null);
       return true;
     },
-    [decorateProjectMentions, onChange],
+    [decorateProjectMentions, onChange, t],
   );
 
   const handleAutocompletePress = useCallback((
@@ -1225,7 +1227,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
     if (handled) {
       autocompleteSelectionHandledRef.current = true;
     }
-  }, [selectMention]);
+  }, [selectMention, t]);
 
   // Touch handling for the mention menu. We deliberately do NOT preventDefault
   // on touchstart so the browser can still scroll the menu vertically; instead
@@ -1238,7 +1240,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
     const touch = event.touches[0];
     if (!touch) return;
     touchStartPointRef.current = { x: touch.clientX, y: touch.clientY };
-  }, []);
+  }, [t]);
 
   const handleAutocompleteTouchMove = useCallback((event: ReactTouchEvent<HTMLButtonElement>) => {
     const start = touchStartPointRef.current;
@@ -1248,7 +1250,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
     if (Math.hypot(touch.clientX - start.x, touch.clientY - start.y) > TOUCH_TAP_THRESHOLD_PX) {
       touchStartPointRef.current = null;
     }
-  }, []);
+  }, [t]);
 
   const handleAutocompleteTouchEnd = useCallback((
     event: ReactTouchEvent<HTMLButtonElement>,
@@ -1263,7 +1265,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       return;
     }
     handleAutocompletePress(event, option);
-  }, [handleAutocompletePress]);
+  }, [handleAutocompletePress, t]);
 
   function hasFilePayload(evt: DragEvent<HTMLDivElement>) {
     return Array.from(evt.dataTransfer?.types ?? []).includes("Files");
@@ -1282,15 +1284,15 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
 
     event.preventDefault();
     ref.current.insertMarkdown(escapeUnsupportedAngleBrackets(normalizeMarkdown(rawText)));
-  }, []);
+  }, [t]);
 
   const handleRichEditorRenderError = useCallback((error: unknown) => {
     setRichEditorError({ code: "MDE-RENDER", message: richEditorErrorMessage(error) });
-  }, []);
+  }, [t]);
 
   const handleRichEditorParseError = useCallback((error: unknown) => {
     setRichEditorError({ code: "MDE-PARSE", message: richEditorErrorMessage(error) });
-  }, []);
+  }, [t]);
 
   const mentionMenuPosition = mentionState
     ? computeMentionMenuPosition(
@@ -1311,8 +1313,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
         )}
       >
         <div className="flex items-start justify-between gap-3 px-3 pt-2 text-xs text-muted-foreground">
-          <p>
-            Rich editor unavailable for this markdown. Showing raw source instead.{" "}
+          <p>{t("app.shell.markdownEditor.richEditorUnavailableForThisMarkdownShowing")}{" "}
             <span data-testid="markdown-editor-fallback-code" className="font-mono">
               {richEditorError.code}
             </span>
@@ -1327,9 +1328,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
               initialChildOnChangeRef.current = true;
               setRichEditorError(null);
             }}
-          >
-            Retry rich editor
-          </button>
+          >{t("app.shell.markdownEditor.retryRichEditor")}</button>
         </div>
         <textarea
           ref={fallbackTextareaRef}
@@ -1614,29 +1613,19 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
                   </span>
                 )}
                 {option.kind === "issue" && (
-                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">
-                    Task
-                  </span>
+                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">{t("app.common.nouns.task")}</span>
                 )}
                 {option.kind === "project" && option.projectId && (
-                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">
-                    Project
-                  </span>
+                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">{t("app.common.nouns.project")}</span>
                 )}
                 {option.kind === "user" && (
-                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">
-                    User
-                  </span>
+                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">{t("app.common.labels.user")}</span>
                 )}
                 {option.kind === "skill" && (
-                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">
-                    Skill
-                  </span>
+                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">{t("app.common.nouns.skill")}</span>
                 )}
                 {option.kind === "routine" && (
-                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">
-                    Routine
-                  </span>
+                  <span className="ml-auto text-(length:--text-nano) uppercase tracking-wide text-muted-foreground">{t("app.common.nouns.routine")}</span>
                 )}
                 {option.kind === "action" && (
                   <span className="ml-auto max-w-28 truncate text-(length:--text-nano) text-muted-foreground">
@@ -1655,8 +1644,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
             "pointer-events-none absolute inset-1 z-40 flex items-center justify-center rounded-md border border-dashed border-primary/80 bg-primary/10 text-xs font-medium text-primary",
             !bordered && "inset-0 rounded-sm",
           )}
-        >
-          Drop {onDropFile ? "file" : "image"} to upload
+        > {onDropFile ? t("app.shell.markdownEditor.dropFile") : t("app.shell.markdownEditor.dropImage")}
         </div>
       )}
       {uploadError && (

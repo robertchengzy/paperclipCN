@@ -1,8 +1,8 @@
+import { t, useTranslation } from "@/i18n";
 import { lazy, Suspense, type ReactNode } from "react";
 import type { ToolConnectionCredentialSource } from "@paperclipai/shared";
 import { Navigate, Outlet, Route, Routes, useActiveCompanyPrefix, useLocation, useParams } from "@/lib/router";
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "@/i18n";
 import { Layout } from "./components/Layout";
 import { Layout as ProductionLayout } from "./components/Layout.production";
 import { ConferenceRoomChatGate } from "./components/ConferenceRoomChatGate";
@@ -140,6 +140,7 @@ const ProductionOrgChart = lazy(() =>
 );
 
 function ProductionSurface({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
   return <Suspense fallback={<PaperclipLoading />}>{children}</Suspense>;
 }
 
@@ -440,6 +441,7 @@ function AppsConnectEntryRoute({
 }: {
   credentialSource?: ToolConnectionCredentialSource;
 } = {}) {
+  const { t } = useTranslation();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const { enabled: chatConnectorsEnabled } = useChatConnectorsEnabled();
@@ -449,10 +451,12 @@ function AppsConnectEntryRoute({
 }
 
 function InboxRootRedirect() {
+  const { t } = useTranslation();
   return <Navigate to={`/inbox/${loadLastInboxTab()}`} replace />;
 }
 
 function LegacySkillStudioRedirect() {
+  const { t } = useTranslation();
   const location = useLocation();
   const { companies, selectedCompany, loading } = useCompany();
   const { companyPrefix, skillId } = useParams<{ companyPrefix?: string; skillId?: string }>();
@@ -480,6 +484,7 @@ function LegacySkillStudioRedirect() {
 }
 
 function LegacySettingsRedirect() {
+  const { t } = useTranslation();
   const location = useLocation();
   const { companies, selectedCompany, loading } = useCompany();
   const { companyPrefix } = useParams<{ companyPrefix?: string }>();
@@ -525,6 +530,7 @@ function LegacySettingsRedirect() {
 }
 
 function LegacyToolsSettingsRedirect() {
+  const { t } = useTranslation();
   const { tab } = useParams<{ tab?: string }>();
   return <Navigate to={legacyToolsRedirectTarget(tab)} replace />;
 }
@@ -532,6 +538,7 @@ function LegacyToolsSettingsRedirect() {
 // The developer "Tools" surface moved under the Apps "Advanced setup" door
 // (PAP-10862). `/tools` and `/tools/:tab` redirect to their new home.
 function LegacyToolsRedirect() {
+  const { t } = useTranslation();
   const { tab } = useParams<{ tab?: string }>();
   return <Navigate to={legacyToolsRedirectTarget(tab)} replace />;
 }
@@ -565,15 +572,15 @@ export function OnboardingRoutePage() {
   }
 
   const title = matchedCompany
-    ? `Add another agent to ${matchedCompany.name}`
+    ? t("app.shell.app.addAnotherAgentTo", { value1: matchedCompany.name })
     : companies.length > 0
-      ? "Create another organization"
-      : "Create your first organization";
+      ? t("app.shell.app.createAnotherOrganization")
+      : t("app.shell.app.createYourFirstOrganization");
   const description = matchedCompany
-    ? "Run onboarding again to add an agent and a starter task for this organization."
+    ? t("app.shell.app.runOnboardingAgainToAddAnAgent")
     : companies.length > 0
-      ? "Run onboarding again to create another organization and seed its first agent."
-      : "Get started by creating an organization and your first agent.";
+      ? t("app.shell.app.runOnboardingAgainToCreateAnotherOrganization")
+      : t("app.shell.app.getStartedByCreatingAnOrganizationAnd");
 
   return (
     <div className="mx-auto max-w-xl py-10">
@@ -589,7 +596,7 @@ export function OnboardingRoutePage() {
             <p className="text-sm text-muted-foreground">
               {t("app.cloudCreateUnavailable", {
                 defaultValue:
-                  "Organizations are created in Paperclip Cloud. This instance can't reach it right now — try again from your Cloud portfolio.",
+                  t("app.shell.app.organizationsAreCreatedInPaperclipCloudThis"),
               })}
             </p>
           ) : (
@@ -611,7 +618,7 @@ export function OnboardingRoutePage() {
                     : openOnboarding()
               }
             >
-              {matchedCompany ? "Add Agent" : "Start Onboarding"}
+              {matchedCompany ? t("app.shell.app.addAgent") : t("app.shell.app.startOnboarding")}
             </Button>
           )}
         </div>
@@ -621,6 +628,7 @@ export function OnboardingRoutePage() {
 }
 
 function CompanyRootRedirect() {
+  const { t } = useTranslation();
   const { companies, selectedCompany, loading } = useCompany();
   const location = useLocation();
 
@@ -645,6 +653,7 @@ function CompanyRootRedirect() {
 }
 
 function StatusCardsLegacyRedirect() {
+  const { t } = useTranslation();
   const { cardId } = useParams<{ cardId?: string }>();
   const prefix = useActiveCompanyPrefix();
   const base = prefix ? `/${prefix}` : "";
@@ -658,6 +667,7 @@ function AuditCompatibilityRedirect({
   to: string;
   forceAgentMode?: boolean;
 }) {
+  const { t } = useTranslation();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   if (forceAgentMode) searchParams.set("mode", "agents");
@@ -666,6 +676,7 @@ function AuditCompatibilityRedirect({
 }
 
 function UnprefixedBoardRedirect() {
+  const { t } = useTranslation();
   const location = useLocation();
   const { companies, selectedCompany, loading } = useCompany();
 
@@ -706,10 +717,10 @@ function NoCompaniesStartPage() {
     <div className="mx-auto max-w-xl py-10">
       <div className="rounded-lg border border-border bg-card p-6">
         <h1 className="text-xl font-semibold">
-          {t("app.noCompanies.title", { defaultValue: "Create your first organization" })}
+          {t("app.noCompanies.title", { defaultValue: t("app.shell.app.createYourFirstOrganization") })}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {t("app.noCompanies.description", { defaultValue: "Get started by creating an organization." })}
+          {t("app.noCompanies.description", { defaultValue: t("app.shell.app.getStartedByCreatingAnOrganization") })}
         </p>
         <div className="mt-4">
           {/* Same as the onboarding route: no Cloud origin means nowhere to
@@ -718,7 +729,7 @@ function NoCompaniesStartPage() {
             <p className="text-sm text-muted-foreground">
               {t("app.cloudCreateUnavailable", {
                 defaultValue:
-                  "Organizations are created in Paperclip Cloud. This instance can't reach it right now — try again from your Cloud portfolio.",
+                  t("app.shell.app.organizationsAreCreatedInPaperclipCloudThis"),
               })}
             </p>
           ) : (
@@ -729,7 +740,7 @@ function NoCompaniesStartPage() {
                   : openOnboarding()
               }
             >
-              {t("app.noCompanies.newCompany", { defaultValue: "New Organization" })}
+              {t("app.noCompanies.newCompany", { defaultValue: t("app.shell.app.newOrganization") })}
             </Button>
           )}
         </div>
@@ -739,6 +750,7 @@ function NoCompaniesStartPage() {
 }
 
 export function App() {
+  const { t } = useTranslation();
   const { enabled: streamlinedUiEnabled, loaded: streamlinedUiLoaded } = useStreamlinedUiEnabled();
 
   return (

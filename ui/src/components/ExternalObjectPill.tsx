@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import type { ReactNode } from "react";
 import type {
   ExternalObjectLivenessState,
@@ -40,7 +41,7 @@ function githubObjectLabel(url: string | null | undefined): string | null {
     const [, owner, repo, kind, number] = parsed.pathname.split("/");
     if (!owner || !repo || !number) return null;
     if (kind === "pull") return `PR ${number}`;
-    if (kind === "issues") return `Issue ${number}`;
+    if (kind === "issues") return t("app.shell.externalObjectPill.issue", { value1: number });
     return null;
   } catch {
     return null;
@@ -110,6 +111,7 @@ export function ExternalObjectPill({
   inert,
   showProviderIcon = true,
 }: ExternalObjectPillProps) {
+  const { t } = useTranslation();
   const overlay = externalObjectLivenessOverlay[object.liveness] ?? "";
   const providerLabel = externalObjectProviderLabel(object.providerKey);
   const typeLabel = externalObjectTypeLabel(object.objectType);

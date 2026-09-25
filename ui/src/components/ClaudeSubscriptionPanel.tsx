@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import type { QuotaWindow } from "@paperclipai/shared";
 import { cn, quotaSourceDisplayName } from "@/lib/utils";
 
@@ -31,7 +32,7 @@ function detailText(window: QuotaWindow): string | null {
       minute: "2-digit",
       timeZoneName: "short",
     });
-    return `Resets ${formatted}`;
+    return t("app.shell.claudeSubscriptionPanel.resets", { value1: formatted });
   }
   return null;
 }
@@ -56,18 +57,15 @@ export function ClaudeSubscriptionPanel({
   source = null,
   error = null,
 }: ClaudeSubscriptionPanelProps) {
+  const { t } = useTranslation();
   const ordered = orderedWindows(windows);
 
   return (
     <div className="border border-border px-4 py-4">
       <div className="flex items-start justify-between gap-3 border-b border-border pb-3">
         <div className="min-w-0">
-          <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">
-            Anthropic subscription
-          </div>
-          <div className="mt-1 text-sm text-muted-foreground">
-            Live Claude quota windows.
-          </div>
+          <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">{t("app.shell.claudeSubscriptionPanel.anthropicSubscription")}</div>
+          <div className="mt-1 text-sm text-muted-foreground">{t("app.shell.claudeSubscriptionPanel.liveClaudeQuotaWindows")}</div>
         </div>
         {source ? (
           <span className="shrink-0 border border-border px-2.5 py-1 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
@@ -120,7 +118,7 @@ export function ClaudeSubscriptionPanel({
                 </div>
                 {window.usedPercent != null ? (
                   <div className="shrink-0 text-sm font-semibold tabular-nums text-foreground">
-                    {window.usedPercent}% used
+                    {t("app.shell.claudeSubscriptionPanel.used", { percent: window.usedPercent })}
                   </div>
                 ) : null}
               </div>
