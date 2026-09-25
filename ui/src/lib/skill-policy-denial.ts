@@ -17,6 +17,7 @@
  */
 
 import { ApiError } from "../api/client";
+import { t } from "@/i18n";
 
 /** Machine-readable error codes the server attaches to skill mutation failures. */
 export const SKILL_POLICY_DENIAL_CODE = "skill_policy_denied";
@@ -58,34 +59,43 @@ export interface SkillDenial {
   remediation: string;
 }
 
-const DEFAULT_POLICY_REMEDIATION =
-  "An organization administrator can change the skill policy to allow this.";
-const DEFAULT_ADMIN_REMEDIATION =
-  "This requires organization administration access. Ask an administrator to make this change.";
+const DEFAULT_POLICY_REMEDIATION_KEY = "app.skills.skillPolicyDenial.defaultPolicyRemediation";
+const DEFAULT_ADMIN_REMEDIATION_KEY =
+  "app.skills.skillPolicyDenial.defaultAdminRemediation";
 
-/** Human-readable titles for the platform-invariant codes (State C). */
-const PLATFORM_TITLES: Record<string, string> = {
-  skill_authentication_required: "Sign in to manage skills.",
-  skill_company_boundary_denied: "This skill belongs to another organization.",
-  skill_workspace_boundary_denied: "This skill source is outside an allowed workspace.",
-  skill_source_validation_failed: "This skill source failed validation.",
-  skill_unsafe_content_blocked: "This skill contains unsafe content.",
-  skill_secret_handling_blocked: "This skill exposes a secret value.",
-  skill_actor_restricted: "This action isn't available for the current actor.",
+/** i18n keys for the human-readable titles of the platform-invariant codes (State C). */
+const PLATFORM_TITLE_KEYS: Record<string, string> = {
+  skill_authentication_required: "app.skills.skillPolicyDenial.titles.authenticationRequired",
+  skill_company_boundary_denied: "app.skills.skillPolicyDenial.titles.companyBoundaryDenied",
+  skill_workspace_boundary_denied: "app.skills.skillPolicyDenial.titles.workspaceBoundaryDenied",
+  skill_source_validation_failed: "app.skills.skillPolicyDenial.titles.sourceValidationFailed",
+  skill_unsafe_content_blocked: "app.skills.skillPolicyDenial.titles.unsafeContentBlocked",
+  skill_secret_handling_blocked: "app.skills.skillPolicyDenial.titles.secretHandlingBlocked",
+  skill_actor_restricted: "app.skills.skillPolicyDenial.titles.actorRestricted",
 };
 
-/** Default remediation copy per platform-invariant code — framed as a fix, never a grant. */
-const PLATFORM_REMEDIATIONS: Record<string, string> = {
-  skill_authentication_required: "Sign in and try again.",
-  skill_company_boundary_denied: "Open the skill from the organization that owns it.",
+/** i18n keys for the default remediation copy per platform-invariant code — framed as a fix, never a grant. */
+const PLATFORM_REMEDIATION_KEYS: Record<string, string> = {
+  skill_authentication_required:
+    "app.skills.skillPolicyDenial.remediations.authenticationRequired",
+  skill_company_boundary_denied:
+    "app.skills.skillPolicyDenial.remediations.companyBoundaryDenied",
   skill_workspace_boundary_denied:
-    "Import from a configured Paperclip workspace or the organization managed-skill directory.",
-  skill_source_validation_failed: "Fix the flagged source and retry.",
+    "app.skills.skillPolicyDenial.remediations.workspaceBoundaryDenied",
+  skill_source_validation_failed:
+    "app.skills.skillPolicyDenial.remediations.sourceValidationFailed",
   skill_unsafe_content_blocked:
-    "Remove the fetch-and-execute or unsafe pattern before saving.",
-  skill_secret_handling_blocked: "Remove the secret value before saving.",
-  skill_actor_restricted: "Retry from an account with access to this action.",
+    "app.skills.skillPolicyDenial.remediations.unsafeContentBlocked",
+  skill_secret_handling_blocked:
+    "app.skills.skillPolicyDenial.remediations.secretHandlingBlocked",
+  skill_actor_restricted:
+    "app.skills.skillPolicyDenial.remediations.actorRestricted",
 };
+
+function translatedKey(keys: Record<string, string>, code: string | null): string | null {
+  const key = code ? keys[code] : undefined;
+  return key ? t(key) : null;
+}
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : null;
@@ -119,14 +129,14 @@ export function classifySkillDenial(
     || reason === "policy_default";
   if (isPolicyDenial) {
     const title = actionLabel
-      ? `${actionLabel} is restricted by your organization policy.`
-      : "This action is restricted by your organization policy.";
+      ? t("app.skills.skillPolicyDenial.actionRestricted", { action: actionLabel })
+      : t("app.skills.skillPolicyDenial.thisActionRestricted");
     return {
       state: "policy",
       code,
       reason,
       title,
-      remediation: remediation ?? DEFAULT_POLICY_REMEDIATION,
+      remediation: remediation ?? t(DEFAULT_POLICY_REMEDIATION_KEY),
     };
   }
 
@@ -136,8 +146,8 @@ export function classifySkillDenial(
       state: "platform_admin",
       code,
       reason,
-      title: "This change needs administration access.",
-      remediation: remediation ?? DEFAULT_ADMIN_REMEDIATION,
+      title: t("app.skills.skillPolicyDenial.adminRequired"),
+      remediation: remediation ?? t(DEFAULT_ADMIN_REMEDIATION_KEY),
     };
   }
 
@@ -150,11 +160,11 @@ export function classifySkillDenial(
       state: "platform",
       code,
       reason,
-      title: (code && PLATFORM_TITLES[code]) ?? "This action is blocked by a platform safety rule.",
+      title: translatedKey(PLATFORM_TITLE_KEYS, code) ?? t("app.skills.skillPolicyDenial.platformBlocked"),
       remediation:
         remediation
-        ?? (code && PLATFORM_REMEDIATIONS[code])
-        ?? "Fix the flagged issue and try again.",
+        ?? translatedKey(PLATFORM_REMEDIATION_KEYS, code)
+        ?? t("app.skills.skillPolicyDenial.fixAndRetry"),
     };
   }
 

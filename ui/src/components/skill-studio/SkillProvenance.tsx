@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { FolderGit2, GitFork } from "lucide-react";
 import type { CompanySkillDetail } from "@paperclipai/shared";
+import { Trans } from "react-i18next";
+import { useTranslation } from "@/i18n";
 import { Link } from "@/lib/router";
 import { companySkillsApi } from "@/api/companySkills";
 import { queryKeys } from "@/lib/queryKeys";
@@ -21,6 +23,7 @@ export function SkillLineageChip({
   companyId: string;
   forkedFromSkillId: string | null;
 }) {
+  const { t } = useTranslation();
   const originalQuery = useQuery({
     queryKey: queryKeys.companySkills.detail(companyId, forkedFromSkillId ?? ""),
     queryFn: () => companySkillsApi.detail(companyId, forkedFromSkillId!),
@@ -31,17 +34,21 @@ export function SkillLineageChip({
   if (!forkedFromSkillId) return null;
 
   const original = originalQuery.data;
-  const label = original ? formatLineageLabel(original) : "the original skill";
+  const label = original ? formatLineageLabel(original) : t("app.skills.skillProvenance.theOriginalSkill");
 
   return (
     <Link
       to={skillStudioRoute(forkedFromSkillId)}
       className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-      title={`Forked from ${label}`}
+      title={t("app.skills.skillProvenance.forkedFromTitle", { label })}
     >
       <GitFork className="h-3 w-3 shrink-0" />
       <span className="truncate">
-        Forked from <span className="font-medium text-foreground">{label}</span>
+        <Trans
+          i18nKey="app.skills.skillProvenance.forkedFrom"
+          values={{ label }}
+          components={{ label: <span className="font-medium text-foreground" /> }}
+        />
       </span>
     </Link>
   );
@@ -60,15 +67,19 @@ export function ProjectScanNotice({
   skill: CompanySkillDetail;
   onEditACopy: () => void;
 }) {
-  const location = skill.sourcePath ?? skill.sourceLabel ?? "the project working tree";
+  const { t } = useTranslation();
+  const location = skill.sourcePath ?? skill.sourceLabel ?? t("app.skills.skillProvenance.theProjectWorkingTree");
 
   return (
     <div className="flex flex-wrap items-start gap-2 border-b border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
       <FolderGit2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
       <div className="min-w-0 flex-1">
         <span>
-          This skill lives in <span className="font-mono text-foreground">{location}</span>.
-          Saves write to the project working tree and are not committed.
+          <Trans
+            i18nKey="app.skills.skillProvenance.projectScanNotice"
+            values={{ location }}
+            components={{ location: <span className="font-mono text-foreground" /> }}
+          />
         </span>{" "}
         <Button
           type="button"
@@ -77,7 +88,7 @@ export function ProjectScanNotice({
           className="h-auto p-0 text-xs"
           onClick={onEditACopy}
         >
-          Edit a copy instead
+          {t("app.skills.skillProvenance.editCopyInstead")}
         </Button>
       </div>
     </div>

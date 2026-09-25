@@ -4,6 +4,7 @@ import type {
   CompanySkillSourceType,
   CompanySkillUsageAgent,
 } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 /**
  * Pure logic for the Skill Studio "Edit a copy" fork flow (PAP-13112). Kept
@@ -96,8 +97,10 @@ export function pickReusableFork(
 
 /** Unmissable agent-usage sentence for the dialog body (P3 hard requirement). */
 export function agentUsageSentence(count: number): string {
-  if (count <= 0) return "No agents currently use this skill";
-  return `${count} ${count === 1 ? "agent" : "agents"} currently use${count === 1 ? "s" : ""} this skill`;
+  if (count <= 0) return t("app.skills.skillFork.noAgentsUse");
+  return count === 1
+    ? t("app.skills.skillFork.oneAgentUses", { count })
+    : t("app.skills.skillFork.manyAgentsUse", { count });
 }
 
 /** Agent ids to reassign when the "Switch these agents to the copy" toggle is on. */
