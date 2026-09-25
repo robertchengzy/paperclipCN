@@ -1,3 +1,4 @@
+import { protocolDetailLabel } from "./protocol-detail-labels";
 import { useId, useState, type ReactNode } from "react";
 import {
   AlertTriangle,
@@ -45,12 +46,13 @@ function stepStatusIcon(status: TaskChatProtocolStep["status"], neutral = false)
 }
 
 function DetailList({ details }: { details: readonly TaskChatProtocolDetail[] }) {
+  const { t } = useTranslation();
   if (details.length === 0) return null;
   return (
     <dl className="flex min-w-0 flex-col gap-1.5" data-testid="task-chat-provider-detail-list">
       {details.map((detail) => (
         <div className="grid min-w-0 grid-cols-1 gap-0.5 sm:grid-cols-(--gtc-task-chat-details) sm:gap-3" key={`${detail.label}:${detail.value}`}>
-          <dt className="text-muted-foreground">{detail.label}</dt>
+          <dt className="text-muted-foreground">{protocolDetailLabel(t, detail.label)}</dt>
           <dd className={cn("min-w-0 break-words text-foreground", detail.mono && "font-mono")}>{detail.value}</dd>
         </div>
       ))}

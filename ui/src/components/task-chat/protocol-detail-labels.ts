@@ -1,0 +1,63 @@
+import type { TFunction } from "i18next";
+
+// Labels generated from PROVIDER_DETAIL_KEYS in transcript-adapter.ts also act
+// as lookup and merge identities. Translate only their rendered text.
+const protocolDetailLabelKeys = new Map<string, string>([
+  ["Revision", "app.reviewProtocolLabels.revision"],
+  ["Sync Status", "app.reviewProtocolLabels.syncStatus"],
+  ["Document Revision", "app.reviewProtocolLabels.documentRevision"],
+  ["Complete", "app.reviewProtocolLabels.complete"],
+  ["Transport", "app.reviewProtocolLabels.transport"],
+  ["Operation", "app.reviewProtocolLabels.operation"],
+  ["Name", "app.reviewProtocolLabels.name"],
+  ["Target", "app.reviewProtocolLabels.target"],
+  ["Namespace", "app.reviewProtocolLabels.namespace"],
+  ["Read Only", "app.reviewProtocolLabels.readOnly"],
+  ["Status", "app.reviewProtocolLabels.status"],
+  ["Progress", "app.reviewProtocolLabels.progress"],
+  ["Duration Ms", "app.reviewProtocolLabels.durationMs"],
+  ["Exit Code", "app.reviewProtocolLabels.exitCode"],
+  ["Output Bytes", "app.reviewProtocolLabels.outputBytes"],
+  ["Action", "app.reviewProtocolLabels.action"],
+  ["Query", "app.reviewProtocolLabels.query"],
+  ["Pattern", "app.reviewProtocolLabels.pattern"],
+  ["Url", "app.reviewProtocolLabels.url"],
+  ["Provider", "app.reviewProtocolLabels.provider"],
+  ["Requested Model", "app.reviewProtocolLabels.requestedModel"],
+  ["From Model", "app.reviewProtocolLabels.fromModel"],
+  ["Effective Model", "app.reviewProtocolLabels.effectiveModel"],
+  ["Reason", "app.reviewProtocolLabels.reason"],
+  ["Buffering", "app.reviewProtocolLabels.buffering"],
+  ["Summary", "app.reviewProtocolLabels.summary"],
+  ["Pre Tokens", "app.reviewProtocolLabels.preTokens"],
+  ["Post Tokens", "app.reviewProtocolLabels.postTokens"],
+  ["Same Session", "app.reviewProtocolLabels.sameSession"],
+  ["Reference", "app.reviewProtocolLabels.reference"],
+  ["Media Type", "app.reviewProtocolLabels.mediaType"],
+  ["Title", "app.reviewProtocolLabels.title"],
+  ["Registered", "app.reviewProtocolLabels.registered"],
+  ["Transparent Background", "app.reviewProtocolLabels.transparentBackground"],
+  ["Failure", "app.reviewProtocolLabels.failure"],
+  ["State", "app.reviewProtocolLabels.state"],
+  ["Scope", "app.reviewProtocolLabels.scope"],
+  ["Event", "app.reviewProtocolLabels.event"],
+  ["Blocking", "app.reviewProtocolLabels.blocking"],
+  ["Label", "app.reviewProtocolLabels.label"],
+  ["Available", "app.reviewProtocolLabels.available"],
+  ["Decision", "app.reviewProtocolLabels.decision"],
+  ["Target Execution Id", "app.reviewProtocolLabels.targetExecutionId"],
+  ["Origin", "app.reviewProtocolLabels.origin"],
+  ["Input Class", "app.reviewProtocolLabels.inputClass"],
+  ["Byte Count", "app.reviewProtocolLabels.byteCount"],
+  ["Planned Duration Ms", "app.reviewProtocolLabels.plannedDurationMs"],
+  ["Elapsed Duration Ms", "app.reviewProtocolLabels.elapsedDurationMs"],
+  ["Severity", "app.reviewProtocolLabels.severity"],
+  ["Category", "app.reviewProtocolLabels.category"],
+  ["Recoverable", "app.reviewProtocolLabels.recoverable"],
+  ["User Actionable", "app.reviewProtocolLabels.userActionable"],
+]);
+
+export function protocolDetailLabel(t: TFunction, label: string): string {
+  const key = protocolDetailLabelKeys.get(label);
+  return key ? t(key) : label;
+}

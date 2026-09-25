@@ -1,3 +1,4 @@
+import { protocolDetailLabel } from "./protocol-detail-labels";
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
@@ -349,7 +350,7 @@ function ProviderActivityCard({
                   key={`${detail.label}:${detail.value}`}
                   className="grid min-w-0 grid-cols-1 gap-0.5 sm:grid-cols-(--gtc-task-chat-details) sm:gap-3"
                 >
-                  <dt className="text-muted-foreground">{detail.label}</dt>
+                  <dt className="text-muted-foreground">{protocolDetailLabel(t, detail.label)}</dt>
                   <dd
                     className={cn(
                       "min-w-0 break-words text-foreground",
