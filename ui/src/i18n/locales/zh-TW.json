@@ -6171,6 +6171,408 @@
         "instructions": "Skill instructions",
         "instructionsEmpty": "Skill instructions are empty."
       }
+    },
+    "reports": {
+      "statusCardDetailDrawer": {
+        "refreshQueued": "Refresh queued — the Summarizer is updating this card.",
+        "refreshFailed": "Could not refresh the card.",
+        "runQueued": "Run queued — the Summarizer is updating this card.",
+        "runFailed": "Could not run the card.",
+        "saveFailed": "Could not save settings.",
+        "untitledCard": "Untitled card",
+        "settingUp": "Setting up…",
+        "running": "Running…",
+        "refreshing": "Refreshing…",
+        "updatedAgo": "Updated {{time}}",
+        "noSummaryYet": "No summary yet",
+        "tabs": {
+          "summary": "Summary",
+          "watched": "Watched issues"
+        },
+        "headsUp": "Heads up",
+        "workingOnIt": "Working on it",
+        "selectRevision": "Select summary revision",
+        "revisionLatest": "Revision {{number}} · latest",
+        "revisionOption": "Rev {{number}} · {{kind}} · {{time}}",
+        "revisionHeading": "Revision {{number}} · {{kind}} · {{time}}",
+        "fullSummaryUnavailable": "The full summary text for this revision is unavailable — showing its change summary. The integrated changes below are the live ledger for this revision.",
+        "noChangeSummary": "No change summary was recorded for this revision.",
+        "setupRunning": "Setting up — the first summary is generated automatically once this finishes.",
+        "setupStalled": "Setup didn’t finish. Run it now to try again.",
+        "viewSetupTask": "View setup task",
+        "noSummaryPending": "No summary yet — the first one is generated automatically once this card finishes setting up.",
+        "integratedRevisionOne": "Integrated in this revision (1 change)",
+        "integratedRevisionMany": "Integrated in this revision ({{count}} changes)",
+        "integratedUpdateOne": "Integrated in this update (1 change)",
+        "integratedUpdateMany": "Integrated in this update ({{count}} changes)",
+        "loadingHistory": "Loading history…",
+        "noUpdates": "No updates recorded yet.",
+        "todayOne": "Today: {{count}} update · {{tokens}} · {{cost}}",
+        "todayMany": "Today: {{count}} updates · {{tokens}} · {{cost}}",
+        "dailyCapSuffix": " · daily cap {{cap}}",
+        "changesSuffix": " · {{count}} changes",
+        "watchedSettingUp": "This card is still setting up — the issues it watches appear here once it's ready.",
+        "matchingIssues": "Matching issues…",
+        "matchedLoadFailed": "Could not load matched issues",
+        "cardName": "Card name",
+        "cardNamePlaceholder": "Auto-named from the query",
+        "interestLabel": "What this card watches & reports",
+        "interestHelp": "This one message drives the whole card: the agent compiles the watch query from it and follows it as the instructions for every update. Editing it rebuilds the card.",
+        "queryDebug": "Query debug",
+        "compiledBy": "Compiled by Summarizer {{time}} · version {{version}}. Edit “What this card watches” above to rebuild it.",
+        "notCompiled": "Not compiled yet. The query builds automatically once the card finishes setting up.",
+        "noMatches": "The compiled query matches no issues right now.",
+        "mentionedLatest": "Mentioned in the latest update",
+        "changeKind": {
+          "matched": "new issue matched the query",
+          "left": "left the query"
+        }
+      },
+      "statusCardTile": {
+        "noSummaryYetLower": "no summary yet",
+        "newCard": "New card",
+        "cardActions": "Card actions",
+        "openDetail": "Open detail",
+        "refreshNow": "Refresh now",
+        "editInterest": "Edit interest & settings",
+        "settingUpCard": "Setting up your card…",
+        "setupDidntFinish": "Setup didn’t finish",
+        "starting": "Starting…",
+        "integratingOne": "Integrating 1 change…",
+        "integratingMany": "Integrating {{count}} changes…",
+        "updatingNow": "Updating now…",
+        "viewUpdateTask": "View update task",
+        "changesSinceOne": "1 change since last update",
+        "changesSinceMany": "{{count}} changes since last update",
+        "lastUpdateFailed": "Last update failed",
+        "pausedBudget": "Daily token cap reached — auto-updates paused",
+        "pausedHours": "Outside active hours — auto-updates paused",
+        "showingLastGood": "Showing last good summary:",
+        "compilingHint": "You can add instructions and pick an update policy while this runs.",
+        "noSummaryYet": "No summary yet.",
+        "footerSettingUp": "setting up · first summary pending",
+        "refreshCard": "Refresh card"
+      },
+      "summarizerAgentSelect": {
+        "default": "Summarizer (default)",
+        "searchAgents": "Search agents..."
+      },
+      "statusCards": {
+        "title": "Status",
+        "archiveFailed": "Could not archive the card.",
+        "restoreFailed": "Could not restore the card.",
+        "todayCost": "Today: {{tokens}} · ~{{cost}}",
+        "loadingCards": "Loading cards…",
+        "loadFailed": "Could not load status cards",
+        "emptyTitle": "No status cards yet",
+        "emptyMessage": "Create a card to keep a living summary of the issues you care about.",
+        "hideArchived": "Hide archived",
+        "showArchived": "Show archived ({{count}})"
+      },
+      "format": {
+        "manualPrimary": "~1 rebuild per refresh ≈ {{cost}}",
+        "manualNote": "Manual cards only cost tokens when you press Refresh.",
+        "everyInterval": "every {{interval}} min",
+        "upToPerHour": "up to {{perHour}}/hour",
+        "primary": "Up to ~{{effective}} updates/day ({{cadence}}) ≈ {{cost}}",
+        "primaryWithinHours": "Up to ~{{effective}} updates/day ({{cadence}} during active hours) ≈ {{cost}}",
+        "cappedNote": "Capped by your {{cap}} daily token cap — the card pauses when it's hit.",
+        "reactiveNote": "Only runs when something changed; a cheap no-op check otherwise.",
+        "tokenSplit": "{{input}} in / {{output}} out",
+        "kind": {
+          "compile": "compile",
+          "full": "full rebuild",
+          "incremental": "incremental"
+        }
+      },
+      "timeline": {
+        "chooseRange": "Choose a start and end date.",
+        "startBeforeEnd": "Start date must be before end date.",
+        "legend": {
+          "delegated": "Delegated",
+          "automation": "Automation",
+          "now": "Now"
+        },
+        "stats": {
+          "runTime": "Run time",
+          "tokensUsed": "Tokens used",
+          "notTracked": "Not tracked"
+        },
+        "projectTimeline": "Project Timeline",
+        "breadcrumb": "Timeline",
+        "selectCompany": "Select an organization to view its work timeline.",
+        "workTimeline": "Work Timeline",
+        "range": "Range",
+        "days7": "7 days",
+        "days30": "30 days",
+        "startDate": "Timeline start date",
+        "to": "to",
+        "endDate": "Timeline end date",
+        "zoomControls": "Timeline zoom controls",
+        "zoomOut": "Zoom out",
+        "zoomIn": "Zoom in",
+        "resetZoom": "Reset zoom",
+        "loadFailed": "Couldn't load the timeline. The aggregation endpoint may be unavailable.",
+        "noProjectActivity": "No project activity in this window.",
+        "noActivity": "No activity in this window.",
+        "footerOne": "1 run · {{from}} to {{to}}",
+        "footerMany": "{{count}} runs · {{from}} to {{to}}",
+        "windowCapped": " · window capped"
+      },
+      "auditNavigation": {
+        "budgets": "Budgets"
+      },
+      "auditHub": {
+        "selectCompany": "Select an organization to view Audit.",
+        "description": "Review what happened, inspect agent runs, and understand the costs and budget controls behind your organization."
+      },
+      "auditRuns": {
+        "routineRun": "Routine run",
+        "loadingRoutineRuns": "Loading routine runs…",
+        "noRoutineRuns": "No routine runs yet.",
+        "routineRuns": "Routine runs",
+        "routineRunsDescription": "Executions created by this routine, newest first.",
+        "showingRoutineRuns": "Showing the {{count}} most recent routine runs.",
+        "description": "Recent agent executions across the organization. Open a run to inspect its transcript, output, and task context.",
+        "allAgents": "All agents",
+        "allStatuses": "All statuses",
+        "loadingRuns": "Loading runs…",
+        "loadFailed": "Failed to load runs.",
+        "noMatches": "No runs match these filters.",
+        "noRuns": "No runs yet.",
+        "recentRuns": "Recent runs",
+        "sourceRun": "{{source}} run",
+        "showingRuns": "Showing the {{count}} most recent runs."
+      },
+      "auditFeed": {
+        "domain": {
+          "all": "All actions",
+          "goals": "Goals",
+          "appsTools": "Apps & tools"
+        },
+        "entity": {
+          "all": "All entities",
+          "goal": "Goal"
+        },
+        "company": "Company",
+        "actor": {
+          "plugin": "Plugin"
+        },
+        "theTask": "the task",
+        "theConnection": "the connection",
+        "aUser": "a user",
+        "documentKey": "Document <code>{{key}}</code>",
+        "onBehalfOf": "on behalf of {{name}}",
+        "viewRun": "View run",
+        "upsellTitle": "Agent audit is a Paperclip Enterprise view",
+        "upsellBody": "The agent audit log gives you a searchable, exportable record of everything your agents did — every comment, task change, approval, and run — with the responsible person for each action. Ask an administrator to grant you the <code>audit:view_agent_actions</code> permission to view it.",
+        "exported": "Audit exported",
+        "exportedBody": "Your CSV download has started.",
+        "exportFailed": "Export failed",
+        "exportFailedBody": "Could not export the audit log.",
+        "agentsDescription": "Every recorded agent action, newest first — with the responsible person and run behind each one.",
+        "allDescriptionOrg": "Everything happening in your organization, newest first — people, agents, and the system. Each line is one recorded action.",
+        "allDescriptionCompany": "Everything happening in your company, newest first — people, agents, and the system. Each line is one recorded action.",
+        "activityScope": "Activity scope",
+        "allActivity": "All activity",
+        "agentActions": "Agent actions",
+        "agentActionsTitle": "Agent Actions",
+        "agentActionsRequiresAccess": "Agent Actions requires audit access",
+        "scopedToRun": "Scoped to run {{id}}",
+        "scopedToAgent": "Scoped to one agent",
+        "scopedTo": "Scoped to {{label}}",
+        "entityFallback": "entity",
+        "responsibleUser": "Responsible user",
+        "allResponsibleUsers": "All responsible users",
+        "entityLabel": "Entity",
+        "from": "From",
+        "to": "To",
+        "fromDate": "From date",
+        "toDate": "To date",
+        "exporting": "Exporting…",
+        "exportCsv": "Export CSV",
+        "refreshingAccess": "Refreshing audit access…",
+        "loadFailed": "Failed to load the audit log.",
+        "noMatches": "No actions match these filters",
+        "nothingYet": "Nothing here yet",
+        "noMatchesHint": "Try a wider date range or different filters.",
+        "emptyAgents": "As soon as your agents start doing things, their actions show up here.",
+        "emptyAllOrg": "As soon as anyone in your organization does something, it shows up here.",
+        "emptyAllCompany": "As soon as anyone in your company does something, it shows up here.",
+        "auditActivity": "Audit activity",
+        "footer": "Recorded by Paperclip — entries can't be edited. Sensitive values are never stored."
+      },
+      "teamCatalog": {
+        "trust": {
+          "markdownOnly": {
+            "label": "Markdown only",
+            "tip": "Contains only markdown and references. No executable content."
+          },
+          "assets": {
+            "label": "Assets",
+            "tip": "Includes static assets (images, fixtures). No executable content."
+          },
+          "scripts": {
+            "label": "Scripts",
+            "tip": "Includes executable scripts that were security-reviewed before bundling."
+          },
+          "external": {
+            "label": "External sources",
+            "tip": "References external sources resolved at install time."
+          }
+        },
+        "compat": {
+          "compatible": "Compatible",
+          "unknown": "Unknown compat",
+          "invalid": "Invalid"
+        },
+        "provenance": "Catalog package provenance",
+        "referencesOne": "This team references 1 external source",
+        "referencesMany": "This team references {{count}} external sources",
+        "unsupportedLower": "unsupported in browser install",
+        "unpinnedLower": "unpinned",
+        "rootAgent": "root agent",
+        "noAgents": "No agents in this team.",
+        "noRequiredSkills": "No required skills.",
+        "resolved": "resolved",
+        "external": "external",
+        "secretsEnv": "Secrets & env inputs",
+        "requiredLower": "required",
+        "externalSourcesCount": "External sources · {{count}}",
+        "pinned": "Pinned",
+        "unpinned": "Unpinned",
+        "unsupported": "Unsupported in browser install",
+        "reinstallLatest": "Re-install latest",
+        "installTeam": "Install team",
+        "invalidManifest": "This team cannot be installed — the package manifest is invalid.",
+        "requiresPermission": "Requires board operator or agent-create permissions.",
+        "requiredSkills": "Required skills",
+        "agentHierarchy": "Agent hierarchy",
+        "steps": {
+          "targetManager": "Target manager",
+          "sourcePolicy": "Source policy",
+          "skillPlan": "Prerequisite skills",
+          "preview": "Preview"
+        },
+        "previewFailed": "Failed to load install preview.",
+        "installFailedMessage": "Install failed.",
+        "enableLegacyAdapterError": "Enable a legacy adapter before installing this team.",
+        "installName": "Install {{name}}",
+        "stepOf": "Step {{step}} of {{total}} · {{label}}",
+        "installFailed": "Install failed",
+        "partialState": "Partial state is not rolled back. Review the organization activity log before retrying.",
+        "blockedOne": "Install blocked: 1 error",
+        "blockedMany": "Install blocked: {{count}} errors",
+        "secretsMissing": "Required secrets missing: {{count}}",
+        "enableLegacyAdapter": "Enable a legacy adapter to install this team",
+        "confirmExecutables": "Confirm — install with executables",
+        "installExecutables": "Install with executables",
+        "targetManagerHelp": "This team's root agents need a manager in your organization. Pick the agent who will become their parent. Internal team hierarchy is preserved.",
+        "rootAgents": "Root agents",
+        "searchAgents": "Search agents…",
+        "fullOrgPackage": "Use this team as a full-organization package (no target manager)",
+        "reviewSourcesOne": "This team references 1 external source. Review each one and decide what to allow before continuing.",
+        "reviewSourcesMany": "This team references {{count}} external sources. Review each one and decide what to allow before continuing.",
+        "pinnedLower": "pinned",
+        "unpinnedReference": "unpinned reference",
+        "notInstallable": "not installable from the browser",
+        "policy": {
+          "external": {
+            "label": "Allow external sources",
+            "description": "Resolve github/url skill and team sources at install time."
+          },
+          "unpinned": {
+            "label": "Allow unpinned optional sources",
+            "description": "Permit optional sources that are not pinned to a ref or checksum."
+          },
+          "localPath": {
+            "label": "Allow local-path sources",
+            "description": "Required for local_path / agent_package sources. Development use only."
+          }
+        },
+        "localPathHint": "This team has local-path sources. Enable “Allow local-path sources” to continue, or install it from the CLI.",
+        "skillAction": {
+          "bundled": "Bundled in package",
+          "catalog": "Will install from catalog",
+          "external": "Will import from source"
+        },
+        "skillPlanHelp": "Before agents are imported, the catalog resolves the skills they depend on. This is the resolution plan.",
+        "preparingPreview": "Preparing preview…",
+        "starterTasks": "Starter tasks",
+        "collisionStrategy": "Collision strategy",
+        "renameCollisions": "Rename collisions",
+        "skipCollisions": "Skip collisions",
+        "installBlocked": "Install blocked",
+        "section": {
+          "agents": "Agents · {{count}}",
+          "projects": "Projects · {{count}}",
+          "starterTasks": "Starter tasks · {{count}}",
+          "adapters": "Adapter selection · {{count}}",
+          "secrets": "Secrets & env inputs · {{count}}"
+        },
+        "noLegacyAdapter": "No enabled legacy adapter",
+        "adapterHelp": "Each imported agent defaults to its package adapter; override here before install. Deeper per-adapter model config is editable on the agent after install.",
+        "requiredPlaceholder": "Required",
+        "inputValue": "{{key}} value",
+        "hideKey": "Hide {{key}}",
+        "showKey": "Show {{key}}",
+        "hideValue": "Hide value",
+        "showValue": "Show value",
+        "provenanceNote": "Imported entities are stamped with <code>metadata.paperclip.catalogTeam</code> ({{name}}, content hash <code>{{hash}}…</code>), and an activity event is recorded for preview and install.",
+        "installing": "Installing {{name}}…",
+        "installingHelp": "Resolving skills, importing agents, projects, and routines. This may take a moment.",
+        "teamInstalled": "Team installed",
+        "importedInto": "{{name}} was imported into your organization. Imported entities are stamped with catalog provenance.",
+        "agentsImported": "Agents imported",
+        "projectsImported": "Projects imported",
+        "skillsResolved": "Skills resolved",
+        "viewAgents": "View imported agents →",
+        "viewProjects": "View imported projects →",
+        "viewRoutines": "View routines →",
+        "viewActivity": "View activity log →",
+        "outOfDate": "Update available — installed team is out of date",
+        "hasExternalSources": "Has external sources",
+        "count": {
+          "agentOne": "1 agent",
+          "agentMany": "{{count}} agents",
+          "projectOne": "1 project",
+          "projectMany": "{{count}} projects",
+          "routineOne": "1 routine",
+          "routineMany": "{{count}} routines"
+        },
+        "orgChart": "Org Chart",
+        "teams": "Teams",
+        "selectCompany": "Select an organization to browse the team catalog.",
+        "searchTeams": "Search teams",
+        "kind": {
+          "label": "Kind",
+          "all": "All kinds",
+          "bundled": "Bundled"
+        },
+        "category": {
+          "label": "Category",
+          "all": "All categories",
+          "selected": "Category · {{category}}"
+        },
+        "risk": {
+          "label": "Risk",
+          "any": "Any risk",
+          "safe": "Safe only",
+          "warnings": "Has warnings"
+        },
+        "resetFilters": "Reset filters",
+        "loadFailed": "Failed to load team catalog.",
+        "noCatalog": "No team catalog configured.",
+        "noMatches": "No teams match this filter.",
+        "group": {
+          "bundled": "Bundled · {{count}}",
+          "optional": "Optional · {{count}}",
+          "installed": "Installed · {{count}}"
+        },
+        "backToCatalog": "Back to catalog",
+        "selectTeam": "Select a team to view details.",
+        "wasImported": "{{name}} was imported."
+      }
     }
   }
 }

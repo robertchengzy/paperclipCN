@@ -6171,6 +6171,408 @@
         "instructions": "技能说明",
         "instructionsEmpty": "技能说明为空。"
       }
+    },
+    "reports": {
+      "statusCardDetailDrawer": {
+        "refreshQueued": "已排队刷新，Summarizer 正在更新此卡片。",
+        "refreshFailed": "无法刷新卡片。",
+        "runQueued": "已排队运行，Summarizer 正在更新此卡片。",
+        "runFailed": "无法运行卡片。",
+        "saveFailed": "无法保存设置。",
+        "untitledCard": "未命名卡片",
+        "settingUp": "设置中…",
+        "running": "运行中…",
+        "refreshing": "刷新中…",
+        "updatedAgo": "更新于 {{time}}",
+        "noSummaryYet": "暂无摘要",
+        "tabs": {
+          "summary": "摘要",
+          "watched": "关注的任务"
+        },
+        "headsUp": "注意",
+        "workingOnIt": "处理中",
+        "selectRevision": "选择摘要版本",
+        "revisionLatest": "版本 {{number}} · 最新",
+        "revisionOption": "版本 {{number}} · {{kind}} · {{time}}",
+        "revisionHeading": "版本 {{number}} · {{kind}} · {{time}}",
+        "fullSummaryUnavailable": "此版本的完整摘要文本不可用，当前显示其变更摘要。下方已整合的变更是此版本的实时记录。",
+        "noChangeSummary": "此版本未记录变更摘要。",
+        "setupRunning": "设置中，完成后会自动生成第一份摘要。",
+        "setupStalled": "设置未完成。请立即运行以重试。",
+        "viewSetupTask": "查看设置任务",
+        "noSummaryPending": "暂无摘要，此卡片设置完成后会自动生成第一份摘要。",
+        "integratedRevisionOne": "此版本已整合（1 项变更）",
+        "integratedRevisionMany": "此版本已整合（{{count}} 项变更）",
+        "integratedUpdateOne": "本次更新已整合（1 项变更）",
+        "integratedUpdateMany": "本次更新已整合（{{count}} 项变更）",
+        "loadingHistory": "正在加载历史…",
+        "noUpdates": "暂无更新记录。",
+        "todayOne": "今日：{{count}} 次更新 · {{tokens}} · {{cost}}",
+        "todayMany": "今日：{{count}} 次更新 · {{tokens}} · {{cost}}",
+        "dailyCapSuffix": " · 每日上限 {{cap}}",
+        "changesSuffix": " · {{count}} 项变更",
+        "watchedSettingUp": "此卡片仍在设置中，就绪后会在这里显示它关注的任务。",
+        "matchingIssues": "正在匹配任务…",
+        "matchedLoadFailed": "无法加载匹配的任务",
+        "cardName": "卡片名称",
+        "cardNamePlaceholder": "根据查询自动命名",
+        "interestLabel": "此卡片关注和报告的内容",
+        "interestHelp": "这条消息驱动整张卡片：智能体据此编译关注查询，并在每次更新时按它执行。修改后会重建卡片。",
+        "queryDebug": "查询调试",
+        "compiledBy": "由 Summarizer 编译于 {{time}} · 版本 {{version}}。修改上方的“此卡片关注的内容”即可重建。",
+        "notCompiled": "尚未编译。卡片设置完成后会自动构建查询。",
+        "noMatches": "编译后的查询当前没有匹配任何任务。",
+        "mentionedLatest": "最新更新中提及",
+        "changeKind": {
+          "matched": "新任务匹配了查询",
+          "left": "已移出查询"
+        }
+      },
+      "statusCardTile": {
+        "noSummaryYetLower": "暂无摘要",
+        "newCard": "新卡片",
+        "cardActions": "卡片操作",
+        "openDetail": "打开详情",
+        "refreshNow": "立即刷新",
+        "editInterest": "编辑关注内容和设置",
+        "settingUpCard": "正在设置卡片…",
+        "setupDidntFinish": "设置未完成",
+        "starting": "启动中…",
+        "integratingOne": "正在整合 1 项变更…",
+        "integratingMany": "正在整合 {{count}} 项变更…",
+        "updatingNow": "正在更新…",
+        "viewUpdateTask": "查看更新任务",
+        "changesSinceOne": "上次更新后有 1 项变更",
+        "changesSinceMany": "上次更新后有 {{count}} 项变更",
+        "lastUpdateFailed": "上次更新失败",
+        "pausedBudget": "已达每日 token 上限，自动更新已暂停",
+        "pausedHours": "不在活跃时段，自动更新已暂停",
+        "showingLastGood": "显示上一份正常摘要：",
+        "compilingHint": "运行期间可以添加指令并选择更新策略。",
+        "noSummaryYet": "暂无摘要。",
+        "footerSettingUp": "设置中 · 第一份摘要待生成",
+        "refreshCard": "刷新卡片"
+      },
+      "summarizerAgentSelect": {
+        "default": "Summarizer（默认）",
+        "searchAgents": "搜索智能体…"
+      },
+      "statusCards": {
+        "title": "状态",
+        "archiveFailed": "无法归档卡片。",
+        "restoreFailed": "无法恢复卡片。",
+        "todayCost": "今日：{{tokens}} · 约 {{cost}}",
+        "loadingCards": "正在加载卡片…",
+        "loadFailed": "无法加载状态卡片",
+        "emptyTitle": "暂无状态卡片",
+        "emptyMessage": "创建一张卡片，持续汇总你关心的任务。",
+        "hideArchived": "隐藏已归档",
+        "showArchived": "显示已归档（{{count}}）"
+      },
+      "format": {
+        "manualPrimary": "每次刷新约重建 1 次 ≈ {{cost}}",
+        "manualNote": "手动卡片只在点击刷新时消耗 token。",
+        "everyInterval": "每 {{interval}} 分钟",
+        "upToPerHour": "最多每小时 {{perHour}} 次",
+        "primary": "每天最多约 {{effective}} 次更新（{{cadence}}）≈ {{cost}}",
+        "primaryWithinHours": "每天最多约 {{effective}} 次更新（{{cadence}}，仅活跃时段）≈ {{cost}}",
+        "cappedNote": "受 {{cap}} 每日 token 上限约束，达到上限后卡片会暂停。",
+        "reactiveNote": "仅在有变化时运行；否则只做一次低成本的空检查。",
+        "tokenSplit": "输入 {{input}} / 输出 {{output}}",
+        "kind": {
+          "compile": "编译",
+          "full": "完整重建",
+          "incremental": "增量"
+        }
+      },
+      "timeline": {
+        "chooseRange": "请选择开始和结束日期。",
+        "startBeforeEnd": "开始日期必须早于结束日期。",
+        "legend": {
+          "delegated": "委派",
+          "automation": "自动化",
+          "now": "现在"
+        },
+        "stats": {
+          "runTime": "运行时长",
+          "tokensUsed": "已用 token",
+          "notTracked": "未统计"
+        },
+        "projectTimeline": "项目时间线",
+        "breadcrumb": "时间线",
+        "selectCompany": "请选择一个组织以查看其工作时间线。",
+        "workTimeline": "工作时间线",
+        "range": "范围",
+        "days7": "7 天",
+        "days30": "30 天",
+        "startDate": "时间线开始日期",
+        "to": "至",
+        "endDate": "时间线结束日期",
+        "zoomControls": "时间线缩放控件",
+        "zoomOut": "缩小",
+        "zoomIn": "放大",
+        "resetZoom": "重置缩放",
+        "loadFailed": "无法加载时间线。聚合端点可能不可用。",
+        "noProjectActivity": "此时间范围内没有项目活动。",
+        "noActivity": "此时间范围内没有活动。",
+        "footerOne": "1 次运行 · {{from}} 至 {{to}}",
+        "footerMany": "{{count}} 次运行 · {{from}} 至 {{to}}",
+        "windowCapped": " · 时间范围已截断"
+      },
+      "auditNavigation": {
+        "budgets": "预算"
+      },
+      "auditHub": {
+        "selectCompany": "请选择一个组织以查看审计。",
+        "description": "回顾发生了什么、检查智能体运行，并了解组织背后的成本和预算控制。"
+      },
+      "auditRuns": {
+        "routineRun": "例程运行",
+        "loadingRoutineRuns": "正在加载例程运行…",
+        "noRoutineRuns": "暂无例程运行。",
+        "routineRuns": "例程运行",
+        "routineRunsDescription": "此例程创建的执行记录，最新的在前。",
+        "showingRoutineRuns": "显示最近 {{count}} 次例程运行。",
+        "description": "组织内最近的智能体执行记录。打开一次运行可查看其记录、输出和任务上下文。",
+        "allAgents": "全部智能体",
+        "allStatuses": "全部状态",
+        "loadingRuns": "正在加载运行…",
+        "loadFailed": "加载运行失败。",
+        "noMatches": "没有符合筛选条件的运行。",
+        "noRuns": "暂无运行。",
+        "recentRuns": "最近运行",
+        "sourceRun": "{{source}} 运行",
+        "showingRuns": "显示最近 {{count}} 次运行。"
+      },
+      "auditFeed": {
+        "domain": {
+          "all": "全部操作",
+          "goals": "目标",
+          "appsTools": "应用和工具"
+        },
+        "entity": {
+          "all": "全部实体",
+          "goal": "目标"
+        },
+        "company": "组织",
+        "actor": {
+          "plugin": "插件"
+        },
+        "theTask": "该任务",
+        "theConnection": "该连接",
+        "aUser": "某位用户",
+        "documentKey": "文档 <code>{{key}}</code>",
+        "onBehalfOf": "代表 {{name}}",
+        "viewRun": "查看运行",
+        "upsellTitle": "智能体审计是 Paperclip Enterprise 视图",
+        "upsellBody": "智能体审计日志提供可搜索、可导出的记录，涵盖智能体做过的每件事（每条评论、任务变更、审批和运行），并标明每项操作的负责人。请让管理员授予 <code>audit:view_agent_actions</code> 权限后查看。",
+        "exported": "审计已导出",
+        "exportedBody": "CSV 下载已开始。",
+        "exportFailed": "导出失败",
+        "exportFailedBody": "无法导出审计日志。",
+        "agentsDescription": "所有已记录的智能体操作，最新的在前，并附有每项操作的负责人和对应运行。",
+        "allDescriptionOrg": "组织内发生的一切，最新的在前，包括人员、智能体和系统。每一行是一条已记录的操作。",
+        "allDescriptionCompany": "组织内发生的一切，最新的在前，包括人员、智能体和系统。每一行是一条已记录的操作。",
+        "activityScope": "活动范围",
+        "allActivity": "全部活动",
+        "agentActions": "智能体操作",
+        "agentActionsTitle": "智能体操作",
+        "agentActionsRequiresAccess": "智能体操作需要审计权限",
+        "scopedToRun": "仅限运行 {{id}}",
+        "scopedToAgent": "仅限单个智能体",
+        "scopedTo": "仅限 {{label}}",
+        "entityFallback": "实体",
+        "responsibleUser": "负责人",
+        "allResponsibleUsers": "全部负责人",
+        "entityLabel": "实体",
+        "from": "开始",
+        "to": "结束",
+        "fromDate": "开始日期",
+        "toDate": "结束日期",
+        "exporting": "导出中…",
+        "exportCsv": "导出 CSV",
+        "refreshingAccess": "正在刷新审计权限…",
+        "loadFailed": "加载审计日志失败。",
+        "noMatches": "没有符合筛选条件的操作",
+        "nothingYet": "暂无内容",
+        "noMatchesHint": "请尝试扩大日期范围或更换筛选条件。",
+        "emptyAgents": "智能体开始工作后，它们的操作会显示在这里。",
+        "emptyAllOrg": "组织内任何人有操作后，都会显示在这里。",
+        "emptyAllCompany": "组织内任何人有操作后，都会显示在这里。",
+        "auditActivity": "审计活动",
+        "footer": "由 Paperclip 记录，条目不可编辑，且从不存储敏感值。"
+      },
+      "teamCatalog": {
+        "trust": {
+          "markdownOnly": {
+            "label": "仅 Markdown",
+            "tip": "仅包含 Markdown 和引用，没有可执行内容。"
+          },
+          "assets": {
+            "label": "资源",
+            "tip": "包含静态资源（图片、测试数据），没有可执行内容。"
+          },
+          "scripts": {
+            "label": "脚本",
+            "tip": "包含在打包前经过安全审查的可执行脚本。"
+          },
+          "external": {
+            "label": "外部来源",
+            "tip": "引用在安装时解析的外部来源。"
+          }
+        },
+        "compat": {
+          "compatible": "兼容",
+          "unknown": "兼容性未知",
+          "invalid": "无效"
+        },
+        "provenance": "目录包来源",
+        "referencesOne": "此团队引用了 1 个外部来源",
+        "referencesMany": "此团队引用了 {{count}} 个外部来源",
+        "unsupportedLower": "浏览器安装不支持",
+        "unpinnedLower": "未固定",
+        "rootAgent": "根智能体",
+        "noAgents": "此团队没有智能体。",
+        "noRequiredSkills": "没有必需的技能。",
+        "resolved": "已解析",
+        "external": "外部",
+        "secretsEnv": "密钥和环境输入",
+        "requiredLower": "必填",
+        "externalSourcesCount": "外部来源 · {{count}}",
+        "pinned": "已固定",
+        "unpinned": "未固定",
+        "unsupported": "浏览器安装不支持",
+        "reinstallLatest": "重新安装最新版",
+        "installTeam": "安装团队",
+        "invalidManifest": "无法安装此团队：包清单无效。",
+        "requiresPermission": "需要管理员操作员或创建智能体权限。",
+        "requiredSkills": "必需技能",
+        "agentHierarchy": "智能体层级",
+        "steps": {
+          "targetManager": "目标上级",
+          "sourcePolicy": "来源策略",
+          "skillPlan": "前置技能",
+          "preview": "预览"
+        },
+        "previewFailed": "加载安装预览失败。",
+        "installFailedMessage": "安装失败。",
+        "enableLegacyAdapterError": "请先启用一个旧版适配器，再安装此团队。",
+        "installName": "安装 {{name}}",
+        "stepOf": "第 {{step}} 步，共 {{total}} 步 · {{label}}",
+        "installFailed": "安装失败",
+        "partialState": "已产生的部分状态不会回滚。重试前请查看组织活动日志。",
+        "blockedOne": "安装受阻：1 个错误",
+        "blockedMany": "安装受阻：{{count}} 个错误",
+        "secretsMissing": "缺少必需的密钥：{{count}}",
+        "enableLegacyAdapter": "启用一个旧版适配器以安装此团队",
+        "confirmExecutables": "确认：安装并包含可执行内容",
+        "installExecutables": "安装并包含可执行内容",
+        "targetManagerHelp": "此团队的根智能体需要在组织中有一位上级。请选择将成为其上级的智能体。团队内部层级会保留。",
+        "rootAgents": "根智能体",
+        "searchAgents": "搜索智能体…",
+        "fullOrgPackage": "将此团队作为完整组织包使用（不设目标上级）",
+        "reviewSourcesOne": "此团队引用了 1 个外部来源。继续前请逐一检查并决定允许哪些。",
+        "reviewSourcesMany": "此团队引用了 {{count}} 个外部来源。继续前请逐一检查并决定允许哪些。",
+        "pinnedLower": "已固定",
+        "unpinnedReference": "未固定的引用",
+        "notInstallable": "无法从浏览器安装",
+        "policy": {
+          "external": {
+            "label": "允许外部来源",
+            "description": "在安装时解析 github/url 技能和团队来源。"
+          },
+          "unpinned": {
+            "label": "允许未固定的可选来源",
+            "description": "允许未固定到 ref 或校验和的可选来源。"
+          },
+          "localPath": {
+            "label": "允许本地路径来源",
+            "description": "local_path / agent_package 来源需要此项。仅限开发使用。"
+          }
+        },
+        "localPathHint": "此团队包含本地路径来源。请启用“允许本地路径来源”后继续，或通过 CLI 安装。",
+        "skillAction": {
+          "bundled": "已打包在包内",
+          "catalog": "将从目录安装",
+          "external": "将从来源导入"
+        },
+        "skillPlanHelp": "导入智能体前，目录会先解析它们依赖的技能。以下是解析计划。",
+        "preparingPreview": "正在准备预览…",
+        "starterTasks": "初始任务",
+        "collisionStrategy": "冲突策略",
+        "renameCollisions": "重命名冲突项",
+        "skipCollisions": "跳过冲突项",
+        "installBlocked": "安装受阻",
+        "section": {
+          "agents": "智能体 · {{count}}",
+          "projects": "项目 · {{count}}",
+          "starterTasks": "初始任务 · {{count}}",
+          "adapters": "适配器选择 · {{count}}",
+          "secrets": "密钥和环境输入 · {{count}}"
+        },
+        "noLegacyAdapter": "没有已启用的旧版适配器",
+        "adapterHelp": "每个导入的智能体默认使用其包内适配器，可在安装前于此处覆盖。更细的适配器模型配置可在安装后到智能体上编辑。",
+        "requiredPlaceholder": "必填",
+        "inputValue": "{{key}} 值",
+        "hideKey": "隐藏 {{key}}",
+        "showKey": "显示 {{key}}",
+        "hideValue": "隐藏值",
+        "showValue": "显示值",
+        "provenanceNote": "导入的实体会标记 <code>metadata.paperclip.catalogTeam</code>（{{name}}，内容哈希 <code>{{hash}}…</code>），预览和安装时都会记录一条活动事件。",
+        "installing": "正在安装 {{name}}…",
+        "installingHelp": "正在解析技能并导入智能体、项目和例程，可能需要一点时间。",
+        "teamInstalled": "团队已安装",
+        "importedInto": "{{name}} 已导入组织。导入的实体已标记目录来源。",
+        "agentsImported": "已导入智能体",
+        "projectsImported": "已导入项目",
+        "skillsResolved": "已解析技能",
+        "viewAgents": "查看已导入的智能体 →",
+        "viewProjects": "查看已导入的项目 →",
+        "viewRoutines": "查看例程 →",
+        "viewActivity": "查看活动日志 →",
+        "outOfDate": "有可用更新：已安装的团队已过时",
+        "hasExternalSources": "包含外部来源",
+        "count": {
+          "agentOne": "1 个智能体",
+          "agentMany": "{{count}} 个智能体",
+          "projectOne": "1 个项目",
+          "projectMany": "{{count}} 个项目",
+          "routineOne": "1 个例程",
+          "routineMany": "{{count}} 个例程"
+        },
+        "orgChart": "组织架构",
+        "teams": "团队",
+        "selectCompany": "请选择一个组织以浏览团队目录。",
+        "searchTeams": "搜索团队",
+        "kind": {
+          "label": "类型",
+          "all": "全部类型",
+          "bundled": "内置"
+        },
+        "category": {
+          "label": "分类",
+          "all": "全部分类",
+          "selected": "分类 · {{category}}"
+        },
+        "risk": {
+          "label": "风险",
+          "any": "任意风险",
+          "safe": "仅安全",
+          "warnings": "有警告"
+        },
+        "resetFilters": "重置筛选",
+        "loadFailed": "加载团队目录失败。",
+        "noCatalog": "未配置团队目录。",
+        "noMatches": "没有符合此筛选条件的团队。",
+        "group": {
+          "bundled": "内置 · {{count}}",
+          "optional": "可选 · {{count}}",
+          "installed": "已安装 · {{count}}"
+        },
+        "backToCatalog": "返回目录",
+        "selectTeam": "请选择一个团队以查看详情。",
+        "wasImported": "{{name}} 已导入。"
+      }
     }
   }
 }
