@@ -7,6 +7,7 @@
  */
 import type { TranscriptEntry } from "@/adapters";
 import { t } from "@/i18n";
+import { taskChatMarkerLabel } from "./marker-label";
 import type {
   TaskChatDiff,
   TaskChatActivityPhaseItem,
@@ -1632,7 +1633,7 @@ function phaseSummary(
     (item) => item.kind === "marker" && item.variant === "interrupted",
   );
   return interrupted?.kind === "marker"
-    ? interrupted.label
+    ? taskChatMarkerLabel(interrupted.label)
     : t("app.taskChat.transcriptAdapter.noToolActivity");
 }
 

@@ -16423,6 +16423,23 @@
       "category": "类别",
       "recoverable": "可恢复",
       "userActionable": "用户可处理"
+    },
+    "reviewMarkers": {
+      "newSession": "新会话",
+      "sessionStarted": "会话已开始",
+      "turnStarted": "轮次已开始",
+      "turnCompleted": "轮次已完成",
+      "interrupted": "已中断",
+      "waitingToResume": "等待恢复",
+      "approvalRequired": "需要审批",
+      "usageLimitReached": "已达到用量上限",
+      "runCancelled": "运行已取消",
+      "runInterrupted": "运行已中断",
+      "runTimedOut": "运行超时",
+      "runFailed": "运行失败",
+      "stopped": "已停止",
+      "couldNotStart": "无法启动",
+      "runCompleted": "运行已完成"
     }
   }
 }

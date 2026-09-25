@@ -1483,7 +1483,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             item: {
               id, kind: "marker", variant: "interrupted", tone: "neutral",
-              label: translate("app.taskChat.taskChatThread.waitingToResume.label"),
+              label: "Waiting to resume",
               detail: translate("app.taskChat.taskChatThread.waitingToResume.detail"),
             },
           });
@@ -1569,16 +1569,16 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             : "native_runner_process_exited");
         const label =
           code === "native_provider_approval_required" && source.status === "failed"
-            ? translate("app.taskChat.taskChatThread.nativeStop.approvalRequired")
+            ? "Approval required"
             : code === "native_provider_usage_limit" && source.status === "failed"
-            ? translate("app.taskChat.taskChatThread.nativeStop.usageLimitReached")
+            ? "Usage limit reached"
             : source.status === "cancelled"
-              ? translate("app.taskChat.taskChatThread.nativeStop.runCancelled")
+              ? "Run cancelled"
               : source.status === "interrupted"
-                ? translate("app.taskChat.taskChatThread.nativeStop.runInterrupted")
+                ? "Run interrupted"
                 : source.status === "timed_out"
-                  ? translate("app.taskChat.taskChatThread.nativeStop.runTimedOut")
-                  : translate("app.taskChat.taskChatThread.nativeStop.runFailed");
+                  ? "Run timed out"
+                  : "Run failed";
         const afterResponse = sourceHasNativeResponse;
         const detail =
           source.status === "cancelled"
@@ -1667,7 +1667,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "interrupted",
-            label: source.status === "cancelled" ? (meta?.startedAt ? translate("app.common.states.stopped") : translate("app.taskChat.taskChatThread.legacyStop.couldNotStart")) : translate("app.taskChat.taskChatThread.nativeStop.runFailed"),
+            label: source.status === "cancelled" ? (meta?.startedAt ? "Stopped" : "Couldn't start") : "Run failed",
             runId: source.status === "cancelled" ? undefined : source.id,
             tone: source.status === "cancelled" ? "neutral" : "error",
             detail,
@@ -1735,7 +1735,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
               id,
               kind: "marker",
               variant: "turn_boundary",
-              label: source.status === "cancelled" ? translate("app.common.states.stopped") : translate("app.taskChat.taskChatThread.runCompleted"),
+              label: source.status === "cancelled" ? "Stopped" : "Run completed",
               detail: source.status === "cancelled" ? translate("app.taskChat.taskChatThread.turnCancelled") : translate("app.taskChat.taskChatThread.noUserFacingResponse"),
             },
           });
@@ -1767,7 +1767,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "turn_boundary",
-            label: translate("app.taskChat.taskChatThread.runCompleted"),
+            label: "Run completed",
             detail: translate("app.taskChat.taskChatThread.noUserFacingResponse"),
           },
         });

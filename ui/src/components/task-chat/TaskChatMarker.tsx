@@ -1,3 +1,4 @@
+import { taskChatMarkerLabel } from "./marker-label";
 import { useId, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronDown, CircleDot, OctagonX, Square, Flag } from "lucide-react";
@@ -29,6 +30,7 @@ export function TaskChatMarker({
   tryAgainPending?: boolean;
 }) {
   const { t } = useTranslation();
+  const label = taskChatMarkerLabel(item.label);
   const [open, setOpen] = useState(false);
   const detailsId = useId();
   const streamlined = useStreamlinedTaskChatPresentation();
@@ -61,7 +63,7 @@ export function TaskChatMarker({
             )}
           >
             <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
-            <span className="truncate font-medium">{item.label}</span>
+            <span className="truncate font-medium">{label}</span>
             {relative ? (
               <span className="shrink-0 text-muted-foreground/70">
                 · {relative}
@@ -129,7 +131,7 @@ export function TaskChatMarker({
     <div
       className="tc-enter-marker flex items-center gap-2 py-1 text-xs text-muted-foreground"
       role={streamlined ? "separator" : undefined}
-      aria-label={streamlined ? item.label : undefined}
+      aria-label={streamlined ? label : undefined}
     >
       <span
         className={cn(
@@ -146,7 +148,7 @@ export function TaskChatMarker({
         )}
       >
         <Icon className="h-3.5 w-3.5" />
-        <span className="font-medium">{item.label}</span>
+        <span className="font-medium">{label}</span>
         {item.detail ? (
           <span className="text-muted-foreground">· {item.detail}</span>
         ) : null}

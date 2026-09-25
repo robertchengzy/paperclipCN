@@ -71,7 +71,7 @@ export function commentsToTaskChatItems(
   for (const comment of comments) {
     if (comment.deletedAt) continue;
     if (comment.conversationSessionGeneration != null) {
-      items.push({ id: comment.id, kind: "marker", variant: "session_start", label: t("app.taskChat.taskChatAdapter.newSession"),
+      items.push({ id: comment.id, kind: "marker", variant: "session_start", label: "New session",
         detail: t("app.taskChat.taskChatAdapter.earlierMessagesAvailable"), createdAtIso: new Date(comment.createdAt).toISOString() });
       continue;
     }

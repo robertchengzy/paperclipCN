@@ -16423,6 +16423,23 @@
       "category": "Category",
       "recoverable": "Recoverable",
       "userActionable": "User Actionable"
+    },
+    "reviewMarkers": {
+      "newSession": "New session",
+      "sessionStarted": "Session started",
+      "turnStarted": "Turn started",
+      "turnCompleted": "Turn completed",
+      "interrupted": "Interrupted",
+      "waitingToResume": "Waiting to resume",
+      "approvalRequired": "Approval required",
+      "usageLimitReached": "Usage limit reached",
+      "runCancelled": "Run cancelled",
+      "runInterrupted": "Run interrupted",
+      "runTimedOut": "Run timed out",
+      "runFailed": "Run failed",
+      "stopped": "Stopped",
+      "couldNotStart": "Couldn't start",
+      "runCompleted": "Run completed"
     }
   }
 }
