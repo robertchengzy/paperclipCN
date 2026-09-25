@@ -12,6 +12,7 @@ import {
   issueAgeBucketsCrossed,
   issueAgeSeparatorLabel,
 } from "./IssuesList";
+import { setUiLanguage } from "@/i18n";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { taskCollectionPreferencesStorageKey } from "../lib/task-collection-preferences";
 
@@ -127,6 +128,7 @@ vi.mock("./IssueRow", () => ({
     desktopMetaLeading,
     desktopTrailing,
     titleClassName,
+    titleSuffix,
     checklistStepNumber,
     checklistCurrentStep,
     checklistDependencyChips,
@@ -142,6 +144,7 @@ vi.mock("./IssueRow", () => ({
     desktopMetaLeading?: ReactNode;
     desktopTrailing?: ReactNode;
     titleClassName?: string;
+    titleSuffix?: ReactNode;
     checklistStepNumber?: number | string | null;
     checklistCurrentStep?: boolean;
     checklistDependencyChips?: ReactNode;
@@ -166,6 +169,7 @@ vi.mock("./IssueRow", () => ({
       data-title-class={titleClassName ?? undefined}
     >
       <span>{issue.title}</span>
+      {titleSuffix}
       {leadingControl}
       {externalObjectSummary ? (
         <span data-testid="external-object-summary">{externalObjectSummary.total}</span>
@@ -373,6 +377,65 @@ describe("IssuesList", () => {
   afterEach(() => {
     vi.useRealTimers();
     container.remove();
+  });
+
+  it.each([
+    { streamlined: true, locale: "en" as const, label: "Paused", nextLocale: "zh-CN" as const, nextLabel: "已暂停" },
+    { streamlined: false, locale: "en" as const, label: "Paused", nextLocale: "zh-CN" as const, nextLabel: "已暂停" },
+    { streamlined: true, locale: "zh-CN" as const, label: "已暂停", nextLocale: "en" as const, nextLabel: "Paused" },
+    { streamlined: false, locale: "zh-CN" as const, label: "已暂停", nextLocale: "en" as const, nextLabel: "Paused" },
+  ])("keeps pause semantics independent of $locale badge text (streamlined=$streamlined)", async ({ streamlined, locale, label, nextLocale, nextLabel }) => {
+    mockInstanceSettingsApi.getExperimental.mockResolvedValue({
+      enableIsolatedWorkspaces: false,
+      enableExternalObjects: false,
+      enableStreamlinedUi: streamlined,
+    });
+    await setUiLanguage(locale);
+    const { root, queryClient } = renderWithQueryClient(
+      <IssuesList
+        issues={[
+          createIssue({ id: "held-issue", title: "Held task" }),
+          createIssue({ id: "custom-issue", identifier: "PAP-2", title: "Custom badge task" }),
+          createIssue({ id: "held-custom-issue", identifier: "PAP-3", title: "Held annotated task" }),
+        ]}
+        isLoading={false}
+        agents={[]}
+        projects={[]}
+        viewStateKey="paperclip:test-pause-badges"
+        rowPresentation="task"
+        pausedIssueIds={new Set(["held-issue", "held-custom-issue"])}
+        issueBadgeById={new Map([["custom-issue", label], ["held-custom-issue", "Custom annotation"]])}
+        onUpdateIssue={() => undefined}
+      />,
+      container,
+    );
+    const rowFor = (title: string) => Array.from(container.querySelectorAll('[data-testid="issue-row"]'))
+      .find((row) => row.textContent?.includes(title));
+    const assertBadges = (pausedLabel: string) => {
+      const heldRow = rowFor("Held task");
+      expect(heldRow?.getAttribute("data-presentation")).toBe(streamlined ? "task" : null);
+      const pausedBadge = heldRow?.querySelector('[data-slot="badge"][data-variant="ghost"]');
+      expect(pausedBadge?.getAttribute("aria-label")).toBe(pausedLabel);
+      expect(pausedBadge?.getAttribute("title")).toBe(pausedLabel);
+      expect(pausedBadge?.textContent).toBe(pausedLabel);
+      expect(pausedBadge?.querySelector("svg")).not.toBeNull();
+      const customBadge = rowFor("Custom badge task")?.querySelector('[data-slot="badge"][data-variant="outline"]');
+      expect(customBadge?.textContent).toBe(label);
+      expect(customBadge?.querySelector("svg")).toBeNull();
+      expect(customBadge?.getAttribute("aria-label")).toBeNull();
+      const annotatedRow = rowFor("Held annotated task");
+      expect(annotatedRow?.querySelector('[data-variant="ghost"]')?.textContent).toBe(pausedLabel);
+      expect(annotatedRow?.querySelector('[data-variant="outline"]')?.textContent).toBe("Custom annotation");
+    };
+    try {
+      await waitForAssertion(() => assertBadges(label));
+      await act(() => setUiLanguage(nextLocale));
+      await waitForAssertion(() => assertBadges(nextLabel));
+    } finally {
+      await act(() => root.unmount());
+      queryClient.clear();
+      await setUiLanguage("en");
+    }
   });
 
   it("uses the master list and legacy persistence when Streamlined UI is off", async () => {

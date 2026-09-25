@@ -466,18 +466,14 @@ vi.mock("../components/MarkdownBody", () => ({
 }));
 
 vi.mock("../components/IssuesList", () => ({
-  IssuesList: (props: { issueBadgeById?: Map<string, string> }) => {
+  IssuesList: (props: { pausedIssueIds?: ReadonlySet<string> }) => {
     mockIssuesListRender(props);
     return (
       <div>
         Sub-issues
-        {Array.from(props.issueBadgeById?.entries() ?? []).map(
-          ([issueId, label]) => (
-            <span key={issueId}>
-              {issueId}:{label}
-            </span>
-          ),
-        )}
+        {Array.from(props.pausedIssueIds ?? []).map((issueId) => (
+          <span key={issueId} data-paused-issue-id={issueId} />
+        ))}
       </div>
     );
   },

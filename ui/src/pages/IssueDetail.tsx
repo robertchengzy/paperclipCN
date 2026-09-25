@@ -6719,14 +6719,6 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     }
     return ids;
   }, [childIssues, heldIssueIds]);
-  const childPauseBadgeById = useMemo(() => {
-    const badges = new Map<string, string>();
-    for (const child of childIssues) {
-      if (!heldIssueIds.has(child.id)) continue;
-      badges.set(child.id, t("app.issueDetail.treeControl.pausedBadge"));
-    }
-    return badges;
-  }, [childIssues, heldIssueIds, t]);
   const activePauseHoldRoot = useMemo(() => {
     if (!activePauseHold) return null;
     if (activePauseHold.rootIssueId === issue?.id) return issue ?? null;
@@ -7507,7 +7499,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                 projects={projects}
                 liveIssueIds={liveIssueIds}
                 mutedIssueIds={mutedChildIssueIds}
-                issueBadgeById={childPauseBadgeById}
+                pausedIssueIds={mutedChildIssueIds}
                 projectId={issue.projectId ?? undefined}
                 viewStateKey={`paperclip:issue-detail:${issue.id}:subissues-view`}
                 issueLinkState={resolvedIssueDetailState ?? location.state}

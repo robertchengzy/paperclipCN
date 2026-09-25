@@ -1,4 +1,5 @@
 import { t as translateCopy, useTranslation } from "@/i18n";
+import { IssueListBadge } from "./IssueListBadge";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { startTransition, useDeferredValue, useEffect, useMemo, useState, useCallback, useRef } from "react";
 import type { ReactNode } from "react";
@@ -68,7 +69,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
-import { CircleDot, Plus, ArrowUpDown, Layers, Check, ChevronRight, List, ListTree, User, Search, CircleSlash2, ChevronsDownUp, PanelTopClose, RotateCcw, ListCollapse,
+import { CircleDot, Plus, ArrowUpDown, Layers, Check, ChevronRight, List, ListTree, User, Search, ChevronsDownUp, PanelTopClose, RotateCcw, ListCollapse,
   SquareKanban,
 } from "lucide-react";
 import {
@@ -84,7 +85,6 @@ import { getInboxKeyboardSelectionIndex } from "../lib/inbox";
 import { hasBlockingShortcutDialog, isKeyboardShortcutTextInputTarget } from "../lib/keyboardShortcuts";
 import { useGeneralSettings } from "../context/GeneralSettingsContext";
 import { buildSubIssueDefaultsForViewer } from "../lib/subIssueDefaults";
-import { statusBadge } from "../lib/status-colors";
 import { workflowSort } from "../lib/workflow-sort";
 import { isSuccessfulRunHandoffRequired } from "../lib/successful-run-handoff";
 import { deriveOriginatingActor, ISSUE_STATUSES, type Issue, type IssueStatus, type Project } from "@paperclipai/shared";
@@ -495,6 +495,7 @@ interface IssuesListProps {
   isLoadingMoreIssues?: boolean;
   mutedIssueIds?: Set<string>;
   issueBadgeById?: Map<string, string>;
+  pausedIssueIds?: ReadonlySet<string>;
   onLoadMoreIssues?: () => void;
   onSearchChange?: (search: string) => void;
   onUpdateIssue: (id: string, data: Record<string, unknown>) => void;
@@ -704,6 +705,7 @@ export function IssuesList({
   isLoadingMoreIssues = false,
   mutedIssueIds,
   issueBadgeById,
+  pausedIssueIds,
   onLoadMoreIssues,
   onSearchChange,
   onUpdateIssue,
@@ -2119,22 +2121,10 @@ export function IssuesList({
                                 {totalDescendants === 1 ? translateCopy("app.issueUi.legacyIssuesList.oneSubtask", { count: totalDescendants }) : translateCopy("app.issueUi.legacyIssuesList.manySubtasks", { count: totalDescendants })}
                               </span>
                             ) : null}
-                            {issueBadge ? (
-                              issueBadge === "Paused" ? (
-                                <Badge variant="ghost"
-                                  className={cn("ml-1.5 px-1.5 text-(length:--text-nano)", statusBadge.paused)}
-                                  aria-label={translateCopy("app.issueUi.legacyIssuesList.paused")}
-                                  title={translateCopy("app.issueUi.legacyIssuesList.paused")}
-                                >
-                                  <CircleSlash2 className="h-3 w-3" />
-                                  {translateCopy("app.issueUi.legacyIssuesList.paused")}
-                                </Badge>
-                              ) : (
-                                <Badge variant="outline" className="ml-1.5 border-amber-500/40 bg-amber-500/10 px-1.5 text-(length:--text-nano) text-amber-700 dark:text-amber-300">
-                                  {issueBadge}
-                                </Badge>
-                              )
-                            ) : null}
+                            <IssueListBadge
+                              isPaused={pausedIssueIds?.has(issue.id) ?? false}
+                              label={issueBadge}
+                            />
                             {isSuccessfulRunHandoffRequired(issue) ? (
                               <Badge variant="outline"
                                 className="ml-1.5 border-amber-400/45 bg-amber-50/60 px-1.5 text-(length:--text-nano) text-amber-700 dark:border-amber-300/35 dark:bg-amber-400/10 dark:text-amber-300"

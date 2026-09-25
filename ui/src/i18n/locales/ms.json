@@ -16460,6 +16460,9 @@
       "savedInput": "saved input",
       "adHocPaste": "ad-hoc paste",
       "forkingNamed": "Forking {{name}}"
+    },
+    "reviewIssueBadge": {
+      "paused": "Paused"
     }
   }
 }

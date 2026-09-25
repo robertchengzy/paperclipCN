@@ -16460,6 +16460,9 @@
       "savedInput": "已保存的输入",
       "adHocPaste": "临时粘贴",
       "forkingNamed": "复制自 {{name}}"
+    },
+    "reviewIssueBadge": {
+      "paused": "已暂停"
     }
   }
 }
