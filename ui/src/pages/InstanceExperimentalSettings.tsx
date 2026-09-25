@@ -436,15 +436,15 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
-          title={t("app.settings.instanceExperimentalSettings.cards.enableMcpAggregators.title")}
-          description={t("app.settings.instanceExperimentalSettings.cards.enableMcpAggregators.description")}
-          footnote={t("app.settings.instanceExperimentalSettings.cards.enableMcpAggregators.footnote")}
-          checked={experimentalQuery.data?.enableMcpAggregators === true}
-          onCheckedChange={(checked) => toggleMutation.mutate({ enableMcpAggregators: checked })}
+          title={t("app.settings.instanceExperimentalSettings.cards.enableMemoryConnectors.title")}
+          description={t("app.settings.instanceExperimentalSettings.cards.enableMemoryConnectors.description")}
+          footnote={t("app.settings.instanceExperimentalSettings.cards.enableMemoryConnectors.footnote")}
+          checked={experimentalQuery.data?.enableMemoryConnectors === true}
+          onCheckedChange={(checked) => toggleMutation.mutate({ enableMemoryConnectors: checked })}
           disabled={toggleMutation.isPending}
-          settingKey="enableMcpAggregators"
-          managed={managedKeys.enableMcpAggregators}
-          ariaLabel={t("app.settings.instanceExperimentalSettings.cards.enableMcpAggregators.ariaLabel")}
+          settingKey="enableMemoryConnectors"
+          managed={managedKeys.enableMemoryConnectors}
+          ariaLabel={t("app.settings.instanceExperimentalSettings.cards.enableMemoryConnectors.ariaLabel")}
         />
 
         <ExperimentalToggleCard

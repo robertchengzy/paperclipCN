@@ -165,6 +165,7 @@ export function ConnectionIntentInteractionBody({
 
   const setupProps: ConnectionSetupFlowProps | null = setupQuery.data ? {
     host: "dialog",
+    upstreamServiceName: interaction.payload.upstreamService?.name,
     serviceSlug: interaction.payload.serviceSlug.startsWith("connection:") ? undefined : interaction.payload.serviceSlug,
     configuredConnection: interaction.payload.serviceSlug.startsWith("connection:") ? setupQuery.data.existingConnections[0] : undefined,
     requestedAgentId: setupQuery.data.requestedAgentId,
@@ -183,8 +184,8 @@ export function ConnectionIntentInteractionBody({
     interaction.status === "accepted"
       ? {
           icon: CheckCircle2,
-          title: t("app.connections.connectionIntentInteractionBody.serviceConnected", { service: interaction.payload.serviceName }),
-          body: isAi ? t("app.connections.connectionIntentInteractionBody.agentCanUse") : t("app.connections.connectionIntentInteractionBody.agentCanUseOnContinuation", { agent: interaction.payload.requestingAgentName }),
+          title: interaction.payload.upstreamService ? t("app.connections.connectionIntentInteractionBody.externalProviderConnected") : t("app.connections.connectionIntentInteractionBody.serviceConnected", { service: interaction.payload.serviceName }),
+          body: interaction.payload.upstreamService ? t("app.connections.connectionIntentInteractionBody.upstreamServiceAuthorize", { agent: interaction.payload.requestingAgentName, service: interaction.payload.upstreamService.name }) : isAi ? t("app.connections.connectionIntentInteractionBody.agentCanUse") : t("app.connections.connectionIntentInteractionBody.agentCanUseOnContinuation", { agent: interaction.payload.requestingAgentName }),
         }
       : interaction.status === "rejected"
         ? {

@@ -2987,7 +2987,9 @@
         "continueSetup": "Continue setup",
         "connectOrUseExisting": "Connect / Use existing",
         "dialogDescription": "Complete connection setup without leaving this task.",
-        "updateFailed": "Couldn’t update this connection request."
+        "updateFailed": "Couldn’t update this connection request.",
+        "externalProviderConnected": "External provider connected",
+        "upstreamServiceAuthorize": "{{agent}} can now verify and authorize {{service}} through this provider. The app is not yet verified."
       },
       "providers": {
         "zapier": {
@@ -3088,7 +3090,8 @@
         "refreshing": "Refreshing…",
         "refreshTools": "Refresh tools",
         "draftKept": "Your access choices and setup progress are kept with this connection.",
-        "resumeSetup": "Resume setup"
+        "resumeSetup": "Resume setup",
+        "connectThroughProvider": "Connect {{service}} through {{provider}}"
       },
       "remoteMcpProductionSetup": {
         "savedCredentialsNotice": "Saved credentials are retained when these fields are left blank. Enter a replacement only to change them.",
@@ -3302,7 +3305,12 @@
         "authorizationIncompleteReady": "Authorization did not complete. Try again when you’re ready.",
         "authorizationIncompleteWindow": "Authorization did not complete. Finish setup in the sign-in window or try again.",
         "openAuthorizationToContinue": "Open authorization in a new tab to continue.",
-        "existingCheckFailed": "Paperclip couldn’t check for an existing connection. Try again."
+        "existingCheckFailed": "Paperclip couldn’t check for an existing connection. Try again.",
+        "enableMemoryConnectors": "Enable memory connectors in Settings → Experimental to set up this connection."
+      },
+      "remoteMcpAccountChoice": {
+        "externalServiceNotice": "{{provider}} is an external service that handles the connection and requests to {{service}}. Reusing this account does not yet verify app access; the agent will check it and guide any additional authorization.",
+        "providerAccountAvailable": "Provider account available"
       }
     },
     "pipelines": {
@@ -12039,6 +12047,12 @@
             "title": "Goals Sidebar Link",
             "description": "Restore the Goals item in the main sidebar while the goals surface is being evaluated.",
             "ariaLabel": "Toggle goals sidebar link experimental setting"
+          },
+          "enableMemoryConnectors": {
+            "title": "Memory connectors",
+            "description": "Connect Mem0, Zep, Supermemory, Cognee, and Honcho for long-term memory and context.",
+            "footnote": "Turning this off hides setup for these connectors. Existing connections keep running.",
+            "ariaLabel": "Toggle memory connectors experimental setting"
           }
         },
         "managedByCloud": "Managed by Paperclip Cloud",
@@ -14355,7 +14369,9 @@
         "providerDetail": "Provider detail: {{detail}}",
         "dismissReceipt": "Dismiss delivery receipt",
         "ordinaryCommentsNote": "Ordinary board comments remain Paperclip-only.",
-        "retrySafely": "Retry safely"
+        "retrySafely": "Retry safely",
+        "slackRepliesMirrored": "{{label}} · Messages you send here and agent replies are also posted to Slack.",
+        "slackCommentStartsAgent": "Your message is posted to Slack with your name and starts the agent."
       },
       "taskChatCompactInteractionCard": {
         "kind": {

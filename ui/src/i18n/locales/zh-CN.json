@@ -2987,7 +2987,9 @@
         "continueSetup": "继续设置",
         "connectOrUseExisting": "连接 / 使用现有连接",
         "dialogDescription": "无需离开此任务即可完成连接设置。",
-        "updateFailed": "无法更新此连接请求。"
+        "updateFailed": "无法更新此连接请求。",
+        "externalProviderConnected": "外部提供方已连接",
+        "upstreamServiceAuthorize": "{{agent}} 现在可以通过此提供方验证并授权 {{service}}。该应用尚未验证。"
       },
       "providers": {
         "zapier": {
@@ -3088,7 +3090,8 @@
         "refreshing": "正在刷新…",
         "refreshTools": "刷新工具",
         "draftKept": "你的访问权限选择和设置进度会随此连接保存。",
-        "resumeSetup": "继续设置"
+        "resumeSetup": "继续设置",
+        "connectThroughProvider": "通过 {{provider}} 连接 {{service}}"
       },
       "remoteMcpProductionSetup": {
         "savedCredentialsNotice": "这些字段留空时会保留已保存的凭据。仅在需要更改时输入新值。",
@@ -3302,7 +3305,12 @@
         "authorizationIncompleteReady": "授权未完成。准备好后请重试。",
         "authorizationIncompleteWindow": "授权未完成。请在登录窗口中完成设置，或重试。",
         "openAuthorizationToContinue": "请在新标签页中打开授权以继续。",
-        "existingCheckFailed": "Paperclip 无法检查现有连接，请重试。"
+        "existingCheckFailed": "Paperclip 无法检查现有连接，请重试。",
+        "enableMemoryConnectors": "请先在“设置 → 实验性”中启用记忆连接器，再设置此连接。"
+      },
+      "remoteMcpAccountChoice": {
+        "externalServiceNotice": "{{provider}} 是负责处理连接及发往 {{service}} 的请求的外部服务。复用此账号还不能验证应用访问权限，智能体会检查并引导完成其余授权。",
+        "providerAccountAvailable": "提供方账号可用"
       }
     },
     "pipelines": {
@@ -12039,6 +12047,12 @@
             "title": "目标侧边栏链接",
             "description": "在目标界面评估期间，在主侧边栏中恢复“目标”入口。",
             "ariaLabel": "切换目标侧边栏链接实验性设置"
+          },
+          "enableMemoryConnectors": {
+            "title": "记忆连接器",
+            "description": "连接 Mem0、Zep、Supermemory、Cognee 和 Honcho，提供长期记忆和上下文。",
+            "footnote": "关闭后会隐藏这些连接器的设置。现有连接会继续运行。",
+            "ariaLabel": "切换记忆连接器实验性设置"
           }
         },
         "managedByCloud": "由 Paperclip Cloud 管理",
@@ -14355,7 +14369,9 @@
         "providerDetail": "提供方详情：{{detail}}",
         "dismissReceipt": "关闭投递回执",
         "ordinaryCommentsNote": "普通管理员评论仅保留在 Paperclip 中。",
-        "retrySafely": "安全重试"
+        "retrySafely": "安全重试",
+        "slackRepliesMirrored": "{{label}} · 你在这里发送的消息和智能体的回复也会同步发布到 Slack。",
+        "slackCommentStartsAgent": "你的消息会以你的名字发布到 Slack，并启动智能体。"
       },
       "taskChatCompactInteractionCard": {
         "kind": {

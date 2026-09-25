@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { REMOTE_MCP_CONNECTOR_METHODS, type ToolConnection } from "@paperclipai/shared";
-import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/i18n";
-import { ConnectionChoiceList } from "../ConnectionChoiceList";
+import { RemoteMcpAccountChoice } from "./RemoteMcpAccountChoice";
 import { readConnectionIntentOAuthOutcome, type ConnectionSetupFlowProps } from "../ConnectionSetupFlow";
 import { agentsApi } from "@/api/agents";
 import { toolsApi } from "@/api/tools";
@@ -25,7 +24,7 @@ function readAccessDraft(key: string): Partial<RemoteMcpSetupState> {
 }
 
 export function RemoteMcpProductionSetup({ providerId, connection, host = "page", interactionId,
-  requestedAgentId, existingConnections = [], forceNewConnection, onUseExisting, onComplete, onCancel, onPhaseChange,
+  upstreamServiceName, requestedAgentId, existingConnections = [], forceNewConnection, onUseExisting, onComplete, onCancel, onPhaseChange,
 }: ConnectionSetupFlowProps & { providerId: RemoteMcpProviderId; connection?: ToolConnection }) {
   const { t } = useTranslation();
   const provider = remoteMcpProviders[providerId];
@@ -182,15 +181,13 @@ export function RemoteMcpProductionSetup({ providerId, connection, host = "page"
     resumeDraft: () => edit({ step: "connect" }), finish: () => { if (savedConnection.current) void finish(savedConnection.current.id); },
     refresh: () => {}, reconnect: () => edit({ step: "connect" }), disconnect: () => {},
   };
-  if (showChoices && onUseExisting) return <div className="space-y-5">
-    <div><h1 className="text-xl font-bold">{t("app.connections.aiConnectionAuth.connectProvider", { provider: provider.name })}</h1><p className="mt-2 text-sm text-muted-foreground">{t("app.connections.remoteMcpProductionSetup.chooseExisting")}</p></div>
-    <ConnectionChoiceList choices={existingConnections.map((c) => ({ id: c.id, name: c.name, description: t("app.connections.remoteMcpProductionSetup.readyToUse") }))} pendingId={choicePending} onSelect={(id) => {
+  if (showChoices && onUseExisting) return <RemoteMcpAccountChoice
+    providerName={provider.name} upstreamServiceName={upstreamServiceName}
+    connections={existingConnections} pendingId={choicePending} error={choiceError}
+    onCancel={onCancel} onConnectNew={() => setShowChoices(false)} onSelect={(id) => {
       setChoicePending(id); setChoiceError(null);
       void onUseExisting(id).catch((error) => { setChoiceError(error instanceof Error ? error.message : t("app.connections.remoteMcpProductionSetup.useFailed")); setChoicePending(null); });
-    }} />
-    {choiceError && <p role="alert" className="text-sm text-destructive">{choiceError}</p>}
-    <div className="flex items-center justify-between gap-3"><Button variant="ghost" disabled={Boolean(choicePending)} onClick={onCancel}>{t("app.common.actions.cancel")}</Button><Button disabled={Boolean(choicePending)} onClick={() => setShowChoices(false)}>{t("app.connections.remoteMcpProductionSetup.connectNew")}</Button></div>
-  </div>;
+    }} />;
   if (connection && !installs.data) return <div className="space-y-3 p-8"><p>{installs.isError ? t("app.connections.remoteMcpProductionSetup.accessLoadFailed") : t("app.connections.remoteMcpProductionSetup.loadingAccess")}</p>{installs.isError && <button type="button" className="text-primary underline" onClick={() => void installs.refetch()}>{t("app.common.actions.tryAgain")}</button>}</div>;
-  return <RemoteMcpConnectionSetup host={host} lockedAgentId={requestedAgentId} authorizationUrl={host === "dialog" ? authorizationUrl.current : undefined} provider={provider} connectionId={savedConnection.current?.id ?? ""} fixedGrantKind={savedConnection.current ? savedConnection.current.credentialPolicy === "per_user" ? "user" : "organization" : undefined} state={state} actions={actions} agents={agents.data ?? []} />;
+  return <RemoteMcpConnectionSetup upstreamServiceName={upstreamServiceName} host={host} lockedAgentId={requestedAgentId} authorizationUrl={host === "dialog" ? authorizationUrl.current : undefined} provider={provider} connectionId={savedConnection.current?.id ?? ""} fixedGrantKind={savedConnection.current ? savedConnection.current.credentialPolicy === "per_user" ? "user" : "organization" : undefined} state={state} actions={actions} agents={agents.data ?? []} />;
 }

@@ -507,7 +507,9 @@ function ConnectedTaskComposer({
               {t("app.taskChat.externallyConnectedTaskBanner.connectedTo", { provider: providerNames[binding.provider] })}
             </p>
             <p className="truncate text-xs text-muted-foreground">
-              {t("app.taskChat.externallyConnectedTaskBanner.agentAssignmentFixed", { label: binding.externalLabel })}
+              {binding.provider === "slack"
+                ? t("app.taskChat.externallyConnectedTaskBanner.slackRepliesMirrored", { label: binding.externalLabel })
+                : t("app.taskChat.externallyConnectedTaskBanner.agentAssignmentFixed", { label: binding.externalLabel })}
             </p>
           </div>
         </div>
@@ -829,7 +831,9 @@ function ConnectedTaskComposer({
           )}
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs text-muted-foreground">
-              {t("app.taskChat.externallyConnectedTaskBanner.ordinaryCommentsNote")}
+              {binding.provider === "slack"
+                ? t("app.taskChat.externallyConnectedTaskBanner.slackCommentStartsAgent")
+                : t("app.taskChat.externallyConnectedTaskBanner.ordinaryCommentsNote")}
             </p>
             <Button
               size="sm"

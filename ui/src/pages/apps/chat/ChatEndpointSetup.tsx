@@ -1,6 +1,7 @@
 import { SLACK_BOT_TOOL_SCOPES } from "@paperclipai/shared";
 import { defaultSlackAppName, slackBotNameForAgent } from "./slack-app-name";
 import { GitHubChatSetup } from "./GitHubChatSetup";
+import { SlackSetupPrompt } from "./SlackSetupPrompt";
 import { GitHubAgentTrustWarning } from "@/components/GitHubAgentTrustWarning";
 import { SetupWizardFooter } from "@/components/SetupWizard";
 import { ChatSetupNavigation } from "@/components/chat/ChatSetupNavigation";
@@ -510,6 +511,7 @@ function ChatSdkEndpointSetup() {
                 {t("app.apps.chatEndpointSetup.agentStep.help")}
               </p>
             </div>
+            {isSlack && <SlackSetupPrompt />}
             {endpoint ? (
               <Input aria-label={t("app.apps.chatEndpointSetup.agentStep.assignedAgent")} value={endpoint.assignedAgentName ?? selectedAgent?.name ?? agentId} readOnly />
             ) : <AgentSelect
