@@ -1,3 +1,4 @@
+import { t as translateCopy } from "@/i18n";
 import type {
   Issue,
   IssueBlockedInboxAttention,
@@ -38,27 +39,27 @@ export const BLOCKED_REASON_VARIANT_ORDER: BlockedReasonVariant[] = [
 ];
 
 export const BLOCKED_VARIANT_LABELS: Record<BlockedReasonVariant, string> = {
-  needs_decision: "Needs decision",
-  stalled: "Blocked chain stalled",
-  needs_attention: "Needs attention",
-  recovery_required: "Recovery required",
-  external_wait: "External wait",
-  owner_paused: "Owner paused",
+  get needs_decision() { return translateCopy("app.issueUi.blockedInbox.needsDecision"); },
+  get stalled() { return translateCopy("app.issueUi.blockedInbox.blockedChainStalled"); },
+  get needs_attention() { return translateCopy("app.issueUi.blockedInbox.needsAttention"); },
+  get recovery_required() { return translateCopy("app.issueUi.blockedInbox.recoveryRequired"); },
+  get external_wait() { return translateCopy("app.issueUi.blockedInbox.externalWait"); },
+  get owner_paused() { return translateCopy("app.issueUi.blockedInbox.ownerPaused"); },
 };
 
 const REASON_LABELS: Record<IssueBlockedInboxReason, string> = {
-  pending_board_decision: "Pending board decision",
-  pending_user_decision: "Pending user decision",
-  missing_successful_run_disposition: "Pick disposition",
-  blocked_chain_stalled: "Blocked chain stalled",
-  blocked_by_unassigned_issue: "Unassigned blocker",
-  blocked_by_assigned_backlog_issue: "Parked blocker",
-  blocked_by_cancelled_issue: "Cancelled blocker",
-  in_review_without_action_path: "Review without action path",
-  invalid_review_participant: "Invalid review participant",
-  open_recovery_issue: "Recovery in progress",
-  external_owner_action: "External owner action",
-  blocked_by_uninvokable_assignee: "Owner paused",
+  get pending_board_decision() { return translateCopy("app.issueUi.blockedInbox.pendingBoardDecision"); },
+  get pending_user_decision() { return translateCopy("app.issueUi.blockedInbox.pendingUserDecision"); },
+  get missing_successful_run_disposition() { return translateCopy("app.issueUi.blockedInbox.pickDisposition"); },
+  get blocked_chain_stalled() { return translateCopy("app.issueUi.blockedInbox.blockedChainStalled"); },
+  get blocked_by_unassigned_issue() { return translateCopy("app.issueUi.blockedInbox.unassignedBlocker"); },
+  get blocked_by_assigned_backlog_issue() { return translateCopy("app.issueUi.blockedInbox.parkedBlocker"); },
+  get blocked_by_cancelled_issue() { return translateCopy("app.issueUi.blockedInbox.cancelledBlocker"); },
+  get in_review_without_action_path() { return translateCopy("app.issueUi.blockedInbox.reviewWithoutActionPath"); },
+  get invalid_review_participant() { return translateCopy("app.issueUi.blockedInbox.invalidReviewParticipant"); },
+  get open_recovery_issue() { return translateCopy("app.issueUi.blockedInbox.recoveryInProgress"); },
+  get external_owner_action() { return translateCopy("app.issueUi.blockedInbox.externalOwnerAction"); },
+  get blocked_by_uninvokable_assignee() { return translateCopy("app.issueUi.blockedInbox.ownerPaused"); },
 };
 
 const SEVERITY_RANK: Record<IssueBlockedInboxSeverity, number> = {
@@ -75,7 +76,7 @@ export function blockedReasonVariant(reason: IssueBlockedInboxReason): BlockedRe
 }
 
 export function blockedReasonLabel(reason: IssueBlockedInboxReason): string {
-  return REASON_LABELS[reason] ?? "Stopped";
+  return REASON_LABELS[reason] ?? translateCopy("app.issueUi.blockedInbox.stopped");
 }
 
 export function blockedVariantLabel(variant: BlockedReasonVariant): string {

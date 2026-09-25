@@ -1,3 +1,4 @@
+import { t as translateCopy, useTranslation } from "@/i18n";
 import type { ReactNode } from "react";
 import type { Issue, Project } from "@paperclipai/shared";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
@@ -46,6 +47,7 @@ export interface TaskDetailTasksPanelProps {
 }
 
 export function TaskDetailTasksPanel({ ancestors = [], subtasks, createdTasks, projects, isLoading, hasError, onRetry, issueLinkState }: TaskDetailTasksPanelProps) {
+  const { t: translateCopy } = useTranslation();
   const sortedSubtasks = sortTasks(subtasks);
   const groups = new Map<string, { name: string; path?: string; tasks: Issue[] }>();
   for (const item of sortTasks(createdTasks)) {
@@ -54,7 +56,7 @@ export function TaskDetailTasksPanel({ ancestors = [], subtasks, createdTasks, p
       ? projects.find((candidate) => candidate.id === item.projectId) ?? item.project
       : null;
     const group = groups.get(key) ?? {
-      name: project?.name ?? (item.projectId ? "Project" : "No project"),
+      name: project?.name ?? (item.projectId ? translateCopy("app.issueUi.taskDetailTasksPanel.project") : translateCopy("app.issueUi.taskDetailTasksPanel.noProject")),
       path: item.projectId ? `/projects/${projectRouteRef(project ?? { id: item.projectId })}/issues` : undefined,
       tasks: [],
     };
@@ -62,13 +64,13 @@ export function TaskDetailTasksPanel({ ancestors = [], subtasks, createdTasks, p
     groups.set(key, group);
   }
   return (
-    <section className="flex flex-col gap-6" aria-label="Related tasks">
+    <section className="flex flex-col gap-6" aria-label={translateCopy("app.issueUi.taskDetailTasksPanel.relatedTasks")}>
       {ancestors.length > 0 && (
         <TaskGroup name="Ancestors">
           <RelationNavigationList
             items={[...ancestors].reverse()}
             emptyMessage=""
-            ariaLabel="Ancestor tasks, root to parent"
+            ariaLabel={translateCopy("app.issueUi.taskDetailTasksPanel.ancestorTasksRootToParent")}
             issueLinkState={issueLinkState}
           />
         </TaskGroup>
@@ -83,15 +85,15 @@ export function TaskDetailTasksPanel({ ancestors = [], subtasks, createdTasks, p
           <TaskDetailTaskList items={group.tasks} ariaLabel={`${group.name} tasks`} issueLinkState={issueLinkState} />
         </TaskGroup>
       ))}
-      {isLoading && <p role="status" className="text-sm text-muted-foreground">Loading tasks…</p>}
+      {isLoading && <p role="status" className="text-sm text-muted-foreground">{translateCopy("app.issueUi.taskDetailTasksPanel.loadingTasks")}</p>}
       {hasError && (
         <div role="alert" className="flex items-center gap-2 text-sm text-destructive">
-          <span>Could not load all tasks.</span>
-          {onRetry && <Button variant="ghost" size="sm" onClick={onRetry}>Retry</Button>}
+          <span>{translateCopy("app.issueUi.taskDetailTasksPanel.couldNotLoadAllTasks")}</span>
+          {onRetry && <Button variant="ghost" size="sm" onClick={onRetry}>{translateCopy("app.issueUi.taskDetailTasksPanel.retry")}</Button>}
         </div>
       )}
       {!isLoading && !hasError && ancestors.length === 0 && subtasks.length === 0 && createdTasks.length === 0 && (
-        <p className="py-6 text-center text-sm text-muted-foreground">No tasks yet.</p>
+        <p className="py-6 text-center text-sm text-muted-foreground">{translateCopy("app.issueUi.taskDetailTasksPanel.noTasksYet")}</p>
       )}
     </section>
   );

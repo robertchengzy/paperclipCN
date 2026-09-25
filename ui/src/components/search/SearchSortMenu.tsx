@@ -1,3 +1,4 @@
+import { t as translateCopy, useTranslation } from "@/i18n";
 import { ArrowUpDown, Check } from "lucide-react";
 import { COMPANY_SEARCH_SORTS, type CompanySearchSort } from "@paperclipai/shared";
 import { Button } from "@/components/ui/button";
@@ -19,17 +20,18 @@ export function SearchSortMenu({
   value: CompanySearchSort;
   onChange: (next: CompanySearchSort) => void;
 }) {
+  const { t: translateCopy } = useTranslation();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-normal" aria-label="Sort results">
+        <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-normal" aria-label={translateCopy("app.issueUi.searchSortMenu.sortResults")}>
           <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
-          <span className="hidden sm:inline text-muted-foreground">Sort:</span>
+          <span className="hidden sm:inline text-muted-foreground">{translateCopy("app.issueUi.searchSortMenu.sort")}</span>
           <span>{SORT_LABELS[value]}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuLabel className="text-xs text-muted-foreground">Sort by</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-xs text-muted-foreground">{translateCopy("app.issueUi.searchSortMenu.sortBy")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {COMPANY_SEARCH_SORTS.map((sort) => (
           <DropdownMenuItem key={sort} onSelect={() => onChange(sort)} className="gap-2 text-sm">

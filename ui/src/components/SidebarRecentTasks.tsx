@@ -1,3 +1,4 @@
+import { t as translateCopy, useTranslation } from "@/i18n";
 import { useState, type FormEvent } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Archive, MoreHorizontal, Pencil, RefreshCw } from "lucide-react";
@@ -107,6 +108,7 @@ function RecentTasksList({
   liveIssueIds: ReadonlySet<string>;
   rail: boolean;
 }) {
+  const { t: translateCopy } = useTranslation();
   const { entries, storageKey } = useRecentTasks({ companyId, userId });
   const queryClient = useQueryClient();
   const toastActions = useOptionalToastActions();
@@ -145,10 +147,10 @@ function RecentTasksList({
       if (storageKey) updateRecentTaskSnapshots(storageKey, companyId, [updated]);
       await refreshIssueQueries(renameEntry.id);
       setRenameEntry(null);
-      toastActions?.pushToast({ title: "Task renamed", tone: "success" });
+      toastActions?.pushToast({ title: translateCopy("app.issueUi.sidebarRecentTasks.taskRenamed"), tone: "success" });
     } catch (error) {
       toastActions?.pushToast({
-        title: "Task rename failed",
+        title: translateCopy("app.issueUi.sidebarRecentTasks.taskRenameFailed"),
         body: errorMessage(error, "Unable to rename this task."),
         tone: "error",
       });
@@ -165,10 +167,10 @@ function RecentTasksList({
       await queryClient.invalidateQueries({
         queryKey: queryKeys.sidebarBadges(companyId),
       });
-      toastActions?.pushToast({ title: "Task archived from inbox", tone: "success" });
+      toastActions?.pushToast({ title: translateCopy("app.issueUi.sidebarRecentTasks.taskArchivedFromInbox"), tone: "success" });
     } catch (error) {
       toastActions?.pushToast({
-        title: "Task archive failed",
+        title: translateCopy("app.issueUi.sidebarRecentTasks.taskArchiveFailed"),
         body: errorMessage(error, "Unable to archive this task from the inbox."),
         tone: "error",
       });
@@ -199,13 +201,13 @@ function RecentTasksList({
             restartIssue.companyId,
           );
           if (!("id" in wakeResult)) {
-            throw new Error(wakeResult.message ?? "The assignee wake was skipped.");
+            throw new Error(wakeResult.message ?? translateCopy("app.issueUi.sidebarRecentTasks.theAssigneeWakeWasSkipped"));
           }
         }
         setRestartWakeRetryPending(restartRetryStorageKey, entry.id, false);
-        toastActions?.pushToast({ title: "Task restarted", tone: "success" });
+        toastActions?.pushToast({ title: translateCopy("app.issueUi.sidebarRecentTasks.taskRestarted"), tone: "success" });
       } else if (state.activePauseHold) {
-        throw new Error("This task is paused by a parent task. Restart it from the pause root.");
+        throw new Error(translateCopy("app.issueUi.sidebarRecentTasks.thisTaskIsPausedByAParentTaskRestart"));
       } else if (readRestartWakeRetryIssueIds(restartRetryStorageKey).has(entry.id)) {
         const restartIssue = await issuesApi.get(entry.id);
         if (restartIssue.assigneeAgentId) {
@@ -220,25 +222,25 @@ function RecentTasksList({
             restartIssue.companyId,
           );
           if (!("id" in wakeResult)) {
-            throw new Error(wakeResult.message ?? "The assignee wake was skipped.");
+            throw new Error(wakeResult.message ?? translateCopy("app.issueUi.sidebarRecentTasks.theAssigneeWakeWasSkipped"));
           }
         }
         setRestartWakeRetryPending(restartRetryStorageKey, entry.id, false);
-        toastActions?.pushToast({ title: "Task restarted", tone: "success" });
+        toastActions?.pushToast({ title: translateCopy("app.issueUi.sidebarRecentTasks.taskRestarted"), tone: "success" });
       } else {
         await issuesApi.createTreeHold(entry.id, {
           mode: "pause",
           reason: "Paused from Recent Tasks.",
           releasePolicy: { strategy: "manual" },
         });
-        toastActions?.pushToast({ title: "Task paused", tone: "success" });
+        toastActions?.pushToast({ title: translateCopy("app.issueUi.sidebarRecentTasks.taskPaused"), tone: "success" });
       }
       await queryClient.invalidateQueries({
         queryKey: ["issues", "tree-control-state", entry.id],
       });
     } catch (error) {
       toastActions?.pushToast({
-        title: "Task pause update failed",
+        title: translateCopy("app.issueUi.sidebarRecentTasks.taskPauseUpdateFailed"),
         body: errorMessage(error, "Unable to pause or restart this task."),
         tone: "error",
       });
@@ -249,15 +251,15 @@ function RecentTasksList({
 
   return (
     <>
-      <SidebarSection label="Recent Tasks">
+      <SidebarSection label={translateCopy("app.issueUi.sidebarRecentTasks.recentTasks")}>
         {entries.map((entry) => (
           <div key={entry.id} className="sidebar-action-row group/recent-task relative">
             <SidebarNavItem
               to={`/issues/${entry.id}`}
               label={entry.title}
               trailing={entry.status === "in_review" && entry.externalConversationState === "waiting"
-                ? <span className="text-xs text-muted-foreground">Idle</span> : undefined}
-              trailingLabel={entry.status === "in_review" && entry.externalConversationState === "waiting" ? "Idle" : undefined}
+                ? <span className="text-xs text-muted-foreground">{translateCopy("app.issueUi.sidebarRecentTasks.idle")}</span> : undefined}
+              trailingLabel={entry.status === "in_review" && entry.externalConversationState === "waiting" ? translateCopy("app.issueUi.sidebarRecentTasks.idle") : undefined}
               className={rail ? undefined : "sidebar-action-link pointer-coarse:pr-8"}
               liveCount={liveIssueIds.has(entry.id) ? 1 : undefined}
             />
@@ -268,7 +270,7 @@ function RecentTasksList({
                     type="button"
                     variant="ghost"
                     size="icon-xs"
-                    aria-label={`More actions for ${entry.title}`}
+                    aria-label={translateCopy("app.issueUi.sidebarRecentTasks.moreActions", { name: entry.title })}
                     className="sidebar-action-menu absolute right-2 top-(--pct-50) z-10 -translate-y-(--pct-50) text-muted-foreground pointer-events-none opacity-0 transition-opacity hover:bg-sidebar-accent dark:hover:bg-sidebar-accent hover:text-foreground focus-visible:pointer-events-auto focus-visible:opacity-100 pointer-coarse:pointer-events-auto pointer-coarse:opacity-100 pointer-coarse:before:hidden group-hover/recent-task:pointer-events-auto group-hover/recent-task:opacity-100 group-focus-within/recent-task:pointer-events-auto group-focus-within/recent-task:opacity-100 data-[state=open]:pointer-events-auto data-[state=open]:bg-sidebar-accent data-[state=open]:text-foreground data-[state=open]:opacity-100"
                   >
                     <MoreHorizontal aria-hidden="true" />
@@ -284,7 +286,7 @@ function RecentTasksList({
                     onSelect={() => beginRename(entry)}
                   >
                     <Pencil aria-hidden="true" />
-                    Rename
+                    {translateCopy("app.issueUi.sidebarRecentTasks.rename")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className={RECENT_TASK_MENU_ITEM_CLASS}
@@ -292,7 +294,7 @@ function RecentTasksList({
                     onSelect={() => void archiveTask(entry)}
                   >
                     <Archive aria-hidden="true" />
-                    Archive
+                    {translateCopy("app.issueUi.sidebarRecentTasks.archive")}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className={RECENT_TASK_MENU_ITEM_CLASS}
@@ -300,7 +302,7 @@ function RecentTasksList({
                     onSelect={() => void toggleTaskPause(entry)}
                   >
                     <RefreshCw aria-hidden="true" />
-                    Pause/Restart
+                    {translateCopy("app.issueUi.sidebarRecentTasks.pauseRestart")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -318,12 +320,12 @@ function RecentTasksList({
         <DialogContent className="sm:max-w-md">
           <form className="grid gap-4" onSubmit={(event) => void submitRename(event)}>
             <DialogHeader>
-              <DialogTitle>Rename task</DialogTitle>
-              <DialogDescription>Choose a short, clear name for this task.</DialogDescription>
+              <DialogTitle>{translateCopy("app.issueUi.sidebarRecentTasks.renameTask")}</DialogTitle>
+              <DialogDescription>{translateCopy("app.issueUi.sidebarRecentTasks.chooseAShortClearNameForThisTask")}</DialogDescription>
             </DialogHeader>
             <Input
               autoFocus
-              aria-label="Task name"
+              aria-label={translateCopy("app.issueUi.sidebarRecentTasks.taskName")}
               value={renameValue}
               disabled={pendingAction === "rename"}
               onChange={(event) => setRenameValue(event.target.value)}
@@ -335,13 +337,13 @@ function RecentTasksList({
                 disabled={pendingAction === "rename"}
                 onClick={() => setRenameEntry(null)}
               >
-                Cancel
+                {translateCopy("app.issueUi.sidebarRecentTasks.cancel")}
               </Button>
               <Button
                 type="submit"
                 disabled={pendingAction === "rename" || !renameValue.trim()}
               >
-                {pendingAction === "rename" ? "Saving..." : "Save"}
+                {pendingAction === "rename" ? translateCopy("app.issueUi.sidebarRecentTasks.saving") : translateCopy("app.issueUi.sidebarRecentTasks.save")}
               </Button>
             </DialogFooter>
           </form>

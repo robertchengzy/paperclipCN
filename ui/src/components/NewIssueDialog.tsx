@@ -1,3 +1,4 @@
+import { t as translateCopy } from "@/i18n";
 import { useWorkspaceIsolationControls } from "@/hooks/useWorkspaceIsolationControls";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { normalizeLegacyRunnerProvider } from "@paperclipai/adapter-utils";
@@ -185,19 +186,19 @@ const STAGED_FILE_ACCEPT = "image/*,application/pdf,text/plain,text/markdown,app
 
 const ISSUE_THINKING_EFFORT_OPTIONS = {
   claude_local: [
-    { value: "", label: "Default" },
-    { value: "low", label: "Low" },
-    { value: "medium", label: "Medium" },
-    { value: "high", label: "High" },
+    { value: "", get label() { return translateCopy("app.issueUi.newIssueDialog.default"); } },
+    { value: "low", get label() { return translateCopy("app.issueUi.newIssueDialog.low"); } },
+    { value: "medium", get label() { return translateCopy("app.issueUi.newIssueDialog.medium"); } },
+    { value: "high", get label() { return translateCopy("app.issueUi.newIssueDialog.high"); } },
   ],
   opencode_local: [
-    { value: "", label: "Default" },
-    { value: "minimal", label: "Minimal" },
-    { value: "low", label: "Low" },
-    { value: "medium", label: "Medium" },
-    { value: "high", label: "High" },
-    { value: "xhigh", label: "X-High" },
-    { value: "max", label: "Max" },
+    { value: "", get label() { return translateCopy("app.issueUi.newIssueDialog.default"); } },
+    { value: "minimal", get label() { return translateCopy("app.issueUi.newIssueDialog.minimal"); } },
+    { value: "low", get label() { return translateCopy("app.issueUi.newIssueDialog.low"); } },
+    { value: "medium", get label() { return translateCopy("app.issueUi.newIssueDialog.medium"); } },
+    { value: "high", get label() { return translateCopy("app.issueUi.newIssueDialog.high"); } },
+    { value: "xhigh", get label() { return translateCopy("app.issueUi.newIssueDialog.xHigh"); } },
+    { value: "max", get label() { return translateCopy("app.issueUi.newIssueDialog.max"); } },
   ],
 } as const;
 
@@ -277,19 +278,19 @@ function buildStatusOptions(): ReadonlyArray<{ value: string; label: string; col
   return [
     {
       value: "backlog",
-      label: "Backlog",
+      label: translateCopy("app.issueUi.newIssueDialog.backlog"),
       color: palette.backlog ?? issueStatusTextDefault,
-      description: "Parked - assignee will not be woken",
+      description: translateCopy("app.issueUi.newIssueDialog.parkedAssigneeWillNotBeWoken"),
     },
     {
       value: "todo",
-      label: "Todo",
+      label: translateCopy("app.issueUi.newIssueDialog.todo"),
       color: palette.todo ?? issueStatusTextDefault,
-      description: "Executable - assignee will be woken",
+      description: translateCopy("app.issueUi.newIssueDialog.executableAssigneeWillBeWoken"),
     },
-    { value: "in_progress", label: "In Progress", color: palette.in_progress ?? issueStatusTextDefault },
-    { value: "in_review", label: "In Review", color: palette.in_review ?? issueStatusTextDefault },
-    { value: "done", label: "Done", color: palette.done ?? issueStatusTextDefault },
+    { value: "in_progress", label: translateCopy("app.issueUi.newIssueDialog.inProgress"), color: palette.in_progress ?? issueStatusTextDefault },
+    { value: "in_review", label: translateCopy("app.issueUi.newIssueDialog.inReview"), color: palette.in_review ?? issueStatusTextDefault },
+    { value: "done", label: translateCopy("app.issueUi.newIssueDialog.done"), color: palette.done ?? issueStatusTextDefault },
   ];
 }
 
@@ -322,16 +323,16 @@ function shouldWarnAboutRunUserSecrets(status: string, assigneeAgentId: string |
 }
 
 const priorities = [
-  { value: "critical", label: "Critical", icon: AlertTriangle, color: priorityColor.critical ?? priorityColorDefault },
-  { value: "high", label: "High", icon: ArrowUp, color: priorityColor.high ?? priorityColorDefault },
-  { value: "medium", label: "Medium", icon: Minus, color: priorityColor.medium ?? priorityColorDefault },
-  { value: "low", label: "Low", icon: ArrowDown, color: priorityColor.low ?? priorityColorDefault },
+  { value: "critical", get label() { return translateCopy("app.issueUi.newIssueDialog.critical"); }, icon: AlertTriangle, color: priorityColor.critical ?? priorityColorDefault },
+  { value: "high", get label() { return translateCopy("app.issueUi.newIssueDialog.high"); }, icon: ArrowUp, color: priorityColor.high ?? priorityColorDefault },
+  { value: "medium", get label() { return translateCopy("app.issueUi.newIssueDialog.medium"); }, icon: Minus, color: priorityColor.medium ?? priorityColorDefault },
+  { value: "low", get label() { return translateCopy("app.issueUi.newIssueDialog.low"); }, icon: ArrowDown, color: priorityColor.low ?? priorityColorDefault },
 ];
 
 const EXECUTION_WORKSPACE_MODES = [
-  { value: "shared_workspace", label: "Project default" },
-  { value: "isolated_workspace", label: "New isolated workspace" },
-  { value: "reuse_existing", label: "Reuse existing workspace" },
+  { value: "shared_workspace", get label() { return translateCopy("app.issueUi.newIssueDialog.projectDefault"); } },
+  { value: "isolated_workspace", get label() { return translateCopy("app.issueUi.newIssueDialog.newIsolatedWorkspace"); } },
+  { value: "reuse_existing", get label() { return translateCopy("app.issueUi.newIssueDialog.reuseExistingWorkspace"); } },
 ] as const;
 
 function defaultExecutionWorkspaceModeForIssueDefaults(
@@ -466,6 +467,7 @@ const IssueDescriptionEditor = memo(function IssueDescriptionEditor({
 });
 
 export function NewIssueDialog() {
+  const { t: translateCopy } = useTranslation();
   const { t } = useTranslation();
   const { visible: workspaceIsolationControlsVisible } = useWorkspaceIsolationControls();
   const { newIssueOpen, newIssueDefaults, closeNewIssue } = useDialog();
@@ -681,7 +683,7 @@ export function NewIssueDialog() {
 
   const uploadDescriptionImage = useMutation({
     mutationFn: async (file: File) => {
-      if (!effectiveCompanyId) throw new Error("No organization selected");
+      if (!effectiveCompanyId) throw new Error(translateCopy("app.issueUi.newIssueDialog.noOrganizationSelected"));
       return assetsApi.uploadImage(effectiveCompanyId, file, "issues/drafts");
     },
   });

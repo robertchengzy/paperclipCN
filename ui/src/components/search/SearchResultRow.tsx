@@ -1,3 +1,4 @@
+import { t as translateCopy, useTranslation } from "@/i18n";
 import { AgentAvatar } from "../AgentAvatar";
 import { AgentIdentity } from "../AgentIdentity";
 import { memo, type ComponentType, type SVGProps } from "react";
@@ -15,10 +16,10 @@ type SnippetStyle = {
 };
 
 const SNIPPET_STYLES: Record<string, SnippetStyle> = {
-  comment: { Icon: MessageSquare, label: "Comment" },
-  document: { Icon: FileText, label: "Doc" },
-  artifact: { Icon: Paperclip, label: "Artifact" },
-  description: { Icon: Quote, label: "Description" },
+  comment: { Icon: MessageSquare, get label() { return translateCopy("app.issueUi.searchResultRow.comment"); } },
+  document: { Icon: FileText, get label() { return translateCopy("app.issueUi.searchResultRow.doc"); } },
+  artifact: { Icon: Paperclip, get label() { return translateCopy("app.issueUi.searchResultRow.artifact"); } },
+  description: { Icon: Quote, get label() { return translateCopy("app.issueUi.searchResultRow.description"); } },
 };
 
 function snippetStyle(field: string, fallbackLabel: string): SnippetStyle {
@@ -62,6 +63,7 @@ function SearchResultRowImpl({
   isActive,
   className,
 }: SearchResultRowProps) {
+  const { t: translateCopy } = useTranslation();
   if (result.type === "agent") {
     return (
       <Link
@@ -79,7 +81,7 @@ function SearchResultRowImpl({
               text={result.snippets[0]?.text ?? result.snippet}
               highlights={result.snippets[0]?.highlights}
               field="agent"
-              fallbackLabel={result.sourceLabel ?? "Agent"}
+              fallbackLabel={result.sourceLabel ?? translateCopy("app.issueUi.searchResultRow.agent")}
             />
           ) : null}
         </div>
@@ -102,7 +104,7 @@ function SearchResultRowImpl({
               text={result.snippets[0]?.text ?? result.snippet}
               highlights={result.snippets[0]?.highlights}
               field="project"
-              fallbackLabel={result.sourceLabel ?? "Project"}
+              fallbackLabel={result.sourceLabel ?? translateCopy("app.issueUi.searchResultRow.project")}
             />
           ) : null}
         </div>
@@ -134,7 +136,7 @@ function SearchResultRowImpl({
               text={result.snippets[0]?.text ?? result.snippet}
               highlights={result.snippets[0]?.highlights}
               field="artifact"
-              fallbackLabel={result.sourceLabel ?? "Artifact"}
+              fallbackLabel={result.sourceLabel ?? translateCopy("app.issueUi.searchResultRow.artifact")}
               multiline
             />
           ) : null}

@@ -1,3 +1,4 @@
+import { t as translateCopy } from "@/i18n";
 import { useCallback, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { DocumentAnnotationComment, DocumentAnnotationThreadStatus, DocumentAnnotationThreadWithComments } from "@paperclipai/shared";
@@ -26,9 +27,9 @@ export function useDocumentAnnotationMutations(options: MutationOptions) {
   });
   const currentUser = useMemo(() => ({
     id: session?.user?.id ?? null,
-    name: session?.user?.name?.trim() || session?.user?.email?.trim() || "You",
+    name: session?.user?.name?.trim() || session?.user?.email?.trim() || translateCopy("app.issueUi.useDocumentAnnotationMutations.you"),
     image: session?.user?.image ?? null,
-  }), [session]);
+  }), [session, translateCopy]);
   const queryKey = useMemo(() => options.target.kind === "routine"
     ? queryKeys.routines.documentAnnotations(options.target.routineId, options.target.documentKey, "all")
     : options.target.kind === "case"
@@ -43,8 +44,8 @@ export function useDocumentAnnotationMutations(options: MutationOptions) {
 
   const createThread = useMutation({
     mutationFn: async (body: string) => {
-      if (!options.pendingAnchor) throw new Error("No selection to anchor to.");
-      if (!options.baseRevisionId) throw new Error("Document has no revision yet.");
+      if (!options.pendingAnchor) throw new Error(translateCopy("app.issueUi.useDocumentAnnotationMutations.noSelectionToAnchorTo"));
+      if (!options.baseRevisionId) throw new Error(translateCopy("app.issueUi.useDocumentAnnotationMutations.documentHasNoRevisionYet"));
       return documentAnnotationsApi.createForTarget(options.target, {
         baseRevisionId: options.baseRevisionId,
         baseRevisionNumber: options.baseRevisionNumber,

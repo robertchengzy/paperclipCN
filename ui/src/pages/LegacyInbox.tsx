@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateCopy, useTranslation } from "@/i18n";
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -220,7 +222,7 @@ function firstNonEmptyLine(value: string | null | undefined): string | null {
 }
 
 function runFailureMessage(run: HeartbeatRun): string {
-  return firstNonEmptyLine(run.error) ?? firstNonEmptyLine(run.stderrExcerpt) ?? "Run exited with an error.";
+  return firstNonEmptyLine(run.error) ?? firstNonEmptyLine(run.stderrExcerpt) ?? translateCopy("app.issueUi.legacyInbox.runExitedWithAnError");
 }
 
 function approvalStatusLabel(status: Approval["status"]): string {
@@ -257,7 +259,7 @@ export function formatJoinRequestInboxLabel(
   },
 ) {
   if (joinRequest.requestType !== "human") {
-    return `Agent join request${joinRequest.agentName ? `: ${joinRequest.agentName}` : ""}`;
+    return joinRequest.agentName ? translateCopy("app.issueUi.legacyInbox.joinNamed", { name: joinRequest.agentName }) : translateCopy("app.issueUi.legacyInbox.joinRequest");
   }
 
   const requesterName = nonEmptyLabel(joinRequest.requesterUser?.name);
@@ -270,7 +272,7 @@ export function formatJoinRequestInboxLabel(
   if (requesterEmail) return requesterEmail;
   if (requesterName) return requesterName;
   if (requesterId) return requesterId;
-  return "Human join request";
+  return translateCopy("app.issueUi.legacyInbox.humanJoinRequest");
 }
 
 
@@ -311,6 +313,7 @@ export function FailedRunInboxRow({
   selected?: boolean;
   className?: string;
 }) {
+  const { t: translateCopy } = useTranslation();
   const issueId = readIssueIdFromRun(run);
   const issue = issueId ? issueById.get(issueId) ?? null : null;
   const displayError = runFailureMessage(run);
@@ -333,7 +336,7 @@ export function FailedRunInboxRow({
                   "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
                   "hover:bg-(--status-task-in_progress)/20",
                 )}
-                aria-label="Mark as read"
+                aria-label={translateCopy("app.issueUi.legacyInbox.markAsRead")}
               >
                 <span className={cn(
                   "block h-2 w-2 rounded-full transition-opacity duration-300",
@@ -368,7 +371,7 @@ export function FailedRunInboxRow({
                   {issue.title}
                 </>
               ) : (
-                <>Failed run{linkedAgentName ? ` — ${linkedAgentName}` : ""}</>
+                <>{translateCopy("app.issueUi.legacyInbox.failedRun")}{linkedAgentName ? ` — ${linkedAgentName}` : ""}</>
               )}
             </span>
             <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
@@ -392,14 +395,14 @@ export function FailedRunInboxRow({
             disabled={isRetrying}
           >
             <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-            {isRetrying ? "Retrying…" : "Retry"}
+            {isRetrying ? translateCopy("app.issueUi.legacyInbox.retrying") : translateCopy("app.issueUi.legacyInbox.retry")}
           </Button>
           {!showUnreadSlot && (
             <button
               type="button"
               onClick={onDismiss}
               className="rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground group-hover:opacity-100"
-              aria-label="Dismiss"
+              aria-label={translateCopy("app.issueUi.legacyInbox.dismiss")}
             >
               <X className="h-4 w-4" />
             </button>
@@ -416,14 +419,14 @@ export function FailedRunInboxRow({
           disabled={isRetrying}
         >
           <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-          {isRetrying ? "Retrying…" : "Retry"}
+          {isRetrying ? translateCopy("app.issueUi.legacyInbox.retrying") : translateCopy("app.issueUi.legacyInbox.retry")}
         </Button>
         {!showUnreadSlot && (
           <button
             type="button"
             onClick={onDismiss}
             className="rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-            aria-label="Dismiss"
+            aria-label={translateCopy("app.issueUi.legacyInbox.dismiss")}
           >
             <X className="h-4 w-4" />
           </button>
@@ -458,6 +461,7 @@ function ApprovalInboxRow({
   selected?: boolean;
   className?: string;
 }) {
+  const { t: translateCopy } = useTranslation();
   const Icon = typeIcon[approval.type] ?? defaultTypeIcon;
   const label = approvalLabel(approval.type, approval.payload as Record<string, unknown> | null);
   const showResolutionButtons =
@@ -482,7 +486,7 @@ function ApprovalInboxRow({
                   "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
                   "hover:bg-(--status-task-in_progress)/20",
                 )}
-                aria-label="Mark as read"
+                aria-label={translateCopy("app.issueUi.legacyInbox.markAsRead")}
               >
                 <span className={cn(
                   "block h-2 w-2 rounded-full transition-opacity duration-300",
@@ -513,8 +517,8 @@ function ApprovalInboxRow({
             </span>
             <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
               <span className="capitalize">{approvalStatusLabel(approval.status)}</span>
-              {requesterName ? <span>requested by {requesterName}</span> : null}
-              <span>updated {timeAgo(approval.updatedAt)}</span>
+              {requesterName ? <span>{translateCopy("app.issueUi.legacyInbox.requestedBy", { name: requesterName })}</span> : null}
+              <span>{translateCopy("app.issueUi.legacyInbox.updatedAgo", { time: timeAgo(approval.updatedAt) })}</span>
             </span>
           </span>
         </Link>
@@ -531,7 +535,7 @@ function ApprovalInboxRow({
                   onClick={onApprove}
                   disabled={isPending}
                 >
-                  Approve
+                  {translateCopy("app.issueUi.legacyInbox.approve")}
                 </Button>
                 <Button
                   variant="destructive"
@@ -540,7 +544,7 @@ function ApprovalInboxRow({
                   onClick={onReject}
                   disabled={isPending}
                 >
-                  Reject
+                  {translateCopy("app.issueUi.legacyInbox.reject")}
                 </Button>
               </>
             ) : null}
@@ -555,7 +559,7 @@ function ApprovalInboxRow({
             onClick={onApprove}
             disabled={isPending}
           >
-            Approve
+            {translateCopy("app.issueUi.legacyInbox.approve")}
           </Button>
           <Button
             variant="destructive"
@@ -564,7 +568,7 @@ function ApprovalInboxRow({
             onClick={onReject}
             disabled={isPending}
           >
-            Reject
+            {translateCopy("app.issueUi.legacyInbox.reject")}
           </Button>
         </div>
       ) : null}
@@ -595,6 +599,7 @@ function JoinRequestInboxRow({
   selected?: boolean;
   className?: string;
 }) {
+  const { t: translateCopy } = useTranslation();
   const label = formatJoinRequestInboxLabel(joinRequest);
   const showUnreadSlot = unreadState !== null;
   const showUnreadDot = unreadState === "visible" || unreadState === "fading";
@@ -615,7 +620,7 @@ function JoinRequestInboxRow({
                   "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
                   "hover:bg-(--status-task-in_progress)/20",
                 )}
-                aria-label="Mark as read"
+                aria-label={translateCopy("app.issueUi.legacyInbox.markAsRead")}
               >
                 <span className={cn(
                   "block h-2 w-2 rounded-full transition-opacity duration-300",
@@ -639,8 +644,8 @@ function JoinRequestInboxRow({
               {label}
             </span>
             <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-              <span>requested {timeAgo(joinRequest.createdAt)} from IP {joinRequest.requestIp}</span>
-              {joinRequest.adapterType && <span>adapter: {joinRequest.adapterType}</span>}
+              <span>{translateCopy("app.issueUi.legacyInbox.requestOrigin", { time: timeAgo(joinRequest.createdAt), ip: joinRequest.requestIp })}</span>
+              {joinRequest.adapterType && <span>{translateCopy("app.issueUi.legacyInbox.adapterNamed", { adapter: joinRequest.adapterType })}</span>}
             </span>
           </span>
         </div>
@@ -654,7 +659,7 @@ function JoinRequestInboxRow({
             onClick={onApprove}
             disabled={isPending}
           >
-            Approve
+            {translateCopy("app.issueUi.legacyInbox.approve")}
           </Button>
           <Button
             variant="destructive"
@@ -663,7 +668,7 @@ function JoinRequestInboxRow({
             onClick={onReject}
             disabled={isPending}
           >
-            Reject
+            {translateCopy("app.issueUi.legacyInbox.reject")}
           </Button>
         </div>
       </div>
@@ -674,7 +679,7 @@ function JoinRequestInboxRow({
           onClick={onApprove}
           disabled={isPending}
         >
-          Approve
+          {translateCopy("app.issueUi.legacyInbox.approve")}
         </Button>
         <Button
           variant="destructive"
@@ -683,7 +688,7 @@ function JoinRequestInboxRow({
           onClick={onReject}
           disabled={isPending}
         >
-          Reject
+          {translateCopy("app.issueUi.legacyInbox.reject")}
         </Button>
       </div>
     </div>
@@ -691,6 +696,7 @@ function JoinRequestInboxRow({
 }
 
 export function Inbox() {
+  const { t: translateCopy } = useTranslation();
   const { selectedCompanyId } = useCompany();
   const { setBreadcrumbs } = useBreadcrumbs();
   const { openNewIssue } = useDialogActions();
@@ -773,8 +779,8 @@ export function Inbox() {
   });
 
   useEffect(() => {
-    setBreadcrumbs([{ label: "Inbox" }]);
-  }, [setBreadcrumbs]);
+    setBreadcrumbs([{ label: translateCopy("app.issueUi.legacyInbox.inbox") }]);
+  }, [setBreadcrumbs, translateCopy]);
 
   useEffect(() => {
     saveLastInboxTab(tab);
@@ -1035,7 +1041,7 @@ export function Inbox() {
     if (currentUserId) {
       options.set(`user:${currentUserId}`, {
         id: `user:${currentUserId}`,
-        label: currentUserId === "local-board" ? "Board" : "Me",
+        label: currentUserId === "local-board" ? translateCopy("app.issueUi.legacyInbox.board") : translateCopy("app.issueUi.legacyInbox.me"),
         kind: "user",
         searchText: currentUserId === "local-board" ? "board me human local-board" : `me board human ${currentUserId}`,
       });
@@ -1087,7 +1093,7 @@ export function Inbox() {
       if (a.kind !== b.kind) return a.kind === "user" ? -1 : 1;
       return a.label.localeCompare(b.label);
     });
-  }, [agents, currentUserId, mineIssues, touchedIssues]);
+  }, [agents, currentUserId, mineIssues, touchedIssues, translateCopy]);
   const issuesToRender = useMemo(
     () => {
       if (tab === "mine") return visibleMineIssues;
@@ -1689,8 +1695,8 @@ export function Inbox() {
     },
     onError: (error) => {
       pushToast({
-        title: "Run retry failed",
-        body: error instanceof Error ? error.message : "Unable to retry run",
+        title: translateCopy("app.issueUi.legacyInbox.runRetryFailed"),
+        body: error instanceof Error ? error.message : translateCopy("app.issueUi.legacyInbox.unableToRetryRun"),
         tone: "error",
       });
     },
@@ -2210,7 +2216,7 @@ export function Inbox() {
   }, [selectedIndex]);
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={InboxIcon} message="Select a company to view inbox." />;
+    return <EmptyState icon={InboxIcon} message={translateCopy("app.issueUi.legacyInbox.selectACompanyToViewInbox")} />;
   }
 
   const hasRunFailures = failedRuns.length > 0;
@@ -2268,7 +2274,7 @@ export function Inbox() {
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search inbox…"
+            placeholder={translateCopy("app.issueUi.legacyInbox.searchInbox")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
@@ -2298,15 +2304,15 @@ export function Inbox() {
             items={[
               {
                 value: "mine",
-                label: "Mine",
+                label: translateCopy("app.issueUi.legacyInbox.mine"),
               },
               {
                 value: "recent",
-                label: "Recent",
+                label: translateCopy("app.issueUi.legacyInbox.recent"),
               },
-              { value: "unread", label: "Unread" },
-              { value: "blocked", label: "Blocked" },
-              { value: "all", label: "All" },
+              { value: "unread", label: translateCopy("app.issueUi.legacyInbox.unread") },
+              { value: "blocked", label: translateCopy("app.issueUi.legacyInbox.blocked") },
+              { value: "all", label: translateCopy("app.issueUi.legacyInbox.all") },
             ]}
           />
         </Tabs>
@@ -2316,7 +2322,7 @@ export function Inbox() {
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search inbox…"
+              placeholder={translateCopy("app.issueUi.legacyInbox.searchInbox")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => {
@@ -2365,7 +2371,7 @@ export function Inbox() {
                     variant="outline"
                     size="icon"
                     className={cn("h-8 w-8 shrink-0", blockedGroupBy !== "none" && "bg-accent")}
-                    title="Group"
+                    title={translateCopy("app.issueUi.legacyInbox.group")}
                   >
                     <Layers className="h-3.5 w-3.5" />
                   </Button>
@@ -2394,7 +2400,7 @@ export function Inbox() {
                 visibleColumnSet={visibleIssueColumnSet}
                 onToggleColumn={toggleIssueColumn}
                 onResetColumns={() => setIssueColumns(DEFAULT_INBOX_ISSUE_COLUMNS)}
-                title="Choose which inbox columns stay visible"
+                title={translateCopy("app.issueUi.legacyInbox.chooseWhichInboxColumnsStayVisible")}
                 iconOnly
               />
               <Popover>
@@ -2404,7 +2410,7 @@ export function Inbox() {
                     variant="outline"
                     size="icon"
                     className="h-8 w-8 shrink-0"
-                    title="Sort"
+                    title={translateCopy("app.issueUi.legacyInbox.sort")}
                   >
                     <ArrowUpDown className="h-3.5 w-3.5" />
                   </Button>
@@ -2437,7 +2443,7 @@ export function Inbox() {
                 size="icon"
                 className={cn("hidden h-8 w-8 shrink-0 sm:inline-flex", nestingEnabled && "bg-accent")}
                 onClick={toggleNesting}
-                title={nestingEnabled ? "Disable parent-child nesting" : "Enable parent-child nesting"}
+                title={nestingEnabled ? translateCopy("app.issueUi.legacyInbox.disableParentchildNesting") : translateCopy("app.issueUi.legacyInbox.enableParentchildNesting")}
               >
                 <ListTree className="h-3.5 w-3.5" />
               </Button>
@@ -2464,7 +2470,7 @@ export function Inbox() {
                     variant="outline"
                     size="icon"
                     className={cn("h-8 w-8 shrink-0", groupBy !== "none" && "bg-accent")}
-                    title="Group"
+                    title={translateCopy("app.issueUi.legacyInbox.group")}
                   >
                     <Layers className="h-3.5 w-3.5" />
                   </Button>
@@ -2499,7 +2505,7 @@ export function Inbox() {
                 visibleColumnSet={visibleIssueColumnSet}
                 onToggleColumn={toggleIssueColumn}
                 onResetColumns={() => setIssueColumns(DEFAULT_INBOX_ISSUE_COLUMNS)}
-                title="Choose which inbox columns stay visible"
+                title={translateCopy("app.issueUi.legacyInbox.chooseWhichInboxColumnsStayVisible")}
                 iconOnly
               />
               {canMarkAllRead && (
@@ -2512,19 +2518,19 @@ export function Inbox() {
                     onClick={() => setShowMarkAllReadConfirm(true)}
                     disabled={markAllReadMutation.isPending}
                   >
-                    {markAllReadMutation.isPending ? "Marking…" : "Mark all as read"}
+                    {markAllReadMutation.isPending ? translateCopy("app.issueUi.legacyInbox.marking") : translateCopy("app.issueUi.legacyInbox.markAllAsRead")}
                   </Button>
                   <Dialog open={showMarkAllReadConfirm} onOpenChange={setShowMarkAllReadConfirm}>
                     <DialogContent className="sm:max-w-md">
                       <DialogHeader>
-                        <DialogTitle>Mark all as read?</DialogTitle>
+                        <DialogTitle>{translateCopy("app.issueUi.legacyInbox.markAllAsRead2")}</DialogTitle>
                         <DialogDescription>
-                          This will mark {unreadIssueIds.length} unread {unreadIssueIds.length === 1 ? "item" : "items"} as read.
+                          {unreadIssueIds.length === 1 ? translateCopy("app.issueUi.legacyInbox.markOneRead", { count: unreadIssueIds.length }) : translateCopy("app.issueUi.legacyInbox.markManyRead", { count: unreadIssueIds.length })}
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
                         <Button variant="outline" onClick={() => setShowMarkAllReadConfirm(false)}>
-                          Cancel
+                          {translateCopy("app.issueUi.legacyInbox.cancel")}
                         </Button>
                         <Button
                           onClick={() => {
@@ -2532,7 +2538,7 @@ export function Inbox() {
                             markAllReadMutation.mutate(unreadIssueIds);
                           }}
                         >
-                          Mark all as read
+                          {translateCopy("app.issueUi.legacyInbox.markAllAsRead")}
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -2552,15 +2558,15 @@ export function Inbox() {
             onValueChange={(value) => updateAllCategoryFilter(value as InboxCategoryFilter)}
           >
             <SelectTrigger className="h-8 w-(--sz-170px) text-xs">
-              <SelectValue placeholder="Category" />
+              <SelectValue placeholder={translateCopy("app.issueUi.legacyInbox.category")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="everything">All categories</SelectItem>
-              <SelectItem value="issues_i_touched">My recent tasks</SelectItem>
-              <SelectItem value="join_requests">Join requests</SelectItem>
-              <SelectItem value="approvals">Approvals</SelectItem>
-              <SelectItem value="failed_runs">Failed runs</SelectItem>
-              <SelectItem value="alerts">Alerts</SelectItem>
+              <SelectItem value="everything">{translateCopy("app.issueUi.legacyInbox.allCategories")}</SelectItem>
+              <SelectItem value="issues_i_touched">{translateCopy("app.issueUi.legacyInbox.myRecentTasks")}</SelectItem>
+              <SelectItem value="join_requests">{translateCopy("app.issueUi.legacyInbox.joinRequests")}</SelectItem>
+              <SelectItem value="approvals">{translateCopy("app.issueUi.legacyInbox.approvals")}</SelectItem>
+              <SelectItem value="failed_runs">{translateCopy("app.issueUi.legacyInbox.failedRuns")}</SelectItem>
+              <SelectItem value="alerts">{translateCopy("app.issueUi.legacyInbox.alerts")}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -2570,12 +2576,12 @@ export function Inbox() {
               onValueChange={(value) => updateAllApprovalFilter(value as InboxApprovalFilter)}
             >
               <SelectTrigger className="h-8 w-(--sz-170px) text-xs">
-                <SelectValue placeholder="Approval status" />
+                <SelectValue placeholder={translateCopy("app.issueUi.legacyInbox.approvalStatus")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All approval statuses</SelectItem>
-                <SelectItem value="actionable">Needs action</SelectItem>
-                <SelectItem value="resolved">Resolved</SelectItem>
+                <SelectItem value="all">{translateCopy("app.issueUi.legacyInbox.allApprovalStatuses")}</SelectItem>
+                <SelectItem value="actionable">{translateCopy("app.issueUi.legacyInbox.needsAction")}</SelectItem>
+                <SelectItem value="resolved">{translateCopy("app.issueUi.legacyInbox.resolved")}</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -2615,14 +2621,14 @@ export function Inbox() {
           icon={searchQuery.trim() ? Search : InboxIcon}
           message={
             searchQuery.trim()
-              ? "No inbox items match your search."
+              ? translateCopy("app.issueUi.legacyInbox.noInboxItemsMatchYourSearch")
               : tab === "mine"
-              ? "Inbox zero."
+              ? translateCopy("app.issueUi.legacyInbox.inboxZero")
               : tab === "unread"
-              ? "No new inbox items."
+              ? translateCopy("app.issueUi.legacyInbox.noNewInboxItems")
               : tab === "recent"
-                ? "No recent inbox items."
-                : "No inbox items match these filters."
+                ? translateCopy("app.issueUi.legacyInbox.noRecentInboxItems")
+                : translateCopy("app.issueUi.legacyInbox.noInboxItemsMatchTheseFilters")
           }
         />
       )}
@@ -2734,7 +2740,7 @@ export function Inbox() {
                       }
                       titleSuffix={hasChildren && !isExpanded && depth === 0 ? (
                         <span className="ml-1.5 text-xs text-muted-foreground">
-                          ({childCount} sub-task{childCount !== 1 ? "s" : ""})
+                          {childCount === 1 ? translateCopy("app.issueUi.legacyInbox.oneSubtask", { count: childCount }) : translateCopy("app.issueUi.legacyInbox.manySubtasks", { count: childCount })}
                         </span>
                       ) : undefined}
                       mobileMeta={issueActivityText(issue).toLowerCase()}
@@ -2809,7 +2815,7 @@ export function Inbox() {
                       >
                         <div className="h-px flex-1 bg-border/80" />
                         <span className="shrink-0 text-(length:--text-micro) font-semibold uppercase tracking-wide text-muted-foreground">
-                          {group.searchSection === "archived" ? "Archived" : "Other results"}
+                          {group.searchSection === "archived" ? translateCopy("app.issueUi.legacyInbox.archived") : translateCopy("app.issueUi.legacyInbox.otherResults")}
                         </span>
                         <div className="h-px flex-1 bg-border/80" />
                       </div>,
@@ -2846,8 +2852,8 @@ export function Inbox() {
                               variant="ghost"
                               size="icon-xs"
                               className="-mr-2 text-muted-foreground"
-                              title={`New task in ${group.label}`}
-                              aria-label={`New task in ${group.label}`}
+                              title={translateCopy("app.issueUi.legacyInbox.newTaskIn", { group: group.label })}
+                              aria-label={translateCopy("app.issueUi.legacyInbox.newTaskIn", { group: group.label })}
                               onClick={(event) => {
                                 event.stopPropagation();
                                 openCreateIssueForGroup(group);
@@ -2889,7 +2895,7 @@ export function Inbox() {
                         <div key={`today-divider-${group.key}-${index}`} className="my-2 flex items-center gap-3 px-4">
                           <div className="flex-1 border-t border-zinc-600" />
                           <span className="shrink-0 text-(length:--text-micro) font-medium uppercase tracking-wider text-zinc-500">
-                            Earlier
+                            {translateCopy("app.issueUi.legacyInbox.earlier")}
                           </span>
                         </div>,
                       );
@@ -3104,7 +3110,7 @@ export function Inbox() {
           {showSeparatorBefore("alerts") && <Separator />}
           <div>
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Alerts
+              {translateCopy("app.issueUi.legacyInbox.alerts")}
             </h3>
             <div className="divide-y divide-border border border-border">
               {showAggregateAgentError && (
@@ -3115,15 +3121,14 @@ export function Inbox() {
                   >
                     <AlertTriangle className="h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
                     <span className="text-sm">
-                      <span className="font-medium">{dashboard!.agents.error}</span>{" "}
-                      {dashboard!.agents.error === 1 ? "agent has" : "agents have"} errors
+                      <Trans i18nKey={dashboard!.agents.error === 1 ? "app.issueUi.legacyInbox.oneAgentError" : "app.issueUi.legacyInbox.manyAgentErrors"} values={{ count: dashboard!.agents.error }} components={{ count: <span className="font-medium" /> }} />
                     </span>
                   </Link>
                   <button
                     type="button"
                     onClick={() => dismissAlert("alert:agent-errors")}
                     className="rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground group-hover/alert:opacity-100"
-                    aria-label="Dismiss"
+                    aria-label={translateCopy("app.issueUi.legacyInbox.dismiss")}
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -3137,16 +3142,14 @@ export function Inbox() {
                   >
                     <AlertTriangle className="h-4 w-4 shrink-0 text-yellow-400" />
                     <span className="text-sm">
-                      Budget at{" "}
-                      <span className="font-medium">{dashboard!.costs.monthUtilizationPercent}%</span>{" "}
-                      utilization this month
+                      <Trans i18nKey="app.issueUi.legacyInbox.budgetUsage" values={{ percent: dashboard!.costs.monthUtilizationPercent }} components={{ value: <span className="font-medium" /> }} />
                     </span>
                   </Link>
                   <button
                     type="button"
                     onClick={() => dismissAlert("alert:budget")}
                     className="rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground group-hover/alert:opacity-100"
-                    aria-label="Dismiss"
+                    aria-label={translateCopy("app.issueUi.legacyInbox.dismiss")}
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>

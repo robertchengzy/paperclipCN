@@ -1,3 +1,4 @@
+import { t as translateCopy } from "@/i18n";
 import { useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type {
@@ -34,19 +35,19 @@ export async function fetchIssueExternalObjectSummariesInBatches(
 function formatMentionSourceLabel(mention: ExternalObjectMention): string {
   switch (mention.sourceKind) {
     case "title":
-      return "Title";
+      return translateCopy("app.issueUi.useIssueExternalObjects.title");
     case "description":
-      return "Description";
+      return translateCopy("app.issueUi.useIssueExternalObjects.description");
     case "comment":
-      return "Comment";
+      return translateCopy("app.issueUi.useIssueExternalObjects.comment");
     case "document":
-      return mention.documentKey ? `Document: ${mention.documentKey}` : "Document";
+      return mention.documentKey ? translateCopy("app.issueUi.useIssueExternalObjects.documentNamed", { key: mention.documentKey }) : translateCopy("app.issueUi.useIssueExternalObjects.document");
     case "property":
-      return mention.propertyKey ? `Property: ${mention.propertyKey}` : "Property";
+      return mention.propertyKey ? translateCopy("app.issueUi.useIssueExternalObjects.propertyNamed", { key: mention.propertyKey }) : translateCopy("app.issueUi.useIssueExternalObjects.property");
     case "plugin":
-      return "Plugin";
+      return translateCopy("app.issueUi.useIssueExternalObjects.plugin");
     default:
-      return "Source";
+      return translateCopy("app.issueUi.useIssueExternalObjects.source");
   }
 }
 

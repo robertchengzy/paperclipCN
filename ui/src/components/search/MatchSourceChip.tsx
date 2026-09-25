@@ -1,3 +1,4 @@
+import { t as translateCopy } from "@/i18n";
 import { cn } from "@/lib/utils";
 
 export type MatchSourceChipKind = "title" | "identifier" | "comment" | "document";
@@ -14,10 +15,10 @@ const chipStyles: Record<MatchSourceChipKind, string> = {
 };
 
 const chipLabels: Record<MatchSourceChipKind, string> = {
-  title: "Title",
-  identifier: "Identifier",
-  comment: "Comment",
-  document: "Doc",
+  get title() { return translateCopy("app.issueUi.matchSourceChip.title"); },
+  get identifier() { return translateCopy("app.issueUi.matchSourceChip.identifier"); },
+  get comment() { return translateCopy("app.issueUi.matchSourceChip.comment"); },
+  get document() { return translateCopy("app.issueUi.matchSourceChip.doc"); },
 };
 
 export interface MatchSourceChipProps {

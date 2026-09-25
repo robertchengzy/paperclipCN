@@ -1,3 +1,4 @@
+import { t as translateCopy, useTranslation } from "@/i18n";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { PauseCircle, PlayCircle, Repeat, XCircle } from "lucide-react";
@@ -35,6 +36,7 @@ export function TaskTreeControlMenuItems({
   onCancel: () => void;
   onRestore: () => void;
 }) {
+  const { t: translateCopy } = useTranslation();
   const itemClass =
     "flex items-center gap-2 w-full px-2 py-1.5 text-xs rounded hover:bg-accent/50 disabled:opacity-50 disabled:pointer-events-none";
   return (
@@ -42,13 +44,13 @@ export function TaskTreeControlMenuItems({
       {canPause ? (
         <button disabled={pending} className={itemClass} onClick={onPause}>
           <PauseCircle className="h-3 w-3" />
-          {scope === "leaf" ? "Pause work" : "Pause subtree"}
+          {scope === "leaf" ? translateCopy("app.issueUi.taskTreeControls.pauseWork") : translateCopy("app.issueUi.taskTreeControls.pauseSubtree")}
         </button>
       ) : null}
       {canResume ? (
         <button disabled={pending} className={itemClass} onClick={onResume}>
           <PlayCircle className="h-3 w-3" />
-          {scope === "leaf" ? "Resume work" : "Resume subtree"}
+          {scope === "leaf" ? translateCopy("app.issueUi.taskTreeControls.resumeWork") : translateCopy("app.issueUi.taskTreeControls.resumeSubtree")}
         </button>
       ) : null}
       {canCancel ? (
@@ -58,13 +60,13 @@ export function TaskTreeControlMenuItems({
           onClick={onCancel}
         >
           <XCircle className="h-3 w-3" />
-          Cancel subtree...
+          {translateCopy("app.issueUi.taskTreeControls.cancelSubtree")}
         </button>
       ) : null}
       {canRestore ? (
         <button disabled={pending} className={itemClass} onClick={onRestore}>
           <Repeat className="h-3 w-3" />
-          Restore subtree...
+          {translateCopy("app.issueUi.taskTreeControls.restoreSubtree")}
         </button>
       ) : null}
     </>
@@ -102,15 +104,16 @@ export function TaskTreeControlDialog({
   onRetry: () => void;
   onApply: () => void;
 }) {
+  const { t: translateCopy } = useTranslation();
   const cancel = mode === "cancel";
-  const tasks = `${affectedCount} task${affectedCount === 1 ? "" : "s"}`;
+  const tasks = affectedCount === 1 ? translateCopy("app.issueUi.taskTreeControls.oneTask", { count: affectedCount }) : translateCopy("app.issueUi.taskTreeControls.manyTasks", { count: affectedCount });
   const title = cancel
-    ? "Cancel subtree?"
+    ? translateCopy("app.issueUi.taskTreeControls.cancelSubtree2")
     : mode === "restore"
-      ? "Restore subtree"
+      ? translateCopy("app.issueUi.taskTreeControls.restoreSubtree2")
       : scope === "leaf"
-        ? "Resume work"
-        : "Resume subtree";
+        ? translateCopy("app.issueUi.taskTreeControls.resumeWork")
+        : translateCopy("app.issueUi.taskTreeControls.resumeSubtree");
   return (
     <Dialog
       open={open}
@@ -126,10 +129,10 @@ export function TaskTreeControlDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             {loading
-              ? "Loading…"
+              ? translateCopy("app.issueUi.taskTreeControls.loading")
               : cancel
-                ? `${tasks} will be cancelled.`
-                : `${tasks} will ${mode === "restore" ? "be restored" : "resume"}.`}
+                ? translateCopy("app.issueUi.taskTreeControls.tasksCancelled", { tasks })
+                : mode === "restore" ? translateCopy("app.issueUi.taskTreeControls.tasksRestored", { tasks }) : translateCopy("app.issueUi.taskTreeControls.tasksResumed", { tasks })}
           </DialogDescription>
         </DialogHeader>
         {error ? (
@@ -143,7 +146,7 @@ export function TaskTreeControlDialog({
               disabled={pending}
               onClick={onRetry}
             >
-              Retry preview
+              {translateCopy("app.issueUi.taskTreeControls.retryPreview")}
             </Button>
           </div>
         ) : null}
@@ -155,7 +158,7 @@ export function TaskTreeControlDialog({
               disabled={pending || loading || affectedAgentCount === 0}
               onChange={(event) => onWakeAgentsChange(event.target.checked)}
             />
-            Wake affected agents ({affectedAgentCount})
+            {translateCopy("app.issueUi.taskTreeControls.wakeCount", { count: affectedAgentCount })}
           </label>
         ) : null}
         <DialogFooter>
@@ -164,7 +167,7 @@ export function TaskTreeControlDialog({
             disabled={pending}
             onClick={() => onOpenChange(false)}
           >
-            {cancel ? "Keep tasks" : "Close"}
+            {cancel ? translateCopy("app.issueUi.taskTreeControls.keepTasks") : translateCopy("app.issueUi.taskTreeControls.close")}
           </Button>
           <Button
             variant={cancel ? "destructive" : "default"}
@@ -172,11 +175,11 @@ export function TaskTreeControlDialog({
             onClick={onApply}
           >
             {pending
-              ? "Applying…"
+              ? translateCopy("app.issueUi.taskTreeControls.applying")
               : cancel
-                ? `Cancel ${tasks}`
+                ? translateCopy("app.issueUi.taskTreeControls.cancelTasks", { tasks })
                 : mode === "restore"
-                  ? `Restore ${tasks}`
+                  ? translateCopy("app.issueUi.taskTreeControls.restoreTasks", { tasks })
                   : title}
           </Button>
         </DialogFooter>
@@ -199,6 +202,7 @@ export function TaskPauseNotice({
   className?: string;
   resumeLink?: ReactNode;
 }) {
+  const { t: translateCopy } = useTranslation();
   return (
     <div
       role="status"
@@ -208,7 +212,7 @@ export function TaskPauseNotice({
       )}
     >
       <span>
-        {scope === "subtree" ? "Subtree is paused." : "Task is paused."}
+        {scope === "subtree" ? translateCopy("app.issueUi.taskTreeControls.subtreeIsPaused") : translateCopy("app.issueUi.taskTreeControls.taskIsPaused")}
       </span>
       {resumeLink ??
         (onResume ? (
@@ -218,7 +222,7 @@ export function TaskPauseNotice({
             disabled={pending}
             onClick={onResume}
           >
-            {scope === "subtree" ? "Resume subtree" : "Resume work"}
+            {scope === "subtree" ? translateCopy("app.issueUi.taskTreeControls.resumeSubtree") : translateCopy("app.issueUi.taskTreeControls.resumeWork")}
           </Button>
         ) : null)}
     </div>
