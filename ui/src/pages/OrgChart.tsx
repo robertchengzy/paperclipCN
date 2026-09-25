@@ -667,5 +667,5 @@ export function OrgChart({ orgTree: providedOrgTree, agents: providedAgents, emb
 const roleLabels: Record<string, string> = AGENT_ROLE_LABELS;
 
 function roleLabel(role: string): string {
-  return roleLabels[role] ?? role;
+  return t(`app.agents.roles.${role}`, { defaultValue: roleLabels[role] ?? role });
 }

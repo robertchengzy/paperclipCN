@@ -6427,7 +6427,8 @@
         "noSkillsInTheOrganizationLibrary": "No skills in the organization library",
         "installSkillsToTheOrganizationThenEnableThemOn": "Install skills to the organization, then enable them on this agent.",
         "materializationNote": "Enabled skills are materialized into the stable Paperclip-managed prompt bundle on the agent's next run.",
-        "betaRelease": "Beta · {{release}}"
+        "betaRelease": "Beta · {{release}}",
+        "enabledOfTotal": "{{enabled}} of {{total}} enabled"
       },
       "agentSkillSource": {
         "localFolder": "Local folder",
@@ -6511,7 +6512,10 @@
         "nonStandardFolders": "For skills in non-standard folders, use <link>Import from path or URL</link>.",
         "workspaceLocal": "local",
         "workspaceFolder": "folder",
-        "workspaceRemote": "remote"
+        "workspaceRemote": "remote",
+        "workspaceCountOne": "{{n}} workspace",
+        "workspaceCountOther": "{{n}} workspaces",
+        "scannableCount": "{{n}} scannable"
       }
     },
     "reports": {
@@ -9626,7 +9630,8 @@
         "invalidAlias": "Invalid alias — use letters, digits and _",
         "duplicateAlias": "Duplicate alias",
         "addApiAccess": "Add API access",
-        "readsByAlias": "The agent reads them by alias through <code>GET /agents/me/secrets</code>."
+        "readsByAlias": "The agent reads them by alias through <code>GET /agents/me/secrets</code>.",
+        "proposedBy": "proposed by {{name}}"
       },
       "createSecretPopover": {
         "nameRequired": "Name is required",
@@ -15030,7 +15035,11 @@
         "usedToolCalls": "Used {{tool}} ({{count}} calls)",
         "collapseStdout": "Collapse stdout",
         "expandStdout": "Expand stdout",
-        "noTranscriptYet": "No transcript yet."
+        "noTranscriptYet": "No transcript yet.",
+        "logLineCountOne": "{{n}} log line",
+        "logLineCountOther": "{{n}} log lines",
+        "systemMessageCountOne": "{{n}} system message",
+        "systemMessageCountOther": "{{n}} system messages"
       },
       "boardChat": {
         "typing": "typing",

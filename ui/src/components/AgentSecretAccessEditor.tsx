@@ -316,7 +316,7 @@ export function AgentSecretAccessEditor({
                     {secret.pending ? <ProposedBadge /> : null}
                   </div>
                   <p className="flex flex-wrap items-center gap-1 text-muted-foreground">
-                    <span>proposed by {proposal.proposedBy.name}</span>
+                    <span>{t("app.secrets.agentSecretAccessEditor.proposedBy", { name: proposal.proposedBy.name })}</span>
                     <span aria-hidden="true">·</span>
                     <span className="truncate italic">“{proposal.justification}”</span>
                   </p>

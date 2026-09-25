@@ -1223,7 +1223,7 @@ export function TaskChatComposer({
                   className="h-7 px-2"
                   onClick={takeover.onShowNext}
                 >
-                  {takeover.pendingCount} pending
+                  {t("app.taskChat.taskChatComposer.pendingCount", { count: takeover.pendingCount })}
                 </Button>
               ) : null}
               <div

@@ -11,11 +11,12 @@ import { companyDirectoryQueryOptions, useAccountIdentity } from "@/api/companie
 import { useToast } from "@/context/ToastContext";
 import { queryKeys } from "@/lib/queryKeys";
 import { useTranslation } from "@/i18n";
+import { statusLabel } from "@/i18n/labels";
 
 export function InstanceAccess() {
   const { userId: accountUserId, settled: accountSettled } = useAccountIdentity();
   const { setBreadcrumbs } = useBreadcrumbs();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { pushToast } = useToast();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
@@ -250,7 +251,9 @@ export function InstanceAccess() {
                       <div>
                         <div className="font-medium">{membership.companyName || membership.companyId}</div>
                         <div className="text-muted-foreground">
-                          {membership.membershipRole || t("app.settings.instanceAccess.unsetRole")} • {membership.status}
+                          {membership.membershipRole
+                            ? (i18n.language === "zh-CN" ? t(`app.settings.companyAccess.roles.${membership.membershipRole}`, { defaultValue: membership.membershipRole }) : membership.membershipRole)
+                            : t("app.settings.instanceAccess.unsetRole")} • {statusLabel(t, membership.status)}
                         </div>
                       </div>
                       <div className="text-xs text-muted-foreground">

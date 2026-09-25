@@ -1,4 +1,5 @@
 import { t, useTranslation } from "@/i18n";
+import { statusLabel } from "@/i18n/labels";
 import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCompany } from "../context/CompanyContext";
@@ -199,7 +200,7 @@ export function Companies() {
                               : "bg-muted text-muted-foreground"
                         }`}
                       >
-                        {company.status}
+                        {statusLabel(t, company.status)}
                       </Badge>
                       <Button
                         variant="ghost"

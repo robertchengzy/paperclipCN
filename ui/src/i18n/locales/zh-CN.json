@@ -464,7 +464,7 @@
         "alphabetical": "按字母顺序",
         "recentlyUpdated": "最近更新",
         "tokens": "Token",
-        "apiKey": "API key"
+        "apiKey": "API 密钥"
       },
       "states": {
         "paused": "已暂停",
@@ -2350,7 +2350,7 @@
         "savedKeysMany": "有 {{n}} 个已保存的 API key 可用。",
         "chooseSavedKey": "选择已保存的 API key 或输入新的 key",
         "provideKey": "提供你的 {{provider}} API key 以连接",
-        "apiKey": "API key",
+        "apiKey": "API 密钥",
         "keyEntered": "已输入 key。请重试连接。",
         "enterKey": "在此输入 API key",
         "loginNoConnection": "登录未返回已保存的连接。请重试。",
@@ -6427,7 +6427,8 @@
         "noSkillsInTheOrganizationLibrary": "组织技能库中暂无技能",
         "installSkillsToTheOrganizationThenEnableThemOn": "先将技能安装到组织，再在此智能体上启用。",
         "materializationNote": "启用的技能将在智能体下次运行时加入由 Paperclip 管理的稳定提示词包。",
-        "betaRelease": "测试版 · {{release}}"
+        "betaRelease": "测试版 · {{release}}",
+        "enabledOfTotal": "已启用 {{enabled}}/{{total}}"
       },
       "agentSkillSource": {
         "localFolder": "本地文件夹",
@@ -6511,7 +6512,10 @@
         "nonStandardFolders": "对于非标准文件夹中的技能，请使用<link>从路径或 URL 导入</link>。",
         "workspaceLocal": "本地",
         "workspaceFolder": "文件夹",
-        "workspaceRemote": "远程"
+        "workspaceRemote": "远程",
+        "workspaceCountOne": "{{n}} 个工作区",
+        "workspaceCountOther": "{{n}} 个工作区",
+        "scannableCount": "{{n}} 个可扫描"
       }
     },
     "reports": {
@@ -9626,7 +9630,8 @@
         "invalidAlias": "别名无效，请使用字母、数字和 _",
         "duplicateAlias": "别名重复",
         "addApiAccess": "添加 API 访问",
-        "readsByAlias": "智能体通过 <code>GET /agents/me/secrets</code> 按别名读取。"
+        "readsByAlias": "智能体通过 <code>GET /agents/me/secrets</code> 按别名读取。",
+        "proposedBy": "由 {{name}} 提议"
       },
       "createSecretPopover": {
         "nameRequired": "名称为必填项",
@@ -15030,7 +15035,11 @@
         "usedToolCalls": "已使用 {{tool}}（{{count}} 次调用）",
         "collapseStdout": "收起 stdout",
         "expandStdout": "展开 stdout",
-        "noTranscriptYet": "暂无运行记录。"
+        "noTranscriptYet": "暂无运行记录。",
+        "logLineCountOne": "{{n}} 行日志",
+        "logLineCountOther": "{{n}} 行日志",
+        "systemMessageCountOne": "{{n}} 条系统消息",
+        "systemMessageCountOther": "{{n}} 条系统消息"
       },
       "boardChat": {
         "typing": "正在输入",

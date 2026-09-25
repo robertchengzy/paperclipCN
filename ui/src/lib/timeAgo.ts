@@ -1,10 +1,12 @@
+import { i18n } from "@/i18n";
+
 const MINUTE = 60;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 const WEEK = 7 * DAY;
 const MONTH = 30 * DAY;
 
-export function timeAgo(date: Date | string, language = "en"): string {
+export function timeAgo(date: Date | string, language: string = i18n.language): string {
   const now = Date.now();
   const then = new Date(date).getTime();
   const seconds = Math.round((now - then) / 1000);

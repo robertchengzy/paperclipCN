@@ -718,8 +718,12 @@ function PickProjectStep({
                     <div className="min-w-0 flex-1">
                       <div className="truncate text-sm font-medium">{project.name}</div>
                       <div className="mt-0.5 text-xs text-muted-foreground">
-                        {project.workspaces.length} workspace
-                        {project.workspaces.length === 1 ? "" : "s"}
+                        {t(
+                          project.workspaces.length === 1
+                            ? "app.skills.importSkillsFromProjectDialog.workspaceCountOne"
+                            : "app.skills.importSkillsFromProjectDialog.workspaceCountOther",
+                          { n: project.workspaces.length },
+                        )}
                         {kinds ? ` · ${kinds}` : ""}
                       </div>
                       {disabled && (
@@ -730,7 +734,7 @@ function PickProjectStep({
                     </div>
                     {!disabled && (
                       <Badge variant="outline" className="shrink-0 px-1.5 py-0 font-normal">
-                        {scannable.length} scannable
+                        {t("app.skills.importSkillsFromProjectDialog.scannableCount", { n: scannable.length })}
                       </Badge>
                     )}
                   </button>
