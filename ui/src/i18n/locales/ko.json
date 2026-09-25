@@ -6368,7 +6368,8 @@
         "couldnTReRun": "Couldn't re-run",
         "couldnTDeleteRun": "Couldn't delete run",
         "inputContentCopied": "Input content copied",
-        "newSkillPreview": "New Skill"
+        "newSkillPreview": "New Skill",
+        "updatedAgo": "updated {{time}}"
       },
       "skillsContextualSidebar": {
         "discover": "Discover",

@@ -883,7 +883,7 @@ function StudioLandingRow({
         ) : null}
       </span>
       <span className="shrink-0 text-xs text-muted-foreground">
-        updated {relativeTime(skill.updatedAt)}
+        {t("app.skills.skillStudio.updatedAgo", { time: relativeTime(skill.updatedAt) })}
       </span>
       {editor ? (
         <Tooltip>

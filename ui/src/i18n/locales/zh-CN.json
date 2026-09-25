@@ -6368,7 +6368,8 @@
         "couldnTReRun": "无法重新运行",
         "couldnTDeleteRun": "无法删除运行",
         "inputContentCopied": "输入内容已复制",
-        "newSkillPreview": "新技能"
+        "newSkillPreview": "新技能",
+        "updatedAgo": "{{time}}更新"
       },
       "skillsContextualSidebar": {
         "discover": "发现",
