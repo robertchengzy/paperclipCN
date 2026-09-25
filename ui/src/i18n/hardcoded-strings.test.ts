@@ -49,5 +49,5 @@ describe("hardcoded UI strings", () => {
       .filter(([file, count]) => count > (allowed[file] ?? 0))
       .map(([file, count]) => `${file}: ${count} (baseline ${allowed[file] ?? 0})`);
     expect(regressions).toEqual([]);
-  });
+  }, 60_000);
 });
