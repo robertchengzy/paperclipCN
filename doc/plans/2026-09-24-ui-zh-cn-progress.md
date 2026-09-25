@@ -135,3 +135,17 @@
 - 屏幕阅读器的实际朗读效果、无存储权限的浏览器环境。
 - 服务端返回的错误与提示消息、插件自带界面、CLI 仍是英文，不在本轮范围内。
 - 部署后的运行版本核对与现网验收。
+
+## 同步上游 `bd2030932`（2026-09-26，分支 `sync/upstream-20260926`）
+
+合并上游 15 个提交（合并提交 `1fefa83b8`）：Slack 聊天设置、记忆连接器、MCP 聚合器默认开启、移动端选择器视口、Codex 配额修复、lockfile 刷新；没有新迁移。9 个文件有冲突，处理原则是采用上游逻辑，同时保留已有译文：
+
+- `NewIssueDialog` 的选择器改用上游的 `contentStyle`，不再用 `disablePortal`。
+- 连接设置去掉 MCP 聚合器开关检查，改为检查记忆连接器；实验性设置里的卡片随之换成“记忆连接器”。
+- 远程 MCP 设置采用上游的 `RemoteMcpAccountChoice` 和“通过 X 连接 Y”标题，均已翻译。
+- GitHub 与 Slack 设置提示共用上游的 `SetupPrompt`。复制给外部 AI 的指令保持英文，作为逐项豁免：实例 URL 两句从 `GitHubSetupPrompt.tsx` 移到 `SetupPrompt.tsx`，新增 `SlackSetupPrompt.tsx` 条目。
+- `codex-home.test.ts` 采用上游等价的 `http_headers` 断言，上游已包含 fork 原有的同类修复。
+
+新增 12 个词条（`en.json` / `zh-CN.json` 各 14535 个叶子词条）。上游新增界面中，静态扫描漏掉了 `RemoteMcpAccountChoice` 的说明段落（含插值），人工逐文件检查了上游改动的 UI 文件后补译。
+
+验证（`1fefa83b8`）：UI typecheck、`pnpm check:token-gates`、`pnpm locales:check`、严格扫描为 0、UI build 通过；全 UI 测试 640 个文件、6725 条全部通过；`codex-local` 的 `src` 测试 30 个文件、465 条通过。隔离实例走查结果与上次相同：168 个页面无异常，`lang` 均为 `zh-CN`，窄屏无溢出，3 个操作用例通过。新出现的英文只有 Zapier、Composio、Arcade、Executor 等应用名称及其目录描述，它们来自服务端应用定义，因聚合器默认开启而显示。服务端测试套件未运行，服务端改动以上游为准，由部署构建和现网启动检查覆盖。
