@@ -1,3 +1,4 @@
+import { useTranslation } from "@/i18n";
 import { configFieldsForSection } from "../config-sections";
 import type { AdapterConfigFieldsProps } from "../types";
 import {
@@ -34,9 +35,10 @@ export function ProcessConfigFields({
   eff,
   mark,
 }: AdapterConfigFieldsProps) {
+  const { t } = useTranslation();
   return configFieldsForSection(section, (
     <>
-      <Field configSection="advanced" label="Command" hint={help.command}>
+      <Field configSection="advanced" label={t("app.agentUi.configFields.command")} hint={help.command}>
         <DraftInput
           value={
             isCreate
@@ -53,7 +55,7 @@ export function ProcessConfigFields({
           placeholder="e.g. node, python"
         />
       </Field>
-      <Field configSection="advanced" label="Args (comma-separated)" hint={help.args}>
+      <Field configSection="advanced" label={t("app.agentUi.configFields.argsCommaSeparated")} hint={help.args}>
         <DraftInput
           value={
             isCreate

@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { motion, useReducedMotion } from "motion/react";
 import * as React from "react";
 
@@ -46,9 +47,9 @@ const SIZE_PRESETS: Record<AgentCapsuleSizePreset, { width: number; height: numb
 };
 
 const STATE_ARIA: Record<AgentCapsuleState, string> = {
-  slot: "empty agent slot",
-  configured: "agent configured, offline",
-  online: "agent online",
+  get slot() { return t("app.agentUi.agentCapsule.emptySlot"); },
+  get configured() { return t("app.agentUi.agentCapsule.agentConfiguredOffline"); },
+  get online() { return t("app.agentUi.agentCapsule.online"); },
 };
 
 export interface AgentCapsuleProps
@@ -96,6 +97,7 @@ export function AgentCapsule({
   "aria-label": ariaLabel,
   ...rest
 }: AgentCapsuleProps) {
+  useTranslation();
   const dims = typeof size === "string" ? SIZE_PRESETS[size] : size;
   const reducedMotion = useReducedMotion();
   const drawn = state === "configured" || state === "online";

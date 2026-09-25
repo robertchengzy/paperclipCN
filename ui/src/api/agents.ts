@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type {
   Agent,
   AgentDesiredSkillEntry,
@@ -264,7 +265,7 @@ export const agentsApi = {
       // that has already stopped. It does not mean a new attempt was queued.
       if (["failed", "timed_out", "cancelled", "interrupted"].includes(result.status)) {
         throw new Error(
-          "The previous retry has already stopped. Refresh the task and retry its latest failed run.",
+          t("app.agentUi.agents.thePreviousRetryHasAlreadyStoppedRefresh"),
         );
       }
       return { runId: result.id, issueId: null };
@@ -272,12 +273,12 @@ export const agentsApi = {
     if ("actionId" in result) {
       if (result.status === "failed" || result.status === "cancelled") {
         throw new Error(
-          "This retry could not start. Open the task to review its current access and recovery state.",
+          t("app.agentUi.agents.thisRetryCouldNotStartOpenThe"),
         );
       }
       return { runId: result.runId, issueId: result.issueId };
     }
-    throw new Error(result.message ?? "Retry was skipped.");
+    throw new Error(result.message ?? t("app.agentUi.agents.retryWasSkipped"));
   },
   loginWithClaude: (id: string, companyId?: string) =>
     api.post<ClaudeLoginResult>(agentPath(id, companyId, "/claude-login"), {}),

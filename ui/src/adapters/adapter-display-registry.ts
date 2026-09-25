@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 /**
  * Single source of truth for adapter display metadata.
  *
@@ -30,7 +31,7 @@ import { OpenCodeLogoIcon } from "@/components/OpenCodeLogoIcon";
 const STRIPPED_TYPE_SUFFIXES = ["_local", "_gateway"] as const;
 
 const DISPLAY_SUFFIXES: Record<string, string> = {
-  _gateway: "gateway",
+  get _gateway() { return t("app.agentUi.adapterDisplayRegistry.gateway"); },
 };
 
 function getTypeSuffix(type: string): string | null {
@@ -61,94 +62,94 @@ export interface AdapterDisplayInfo {
 
 const adapterDisplayMap: Record<string, AdapterDisplayInfo> = {
   acpx_local: {
-    label: "ACPX (retired)",
-    description: "Retired standalone ACPX adapter",
+    get label() { return t("app.agentUi.adapterDisplayRegistry.acpxRetired"); },
+    get description() { return t("app.agentUi.adapterDisplayRegistry.retiredStandaloneAcpxAdapter"); },
     icon: Bot,
     comingSoon: true,
-    disabledLabel: "Use Claude Code or Codex with the ACP engine",
+    get disabledLabel() { return t("app.agentUi.adapterDisplayRegistry.useClaudeCodeOrCodexWithThe"); },
     hideFromVisualSelection: true,
   },
   claude_local: {
     label: "Claude Code",
-    description: "Claude Code CLI harness",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.claudeCodeCliHarness"); },
     icon: Sparkles,
     recommended: true,
   },
   codex_local: {
     label: "Codex",
-    description: "Codex CLI harness",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.codexCliHarness"); },
     icon: Code,
     recommended: true,
   },
   paperclip_runner: {
     label: "Paperclip Runner",
-    description: "Experimental Rust runner with a Codex provider",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.experimentalRustRunnerWithACodexProvider"); },
     icon: Cpu,
     experimental: true,
   },
   gemini_local: {
     label: "Gemini CLI",
-    description: "Gemini CLI harness",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.geminiCliHarness"); },
     icon: Gem,
   },
   grok_local: {
     label: "Grok Build",
-    description: "Grok Build harness",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.grokBuildHarness"); },
     icon: Bot,
   },
   kimi_local: {
     label: "Kimi Code",
-    description: "Kimi Code CLI harness",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.kimiCodeCliHarness"); },
     icon: Moon,
   },
   hermes_gateway: {
     label: "Hermes Gateway",
-    description: "Remote Hermes API server",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.remoteHermesApiServer"); },
     icon: Bot,
     hideFromVisualSelection: true,
   },
   hermes_local: {
     label: "Hermes",
-    description: "Hermes harness",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.hermesHarness"); },
     icon: Bot,
   },
   opencode_local: {
     label: "OpenCode",
-    description: "OpenCode multi-provider harness",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.opencodeMultiProviderHarness"); },
     icon: OpenCodeLogoIcon,
   },
   pi_local: {
     label: "Pi",
-    description: "Pi harness",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.piHarness"); },
     icon: Terminal,
   },
   cursor: {
     label: "Cursor",
-    description: "Cursor CLI harness",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.cursorCliHarness"); },
     icon: MousePointer2,
   },
   cursor_cloud: {
     label: "Cursor Cloud",
-    description: "Managed remote Cursor agent",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.managedRemoteCursorAgent"); },
     icon: MousePointer2,
   },
   openclaw_gateway: {
     label: "OpenClaw Gateway",
-    description: "External gateway adapter",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.externalGatewayAdapter"); },
     icon: Bot,
     comingSoon: true,
-    disabledLabel: "Invite external agents from the add-agent modal",
+    get disabledLabel() { return t("app.agentUi.adapterDisplayRegistry.inviteExternalAgentsFromTheAddAgent"); },
     hideFromVisualSelection: true,
   },
   process: {
-    label: "Process",
-    description: "Internal process adapter",
+    get label() { return t("app.agentUi.adapterDisplayRegistry.process"); },
+    get description() { return t("app.agentUi.adapterDisplayRegistry.internalProcessAdapter"); },
     icon: Cpu,
     comingSoon: true,
   },
   http: {
     label: "HTTP",
-    description: "Internal HTTP adapter",
+    get description() { return t("app.agentUi.adapterDisplayRegistry.internalHttpAdapter"); },
     icon: Cpu,
     comingSoon: true,
   },
@@ -182,7 +183,7 @@ export function getAdapterLabel(type: string): string {
 export function getAdapterLabels(): Record<string, string> {
   const labels: Record<string, string> = {};
   for (const [type, info] of Object.entries(adapterDisplayMap)) {
-    labels[type] = info.label;
+    Object.defineProperty(labels, type, { enumerable: true, get: () => info.label });
   }
   return labels;
 }
@@ -195,7 +196,7 @@ export function getAdapterDisplay(type: string): AdapterDisplayInfo {
   const label = withSuffix(humanizeType(type), suffix);
   return {
     label,
-    description: suffix ? `External ${suffix} adapter` : "External adapter",
+    description: suffix ? t("app.agentUi.adapterDisplayRegistry.externalAdapter", { value0: suffix }) : t("app.agentUi.adapterDisplayRegistry.externalAdapter2"),
     icon: Cpu,
   };
 }

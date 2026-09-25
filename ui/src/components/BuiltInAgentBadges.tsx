@@ -1,3 +1,4 @@
+import { useTranslation } from "@/i18n";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { brandChipBadge } from "@/lib/status-colors";
@@ -17,6 +18,7 @@ export function BuiltInLifecycleChip({
   compact?: boolean;
   className?: string;
 }) {
+  const { t } = useTranslation();
   if (status !== "needs_setup" && status !== "pending_approval") return null;
   const isPendingApproval = status === "pending_approval";
   return (
@@ -29,11 +31,11 @@ export function BuiltInLifecycleChip({
       )}
       title={
         isPendingApproval
-          ? "Waiting on board hire approval before the feature can run"
-          : "Needs adapter/model setup before the feature can run"
+          ? t("app.agentUi.builtInAgentBadges.waitingOnBoardHireApprovalBeforeThe")
+          : t("app.agentUi.builtInAgentBadges.needsAdapterModelSetupBeforeTheFeature")
       }
     >
-      {isPendingApproval ? (compact ? "Approval" : "Pending approval") : compact ? "Setup" : "Needs setup"}
+      {isPendingApproval ? (compact ? t("app.agentUi.builtInAgentBadges.approval") : t("app.agentUi.builtInAgentBadges.pendingApproval")) : compact ? t("app.agentUi.builtInAgentBadges.setup") : t("app.agentUi.builtInAgentBadges.needsSetup")}
     </Badge>
   );
 }

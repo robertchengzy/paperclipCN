@@ -318,6 +318,12 @@ function thinkingEffortLabel(t: TFunction, label: string): string {
     case "Ultra": return t("app.agents.config.effort.ultra");
     case "Plan": return t("app.agents.config.effort.plan");
     case "Ask": return t("app.agents.config.effort.ask");
+    case "off": return t("app.agentUi.agentConfigForm.off");
+    case "minimal": return t("app.agentUi.agentConfigForm.minimal");
+    case "low": return t("app.agentUi.agentConfigForm.low");
+    case "medium": return t("app.agentUi.agentConfigForm.medium");
+    case "high": return t("app.agentUi.agentConfigForm.high");
+    case "xhigh": return t("app.agentUi.agentConfigForm.xhigh");
     default: return label;
   }
 }
@@ -3646,7 +3652,7 @@ export function AdapterTypeDropdown({
       listAdapterOptions((type) => adapterLabels[type] ?? getAdapterLabel(type)).filter(
         (item) => !disabledTypes.has(item.value),
       ),
-    [disabledTypes],
+    [disabledTypes, t],
   );
 
   return (
