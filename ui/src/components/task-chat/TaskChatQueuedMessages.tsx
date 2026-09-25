@@ -29,6 +29,7 @@ import type {
   IssueQueuedCommentQueue,
 } from "@paperclipai/shared";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -95,6 +96,7 @@ function SortableQueuedMessage({
   onInterrupt?: () => void;
   onDiscard: () => void;
 }) {
+  const { t } = useTranslation();
   const immutableResponse = entry.source?.kind === "interaction";
   const label = immutableResponse ? entry.comment.body.split("\n")[0] : entry.comment.body;
   const sortable = useSortable({
@@ -109,10 +111,10 @@ function SortableQueuedMessage({
     queueMutationDisabled || queue.steeringDisposition !== "available";
   const steerTitle =
     queue.steeringDisposition === "unsupported"
-      ? "This runner does not support steering"
+      ? t("app.taskChat.taskChatQueuedMessages.steerUnsupported")
       : queue.steeringDisposition === "temporarily_unavailable"
-        ? "Steering is temporarily unavailable"
-        : "Steer this message into the active turn";
+        ? t("app.taskChat.taskChatQueuedMessages.steerTemporarilyUnavailable")
+        : t("app.taskChat.taskChatQueuedMessages.steerTitle");
 
   return (
     <div
@@ -131,7 +133,7 @@ function SortableQueuedMessage({
         {...sortable.attributes}
         {...sortable.listeners}
         disabled={queueMutationDisabled || immutableResponse}
-        aria-label={`Reorder queued message: ${entry.comment.body}`}
+        aria-label={t("app.taskChat.taskChatQueuedMessages.reorderLabel", { body: entry.comment.body })}
         className="flex h-7 w-7 shrink-0 cursor-grab items-center justify-center rounded-md text-muted-foreground/70 transition-colors hover:bg-accent hover:text-foreground active:cursor-grabbing disabled:cursor-default disabled:opacity-40"
       >
         <GripVertical className="h-3.5 w-3.5" aria-hidden />
@@ -150,7 +152,7 @@ function SortableQueuedMessage({
           type="button"
           onClick={onInterrupt}
           disabled={busy || !queue.queueId || !onInterrupt}
-          title={queue.targetRunId ? "Interrupt the active turn and send queued messages" : "Send queued messages now"}
+          title={queue.targetRunId ? t("app.taskChat.taskChatQueuedMessages.interruptTitle") : t("app.taskChat.taskChatQueuedMessages.sendNowTitle")}
           className="flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-40"
           data-testid={`task-chat-queued-interrupt-${entry.comment.id}`}
         >
@@ -159,7 +161,7 @@ function SortableQueuedMessage({
           ) : (
             <CornerDownRight className="h-3.5 w-3.5" aria-hidden />
           )}
-          Interrupt
+          {t("app.issueChat.queue.interrupt")}
         </button>
       ) : (
         <button
@@ -175,7 +177,7 @@ function SortableQueuedMessage({
           ) : (
             <CornerDownRight className="h-3.5 w-3.5" aria-hidden />
           )}
-          Steer
+          {t("app.taskChat.taskChatQueuedMessages.steer")}
         </button>
       )}
 
@@ -187,8 +189,8 @@ function SortableQueuedMessage({
           (!queue.queueId && !entry.comment.id.startsWith("optimistic-")) ||
           !entry.canDiscard
         }
-        title="Discard queued message"
-        aria-label={`Discard queued message: ${entry.comment.body}`}
+        title={t("app.taskChat.taskChatQueuedMessages.discard")}
+        aria-label={t("app.taskChat.taskChatQueuedMessages.discardLabel", { body: entry.comment.body })}
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive disabled:opacity-40"
         data-testid={`task-chat-queued-discard-${entry.comment.id}`}
       >
@@ -204,8 +206,8 @@ function SortableQueuedMessage({
           <button
             type="button"
             disabled={queueMutationDisabled || immutableResponse}
-            title="Queued message actions"
-            aria-label={`Queued message actions: ${entry.comment.body}`}
+            title={t("app.taskChat.taskChatQueuedMessages.actions")}
+            aria-label={t("app.taskChat.taskChatQueuedMessages.actionsLabel", { body: entry.comment.body })}
             className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-40"
           >
             <MoreHorizontal className="h-4 w-4" aria-hidden />
@@ -214,7 +216,7 @@ function SortableQueuedMessage({
         <DropdownMenuContent align="end" className="w-44">
           <DropdownMenuItem disabled={!entry.canEdit} onSelect={onEdit}>
             <Pencil className="h-4 w-4" aria-hidden />
-            Edit message
+            {t("app.taskChat.taskChatQueuedMessages.editMessage")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -231,6 +233,7 @@ export function TaskChatQueuedMessages({
   onInterrupt,
   onDiscard,
 }: TaskChatQueuedMessagesProps) {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState(queue.entries);
   const [pending, setPending] = useState<{
     commentId: string;
@@ -279,7 +282,7 @@ export function TaskChatQueuedMessages({
     setReordering(true);
     setVisibleError(null);
     setAnnouncement(
-      `Moved queued message to position ${to + 1} of ${next.length}.`,
+      t("app.taskChat.taskChatQueuedMessages.movedAnnouncement", { position: to + 1, total: next.length }),
     );
     try {
       await onReorder(orderedIds, queue.revision);
@@ -288,8 +291,8 @@ export function TaskChatQueuedMessages({
       setAnnouncement("");
       setVisibleError(
         queueActionErrorCode(error) === "queued_comment_revision_conflict"
-          ? "The queue changed in another session. Its latest order has been restored."
-          : "Couldn’t reorder. Previous order restored.",
+          ? t("app.taskChat.taskChatQueuedMessages.reorderConflict")
+          : t("app.taskChat.taskChatQueuedMessages.reorderFailed"),
       );
     } finally {
       setReordering(false);
@@ -314,10 +317,10 @@ export function TaskChatQueuedMessages({
     setVisibleError(null);
     setAnnouncement(
       action === "steer"
-        ? "Steering queued message."
+        ? t("app.taskChat.taskChatQueuedMessages.steering")
         : action === "interrupt"
-          ? "Sending queued messages."
-          : "Discarding queued message.",
+          ? t("app.taskChat.taskChatQueuedMessages.sending")
+          : t("app.taskChat.taskChatQueuedMessages.discarding"),
     );
     if (action === "steer") {
       setEntries((current) =>
@@ -335,10 +338,10 @@ export function TaskChatQueuedMessages({
       }
       setAnnouncement(
         action === "steer"
-          ? "Message steered into the active turn."
+          ? t("app.taskChat.taskChatQueuedMessages.steered")
           : action === "interrupt"
-            ? "Queued messages will be sent when the previous run has stopped."
-            : "Queued message discarded.",
+            ? t("app.taskChat.taskChatQueuedMessages.willSendAfterStop")
+            : t("app.taskChat.taskChatQueuedMessages.discarded"),
       );
     } catch (error) {
       if (action === "steer") setEntries(previous);
@@ -346,14 +349,14 @@ export function TaskChatQueuedMessages({
       const code = queueActionErrorCode(error);
       setVisibleError(
         code === "queued_comment_already_dispatching"
-          ? "Too late to discard: this message is already being sent."
+          ? t("app.taskChat.taskChatQueuedMessages.tooLateToDiscard")
           : action === "steer"
-            ? "Couldn’t steer. Message is still queued."
+            ? t("app.taskChat.taskChatQueuedMessages.steerFailed")
             : action === "interrupt"
-              ? "Couldn’t interrupt. Message is still queued."
+              ? t("app.taskChat.taskChatQueuedMessages.interruptFailed")
               : code === "queued_comment_revision_conflict"
-                ? "The queue changed in another session. Review it and try again."
-                : "Couldn’t discard. Message is still queued.",
+                ? t("app.taskChat.taskChatQueuedMessages.discardConflict")
+                : t("app.taskChat.taskChatQueuedMessages.discardFailed"),
       );
     } finally {
       setPending(null);
@@ -366,7 +369,7 @@ export function TaskChatQueuedMessages({
     <div
       className="relative z-0 mx-3 -mb-px overflow-hidden rounded-t-xl rounded-b-none border border-b-0 border-border/75 bg-card shadow-sm"
       data-testid="task-chat-queued-messages"
-      aria-label="Queued messages"
+      aria-label={t("app.taskChat.taskChatQueuedMessages.queuedMessages")}
     >
       {queue.executionWait && (
         <div role="status" aria-live="polite" className="px-3 py-1.5 text-xs text-muted-foreground">

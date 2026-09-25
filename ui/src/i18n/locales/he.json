@@ -10543,6 +10543,672 @@
           "loadFailed": "Could not load members or linked accounts. Refresh to try again."
         }
       }
+    },
+    "taskChat": {
+      "chatComposer": {
+        "dropToAttach": "Drop to attach",
+        "uploading": "Uploading…",
+        "attached": "Attached",
+        "attachFiles": "Attach files",
+        "messagePlaceholder": "Message…",
+        "sendMessage": "Send message"
+      },
+      "agentChannelsPanel": {
+        "title": "Channels",
+        "description": "Chat and email identities connected to this agent.",
+        "connectChannel": "Connect a channel",
+        "loading": "Loading channels…",
+        "emptyTitle": "No channels connected",
+        "emptyDescription": "Connect AgentMail, Slack, GitHub, Discord, Microsoft Teams, or Telegram from Connectors.",
+        "openConnectors": "Open Connectors",
+        "providerIdentity": "Provider identity",
+        "openConnection": "Open connection"
+      },
+      "chatSetupNavigation": {
+        "connectProvider": "Connect provider",
+        "progressLabel": "Connection setup progress"
+      },
+      "boardSendDraft": {
+        "unreadableIdentity": "Saved channel delivery identity could not be read. Check Activity before starting another send."
+      },
+      "taskChatActivityPhase": {
+        "collapseActivity": "Collapse activity: {{summary}}",
+        "expandActivity": "Expand activity: {{summary}}"
+      },
+      "taskChatBubble": {
+        "images": "Images · {{count}}",
+        "files": "Files · {{count}}",
+        "openItem": "Open {{name}}",
+        "imageNumber": "image {{number}}",
+        "image": "image",
+        "openMoreScreenshots": "Open {{count}} more screenshots",
+        "verificationCaveat": "Verification caveat",
+        "sending": "Sending…"
+      },
+      "taskChatBubbleActions": {
+        "copyFailed": "Couldn’t copy message"
+      },
+      "taskChatDescriptionBubble": {
+        "addDescription": "Add a description...",
+        "editDescription": "Edit description"
+      },
+      "taskChatInteractionCard": {
+        "reviewRequest": "Review request"
+      },
+      "taskChatMarker": {
+        "tryingAgain": "Trying again..."
+      },
+      "taskChatPausedTakeover": {
+        "subtreePaused": "Subtree is paused.",
+        "taskPaused": "Task is paused.",
+        "resumeSubtreeHint": "Resume this subtree to send a message.",
+        "resumeTaskHint": "Resume this task to send a message.",
+        "draftSaved": "Your draft is saved.",
+        "resumeSubtree": "Resume subtree",
+        "resumeTask": "Resume task"
+      },
+      "taskChatPlanPreviewCard": {
+        "plan": "Plan",
+        "revision": "rev {{revision}}",
+        "writingPlan": "Writing plan",
+        "waitingFirstStep": "Waiting for the first plan step…",
+        "openToReview": "Open the synchronized plan to review it.",
+        "openPlan": "Open Plan",
+        "openPlanRevision": "Open Plan revision {{revision}}",
+        "streamingPreview": "Streaming Plan preview"
+      },
+      "taskChatPlanView": {
+        "doneCount": "{{done}}/{{total}} done"
+      },
+      "taskChatProjectCreatedCard": {
+        "ariaLabel": "Project created: {{name}}",
+        "title": "Project created"
+      },
+      "taskChatSkillCreatedCard": {
+        "ariaLabel": "Skill created: {{name}}",
+        "title": "Skill created"
+      },
+      "taskChatRichInput": {
+        "uploadsUnavailable": "Image uploads are unavailable.",
+        "dropOrPasteHint": "or drop/paste an image into the note"
+      },
+      "taskChatRunnerActivityGroup": {
+        "thinking": "Thinking",
+        "thought": "Thought",
+        "tokenUsage": "Token usage",
+        "permissionDecision": "Permission {{decision}}",
+        "oneActivity": "{{count}} activity",
+        "manyActivities": "{{count}} activities",
+        "summaryWithCount": "{{summary}} ({{countLabel}})",
+        "collapseLabel": "Collapse {{label}}",
+        "expandLabel": "Expand {{label}}",
+        "activityHistory": "Activity history"
+      },
+      "questionForm": {
+        "required": "This question is required.",
+        "enterCustomAnswer": "Enter a custom answer.",
+        "minLength": "Enter at least {{count}} characters.",
+        "maxLength": "Enter no more than {{count}} characters.",
+        "unsupportedPattern": "This question has an unsupported validation pattern.",
+        "requestedFormat": "Use the requested format.",
+        "validNumber": "Enter a valid number.",
+        "validInteger": "Enter a valid integer.",
+        "minimum": "Enter a value of at least {{value}}.",
+        "maximum": "Enter a value no greater than {{value}}.",
+        "recommended": "Recommended",
+        "noAnswer": "No answer",
+        "noQuestions": "No answerable questions were provided.",
+        "questionNeedsAnswer": "Question {{number}} needs an answer before you can send.",
+        "submitFailed": "The answers could not be submitted.",
+        "cancelFailed": "The questions could not be cancelled.",
+        "pagination": "Question pagination",
+        "previousQuestion": "Previous question",
+        "nextQuestion": "Next question",
+        "pageOf": "{{current}} of {{total}}",
+        "writeAnAnswer": "Write an answer",
+        "writeYourAnswer": "Write your answer",
+        "attachImageFor": "Attach image to answer for {{prompt}}",
+        "filterChoices": "Filter choices",
+        "filterChoicesFor": "Filter choices for {{prompt}}",
+        "other": "Other",
+        "typeYourAnswer": "Type your answer",
+        "attachImageOtherFor": "Attach image to other answer for {{prompt}}",
+        "skip": "Skip",
+        "submitAnswers": "Submit answers"
+      },
+      "richWorkProductCard": {
+        "changesRequested": "Changes requested",
+        "opening": "Opening",
+        "pending": "Pending",
+        "open": "Open",
+        "merged": "Merged",
+        "closed": "Closed",
+        "openPreview": "Open preview",
+        "openOnGitHub": "Open on GitHub",
+        "image": "Image",
+        "video": "Video",
+        "file": "File",
+        "openGallery": "Open gallery",
+        "document": "Document",
+        "revision": "rev {{revision}}",
+        "openDocument": "Open document",
+        "port": "port {{port}}",
+        "openService": "Open service",
+        "down": "Down",
+        "unhealthy": "Unhealthy",
+        "oneFile": "{{count}} file",
+        "manyFiles": "{{count}} files",
+        "actionLabel": "{{action}}: {{title}}"
+      },
+      "runnerGoalWidget": {
+        "pending": {
+          "starting": "Starting",
+          "editing": "Saving",
+          "replacing": "Replacing",
+          "pausing": "Pausing after current turn",
+          "resuming": "Resuming",
+          "clearing": "Clearing",
+          "continuing": "Continuing in a new run"
+        },
+        "selectAgent": "Select an agent to use /goal.",
+        "unsupported": "Session goals are unsupported by this agent.",
+        "actionFailed": "The goal action could not be applied.",
+        "noGoalToEdit": "There is no current session goal to edit.",
+        "addObjective": "Add an objective after /goal to start a goal.",
+        "agentSessionGoal": "Agent session goal",
+        "sessionGoal": "Session goal",
+        "workingNow": "Working now",
+        "emptyHint": "Type /goal followed by an objective to pursue work across turns.",
+        "tokens": "{{used}} tokens",
+        "tokensOfBudget": "{{used}} tokens / {{budget}}",
+        "iterations": "{{count}} iterations",
+        "editGoal": "Edit goal",
+        "pauseGoal": "Pause goal",
+        "resumeGoal": "Resume goal",
+        "clearGoal": "Clear goal",
+        "replaceTitle": "Replace session goal?",
+        "editTitle": "Edit session goal",
+        "replaceDescription": "This clears the unfinished goal and starts a new goal with the objective below.",
+        "editDescription": "Update the objective without clearing the goal's progress.",
+        "goalObjective": "Goal objective",
+        "replaceGoal": "Replace goal",
+        "saveGoal": "Save goal"
+      },
+      "taskChatBlockerLinks": {
+        "stillBlockedBy": "Still blocked by",
+        "blockedBy": "Blocked by",
+        "rootBlockerRemains": "Root blocker remains",
+        "rootBlocker": "Root blocker",
+        "ultimatelyBlockedBy": "Ultimately blocked by",
+        "taskBlockers": "Task blockers",
+        "stillWaitingOnLiveWork": "Still waiting on live work",
+        "waitingOnLiveWork": "Waiting on live work",
+        "tasksWaitingOnLiveWork": "Tasks waiting on live work",
+        "nowRunning": "Now running"
+      },
+      "taskChatProtocolActivityRow": {
+        "query": "Query",
+        "oneResult": "{{count}} result",
+        "manyResults": "{{count}} results",
+        "showOneMoreResult": "Show {{count}} more result",
+        "showMoreResults": "Show {{count}} more results",
+        "showFewerResults": "Show fewer results",
+        "additionalOutput": "Additional provider output is available in Runner Inspector.",
+        "noChangedFileDetails": "No changed-file details were reported.",
+        "oneMoreFileHidden": "{{count}} more file not shown",
+        "moreFilesHidden": "{{count}} more files not shown",
+        "noticeWithoutMessage": "The provider reported a notice without a message."
+      },
+      "taskChatProtocolCard": {
+        "researchSources": "Research sources",
+        "planSteps": "Plan steps",
+        "delegatedAgents": "Delegated agents",
+        "outputTruncated": "Output truncated to 8 KiB.",
+        "changedFiles": "Changed files",
+        "previewUnavailableShort": "Preview unavailable.",
+        "previewTruncated": "Preview truncated by the runner.",
+        "oneFileChanged": "{{count}} file changed",
+        "manyFilesChanged": "{{count}} files changed",
+        "changedWithStats": "{{changed}} · {{stats}}",
+        "workspaceChangesInProgress": "Workspace changes in progress",
+        "workspaceChanges": "Workspace changes",
+        "binary": "binary",
+        "showFewerFiles": "Show fewer files",
+        "showMoreFiles": "Show {{count}} more files",
+        "reviewDiff": "Review diff",
+        "workspaceDiff": "Workspace diff",
+        "binaryNoDiff": "Binary file; text diff is unavailable.",
+        "noInlinePatch": "No inline patch was recorded for this file.",
+        "file": "File",
+        "lineNumber": "line {{line}}",
+        "preview": "Preview",
+        "previewUnavailable": "Preview unavailable. The verified workspace reference is still available above.",
+        "answerDetailsNotRecorded": "Answer details were not recorded by this older runtime.",
+        "noAnswersCancelled": "No answers were submitted; this request was cancelled.",
+        "noAnswersExpired": "No answers were submitted; this request was expired.",
+        "noAnswersStatus": "No answers were submitted; this request was {{status}}.",
+        "questionsAnswered": "Questions answered",
+        "questionsCancelled": "Questions cancelled",
+        "questionsExpired": "Questions expired",
+        "questionsResolved": "Questions resolved",
+        "runtimeInput": "Runtime input",
+        "runtimePermission": "Runtime permission",
+        "response": "Response",
+        "resolveFailed": "The runtime request could not be resolved.",
+        "submitting": "Submitting…",
+        "submitResponse": "Submit response",
+        "resolveInActiveSession": "Resolve this request in the active runtime session.",
+        "runResult": "Run result",
+        "blockedReason": "Blocked: {{reason}}",
+        "verificationResults": "Verification results",
+        "blocksCompletion": "· blocks completion",
+        "runEnded": "Run ended"
+      },
+      "taskChatQueuedMessages": {
+        "steerUnsupported": "This runner does not support steering",
+        "steerTemporarilyUnavailable": "Steering is temporarily unavailable",
+        "steerTitle": "Steer this message into the active turn",
+        "reorderLabel": "Reorder queued message: {{body}}",
+        "interruptTitle": "Interrupt the active turn and send queued messages",
+        "sendNowTitle": "Send queued messages now",
+        "steer": "Steer",
+        "discard": "Discard queued message",
+        "discardLabel": "Discard queued message: {{body}}",
+        "actions": "Queued message actions",
+        "actionsLabel": "Queued message actions: {{body}}",
+        "editMessage": "Edit message",
+        "movedAnnouncement": "Moved queued message to position {{position}} of {{total}}.",
+        "reorderConflict": "The queue changed in another session. Its latest order has been restored.",
+        "reorderFailed": "Couldn’t reorder. Previous order restored.",
+        "steering": "Steering queued message.",
+        "sending": "Sending queued messages.",
+        "discarding": "Discarding queued message.",
+        "steered": "Message steered into the active turn.",
+        "willSendAfterStop": "Queued messages will be sent when the previous run has stopped.",
+        "discarded": "Queued message discarded.",
+        "tooLateToDiscard": "Too late to discard: this message is already being sent.",
+        "steerFailed": "Couldn’t steer. Message is still queued.",
+        "interruptFailed": "Couldn’t interrupt. Message is still queued.",
+        "discardConflict": "The queue changed in another session. Review it and try again.",
+        "discardFailed": "Couldn’t discard. Message is still queued.",
+        "queuedMessages": "Queued messages"
+      },
+      "taskChatTurn": {
+        "oneTool": "{{count}} tool",
+        "manyTools": "{{count}} tools",
+        "labelWithMetrics": "{{label}} · {{metrics}}",
+        "workedFor": "Worked for {{duration}}",
+        "stoppedFor": "Stopped for {{duration}}",
+        "continuedAfterSteering": "Continued after steering · {{label}}"
+      },
+      "taskChatRunnerTurn": {
+        "stoppedAfter": "Stopped after {{duration}}",
+        "workingFor": "Working for {{duration}}",
+        "activityUnavailable": "Live runner activity is temporarily unavailable. Retrying…"
+      },
+      "taskChatSystemNotice": {
+        "systemUpdate": "System update: {{title}}"
+      },
+      "taskChatThinking": {
+        "reasoningDetail": "Reasoning detail",
+        "reasoning": "Reasoning",
+        "reasoningDetailActive": "Reasoning detail…",
+        "reasoningActive": "Reasoning…",
+        "thinking": "Thinking…",
+        "collapseReasoning": "Collapse reasoning: {{preview}}",
+        "expandReasoning": "Expand reasoning: {{preview}}",
+        "collapseReasoningDetail": "Collapse reasoning detail: {{preview}}",
+        "expandReasoningDetail": "Expand reasoning detail: {{preview}}"
+      },
+      "taskChatToolCard": {
+        "interrupted": "Interrupted",
+        "changed": "Changed"
+      },
+      "taskChatTurnStatusIsland": {
+        "stepProgress": "Step {{current}} / {{total}}",
+        "stepOf": "Step {{current}} of {{total}}",
+        "stepOfWithLabel": "Step {{current}} of {{total}}: {{label}}",
+        "additions": "{{count}} additions",
+        "deletions": "{{count}} deletions",
+        "turnPlan": "Turn plan",
+        "checklist": "Within-turn checklist"
+      },
+      "taskMessageScroller": {
+        "scrollToLatest": "Scroll to latest"
+      },
+      "tweakPanel": {
+        "title": "Motion tweak panel",
+        "resetAll": "Reset all",
+        "minimize": "Minimize",
+        "copyAsTheme": "Copy as @theme",
+        "copied": "Copied to clipboard",
+        "copyFailed": "Copy failed — select the text and copy it manually",
+        "clickToCopy": "Click the box to copy"
+      },
+      "externallyConnectedTaskBanner": {
+        "publication": {
+          "awaitingConsent": {
+            "title": "Waiting for file consent",
+            "body": "The recipient must accept the file card in Microsoft Teams. The file is not delivered yet; this send identity is kept while Paperclip waits."
+          },
+          "published": {
+            "title": "Sent to channel",
+            "body": "The board update was published to the connected conversation."
+          },
+          "pending": {
+            "title": "Queued for channel",
+            "body": "Delivery is still pending. Your draft is kept until Paperclip confirms publication."
+          },
+          "streaming": {
+            "title": "Publishing to channel",
+            "body": "Delivery is still in progress. Your draft is kept until Paperclip confirms publication."
+          },
+          "retry": {
+            "title": "Delivery retry scheduled",
+            "body": "Paperclip will retry this publication. Your draft and retry identity are kept."
+          },
+          "deliveryUnknown": {
+            "title": "Delivery not confirmed",
+            "body": "The provider may have accepted this update. Resolve it in Activity before trying again to avoid a duplicate."
+          },
+          "failed": {
+            "title": "Channel delivery failed",
+            "body": "Your draft is kept. Open Activity to retry this same publication safely."
+          },
+          "cancelled": {
+            "title": "Channel delivery cancelled",
+            "body": "Your draft is kept. Some parts may already have been published; check Activity before starting a new send."
+          }
+        },
+        "filePhase": {
+          "consentPending": "Consent card queued",
+          "consentSending": "Sending consent card",
+          "consentUnknown": "Consent card delivery not confirmed",
+          "awaitingConsent": "Awaiting consent",
+          "uploadPending": "Upload queued",
+          "uploading": "Uploading file",
+          "uploadUnknown": "File upload not confirmed",
+          "fileInfoPending": "File notification queued",
+          "fileInfoSending": "Sending file notification",
+          "fileInfoUnknown": "File notification not confirmed",
+          "delivered": "Delivered",
+          "declined": "Declined",
+          "expired": "Consent expired",
+          "cancelled": "Cancelled; remote bytes may remain",
+          "conflict": "File delivery needs review"
+        },
+        "storage": {
+          "readFailed": "Saved delivery identity could not be read. Check Activity and restore browser storage before starting another send.",
+          "rejectionSaveFailed": "The rejected send could not be saved. Restore browser storage, then retry this same request to recover its receipt.",
+          "rejectionClearFailed": "Saved rejection could not be cleared. Restore browser storage before editing this send.",
+          "clearFailed": "Saved delivery identity could not be cleared. Restore browser storage before starting another send.",
+          "writeFailed": "Browser storage could not preserve this delivery identity. No update was sent. Restore browser storage, then reload to try again."
+        },
+        "viewActivity": "View activity",
+        "updateNotSent": "Update was not sent",
+        "rejectedToastBody": "A selected file already belongs to another comment. Edit the rejected send to correct the selection.",
+        "confirmFailedTitle": "Couldn't confirm channel delivery",
+        "confirmFailedBodyWithReason": "{{reason}} Your draft is kept; retrying here reuses the same request identity.",
+        "confirmFailedBody": "Your draft is kept; retrying here reuses the same request identity.",
+        "uploadFailed": "{{reason}} No channel message was sent. Check task files before retrying the upload.",
+        "uploadNotConfirmed": "Upload could not be confirmed.",
+        "selectedFileUnavailable": "Selected task file (details unavailable)",
+        "mixedOutcomes": {
+          "title": "Delivery settled with mixed outcomes",
+          "body": "Not every part was confirmed delivered. Review the outcomes below; dismissing this receipt does not resend anything."
+        },
+        "remainingConsent": {
+          "title": "Waiting for remaining file consent",
+          "body": "Some parts have settled. The remaining file cards still need the recipient's response; this send stays locked until the whole batch is resolved."
+        },
+        "externalConversation": "External conversation",
+        "connectedTo": "Connected to {{provider}}",
+        "agentAssignmentFixed": "{{label}} · Agent assignment is fixed for this external task.",
+        "openProvider": "Open {{provider}}",
+        "sendToChannel": "Send to channel",
+        "connection": "Connection",
+        "boardUpdate": "Board update",
+        "bodyPlaceholder": "Write only what should be visible in the provider conversation.",
+        "addMessageWithFiles": "Add a message to send with your files.",
+        "attachFileLabel": "Attach file to channel update",
+        "attachFile": "Attach file",
+        "filesStayOnTask": "Files stay on this task until you send them to the channel.",
+        "selectionNotice": "A file already attached to another comment was removed from this selection. Attach a new copy or share the task link; your message is unchanged.",
+        "filesInThisSend": "Files in this send",
+        "includeTaskFiles": "Include task files",
+        "filesHint": {
+          "github": "GitHub Apps cannot upload file bytes in comments. Checked files stay on the Paperclip task; GitHub receives an authenticated task link when this Board has a public URL, or a private-task notice otherwise.",
+          "teams": "In personal Teams chats, recipients accept each file before upload. Channels and group chats receive supported images directly; other files stay on the task, with a task link or private-task notice.",
+          "retained": "These are the files selected for this send. Selection is locked until delivery is resolved.",
+          "default": "Only checked files will be published to the external conversation."
+        },
+        "unnamedAttachment": "Unnamed attachment",
+        "rejectedBody": "A selected file already belongs to another comment. This request was rejected before any channel message was queued. Your exact draft is kept.",
+        "editRejectedSend": "Edit rejected send",
+        "resultNotConfirmed": {
+          "title": "Delivery result not confirmed",
+          "body": "Your exact draft and request identity are kept. Retry safely to learn the authoritative publication state without creating a duplicate."
+        },
+        "openActivity": "Open Activity",
+        "batch": {
+          "published": "{{count}} published",
+          "awaitingConsent": "{{count}} awaiting consent",
+          "declined": "{{count}} declined",
+          "expired": "{{count}} expired",
+          "cancelled": "{{count}} cancelled",
+          "partsPublished": "{{published}} of {{total}} parts published."
+        },
+        "fileDeliveryOutcomes": "File delivery outcomes",
+        "statusRefreshFailed": "Delivery status could not be refreshed. Your draft is kept; Paperclip will check again without sending another update.",
+        "providerDetail": "Provider detail: {{detail}}",
+        "dismissReceipt": "Dismiss delivery receipt",
+        "ordinaryCommentsNote": "Ordinary board comments remain Paperclip-only.",
+        "retrySafely": "Retry safely"
+      },
+      "taskChatCompactInteractionCard": {
+        "kind": {
+          "suggestTasks": {
+            "title": "Suggested tasks",
+            "label": "Tasks"
+          },
+          "askUserQuestions": {
+            "title": "Questions",
+            "label": "Questions"
+          },
+          "requestConfirmation": {
+            "title": "Confirmation",
+            "label": "Confirmation"
+          },
+          "checkboxConfirmation": {
+            "title": "Choose options",
+            "label": "Selection"
+          },
+          "itemVerdicts": {
+            "title": "Review items",
+            "label": "Review"
+          },
+          "connectionIntent": {
+            "title": "Connect service",
+            "label": "Connection"
+          }
+        },
+        "openTarget": "Open {{label}}",
+        "openPlan": "Open plan",
+        "openPlanRevision": "Open plan revision {{revision}}",
+        "answerValue": "Answer: {{value}}",
+        "noOptionsSelected": "No options selected",
+        "noVerdicts": "No verdicts submitted",
+        "noTasksCreated": "No tasks created",
+        "requestedAccess": "{{agent}} requested access to {{service}}.",
+        "risk": "{{risk}} risk",
+        "secret": "Secret",
+        "binding": "Binding",
+        "why": "Why",
+        "expires": "Expires",
+        "reasonPrefix": "Reason:",
+        "viewOriginal": "View original request and resolution",
+        "acceptPlanPrompt": "Do you accept this plan?",
+        "argumentsAndHash": "Arguments and audit hash",
+        "whatShouldChange": "What should change?",
+        "withOptional": "{{label}} (optional)",
+        "describeChange": "Describe what should change",
+        "addShortNote": "Add a short note",
+        "selectedChooseRange": "{{count}} selected · choose {{min}}–{{max}}",
+        "selectedAtLeast": "{{count}} selected · at least {{min}}",
+        "selectedCount": "{{count}} selected",
+        "filterOptions": "Filter options",
+        "confirmSelection": "Confirm selection",
+        "selectTasks": "Select the tasks to create.",
+        "filterSuggestedTasks": "Filter suggested tasks",
+        "whyTasksChange": "Why should these tasks change? (optional)",
+        "selectedOfTotal": "{{selected}} of {{total}} selected",
+        "sendBack": "Send back",
+        "revise": "Revise",
+        "createSelected": "Create selected",
+        "noReviewItems": "No review items were provided.",
+        "decidedCount": "{{count}} decided",
+        "itemPagination": "Item pagination",
+        "previousItem": "Previous item",
+        "nextItem": "Next item",
+        "verdictFor": "Verdict for {{label}}",
+        "reason": "Reason",
+        "addShortReason": "Add a short reason",
+        "submitRejectionReason": "Submit rejection reason",
+        "applyCount": "Apply {{count}}",
+        "applyDecisions": "Apply decisions"
+      },
+      "taskChatComposer": {
+        "modeDescription": {
+          "standard": "Make changes and run work",
+          "planning": "Draft a plan before acting",
+          "ask": "Answer questions only, no changes"
+        },
+        "placeholder": {
+          "planningShort": "Plan with {{agent}}…",
+          "askShort": "Ask {{agent}}…",
+          "standardShort": "Message {{agent}}…",
+          "planning": "Plan with {{agent}} — shapes the plan doc, no code changes…",
+          "ask": "Ask {{agent}} a question — read-only, nothing runs…",
+          "standard": "Message {{agent}} — describe what you want done…"
+        },
+        "unassigned": "Unassigned",
+        "theAgent": "the agent",
+        "editQueuedMessage": "Edit queued message…",
+        "goalCommand": {
+          "name": "Goal",
+          "unverified": "Support will be verified when the session starts.",
+          "description": "Pursue work across turns."
+        },
+        "noFileUrl": "Upload did not return a file URL",
+        "attachmentRemoved": "Attachment was removed",
+        "fileTypeNotAllowed": "This file type cannot be attached here",
+        "uncertain": {
+          "body": "We couldn’t confirm whether this comment was saved. It may already be in the conversation. Review it before starting another draft.",
+          "review": "Review conversation",
+          "refreshFailed": "Couldn’t refresh the conversation. Try reviewing it again.",
+          "discardNote": "Discarding this draft does not remove any saved comment or uploaded file.",
+          "discard": "Discard draft and start new"
+        },
+        "dismissLabel": "Dismiss {{label}}",
+        "pendingInput": "Pending input",
+        "pendingCount": "{{count}} pending",
+        "sendNewHint": "Send /new to start a fresh session and resume this conversation.",
+        "composerDisabled": "Composer disabled",
+        "newSessionCommand": {
+          "name": "New session",
+          "description": "Start fresh context here, preserving conversation history."
+        },
+        "queuedChanged": "Queued message changed",
+        "editingQueued": "Editing queued message",
+        "assignee": {
+          "placeholder": "Assignee",
+          "none": "No assignee",
+          "search": "Search assignees…",
+          "empty": "No matches."
+        },
+        "stopping": "Stopping…",
+        "stopResponse": "Stop response",
+        "stop": "Stop",
+        "queueAsNew": "Queue as new message",
+        "saveQueued": "Save queued message",
+        "waitingForUpload": "Waiting for upload to finish",
+        "removeFailedAttachment": "Remove the failed attachment to send",
+        "sendShortcut": "Send (⌘+Enter)",
+        "send": "Send",
+        "goalExtraArgs": "/goal {{subcommand}} does not accept extra arguments.",
+        "goalInConversation": "Create a separate task for work that needs an ongoing execution goal.",
+        "goalRemoveAttachments": "Remove attachments before using /goal.",
+        "goalSelectAgent": "Select an agent before starting a session goal.",
+        "skipFailed": "This request could not be skipped."
+      },
+      "taskChatThread": {
+        "input": {
+          "reviewPlan": "Review plan",
+          "approveToolAction": "Approve tool action",
+          "reviewSecretProposal": "Review secret proposal"
+        },
+        "errors": {
+          "reassignUnavailable": "The task is not available for reassignment.",
+          "queuedNotEditable": "This queued message is no longer editable.",
+          "questionClosed": "This question has already been answered or closed.",
+          "cancelQuestionUnavailable": "Cancelling this question is unavailable.",
+          "submitThroughCard": "Submit the answer through the saved question card.",
+          "missingTurnIdentity": "This runtime request is missing the provider turn identity needed to resolve it.",
+          "permissionNoFormData": "This runtime permission does not accept submitted form data.",
+          "skipUnavailable": "Skipping this interaction is unavailable.",
+          "reorderUnavailable": "Queue reordering is unavailable.",
+          "steerUnavailable": "Steering is unavailable.",
+          "discardUnavailable": "Discard is unavailable."
+        },
+        "documentRevision": "Document · rev {{revision}}",
+        "agentAttachment": "Agent attachment",
+        "waitingToResume": {
+          "label": "Waiting to resume",
+          "detail": "The previous execution needs to be checked before work can continue. See the task’s execution hold for the next action. Individual checks remain in the run history."
+        },
+        "nativeStop": {
+          "approvalRequired": "Approval required",
+          "usageLimitReached": "Usage limit reached",
+          "runCancelled": "Run cancelled",
+          "runInterrupted": "Run interrupted",
+          "runTimedOut": "Run timed out",
+          "runFailed": "Run failed",
+          "cancelledAfterResponse": "The run was cancelled after returning a final response.",
+          "cancelledBeforeAnswer": "The run was cancelled before returning an answer.",
+          "interruptedAfterResponse": "The run was interrupted after returning a final response.",
+          "interruptedBeforeAnswer": "The run was interrupted before returning an answer.",
+          "approvalRequiredDetail": "This operation requires approval, but this runner has no interactive approval handler. Review the operation and update the agent's permission setting before retrying.",
+          "modelRejectedDetail": "The provider rejected the selected model. Check the model ID and your account's access, save the agent configuration, then retry. View the run for the provider's full error.",
+          "usageLimitDetail": "The model provider has reached its current usage limit. Try again after the limit resets.",
+          "timedOutAfterResponse": "The runner timed out after returning a final response ({{code}}).",
+          "timedOutBeforeAnswer": "The runner timed out before returning an answer ({{code}}).",
+          "stoppedAfterResponse": "The runner stopped after returning a final response ({{code}}).",
+          "stoppedBeforeAnswer": "The runner stopped before returning an answer ({{code}})."
+        },
+        "outputTooLarge": "Provider output exceeded the safe limit.",
+        "workspaceSetupFailed": "Workspace setup failed before the agent started.",
+        "withRetryDetail": "{{detail}} {{retry}}",
+        "legacyStop": {
+          "retryScheduled": "Retry scheduled automatically.",
+          "canRetry": "You can retry this message now.",
+          "messagePreserved": "Your message is preserved.",
+          "aiAccountUnavailable": "The selected AI account is unavailable. Fix it in the connection card.",
+          "aiAccountStopped": "This run stopped because its AI account was unavailable.",
+          "reconciliationRequired": "The previous execution must be checked before this task can continue. Your message is preserved. View the stopped run for details.",
+          "stoppedBeforeAnswer": "Execution was stopped before returning an answer.",
+          "runnerStopped": "The runner stopped before returning an answer ({{code}}).",
+          "couldNotStart": "Couldn't start"
+        },
+        "runCompleted": "Run completed",
+        "turnCancelled": "This turn was cancelled before it returned a response.",
+        "noUserFacingResponse": "The runner returned no user-facing response.",
+        "interrupting": "Interrupting…",
+        "historyLoadFailed": "Some task history could not be loaded.",
+        "loadingConversation": "Loading conversation",
+        "waitingToStart": "Waiting to start...",
+        "stoppedBeforeResponse": "This run stopped before a response was available. Review the task’s connection or recovery action below.",
+        "waitingForTranscript": "Waiting for transcript..."
+      }
     }
   }
 }

@@ -23,6 +23,7 @@ import {
 } from "./TaskChatProtocolActivityRow";
 import { TaskChatUsageReadout } from "./TaskChatUsageReadout";
 import { toolActivityPresentation } from "./tool-taxonomy";
+import { t as translate, useTranslation } from "@/i18n";
 
 type Activity = TaskChatActivityPhaseItem["items"][number];
 
@@ -53,7 +54,7 @@ function presentation(item: Activity, active: boolean) {
     const running = active && Boolean(item.streaming);
     return {
       icon: Brain,
-      label: running ? "Thinking" : "Thought",
+      label: running ? translate("app.taskChat.taskChatRunnerActivityGroup.thinking") : translate("app.taskChat.taskChatRunnerActivityGroup.thought"),
       target: item.lines
         .filter((line) => line.trim())
         .at(-1)
@@ -95,7 +96,7 @@ function presentation(item: Activity, active: boolean) {
     .join(" · ");
   return {
     icon: Gauge,
-    label: item.label ?? "Token usage",
+    label: item.label ?? translate("app.taskChat.taskChatRunnerActivityGroup.tokenUsage"),
     target: usage || item.detail,
     mono: false,
     running: false,
@@ -208,6 +209,7 @@ function RollingActivity({
 }
 
 function ActivityDetails({ item }: { item: Activity }) {
+  const { t } = useTranslation();
   if (item.kind === "thinking")
     return <MarkdownBody softBreaks>{item.lines.join("\n")}</MarkdownBody>;
   if (item.kind === "usage") return <TaskChatUsageReadout item={item} />;
@@ -229,7 +231,7 @@ function ActivityDetails({ item }: { item: Activity }) {
           {item.detail}
         </pre>
       ) : null}
-      {item.decision ? <p>Permission {item.decision}</p> : null}
+      {item.decision ? <p>{t("app.taskChat.taskChatRunnerActivityGroup.permissionDecision", { decision: item.decision })}</p> : null}
       {item.diff ? (
         <p className="break-all font-mono">
           {item.diff.path} · +{item.diff.added} −{item.diff.removed}
@@ -312,6 +314,7 @@ export function TaskChatRunnerActivityGroup({
   item: TaskChatActivityPhaseItem;
   defaultExpanded?: boolean;
 }) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useTaskChatExpansion(
     item.id,
     defaultExpanded,
@@ -323,7 +326,12 @@ export function TaskChatRunnerActivityGroup({
   const latest = activities.at(-1);
   const summary = completedActivitySummary(activities);
   const SummaryIcon = summary.icon;
-  const countLabel = `${activities.length} ${activities.length === 1 ? "activity" : "activities"}`;
+  const countLabel = activities.length === 1
+    ? t("app.taskChat.taskChatRunnerActivityGroup.oneActivity", { count: activities.length })
+    : t("app.taskChat.taskChatRunnerActivityGroup.manyActivities", { count: activities.length });
+  const toggleTarget = item.active
+    ? countLabel
+    : t("app.taskChat.taskChatRunnerActivityGroup.summaryWithCount", { summary: summary.fullLabel.toLowerCase(), countLabel });
   return (
     <section
       className="flex min-w-0 flex-col gap-2"
@@ -350,7 +358,7 @@ export function TaskChatRunnerActivityGroup({
             onClick={() => setExpanded(!expanded)}
             aria-expanded={expanded}
             aria-controls={expanded ? historyId : undefined}
-            aria-label={`${expanded ? "Collapse" : "Expand"} ${item.active ? countLabel : `${summary.fullLabel.toLowerCase()} (${countLabel})`}`}
+            aria-label={expanded ? t("app.taskChat.taskChatRunnerActivityGroup.collapseLabel", { label: toggleTarget }) : t("app.taskChat.taskChatRunnerActivityGroup.expandLabel", { label: toggleTarget })}
           >
             {!item.active ? (
               <span
@@ -386,7 +394,7 @@ export function TaskChatRunnerActivityGroup({
             <ol
               id={historyId}
               className="flex min-w-0 flex-col gap-1"
-              aria-label="Activity history"
+              aria-label={t("app.taskChat.taskChatRunnerActivityGroup.activityHistory")}
               data-testid="task-chat-runner-activity-list"
             >
               {activities.map((activity, index) => (

@@ -94,6 +94,7 @@ import { TaskChatWindowScroll } from "@/components/task-chat/useWindowAutoFollow
 import { useSidebar } from "@/context/SidebarContext";
 import { useStreamlinedUiEnabled } from "@/hooks/useStreamlinedUiEnabled";
 import { cn } from "@/lib/utils";
+import { t as translate, useTranslation } from "@/i18n";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useIssuePlanDocument } from "@/hooks/useIssuePlanDocument";
@@ -423,26 +424,26 @@ function durableInputLabel(
   interaction: TaskChatInteractionItem["interaction"],
 ): string {
   if (interaction.kind === "ask_user_questions")
-    return interaction.title ?? "Questions";
+    return interaction.title ?? translate("app.taskChat.taskChatCompactInteractionCard.kind.askUserQuestions.title");
   if (interaction.kind === "suggest_tasks")
-    return interaction.title ?? "Suggested tasks";
+    return interaction.title ?? translate("app.taskChat.taskChatCompactInteractionCard.kind.suggestTasks.title");
   if (interaction.kind === "request_checkbox_confirmation")
-    return interaction.title ?? "Choose options";
+    return interaction.title ?? translate("app.taskChat.taskChatCompactInteractionCard.kind.checkboxConfirmation.title");
   if (interaction.kind === "request_item_verdicts")
-    return interaction.title ?? "Review items";
+    return interaction.title ?? translate("app.taskChat.taskChatCompactInteractionCard.kind.itemVerdicts.title");
   if (interaction.kind === "connection_intent")
-    return interaction.title ?? "Connect service";
+    return interaction.title ?? translate("app.taskChat.taskChatCompactInteractionCard.kind.connectionIntent.title");
   if (
     interaction.payload.target?.type === "issue_document" &&
     interaction.payload.target.key === "plan"
   ) {
-    return interaction.title ?? "Review plan";
+    return interaction.title ?? translate("app.taskChat.taskChatThread.input.reviewPlan");
   }
   if (interaction.payload.toolAction)
-    return interaction.title ?? "Approve tool action";
+    return interaction.title ?? translate("app.taskChat.taskChatThread.input.approveToolAction");
   if (interaction.payload.secretProposal)
-    return interaction.title ?? "Review secret proposal";
-  return interaction.title ?? "Confirmation";
+    return interaction.title ?? translate("app.taskChat.taskChatThread.input.reviewSecretProposal");
+  return interaction.title ?? translate("app.taskChat.taskChatCompactInteractionCard.kind.requestConfirmation.title");
 }
 
 /**
@@ -468,6 +469,7 @@ function durableInputLabel(
  * folded row. flag-OFF remains byte-for-byte IssueChatThread.
  */
 export function TaskChatThread(props: TaskChatThreadProps) {
+  const { t } = useTranslation();
   const { enabled: streamlinedUiEnabled } = useStreamlinedUiEnabled();
   const {
     initialHistoryPending = false,
@@ -599,7 +601,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
       assigneeUserId: string | null;
     }) => {
       if (!issueId)
-        throw new Error("The task is not available for reassignment.");
+        throw new Error(translate("app.taskChat.taskChatThread.errors.reassignUnavailable"));
       await issuesApi.update(issueId, {
         ...reassignment,
         deferWakeForGoal: true,
@@ -647,14 +649,14 @@ export function TaskChatThread(props: TaskChatThreadProps) {
   const saveQueuedEdit = useCallback(
     async (commentId: string, body: string) => {
       if (!queuedEdit || queuedEdit.commentId !== commentId) {
-        throw new Error("This queued message is no longer editable.");
+        throw new Error(translate("app.taskChat.taskChatThread.errors.queuedNotEditable"));
       }
       if (queuedEdit.stale) {
         await onAdd(body);
         return;
       }
       if (!onEditQueuedComment)
-        throw new Error("This queued message is no longer editable.");
+        throw new Error(translate("app.taskChat.taskChatThread.errors.queuedNotEditable"));
       try {
         await onEditQueuedComment(commentId, body, queuedEdit.revision);
       } catch (error) {
@@ -1237,7 +1239,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           surface: "resource",
           resourceKind: "document",
           title: documentDisplayTitle(document),
-          subtitle: `Document · rev ${document.latestRevisionNumber}`,
+          subtitle: translate("app.taskChat.taskChatThread.documentRevision", { revision: document.latestRevisionNumber }),
           href: buildDocumentAnnotationHash({
             documentKey: document.key,
             threadId: null,
@@ -1288,7 +1290,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           kind: "protocol",
           surface: "resource",
           resourceKind: "attachment",
-          title: attachment.originalFilename ?? "Agent attachment",
+          title: attachment.originalFilename ?? translate("app.taskChat.taskChatThread.agentAttachment"),
           subtitle: `${attachment.contentType} · ${formatResourceBytes(attachment.byteSize)}`,
           href: safeResourceHref(attachment.openPath ?? attachment.contentPath),
           timestamp: new Date(attachment.createdAt).toISOString(),
@@ -1481,8 +1483,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             item: {
               id, kind: "marker", variant: "interrupted", tone: "neutral",
-              label: "Waiting to resume",
-              detail: "The previous execution needs to be checked before work can continue. See the task’s execution hold for the next action. Individual checks remain in the run history.",
+              label: translate("app.taskChat.taskChatThread.waitingToResume.label"),
+              detail: translate("app.taskChat.taskChatThread.waitingToResume.detail"),
             },
           });
         }
@@ -1567,36 +1569,38 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             : "native_runner_process_exited");
         const label =
           code === "native_provider_approval_required" && source.status === "failed"
-            ? "Approval required"
+            ? translate("app.taskChat.taskChatThread.nativeStop.approvalRequired")
             : code === "native_provider_usage_limit" && source.status === "failed"
-            ? "Usage limit reached"
+            ? translate("app.taskChat.taskChatThread.nativeStop.usageLimitReached")
             : source.status === "cancelled"
-              ? "Run cancelled"
+              ? translate("app.taskChat.taskChatThread.nativeStop.runCancelled")
               : source.status === "interrupted"
-                ? "Run interrupted"
+                ? translate("app.taskChat.taskChatThread.nativeStop.runInterrupted")
                 : source.status === "timed_out"
-                  ? "Run timed out"
-                  : "Run failed";
-        const responseBoundary = sourceHasNativeResponse
-          ? "after returning a final response"
-          : "before returning an answer";
+                  ? translate("app.taskChat.taskChatThread.nativeStop.runTimedOut")
+                  : translate("app.taskChat.taskChatThread.nativeStop.runFailed");
+        const afterResponse = sourceHasNativeResponse;
         const detail =
           source.status === "cancelled"
-            ? `The run was cancelled ${responseBoundary}.`
+            ? afterResponse ? translate("app.taskChat.taskChatThread.nativeStop.cancelledAfterResponse") : translate("app.taskChat.taskChatThread.nativeStop.cancelledBeforeAnswer")
             : source.status === "interrupted"
-              ? `The run was interrupted ${responseBoundary}.`
+              ? afterResponse ? translate("app.taskChat.taskChatThread.nativeStop.interruptedAfterResponse") : translate("app.taskChat.taskChatThread.nativeStop.interruptedBeforeAnswer")
               : code === "native_provider_approval_required"
-                ? "This operation requires approval, but this runner has no interactive approval handler. Review the operation and update the agent's permission setting before retrying."
+                ? translate("app.taskChat.taskChatThread.nativeStop.approvalRequiredDetail")
                 : code === "native_provider_model_rejected"
-                ? "The provider rejected the selected model. Check the model ID and your account's access, save the agent configuration, then retry. View the run for the provider's full error."
+                ? translate("app.taskChat.taskChatThread.nativeStop.modelRejectedDetail")
                 : code === "native_provider_usage_limit" &&
                     source.status === "failed"
-                  ? "The model provider has reached its current usage limit. Try again after the limit resets."
+                  ? translate("app.taskChat.taskChatThread.nativeStop.usageLimitDetail")
                   : code === "provider_frame_too_large"
-                    ? "Provider output exceeded the safe limit."
+                    ? translate("app.taskChat.taskChatThread.outputTooLarge")
                     : source.status === "timed_out"
-                      ? `The runner timed out ${responseBoundary} (${code}).`
-                      : `The runner stopped ${responseBoundary} (${code}).`;
+                      ? afterResponse
+                        ? translate("app.taskChat.taskChatThread.nativeStop.timedOutAfterResponse", { code })
+                        : translate("app.taskChat.taskChatThread.nativeStop.timedOutBeforeAnswer", { code })
+                      : afterResponse
+                        ? translate("app.taskChat.taskChatThread.nativeStop.stoppedAfterResponse", { code })
+                        : translate("app.taskChat.taskChatThread.nativeStop.stoppedBeforeAnswer", { code });
         const id = `${source.id}:failure`;
         const runAgent = meta?.agentId
           ? agentMap?.get(meta.agentId)
@@ -1636,24 +1640,24 @@ export function TaskChatThread(props: TaskChatThreadProps) {
         settledRunIds.add(source.id);
         const code = meta?.errorCode ?? "native_runner_process_exited";
         const retryDetail = meta?.scheduledRetryAt
-          ? "Retry scheduled automatically."
+          ? translate("app.taskChat.taskChatThread.legacyStop.retryScheduled")
           : canRetryFailedRun
-            ? "You can retry this message now."
-            : "Your message is preserved.";
+            ? translate("app.taskChat.taskChatThread.legacyStop.canRetry")
+            : translate("app.taskChat.taskChatThread.legacyStop.messagePreserved");
         const aiRequest = interactions?.find((interaction) => interaction.kind === "connection_intent" && interaction.payload.purpose === "ai" && interaction.sourceRunId === source.id);
         const detail = aiRequest
           ? aiRequest.status === "pending"
-            ? "The selected AI account is unavailable. Fix it in the connection card."
-            : "This run stopped because its AI account was unavailable."
+            ? translate("app.taskChat.taskChatThread.legacyStop.aiAccountUnavailable")
+            : translate("app.taskChat.taskChatThread.legacyStop.aiAccountStopped")
           : source.status === "cancelled"
             ? code === "execution_reconciliation_required"
-              ? "The previous execution must be checked before this task can continue. Your message is preserved. View the stopped run for details."
-              : "Execution was stopped before returning an answer."
+              ? translate("app.taskChat.taskChatThread.legacyStop.reconciliationRequired")
+              : translate("app.taskChat.taskChatThread.legacyStop.stoppedBeforeAnswer")
             : code === "provider_frame_too_large"
-            ? `Provider output exceeded the safe limit. ${retryDetail}`
+            ? translate("app.taskChat.taskChatThread.withRetryDetail", { detail: translate("app.taskChat.taskChatThread.outputTooLarge"), retry: retryDetail })
             : code.startsWith("workspace_git_scan_")
-            ? `Workspace setup failed before the agent started. ${retryDetail}`
-            : `The runner stopped before returning an answer (${code}). ${retryDetail}`;
+            ? translate("app.taskChat.taskChatThread.withRetryDetail", { detail: translate("app.taskChat.taskChatThread.workspaceSetupFailed"), retry: retryDetail })
+            : translate("app.taskChat.taskChatThread.withRetryDetail", { detail: translate("app.taskChat.taskChatThread.legacyStop.runnerStopped", { code }), retry: retryDetail });
         const id = `${source.id}:failure`;
         entriesWithFailures.push({
           ms: toMs(meta?.finishedAt ?? meta?.startedAt ?? meta?.createdAt),
@@ -1663,7 +1667,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "interrupted",
-            label: source.status === "cancelled" ? (meta?.startedAt ? "Stopped" : "Couldn't start") : "Run failed",
+            label: source.status === "cancelled" ? (meta?.startedAt ? translate("app.common.states.stopped") : translate("app.taskChat.taskChatThread.legacyStop.couldNotStart")) : translate("app.taskChat.taskChatThread.nativeStop.runFailed"),
             runId: source.status === "cancelled" ? undefined : source.id,
             tone: source.status === "cancelled" ? "neutral" : "error",
             detail,
@@ -1731,8 +1735,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
               id,
               kind: "marker",
               variant: "turn_boundary",
-              label: source.status === "cancelled" ? "Stopped" : "Run completed",
-              detail: source.status === "cancelled" ? "This turn was cancelled before it returned a response." : "The runner returned no user-facing response.",
+              label: source.status === "cancelled" ? translate("app.common.states.stopped") : translate("app.taskChat.taskChatThread.runCompleted"),
+              detail: source.status === "cancelled" ? translate("app.taskChat.taskChatThread.turnCancelled") : translate("app.taskChat.taskChatThread.noUserFacingResponse"),
             },
           });
         }
@@ -1763,8 +1767,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "turn_boundary",
-            label: "Run completed",
-            detail: "The runner returned no user-facing response.",
+            label: translate("app.taskChat.taskChatThread.runCompleted"),
+            detail: translate("app.taskChat.taskChatThread.noUserFacingResponse"),
           },
         });
       }
@@ -2285,14 +2289,14 @@ export function TaskChatThread(props: TaskChatThreadProps) {
         interaction.kind === "ask_user_questions" && interaction.sourceRunId === item.runId &&
         interaction.payload.runtimeRequestId === item.requestId);
       if (projected?.kind === "ask_user_questions") {
-        if (projected.status !== "pending") throw new Error("This question has already been answered or closed.");
+        if (projected.status !== "pending") throw new Error(translate("app.taskChat.taskChatThread.errors.questionClosed"));
         if (decision.action === "cancel") {
-          if (!onCancelInteraction) throw new Error("Cancelling this question is unavailable.");
+          if (!onCancelInteraction) throw new Error(translate("app.taskChat.taskChatThread.errors.cancelQuestionUnavailable"));
           await onCancelInteraction(projected);
           return;
         }
         if (decision.action !== "submit" || !("response" in decision) || !projected.payload.questionSet || !onSubmitInteractionAnswers) {
-          throw new Error("Submit the answer through the saved question card.");
+          throw new Error(translate("app.taskChat.taskChatThread.errors.submitThroughCard"));
         }
         const response = decision.response;
         await onSubmitInteractionAnswers(projected, projected.payload.questionSet.questions.map(question => {
@@ -2305,7 +2309,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
       }
       if (!item.turnId || !item.requestKind) {
         throw new Error(
-          "This runtime request is missing the provider turn identity needed to resolve it.",
+          translate("app.taskChat.taskChatThread.errors.missingTurnIdentity"),
         );
       }
       let resolution: RuntimeRequestResolution;
@@ -2327,7 +2331,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
         resolution = { action: "submit", content: decision.values };
       } else {
         throw new Error(
-          "This runtime permission does not accept submitted form data.",
+          translate("app.taskChat.taskChatThread.errors.permissionNoFormData"),
         );
       }
       await heartbeatsApi.resolveRuntimeRequest({
@@ -2358,8 +2362,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
         label:
           pendingRuntimeRequest.questionSet?.title ??
           (pendingRuntimeRequest.requestType === "permission"
-            ? "Runtime permission"
-            : "Runtime input"),
+            ? translate("app.taskChat.taskChatProtocolCard.runtimePermission")
+            : translate("app.taskChat.taskChatProtocolCard.runtimeInput")),
       });
     }
     const durable = (interactions ?? [])
@@ -2434,7 +2438,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
         await handleRuntimeRequestDecision(input.item, { action: "cancel" });
       } else {
         if (!onSkipInteraction)
-          throw new Error("Skipping this interaction is unavailable.");
+          throw new Error(translate("app.taskChat.taskChatThread.errors.skipUnavailable"));
         await onSkipInteraction(input.interaction);
       }
       setTakeoverMode("normal");
@@ -2538,7 +2542,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           disabled={isInterrupting}
           onClick={() => void onInterruptQueued(runId)}
         >
-          {isInterrupting ? "Interrupting…" : "Interrupt"}
+          {isInterrupting ? translate("app.taskChat.taskChatThread.interrupting") : translate("app.issueChat.queue.interrupt")}
         </Button>
       );
     },
@@ -2791,9 +2795,9 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                   role="status"
                   className="absolute inset-x-0 top-0 z-20 mx-auto flex w-full max-w-(--tc-shell-max-w) items-center gap-2 border border-border bg-background px-4 py-2 text-sm text-muted-foreground"
                 >
-                  Some task history could not be loaded.
+                  {t("app.taskChat.taskChatThread.historyLoadFailed")}
                   <Button variant="ghost" size="sm" onClick={retryHistory}>
-                    Retry
+                    {t("app.common.actions.retry")}
                   </Button>
                 </div>
               ) : null}
@@ -2802,7 +2806,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                   className="absolute inset-0 z-10 overflow-hidden bg-background"
                   data-testid="task-chat-history-loading"
                   role="status"
-                  aria-label="Loading conversation"
+                  aria-label={t("app.taskChat.taskChatThread.loadingConversation")}
                 >
                   <div className="mx-auto flex w-full max-w-(--tc-shell-max-w) flex-col gap-4 px-4 py-3">
                     {threadHeader}
@@ -2934,15 +2938,15 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                                     items={tailItems}
                                     emptyMessage={
                                       tailStatus === "queued"
-                                        ? "Waiting to start..."
+                                        ? t("app.taskChat.taskChatThread.waitingToStart")
                                         : (liveRun && liveRun.id === tailRunId
                                             ? liveRun.currentStatusMessage
                                             : null) ||
                                           (tailStatus === "failed"
                                             ? linkedRunMetaById.get(tailRunId ?? "")?.errorCode?.startsWith("workspace_git_scan_")
-                                              ? "Workspace setup failed before the agent started."
-                                              : "This run stopped before a response was available. Review the task’s connection or recovery action below."
-                                            : "Waiting for transcript...")
+                                              ? t("app.taskChat.taskChatThread.workspaceSetupFailed")
+                                              : t("app.taskChat.taskChatThread.stoppedBeforeResponse")
+                                            : t("app.taskChat.taskChatThread.waitingForTranscript"))
                                     }
                                   />
                                 </>
@@ -3007,7 +3011,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                       onEdit={beginQueuedEdit}
                       onReorder={async (orderedCommentIds, revision) => {
                         if (!onReorderQueuedComments)
-                          throw new Error("Queue reordering is unavailable.");
+                          throw new Error(t("app.taskChat.taskChatThread.errors.reorderUnavailable"));
                         await onReorderQueuedComments(
                           orderedCommentIds,
                           revision,
@@ -3015,7 +3019,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                       }}
                       onSteer={async (commentId, revision) => {
                         if (!onSteerQueuedComment)
-                          throw new Error("Steering is unavailable.");
+                          throw new Error(t("app.taskChat.taskChatThread.errors.steerUnavailable"));
                         await onSteerQueuedComment(commentId, revision);
                       }}
                       onInterrupt={
@@ -3030,12 +3034,12 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                       onDiscard={async (commentId, revision) => {
                         if (commentId.startsWith("optimistic-")) {
                           if (!onCancelQueued)
-                            throw new Error("Discard is unavailable.");
+                            throw new Error(t("app.taskChat.taskChatThread.errors.discardUnavailable"));
                           onCancelQueued(commentId);
                           return;
                         }
                         if (!onDiscardQueuedComment)
-                          throw new Error("Discard is unavailable.");
+                          throw new Error(t("app.taskChat.taskChatThread.errors.discardUnavailable"));
                         await onDiscardQueuedComment(commentId, revision);
                         if (queuedEdit?.commentId === commentId)
                           setQueuedEdit(null);

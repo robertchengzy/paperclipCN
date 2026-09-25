@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { t as translate, useTranslation } from "@/i18n";
 import { useStreamlinedTaskChatPresentation } from "./presentation-mode";
 import { Check, ChevronRight, X } from "lucide-react";
 import { MarkdownBody } from "@/components/MarkdownBody";
@@ -35,7 +36,9 @@ export function turnSummaryMetrics(
   if (summary.durationLabel) parts.push(summary.durationLabel);
   if (summary.toolCount > 0)
     parts.push(
-      `${summary.toolCount} tool${summary.toolCount === 1 ? "" : "s"}`,
+      summary.toolCount === 1
+        ? translate("app.taskChat.taskChatTurn.oneTool", { count: summary.toolCount })
+        : translate("app.taskChat.taskChatTurn.manyTools", { count: summary.toolCount }),
     );
   if (summary.added > 0 || summary.removed > 0)
     parts.push(`+${summary.added} −${summary.removed}`);
@@ -46,8 +49,8 @@ export function turnSummaryMetrics(
 /** "✓ Worked · 38s · 3 tools · +34 −3 · 12.3k tokens" (parts omitted when unknown). */
 export function turnSummaryText(summary: TaskChatTurnItem["summary"]): string {
   const metrics = turnSummaryMetrics(summary);
-  const label = summary.failed ? "Stopped" : "Worked";
-  return metrics ? `${label} · ${metrics}` : label;
+  const label = summary.failed ? translate("app.common.states.stopped") : translate("app.issueChat.cot.worked");
+  return metrics ? translate("app.taskChat.taskChatTurn.labelWithMetrics", { label, metrics }) : label;
 }
 
 /**
@@ -75,8 +78,19 @@ export function TaskChatTurn({
   timestampPrefix,
   leading,
 }: TaskChatTurnProps) {
+  const { t } = useTranslation();
   const streamlined = useStreamlinedTaskChatPresentation();
   const parentRow = !item.settled && item.liveStatus != null;
+  const settledStatusLabel = item.summary.durationLabel
+    ? item.summary.failed
+      ? t("app.taskChat.taskChatTurn.stoppedFor", { duration: item.summary.durationLabel })
+      : t("app.taskChat.taskChatTurn.workedFor", { duration: item.summary.durationLabel })
+    : item.summary.failed
+      ? t("app.common.states.stopped")
+      : t("app.issueChat.cot.worked");
+  const standaloneStatusLabel = item.continuedAfterSteering
+    ? t("app.taskChat.taskChatTurn.continuedAfterSteering", { label: settledStatusLabel })
+    : settledStatusLabel;
   // The new Paperclip Runner task surface owns one durable chronological
   // timeline. The Worked/Stopped row is its stable header, so it stays directly
   // below the preceding human bubble and above commentary, activity phases,
@@ -100,12 +114,7 @@ export function TaskChatTurn({
             />
           ) : null}
           <span className="min-w-0 truncate">
-            {item.continuedAfterSteering ? "Continued after steering · " : ""}
-            {item.summary.durationLabel
-              ? `${item.summary.failed ? "Stopped" : "Worked"} for ${item.summary.durationLabel}`
-              : item.summary.failed
-                ? "Stopped"
-                : "Worked"}
+            {standaloneStatusLabel}
           </span>
         </div>
         {item.items.length > 0 ? (
@@ -206,10 +215,12 @@ export function TaskChatTurn({
       ) : null}
       <span>
         {item.standaloneHeader && item.summary.durationLabel
-          ? `${item.summary.failed ? "Stopped" : "Worked"} for ${item.summary.durationLabel}`
+          ? item.summary.failed
+            ? t("app.taskChat.taskChatTurn.stoppedFor", { duration: item.summary.durationLabel })
+            : t("app.taskChat.taskChatTurn.workedFor", { duration: item.summary.durationLabel })
           : item.summary.failed
-            ? "Stopped"
-            : "Worked"}
+            ? t("app.common.states.stopped")
+            : t("app.issueChat.cot.worked")}
       </span>
       {!item.standaloneHeader && turnSummaryMetrics(item.summary) ? (
         // Time/tools/tokens is demoted, not deleted (PAP-502): it stays in the

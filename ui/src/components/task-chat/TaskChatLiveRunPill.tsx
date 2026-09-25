@@ -6,6 +6,7 @@ import { useSecondTick } from "@/hooks/useSecondTick";
 import { formatDurationWords } from "@/lib/issue-chat-messages";
 import { isCommandTool } from "@/lib/transcriptPresentation";
 import { isTerminalRunStatus } from "@/components/task-chat/transcript-adapter";
+import { t } from "@/i18n";
 
 /**
  * "ran N commands, called M tools" for the live tail's status pill, counted off
@@ -29,9 +30,9 @@ export function toolCountSummaryFromEntries(entries: readonly TranscriptEntry[])
     else other += 1;
   }
   const parts: string[] = [];
-  if (commands > 0) parts.push(`ran ${commands} command${commands === 1 ? "" : "s"}`);
-  if (other > 0) parts.push(`called ${other} tool${other === 1 ? "" : "s"}`);
-  return parts.length > 0 ? parts.join(", ") : null;
+  if (commands > 0) parts.push(t(commands === 1 ? "app.issueChat.cot.ranCommandsOne" : "app.issueChat.cot.ranCommandsMany", { count: commands }));
+  if (other > 0) parts.push(t(other === 1 ? "app.issueChat.cot.calledToolsOne" : "app.issueChat.cot.calledToolsMany", { count: other }));
+  return parts.length > 0 ? parts.join(t("app.issueChat.cot.summarySeparator")) : null;
 }
 
 /**
@@ -68,8 +69,8 @@ export function TaskChatLiveRunPill({
     ? formatDurationWords(elapsedMs)
     : null;
   const failed = ["failed", "timed_out", "cancelled", "interrupted"].includes(status);
-  const verb = active ? "Working" : failed ? "Stopped" : "Worked";
-  const suffix = elapsed ? `for ${elapsed}` : null;
+  const verb = active ? t("app.issueChat.cot.working") : failed ? t("app.common.states.stopped") : t("app.issueChat.cot.worked");
+  const suffix = elapsed ? t("app.issueChat.cot.forDuration", { duration: elapsed }) : null;
 
   return (
     <div

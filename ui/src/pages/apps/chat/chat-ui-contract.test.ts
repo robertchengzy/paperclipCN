@@ -93,8 +93,11 @@ describe("chat connector UI contract", () => {
 
   it("lists every supported provider in the agent channel empty state", () => {
     const panel = source("../../../components/chat/AgentChannelsPanel.tsx");
-    expect(panel).toContain(
-      "Connect AgentMail, Slack, GitHub, Discord, Microsoft Teams, or Telegram from",
+    expect(panel).toMatch(
+      /Connect AgentMail, Slack, GitHub, Discord, Microsoft Teams, or Telegram from|t\("app\.taskChat\.agentChannelsPanel\.emptyDescription"\)/,
+    );
+    expect(en.app.taskChat.agentChannelsPanel.emptyDescription).toBe(
+      "Connect AgentMail, Slack, GitHub, Discord, Microsoft Teams, or Telegram from Connectors.",
     );
   });
 

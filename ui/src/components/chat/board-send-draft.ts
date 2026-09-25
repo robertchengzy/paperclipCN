@@ -4,6 +4,7 @@ import {
   type ChatPublicationBatchStatus,
 } from "@paperclipai/shared";
 import { ApiError } from "@/api/client";
+import { t } from "@/i18n";
 
 export type BoardSendRejection = {
   code: "chat_board_send_attachments_already_bound";
@@ -115,7 +116,7 @@ export function readBoardSendDraft(key: string): RetainedBoardSend | null {
         value.publication.attempts < 0))
   )
     throw new Error(
-      "Saved channel delivery identity could not be read. Check Activity before starting another send.",
+      t("app.taskChat.boardSendDraft.unreadableIdentity"),
     );
   return value as RetainedBoardSend;
 }

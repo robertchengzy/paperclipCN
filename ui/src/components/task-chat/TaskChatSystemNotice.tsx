@@ -8,6 +8,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n";
 import { useStreamlinedTaskChatPresentation } from "./presentation-mode";
 import { MarkdownBody } from "@/components/MarkdownBody";
 import { Button } from "@/components/ui/button";
@@ -54,6 +55,7 @@ export function TaskChatSystemNotice({
   onTryAgainNoLiveExecutionPath?: () => Promise<void> | void;
   tryAgainNoLiveExecutionPathPending?: boolean;
 }) {
+  const { t } = useTranslation();
   const streamlined = useStreamlinedTaskChatPresentation();
   const [open, setOpen] = useState(Boolean(item.presentation?.detailsDefaultOpen));
   const detailsId = useId();
@@ -88,7 +90,7 @@ export function TaskChatSystemNotice({
       data-testid="task-chat-system-notice"
       data-tone={streamlined ? tone : undefined}
       role={streamlined ? "group" : undefined}
-      aria-label={streamlined ? `System update: ${title}` : undefined}
+      aria-label={streamlined ? t("app.taskChat.taskChatSystemNotice.systemUpdate", { title }) : undefined}
     >
       <div className="flex max-w-(--pct-85) items-center gap-1.5">
         <button
@@ -120,7 +122,7 @@ export function TaskChatSystemNotice({
             disabled={tryAgainNoLiveExecutionPathPending}
             data-testid="task-chat-no-live-path-try-again"
           >
-            {tryAgainNoLiveExecutionPathPending ? "Trying again..." : "Try again"}
+            {tryAgainNoLiveExecutionPathPending ? t("app.taskChat.taskChatMarker.tryingAgain") : t("app.common.actions.tryAgain")}
           </Button>
         ) : null}
       </div>
@@ -156,7 +158,7 @@ export function TaskChatSystemNotice({
                 disabled={tryAgainNoLiveExecutionPathPending}
                 data-testid="task-chat-no-live-path-try-again"
               >
-                {tryAgainNoLiveExecutionPathPending ? "Trying again..." : "Try again"}
+                {tryAgainNoLiveExecutionPathPending ? t("app.taskChat.taskChatMarker.tryingAgain") : t("app.common.actions.tryAgain")}
               </Button>
             </div>
           ) : null}

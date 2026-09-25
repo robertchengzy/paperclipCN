@@ -10543,6 +10543,672 @@
           "loadFailed": "无法加载成员或已关联的账号。请刷新后重试。"
         }
       }
+    },
+    "taskChat": {
+      "chatComposer": {
+        "dropToAttach": "拖放以附加",
+        "uploading": "上传中…",
+        "attached": "已附加",
+        "attachFiles": "附加文件",
+        "messagePlaceholder": "输入消息…",
+        "sendMessage": "发送消息"
+      },
+      "agentChannelsPanel": {
+        "title": "频道",
+        "description": "已连接到此智能体的聊天和邮件身份。",
+        "connectChannel": "连接频道",
+        "loading": "正在加载频道…",
+        "emptyTitle": "尚未连接频道",
+        "emptyDescription": "可在连接器中连接 AgentMail、Slack、GitHub、Discord、Microsoft Teams 或 Telegram。",
+        "openConnectors": "打开连接器",
+        "providerIdentity": "提供方身份",
+        "openConnection": "打开连接"
+      },
+      "chatSetupNavigation": {
+        "connectProvider": "连接提供方",
+        "progressLabel": "连接设置进度"
+      },
+      "boardSendDraft": {
+        "unreadableIdentity": "无法读取已保存的频道投递身份。请先查看活动，再发起新的发送。"
+      },
+      "taskChatActivityPhase": {
+        "collapseActivity": "收起活动：{{summary}}",
+        "expandActivity": "展开活动：{{summary}}"
+      },
+      "taskChatBubble": {
+        "images": "图片 · {{count}}",
+        "files": "文件 · {{count}}",
+        "openItem": "打开 {{name}}",
+        "imageNumber": "图片 {{number}}",
+        "image": "图片",
+        "openMoreScreenshots": "打开另外 {{count}} 张截图",
+        "verificationCaveat": "验证注意事项",
+        "sending": "发送中…"
+      },
+      "taskChatBubbleActions": {
+        "copyFailed": "无法复制消息"
+      },
+      "taskChatDescriptionBubble": {
+        "addDescription": "添加描述…",
+        "editDescription": "编辑描述"
+      },
+      "taskChatInteractionCard": {
+        "reviewRequest": "查看请求"
+      },
+      "taskChatMarker": {
+        "tryingAgain": "正在重试…"
+      },
+      "taskChatPausedTakeover": {
+        "subtreePaused": "子树已暂停。",
+        "taskPaused": "任务已暂停。",
+        "resumeSubtreeHint": "恢复此子树后才能发送消息。",
+        "resumeTaskHint": "恢复此任务后才能发送消息。",
+        "draftSaved": "草稿已保存。",
+        "resumeSubtree": "恢复子树",
+        "resumeTask": "恢复任务"
+      },
+      "taskChatPlanPreviewCard": {
+        "plan": "计划",
+        "revision": "修订 {{revision}}",
+        "writingPlan": "正在编写计划",
+        "waitingFirstStep": "等待第一个计划步骤…",
+        "openToReview": "打开已同步的计划进行查看。",
+        "openPlan": "打开计划",
+        "openPlanRevision": "打开计划修订 {{revision}}",
+        "streamingPreview": "计划实时预览"
+      },
+      "taskChatPlanView": {
+        "doneCount": "已完成 {{done}}/{{total}}"
+      },
+      "taskChatProjectCreatedCard": {
+        "ariaLabel": "项目已创建：{{name}}",
+        "title": "项目已创建"
+      },
+      "taskChatSkillCreatedCard": {
+        "ariaLabel": "技能已创建：{{name}}",
+        "title": "技能已创建"
+      },
+      "taskChatRichInput": {
+        "uploadsUnavailable": "图片上传不可用。",
+        "dropOrPasteHint": "或将图片拖放/粘贴到备注中"
+      },
+      "taskChatRunnerActivityGroup": {
+        "thinking": "思考中",
+        "thought": "已思考",
+        "tokenUsage": "Token 用量",
+        "permissionDecision": "权限：{{decision}}",
+        "oneActivity": "{{count}} 项活动",
+        "manyActivities": "{{count}} 项活动",
+        "summaryWithCount": "{{summary}}（{{countLabel}}）",
+        "collapseLabel": "收起 {{label}}",
+        "expandLabel": "展开 {{label}}",
+        "activityHistory": "活动历史"
+      },
+      "questionForm": {
+        "required": "此问题为必答题。",
+        "enterCustomAnswer": "请输入自定义回答。",
+        "minLength": "请至少输入 {{count}} 个字符。",
+        "maxLength": "最多输入 {{count}} 个字符。",
+        "unsupportedPattern": "此问题的校验规则不受支持。",
+        "requestedFormat": "请使用要求的格式。",
+        "validNumber": "请输入有效的数字。",
+        "validInteger": "请输入有效的整数。",
+        "minimum": "请输入不小于 {{value}} 的值。",
+        "maximum": "请输入不大于 {{value}} 的值。",
+        "recommended": "推荐",
+        "noAnswer": "未回答",
+        "noQuestions": "没有可回答的问题。",
+        "questionNeedsAnswer": "请先回答第 {{number}} 个问题再发送。",
+        "submitFailed": "无法提交回答。",
+        "cancelFailed": "无法取消这些问题。",
+        "pagination": "问题分页",
+        "previousQuestion": "上一个问题",
+        "nextQuestion": "下一个问题",
+        "pageOf": "{{current}}/{{total}}",
+        "writeAnAnswer": "填写回答",
+        "writeYourAnswer": "写下你的回答",
+        "attachImageFor": "为“{{prompt}}”的回答附加图片",
+        "filterChoices": "筛选选项",
+        "filterChoicesFor": "筛选“{{prompt}}”的选项",
+        "other": "其他",
+        "typeYourAnswer": "输入你的回答",
+        "attachImageOtherFor": "为“{{prompt}}”的其他回答附加图片",
+        "skip": "跳过",
+        "submitAnswers": "提交回答"
+      },
+      "richWorkProductCard": {
+        "changesRequested": "已要求修改",
+        "opening": "正在打开",
+        "pending": "待处理",
+        "open": "开放",
+        "merged": "已合并",
+        "closed": "已关闭",
+        "openPreview": "打开预览",
+        "openOnGitHub": "在 GitHub 上打开",
+        "image": "图片",
+        "video": "视频",
+        "file": "文件",
+        "openGallery": "打开图库",
+        "document": "文档",
+        "revision": "修订 {{revision}}",
+        "openDocument": "打开文档",
+        "port": "端口 {{port}}",
+        "openService": "打开服务",
+        "down": "不可用",
+        "unhealthy": "不健康",
+        "oneFile": "{{count}} 个文件",
+        "manyFiles": "{{count}} 个文件",
+        "actionLabel": "{{action}}：{{title}}"
+      },
+      "runnerGoalWidget": {
+        "pending": {
+          "starting": "启动中",
+          "editing": "保存中",
+          "replacing": "替换中",
+          "pausing": "将在当前轮次后暂停",
+          "resuming": "恢复中",
+          "clearing": "清除中",
+          "continuing": "在新的运行中继续"
+        },
+        "selectAgent": "请选择一个智能体以使用 /goal。",
+        "unsupported": "此智能体不支持会话目标。",
+        "actionFailed": "无法执行该目标操作。",
+        "noGoalToEdit": "当前没有可编辑的会话目标。",
+        "addObjective": "请在 /goal 后填写目标内容以开始一个目标。",
+        "agentSessionGoal": "智能体会话目标",
+        "sessionGoal": "会话目标",
+        "workingNow": "正在工作",
+        "emptyHint": "输入 /goal 并跟上目标内容，即可跨多个轮次持续推进工作。",
+        "tokens": "{{used}} Token",
+        "tokensOfBudget": "{{used}} Token / {{budget}}",
+        "iterations": "{{count}} 次迭代",
+        "editGoal": "编辑目标",
+        "pauseGoal": "暂停目标",
+        "resumeGoal": "恢复目标",
+        "clearGoal": "清除目标",
+        "replaceTitle": "替换会话目标？",
+        "editTitle": "编辑会话目标",
+        "replaceDescription": "这会清除未完成的目标，并以下方的目标内容开始新目标。",
+        "editDescription": "更新目标内容，不清除目标进度。",
+        "goalObjective": "目标内容",
+        "replaceGoal": "替换目标",
+        "saveGoal": "保存目标"
+      },
+      "taskChatBlockerLinks": {
+        "stillBlockedBy": "仍被阻塞于",
+        "blockedBy": "被阻塞于",
+        "rootBlockerRemains": "根阻塞项仍在",
+        "rootBlocker": "根阻塞项",
+        "ultimatelyBlockedBy": "最终被阻塞于",
+        "taskBlockers": "任务阻塞项",
+        "stillWaitingOnLiveWork": "仍在等待进行中的工作",
+        "waitingOnLiveWork": "正在等待进行中的工作",
+        "tasksWaitingOnLiveWork": "等待进行中工作的任务",
+        "nowRunning": "正在运行"
+      },
+      "taskChatProtocolActivityRow": {
+        "query": "查询",
+        "oneResult": "{{count}} 条结果",
+        "manyResults": "{{count}} 条结果",
+        "showOneMoreResult": "再显示 {{count}} 条结果",
+        "showMoreResults": "再显示 {{count}} 条结果",
+        "showFewerResults": "收起部分结果",
+        "additionalOutput": "更多提供方输出可在 Runner Inspector 中查看。",
+        "noChangedFileDetails": "未报告变更文件详情。",
+        "oneMoreFileHidden": "另有 {{count}} 个文件未显示",
+        "moreFilesHidden": "另有 {{count}} 个文件未显示",
+        "noticeWithoutMessage": "提供方报告了一条没有内容的通知。"
+      },
+      "taskChatProtocolCard": {
+        "researchSources": "研究来源",
+        "planSteps": "计划步骤",
+        "delegatedAgents": "委派的智能体",
+        "outputTruncated": "输出已截断至 8 KiB。",
+        "changedFiles": "变更的文件",
+        "previewUnavailableShort": "预览不可用。",
+        "previewTruncated": "预览已被 Runner 截断。",
+        "oneFileChanged": "{{count}} 个文件已变更",
+        "manyFilesChanged": "{{count}} 个文件已变更",
+        "changedWithStats": "{{changed}} · {{stats}}",
+        "workspaceChangesInProgress": "工作区变更进行中",
+        "workspaceChanges": "工作区变更",
+        "binary": "二进制",
+        "showFewerFiles": "收起部分文件",
+        "showMoreFiles": "再显示 {{count}} 个文件",
+        "reviewDiff": "查看差异",
+        "workspaceDiff": "工作区差异",
+        "binaryNoDiff": "二进制文件，无法显示文本差异。",
+        "noInlinePatch": "此文件没有记录内联补丁。",
+        "file": "文件",
+        "lineNumber": "第 {{line}} 行",
+        "preview": "预览",
+        "previewUnavailable": "预览不可用。上方仍可使用已验证的工作区引用。",
+        "answerDetailsNotRecorded": "此旧版运行时未记录回答详情。",
+        "noAnswersCancelled": "未提交回答；此请求已取消。",
+        "noAnswersExpired": "未提交回答；此请求已过期。",
+        "noAnswersStatus": "未提交回答；此请求状态为 {{status}}。",
+        "questionsAnswered": "问题已回答",
+        "questionsCancelled": "问题已取消",
+        "questionsExpired": "问题已过期",
+        "questionsResolved": "问题已处理",
+        "runtimeInput": "运行时输入",
+        "runtimePermission": "运行时权限",
+        "response": "回复",
+        "resolveFailed": "无法处理该运行时请求。",
+        "submitting": "提交中…",
+        "submitResponse": "提交回复",
+        "resolveInActiveSession": "请在活动的运行时会话中处理此请求。",
+        "runResult": "运行结果",
+        "blockedReason": "受阻：{{reason}}",
+        "verificationResults": "验证结果",
+        "blocksCompletion": "· 阻碍完成",
+        "runEnded": "运行已结束"
+      },
+      "taskChatQueuedMessages": {
+        "steerUnsupported": "此 Runner 不支持引导",
+        "steerTemporarilyUnavailable": "引导暂时不可用",
+        "steerTitle": "将此消息引导到当前轮次",
+        "reorderLabel": "调整排队消息顺序：{{body}}",
+        "interruptTitle": "中断当前轮次并发送排队消息",
+        "sendNowTitle": "立即发送排队消息",
+        "steer": "引导",
+        "discard": "丢弃排队消息",
+        "discardLabel": "丢弃排队消息：{{body}}",
+        "actions": "排队消息操作",
+        "actionsLabel": "排队消息操作：{{body}}",
+        "editMessage": "编辑消息",
+        "movedAnnouncement": "已将排队消息移至第 {{position}} 位（共 {{total}} 条）。",
+        "reorderConflict": "队列已在其他会话中被修改，已恢复为最新顺序。",
+        "reorderFailed": "无法调整顺序，已恢复之前的顺序。",
+        "steering": "正在引导排队消息。",
+        "sending": "正在发送排队消息。",
+        "discarding": "正在丢弃排队消息。",
+        "steered": "消息已引导到当前轮次。",
+        "willSendAfterStop": "排队消息将在上一次运行停止后发送。",
+        "discarded": "已丢弃排队消息。",
+        "tooLateToDiscard": "无法丢弃：此消息已在发送中。",
+        "steerFailed": "无法引导，消息仍在排队。",
+        "interruptFailed": "无法中断，消息仍在排队。",
+        "discardConflict": "队列已在其他会话中被修改，请检查后重试。",
+        "discardFailed": "无法丢弃，消息仍在排队。",
+        "queuedMessages": "排队消息"
+      },
+      "taskChatTurn": {
+        "oneTool": "{{count}} 个工具",
+        "manyTools": "{{count}} 个工具",
+        "labelWithMetrics": "{{label}} · {{metrics}}",
+        "workedFor": "已工作 {{duration}}",
+        "stoppedFor": "运行 {{duration}} 后停止",
+        "continuedAfterSteering": "引导后继续 · {{label}}"
+      },
+      "taskChatRunnerTurn": {
+        "stoppedAfter": "运行 {{duration}} 后停止",
+        "workingFor": "已工作 {{duration}}",
+        "activityUnavailable": "Runner 实时活动暂时不可用，正在重试…"
+      },
+      "taskChatSystemNotice": {
+        "systemUpdate": "系统更新：{{title}}"
+      },
+      "taskChatThinking": {
+        "reasoningDetail": "推理详情",
+        "reasoning": "推理",
+        "reasoningDetailActive": "推理详情…",
+        "reasoningActive": "推理中…",
+        "thinking": "思考中…",
+        "collapseReasoning": "收起推理：{{preview}}",
+        "expandReasoning": "展开推理：{{preview}}",
+        "collapseReasoningDetail": "收起推理详情：{{preview}}",
+        "expandReasoningDetail": "展开推理详情：{{preview}}"
+      },
+      "taskChatToolCard": {
+        "interrupted": "已中断",
+        "changed": "已变更"
+      },
+      "taskChatTurnStatusIsland": {
+        "stepProgress": "步骤 {{current}} / {{total}}",
+        "stepOf": "第 {{current}} 步，共 {{total}} 步",
+        "stepOfWithLabel": "第 {{current}} 步，共 {{total}} 步：{{label}}",
+        "additions": "新增 {{count}} 行",
+        "deletions": "删除 {{count}} 行",
+        "turnPlan": "本轮计划",
+        "checklist": "本轮检查清单"
+      },
+      "taskMessageScroller": {
+        "scrollToLatest": "滚动到最新"
+      },
+      "tweakPanel": {
+        "title": "动效调节面板",
+        "resetAll": "全部重置",
+        "minimize": "最小化",
+        "copyAsTheme": "复制为 @theme",
+        "copied": "已复制到剪贴板",
+        "copyFailed": "复制失败，请选中文本后手动复制",
+        "clickToCopy": "点击文本框即可复制"
+      },
+      "externallyConnectedTaskBanner": {
+        "publication": {
+          "awaitingConsent": {
+            "title": "正在等待文件同意",
+            "body": "接收方需要在 Microsoft Teams 中接受文件卡片。文件尚未送达；在 Paperclip 等待期间会保留此发送标识。"
+          },
+          "published": {
+            "title": "已发送到频道",
+            "body": "管理员更新已发布到已连接的会话。"
+          },
+          "pending": {
+            "title": "已排队等待发送到频道",
+            "body": "投递仍在等待中。在 Paperclip 确认发布之前会保留你的草稿。"
+          },
+          "streaming": {
+            "title": "正在发布到频道",
+            "body": "投递仍在进行中。在 Paperclip 确认发布之前会保留你的草稿。"
+          },
+          "retry": {
+            "title": "已安排重试投递",
+            "body": "Paperclip 将重试此次发布。你的草稿和重试标识会被保留。"
+          },
+          "deliveryUnknown": {
+            "title": "投递未确认",
+            "body": "提供方可能已接受此更新。请先在活动中处理，再重试，以免重复发送。"
+          },
+          "failed": {
+            "title": "频道投递失败",
+            "body": "你的草稿已保留。打开活动即可安全地重试同一次发布。"
+          },
+          "cancelled": {
+            "title": "频道投递已取消",
+            "body": "你的草稿已保留。部分内容可能已经发布；发起新的发送前请先查看活动。"
+          }
+        },
+        "filePhase": {
+          "consentPending": "同意卡片已排队",
+          "consentSending": "正在发送同意卡片",
+          "consentUnknown": "同意卡片投递未确认",
+          "awaitingConsent": "等待同意",
+          "uploadPending": "上传已排队",
+          "uploading": "正在上传文件",
+          "uploadUnknown": "文件上传未确认",
+          "fileInfoPending": "文件通知已排队",
+          "fileInfoSending": "正在发送文件通知",
+          "fileInfoUnknown": "文件通知未确认",
+          "delivered": "已送达",
+          "declined": "已拒绝",
+          "expired": "同意已过期",
+          "cancelled": "已取消；远端可能仍保留文件内容",
+          "conflict": "文件投递需要检查"
+        },
+        "storage": {
+          "readFailed": "无法读取已保存的投递标识。发起新的发送前，请先查看活动并恢复浏览器存储。",
+          "rejectionSaveFailed": "无法保存被拒绝的发送。请恢复浏览器存储，然后重试同一请求以找回其回执。",
+          "rejectionClearFailed": "无法清除已保存的拒绝记录。编辑此次发送前请先恢复浏览器存储。",
+          "clearFailed": "无法清除已保存的投递标识。发起新的发送前请先恢复浏览器存储。",
+          "writeFailed": "浏览器存储无法保存此投递标识，更新未发送。请恢复浏览器存储后重新加载再试。"
+        },
+        "viewActivity": "查看活动",
+        "updateNotSent": "更新未发送",
+        "rejectedToastBody": "所选文件已属于另一条评论。请编辑被拒绝的发送以修正选择。",
+        "confirmFailedTitle": "无法确认频道投递",
+        "confirmFailedBodyWithReason": "{{reason}} 你的草稿已保留；在此重试会复用同一请求标识。",
+        "confirmFailedBody": "你的草稿已保留；在此重试会复用同一请求标识。",
+        "uploadFailed": "{{reason}} 未发送任何频道消息。重试上传前请先检查任务文件。",
+        "uploadNotConfirmed": "无法确认上传结果。",
+        "selectedFileUnavailable": "已选任务文件（详情不可用）",
+        "mixedOutcomes": {
+          "title": "投递已结束，结果不一",
+          "body": "并非所有部分都已确认送达。请查看下方结果；关闭此回执不会重新发送任何内容。"
+        },
+        "remainingConsent": {
+          "title": "正在等待其余文件的同意",
+          "body": "部分内容已结束。其余文件卡片仍需接收方回应；整批处理完成前，此次发送保持锁定。"
+        },
+        "externalConversation": "外部会话",
+        "connectedTo": "已连接到 {{provider}}",
+        "agentAssignmentFixed": "{{label}} · 此外部任务的智能体分配已固定。",
+        "openProvider": "打开 {{provider}}",
+        "sendToChannel": "发送到频道",
+        "connection": "连接",
+        "boardUpdate": "管理员更新",
+        "bodyPlaceholder": "只填写应在提供方会话中可见的内容。",
+        "addMessageWithFiles": "请添加一条随文件发送的消息。",
+        "attachFileLabel": "为频道更新附加文件",
+        "attachFile": "附加文件",
+        "filesStayOnTask": "文件会保留在此任务中，直到你将其发送到频道。",
+        "selectionNotice": "已附加到另一条评论的文件已从当前选择中移除。请附加新副本或分享任务链接；你的消息保持不变。",
+        "filesInThisSend": "本次发送的文件",
+        "includeTaskFiles": "包含任务文件",
+        "filesHint": {
+          "github": "GitHub App 无法在评论中上传文件内容。勾选的文件保留在 Paperclip 任务中；若此管理面板有公开 URL，GitHub 会收到需认证的任务链接，否则收到私有任务提示。",
+          "teams": "在 Teams 个人聊天中，接收方需在上传前逐个接受文件。频道和群聊会直接收到受支持的图片；其他文件保留在任务中，并附带任务链接或私有任务提示。",
+          "retained": "这些是本次发送所选的文件。投递结束前无法更改选择。",
+          "default": "只有勾选的文件会发布到外部会话。"
+        },
+        "unnamedAttachment": "未命名附件",
+        "rejectedBody": "所选文件已属于另一条评论。此请求在任何频道消息排队之前即被拒绝。你的草稿已原样保留。",
+        "editRejectedSend": "编辑被拒绝的发送",
+        "resultNotConfirmed": {
+          "title": "投递结果未确认",
+          "body": "你的草稿和请求标识已原样保留。安全重试即可获知权威的发布状态，且不会产生重复发送。"
+        },
+        "openActivity": "打开活动",
+        "batch": {
+          "published": "{{count}} 项已发布",
+          "awaitingConsent": "{{count}} 项等待同意",
+          "declined": "{{count}} 项已拒绝",
+          "expired": "{{count}} 项已过期",
+          "cancelled": "{{count}} 项已取消",
+          "partsPublished": "已发布 {{published}}/{{total}} 个部分。"
+        },
+        "fileDeliveryOutcomes": "文件投递结果",
+        "statusRefreshFailed": "无法刷新投递状态。你的草稿已保留；Paperclip 会再次检查，不会重复发送更新。",
+        "providerDetail": "提供方详情：{{detail}}",
+        "dismissReceipt": "关闭投递回执",
+        "ordinaryCommentsNote": "普通管理员评论仅保留在 Paperclip 中。",
+        "retrySafely": "安全重试"
+      },
+      "taskChatCompactInteractionCard": {
+        "kind": {
+          "suggestTasks": {
+            "title": "建议的任务",
+            "label": "任务"
+          },
+          "askUserQuestions": {
+            "title": "问题",
+            "label": "问题"
+          },
+          "requestConfirmation": {
+            "title": "确认",
+            "label": "确认"
+          },
+          "checkboxConfirmation": {
+            "title": "选择选项",
+            "label": "选择"
+          },
+          "itemVerdicts": {
+            "title": "审核条目",
+            "label": "审核"
+          },
+          "connectionIntent": {
+            "title": "连接服务",
+            "label": "连接"
+          }
+        },
+        "openTarget": "打开 {{label}}",
+        "openPlan": "打开计划",
+        "openPlanRevision": "打开计划修订 {{revision}}",
+        "answerValue": "回答：{{value}}",
+        "noOptionsSelected": "未选择任何选项",
+        "noVerdicts": "未提交任何裁定",
+        "noTasksCreated": "未创建任务",
+        "requestedAccess": "{{agent}} 请求访问 {{service}}。",
+        "risk": "{{risk}} 风险",
+        "secret": "密钥",
+        "binding": "绑定",
+        "why": "原因",
+        "expires": "过期时间",
+        "reasonPrefix": "原因：",
+        "viewOriginal": "查看原始请求和处理结果",
+        "acceptPlanPrompt": "是否接受此计划？",
+        "argumentsAndHash": "参数和审计哈希",
+        "whatShouldChange": "需要修改什么？",
+        "withOptional": "{{label}}（可选）",
+        "describeChange": "描述需要修改的内容",
+        "addShortNote": "添加简短说明",
+        "selectedChooseRange": "已选 {{count}} 项 · 请选择 {{min}}–{{max}} 项",
+        "selectedAtLeast": "已选 {{count}} 项 · 至少 {{min}} 项",
+        "selectedCount": "已选 {{count}} 项",
+        "filterOptions": "筛选选项",
+        "confirmSelection": "确认选择",
+        "selectTasks": "选择要创建的任务。",
+        "filterSuggestedTasks": "筛选建议的任务",
+        "whyTasksChange": "为什么需要修改这些任务？（可选）",
+        "selectedOfTotal": "已选 {{selected}}/{{total}}",
+        "sendBack": "退回",
+        "revise": "修改",
+        "createSelected": "创建所选任务",
+        "noReviewItems": "没有可审核的条目。",
+        "decidedCount": "已裁定 {{count}} 项",
+        "itemPagination": "条目分页",
+        "previousItem": "上一条",
+        "nextItem": "下一条",
+        "verdictFor": "“{{label}}”的裁定",
+        "reason": "原因",
+        "addShortReason": "添加简短原因",
+        "submitRejectionReason": "提交拒绝原因",
+        "applyCount": "应用 {{count}} 项",
+        "applyDecisions": "应用裁定"
+      },
+      "taskChatComposer": {
+        "modeDescription": {
+          "standard": "进行修改并执行工作",
+          "planning": "先起草计划再行动",
+          "ask": "仅回答问题，不做修改"
+        },
+        "placeholder": {
+          "planningShort": "与 {{agent}} 一起规划…",
+          "askShort": "向 {{agent}} 提问…",
+          "standardShort": "给 {{agent}} 发消息…",
+          "planning": "与 {{agent}} 一起规划 — 完善计划文档，不改代码…",
+          "ask": "向 {{agent}} 提问 — 只读，不执行任何操作…",
+          "standard": "给 {{agent}} 发消息 — 描述你想完成的事…"
+        },
+        "unassigned": "未分配",
+        "theAgent": "智能体",
+        "editQueuedMessage": "编辑排队消息…",
+        "goalCommand": {
+          "name": "目标",
+          "unverified": "会话开始时将验证是否支持。",
+          "description": "跨多个轮次持续推进工作。"
+        },
+        "noFileUrl": "上传未返回文件 URL",
+        "attachmentRemoved": "附件已被移除",
+        "fileTypeNotAllowed": "此处无法附加该类型的文件",
+        "uncertain": {
+          "body": "无法确认此评论是否已保存，它可能已经出现在会话中。开始新草稿前请先查看会话。",
+          "review": "查看会话",
+          "refreshFailed": "无法刷新会话，请再次查看。",
+          "discardNote": "丢弃此草稿不会删除任何已保存的评论或已上传的文件。",
+          "discard": "丢弃草稿并重新开始"
+        },
+        "dismissLabel": "关闭 {{label}}",
+        "pendingInput": "待处理的输入",
+        "pendingCount": "{{count}} 项待处理",
+        "sendNewHint": "发送 /new 可开始新会话并继续此对话。",
+        "composerDisabled": "输入框已禁用",
+        "newSessionCommand": {
+          "name": "新会话",
+          "description": "在此开始全新上下文，并保留会话历史。"
+        },
+        "queuedChanged": "排队消息已变更",
+        "editingQueued": "正在编辑排队消息",
+        "assignee": {
+          "placeholder": "负责人",
+          "none": "无负责人",
+          "search": "搜索负责人…",
+          "empty": "无匹配项。"
+        },
+        "stopping": "停止中…",
+        "stopResponse": "停止回复",
+        "stop": "停止",
+        "queueAsNew": "作为新消息排队",
+        "saveQueued": "保存排队消息",
+        "waitingForUpload": "正在等待上传完成",
+        "removeFailedAttachment": "请移除上传失败的附件后再发送",
+        "sendShortcut": "发送（⌘+Enter）",
+        "send": "发送",
+        "goalExtraArgs": "/goal {{subcommand}} 不接受额外参数。",
+        "goalInConversation": "需要持续执行目标的工作，请另建一个任务。",
+        "goalRemoveAttachments": "使用 /goal 前请先移除附件。",
+        "goalSelectAgent": "开始会话目标前请先选择一个智能体。",
+        "skipFailed": "无法跳过此请求。"
+      },
+      "taskChatThread": {
+        "input": {
+          "reviewPlan": "审核计划",
+          "approveToolAction": "批准工具操作",
+          "reviewSecretProposal": "审核密钥提案"
+        },
+        "errors": {
+          "reassignUnavailable": "此任务无法重新分配。",
+          "queuedNotEditable": "此排队消息已无法编辑。",
+          "questionClosed": "此问题已被回答或已关闭。",
+          "cancelQuestionUnavailable": "无法取消此问题。",
+          "submitThroughCard": "请通过已保存的问题卡片提交回答。",
+          "missingTurnIdentity": "此运行时请求缺少处理所需的提供方轮次标识。",
+          "permissionNoFormData": "此运行时权限不接受提交的表单数据。",
+          "skipUnavailable": "无法跳过此交互。",
+          "reorderUnavailable": "无法调整队列顺序。",
+          "steerUnavailable": "无法引导。",
+          "discardUnavailable": "无法丢弃。"
+        },
+        "documentRevision": "文档 · 修订 {{revision}}",
+        "agentAttachment": "智能体附件",
+        "waitingToResume": {
+          "label": "等待恢复",
+          "detail": "继续工作前需要检查上一次执行。下一步操作请查看任务的执行暂停项。各项检查仍保留在运行历史中。"
+        },
+        "nativeStop": {
+          "approvalRequired": "需要批准",
+          "usageLimitReached": "已达到用量上限",
+          "runCancelled": "运行已取消",
+          "runInterrupted": "运行已中断",
+          "runTimedOut": "运行超时",
+          "runFailed": "运行失败",
+          "cancelledAfterResponse": "运行在返回最终回复后被取消。",
+          "cancelledBeforeAnswer": "运行在返回回答前被取消。",
+          "interruptedAfterResponse": "运行在返回最终回复后被中断。",
+          "interruptedBeforeAnswer": "运行在返回回答前被中断。",
+          "approvalRequiredDetail": "此操作需要批准，但该 Runner 没有交互式审批处理程序。请检查该操作并更新智能体的权限设置后再重试。",
+          "modelRejectedDetail": "提供方拒绝了所选模型。请检查模型 ID 和账号的访问权限，保存智能体配置后重试。完整错误信息请查看该运行。",
+          "usageLimitDetail": "模型提供方已达到当前用量上限，请在额度重置后重试。",
+          "timedOutAfterResponse": "Runner 在返回最终回复后超时（{{code}}）。",
+          "timedOutBeforeAnswer": "Runner 在返回回答前超时（{{code}}）。",
+          "stoppedAfterResponse": "Runner 在返回最终回复后停止（{{code}}）。",
+          "stoppedBeforeAnswer": "Runner 在返回回答前停止（{{code}}）。"
+        },
+        "outputTooLarge": "提供方输出超出了安全上限。",
+        "workspaceSetupFailed": "智能体启动前工作区设置失败。",
+        "withRetryDetail": "{{detail}}{{retry}}",
+        "legacyStop": {
+          "retryScheduled": "已自动安排重试。",
+          "canRetry": "现在可以重试此消息。",
+          "messagePreserved": "你的消息已保留。",
+          "aiAccountUnavailable": "所选 AI 账号不可用，请在连接卡片中修复。",
+          "aiAccountStopped": "此运行因 AI 账号不可用而停止。",
+          "reconciliationRequired": "此任务继续之前必须检查上一次执行。你的消息已保留。详情请查看已停止的运行。",
+          "stoppedBeforeAnswer": "执行在返回回答前已停止。",
+          "runnerStopped": "Runner 在返回回答前停止（{{code}}）。",
+          "couldNotStart": "无法启动"
+        },
+        "runCompleted": "运行已完成",
+        "turnCancelled": "此轮次在返回回复前已被取消。",
+        "noUserFacingResponse": "Runner 未返回面向用户的回复。",
+        "interrupting": "中断中…",
+        "historyLoadFailed": "部分任务历史无法加载。",
+        "loadingConversation": "正在加载会话",
+        "waitingToStart": "等待开始…",
+        "stoppedBeforeResponse": "此运行在产生回复前已停止。请查看下方任务的连接或恢复操作。",
+        "waitingForTranscript": "等待转录…"
+      }
     }
   }
 }

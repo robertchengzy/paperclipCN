@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Brain, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n";
 import { MarkdownBody } from "@/components/MarkdownBody";
 import type { TaskChatThinkingItem } from "./task-chat-model";
 import { flattenSelfTalk } from "./transcript-adapter";
@@ -20,13 +21,24 @@ export function TaskChatThinking({
   /** Whether this reasoning block is the runner's current activity. */
   active?: boolean;
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(defaultOpen ?? false);
   const body = item.lines.join("\n").trim();
   const preview = flattenSelfTalk(body);
-  const baseLabel = item.channel === "detail" ? "Reasoning detail" : "Reasoning";
+  const isDetail = item.channel === "detail";
+  const baseLabel = isDetail ? t("app.taskChat.taskChatThinking.reasoningDetail") : t("app.taskChat.taskChatThinking.reasoning");
   const label = active
-    ? body ? `${baseLabel}…` : "Thinking…"
-    : item.summaryLabel ?? (body ? baseLabel : "Thought");
+    ? body
+      ? isDetail ? t("app.taskChat.taskChatThinking.reasoningDetailActive") : t("app.taskChat.taskChatThinking.reasoningActive")
+      : t("app.taskChat.taskChatThinking.thinking")
+    : item.summaryLabel ?? (body ? baseLabel : t("app.taskChat.taskChatRunnerActivityGroup.thought"));
+  const toggleLabel = open
+    ? isDetail
+      ? t("app.taskChat.taskChatThinking.collapseReasoningDetail", { preview })
+      : t("app.taskChat.taskChatThinking.collapseReasoning", { preview })
+    : isDetail
+      ? t("app.taskChat.taskChatThinking.expandReasoningDetail", { preview })
+      : t("app.taskChat.taskChatThinking.expandReasoning", { preview });
 
   if (body && !active) {
     return (
@@ -68,7 +80,7 @@ export function TaskChatThinking({
       <button
         type="button"
         aria-expanded={open}
-        aria-label={`${open ? "Collapse" : "Expand"} ${baseLabel.toLowerCase()}: ${preview}`}
+        aria-label={toggleLabel}
         onClick={() => setOpen((value) => !value)}
         className={cn("group/thinking -mx-1.5 flex w-full min-w-0 max-w-full items-center gap-2 overflow-hidden rounded-sm px-1.5 py-0.5 text-left font-normal text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", rowClassName)}
       >
