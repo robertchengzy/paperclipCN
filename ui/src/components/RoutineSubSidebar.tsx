@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useRef } from "react";
 import {
   Activity as ActivityIcon,
@@ -40,21 +41,21 @@ type NavGroup = {
 
 const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Routine",
+    get label() { return t("app.common.nouns.routine"); },
     items: [
-      { key: "overview", label: "Overview", icon: Circle },
-      { key: "triggers", label: "Triggers", icon: Clock3 },
-      { key: "variables", label: "Variables", icon: LayoutGrid },
-      { key: "secrets", label: "Secrets", icon: KeyRound },
-      { key: "delivery", label: "Delivery", icon: Send },
+      { key: "overview", get label() { return t("app.common.labels.overview"); }, icon: Circle },
+      { key: "triggers", get label() { return t("app.common.nouns.triggers"); }, icon: Clock3 },
+      { key: "variables", get label() { return t("app.common.labels.variables"); }, icon: LayoutGrid },
+      { key: "secrets", get label() { return t("app.common.nouns.secrets"); }, icon: KeyRound },
+      { key: "delivery", get label() { return t("app.routines.routineSubSidebar.delivery"); }, icon: Send },
     ],
   },
   {
-    label: "Operate",
+    get label() { return t("app.routines.routineSubSidebar.operate"); },
     items: [
-      { key: "runs", label: "Runs", icon: Play },
-      { key: "activity", label: "Activity", icon: ActivityIcon },
-      { key: "history", label: "History", icon: HistoryIcon },
+      { key: "runs", get label() { return t("app.common.nouns.runs"); }, icon: Play },
+      { key: "activity", get label() { return t("app.common.nouns.activity"); }, icon: ActivityIcon },
+      { key: "history", get label() { return t("app.common.labels.history"); }, icon: HistoryIcon },
     ],
   },
 ];
@@ -74,6 +75,7 @@ export function RoutineSubSidebar({
   hasLiveRun: boolean;
   onNavigate: (section: RoutineSectionKey) => void;
 }) {
+  const { t } = useTranslation();
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
 
   const focusItem = (index: number) => {
@@ -109,11 +111,11 @@ export function RoutineSubSidebar({
 
   return (
     <nav
-      aria-label="Routine sections"
+      aria-label={t("app.routines.routineSubSidebar.routineSections")}
       className="hidden h-full w-52 shrink-0 flex-col gap-4 overflow-y-auto border-r border-border bg-background px-3 py-4 md:flex"
     >
       {NAV_GROUPS.map((group) => (
-        <div key={group.label} className="flex flex-col gap-0.5">
+        <div key={group.items[0].key} className="flex flex-col gap-0.5">
           <p className="mx-2 px-2 pb-1 text-(length:--text-nano) font-medium uppercase tracking-widest font-mono text-muted-foreground/60">
             {group.label}
           </p>
@@ -152,7 +154,7 @@ export function RoutineSubSidebar({
                   <span className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500 motion-safe:animate-pulse" />
                 ) : dirty ? (
                   <span
-                    aria-label="Unsaved changes"
+                    aria-label={t("app.common.states.unsavedChanges")}
                     className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500 ring-2 ring-background"
                   />
                 ) : null}
@@ -175,6 +177,7 @@ export function RoutineSectionPicker({
   onNavigate: (section: RoutineSectionKey) => void;
   isSectionDirty: (section: RoutineSectionKey) => boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="sticky top-0 z-10 border-b border-border bg-background px-4 py-2 md:hidden">
       <Select
@@ -185,12 +188,12 @@ export function RoutineSectionPicker({
           }
         }}
       >
-        <SelectTrigger className="h-11 w-full" aria-label="Routine section">
+        <SelectTrigger className="h-11 w-full" aria-label={t("app.routines.routineSubSidebar.routineSection")}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {NAV_GROUPS.map((group) => (
-            <SelectGroup key={group.label}>
+            <SelectGroup key={group.items[0].key}>
               <SelectLabel className="uppercase tracking-(--tracking-eyebrow) text-(length:--text-micro)">
                 {group.label}
               </SelectLabel>

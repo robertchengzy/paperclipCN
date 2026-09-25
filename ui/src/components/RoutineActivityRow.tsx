@@ -1,3 +1,5 @@
+import { formatRoutineRunStatus } from "@/components/RoutineList";
+import { t, useTranslation } from "@/i18n";
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import type { ActivityEvent } from "@paperclipai/shared";
@@ -15,13 +17,13 @@ function formatTime(value: string | Date): string {
 
 function summarizeEvent(event: RoutineActivityEvent): string {
   const details = event.details;
-  if (event.action === "routine.webhook_test_received") return "Connection working · No run or task created";
-  if (event.action === "routine.webhook_test_rejected") return "Update the key in your app and resend";
-  if (event.action === "routine.webhook_received") return "Authentication passed";
-  if (event.action === "routine.webhook_rejected") return "Check the key in your sending app";
+  if (event.action === "routine.webhook_test_received") return t("app.routines.routineActivityRow.connectionWorkingNoRunOrTaskCreated");
+  if (event.action === "routine.webhook_test_rejected") return t("app.routines.routineActivityRow.updateTheKeyInYourAppAndResend");
+  if (event.action === "routine.webhook_received") return t("app.routines.routineActivityRow.authenticationPassed");
+  if (event.action === "routine.webhook_rejected") return t("app.routines.routineActivityRow.checkTheKeyInYourSendingApp");
   if (!details) return "";
   if (typeof details.changeSummary === "string") return details.changeSummary;
-  if (event.action === "routine.run_triggered") return `${details.source === "webhook" ? "Webhook" : details.source === "schedule" ? "Schedule" : "Manual"} · ${details.status === "issue_created" ? "Task created" : String(details.status ?? "").replaceAll("_", " ")}`;
+  if (event.action === "routine.run_triggered") return `${details.source === "webhook" ? t("app.common.nouns.webhook") : details.source === "schedule" ? t("app.common.nouns.schedule") : t("app.routines.routineActivityRow.manual")} · ${details.status === "issue_created" ? t("app.routines.routineActivityRow.taskCreated") : (formatRoutineRunStatus(String(details.status ?? "")) ?? "")}`;
   return Object.entries(details).filter(([key]) => !/id$/i.test(key)).slice(0, 3)
     .map(([key, value]) => `${key.replace(/([a-z])([A-Z])/g, "$1 $2").replaceAll("_", " ").toLowerCase()}: ${formatDetailValue(value)}`)
     .join(" · ");
@@ -40,14 +42,14 @@ function formatDetailValue(value: unknown): string {
 }
 
 const actionLabels: Record<string, string> = {
-  "routine.webhook_test_received": "Connection test passed",
-  "routine.webhook_test_rejected": "Connection test rejected",
-  "routine.webhook_received": "Webhook event received",
-  "routine.webhook_rejected": "Webhook authentication failed",
-  "routine.created": "Routine created", "routine.updated": "Routine updated",
-  "routine.trigger_created": "Trigger added", "routine.trigger_updated": "Trigger updated",
-  "routine.trigger_deleted": "Trigger removed", "routine.trigger_removed": "Trigger removed", "routine.trigger_restored": "Trigger restored", "routine.trigger_setup_finished": "Webhook setup finished", "routine.trigger_secret_rotated": "Webhook key replaced",
-  "routine.run_triggered": "Routine started", "routine.run_created": "Run created",
+  get "routine.webhook_test_received"() { return t("app.routines.routineActivityRow.connectionTestPassed"); },
+  get "routine.webhook_test_rejected"() { return t("app.routines.routineActivityRow.connectionTestRejected"); },
+  get "routine.webhook_received"() { return t("app.routines.routineActivityRow.webhookEventReceived"); },
+  get "routine.webhook_rejected"() { return t("app.routines.routineActivityRow.webhookAuthenticationFailed"); },
+  get "routine.created"() { return t("app.routines.routineActivityRow.routineCreated"); }, get "routine.updated"() { return t("app.routines.routineActivityRow.routineUpdated"); },
+  get "routine.trigger_created"() { return t("app.routines.routineActivityRow.triggerAdded"); }, get "routine.trigger_updated"() { return t("app.routines.routineActivityRow.triggerUpdated"); },
+  get "routine.trigger_deleted"() { return t("app.routines.routineActivityRow.triggerRemoved"); }, get "routine.trigger_removed"() { return t("app.routines.routineActivityRow.triggerRemoved"); }, get "routine.trigger_restored"() { return t("app.routines.routineActivityRow.triggerRestored"); }, get "routine.trigger_setup_finished"() { return t("app.routines.routineActivityRow.webhookSetupFinished"); }, get "routine.trigger_secret_rotated"() { return t("app.routines.routineActivityRow.webhookKeyReplaced"); },
+  get "routine.run_triggered"() { return t("app.routines.routineActivityRow.routineStarted"); }, get "routine.run_created"() { return t("app.routines.routineActivityRow.runCreated"); },
 };
 function actionLabel(action: string) {
   return actionLabels[action] ?? action.replace(/^routine[._]/, "").replaceAll("_", " ").replaceAll(".", " ").replace(/^./, (char) => char.toUpperCase());
@@ -55,6 +57,7 @@ function actionLabel(action: string) {
 
 /** Activity log row with an expandable JSON payload (§3.7). */
 export function RoutineActivityRow({ event }: { event: RoutineActivityEvent }) {
+  useTranslation();;
   const [expanded, setExpanded] = useState(false);
   const hasPayload = event.details != null && Object.keys(event.details).length > 0;
 

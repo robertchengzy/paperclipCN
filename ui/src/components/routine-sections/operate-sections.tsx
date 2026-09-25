@@ -1,3 +1,4 @@
+import { useTranslation } from "@/i18n";
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Activity as ActivityIcon } from "lucide-react";
@@ -13,6 +14,7 @@ import { RoutineActivityRow } from "../RoutineActivityRow";
 import { useRoutineDetail } from "./context";
 
 export function RunsSection() {
+  const { t } = useTranslation();
   const { routine, companyId, agents, projects, hasLiveRun, activeIssueId } = useRoutineDetail();
   const queryClient = useQueryClient();
   const { pushToast } = useToastActions();
@@ -29,7 +31,7 @@ export function RunsSection() {
       void queryClient.invalidateQueries({ queryKey: queryKeys.routines.detail(routine.id) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.routines.runs(routine.id) });
     },
-    onError: (updateError) => pushToast({ title: "Failed to update task", body: updateError.message, tone: "error" }),
+    onError: (updateError) => pushToast({ title: t("app.routines.operateSections.failedToUpdateTask"), body: updateError.message, tone: "error" }),
   });
 
   return (
@@ -51,6 +53,7 @@ export function RunsSection() {
 }
 
 export function ActivitySection({ isLoading = false, error }: { isLoading?: boolean; error?: Error | null } = {}) {
+  const { t } = useTranslation();
   const ctx = useRoutineDetail();
   const { activity } = ctx;
   const events = activity ?? [];
@@ -58,7 +61,7 @@ export function ActivitySection({ isLoading = false, error }: { isLoading?: bool
   const groups = useMemo(() => {
     const byDay = new Map<string, typeof events>();
     for (const event of events) {
-      let label = "Earlier";
+      let label = t("app.common.labels.earlier");
       try {
         label = new Date(event.createdAt).toLocaleDateString(undefined, {
           weekday: "short",
@@ -73,13 +76,13 @@ export function ActivitySection({ isLoading = false, error }: { isLoading?: bool
       byDay.set(label, bucket);
     }
     return Array.from(byDay.entries());
-  }, [events]);
+  }, [t, events]);
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Loading activity…</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">{t("app.routines.operateSections.loadingActivity")}</p>;
   if (error) return <p role="alert" className="text-sm text-destructive">{error.message}</p>;
 
   if (events.length === 0) {
-    return <EmptyState icon={ActivityIcon} message="No activity yet." />;
+    return <EmptyState icon={ActivityIcon} message={t("app.common.messages.noActivityYet")} />;
   }
 
   return (
@@ -101,6 +104,7 @@ export function ActivitySection({ isLoading = false, error }: { isLoading?: bool
 }
 
 export function HistorySection() {
+  useTranslation();;
   const ctx = useRoutineDetail();
   const {
     routine,
