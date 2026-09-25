@@ -29,6 +29,11 @@ export interface Exemptions {
   files: string[];
   /** Exact literal values that are allowed to stay as-is (brand names, acronyms). */
   values: string[];
+  /**
+   * Per-file literals that look like copy but are program data (persisted
+   * defaults, ids, developer-only errors). Keyed by ui/src-relative path.
+   */
+  entries?: Record<string, string[]>;
 }
 
 const COPY_ATTR_RE =
@@ -295,7 +300,9 @@ export function scanUi(srcDir: string, exemptions: Exemptions): HardcodedString[
   for (const full of collectSourceFiles(srcDir)) {
     const rel = path.relative(srcDir, full).split(path.sep).join("/");
     if (exemptions.files.some((prefix) => rel === prefix || rel.startsWith(prefix))) continue;
-    found.push(...scanSource(rel, fs.readFileSync(full, "utf8"), exemptValues));
+    const fileEntries = exemptions.entries?.[rel];
+    const values = fileEntries ? new Set([...exemptValues, ...fileEntries]) : exemptValues;
+    found.push(...scanSource(rel, fs.readFileSync(full, "utf8"), values));
   }
   return found;
 }
