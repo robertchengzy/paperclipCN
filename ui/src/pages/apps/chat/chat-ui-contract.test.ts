@@ -6,9 +6,25 @@ function source(relativePath: string) {
   return readFileSync(new URL(relativePath, import.meta.url), "utf8");
 }
 
+// Localized chat sources reference copy through i18n keys. Inline each key's
+// English value right after the key so the copy assertions below keep checking
+// the English text (and where in the source it is used).
+function chatSource(relativePath: string) {
+  return source(relativePath).replace(/"(app\.[A-Za-z0-9_.-]+)"/g, (match, key: string) => {
+    const value = key
+      .split(".")
+      .reduce<unknown>(
+        (node, part) =>
+          node && typeof node === "object" ? (node as Record<string, unknown>)[part] : undefined,
+        en,
+      );
+    return typeof value === "string" ? `${match} ${value}` : match;
+  });
+}
+
 describe("chat connector UI contract", () => {
   it("describes the close command as a conversation control rather than a task status change", () => {
-    const setup = source("./ChatEndpointSetup.tsx");
+    const setup = chatSource("./ChatEndpointSetup.tsx");
     expect(setup).toContain("Close the active chat conversation");
     expect(setup).not.toContain("Close the active Paperclip task");
   });
@@ -43,7 +59,7 @@ describe("chat connector UI contract", () => {
     }
   });
   it("keeps the exact dual-purpose choice and immutable searchable agent selection", () => {
-    const setup = source("./ChatEndpointSetup.tsx");
+    const setup = chatSource("./ChatEndpointSetup.tsx");
     expect(setup).toContain("Chat with an agent");
     expect(setup).toContain("Use this connection as an agent tool");
     expect(setup).toContain("<AgentSelect");
@@ -51,18 +67,21 @@ describe("chat connector UI contract", () => {
   });
 
   it("provides every settled detail tab and no detach control", () => {
-    const detail = source("./ChatEndpointDetail.tsx");
+    const detail = chatSource("./ChatEndpointDetail.tsx");
     for (const tab of ["settings", "access", "conversations", "activity"]) {
       expect(detail).toContain(`"${tab}"`);
     }
     expect(detail).not.toContain('"overview"');
-    expect(detail).toContain("Open {providerNames[provider]}");
+    expect(detail).toMatch(
+      /Open \{providerNames\[provider\]\}|t\("app\.apps\.chatEndpointDetail\.openProvider"[^\n]*providerNames\[provider\]/,
+    );
+    expect(en.app.apps.chatEndpointDetail.openProvider).toBe("Open {{provider}}");
     expect(detail).toContain("Open task");
     expect(detail.toLowerCase()).not.toContain("detach");
   });
 
   it("shows independent Slack callback surfaces and public URL drift", () => {
-    const detail = source("./ChatEndpointDetail.tsx");
+    const detail = chatSource("./ChatEndpointDetail.tsx");
     expect(detail).toContain("Slack callback health");
     expect(detail).toContain("Events API");
     expect(detail).toContain("Interactivity");
@@ -80,8 +99,8 @@ describe("chat connector UI contract", () => {
   });
 
   it("keeps provider capabilities automatic and settings focused on plausible reach", () => {
-    const detail = source("./ChatEndpointDetail.tsx");
-    const setup = source("./ChatEndpointSetup.tsx");
+    const detail = chatSource("./ChatEndpointDetail.tsx");
+    const setup = chatSource("./ChatEndpointSetup.tsx");
     expect(detail).toContain("Allow direct messages");
     expect(detail).toContain("Allow group chats");
     expect(detail).toContain("Their tasks run only with an isolated workspace");
@@ -98,7 +117,7 @@ describe("chat connector UI contract", () => {
   });
 
   it("explains Discord's independent per-server direct-message restriction", () => {
-    const detail = source("./ChatEndpointDetail.tsx");
+    const detail = chatSource("./ChatEndpointDetail.tsx");
     expect(detail).toContain('endpoint.provider === "discord"');
     expect(detail).toContain(
       "People must also enable Direct Messages in their shared Discord server’s Privacy Settings.",
@@ -106,7 +125,7 @@ describe("chat connector UI contract", () => {
   });
 
   it("offers only real connection lifecycle actions", () => {
-    const detail = source("./ChatEndpointDetail.tsx");
+    const detail = chatSource("./ChatEndpointDetail.tsx");
     const settings = detail.slice(
       detail.indexOf("function Settings"),
       detail.indexOf("function SettingToggle"),
@@ -128,8 +147,8 @@ describe("chat connector UI contract", () => {
   });
 
   it("states the provider boundary for reconnect and removal", () => {
-    const detail = source("./ChatEndpointDetail.tsx");
-    const setup = source("./ChatEndpointSetup.tsx");
+    const detail = chatSource("./ChatEndpointDetail.tsx");
+    const setup = chatSource("./ChatEndpointSetup.tsx");
     for (const reconnectCopy of [
       "does not reinstall the app or change its workspace or channel membership",
       "does not reinstall the App or change repository access",
@@ -154,7 +173,7 @@ describe("chat connector UI contract", () => {
   });
 
   it("uses only executable provider credential flows", () => {
-    const setup = source("./ChatEndpointSetup.tsx");
+    const setup = chatSource("./ChatEndpointSetup.tsx");
     for (const credential of [
       "botToken",
       "appId",
@@ -193,9 +212,7 @@ describe("chat connector UI contract", () => {
     expect(setup).not.toContain("/setprivacy");
     expect(setup).toContain("/task@bot_username");
     expect(setup).toContain("registers its command menu automatically");
-    expect(setup).toContain(
-      "ordinary\n          mentions are not delivered to bots",
-    );
+    expect(setup).toMatch(/ordinary\s+mentions are not delivered to bots/);
     expect(setup).toContain("Create Azure Bot");
     expect(setup).toContain("Microsoft 365 work or school organization");
     expect(setup).toContain("teams.live.com");
@@ -283,7 +300,7 @@ describe("chat connector UI contract", () => {
   });
 
   it("keeps provider setup failures visible without rendering submitted credentials", () => {
-    const setup = source("./ChatEndpointSetup.tsx");
+    const setup = chatSource("./ChatEndpointSetup.tsx");
     const setupError = source("./chat-setup-error.ts");
     expect(setup).toContain("sanitizedSetupErrorMessage");
     expect(setup).toContain('role="alert"');
@@ -294,7 +311,7 @@ describe("chat connector UI contract", () => {
   });
 
   it("keeps GitHub setup on the shipped customer-owned App path", () => {
-    const setup = source("./ChatEndpointSetup.tsx");
+    const setup = chatSource("./ChatEndpointSetup.tsx");
     const generator = source(
       "../../../../../doc/plans/chat-adapters/generate-wireframes-v8.mjs",
     );

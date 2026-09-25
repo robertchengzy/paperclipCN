@@ -16,17 +16,26 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ToggleSwitch } from "@/components/ui/toggle-switch";
 import { Link } from "@/lib/router";
+import { t as translate, useTranslation } from "@/i18n";
 
 export const githubSelectClass =
   "w-full rounded-md border border-input bg-background px-3 py-2 text-sm";
-const eventLabels = {
-  opened: "New pull request",
-  synchronize: "Updated commits",
-  reopened: "Reopened",
-  ready_for_review: "Ready for review",
-  mention: "Mention",
-  comment: "Follow-up comment",
-};
+function eventLabel(event: (typeof GITHUB_REVIEW_EVENTS)[number]): string {
+  switch (event) {
+    case "opened":
+      return translate("app.apps.gitHubBotConfiguration.events.opened");
+    case "synchronize":
+      return translate("app.apps.gitHubBotConfiguration.events.synchronize");
+    case "reopened":
+      return translate("app.apps.gitHubBotConfiguration.events.reopened");
+    case "ready_for_review":
+      return translate("app.apps.gitHubBotConfiguration.events.readyForReview");
+    case "mention":
+      return translate("app.apps.gitHubBotConfiguration.events.mention");
+    case "comment":
+      return translate("app.apps.gitHubBotConfiguration.events.comment");
+  }
+}
 export function GitHubToggle({
   label,
   description,
@@ -61,6 +70,7 @@ export function GitHubPolicyEditor({
   policy: GitHubReviewPolicy;
   onChange: (policy: GitHubReviewPolicy) => void;
 }) {
+  const { t } = useTranslation();
   const [prompt, setPrompt] =
     useState<(typeof GITHUB_REVIEW_EVENTS)[number]>("opened");
   const set = <K extends keyof GitHubReviewPolicy>(
@@ -71,7 +81,7 @@ export function GitHubPolicyEditor({
     <div className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="github-invocation">
-          When should this agent review?
+          {t("app.apps.gitHubBotConfiguration.policy.when")}
         </Label>
         <select
           id="github-invocation"
@@ -85,23 +95,23 @@ export function GitHubPolicyEditor({
           }
         >
           <option value="linked_authors">
-            Linked members’ PRs and authorized mentions
+            {t("app.apps.gitHubBotConfiguration.policy.linkedAuthors")}
           </option>
-          <option value="mentions_only">Authorized mentions only</option>
+          <option value="mentions_only">{t("app.apps.gitHubBotConfiguration.policy.mentionsOnly")}</option>
           <option value="allowed_authors">
-            Allowed authors’ PRs and authorized mentions
+            {t("app.apps.gitHubBotConfiguration.policy.allowedAuthors")}
           </option>
         </select>
         <p className="text-xs text-muted-foreground">
-          Newly added people have a separate automatic-review setting in Access.
+          {t("app.apps.gitHubBotConfiguration.policy.whenHelp")}
         </p>
       </div>
       <div>
-        <h3 className="text-sm font-medium">Automatic review events</h3>
+        <h3 className="text-sm font-medium">{t("app.apps.gitHubBotConfiguration.policy.events")}</h3>
         {GITHUB_REVIEW_EVENTS.slice(0, 4).map((event) => (
           <GitHubToggle
             key={event}
-            label={eventLabels[event]}
+            label={eventLabel(event)}
             checked={policy.events.includes(event)}
             onChange={(enabled) =>
               set(
@@ -114,58 +124,58 @@ export function GitHubPolicyEditor({
           />
         ))}
         <GitHubToggle
-          label="Include draft PRs"
+          label={t("app.apps.gitHubBotConfiguration.policy.drafts")}
           checked={policy.reviewDrafts}
           onChange={(value) => set("reviewDrafts", value)}
         />
         <GitHubToggle
-          label="Include bot authors"
-          description="Also allow the bot account in Access with a sponsor and automatic reviews enabled."
+          label={t("app.apps.gitHubBotConfiguration.policy.botAuthors")}
+          description={t("app.apps.gitHubBotConfiguration.policy.botAuthorsHelp")}
           checked={policy.reviewBotAuthors}
           onChange={(value) => set("reviewBotAuthors", value)}
         />
       </div>
       <details className="rounded-lg border border-border p-4">
         <summary className="cursor-pointer text-sm font-medium">
-          Author, branch, label, and file filters
+          {t("app.apps.gitHubBotConfiguration.filters.title")}
         </summary>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {(
             [
               [
                 "includeAuthors",
-                "Included authors",
-                "Leave empty to include any authorized author. One username or glob per line.",
+                t("app.apps.gitHubBotConfiguration.filters.includeAuthors"),
+                t("app.apps.gitHubBotConfiguration.filters.includeAuthorsHelp"),
               ],
               [
                 "excludeAuthors",
-                "Excluded authors",
-                "One username or glob per line.",
+                t("app.apps.gitHubBotConfiguration.filters.excludeAuthors"),
+                t("app.apps.gitHubBotConfiguration.filters.excludeAuthorsHelp"),
               ],
               [
                 "targetBranches",
-                "Target branches",
-                "Leave empty for all branches. Supports * and **.",
+                t("app.apps.gitHubBotConfiguration.filters.targetBranches"),
+                t("app.apps.gitHubBotConfiguration.filters.targetBranchesHelp"),
               ],
               [
                 "excludedBranches",
-                "Excluded target branches",
-                "Never automatically review these branches. Supports * and **.",
+                t("app.apps.gitHubBotConfiguration.filters.excludedBranches"),
+                t("app.apps.gitHubBotConfiguration.filters.excludedBranchesHelp"),
               ],
               [
                 "requiredLabels",
-                "Required labels",
-                "All listed labels must be present.",
+                t("app.apps.gitHubBotConfiguration.filters.requiredLabels"),
+                t("app.apps.gitHubBotConfiguration.filters.requiredLabelsHelp"),
               ],
               [
                 "excludedLabels",
-                "Excluded labels",
-                "Any listed label prevents automatic review.",
+                t("app.apps.gitHubBotConfiguration.filters.excludedLabels"),
+                t("app.apps.gitHubBotConfiguration.filters.excludedLabelsHelp"),
               ],
               [
                 "ignoredPaths",
-                "Ignored file paths",
-                "Excluded from manual and automatic analysis. Supports * and **.",
+                t("app.apps.gitHubBotConfiguration.filters.ignoredPaths"),
+                t("app.apps.gitHubBotConfiguration.filters.ignoredPathsHelp"),
               ],
             ] as const
           ).map(([key, label, help]) => (
@@ -183,24 +193,22 @@ export function GitHubPolicyEditor({
           ))}
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          Authorized manual requests bypass automatic scheduling filters.
-          Repository restrictions and ignored files still apply.
+          {t("app.apps.gitHubBotConfiguration.filters.note")}
         </p>
       </details>
       <div className="space-y-2">
-        <Label htmlFor="github-instructions">Review instructions</Label>
+        <Label htmlFor="github-instructions">{t("app.apps.gitHubBotConfiguration.policy.instructions")}</Label>
         <Textarea
           id="github-instructions"
           value={policy.instructions}
           onChange={(e) => set("instructions", e.target.value)}
         />
         <p className="text-xs text-muted-foreground">
-          Additional guidance for the assigned agent. Provider content cannot
-          change its permissions.
+          {t("app.apps.gitHubBotConfiguration.policy.instructionsHelp")}
         </p>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="github-prompt-event">Event prompts</Label>
+        <Label htmlFor="github-prompt-event">{t("app.apps.gitHubBotConfiguration.policy.eventPrompts")}</Label>
         <select
           id="github-prompt-event"
           className={githubSelectClass}
@@ -209,26 +217,24 @@ export function GitHubPolicyEditor({
         >
           {GITHUB_REVIEW_EVENTS.map((event) => (
             <option key={event} value={event}>
-              {eventLabels[event]}
+              {eventLabel(event)}
             </option>
           ))}
         </select>
         <Textarea
-          aria-label={`${eventLabels[prompt]} prompt`}
+          aria-label={t("app.apps.gitHubBotConfiguration.policy.eventPrompt", { event: eventLabel(prompt) })}
           value={policy.prompts[prompt]}
           onChange={(e) =>
             set("prompts", { ...policy.prompts, [prompt]: e.target.value })
           }
         />
         <p className="text-xs text-muted-foreground">
-          Paperclip supplies repository, PR, base and head commits, sender, and
-          prior head as typed context. Saved revisions remain attached to review
-          activity.
+          {t("app.apps.gitHubBotConfiguration.policy.promptsHelp")}
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="github-categories">Finding categories</Label>
+          <Label htmlFor="github-categories">{t("app.apps.gitHubBotConfiguration.policy.categories")}</Label>
           <Input
             id="github-categories"
             value={policy.findingCategories.join(", ")}
@@ -243,12 +249,12 @@ export function GitHubPolicyEditor({
             }
           />
           <p className="text-xs text-muted-foreground">
-            Comma-separated assessment categories.
+            {t("app.apps.gitHubBotConfiguration.policy.categoriesHelp")}
           </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="github-severity">
-            Minimum inline comment severity
+            {t("app.apps.gitHubBotConfiguration.policy.severity")}
           </Label>
           <select
             id="github-severity"
@@ -261,41 +267,41 @@ export function GitHubPolicyEditor({
               )
             }
           >
-            <option value="info">Info</option>
-            <option value="warning">Warning</option>
-            <option value="error">Error</option>
+            <option value="info">{t("app.apps.gitHubBotConfiguration.severity.info")}</option>
+            <option value="warning">{t("app.common.labels.warning")}</option>
+            <option value="error">{t("app.common.labels.error")}</option>
           </select>
           <p className="text-xs text-muted-foreground">
-            Hidden comments still count in the assessment.
+            {t("app.apps.gitHubBotConfiguration.policy.severityHelp")}
           </p>
         </div>
       </div>
       <div>
-        <h3 className="text-sm font-medium">Publication permissions</h3>
+        <h3 className="text-sm font-medium">{t("app.apps.gitHubBotConfiguration.policy.publication")}</h3>
         <GitHubToggle
-          label="Publish summary"
+          label={t("app.apps.gitHubBotConfiguration.policy.publishSummary")}
           checked={policy.publishSummary}
           onChange={(value) => set("publishSummary", value)}
         />
         <GitHubToggle
-          label="Publish inline findings"
+          label={t("app.apps.gitHubBotConfiguration.policy.publishInline")}
           checked={policy.publishInline}
           onChange={(value) => set("publishInline", value)}
         />
         <GitHubToggle
-          label="Allow formal approvals"
-          description="A separate agent action; a 5/5 score never automatically approves."
+          label={t("app.apps.gitHubBotConfiguration.policy.allowApprove")}
+          description={t("app.apps.gitHubBotConfiguration.policy.allowApproveHelp")}
           checked={policy.allowApprove}
           onChange={(value) => set("allowApprove", value)}
         />
         <GitHubToggle
-          label="Allow formal request changes"
+          label={t("app.apps.gitHubBotConfiguration.policy.allowRequestChanges")}
           checked={policy.allowRequestChanges}
           onChange={(value) => set("allowRequestChanges", value)}
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="github-rating">Paperclip Review check</Label>
+        <Label htmlFor="github-rating">{t("app.apps.gitHubBotConfiguration.policy.check")}</Label>
         <select
           id="github-rating"
           className={githubSelectClass}
@@ -311,17 +317,13 @@ export function GitHubPolicyEditor({
         >
           {[5, 4, 3, 2, 1].map((score) => (
             <option key={score} value={score}>
-              Require at least {score}/5
+              {t("app.apps.gitHubBotConfiguration.policy.requireScore", { score })}
             </option>
           ))}
-          <option value="report">Report only</option>
+          <option value="report">{t("app.apps.gitHubBotConfiguration.policy.reportOnly")}</option>
         </select>
         <p className="text-xs text-muted-foreground">
-          Paperclip computes the result for the exact reviewed commit.
-          Incomplete reviews cannot pass. To require it before merging, select
-          “Paperclip Review” in your GitHub branch protection or ruleset
-          settings and choose this bot’s GitHub App as the expected source. Run
-          a review first so the check appears in GitHub’s selector.
+          {t("app.apps.gitHubBotConfiguration.policy.checkHelp")}
         </p>
         <a
           className="text-xs underline"
@@ -329,7 +331,7 @@ export function GitHubPolicyEditor({
           target="_blank"
           rel="noreferrer"
         >
-          Set up a required check on GitHub
+          {t("app.apps.gitHubBotConfiguration.policy.setupCheck")}
         </a>
       </div>
     </div>
@@ -347,6 +349,7 @@ export function GitHubAccessEditor({
   configuration: GitHubChatConfiguration;
   onChange: (configuration: GitHubChatConfiguration) => void;
 }) {
+  const { t } = useTranslation();
   const accountLink = useRef<HTMLAnchorElement>(null);
   const [linkCopied, setLinkCopied] = useState(false);
   const members = useQuery({
@@ -388,7 +391,7 @@ export function GitHubAccessEditor({
     <div className="space-y-5">
       <div className="space-y-2">
         <Label htmlFor="github-responsible">
-          Responsible user for automatic events
+          {t("app.apps.gitHubBotConfiguration.access.responsible")}
         </Label>
         <select
           id="github-responsible"
@@ -405,12 +408,11 @@ export function GitHubAccessEditor({
           ))}
         </select>
         <p className="text-xs text-muted-foreground">
-          Accountable for automatic tasks. The PR author and webhook sender
-          remain recorded separately.
+          {t("app.apps.gitHubBotConfiguration.access.responsibleHelp")}
         </p>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="github-member-access">Company member access</Label>
+        <Label htmlFor="github-member-access">{t("app.apps.gitHubBotConfiguration.access.memberAccess")}</Label>
         <select
           id="github-member-access"
           className={githubSelectClass}
@@ -422,17 +424,17 @@ export function GitHubAccessEditor({
             })
           }
         >
-          <option value="all_linked">All linked company members</option>
-          <option value="selected">Only selected linked members</option>
+          <option value="all_linked">{t("app.apps.gitHubBotConfiguration.access.allLinked")}</option>
+          <option value="selected">{t("app.apps.gitHubBotConfiguration.access.selected")}</option>
         </select>
         <p className="text-xs text-muted-foreground">
-          Members connect their own GitHub account.{" "}
+          {t("app.apps.gitHubBotConfiguration.access.membersConnect")}{" "}
           <Link
             className="underline"
             ref={accountLink}
             to={`/apps/chat/connect?provider=github&resume=${endpointId}&stage=identity`}
           >
-            Open account linking
+            {t("app.apps.gitHubBotConfiguration.access.openLinking")}
           </Link>
           <Button
             variant="link"
@@ -443,21 +445,21 @@ export function GitHubAccessEditor({
                   () => setLinkCopied(true),
                   () =>
                     setError(
-                      "Could not copy the link. Open account linking and copy the address.",
+                      t("app.apps.gitHubBotConfiguration.access.copyLinkFailed"),
                     ),
                 );
             }}
           >
-            {linkCopied ? "Link copied" : "Copy link for teammates"}
+            {linkCopied ? t("app.apps.gitHubBotConfiguration.access.linkCopied") : t("app.apps.gitHubBotConfiguration.access.copyLink")}
           </Button>
           .
         </p>
       </div>
       <div className="space-y-3">
-        <h3 className="text-sm font-medium">Linked GitHub accounts</h3>
+        <h3 className="text-sm font-medium">{t("app.apps.gitHubBotConfiguration.access.linkedAccounts")}</h3>
         {links.isError && (
           <p role="alert" className="text-sm text-destructive">
-            Could not load linked accounts.
+            {t("app.apps.gitHubBotConfiguration.access.loadLinkedFailed")}
           </p>
         )}
         {(links.data ?? [])
@@ -487,14 +489,14 @@ export function GitHubAccessEditor({
                     setError(
                       e instanceof Error
                         ? e.message
-                        : "Could not unlink this account.",
+                        : t("app.apps.gitHubBotConfiguration.access.unlinkFailed"),
                     );
                   } finally {
                     setBusy(false);
                   }
                 }}
               >
-                Unlink account
+                {t("app.apps.gitHubBotConfiguration.access.unlink")}
               </Button>
             </div>
           ))}
@@ -502,16 +504,14 @@ export function GitHubAccessEditor({
           !links.isError &&
           !(links.data ?? []).some((link) => link.status === "linked") && (
             <p className="text-sm text-muted-foreground">
-              No accounts linked yet. Each teammate confirms their own GitHub
-              identity.
+              {t("app.apps.gitHubBotConfiguration.access.noLinked")}
             </p>
           )}
       </div>
       <div className="divide-y divide-border rounded-lg border border-border">
         {configuration.people.length === 0 && (
           <p className="p-4 text-sm text-muted-foreground">
-            No individual access entries. Unlinked people cannot invoke this
-            bot.
+            {t("app.apps.gitHubBotConfiguration.access.noPeople")}
           </p>
         )}
         {configuration.people.map((person) => (
@@ -521,8 +521,8 @@ export function GitHubAccessEditor({
                 <p className="text-sm font-medium">@{person.login}</p>
                 <p className="text-xs text-muted-foreground">
                   {person.kind === "member"
-                    ? "Linked company member"
-                    : "External contributor · restricted guest permissions"}
+                    ? t("app.apps.gitHubBotConfiguration.access.memberLabel")
+                    : t("app.apps.gitHubBotConfiguration.access.guestLabel")}
                 </p>
               </div>
               <Button
@@ -537,11 +537,11 @@ export function GitHubAccessEditor({
                   })
                 }
               >
-                Remove
+                {t("app.common.actions.remove")}
               </Button>
             </div>
             <GitHubToggle
-              label={`Automatic PR reviews for @${person.login}`}
+              label={t("app.apps.gitHubBotConfiguration.access.autoReviews", { login: person.login })}
               checked={person.automaticReviews}
               onChange={(value) =>
                 onChange({
@@ -556,11 +556,12 @@ export function GitHubAccessEditor({
             />
             {person.kind === "guest" && (
               <p className="text-xs text-muted-foreground">
-                Sponsor:{" "}
-                {activeMembers.find(
-                  (member) => member.principalId === person.sponsorUserId,
-                )?.user?.name ?? person.sponsorUserId}
-                . No company membership or personal credentials are granted.
+                {t("app.apps.gitHubBotConfiguration.access.sponsorNote", {
+                  sponsor:
+                    activeMembers.find(
+                      (member) => member.principalId === person.sponsorUserId,
+                    )?.user?.name ?? person.sponsorUserId,
+                })}
               </p>
             )}
           </div>
@@ -568,17 +569,16 @@ export function GitHubAccessEditor({
       </div>
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" onClick={() => setKind("member")}>
-          Add linked member
+          {t("app.apps.gitHubBotConfiguration.access.addMember")}
         </Button>
         <Button variant="outline" onClick={() => setKind("guest")}>
-          Allow external contributor
+          {t("app.apps.gitHubBotConfiguration.access.allowGuest")}
         </Button>
       </div>
       {kind === "member" && (
         <div className="space-y-3 rounded-lg border border-border p-4">
           <p className="text-sm">
-            Adding a member switches access to the selected-member list.
-            Automatic PR reviews start off.
+            {t("app.apps.gitHubBotConfiguration.access.addMemberHelp")}
           </p>
           {(links.data ?? [])
             .filter((link) => link.status === "linked" && link.paperclipUserId)
@@ -595,7 +595,7 @@ export function GitHubAccessEditor({
                   const id = link.githubUserId;
                   if (!id) {
                     setError(
-                      "Refresh linked identities before adding this member.",
+                      t("app.apps.gitHubBotConfiguration.access.refreshLinked"),
                     );
                     return;
                   }
@@ -612,18 +612,17 @@ export function GitHubAccessEditor({
               </Button>
             ))}
           <Button variant="ghost" onClick={() => setKind(null)}>
-            Cancel
+            {t("app.common.actions.cancel")}
           </Button>
         </div>
       )}
       {kind === "guest" && (
         <div className="space-y-4 rounded-lg border border-border p-4">
           <p className="text-sm">
-            Allow one GitHub account to mention the bot with restricted guest
-            permissions. A sponsor is required.
+            {t("app.apps.gitHubBotConfiguration.access.guestHelp")}
           </p>
           <div className="space-y-2">
-            <Label htmlFor="github-guest-login">GitHub username</Label>
+            <Label htmlFor="github-guest-login">{t("app.apps.gitHubBotConfiguration.access.username")}</Label>
             <div className="flex gap-2">
               <Input
                 id="github-guest-login"
@@ -643,19 +642,19 @@ export function GitHubAccessEditor({
                     setCandidate(await githubChatApi.lookup(endpointId, login));
                   } catch (error) {
                     setError(
-                      error instanceof Error ? error.message : "Lookup failed",
+                      error instanceof Error ? error.message : t("app.apps.gitHubBotConfiguration.access.lookupFailed"),
                     );
                   } finally {
                     setBusy(false);
                   }
                 }}
               >
-                Look up
+                {t("app.apps.gitHubBotConfiguration.access.lookUp")}
               </Button>
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="github-guest-sponsor">Sponsor</Label>
+            <Label htmlFor="github-guest-sponsor">{t("app.apps.gitHubBotConfiguration.access.sponsor")}</Label>
             <select
               id="github-guest-sponsor"
               className={githubSelectClass}
@@ -671,12 +670,12 @@ export function GitHubAccessEditor({
           </div>
           {candidate && (
             <p className="text-sm">
-              @{candidate.login} · GitHub ID {candidate.githubUserId}
+              {t("app.apps.gitHubBotConfiguration.access.candidate", { login: candidate.login, id: candidate.githubUserId })}
             </p>
           )}
           <div className="flex justify-between">
             <Button variant="ghost" onClick={() => setKind(null)}>
-              Cancel
+              {t("app.common.actions.cancel")}
             </Button>
             <Button
               disabled={
@@ -697,7 +696,7 @@ export function GitHubAccessEditor({
                 })
               }
             >
-              Allow this account
+              {t("app.apps.gitHubBotConfiguration.access.allowAccount")}
             </Button>
           </div>
         </div>
@@ -705,7 +704,7 @@ export function GitHubAccessEditor({
       {(error || members.error || links.error) && (
         <p role="alert" className="text-sm text-destructive">
           {error ||
-            "Could not load members or linked accounts. Refresh to try again."}
+            t("app.apps.gitHubBotConfiguration.access.loadFailed")}
         </p>
       )}
     </div>

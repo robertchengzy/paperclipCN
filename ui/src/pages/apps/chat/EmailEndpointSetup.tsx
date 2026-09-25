@@ -39,6 +39,7 @@ import {
   lowTrustBoundaryHasScope,
 } from "@/lib/trust-policy-ui";
 import { queryKeys } from "@/lib/queryKeys";
+import { useTranslation } from "@/i18n";
 import type {
   AgentPermissions,
   EmailEndpointSummary,
@@ -47,6 +48,7 @@ const selectClass =
   "w-full rounded-md border border-input bg-background px-3 py-2 text-sm";
 
 export function EmailEndpointSetup() {
+  const { t } = useTranslation();
   const { selectedCompanyId } = useCompany();
   const [params] = useSearchParams();
   const navigate = useNavigate();
@@ -176,8 +178,8 @@ export function EmailEndpointSetup() {
     addressMode === "existing" ? inboxId : `${username}@${domain}`;
   const labels =
     step < 3
-      ? ["Access", "API key", "Connected"]
-      : ["Agent", "Email address", "Review"];
+      ? [t("app.common.nouns.access"), t("app.common.labels.apiKey"), t("app.common.states.connected")]
+      : [t("app.common.nouns.agent"), t("app.apps.emailEndpointSetup.emailAddress"), t("app.apps.emailEndpointSetup.steps.review")];
   const current = step < 3 ? step : Math.min(step - 3, 2);
   const error = connect.error ?? setup.error ?? inspected.error ?? agents.error;
   const trustNotice = chosen && (
@@ -193,16 +195,16 @@ export function EmailEndpointSetup() {
         )}
         {lowTrust
           ? scoped
-            ? "Low-trust review configured"
-            : "Low trust needs a work boundary"
-          : `${chosen.name} is not a low-trust agent`}
+            ? t("app.apps.emailEndpointSetup.trust.configured")
+            : t("app.apps.emailEndpointSetup.trust.needsBoundary")
+          : t("app.apps.emailEndpointSetup.trust.notLowTrust", { name: chosen.name })}
       </p>
       <p className="text-sm text-muted-foreground">
         {lowTrust
-          ? "Email tasks stay inside the configured project or root task boundary. Output is quarantined for trusted review."
-          : "Email can contain malicious instructions. We recommend Low-trust review to limit the agent’s access to Paperclip work."}
+          ? t("app.apps.emailEndpointSetup.trust.lowTrustHelp")
+          : t("app.apps.emailEndpointSetup.trust.recommend")}
       </p>
-      <p className="text-xs text-muted-foreground">Low-trust execution also requires isolated workspaces and an active sandbox environment in the agent’s runtime settings.</p>
+      <p className="text-xs text-muted-foreground">{t("app.apps.emailEndpointSetup.trust.requirements")}</p>
       <Button
         size="sm"
         variant="outline"
@@ -211,7 +213,7 @@ export function EmailEndpointSetup() {
           setTrustOpen(true);
         }}
       >
-        {lowTrust ? "Review trust settings" : "Configure low trust"}
+        {lowTrust ? t("app.apps.emailEndpointSetup.trust.review") : t("app.apps.emailEndpointSetup.trust.configure")}
       </Button>
     </div>
   );
@@ -220,10 +222,10 @@ export function EmailEndpointSetup() {
       <header className="flex items-center justify-between gap-3">
         <h1 className="text-xl font-bold">
           {step < 3
-            ? "Connect AgentMail"
+            ? t("app.apps.emailEndpointSetup.connectAgentMail")
             : step === 6
-              ? "Your agent’s email is ready"
-              : "Give an agent an email address"}
+              ? t("app.apps.emailEndpointSetup.ready")
+              : t("app.apps.emailEndpointSetup.giveAddress")}
         </h1>
         <Button
           variant="ghost"
@@ -233,7 +235,7 @@ export function EmailEndpointSetup() {
             )
           }
         >
-          {step === 6 ? "Close" : "Cancel"}
+          {step === 6 ? t("app.common.actions.close") : t("app.common.actions.cancel")}
         </Button>
       </header>
       <ChatSetupNavigation
@@ -256,7 +258,7 @@ export function EmailEndpointSetup() {
           setInstallAgentIds={setAgentIds}
           onBack={() => navigate("/apps")}
           onContinue={() => setStep(1)}
-          submitLabel="Continue"
+          submitLabel={t("app.common.actions.continue")}
         />
       )}
       {step === 1 && (
@@ -269,16 +271,16 @@ export function EmailEndpointSetup() {
         >
           <section className="space-y-4 rounded-xl border border-border p-6">
             <h2 className="text-lg font-semibold">
-              Add your AgentMail API key
+              {t("app.apps.emailEndpointSetup.addApiKey")}
             </h2>
-            <Label htmlFor="email-api-key">API key</Label>
+            <Label htmlFor="email-api-key">{t("app.common.labels.apiKey")}</Label>
             <Input
               id="email-api-key"
               type="password"
               autoComplete="off"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Paste your AgentMail API key"
+              placeholder={t("app.apps.emailEndpointSetup.apiKeyPlaceholder")}
             />
             <a
               href="https://console.agentmail.to"
@@ -286,30 +288,30 @@ export function EmailEndpointSetup() {
               rel="noreferrer"
               className="text-sm underline"
             >
-              Get a key in AgentMail ↗
+              {t("app.apps.emailEndpointSetup.getKey")}
             </a>
           </section>
           <div className="flex justify-between">
             <Button type="button" variant="ghost" onClick={() => setStep(0)}>
-              Back
+              {t("app.common.actions.back")}
             </Button>
             <Button disabled={!apiKey.trim() || connect.isPending}>
-              {connect.isPending ? "Connecting…" : "Connect AgentMail"}
+              {connect.isPending ? t("app.common.progress.connecting") : t("app.apps.emailEndpointSetup.connectAgentMail")}
             </Button>
           </div>
         </form>
       )}
       {step === 2 && (
         <section className="space-y-5 rounded-xl border border-border p-6">
-          <h2 className="text-lg font-semibold">AgentMail is connected</h2>
+          <h2 className="text-lg font-semibold">{t("app.apps.emailEndpointSetup.connectedTitle")}</h2>
           <p className="text-sm text-muted-foreground">
-            Next, give an agent an email address from Permissions.
+            {t("app.apps.emailEndpointSetup.connectedHelp")}
           </p>
           <div className="flex justify-end">
             <Button
               onClick={() => navigate(`/apps/${connectionId}/permissions`)}
             >
-              Open permissions <ArrowRight className="size-4" />
+              {t("app.apps.emailEndpointSetup.openPermissions")} <ArrowRight className="size-4" />
             </Button>
           </div>
         </section>
@@ -318,17 +320,17 @@ export function EmailEndpointSetup() {
         <>
           <section className="space-y-4 rounded-xl border border-border p-6">
             <h2 className="text-lg font-semibold">
-              Who should handle this inbox?
+              {t("app.apps.emailEndpointSetup.agentStep.title")}
             </h2>
             <p className="text-sm text-muted-foreground">
-              Incoming email will create tasks assigned to this agent.
+              {t("app.apps.emailEndpointSetup.agentStep.help")}
             </p>
-            <Label>Agent</Label>
+            <Label>{t("app.common.nouns.agent")}</Label>
             <SearchableSelect
               value={agentId}
-              placeholder="Choose an agent"
-              searchPlaceholder="Search all agents…"
-              emptyMessage="No agents found."
+              placeholder={t("app.apps.emailEndpointSetup.agentStep.placeholder")}
+              searchPlaceholder={t("app.apps.emailEndpointSetup.agentStep.search")}
+              emptyMessage={t("app.common.messages.noAgentsFound")}
               groups={[
                 {
                   id: "agents",
@@ -368,8 +370,7 @@ export function EmailEndpointSetup() {
               }
             />
             <p className="text-xs text-muted-foreground">
-              Activating this inbox also adds the agent to this connection’s
-              allowed agents.
+              {t("app.apps.emailEndpointSetup.agentStep.note")}
             </p>
           </section>
           {trustNotice}
@@ -379,24 +380,24 @@ export function EmailEndpointSetup() {
         <>
           <section className="space-y-5 rounded-xl border border-border p-6">
             <h2 className="text-lg font-semibold">
-              Choose {chosen?.name}’s email address
+              {t("app.apps.emailEndpointSetup.addressStep.title", { name: chosen?.name })}
             </h2>
             <RadioCardGroup
-              ariaLabel="Email address source"
+              ariaLabel={t("app.apps.emailEndpointSetup.addressStep.source")}
               value={addressMode}
               onValueChange={setAddressMode}
               options={[
                 {
                   value: "new",
-                  title: "Create a new address",
+                  title: t("app.apps.emailEndpointSetup.addressStep.new"),
                   disabled: scopedKey,
                 },
-                { value: "existing", title: "Use an existing inbox" },
+                { value: "existing", title: t("app.apps.emailEndpointSetup.addressStep.existing") },
               ]}
             />
             {addressMode === "new" ? (
               <div className="space-y-2">
-                <Label htmlFor="email-name">Email address</Label>
+                <Label htmlFor="email-name">{t("app.apps.emailEndpointSetup.emailAddress")}</Label>
                 <div className="flex items-center gap-2">
                   <Input
                     id="email-name"
@@ -410,14 +411,14 @@ export function EmailEndpointSetup() {
               </div>
             ) : (
               <div className="space-y-2">
-                <Label htmlFor="email-existing">Available inbox</Label>
+                <Label htmlFor="email-existing">{t("app.apps.emailEndpointSetup.addressStep.available")}</Label>
                 <select
                   id="email-existing"
                   className={selectClass}
                   value={inboxId}
                   onChange={(e) => setInboxId(e.target.value)}
                 >
-                  <option value="">Choose an inbox</option>
+                  <option value="">{t("app.apps.emailEndpointSetup.addressStep.chooseInbox")}</option>
                   {inspected.data?.inboxes.map((i) => (
                     <option
                       key={i.inbox_id}
@@ -429,7 +430,7 @@ export function EmailEndpointSetup() {
                     >
                       {i.inbox_id}
                       {inboxes.data?.some((e) => e.address === i.inbox_id)
-                        ? " — already assigned"
+                        ? t("app.apps.emailEndpointSetup.addressStep.alreadyAssigned")
                         : ""}
                     </option>
                   ))}
@@ -438,12 +439,12 @@ export function EmailEndpointSetup() {
             )}
             <details className="border-t border-border pt-4">
               <summary className="cursor-pointer text-sm text-muted-foreground">
-                Advanced options
+                {t("app.apps.emailEndpointSetup.addressStep.advanced")}
               </summary>
               <div className="space-y-4 pt-4">
                 {addressMode === "new" && (
                   <>
-                    <Label htmlFor="email-domain">Domain</Label>
+                    <Label htmlFor="email-domain">{t("app.apps.emailEndpointSetup.addressStep.domain")}</Label>
                     <select
                       id="email-domain"
                       value={domain}
@@ -463,11 +464,11 @@ export function EmailEndpointSetup() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      Set up a custom domain in AgentMail ↗
+                      {t("app.apps.emailEndpointSetup.addressStep.customDomain")}
                     </a>
                   </>
                 )}
-                <Label htmlFor="email-mode">Receiving</Label>
+                <Label htmlFor="email-mode">{t("app.apps.emailEndpointSetup.addressStep.receiving")}</Label>
                 <select
                   id="email-mode"
                   value={mode}
@@ -475,10 +476,10 @@ export function EmailEndpointSetup() {
                   className={selectClass}
                 >
                   <option value="websocket">
-                    Live connection — works locally
+                    {t("app.apps.emailEndpointSetup.addressStep.live")}
                   </option>
                   <option value="webhook">
-                    Webhook — requires public HTTPS
+                    {t("app.apps.emailEndpointSetup.addressStep.webhook")}
                   </option>
                 </select>
               </div>
@@ -493,16 +494,15 @@ export function EmailEndpointSetup() {
           {trustNotice}
           <section className="space-y-4 rounded-xl border border-border p-6">
             <h2 className="text-lg font-semibold">
-              Ready to start receiving email?
+              {t("app.apps.emailEndpointSetup.reviewStep.title")}
             </h2>
             <p className="text-lg font-semibold">{address}</p>
             <p className="text-sm">
-              Assigned to {chosen?.name} ·{" "}
-              {mode === "websocket" ? "Live connection" : "Signed webhook"}
+              {t("app.apps.emailEndpointSetup.reviewStep.assignedTo", { name: chosen?.name })} ·{" "}
+              {mode === "websocket" ? t("app.apps.emailEndpointSetup.liveConnection") : t("app.apps.emailEndpointSetup.reviewStep.signedWebhook")}
             </p>
             <p className="text-sm text-muted-foreground">
-              New conversations create tasks. Replies stay in the same task.
-              Task comments stay internal.
+              {t("app.apps.emailEndpointSetup.reviewStep.help")}
             </p>
           </section>
         </>
@@ -511,12 +511,12 @@ export function EmailEndpointSetup() {
         <section className="space-y-5 rounded-xl border border-border p-6">
           <p className="flex items-center gap-2 text-sm">
             <Check className="size-4" />
-            Receiving email for {chosen?.name}
+            {t("app.apps.emailEndpointSetup.done.receiving", { name: chosen?.name })}
           </p>
           <p className="text-lg font-semibold">{setup.data?.address}</p>
           <EmailSafetyNotice />
           <Button onClick={() => navigate(`/apps/${connectionId}/permissions`)}>
-            Back to permissions
+            {t("app.apps.emailEndpointSetup.done.back")}
           </Button>
         </section>
       )}
@@ -531,7 +531,7 @@ export function EmailEndpointSetup() {
             }
           >
             <ArrowLeft className="size-4" />
-            Back
+            {t("app.common.actions.back")}
           </Button>
           <Button
             disabled={
@@ -547,14 +547,14 @@ export function EmailEndpointSetup() {
             onClick={() => (step === 5 ? setup.mutate() : setStep(step + 1))}
           >
             {setup.isPending
-              ? "Activating…"
+              ? t("app.apps.emailEndpointSetup.activating")
               : step === 5
                 ? addressMode === "new"
-                  ? "Create email address"
-                  : "Connect email address"
+                  ? t("app.apps.emailEndpointSetup.createAddress")
+                  : t("app.apps.emailEndpointSetup.connectAddress")
                 : step === 4
-                  ? "Review email address"
-                  : "Continue"}
+                  ? t("app.apps.emailEndpointSetup.reviewAddress")
+                  : t("app.common.actions.continue")}
             <ArrowRight className="size-4" />
           </Button>
         </div>
@@ -567,10 +567,9 @@ export function EmailEndpointSetup() {
       <Dialog open={trustOpen} onOpenChange={setTrustOpen}>
         <DialogContent className="max-h-screen overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Trust settings · {chosen?.name}</DialogTitle>
+            <DialogTitle>{t("app.apps.emailEndpointSetup.trust.dialogTitle", { name: chosen?.name })}</DialogTitle>
             <DialogDescription>
-              Changes apply to all of this agent’s work. Use a dedicated email
-              agent if its other tasks need broader access.
+              {t("app.apps.emailEndpointSetup.trust.dialogHelp")}
             </DialogDescription>
           </DialogHeader>
           <TrustPresetSection
@@ -589,8 +588,7 @@ export function EmailEndpointSetup() {
             candidatesLoading={projects.isPending || boundaryIssues.isPending}
           />
           <p className="text-xs text-muted-foreground">
-            Low trust limits Paperclip access; it does not sandbox the runtime.
-            Review filesystem, tool, and secret access separately.
+            {t("app.apps.emailEndpointSetup.trust.dialogNote")}
           </p>
           {(trust.error || projects.error || boundaryIssues.error) && (
             <p role="alert" className="text-sm text-destructive">
@@ -599,7 +597,7 @@ export function EmailEndpointSetup() {
           )}
           <DialogFooter>
             <Button variant="ghost" onClick={() => setTrustOpen(false)}>
-              Cancel
+              {t("app.common.actions.cancel")}
             </Button>
             <Button
               disabled={
@@ -611,7 +609,7 @@ export function EmailEndpointSetup() {
               }
               onClick={() => trust.mutate()}
             >
-              Save trust settings
+              {t("app.apps.emailEndpointSetup.trust.save")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -629,6 +627,7 @@ export function EmailConnectionInboxes({
   connectionId: string;
   canConfigure: boolean;
 }) {
+  const { t } = useTranslation();
   const query = useQuery({
     queryKey: ["email-inboxes", companyId],
     queryFn: () => emailApi.list(companyId),
@@ -652,10 +651,10 @@ export function EmailConnectionInboxes({
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border p-6">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold">
-            Give an agent an email address
+            {t("app.apps.emailEndpointSetup.giveAddress")}
           </h2>
           <p className="text-sm text-muted-foreground">
-            Each email conversation becomes a task.
+            {t("app.apps.emailEndpointSetup.inboxes.help")}
           </p>
         </div>
         {canConfigure && (
@@ -663,7 +662,7 @@ export function EmailConnectionInboxes({
             <Link
               to={`/apps/chat/connect?provider=agentmail&connectionId=${connectionId}`}
             >
-              Give an agent an email address
+              {t("app.apps.emailEndpointSetup.giveAddress")}
             </Link>
           </Button>
         )}
@@ -681,7 +680,7 @@ export function EmailConnectionInboxes({
           </Link>
           <span className="text-xs text-muted-foreground">
             {i.lastError ??
-              (i.status === "active" ? "Receiving email" : i.status)}
+              (i.status === "active" ? t("app.apps.emailEndpointSetup.inboxes.receiving") : i.status)}
           </span>
         </div>
       ))}
@@ -701,6 +700,7 @@ export function EmailEndpointSettings({
   endpointId: string;
   companyId: string;
 }) {
+  const { t } = useTranslation();
   const cache = useQueryClient();
   const query = useQuery({
     queryKey: ["email-inboxes", companyId],
@@ -738,11 +738,11 @@ export function EmailEndpointSettings({
     },
   });
   if (removed)
-    return <p>Inbox disconnected. Email history remains in its tasks.</p>;
+    return <p>{t("app.apps.emailEndpointSetup.settings.disconnected")}</p>;
   if (!inbox)
     return (
       <p role={query.error ? "alert" : undefined}>
-        {query.error?.message ?? "Loading email inbox…"}
+        {query.error?.message ?? t("app.apps.emailEndpointSetup.settings.loading")}
       </p>
     );
   return (
@@ -750,14 +750,17 @@ export function EmailEndpointSettings({
       <h1 className="text-xl font-bold">{inbox.address}</h1>
       <p className="text-sm text-muted-foreground">
         {inbox.status} ·{" "}
-        {inbox.receiveMode === "websocket" ? "Live connection" : "Webhook"}
+        {inbox.receiveMode === "websocket" ? t("app.apps.emailEndpointSetup.liveConnection") : t("app.common.nouns.webhook")}
       </p>
       <p className="text-sm text-muted-foreground">
-        Last mail check: {inbox.lastSyncAt ? new Date(inbox.lastSyncAt).toLocaleString() : "Not checked yet"}
+        {t("app.apps.emailEndpointSetup.settings.lastCheck", {
+          time: inbox.lastSyncAt
+            ? new Date(inbox.lastSyncAt).toLocaleString()
+            : t("app.apps.emailEndpointSetup.settings.notChecked"),
+        })}
       </p>
       <p className="text-sm">
-        Each email conversation is a task. Task comments stay internal; use
-        Email reply to send.
+        {t("app.apps.emailEndpointSetup.settings.help")}
       </p>
       {inbox.lastError && (
         <p role="alert" className="text-sm text-destructive">
@@ -772,19 +775,19 @@ export function EmailEndpointSettings({
             control.mutate(inbox.status === "active" ? "pause" : "resume")
           }
         >
-          {inbox.status === "active" ? "Pause" : "Resume"}
+          {inbox.status === "active" ? t("app.common.actions.pause") : t("app.common.actions.resume")}
         </Button>
         <Button
           variant="outline"
           disabled={control.isPending}
           onClick={() => control.mutate("remove")}
         >
-          Disconnect inbox
+          {t("app.apps.emailEndpointSetup.settings.disconnect")}
         </Button>
       </div>
       <div className="space-y-2">
         <Label htmlFor="email-reconnect-key">
-          Reconnect this inbox with a new API key
+          {t("app.apps.emailEndpointSetup.settings.reconnectLabel")}
         </Label>
         <Input
           id="email-reconnect-key"
@@ -793,7 +796,7 @@ export function EmailEndpointSettings({
           value={replacementKey}
           onChange={(e) => setReplacementKey(e.target.value)}
         />
-        <Label htmlFor="email-reconnect-mode">Receiving mode</Label>
+        <Label htmlFor="email-reconnect-mode">{t("app.apps.emailEndpointSetup.settings.receivingMode")}</Label>
         <select
           id="email-reconnect-mode"
           className={selectClass}
@@ -802,15 +805,15 @@ export function EmailEndpointSettings({
             setReceiveMode(e.target.value as "websocket" | "webhook")
           }
         >
-          <option value="websocket">Live connection</option>
-          <option value="webhook">Webhook</option>
+          <option value="websocket">{t("app.apps.emailEndpointSetup.liveConnection")}</option>
+          <option value="webhook">{t("app.common.nouns.webhook")}</option>
         </select>
         <Button
           variant="outline"
           disabled={!replacementKey || reconnect.isPending}
           onClick={() => reconnect.mutate()}
         >
-          Reconnect inbox
+          {t("app.apps.emailEndpointSetup.settings.reconnect")}
         </Button>
       </div>
       {reconnect.error && (
