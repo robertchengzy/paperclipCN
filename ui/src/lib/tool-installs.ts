@@ -49,12 +49,14 @@ export function installInfoNotice(appName: string): string {
   return t("app.lib.toolInstalls.installInfo", { appName });
 }
 
-export const INSTALL_ALL_WARNING =
-  "Adds context cost to every run of every agent — a deliberate choice. New agents you add later are installed automatically.";
+export function installAllWarning(): string {
+  return t("app.lib.toolInstalls.installAllWarning");
+}
 
 export function autoExtendNotice(agentName: string): string {
   return t("app.lib.toolInstalls.autoExtend", { agentName });
 }
 
-export const INSTALLED_HINT =
-  "Has access — tick to load its tools into this agent's context.";
+export function installedHint(): string {
+  return t("app.lib.toolInstalls.installedHint");
+}

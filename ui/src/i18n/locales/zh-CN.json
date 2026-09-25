@@ -5323,14 +5323,30 @@
       },
       "toolInstalls": {
         "installInfo": "安装后，每次运行都会把 {{appName}} 的工具加入智能体上下文——请只在确实会用到的地方安装。",
-        "autoExtend": "安装到 {{agentName}} 时也会授予访问权限。工具无法安装到无权使用它的智能体上，因此会把 {{agentName}} 加入可使用者名单。此操作会被记录。"
+        "autoExtend": "安装到 {{agentName}} 时也会授予访问权限。工具无法安装到无权使用它的智能体上，因此会把 {{agentName}} 加入可使用者名单。此操作会被记录。",
+        "installAllWarning": "这会增加每个智能体每次运行的上下文成本，请谨慎选择。之后新增的智能体也会自动安装。",
+        "installedHint": "已有访问权限 — 勾选后将工具加载到此智能体的上下文中。"
       },
       "transcriptPresentation": {
         "executingCommand": "正在执行命令",
         "inspectInput": "查看 {{name}} 输入",
         "toolFailed": "工具失败",
         "waitingForResult": "等待结果",
-        "failedWithExitCode": "失败，退出码 {{code}}"
+        "failedWithExitCode": "失败，退出码 {{code}}",
+        "detailLabels": {
+          "command": "命令",
+          "input": "输入",
+          "intent": "意图",
+          "path": "路径",
+          "directory": "目录",
+          "query": "查询",
+          "target": "目标",
+          "prompt": "提示词",
+          "pattern": "模式",
+          "name": "名称",
+          "paths": "路径"
+        },
+        "morePaths": "，另有 {{count}} 项"
       },
       "trustPolicyUi": {
         "presetStandard": "标准",
@@ -12909,6 +12925,47 @@
         "sendMessage": "发送消息",
         "resizePanes": "调整管理员聊天与智能体动态的宽度",
         "openAgentFeed": "打开智能体动态"
+      },
+      "taskChatStatusPill": {
+        "labels": {
+          "responding": "回复中",
+          "thinking": "思考中",
+          "running": "运行中",
+          "working": "工作中",
+          "queued": "排队中",
+          "reconnecting": "重新连接中",
+          "clipping": "剪辑中",
+          "organizing": "整理中",
+          "sorting": "排序中",
+          "synthesizing": "综合中",
+          "analyzing": "分析中",
+          "filing": "归档中",
+          "collating": "汇总中",
+          "stapling": "装订中",
+          "indexing": "索引中",
+          "annotating": "批注中",
+          "drafting": "起草中",
+          "proofreading": "校对中",
+          "alphabetizing": "按字母排序中",
+          "photocopying": "复印中",
+          "laminating": "覆膜中",
+          "holepunching": "打孔中",
+          "bookmarking": "添加书签中",
+          "highlighting": "标记重点中",
+          "typing": "输入中",
+          "trimming": "修剪中",
+          "aligning": "对齐中",
+          "combining": "合并中",
+          "whiteboarding": "梳理思路中",
+          "diagramming": "绘图中",
+          "sketching": "勾勒中",
+          "labeling": "标注中",
+          "stickynoting": "贴便签中",
+          "brewing": "酝酿中",
+          "tinkering": "调试中",
+          "distilling": "提炼中",
+          "deliberating": "斟酌中"
+        }
       }
     }
   }

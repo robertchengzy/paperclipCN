@@ -184,6 +184,24 @@ function readToolDetailValue(value: unknown, max = 200): string | null {
   return null;
 }
 
+/** Translate display labels without changing the identifiers used for comparisons. */
+export function toolInputDetailLabel(label: string): string {
+  const keys: Record<string, string> = {
+    "Command": "app.lib.transcriptPresentation.detailLabels.command",
+    "Input": "app.lib.transcriptPresentation.detailLabels.input",
+    "Intent": "app.lib.transcriptPresentation.detailLabels.intent",
+    "Path": "app.lib.transcriptPresentation.detailLabels.path",
+    "Directory": "app.lib.transcriptPresentation.detailLabels.directory",
+    "Query": "app.lib.transcriptPresentation.detailLabels.query",
+    "Target": "app.lib.transcriptPresentation.detailLabels.target",
+    "Prompt": "app.lib.transcriptPresentation.detailLabels.prompt",
+    "Pattern": "app.lib.transcriptPresentation.detailLabels.pattern",
+    "Name": "app.lib.transcriptPresentation.detailLabels.name",
+    "Paths": "app.lib.transcriptPresentation.detailLabels.paths",
+  };
+  return Object.hasOwn(keys, label) ? t(keys[label]) : label;
+}
+
 export function describeToolInput(name: string, input: unknown): ToolInputDetail[] {
   if (typeof input === "string") {
     const summary = compactWhitespace(isCommandTool(name, input) ? stripWrappedShell(input) : input);
@@ -221,7 +239,7 @@ export function describeToolInput(name: string, input: unknown): ToolInputDetail
       .slice(0, 3)
       .join(", ");
     if (paths) {
-      const suffix = record.paths.length > 3 ? `, +${record.paths.length - 3} more` : "";
+      const suffix = record.paths.length > 3 ? t("app.lib.transcriptPresentation.morePaths", { count: record.paths.length - 3 }) : "";
       pushDetail("Paths", `${paths}${suffix}`);
     }
   }

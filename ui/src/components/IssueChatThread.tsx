@@ -196,6 +196,7 @@ import type {
 } from "@paperclipai/shared";
 import {
   describeToolInput,
+  toolInputDetailLabel,
   displayToolName,
   formatToolPayload,
   isCommandTool,
@@ -1728,9 +1729,9 @@ function IssueChatToolPart({
                 </div>
                 <dl className="space-y-1.5">
                   {nonIntentDetails.map((detail) => (
-                    <div key={`${detail.label}:${detail.value}`}>
+                    <div key={`${toolInputDetailLabel(detail.label)}:${detail.value}`}>
                       <dt className="text-(length:--text-nano) font-medium text-muted-foreground/60">
-                        {detail.label}
+                        {toolInputDetailLabel(detail.label)}
                       </dt>
                       <dd
                         className={cn(

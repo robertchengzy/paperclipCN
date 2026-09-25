@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { i18n } from "@/i18n";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { lineScrollOffset, TaskChatStatusPill } from "./TaskChatStatusPill";
@@ -42,6 +43,21 @@ describe("TaskChatStatusPill whimsy", () => {
       root.render(<TaskChatStatusPill item={item} />);
     });
   };
+
+  it("updates the display language without changing the status identity", async () => {
+    const item = liveStatus({ label: "Thinking" });
+    render(item);
+    expect(container.textContent).toContain("Thinking…");
+    try {
+      await act(async () => { await i18n.changeLanguage("zh-CN"); });
+      expect(container.textContent).toContain("思考中…");
+      expect(item.label).toBe("Thinking");
+      render(liveStatus({ label: "User supplied status" }));
+      expect(container.textContent).toContain("User supplied status…");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
+  });
 
   it("swaps the generic Running label for a deterministic whimsical word", () => {
     const item = liveStatus();

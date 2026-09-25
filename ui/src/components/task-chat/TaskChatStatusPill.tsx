@@ -1,3 +1,4 @@
+import { useTranslation } from "@/i18n";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronRight, Loader2, ShieldQuestion, OctagonX, Ban, Scissors } from "lucide-react";
@@ -289,6 +290,49 @@ export function TaskChatStatusPill({
   chevronOpen,
   onToggle,
 }: TaskChatStatusPillProps) {
+  const { t } = useTranslation();
+  const displayStatusLabel = (label: string) => {
+    const keys: Record<string, string> = {
+      "Responding": "app.taskChat.taskChatStatusPill.labels.responding",
+      "Thinking": "app.taskChat.taskChatStatusPill.labels.thinking",
+      "Running": "app.taskChat.taskChatStatusPill.labels.running",
+      "Working": "app.taskChat.taskChatStatusPill.labels.working",
+      "Queued": "app.taskChat.taskChatStatusPill.labels.queued",
+      "Reconnecting": "app.taskChat.taskChatStatusPill.labels.reconnecting",
+      "Clipping": "app.taskChat.taskChatStatusPill.labels.clipping",
+      "Organizing": "app.taskChat.taskChatStatusPill.labels.organizing",
+      "Sorting": "app.taskChat.taskChatStatusPill.labels.sorting",
+      "Synthesizing": "app.taskChat.taskChatStatusPill.labels.synthesizing",
+      "Analyzing": "app.taskChat.taskChatStatusPill.labels.analyzing",
+      "Filing": "app.taskChat.taskChatStatusPill.labels.filing",
+      "Collating": "app.taskChat.taskChatStatusPill.labels.collating",
+      "Stapling": "app.taskChat.taskChatStatusPill.labels.stapling",
+      "Indexing": "app.taskChat.taskChatStatusPill.labels.indexing",
+      "Annotating": "app.taskChat.taskChatStatusPill.labels.annotating",
+      "Drafting": "app.taskChat.taskChatStatusPill.labels.drafting",
+      "Proofreading": "app.taskChat.taskChatStatusPill.labels.proofreading",
+      "Alphabetizing": "app.taskChat.taskChatStatusPill.labels.alphabetizing",
+      "Photocopying": "app.taskChat.taskChatStatusPill.labels.photocopying",
+      "Laminating": "app.taskChat.taskChatStatusPill.labels.laminating",
+      "Hole-punching": "app.taskChat.taskChatStatusPill.labels.holepunching",
+      "Bookmarking": "app.taskChat.taskChatStatusPill.labels.bookmarking",
+      "Highlighting": "app.taskChat.taskChatStatusPill.labels.highlighting",
+      "Typing": "app.taskChat.taskChatStatusPill.labels.typing",
+      "Trimming": "app.taskChat.taskChatStatusPill.labels.trimming",
+      "Aligning": "app.taskChat.taskChatStatusPill.labels.aligning",
+      "Combining": "app.taskChat.taskChatStatusPill.labels.combining",
+      "Whiteboarding": "app.taskChat.taskChatStatusPill.labels.whiteboarding",
+      "Diagramming": "app.taskChat.taskChatStatusPill.labels.diagramming",
+      "Sketching": "app.taskChat.taskChatStatusPill.labels.sketching",
+      "Labeling": "app.taskChat.taskChatStatusPill.labels.labeling",
+      "Sticky-noting": "app.taskChat.taskChatStatusPill.labels.stickynoting",
+      "Brewing": "app.taskChat.taskChatStatusPill.labels.brewing",
+      "Tinkering": "app.taskChat.taskChatStatusPill.labels.tinkering",
+      "Distilling": "app.taskChat.taskChatStatusPill.labels.distilling",
+      "Deliberating": "app.taskChat.taskChatStatusPill.labels.deliberating",
+    };
+    return Object.hasOwn(keys, label) ? t(keys[label]) : label;
+  };
   const { Icon, spin, tone } = CONFIG[item.status];
   const awaiting = item.status === "awaiting_approval";
   const live = item.status === "running" || item.status === "working";
@@ -344,7 +388,7 @@ export function TaskChatStatusPill({
             float above the label's baseline. */}
         <span className="flex min-w-0 flex-1 items-baseline gap-2">
           <span className="shimmer-text shimmer-text-muted shrink-0 font-medium">
-            {label}…
+            {displayStatusLabel(label)}…
           </span>
           {liveElapsed ? (
             <span className="shrink-0 font-mono tabular-nums text-(length:--text-micro)">
@@ -417,7 +461,7 @@ export function TaskChatStatusPill({
     >
       <div className="flex min-w-0 items-center gap-2">
         <Icon className={cn("h-4 w-4 shrink-0", tone, spin && "animate-spin")} />
-        <span className="min-w-0 truncate font-medium">{item.label}</span>
+        <span className="min-w-0 truncate font-medium">{displayStatusLabel(item.label)}</span>
         <span className="ml-auto flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
           {elapsed ? <span>{elapsed}</span> : null}
           {item.tokens ? (

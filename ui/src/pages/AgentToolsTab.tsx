@@ -24,7 +24,7 @@ import {
 } from "./tools/shared";
 import { cn } from "../lib/utils";
 import { brandChipBadge } from "../lib/status-colors";
-import { installPayload, installStateFrom, isAgentInstalled, INSTALLED_HINT } from "../lib/tool-installs";
+import { installPayload, installStateFrom, isAgentInstalled, installedHint } from "../lib/tool-installs";
 import { Trans } from "react-i18next";
 import { useTranslation } from "@/i18n";
 
@@ -251,7 +251,7 @@ function InstalledAppsSection({
                           ? t("app.tools.agentToolsTab.installed.forAllHint")
                           : checked
                             ? t("app.tools.agentToolsTab.installed.loadedHint")
-                            : INSTALLED_HINT}
+                            : installedHint()}
                       </span>
                     </span>
                   </label>

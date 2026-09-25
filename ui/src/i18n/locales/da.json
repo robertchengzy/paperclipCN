@@ -5323,14 +5323,30 @@
       },
       "toolInstalls": {
         "installInfo": "Installing adds {{appName}}'s tools to the agent's context on every run — install only where it will actually be used.",
-        "autoExtend": "Installing on {{agentName}} will also grant access. A tool can't be installed on an agent that isn't allowed to use it, so we'll add {{agentName}} to who can use it. This is logged."
+        "autoExtend": "Installing on {{agentName}} will also grant access. A tool can't be installed on an agent that isn't allowed to use it, so we'll add {{agentName}} to who can use it. This is logged.",
+        "installAllWarning": "Adds context cost to every run of every agent — a deliberate choice. New agents you add later are installed automatically.",
+        "installedHint": "Has access — tick to load its tools into this agent's context."
       },
       "transcriptPresentation": {
         "executingCommand": "Executing command",
         "inspectInput": "Inspect {{name}} input",
         "toolFailed": "Tool failed",
         "waitingForResult": "Waiting for result",
-        "failedWithExitCode": "Failed with exit code {{code}}"
+        "failedWithExitCode": "Failed with exit code {{code}}",
+        "detailLabels": {
+          "command": "Command",
+          "input": "Input",
+          "intent": "Intent",
+          "path": "Path",
+          "directory": "Directory",
+          "query": "Query",
+          "target": "Target",
+          "prompt": "Prompt",
+          "pattern": "Pattern",
+          "name": "Name",
+          "paths": "Paths"
+        },
+        "morePaths": ", +{{count}} more"
       },
       "trustPolicyUi": {
         "presetStandard": "Standard",
@@ -12909,6 +12925,47 @@
         "sendMessage": "Send message",
         "resizePanes": "Resize board chat and agent feed",
         "openAgentFeed": "Open agent feed"
+      },
+      "taskChatStatusPill": {
+        "labels": {
+          "responding": "Responding",
+          "thinking": "Thinking",
+          "running": "Running",
+          "working": "Working",
+          "queued": "Queued",
+          "reconnecting": "Reconnecting",
+          "clipping": "Clipping",
+          "organizing": "Organizing",
+          "sorting": "Sorting",
+          "synthesizing": "Synthesizing",
+          "analyzing": "Analyzing",
+          "filing": "Filing",
+          "collating": "Collating",
+          "stapling": "Stapling",
+          "indexing": "Indexing",
+          "annotating": "Annotating",
+          "drafting": "Drafting",
+          "proofreading": "Proofreading",
+          "alphabetizing": "Alphabetizing",
+          "photocopying": "Photocopying",
+          "laminating": "Laminating",
+          "holepunching": "Hole-punching",
+          "bookmarking": "Bookmarking",
+          "highlighting": "Highlighting",
+          "typing": "Typing",
+          "trimming": "Trimming",
+          "aligning": "Aligning",
+          "combining": "Combining",
+          "whiteboarding": "Whiteboarding",
+          "diagramming": "Diagramming",
+          "sketching": "Sketching",
+          "labeling": "Labeling",
+          "stickynoting": "Sticky-noting",
+          "brewing": "Brewing",
+          "tinkering": "Tinkering",
+          "distilling": "Distilling",
+          "deliberating": "Deliberating"
+        }
       }
     }
   }
