@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { useTranslation } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, Copy, ExternalLink, Loader2 } from "lucide-react";
@@ -15,6 +17,7 @@ export function SlackIdentityStep({ endpointId, command, testStartedAt, onConnec
   onConnected: () => void;
   onSaveExit: () => void;
 }) {
+  const { t } = useTranslation();
   const client = useQueryClient();
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
@@ -27,7 +30,7 @@ export function SlackIdentityStep({ endpointId, command, testStartedAt, onConnec
   });
   const local = health.data?.deploymentMode === "local_trusted";
   const userId = local ? "local-board" : session.data?.user.id;
-  const userLabel = local ? "Local Board" : session.data?.user.name || session.data?.user.email;
+  const userLabel = local ? t("app.apps.slackIdentityStep.localBoard") : session.data?.user.name || session.data?.user.email;
   const candidates = (identities.data ?? []).filter((identity) => identity.lastConnectAt &&
     (!testStartedAt || Date.parse(identity.lastConnectAt) >= Date.parse(testStartedAt)));
   const linkedToMe = candidates.some((identity) => identity.status === "linked" && identity.paperclipUserId === userId);
@@ -36,7 +39,7 @@ export function SlackIdentityStep({ endpointId, command, testStartedAt, onConnec
     mutationFn: async (principalId: string) => {
       const { confirmationUrl } = await chatEndpointsApi.createLinkIntent(endpointId, principalId);
       const token = new URL(confirmationUrl, window.location.origin).searchParams.get("token");
-      if (!token) throw new Error("Could not create the account confirmation. Try again.");
+      if (!token) throw new Error(t("app.apps.slackIdentityStep.couldNotCreateTheAccountConfirmationTry"));
       await chatEndpointsApi.confirmIdentityLink(token);
     },
     onSuccess: () => client.invalidateQueries({ queryKey: queryKeys.chatEndpoints.principals(endpointId) }),
@@ -45,30 +48,27 @@ export function SlackIdentityStep({ endpointId, command, testStartedAt, onConnec
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-bold">Connect your Slack account</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Send this command in Slack so we can identify your account. It won&apos;t start agent work.
-        </p>
+        <h1 className="text-xl font-bold">{t("app.apps.slackIdentityStep.connectYourSlackAccount")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("app.apps.slackIdentityStep.sendThisCommandInSlackSoWe")}</p>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-3">
         <code className="text-sm">{connectCommand}</code>
         <Button variant="ghost" size="sm" onClick={() => {
           void copyTextToClipboard(connectCommand).then(() => { setCopied(true); setCopyError(false); }, () => setCopyError(true));
-        }}><Copy className="size-4" />{copied ? "Copied" : "Copy command"}</Button>
+        }}><Copy className="size-4" />{copied ? t("app.common.states.copied") : t("app.apps.slackIdentityStep.copyCommand")}</Button>
       </div>
-      {copyError && <p role="alert" className="text-sm text-destructive">Couldn&apos;t copy the command. Select and copy it above.</p>}
+      {copyError && <p role="alert" className="text-sm text-destructive">{t("app.apps.slackIdentityStep.couldnTCopyTheCommandSelectAnd")}</p>}
       <p className="text-sm">
-        <a href="https://app.slack.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">Open Slack <ExternalLink className="inline size-3" /></a>, send the command in your workspace, then return here.
-      </p>
+        <Trans i18nKey="app.apps.slackIdentityStep.sendCommandInSlack" components={{ settingsLink: <a href="https://app.slack.com/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4" />, icon: <ExternalLink className="inline size-3" /> }} /></p>
       {identities.isError ? (
-        <p role="alert" className="text-sm text-destructive">Couldn&apos;t check for your Slack account. We&apos;ll keep trying.</p>
+        <p role="alert" className="text-sm text-destructive">{t("app.apps.slackIdentityStep.couldnTCheckForYourSlackAccount")}</p>
       ) : candidates.length === 0 ? (
-        <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Waiting for your connect command…</p>
+        <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{t("app.apps.slackIdentityStep.waitingForYourConnectCommand")}</p>
       ) : (
         <div className={`space-y-3 rounded-lg border p-4 ${linkedToMe
           ? "border-(--status-task-done)/30 bg-(--status-task-done)/10"
           : "border-(--status-task-todo)/30 bg-(--status-task-todo)/10"}`}>
-          <p className="text-sm">Choose your Slack account below to link it to <strong>{userLabel ?? "your Paperclip account"}</strong>. Only confirm an account that belongs to you. Future messages will use your Paperclip permissions.</p>
+          <p className="text-sm"><Trans i18nKey="app.apps.slackIdentityStep.confirmAccount" values={{ account: userLabel ?? t("app.apps.slackIdentityStep.yourPaperclipAccount") }} components={{ strong: <strong /> }} /></p>
           {candidates.map((identity) => {
             const mine = identity.status === "linked" && identity.paperclipUserId === userId;
             return (
@@ -77,21 +77,20 @@ export function SlackIdentityStep({ endpointId, command, testStartedAt, onConnec
                   <p className="text-sm font-medium">{identity.externalLabel}</p>
                   <p className="text-xs text-muted-foreground">{identity.externalDetail}</p>
                 </div>
-                {mine ? <p role="status" className="flex items-center gap-2 text-sm"><CheckCircle2 className="size-4 text-(--status-task-done)" />Linked to you</p>
-                  : identity.status === "linked" ? <p className="text-sm text-muted-foreground">Linked to {identity.paperclipUserLabel ?? "another Paperclip account"}</p>
-                  : <Button variant="outline" disabled={!userId || link.isPending} onClick={() => link.mutate(identity.principalId)} aria-label={`Link ${identity.externalLabel} to my Paperclip account`}>
-                    {link.isPending && link.variables === identity.principalId && <Loader2 className="size-4 animate-spin" />}This is my Slack account
-                  </Button>}
+                {mine ? <p role="status" className="flex items-center gap-2 text-sm"><CheckCircle2 className="size-4 text-(--status-task-done)" />{t("app.apps.slackIdentityStep.linkedToYou")}</p>
+                  : identity.status === "linked" ? <p className="text-sm text-muted-foreground">{t("app.apps.slackIdentityStep.linkedAccount", { account: identity.paperclipUserLabel ?? t("app.apps.slackIdentityStep.anotherPaperclipAccount") })}</p>
+                  : <Button variant="outline" disabled={!userId || link.isPending} onClick={() => link.mutate(identity.principalId)} aria-label={t("app.apps.slackIdentityStep.linkToMyPaperclipAccount", { value0: identity.externalLabel })}>
+                    {link.isPending && link.variables === identity.principalId && <Loader2 className="size-4 animate-spin" />}{t("app.apps.slackIdentityStep.thisIsMySlackAccount")}</Button>}
               </div>
             );
           })}
         </div>
       )}
-      {!userId && !session.isPending && !health.isPending && <p role="alert" className="text-sm text-destructive">Sign in to Paperclip to link your Slack account. Refresh this page after signing in.</p>}
-      {link.isError && <p role="alert" className="text-sm text-destructive">Couldn&apos;t link your account. Check that you are a member of this company and try again.</p>}
+      {!userId && !session.isPending && !health.isPending && <p role="alert" className="text-sm text-destructive">{t("app.apps.slackIdentityStep.signInToPaperclipToLinkYour")}</p>}
+      {link.isError && <p role="alert" className="text-sm text-destructive">{t("app.apps.slackIdentityStep.couldnTLinkYourAccountCheckThat")}</p>}
       <div className="flex items-center justify-between gap-3">
-        <Button variant="ghost" className="text-muted-foreground" onClick={onSaveExit}>Save &amp; exit</Button>
-        {linkedToMe && <Button onClick={onConnected}>Continue to message test</Button>}
+        <Button variant="ghost" className="text-muted-foreground" onClick={onSaveExit}>{t("app.apps.slackIdentityStep.saveExit")}</Button>
+        {linkedToMe && <Button onClick={onConnected}>{t("app.apps.slackIdentityStep.continueToMessageTest")}</Button>}
       </div>
     </div>
   );

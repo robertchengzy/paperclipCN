@@ -1,3 +1,4 @@
+import { useTranslation } from "@/i18n";
 import { type FormEvent, useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ToolMcpGatewayContextScopeType, ToolProfileWithDetails } from "@paperclipai/shared";
@@ -34,6 +35,7 @@ export function NewGatewayDialog({
   onOpenChange: (open: boolean) => void;
   onCreated?: (gatewayId: string) => void;
 }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { pushToast } = useToast();
   const [name, setName] = useState("");
@@ -63,7 +65,7 @@ export function NewGatewayDialog({
         contextScopeType: "company" satisfies ToolMcpGatewayContextScopeType,
       }),
     onSuccess: async (gateway) => {
-      pushToast({ title: "Gateway created", body: gateway.name, tone: "success" });
+      pushToast({ title: t("app.apps.newGatewayDialog.gatewayCreated"), body: gateway.name, tone: "success" });
       await queryClient.invalidateQueries({ queryKey: gatewaysQueryKey(companyId) });
       setName("");
       setDescription("");
@@ -72,7 +74,7 @@ export function NewGatewayDialog({
     },
     onError: (error) => {
       pushToast({
-        title: "Gateway was not created",
+        title: t("app.apps.newGatewayDialog.gatewayWasNotCreated"),
         body: error instanceof Error ? error.message : String(error),
         tone: "error",
       });
@@ -92,15 +94,12 @@ export function NewGatewayDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>New gateway</DialogTitle>
-          <DialogDescription>
-            One safe MCP endpoint that exposes only the apps in its access profile. Hand it to a client
-            like Cursor or Claude Desktop.
-          </DialogDescription>
+          <DialogTitle>{t("app.apps.newGatewayDialog.newGateway")}</DialogTitle>
+          <DialogDescription>{t("app.apps.newGatewayDialog.oneSafeMcpEndpointThatExposesOnly")}</DialogDescription>
         </DialogHeader>
         <form className="space-y-4" onSubmit={submit}>
           <label className="block space-y-1.5">
-            <span className="text-xs font-medium text-muted-foreground">Name</span>
+            <span className="text-xs font-medium text-muted-foreground">{t("app.common.labels.name")}</span>
             <Input
               value={name}
               onChange={(event) => setName(event.target.value)}
@@ -110,7 +109,7 @@ export function NewGatewayDialog({
             />
           </label>
           <label className="block space-y-1.5">
-            <span className="text-xs font-medium text-muted-foreground">Access profile</span>
+            <span className="text-xs font-medium text-muted-foreground">{t("app.apps.newGatewayDialog.accessProfile")}</span>
             <select
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               value={profileId}
@@ -119,7 +118,7 @@ export function NewGatewayDialog({
               disabled={noProfiles}
             >
               <option value="" disabled>
-                {profilesLoading ? "Loading profiles…" : "Choose a profile"}
+                {profilesLoading ? t("app.apps.newGatewayDialog.loadingProfiles") : t("app.apps.newGatewayDialog.chooseAProfile")}
               </option>
               {activeProfiles.map((profile) => (
                 <option key={profile.id} value={profile.id}>
@@ -127,33 +126,27 @@ export function NewGatewayDialog({
                 </option>
               ))}
             </select>
-            <span className="text-xs text-muted-foreground">
-              The profile decides which tools this gateway allows. You can change it later.
-            </span>
+            <span className="text-xs text-muted-foreground">{t("app.apps.newGatewayDialog.theProfileDecidesWhichToolsThisGateway")}</span>
           </label>
           <label className="block space-y-1.5">
-            <span className="text-xs font-medium text-muted-foreground">Description (optional)</span>
+            <span className="text-xs font-medium text-muted-foreground">{t("app.apps.newGatewayDialog.descriptionOptional")}</span>
             <textarea
               className="min-h-16 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              placeholder="Who this endpoint is for and when it should be rotated."
+              placeholder={t("app.apps.newGatewayDialog.whoThisEndpointIsForAndWhen")}
             />
           </label>
           {noProfiles ? (
-            <p className="text-xs text-destructive">
-              Create an access profile under Advanced before adding a gateway.
-            </p>
+            <p className="text-xs text-destructive">{t("app.apps.newGatewayDialog.createAnAccessProfileUnderAdvancedBefore")}</p>
           ) : null}
           <DialogFooter>
-            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
+            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>{t("app.common.actions.cancel")}</Button>
             <Button
               type="submit"
               disabled={createMutation.isPending || noProfiles || !name.trim() || !profileId}
             >
-              {createMutation.isPending ? "Creating…" : "Create gateway"}
+              {createMutation.isPending ? t("app.common.progress.creating") : t("app.apps.newGatewayDialog.createGateway")}
             </Button>
           </DialogFooter>
         </form>

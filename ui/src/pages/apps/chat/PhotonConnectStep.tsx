@@ -1,3 +1,4 @@
+import { useTranslation } from "@/i18n";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ export function PhotonConnectStep({
     values?: Record<string, string>,
   ): void;
 }) {
+  const { t } = useTranslation();
   const [projectId, setProjectId] = useState(endpoint.providerAccountId ?? "");
   const [projectSecret, setProjectSecret] = useState("");
   const [lineId, setLineId] = useState("");
@@ -46,41 +48,29 @@ export function PhotonConnectStep({
   return (
     <div className="space-y-5">
       <div className="space-y-2">
-        <h1 className="text-xl font-bold">Connect iMessage Photon</h1>
-        <p className="text-sm text-muted-foreground">
-          Connect {agentName} to Photon Cloud. Pro supports direct messages through
-          a shared line. Dedicated numbers also support individually enabled groups.
-        </p>
+        <h1 className="text-xl font-bold">{t("app.apps.photonConnectStep.connectImessagePhoton")}</h1>
+        <p className="text-sm text-muted-foreground">{t("app.apps.photonConnectStep.connectAgent", { agentName })}</p>
         <p className="text-sm">
           <a
             className="underline"
             href="https://app.photon.codes/"
             target="_blank"
             rel="noreferrer"
-          >
-            Photon dashboard
-          </a>
+          >{t("app.apps.photonConnectStep.photonDashboard")}</a>
           {" · "}
           <a
             className="underline"
             href="https://photon.codes/docs/spectrum-ts/providers/imessage/connection-and-routing"
             target="_blank"
             rel="noreferrer"
-          >
-            Photon line setup
-          </a>
+          >{t("app.apps.photonConnectStep.photonLineSetup")}</a>
         </p>
       </div>
       {repairing && (
-        <p className="text-sm text-muted-foreground">
-          Reconnect keeps this project and{" "}
-          {endpoint.photonAllocation === "shared" ? "shared DM allocation" : endpoint.botExternalId ?? "dedicated number"}. Leave the secret blank
-          to reuse the saved connection.
+        <p className="text-sm text-muted-foreground">{t("app.apps.photonConnectStep.reconnectAllocation", { allocation: endpoint.photonAllocation === "shared" ? t("app.apps.photonConnectStep.sharedDmAllocation") : endpoint.botExternalId ?? t("app.apps.photonConnectStep.dedicatedNumber") })}
         </p>
       )}
-      <label className="grid gap-2 text-sm font-medium">
-        Project ID
-        <Input
+      <label className="grid gap-2 text-sm font-medium">{t("app.apps.photonConnectStep.projectId")}<Input
           value={projectId}
           autoComplete="off"
           disabled={pending || inspection.isPending || !!endpoint.botExternalId}
@@ -90,9 +80,7 @@ export function PhotonConnectStep({
           }}
         />
       </label>
-      <label className="grid gap-2 text-sm font-medium">
-        Project secret
-        <Input
+      <label className="grid gap-2 text-sm font-medium">{t("app.apps.photonConnectStep.projectSecret")}<Input
           type="password"
           value={projectSecret}
           autoComplete="new-password"
@@ -110,7 +98,7 @@ export function PhotonConnectStep({
         }
         onClick={() => inspection.mutate()}
       >
-        {inspection.isPending ? "Inspecting Photon…" : "Inspect Photon project"}
+        {inspection.isPending ? t("app.apps.photonConnectStep.inspectingPhoton") : t("app.apps.photonConnectStep.inspectPhotonProject")}
       </Button>
       {inspection.isError && (
         <p role="alert" className="text-sm text-destructive">
@@ -120,21 +108,17 @@ export function PhotonConnectStep({
       {inspection.data && (
         <fieldset className="space-y-3">
           <legend className="text-sm font-medium">
-            {inspection.data.allocation === "shared" ? "Shared DMs" : "Dedicated numbers"} in {inspection.data.projectName}
+            {t("app.apps.photonConnectStep.projectAllocation", { allocation: inspection.data.allocation === "shared" ? t("app.apps.photonConnectStep.sharedDms") : t("app.apps.photonConnectStep.dedicatedNumbers"), project: inspection.data.projectName })}
           </legend>
           {!inspection.data.eligible && (
             <p role="alert" className="text-sm text-destructive">
               {inspection.data.allocation === "shared"
-                ? "This shared project already belongs to another channel. Use a separate Photon project for each agent."
-                : "No eligible dedicated number is available. Check the line allocation in Photon and existing Paperclip channels."}
+                ? t("app.apps.photonConnectStep.thisSharedProjectAlreadyBelongsToAnother")
+                : t("app.apps.photonConnectStep.noEligibleDedicatedNumberIsAvailableCheck")}
             </p>
           )}
           {inspection.data.allocation === "shared" && inspection.data.eligible && (
-            <p className="text-sm text-muted-foreground">
-              Direct messages only. Enroll each test sender in your Photon project's Users page,
-              then use the number Photon assigns to that sender. Paperclip identity linking is
-              still required. Groups cannot be enabled on this channel.
-            </p>
+            <p className="text-sm text-muted-foreground">{t("app.apps.photonConnectStep.directMessagesOnlyEnrollEachTestSender")}</p>
           )}
           {inspection.data.lines.map((line) => (
             <label
@@ -181,10 +165,10 @@ export function PhotonConnectStep({
           }
         >
           {pending
-            ? "Connecting…"
+            ? t("app.common.progress.connecting")
             : repairing
-              ? "Reconnect Photon"
-              : inspection.data?.allocation === "shared" ? "Connect shared DMs" : "Connect selected number"}
+              ? t("app.apps.photonConnectStep.reconnectPhoton")
+              : inspection.data?.allocation === "shared" ? t("app.apps.photonConnectStep.connectSharedDms") : t("app.apps.photonConnectStep.connectSelectedNumber")}
         </Button>
       </div>
     </div>

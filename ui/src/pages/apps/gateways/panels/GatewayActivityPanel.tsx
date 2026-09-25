@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t, useTranslation } from "@/i18n";
 import { useMemo, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight } from "lucide-react";
@@ -12,12 +14,12 @@ import { ErrorState, RelativeTime } from "@/pages/tools/shared";
 const PAGE_SIZE = 25;
 
 const OUTCOME_META: Record<ToolAuditOutcome, { label: string; status: string }> = {
-  allowed: { label: "Allowed", status: "allowed" },
-  blocked: { label: "Blocked", status: "denied" },
-  asked_first: { label: "Asked first", status: "require-approval" },
-  waiting: { label: "Waiting", status: "deferred" },
-  failed: { label: "Failed", status: "failed" },
-  unknown: { label: "Recorded", status: "unchecked" },
+  allowed: { get label() { return t("app.apps.gatewayActivityPanel.allowed"); }, status: "allowed" },
+  blocked: { get label() { return t("app.common.states.blocked"); }, status: "denied" },
+  asked_first: { get label() { return t("app.apps.gatewayActivityPanel.askedFirst"); }, status: "require-approval" },
+  waiting: { get label() { return t("app.common.states.waiting"); }, status: "deferred" },
+  failed: { get label() { return t("app.common.states.failed"); }, status: "failed" },
+  unknown: { get label() { return t("app.apps.gatewayActivityPanel.recorded"); }, status: "unchecked" },
 };
 
 function detailString(details: Record<string, unknown> | null, key: string): string | null {
@@ -52,6 +54,7 @@ function durationLabel(event: ToolGatewayActivityEvent): string | null {
 }
 
 function Fact({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
+  const { t } = useTranslation();
   return (
     <div className="flex gap-3 py-1">
       <dt className="w-28 shrink-0 text-muted-foreground">{label}</dt>
@@ -63,11 +66,12 @@ function Fact({ label, value, mono = false }: { label: string; value: string; mo
 }
 
 function ActivityRow({ event }: { event: ToolGatewayActivityEvent }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const outcome = OUTCOME_META[event.normalizedOutcome] ?? OUTCOME_META.unknown;
-  const actor = event.agentDisplayName ?? "Client";
-  const app = event.appDisplayName ?? event.connectionDisplayName ?? event.applicationDisplayName ?? "App";
-  const tool = event.toolDisplayName ?? event.invocation?.toolName ?? "Tool call";
+  const actor = event.agentDisplayName ?? t("app.apps.gatewayActivityPanel.client");
+  const app = event.appDisplayName ?? event.connectionDisplayName ?? event.applicationDisplayName ?? t("app.common.nouns.app");
+  const tool = event.toolDisplayName ?? event.invocation?.toolName ?? t("app.apps.gatewayActivityPanel.toolCall");
   const rawTool = event.invocation?.toolName ?? detailString(event.details, "tool") ?? detailString(event.details, "toolName");
   const reason = detailString(event.details, "reasonCode");
   const argumentsText = formatSummary(
@@ -93,7 +97,7 @@ function ActivityRow({ event }: { event: ToolGatewayActivityEvent }) {
         )}
         <span className="min-w-0 flex-1">
           <span className="block text-foreground">
-            <span className="font-medium">{actor}</span> used <span className="font-medium">{tool}</span> in {app}
+            <Trans i18nKey="app.apps.gatewayActivityPanel.activityDescription" values={{ actor, tool, app }} components={{ strong: <span className="font-medium" /> }} />
           </span>
         </span>
         <span className="flex shrink-0 items-center gap-2 whitespace-nowrap">
@@ -107,18 +111,18 @@ function ActivityRow({ event }: { event: ToolGatewayActivityEvent }) {
       {open ? (
         <div className="border-t border-border bg-muted/30 px-4 py-3 pl-10 text-xs">
           <dl>
-            {rawTool ? <Fact label="Tool" value={rawTool} mono /> : null}
-            {event.invocation?.status ? <Fact label="Call status" value={event.invocation.status} /> : null}
-            {event.invocation?.policyDecision ? <Fact label="Decision" value={event.invocation.policyDecision} /> : null}
-            {reason ? <Fact label="Reason" value={reason} mono /> : null}
-            {duration ? <Fact label="Duration" value={duration} /> : null}
-            {event.invocation?.id ? <Fact label="Invocation ID" value={event.invocation.id} mono /> : null}
-            {event.invocation?.errorCode ? <Fact label="Error code" value={event.invocation.errorCode} mono /> : null}
-            {event.invocation?.errorMessage ? <Fact label="Error" value={event.invocation.errorMessage} /> : null}
+            {rawTool ? <Fact label={t("app.common.nouns.tool")} value={rawTool} mono /> : null}
+            {event.invocation?.status ? <Fact label={t("app.apps.gatewayActivityPanel.callStatus")} value={event.invocation.status} /> : null}
+            {event.invocation?.policyDecision ? <Fact label={t("app.apps.gatewayActivityPanel.decision")} value={event.invocation.policyDecision} /> : null}
+            {reason ? <Fact label={t("app.common.labels.reason")} value={reason} mono /> : null}
+            {duration ? <Fact label={t("app.apps.gatewayActivityPanel.duration")} value={duration} /> : null}
+            {event.invocation?.id ? <Fact label={t("app.apps.gatewayActivityPanel.invocationId")} value={event.invocation.id} mono /> : null}
+            {event.invocation?.errorCode ? <Fact label={t("app.apps.gatewayActivityPanel.errorCode")} value={event.invocation.errorCode} mono /> : null}
+            {event.invocation?.errorMessage ? <Fact label={t("app.common.labels.error")} value={event.invocation.errorMessage} /> : null}
           </dl>
           {argumentsText ? (
             <div className="mt-2 space-y-1">
-              <div className="text-muted-foreground">Arguments (redacted)</div>
+              <div className="text-muted-foreground">{t("app.apps.gatewayActivityPanel.argumentsRedacted")}</div>
               <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-xs text-foreground">
                 {argumentsText}
               </pre>
@@ -126,7 +130,7 @@ function ActivityRow({ event }: { event: ToolGatewayActivityEvent }) {
           ) : null}
           {resultText ? (
             <div className="mt-3 space-y-1">
-              <div className="text-muted-foreground">Result (redacted)</div>
+              <div className="text-muted-foreground">{t("app.apps.gatewayActivityPanel.resultRedacted")}</div>
               <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-md border border-border bg-background p-3 font-mono text-xs text-foreground">
                 {resultText}
               </pre>
@@ -145,6 +149,7 @@ export function GatewayActivityPanel({
   companyId: string;
   gateway: ToolMcpGatewayWithTokens;
 }) {
+  const { t } = useTranslation();
   const activityQuery = useInfiniteQuery({
     queryKey: queryKeys.tools.activity(companyId, { gateway: gateway.id, window: "30d" }),
     queryFn: ({ pageParam }) =>
@@ -178,13 +183,9 @@ export function GatewayActivityPanel({
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted-foreground">
-        Calls through this gateway from the last 30 days. Open a row to inspect its tool, redacted arguments, result, and decision.
-      </p>
+      <p className="text-sm text-muted-foreground">{t("app.apps.gatewayActivityPanel.callsThroughThisGatewayFromTheLast")}</p>
       {events.length === 0 ? (
-        <div className="rounded-md border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-          No calls have gone through this gateway yet.
-        </div>
+        <div className="rounded-md border border-dashed border-border p-6 text-center text-sm text-muted-foreground">{t("app.apps.gatewayActivityPanel.noCallsHaveGoneThroughThisGateway")}</div>
       ) : (
         <ul className="divide-y divide-border rounded-lg border border-border">
           {events.map((event) => <ActivityRow key={event.id} event={event} />)}
@@ -198,7 +199,7 @@ export function GatewayActivityPanel({
             onClick={() => activityQuery.fetchNextPage()}
             disabled={activityQuery.isFetchingNextPage}
           >
-            {activityQuery.isFetchingNextPage ? "Loading…" : "Load more"}
+            {activityQuery.isFetchingNextPage ? t("app.common.progress.loading") : t("app.common.actions.loadMore")}
           </Button>
         </div>
       ) : null}

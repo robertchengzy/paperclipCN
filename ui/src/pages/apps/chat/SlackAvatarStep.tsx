@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { useTranslation } from "@/i18n";
 import { useId, useState } from "react";
 import {
   ArrowRight,
@@ -22,6 +24,7 @@ export function SlackAvatarContent({
   avatarUrl,
   compact = false,
 }: SlackAvatarProps & { compact?: boolean }) {
+  const { t } = useTranslation();
   const id = useId();
   const filename = `${appName.replace(/[^a-zA-Z0-9_-]+/g, "-") || "agent"}-avatar.png`;
   const [downloading, setDownloading] = useState(false);
@@ -36,7 +39,7 @@ export function SlackAvatarContent({
         !response.ok ||
         !response.headers.get("content-type")?.startsWith("image/png")
       )
-        throw new Error("Avatar unavailable");
+        throw new Error(t("app.apps.slackAvatarStep.avatarUnavailable"));
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -62,19 +65,17 @@ export function SlackAvatarContent({
           src={avatarUrl}
           width={512}
           height={512}
-          alt={`${agentName}’s Cliptoon avatar`}
+          alt={t("app.apps.slackAvatarStep.sCliptoonAvatar", { value0: agentName })}
           className="size-40 shrink-0 rounded-lg bg-muted object-contain"
         />
         <div className="space-y-3">
           <div className="space-y-1">
             <h2 id={`${id}-download`} className="text-sm font-semibold">
               {compact
-                ? "Download your agent’s avatar"
-                : "1. Download your agent’s avatar"}
+                ? t("app.apps.slackAvatarStep.downloadYourAgentSAvatar")
+                : t("app.apps.slackAvatarStep.1DownloadYourAgentSAvatar")}
             </h2>
-            <p className="text-xs text-muted-foreground">
-              PNG · 512 × 512 · Ready for Slack
-            </p>
+            <p className="text-xs text-muted-foreground">{t("app.apps.slackAvatarStep.png512512ReadyForSlack")}</p>
           </div>
           <Button variant="outline" asChild>
             <a
@@ -90,14 +91,10 @@ export function SlackAvatarContent({
                 <Loader2 className="size-4 animate-spin" />
               ) : (
                 <Download className="size-4" />
-              )}
-              Download avatar
-            </a>
+              )}{t("app.apps.slackAvatarStep.downloadAvatar")}</a>
           </Button>
           {downloadError && (
-            <p role="alert" className="text-sm text-destructive">
-              Couldn’t download the avatar. Try downloading it again.
-            </p>
+            <p role="alert" className="text-sm text-destructive">{t("app.apps.slackAvatarStep.couldnTDownloadTheAvatarTryDownloading")}</p>
           )}
         </div>
       </section>
@@ -109,45 +106,19 @@ export function SlackAvatarContent({
               ? "cursor-pointer text-sm underline underline-offset-4"
               : "hidden"
           }
-        >
-          How to upload in Slack
-        </summary>
+        >{t("app.apps.slackAvatarStep.howToUploadInSlack")}</summary>
         <section aria-labelledby={`${id}-upload`} className="space-y-4">
           <div className="space-y-1">
             <h2 id={`${id}-upload`} className="text-sm font-semibold">
-              {compact ? "Upload it in Slack" : "2. Upload it in Slack"}
+              {compact ? t("app.apps.slackAvatarStep.uploadItInSlack") : t("app.apps.slackAvatarStep.2UploadItInSlack")}
             </h2>
-            <p className="text-sm text-muted-foreground">
-              You’ll upload the downloaded image directly in Slack’s app
-              settings.
-            </p>
+            <p className="text-sm text-muted-foreground">{t("app.apps.slackAvatarStep.youLlUploadTheDownloadedImageDirectly")}</p>
           </div>
           <ol className="list-decimal space-y-3 pl-5 text-sm">
-            <li>
-              <a
-                href="https://api.slack.com/apps"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-4"
-              >
-                Open Slack app Settings{" "}
-                <ExternalLink className="inline size-3" />
-              </a>{" "}
-              and choose <strong>{appName}</strong>.
-            </li>
-            <li>
-              Choose <strong>Basic Information</strong>, then scroll to{" "}
-              <strong>Display Information</strong>.
-            </li>
-            <li>
-              Under <strong>App icon &amp; Preview</strong>, click the app icon
-              and upload{" "}
-              <span className="break-all font-mono text-xs">{filename}</span>.
-            </li>
-            <li>
-              Confirm the crop, then click <strong>Save Changes</strong> in
-              Slack.
-            </li>
+            <li><Trans i18nKey="app.apps.slackAvatarStep.openSettingsAndChoose" values={{ appName }} components={{ settingsLink: <a href="https://api.slack.com/apps" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4" />, icon: <ExternalLink className="inline size-3" />, strong: <strong /> }} /></li>
+            <li><Trans i18nKey="app.apps.slackAvatarStep.chooseBasicInformation" components={{ strong: <strong /> }} /></li>
+            <li><Trans i18nKey="app.apps.slackAvatarStep.uploadIcon" values={{ filename }} components={{ strong: <strong />, file: <span className="break-all font-mono text-xs" /> }} /></li>
+            <li><Trans i18nKey="app.apps.slackAvatarStep.saveIcon" components={{ strong: <strong /> }} /></li>
           </ol>
         </section>
       </details>
@@ -167,18 +138,15 @@ export function SlackAvatarStep({
   onSkip: () => void;
   onSaveExit: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-8">
       <div className="space-y-2">
         <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold">
-            Give {props.agentName} a face in Slack
-          </h1>
-          <span className="text-xs text-muted-foreground">Optional</span>
+          <h1 className="text-xl font-bold">{t("app.apps.slackAvatarStep.giveAgentFace", { agentName: props.agentName })}</h1>
+          <span className="text-xs text-muted-foreground">{t("app.common.labels.optional")}</span>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Use {props.agentName}’s avatar so your team recognizes the agent
-        </p>
+        <p className="text-sm text-muted-foreground">{t("app.apps.slackAvatarStep.useAgentAvatar", { agentName: props.agentName })}</p>
       </div>
       <SlackAvatarContent {...props} />
       {uploaded && (
@@ -186,16 +154,12 @@ export function SlackAvatarStep({
           role="status"
           className="flex items-center gap-2 rounded-lg bg-(--status-task-done)/10 p-3 text-sm"
         >
-          <Check className="size-4 text-(--status-task-done)" />
-          You marked the avatar as uploaded in Slack.
-        </p>
+          <Check className="size-4 text-(--status-task-done)" />{t("app.apps.slackAvatarStep.youMarkedTheAvatarAsUploadedIn")}</p>
       )}
       <SetupWizardFooter onSaveExit={onSaveExit}>
-        <Button variant="ghost" onClick={onSkip}>
-          Skip for now
-        </Button>
+        <Button variant="ghost" onClick={onSkip}>{t("app.apps.slackAvatarStep.skipForNow")}</Button>
         <Button onClick={onUploaded}>
-          {uploaded ? "Continue" : "I’ve uploaded the avatar"}
+          {uploaded ? t("app.common.actions.continue") : t("app.apps.slackAvatarStep.iVeUploadedTheAvatar")}
           <ArrowRight className="size-4" />
         </Button>
       </SetupWizardFooter>
@@ -204,13 +168,12 @@ export function SlackAvatarStep({
 }
 
 export function SlackAvatarSettings(props: SlackAvatarProps) {
+  const { t } = useTranslation();
   return (
-    <section className="space-y-4" aria-label="Slack avatar">
+    <section className="space-y-4" aria-label={t("app.apps.slackAvatarStep.slackAvatar")}>
       <div className="space-y-1">
-        <h2 className="text-lg font-semibold">Agent avatar</h2>
-        <p className="text-sm text-muted-foreground">
-          Use {props.agentName}’s avatar so your team recognizes the agent
-        </p>
+        <h2 className="text-lg font-semibold">{t("app.apps.slackAvatarStep.agentAvatar")}</h2>
+        <p className="text-sm text-muted-foreground">{t("app.apps.slackAvatarStep.useAgentAvatar", { agentName: props.agentName })}</p>
       </div>
       <SlackAvatarContent {...props} compact />
     </section>

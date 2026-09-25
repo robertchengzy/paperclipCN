@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 import type {
   ToolApplication,
   ToolConnection,
@@ -38,10 +39,10 @@ export function tokenStatus(
 }
 
 export const TOKEN_STATUS_LABEL: Record<TokenStatus, string> = {
-  active: "Active",
-  expiring: "Expiring",
-  expired: "Expired",
-  revoked: "Revoked",
+  get active() { return t("app.common.states.active"); },
+  get expiring() { return t("app.apps.gatewayHelpers.expiring"); },
+  get expired() { return t("app.common.states.expired"); },
+  get revoked() { return t("app.common.states.revoked"); },
 };
 
 /** Count of tokens that can currently authenticate (not revoked, not expired). */
@@ -77,23 +78,23 @@ export function formatScope(
 ): string {
   if (gateway.contextScopeType !== "none" && gateway.contextScopeId) {
     if (gateway.contextScopeType === "project") {
-      return `Project · ${projectNames.get(gateway.contextScopeId) ?? shortId(gateway.contextScopeId)}`;
+      return t("app.apps.gatewayHelpers.project", { value0: projectNames.get(gateway.contextScopeId) ?? shortId(gateway.contextScopeId) });
     }
     if (gateway.contextScopeType === "agent") {
-      return `Agent · ${agentNames.get(gateway.contextScopeId) ?? shortId(gateway.contextScopeId)}`;
+      return t("app.apps.gatewayHelpers.agent", { value0: agentNames.get(gateway.contextScopeId) ?? shortId(gateway.contextScopeId) });
     }
     return `${gateway.contextScopeType} · ${shortId(gateway.contextScopeId)}`;
   }
-  if (gateway.projectId) return `Project · ${projectNames.get(gateway.projectId) ?? shortId(gateway.projectId)}`;
-  if (gateway.agentId) return `Agent · ${agentNames.get(gateway.agentId) ?? shortId(gateway.agentId)}`;
-  return "Organization";
+  if (gateway.projectId) return t("app.apps.gatewayHelpers.project", { value0: projectNames.get(gateway.projectId) ?? shortId(gateway.projectId) });
+  if (gateway.agentId) return t("app.apps.gatewayHelpers.agent", { value0: agentNames.get(gateway.agentId) ?? shortId(gateway.agentId) });
+  return t("app.common.nouns.organization");
 }
 
 export function formatOwner(gateway: ToolMcpGatewayWithTokens, agentNames: Map<string, string>): string {
   if (gateway.createdByAgentId) {
-    return agentNames.get(gateway.createdByAgentId) ?? `Agent ${shortId(gateway.createdByAgentId)}`;
+    return agentNames.get(gateway.createdByAgentId) ?? t("app.apps.gatewayHelpers.agent2", { value0: shortId(gateway.createdByAgentId) });
   }
-  return "Board";
+  return t("app.common.nouns.board");
 }
 
 /** Whether the gateway is exposing tools to clients right now. */
@@ -103,14 +104,14 @@ export function isGatewayOn(gateway: ToolMcpGatewayWithTokens): boolean {
 
 /** Human summary of how many tools a profile allows. */
 export function allowedToolsLabel(profile: ToolProfileWithDetails | undefined): string {
-  if (!profile) return "Profile unavailable";
+  if (!profile) return t("app.apps.gatewayHelpers.profileUnavailable");
   const { accessMode, allowedToolCount, totalToolCount, excludedToolCount } = profile.summary;
   const count =
     accessMode === "all_except"
       ? Math.max(totalToolCount - excludedToolCount, 0)
       : allowedToolCount;
-  if (count === 0) return "No tools allowed";
-  return `${count} ${count === 1 ? "tool" : "tools"}`;
+  if (count === 0) return t("app.apps.gatewayHelpers.noToolsAllowed");
+  return count === 1 ? t("app.apps.gatewayHelpers.toolCountOne", { count }) : t("app.apps.gatewayHelpers.toolCountMany", { count });
 }
 
 export type GatewayAppRow = {
@@ -175,7 +176,7 @@ export function deriveGatewayApps(
       toolCount: toolCountByApp.get(applicationId) ?? 0,
       needsAttention: Boolean(attentionConnection),
       attentionReason: attentionConnection
-        ? "Sign-in expired — reconnect to restore access."
+        ? t("app.apps.gatewayHelpers.signInExpiredReconnectToRestoreAccess")
         : null,
     });
   }

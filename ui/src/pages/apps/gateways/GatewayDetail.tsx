@@ -1,3 +1,4 @@
+import { useTranslation } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pencil, Send } from "lucide-react";
@@ -27,6 +28,7 @@ import { GatewayAdvancedPanel } from "./panels/GatewayAdvancedPanel";
 import { CopyableGatewayUrl } from "./CopyableGatewayUrl";
 
 export function GatewayDetail() {
+  const { t } = useTranslation();
   const { gatewayId = "", tab } = useParams<{ gatewayId: string; tab?: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -85,7 +87,7 @@ export function GatewayDetail() {
         applicationsQuery.data?.applications ?? [],
         connectionsQuery.data?.connections ?? [],
       ),
-    [profile, applicationsQuery.data, connectionsQuery.data],
+    [profile, applicationsQuery.data, connectionsQuery.data, t],
   );
   const agentNames = useMemo(
     () => new Map((agentsQuery.data ?? []).map((agent) => [agent.id, agent.name])),
@@ -103,12 +105,12 @@ export function GatewayDetail() {
   useEffect(() => {
     if (!gateway) return;
     setBreadcrumbs([
-      { label: "Connectors", href: "/apps" },
-      { label: "Gateways", href: "/apps/gateways" },
+      { label: t("app.common.nouns.connectors"), href: "/apps" },
+      { label: t("app.apps.gatewayDetail.gateways"), href: "/apps/gateways" },
       { label: gateway.name },
     ]);
     return () => setBreadcrumbs([]);
-  }, [setBreadcrumbs, gateway]);
+  }, [setBreadcrumbs, gateway, t]);
 
   const toggleMutation = useMutation({
     mutationFn: () =>
@@ -117,25 +119,25 @@ export function GatewayDetail() {
       }),
     onSuccess: async (updated) => {
       pushToast({
-        title: updated.status === "active" ? "Gateway on" : "Gateway off",
+        title: updated.status === "active" ? t("app.apps.gatewayDetail.gatewayOn") : t("app.apps.gatewayDetail.gatewayOff"),
         body:
           updated.status === "active"
             ? `${updated.name} is exposing its tools again.`
-            : `${updated.name} is off — every client goes silent.`,
+            : t("app.apps.gatewayDetail.isOffEveryClientGoesSilent", { value0: updated.name }),
         tone: "success",
       });
       await queryClient.invalidateQueries({ queryKey: gatewaysQueryKey(selectedCompanyId!) });
     },
     onError: (error) =>
       pushToast({
-        title: "Couldn't update the gateway",
+        title: t("app.apps.gatewayDetail.couldnTUpdateTheGateway"),
         body: error instanceof Error ? error.message : String(error),
         tone: "error",
       }),
   });
 
   if (!selectedCompanyId) {
-    return <div className="p-6 text-sm text-muted-foreground">Select an organization to manage gateways.</div>;
+    return <div className="p-6 text-sm text-muted-foreground">{t("app.apps.gatewayDetail.selectAnOrganizationToManageGateways")}</div>;
   }
   if (!activeTab) {
     return <Navigate replace to={gatewayTabHref(gatewayId, "overview")} />;
@@ -155,10 +157,8 @@ export function GatewayDetail() {
   if (!gateway) {
     return (
       <div className="max-w-3xl p-6">
-        <p className="text-sm text-muted-foreground">We couldn’t find that gateway.</p>
-        <Button className="mt-4" variant="outline" onClick={() => navigate("/apps/gateways")}>
-          Back to gateways
-        </Button>
+        <p className="text-sm text-muted-foreground">{t("app.apps.gatewayDetail.weCouldnTFindThatGateway")}</p>
+        <Button className="mt-4" variant="outline" onClick={() => navigate("/apps/gateways")}>{t("app.apps.gatewayDetail.backToGateways")}</Button>
       </div>
     );
   }
@@ -168,26 +168,20 @@ export function GatewayDetail() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="text-xs text-muted-foreground">
-            <Link to="/apps/gateways" className="hover:underline">
-              Apps · Gateways
-            </Link>
+            <Link to="/apps/gateways" className="hover:underline">{t("app.apps.gatewayDetail.appsGateways")}</Link>
           </div>
           <h1 className="mt-1 text-2xl font-bold tracking-tight">{gateway.name}</h1>
           <CopyableGatewayUrl endpointPath={gateway.endpointPath} className="mt-1 max-w-xl" />
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => setEditing(true)}>
-            <Pencil className="mr-1.5 h-4 w-4" />
-            Edit
-          </Button>
+            <Pencil className="mr-1.5 h-4 w-4" />{t("app.common.actions.edit")}</Button>
           <Button onClick={() => setSnippetOpen(true)}>
-            <Send className="mr-1.5 h-4 w-4" />
-            Client snippets
-          </Button>
+            <Send className="mr-1.5 h-4 w-4" />{t("app.apps.gatewayDetail.clientSnippets")}</Button>
         </div>
       </div>
 
-      <nav className="flex items-center gap-6 overflow-x-auto border-b border-border text-sm" aria-label="Gateway tabs">
+      <nav className="flex items-center gap-6 overflow-x-auto border-b border-border text-sm" aria-label={t("app.apps.gatewayDetail.gatewayTabs")}>
         {GATEWAY_TABS.map((item) => {
           const isActive = item.key === activeTab;
           return (

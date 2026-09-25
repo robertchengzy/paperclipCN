@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import type { ToolConnection } from "@paperclipai/shared";
 import { humanizeConnectionDisplayName } from "@paperclipai/shared";
 import { Identity } from "@/components/Identity";
@@ -11,20 +12,16 @@ export function connectionOwnerProfile(
 ): ConnectionOwnerProfile | null {
   if (!connection.createdByUserId) return null;
   return profiles.get(connection.createdByUserId) ?? {
-    label: connection.createdByUserId === "local-board" ? "Board" : "Board member",
+    label: connection.createdByUserId === "local-board" ? t("app.common.nouns.board") : t("app.apps.connectionOwner.boardMember"),
     image: null,
   };
 }
 
 function ownerGivenName(label: string): string {
   const trimmed = label.trim();
-  if (!trimmed) return "Board";
+  if (!trimmed) return t("app.common.nouns.board");
   const first = trimmed.split(/\s+/)[0] ?? trimmed;
-  return first.includes("@") ? first.split("@")[0] || "Board" : first;
-}
-
-function possessive(label: string): string {
-  return label.toLowerCase().endsWith("s") ? `${label}’` : `${label}’s`;
+  return first.includes("@") ? first.split("@")[0] || t("app.common.nouns.board") : first;
 }
 
 /**
@@ -49,11 +46,15 @@ export function connectionDisplayNameForOwner(
   if (connectionName.trim().toLocaleLowerCase() !== applicationName.trim().toLocaleLowerCase()) {
     return connectionName;
   }
-  return `${possessive(ownerGivenName(owner.label))} ${applicationName}`;
+  const name = ownerGivenName(owner.label);
+  return name.toLowerCase().endsWith("s")
+    ? t("app.apps.connectionOwner.ownerAppEndingS", { owner: name, applicationName })
+    : t("app.apps.connectionOwner.ownerApp", { owner: name, applicationName });
 }
 
 export function ConnectionOwnerIdentity({ owner }: { owner: ConnectionOwnerProfile | null }) {
-  if (!owner) return <span className="text-xs text-muted-foreground">Unknown</span>;
+  const { t } = useTranslation();
+  if (!owner) return <span className="text-xs text-muted-foreground">{t("app.common.labels.unknown")}</span>;
   return (
     <Identity
       name={owner.label}
