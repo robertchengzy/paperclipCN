@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { AgentAvatar } from "./AgentAvatar";
 import { Link } from "@/lib/router";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -30,6 +31,7 @@ interface ActivityRowProps {
 }
 
 export function ActivityRow({ event, agentMap, userProfileMap, entityNameMap, entityTitleMap, className }: ActivityRowProps) {
+  const { t } = useTranslation();
   const verb = formatActivityVerb(event.action, event.details, { agentMap, userProfileMap });
 
   const isHeartbeatEvent = event.entityType === "heartbeat_run";
@@ -50,7 +52,7 @@ export function ActivityRow({ event, agentMap, userProfileMap, entityNameMap, en
 
   const actor = event.actorType === "agent" ? agentMap.get(event.actorId) : null;
   const userProfile = event.actorType === "user" ? userProfileMap?.get(event.actorId) : null;
-  const actorName = actor?.name ?? (event.actorType === "system" ? "System" : userProfile?.label ?? (event.actorType === "user" ? "Board" : event.actorId || "Unknown"));
+  const actorName = actor?.name ?? (event.actorType === "system" ? t("app.common.labels.system") : userProfile?.label ?? (event.actorType === "user" ? t("app.common.nouns.board") : event.actorId || t("app.common.labels.unknown")));
   const actorAvatarUrl = userProfile?.image ?? null;
 
   const inner = (

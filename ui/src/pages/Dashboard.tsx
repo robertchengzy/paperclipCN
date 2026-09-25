@@ -157,7 +157,7 @@ export function Dashboard() {
   }, [shouldOpenOnboarding, selectedCompanyId, openOnboarding]);
 
   useEffect(() => {
-    setBreadcrumbs([{ label: t("app.sidebar.dashboard", { defaultValue: "Dashboard" }) }]);
+    setBreadcrumbs([{ label: t("app.sidebar.dashboard") }]);
   }, [setBreadcrumbs, t]);
 
   const dashboardQueryKey = queryKeys.dashboard(selectedCompanyId!);
@@ -351,11 +351,11 @@ export function Dashboard() {
           title={t("app.dashboard.allAgentsPaused")}
           actions={
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/agents">{t("app.dashboard.reviewAgents", { defaultValue: "Review agents" })}</Link>
+              <Link to="/agents">{t("app.dashboard.reviewAgents")}</Link>
             </Button>
           }
         >
-          {t("app.dashboard.resumeAtLeastOneAgentToLetAssignedTasksStart", { defaultValue: "Resume at least one agent to let assigned tasks start." })}
+          {t("app.dashboard.resumeAtLeastOneAgentToLetAssignedTasksStart")}
         </InlineBanner>
       ) : null}
 
@@ -364,14 +364,14 @@ export function Dashboard() {
           <div className="flex items-center gap-2.5">
             <Bot className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
             <p className="text-sm text-amber-900 dark:text-amber-100">
-              {t("app.dashboard.noAgents", { defaultValue: "You have no agents." })}
+              {t("app.dashboard.noAgents")}
             </p>
           </div>
           <button
             onClick={() => openOnboarding({ initialStep: 3, companyId: selectedCompanyId! })}
             className="text-sm font-medium text-amber-700 hover:text-amber-900 dark:text-amber-300 dark:hover:text-amber-100 underline underline-offset-2 shrink-0"
           >
-            {t("app.dashboard.createOneHere", { defaultValue: "Create one here" })}
+            {t("app.dashboard.createOneHere")}
           </button>
         </div>
       )}
@@ -394,7 +394,7 @@ export function Dashboard() {
                 </div>
               </div>
               <Link to="/costs" className="text-sm underline underline-offset-2 text-red-900 dark:text-red-100">
-                {t("app.dashboard.openBudgets", { defaultValue: "Open budgets" })}
+                {t("app.dashboard.openBudgets")}
               </Link>
             </div>
           ) : null}
@@ -403,7 +403,7 @@ export function Dashboard() {
             <MetricCard
               icon={Bot}
               value={data.agents.active + data.agents.running + data.agents.paused + data.agents.error}
-              label={t("app.dashboard.agentsEnabled", { defaultValue: "Agents Enabled" })}
+              label={t("app.dashboard.agentsEnabled")}
               to="/agents"
               description={
                 <span>
@@ -414,7 +414,7 @@ export function Dashboard() {
             <MetricCard
               icon={CircleDot}
               value={data.tasks.inProgress}
-              label={t("app.dashboard.tasksInProgress", { defaultValue: "Tasks In Progress" })}
+              label={t("app.dashboard.tasksInProgress")}
               to="/issues"
               description={
                 <span>
@@ -425,26 +425,26 @@ export function Dashboard() {
             <MetricCard
               icon={DollarSign}
               value={formatCents(data.costs.monthSpendCents)}
-              label={t("app.dashboard.monthSpend", { defaultValue: "Month Spend" })}
+              label={t("app.dashboard.monthSpend")}
               to="/costs"
               description={
                 <span>
                   {data.costs.monthBudgetCents > 0
                     ? t("app.dashboard.budgetUtilization", { percent: data.costs.monthUtilizationPercent, budget: formatCents(data.costs.monthBudgetCents) })
-                    : t("app.dashboard.unlimitedBudget", { defaultValue: "Unlimited budget" })}
+                    : t("app.dashboard.unlimitedBudget")}
                 </span>
               }
             />
             <MetricCard
               icon={ShieldCheck}
               value={data.pendingApprovals + data.budgets.pendingApprovals}
-              label={t("app.dashboard.pendingApprovals", { defaultValue: "Pending Approvals" })}
+              label={t("app.dashboard.pendingApprovals")}
               to="/approvals"
               description={
                 <span>
                   {data.budgets.pendingApprovals > 0
                     ? t("app.dashboard.budgetOverridesAwaitingReview", { value: data.budgets.pendingApprovals })
-                    : t("app.dashboard.awaitingBoardReview", { defaultValue: "Awaiting board review" })}
+                    : t("app.dashboard.awaitingBoardReview")}
                 </span>
               }
             />
@@ -458,14 +458,14 @@ export function Dashboard() {
             </ChartCard>
             {/* PAP-411: "Tasks by Priority" chart hidden behind SHOW_TASK_PRIORITY_UI. */}
             {SHOW_TASK_PRIORITY_UI && (
-              <ChartCard title={t("app.dashboard.tasksByPriority", { defaultValue: "Tasks by Priority" })} subtitle={t("app.dashboard.last14Days", { defaultValue: "Last 14 days" })}>
+              <ChartCard title={t("app.dashboard.tasksByPriority")} subtitle={t("app.dashboard.last14Days")}>
                 <PriorityChart issues={issues ?? []} />
               </ChartCard>
             )}
-            <ChartCard title={t("app.dashboard.tasksByStatus", { defaultValue: "Tasks by Status" })} subtitle={t("app.dashboard.last14Days", { defaultValue: "Last 14 days" })}>
+            <ChartCard title={t("app.dashboard.tasksByStatus")} subtitle={t("app.dashboard.last14Days")}>
               <IssueStatusChart issues={issues ?? []} />
             </ChartCard>
-            <ChartCard title={t("app.dashboard.successRate", { defaultValue: "Success Rate" })} subtitle={t("app.dashboard.last14Days", { defaultValue: "Last 14 days" })}>
+            <ChartCard title={t("app.dashboard.successRate")} subtitle={t("app.dashboard.last14Days")}>
               <SuccessRateChart activity={data.runActivity} />
             </ChartCard>
           </div>
@@ -504,11 +504,11 @@ export function Dashboard() {
             {/* Recent Tasks */}
             <div className="min-w-0">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-                {t("app.dashboard.recentTasks", { defaultValue: "Recent Tasks" })}
+                {t("app.dashboard.recentTasks")}
               </h3>
               {recentIssues.length === 0 ? (
                 <Card className="block p-4">
-                  <p className="text-sm text-muted-foreground">{t("app.dashboard.noTasksYet", { defaultValue: "No tasks yet." })}</p>
+                  <p className="text-sm text-muted-foreground">{t("app.dashboard.noTasksYet")}</p>
                 </Card>
               ) : (
                 <Card className="@container block py-0 divide-y divide-border overflow-hidden">

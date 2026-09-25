@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { EmailMessageCard } from "./EmailMessageCard";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,6 +16,7 @@ export function EmailTaskActivity({
   companyId: string;
   issueId: string;
 }) {
+  const { t } = useTranslation();
   const cache = useQueryClient();
   const threadKey = ["email-thread", companyId, issueId];
   const queryEnabled = Boolean(companyId && issueId) && !issueId.startsWith("chat:");
@@ -71,6 +73,7 @@ function EmailDelivery({
   publication: EmailPublicationSummary;
   onResolved: () => void;
 }) {
+  const { t } = useTranslation();
   const [messageId, setMessageId] = useState("");
   const resolve = useMutation({
     mutationFn: (outcome: "sent" | "failed") =>
@@ -81,35 +84,29 @@ function EmailDelivery({
     <div className="space-y-2 text-xs text-muted-foreground">
       {p.request && !p.providerMessageId && (
         <article
-          aria-label="Email send intent"
+          aria-label={t("app.reports.emailTaskActivity.emailSendIntent")}
           className="space-y-3 rounded-lg border border-border p-4"
         >
-          <p className="font-semibold">{p.request.subject ?? "Email reply"}</p>
-          {p.request.to && <p>To: {p.request.to.join(", ")}</p>}
+          <p className="font-semibold">{p.request.subject ?? t("app.reports.emailTaskActivity.emailReply")}</p>
+          {p.request.to && <p>{t("app.reports.emailTaskActivity.to", { recipients: p.request.to.join(", ") })}</p>}
           <div className="whitespace-pre-wrap break-words text-sm text-foreground">
             {p.request.text}
           </div>
         </article>
       )}
-      <p>
-        Email {p.outcome}
+      <p>{t("app.reports.emailTaskActivity.emailOutcome", { outcome: t(`app.reports.emailTaskActivity.outcome.${p.outcome}`, { defaultValue: p.outcome }) })}
         {p.error ? ` — ${p.error}` : ""}
       </p>
       {p.outcome === "uncertain" && (
         <details>
-          <summary className="cursor-pointer">
-            Resolve delivery after checking AgentMail
-          </summary>
+          <summary className="cursor-pointer">{t("app.reports.emailTaskActivity.resolveDeliveryAfterCheckingAgentMail")}</summary>
           <div className="space-y-2 py-2">
-            <p>
-              Confirm the outcome in AgentMail before resolving. This action
-              does not resend.
-            </p>
+            <p>{t("app.reports.emailTaskActivity.confirmTheOutcomeInAgentMailBeforeResolvingThisActionDoesNotResend")}</p>
             <Input
-              aria-label="Provider message ID"
+              aria-label={t("app.reports.emailTaskActivity.providerMessageID")}
               value={messageId}
               onChange={(e) => setMessageId(e.target.value)}
-              placeholder="Provider message ID"
+              placeholder={t("app.reports.emailTaskActivity.providerMessageID")}
             />
             <div className="flex gap-2">
               <Button
@@ -117,17 +114,13 @@ function EmailDelivery({
                 variant="outline"
                 disabled={!messageId || resolve.isPending}
                 onClick={() => resolve.mutate("sent")}
-              >
-                Confirm sent
-              </Button>
+              >{t("app.reports.emailTaskActivity.confirmSent")}</Button>
               <Button
                 size="sm"
                 variant="outline"
                 disabled={resolve.isPending}
                 onClick={() => resolve.mutate("failed")}
-              >
-                Confirm not sent
-              </Button>
+              >{t("app.reports.emailTaskActivity.confirmNotSent")}</Button>
             </div>
             {resolve.error && (
               <p role="alert" className="text-destructive">

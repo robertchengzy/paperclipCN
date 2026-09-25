@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useState } from "react";
 import type { BudgetIncident } from "@paperclipai/shared";
 import { AlertOctagon, ArrowUpRight, PauseCircle } from "lucide-react";
@@ -18,11 +19,11 @@ function parseDollarInput(value: string) {
 }
 
 function incidentStateLabel(incident: BudgetIncident) {
-  if (incident.status === "resolved") return "Resolved";
-  if (incident.status === "dismissed") return "Dismissed";
-  if (incident.approvalStatus === "revision_requested") return "Escalated";
-  if (incident.approvalStatus === "pending") return "Pending approval";
-  return "Open";
+  if (incident.status === "resolved") return t("app.reports.budgetIncidentCard.resolved");
+  if (incident.status === "dismissed") return t("app.reports.budgetIncidentCard.dismissed");
+  if (incident.approvalStatus === "revision_requested") return t("app.reports.budgetIncidentCard.escalated");
+  if (incident.approvalStatus === "pending") return t("app.reports.budgetIncidentCard.pendingApproval");
+  return t("app.reports.budgetIncidentCard.open");
 }
 
 export function BudgetIncidentCard({
@@ -36,6 +37,7 @@ export function BudgetIncidentCard({
   onKeepPaused: () => void;
   isMutating?: boolean;
 }) {
+  const { t } = useTranslation();
   const [draftAmount, setDraftAmount] = useState(
     centsInputValue(Math.max(incident.amountObserved + 1000, incident.amountLimit)),
   );
@@ -49,7 +51,7 @@ export function BudgetIncidentCard({
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <div className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-red-700/90 dark:text-red-200/80">
-                {incident.scopeType} hard stop
+                {t("app.reports.budgetIncidentCard.scopeHardStop", { scope: t(`app.reports.budgetIncidentCard.scope.${incident.scopeType}`) })}
               </div>
               <Badge variant={incident.status === "resolved" ? "outline" : "secondary"}>
                 {stateLabel}
@@ -57,7 +59,7 @@ export function BudgetIncidentCard({
             </div>
             <CardTitle className="mt-1 text-base text-red-950 dark:text-red-50">{incident.scopeName}</CardTitle>
             <CardDescription className="mt-1 text-red-900/75 dark:text-red-100/70">
-              Spending reached {formatCents(incident.amountObserved)} against a limit of {formatCents(incident.amountLimit)}.
+              {t("app.reports.budgetIncidentCard.spendReached", { observed: formatCents(incident.amountObserved), limit: formatCents(incident.amountLimit) })}
             </CardDescription>
           </div>
           <div className="rounded-full border border-red-400/30 bg-red-500/10 p-2 text-red-600 dark:text-red-200">
@@ -70,15 +72,13 @@ export function BudgetIncidentCard({
           <PauseCircle className="mt-0.5 h-4 w-4 shrink-0" />
           <div>
             {incident.scopeType === "project"
-              ? "Project execution is paused. New work in this project will not start until you resolve the budget incident."
-              : "This scope is paused. New heartbeats will not start until you resolve the budget incident."}
+              ? t("app.reports.budgetIncidentCard.projectExecutionIsPausedNewWorkInThisProjectWillNotStart")
+              : t("app.reports.budgetIncidentCard.thisScopeIsPausedNewHeartbeatsWillNotStartUntilYouResolve")}
           </div>
         </div>
 
         <div className="rounded-xl border border-border/60 bg-background/60 p-3">
-          <label className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">
-            New budget (USD)
-          </label>
+          <label className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">{t("app.reports.budgetIncidentCard.newBudgetUSD")}</label>
           <div className="mt-2 flex flex-col gap-3 sm:flex-row">
             <Input
               value={draftAmount}
@@ -94,20 +94,16 @@ export function BudgetIncidentCard({
               }}
             >
               <ArrowUpRight className="h-4 w-4" />
-              {isMutating ? "Applying..." : "Raise budget & resume"}
+              {isMutating ? t("app.reports.budgetIncidentCard.applying") : t("app.reports.budgetIncidentCard.raiseBudgetResume")}
             </Button>
           </div>
           {parsed !== null && parsed <= incident.amountObserved ? (
-            <p className="mt-2 text-xs text-red-700 dark:text-red-200/80">
-              The new budget must exceed current observed spend.
-            </p>
+            <p className="mt-2 text-xs text-red-700 dark:text-red-200/80">{t("app.reports.budgetIncidentCard.theNewBudgetMustExceedCurrentObservedSpend")}</p>
           ) : null}
         </div>
 
         <div className="flex justify-end">
-          <Button variant="ghost" className="text-muted-foreground" disabled={isMutating} onClick={onKeepPaused}>
-            Keep paused
-          </Button>
+          <Button variant="ghost" className="text-muted-foreground" disabled={isMutating} onClick={onKeepPaused}>{t("app.reports.budgetIncidentCard.keepPaused")}</Button>
         </div>
       </CardContent>
     </Card>

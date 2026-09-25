@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { defaultStatusCardRefreshPolicy } from "@paperclipai/shared";
@@ -33,6 +34,7 @@ export function CreateStatusCardDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [prompt, setPrompt] = useState("");
   // "" → the built-in Summarizer; otherwise the id of the override agent.
@@ -67,26 +69,21 @@ export function CreateStatusCardDialog({
       ]);
       close();
     },
-    onError: (err) => setError(err instanceof Error ? err.message : "Could not create the card."),
+    onError: (err) => setError(err instanceof Error ? err.message : t("app.reports.createStatusCardDialog.couldNotCreateTheCard")),
   });
 
   return (
     <Dialog open={open} onOpenChange={(next) => (next ? onOpenChange(true) : close())}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>New card</DialogTitle>
-          <DialogDescription>
-            One message sets up the whole card: say what you want to watch and what each update
-            should tell you. The agent builds the query from it and writes every update against it.
-          </DialogDescription>
+          <DialogTitle>{t("app.reports.createStatusCardDialog.newCard")}</DialogTitle>
+          <DialogDescription>{t("app.reports.createStatusCardDialog.oneMessageSetsUpTheWholeCardSayWhatYouWantTo")}</DialogDescription>
         </DialogHeader>
 
-        {error ? <InlineBanner tone="danger" title="Create failed">{error}</InlineBanner> : null}
+        {error ? <InlineBanner tone="danger" title={t("app.reports.createStatusCardDialog.createFailed")}>{error}</InlineBanner> : null}
 
         <div className="space-y-3">
-          <label htmlFor="status-card-prompt" className="block pb-1 text-sm font-semibold">
-            What do you want to keep an eye on?
-          </label>
+          <label htmlFor="status-card-prompt" className="block pb-1 text-sm font-semibold">{t("app.reports.createStatusCardDialog.whatDoYouWantToKeepAnEyeOn")}</label>
           <Textarea
             id="status-card-prompt"
             value={prompt}
@@ -97,7 +94,7 @@ export function CreateStatusCardDialog({
             className="text-sm"
           />
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground">Examples</span>
+            <span className="text-xs font-medium text-muted-foreground">{t("app.reports.createStatusCardDialog.examples")}</span>
             {EXAMPLES.map((example) => (
               <button
                 key={example}
@@ -112,25 +109,19 @@ export function CreateStatusCardDialog({
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-semibold">Agent</label>
+          <label className="block text-sm font-semibold">{t("app.common.nouns.agent")}</label>
           <SummarizerAgentSelect companyId={companyId} value={agentId} onChange={setAgentId} enabled={open} />
-          <p className="text-xs text-muted-foreground">
-            Runs this card's setup and updates. Leave on the default unless another agent should own it.
-          </p>
+          <p className="text-xs text-muted-foreground">{t("app.reports.createStatusCardDialog.runsThisCardsSetupAndUpdatesLeaveOnTheDefaultUnlessAnother")}</p>
         </div>
 
         <DialogFooter>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={close} disabled={createMutation.isPending}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={close} disabled={createMutation.isPending}>{t("app.common.actions.cancel")}</Button>
             <Button
               onClick={() => createMutation.mutate()}
               disabled={prompt.trim().length === 0 || createMutation.isPending}
             >
-              {createMutation.isPending ? <Loader2 className="animate-spin" /> : null}
-              Create card
-            </Button>
+              {createMutation.isPending ? <Loader2 className="animate-spin" /> : null}{t("app.reports.createStatusCardDialog.createCard")}</Button>
           </div>
         </DialogFooter>
       </DialogContent>

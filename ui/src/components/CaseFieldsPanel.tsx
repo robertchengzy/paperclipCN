@@ -1,3 +1,4 @@
+import { i18n, t, useTranslation } from "@/i18n";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -79,6 +80,7 @@ function CopyableCompactValue({
   children: ReactNode;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const text = stringifyCopyValue(value);
   const [copied, setCopied] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -109,15 +111,14 @@ function CopyableCompactValue({
           aria-live="polite"
           className="pointer-events-none absolute bottom-full left-1/2 mb-1.5 inline-flex -translate-x-1/2 items-center gap-1 rounded-md bg-foreground px-2 py-1 text-xs whitespace-nowrap text-background"
         >
-          <Check className="h-3 w-3 shrink-0" />
-          Copied
-        </span>
+          <Check className="h-3 w-3 shrink-0" />{t("app.common.states.copied")}</span>
       ) : null}
     </span>
   );
 }
 
 function StringValue({ value, variant }: { value: string; variant: "compact" | "full" }) {
+  const { t } = useTranslation();
   const caseHref = useCaseHref();
   const trimmed = value.trim();
   if (trimmed === "") return <EmptyValue />;
@@ -164,6 +165,7 @@ export function CaseFieldValue({
   fieldKey?: string;
   variant?: "compact" | "full";
 }) {
+  const { t } = useTranslation();
   if (value === null || value === undefined) return <EmptyValue />;
 
   const issueIdentifiers = extractIssueIdentifiers(value, fieldKey);
@@ -176,16 +178,16 @@ export function CaseFieldValue({
     if (variant === "compact") {
       return (
         <CopyableCompactValue value={value} className="text-sm tabular-nums">
-          {value.toLocaleString()}
+          {value.toLocaleString(i18n.resolvedLanguage)}
         </CopyableCompactValue>
       );
     }
-    return <span className="text-sm tabular-nums">{value.toLocaleString()}</span>;
+    return <span className="text-sm tabular-nums">{value.toLocaleString(i18n.resolvedLanguage)}</span>;
   }
 
   if (typeof value === "boolean") {
     return value ? (
-      <Check className="h-4 w-4 text-green-600 dark:text-green-400" aria-label="true" />
+      <Check className="h-4 w-4 text-green-600 dark:text-green-400" aria-label={t("app.reports.caseFieldsPanel.trueValue")} />
     ) : (
       <EmptyValue />
     );
@@ -233,17 +235,18 @@ export function CaseFieldValue({
 }
 
 export function CaseFieldsPanel({ fields }: { fields: Record<string, unknown> }) {
+  const { t } = useTranslation();
   const entries = Object.entries(fields ?? {});
 
   return (
     <section className="space-y-2">
       <div className="flex items-baseline gap-2">
-        <h2 className="text-sm font-semibold">Fields</h2>
-        <span className="text-xs text-muted-foreground">from the skill&apos;s schema — rendered generically</span>
+        <h2 className="text-sm font-semibold">{t("app.reports.caseFieldsPanel.fields")}</h2>
+        <span className="text-xs text-muted-foreground">{t("app.reports.caseFieldsPanel.fromTheSkillsSchemaRenderedGenerically")}</span>
       </div>
       <Card className="gap-0 py-0">
         {entries.length === 0 ? (
-          <div className="px-4 py-3 text-sm text-muted-foreground">No fields set</div>
+          <div className="px-4 py-3 text-sm text-muted-foreground">{t("app.reports.caseFieldsPanel.noFieldsSet")}</div>
         ) : (
           <dl className="divide-y divide-border">
             {entries.map(([key, value]) => (
