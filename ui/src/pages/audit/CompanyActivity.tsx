@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { History } from "lucide-react";
 import { useSearchParams } from "@/lib/router";
+import { useTranslation } from "@/i18n";
 import { useCompany } from "../../context/CompanyContext";
 import { useBreadcrumbs } from "../../context/BreadcrumbContext";
 import { useStreamlinedUiEnabled } from "../../hooks/useStreamlinedUiEnabled";
@@ -16,6 +17,7 @@ import { AuditHub } from "./AuditHub";
  */
 export function CompanyActivity() {
   const { enabled: streamlinedUiEnabled } = useStreamlinedUiEnabled();
+  const { t } = useTranslation();
   const { selectedCompanyId } = useCompany();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,8 +36,8 @@ export function CompanyActivity() {
   ].includes(actionParam ?? "") ? actionParam! : "__all";
 
   useEffect(() => {
-    if (!streamlinedUiEnabled) setBreadcrumbs([{ label: "Activity" }]);
-  }, [setBreadcrumbs, streamlinedUiEnabled]);
+    if (!streamlinedUiEnabled) setBreadcrumbs([{ label: t("app.common.nouns.activity") }]);
+  }, [setBreadcrumbs, streamlinedUiEnabled, t]);
 
   const handleModeChange = useCallback(
     (next: AuditFeedMode) => {
@@ -67,7 +69,7 @@ export function CompanyActivity() {
   if (streamlinedUiEnabled) return <AuditHub section="activity" />;
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={History} message="Select an organization to view activity." />;
+    return <EmptyState icon={History} message={t("app.settings.companyActivity.selectOrganization")} />;
   }
 
   return (
