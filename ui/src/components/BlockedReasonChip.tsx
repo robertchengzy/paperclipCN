@@ -8,6 +8,7 @@ import {
   type BlockedReasonVariant,
 } from "../lib/blockedInbox";
 import type { IssueBlockedInboxReason } from "@paperclipai/shared";
+import { useTranslation } from "@/i18n";
 
 interface BlockedReasonChipProps {
   reason: IssueBlockedInboxReason;
@@ -53,6 +54,7 @@ export function BlockedReasonChip({
   compact = false,
   className,
 }: BlockedReasonChipProps) {
+  const { t } = useTranslation();
   const variant = blockedReasonVariant(reason);
   const label = blockedVariantLabel(variant);
   const Icon = VARIANT_ICONS[variant];
@@ -62,7 +64,7 @@ export function BlockedReasonChip({
       data-testid="blocked-reason-chip"
       data-variant={variant}
       data-severity={severity}
-      aria-label={`Reason: ${label}, severity ${severity}`}
+      aria-label={t("app.issueUi.blockedReasonChip.ariaLabel", { label, severity })}
       className={cn(
         "inline-flex shrink-0 items-center gap-1 rounded-md border px-2 py-0.5 text-(length:--text-nano) font-medium leading-tight sm:text-(length:--text-micro)",
         VARIANT_STYLES[variant],

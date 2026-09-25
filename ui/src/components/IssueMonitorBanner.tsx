@@ -13,6 +13,7 @@ import {
   type DerivedMonitorState,
   type MonitorDisplayState,
 } from "@/lib/issue-monitor";
+import { t, useTranslation } from "@/i18n";
 
 /** Matches the `Date | string` inputs accepted by the issue-monitor helpers. */
 type MonitorDate = Date | string;
@@ -70,10 +71,10 @@ export function buildMonitorSurfaceCopy(
 
   if (derived.source === "scheduled-retry" && scheduledRetryReason === "workspace_busy") {
     return {
-      bannerTitle: "Waiting for workspace",
-      stripTitle: "Waiting for workspace",
-      bannerMeta: ["Another task is using this workspace. Work starts automatically when it is available."],
-      stripMeta: ["Work starts automatically when the workspace is available."],
+      bannerTitle: t("app.issueUi.issueMonitorBanner.waitingForWorkspace"),
+      stripTitle: t("app.issueUi.issueMonitorBanner.waitingForWorkspace"),
+      bannerMeta: [t("app.issueUi.issueMonitorBanner.workspaceBusyBanner")],
+      stripMeta: [t("app.issueUi.issueMonitorBanner.workspaceBusyStrip")],
       tone: "info",
       workspaceWait: true,
     };
@@ -89,26 +90,26 @@ export function buildMonitorSurfaceCopy(
   switch (derived.state) {
     case "scheduled":
     case "retrying":
-      bannerTitle = isScheduledRetryOnly ? `Agent resumes ${eta}` : `Waiting on monitor — resumes ${eta}`;
-      stripTitle = `Resumes ${eta}`;
+      bannerTitle = isScheduledRetryOnly ? t("app.issueUi.issueMonitorBanner.agentResumes", { eta }) : t("app.issueUi.issueMonitorBanner.monitorResumes", { eta });
+      stripTitle = t("app.issueUi.issueMonitorBanner.resumes", { eta });
       break;
     case "due-now":
-      bannerTitle = isScheduledRetryOnly ? "Agent retry due now" : "Waiting on monitor — due now";
-      stripTitle = "Due now";
-      statusHint = "Checking momentarily…";
+      bannerTitle = isScheduledRetryOnly ? t("app.issueUi.issueMonitorBanner.agentRetryDueNow") : t("app.issueUi.issueMonitorBanner.monitorDueNow");
+      stripTitle = t("app.issueUi.issueMonitorBanner.dueNow");
+      statusHint = t("app.issueUi.issueMonitorBanner.checkingMomentarily");
       break;
     case "overdue":
     default:
-      bannerTitle = isScheduledRetryOnly ? `Agent retry ${eta}` : `Waiting on monitor — ${eta}`;
+      bannerTitle = isScheduledRetryOnly ? t("app.issueUi.issueMonitorBanner.agentRetryEta", { eta }) : t("app.issueUi.issueMonitorBanner.monitorEta", { eta });
       stripTitle = capitalize(eta);
-      statusHint = "Fires on next tick";
+      statusHint = t("app.issueUi.issueMonitorBanner.firesNextTick");
       break;
   }
 
-  const attemptLabel = derived.attemptCount >= 1 ? `Attempt ${derived.attemptCount}` : null;
-  const serviceLabel = derived.serviceName ? `Watching: ${derived.serviceName}` : null;
+  const attemptLabel = derived.attemptCount >= 1 ? t("app.issueUi.issueMonitorBanner.attempt", { count: derived.attemptCount }) : null;
+  const serviceLabel = derived.serviceName ? t("app.issueUi.issueMonitorBanner.watching", { name: derived.serviceName }) : null;
 
-  const bannerMeta = [statusHint, `${absolute} (your time)`, attemptLabel, serviceLabel].filter(
+  const bannerMeta = [statusHint, t("app.issueUi.issueMonitorBanner.yourTime", { time: absolute }), attemptLabel, serviceLabel].filter(
     (piece): piece is string => Boolean(piece),
   );
   const stripMeta = [statusHint, absolute, attemptLabel, serviceLabel].filter(
@@ -140,6 +141,7 @@ function CheckNowButton({
   onCheckNow: () => void;
   checkingNow: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <Button
       type="button"
@@ -149,7 +151,7 @@ function CheckNowButton({
       onClick={onCheckNow}
       disabled={checkingNow}
     >
-      {checkingNow ? "Checking…" : "Check now"}
+      {checkingNow ? t("app.common.progress.checking") : t("app.issueUi.issueMonitorBanner.checkNow")}
     </Button>
   );
 }
@@ -197,6 +199,7 @@ export function IssueMonitorComposerStrip({
   checkingNow = false,
   className,
 }: IssueMonitorSurfaceProps & { className?: string }) {
+  const { t } = useTranslation();
   const copy = useMonitorSurfaceCopy(issue);
   if (!copy) return null;
 
@@ -218,8 +221,8 @@ export function IssueMonitorComposerStrip({
       </div>
       <p className="mt-1.5 text-xs text-muted-foreground">
         {copy.workspaceWait
-          ? "You can keep sending instructions while the agent waits."
-          : "Sending a reply wakes the agent now — before the scheduled check."}
+          ? t("app.issueUi.issueMonitorBanner.keepSending")
+          : t("app.issueUi.issueMonitorBanner.replyWakes")}
       </p>
     </div>
   );

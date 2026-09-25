@@ -6573,6 +6573,1094 @@
         "selectTeam": "Select a team to view details.",
         "wasImported": "{{name}} was imported."
       }
+    },
+    "issueUi": {
+      "attentionInteractionResolver": {
+        "loading": "Loading decision…",
+        "unavailable": "This decision is no longer available — it may have been resolved elsewhere."
+      },
+      "attentionQueueRow": {
+        "snooze": {
+          "oneHour": "1 hour",
+          "fourHours": "4 hours",
+          "tomorrowMorning": "Tomorrow morning",
+          "nextWeek": "Next week",
+          "label": "Snooze",
+          "until": "Snooze until…"
+        },
+        "collapseDecision": "Collapse decision",
+        "expandDecision": "Expand decision",
+        "seeLess": "See less",
+        "seeMore": "See more",
+        "setByTitle": "Set by {{name}}",
+        "setByInline": "· set by {{name}}",
+        "reappearsAt": "Reappears {{time}}",
+        "reappearsIn": "Reappears {{time}}",
+        "rowActions": "Row actions",
+        "openSource": "Open source",
+        "missingIssueReference": "Missing issue reference for this decision.",
+        "completeFromDetail": "This decision must be completed from its detail view.",
+        "decisionActions": "Decision actions",
+        "failed": {
+          "sentForRevision": "Could not sent for revision",
+          "approved": "Could not approved",
+          "rejected": "Could not rejected"
+        },
+        "success": {
+          "approvalSentForRevision": "Approval sent for revision",
+          "approvalApproved": "Approval approved",
+          "approvalRejected": "Approval rejected",
+          "joinRequestSentForRevision": "Join request sent for revision",
+          "joinRequestApproved": "Join request approved",
+          "joinRequestRejected": "Join request rejected",
+          "confirmationAccepted": "Confirmation accepted",
+          "confirmationDeclined": "Confirmation declined"
+        },
+        "moreImages": "{{count}} more",
+        "viewIssue": "View issue",
+        "provenance": {
+          "anAgent": "an agent",
+          "you": "you"
+        },
+        "reappear": {
+          "soon": "soon",
+          "minutes": "in {{count}}m",
+          "hours": "in {{count}}h",
+          "days": "in {{count}}d"
+        },
+        "optionalNote": "Optional decision note…",
+        "requestRevision": "Request revision"
+      },
+      "blockedReasonChip": {
+        "ariaLabel": "Reason: {{label}}, severity {{severity}}"
+      },
+      "commentAttributionChip": {
+        "tooltip": "{{agentName}} posted this on behalf of {{userName}}. {{agentName}} is not assigned to this task — its authority to write here comes from {{userName}}, and never exceeds it.",
+        "thisAgent": "This agent",
+        "ariaLabel": "Posted on behalf of {{user}}",
+        "chip": "for {{user}}"
+      },
+      "decisionCard": {
+        "unknownStatus": "unknown",
+        "issueFallback": "issue {{id}}",
+        "effect": {
+          "commentOn": "Comment on {{target}}",
+          "createIssue": "Create issue “{{title}}” under {{parent}}",
+          "setStatus": "Set {{target}} to {{status}}",
+          "reassign": "Reassign {{target}}",
+          "unblockOne": "Unblock {{target}} — remove {{count}} blocker",
+          "unblockMany": "Unblock {{target}} — remove {{count}} blockers",
+          "cancelTreeOne": "Cancel {{target}} and its sub-tree ({{count}} issue)",
+          "cancelTreeMany": "Cancel {{target}} and its sub-tree ({{count}} issues)",
+          "apply": "Apply effect"
+        },
+        "cause": {
+          "denyDecisionIntersection": "blocked by the permission boundary (fail-closed)",
+          "invalidEffectReference": "a referenced issue no longer exists",
+          "targetChanged": "the target changed since this was proposed",
+          "effectExecutionFailed": "the effect errored while running",
+          "couldNotRun": "the effect could not run"
+        },
+        "result": {
+          "skipped": "Skipped {{target}} — target changed since proposal",
+          "failed": "Failed on {{target}} — {{cause}}",
+          "running": "Running on {{target}}…",
+          "commented": "Commented on {{target}}",
+          "created": "Created {{target}}",
+          "aNewIssue": "a new issue",
+          "setStatus": "Set {{target}} to {{status}}",
+          "reassigned": "Reassigned {{target}}",
+          "removedBlockersOne": "Removed {{count}} blocker from {{target}}",
+          "removedBlockersMany": "Removed {{count}} blockers from {{target}}",
+          "cancelledOne": "Cancelled {{count}} issue under {{target}}",
+          "cancelledMany": "Cancelled {{count}} issues under {{target}}",
+          "applied": "Applied effect on {{target}}"
+        },
+        "badge": {
+          "pending": "Pending",
+          "dismissed": "Dismissed",
+          "decided": "Decided",
+          "partial": "Partial"
+        },
+        "destructive": "Destructive",
+        "provenance": {
+          "proposedBy": "Proposed by <agent>{{agent}}</agent>",
+          "anAgent": "an agent",
+          "whileRunning": "while running <link>{{issue}}</link>",
+          "appliesTo": " · applies to ",
+          "viewRun": "view run"
+        },
+        "stale": {
+          "titleOne": "{{count}} target changed since this was proposed",
+          "titleMany": "{{count}} targets changed since this was proposed",
+          "changed": "changed",
+          "optionsDisabled": "Options that require an unchanged target are disabled below."
+        },
+        "blockedStale": "Blocked · stale",
+        "cancelTree": {
+          "title": "This cancels an entire issue tree",
+          "willCancelOne": "{{count}} issue will be cancelled:",
+          "willCancelMany": "{{count}} issues will be cancelled:",
+          "willCancelAll": "This issue and every sub-issue beneath it will be cancelled.",
+          "typeToConfirm": "Type <token>{{token}}</token> to confirm.",
+          "confirmAria": "Type the issue identifier to confirm",
+          "cancelOne": "Cancel {{count}} issue",
+          "cancelMany": "Cancel {{count}} issues",
+          "cancelTree": "Cancel tree"
+        },
+        "notNow": "Not now?",
+        "dismissNoEffects": "Dismiss — no effects",
+        "expired": {
+          "title": "The decision window closed",
+          "targetGone": "A target issue was cancelled before this was decided.",
+          "targetCompleted": "All target issues were completed before this was decided.",
+          "noResponse": "No response before the expiry deadline.",
+          "proposerRewoken": " The proposer was re-woken."
+        },
+        "withdrawn": "This decision was withdrawn by the proposer before a response.",
+        "dismissedNoEffects": "Dismissed — no effects were run.",
+        "partialWarning": "Some effects may already have been applied. Review the results before asking the proposer to re-propose."
+      },
+      "decisionDateChips": {
+        "from": "From",
+        "to": "To"
+      },
+      "decisionQueueRail": {
+        "ariaLabel": "Decision queues",
+        "recentActivity": "Recent activity"
+      },
+      "decisionResolver": {
+        "loading": "Loading decision…",
+        "unavailable": "This decision is no longer available — it may have been resolved elsewhere."
+      },
+      "decisionShelf": {
+        "keptToast": "Kept on desk",
+        "keepFailed": "Could not keep this decision",
+        "idleOneDay": "Idle {{count}} day",
+        "idleDays": "Idle {{count}} days",
+        "kept": "Kept",
+        "keepOnDesk": "Keep on desk"
+      },
+      "decisionTriageStrip": {
+        "snoozeTomorrow": "Tomorrow",
+        "expiresInMinutes": "Expires in {{count}}m",
+        "expiresInHours": "Expires in {{count}}h",
+        "expiresInDays": "Expires in {{count}}d",
+        "failed": {
+          "setDecideBy": "Could not set when to decide",
+          "snooze": "Could not snooze",
+          "addToQueue": "Could not add to queue",
+          "removeFromQueue": "Could not remove from queue",
+          "askAgent": "Could not ask that agent for a recommendation",
+          "createQueue": "Could not create queue"
+        },
+        "noLinkedTaskError": "This decision has no linked task to route from.",
+        "askedToast": "Asked {{name}} for a recommendation",
+        "whenToDecide": "When to decide",
+        "pickDate": "Pick date",
+        "queues": "Queues",
+        "removeFrom": "Remove from {{title}}",
+        "snoozedUntil": "Snoozed until {{time}}",
+        "noLinkedTask": "No linked task to ask about",
+        "queue": "Queue",
+        "newQueueName": "New queue name…",
+        "noOtherQueues": "No other queues yet.",
+        "newQueue": "New queue…",
+        "askAgent": "Ask agent for recommendation"
+      },
+      "decisionsToolbar": {
+        "oneDecision": "{{count}} decision",
+        "manyDecisions": "{{count}} decisions",
+        "severity": "Severity",
+        "workspace": "Workspace",
+        "noWorkspace": "No workspace"
+      },
+      "documentAnnotationLayer": {
+        "openThread": "Open annotation thread",
+        "anchorMoved": "Anchor moved — needs review",
+        "selectionActions": "Selection actions",
+        "addCommentOnSelection": "Add comment on selection (⌘⇧M)"
+      },
+      "documentAnnotationPanel": {
+        "sheetTitle": "Comments on {{key}} revision {{revision}}",
+        "ariaLabel": "Annotations for {{key}}, revision {{revision}}",
+        "rev": "rev {{revision}}",
+        "close": "Close annotation panel",
+        "writeComment": "Write a comment…",
+        "posting": "Posting…",
+        "replyPlaceholder": "Reply…",
+        "reopen": "Reopen",
+        "resolve": "Resolve",
+        "sending": "Sending…",
+        "reply": "Reply",
+        "moreThreadActions": "More thread actions",
+        "oneComment": "{{count}} comment",
+        "manyComments": "{{count}} comments",
+        "agentSuffix": "· agent",
+        "linkCopied": "Link copied"
+      },
+      "documentAnnotationPopover": {
+        "addComment": "Add annotation comment",
+        "thread": "Annotation thread"
+      },
+      "documentDiffModal": {
+        "actor": {
+          "board": "board",
+          "agent": "agent",
+          "system": "system"
+        },
+        "revisionLabel": "rev {{revision}} — {{time}} • {{actor}}",
+        "title": "Diff — <key>{{key}}</key>",
+        "old": "Old",
+        "new": "New",
+        "selectRevision": "Select revision",
+        "loadingRevisions": "Loading revisions...",
+        "selectTwo": "Select two revisions to compare.",
+        "sameRevision": "Both sides are the same revision.",
+        "content": "Content"
+      },
+      "documentFrameHeader": {
+        "expand": "Expand {{key}} document",
+        "collapse": "Collapse {{key}} document",
+        "revisionHistory": "Revision history",
+        "noRevisions": "No revisions yet",
+        "updated": "updated {{time}}"
+      },
+      "issueAssignedBacklogNotice": {
+        "theAssignee": "the assignee",
+        "parked": "<strong>Parked</strong> — <strong>{{assignee}}</strong> will not be asked to work on this until status changes to To do or In progress.",
+        "commentsNotify": "Comments still notify the assignee for questions or triage. Leave this parked only if the work is intentionally on hold.",
+        "resumeNow": "Resume now"
+      },
+      "issueAttachmentsSection": {
+        "browseGallery": "Browse gallery",
+        "browseInGallery": "Browse {{filename}} in gallery",
+        "openInNewTab": "Open in new tab",
+        "openFile": "Open {{filename}}",
+        "downloadFile": "Download {{filename}}",
+        "deleteAttachment": "Delete attachment",
+        "meta": "Attachment · {{contentType}} · {{size}}",
+        "loadingPreview": "Loading preview...",
+        "previewFailed": "Could not load markdown preview.",
+        "title": "Attachments",
+        "altFallback": "attachment",
+        "deleteQuestion": "Delete?",
+        "deleteConfirm": "Delete this attachment? This cannot be undone.",
+        "deleting": "Deleting..."
+      },
+      "issueBlockedNotice": {
+        "recoveryTitleDetail": "{{label}} — {{detail}}. Open the source task to act.",
+        "recoveryTitle": "{{label}} — open the source task to act.",
+        "nextStep": {
+          "dueNow": "Paperclip will ask the assignee to choose the next step due now. Retry now starts that follow-up immediately.",
+          "scheduledRelative": "Paperclip will ask the assignee to choose the next step scheduled {{relative}}. Retry now starts that follow-up immediately.",
+          "scheduled": "Paperclip will ask the assignee to choose the next step scheduled. Retry now starts that follow-up immediately."
+        },
+        "retrying": "Retrying...",
+        "alreadyPromoted": "Already promoted",
+        "promoted": "Promoted",
+        "retryNow": "Retry now",
+        "statusTitle": "{{status}} status",
+        "inFlight": "A correction run is in progress — the agent is working. This alert returns if the run stops without choosing a next step.",
+        "runId": "run {{id}}",
+        "live": {
+          "title": "Waiting on live work",
+          "queuedOne": "Queued behind {{count}} task being worked in order. This task resumes automatically when the chain is done. Comments still notify the assignee.",
+          "queuedMany": "Queued behind {{count}} tasks being worked in order. This task resumes automatically when the chain is done. Comments still notify the assignee.",
+          "progressRunning": "{{done}} of {{total}} done · {{running}} running",
+          "progress": "{{done}} of {{total}} done",
+          "progressAria": "Blocker chain progress",
+          "thisTask": "This task — resumes automatically when the chain is done",
+          "nowRunning": "Now running"
+        },
+        "blockedByParked": "Blocked by parked work",
+        "theAssignee": "the assignee",
+        "handoff": {
+          "title": "This task still needs a next step.",
+          "body": "A run finished successfully, but the task is still open. Paperclip needs someone to choose what happens next.",
+          "markDone": "Mark it done or cancelled.",
+          "sendReview": "Send it for review or ask for input.",
+          "recordBlocker": "Record what is blocking it and who owns that blocker.",
+          "delegate": "Delegate follow-up work or queue a continuation.",
+          "asked": "Asked {{name}} to choose the next step",
+          "detectedProgress": "Detected progress: {{summary}}"
+        },
+        "blocked": {
+          "stalledReviewsOne": "Work on this task is blocked by the linked task, but the chain is stalled in review without a clear next step. Resolve the stalled reviews below or remove them as blockers.",
+          "stalledReviewsMany": "Work on this task is blocked by the linked tasks, but the chain is stalled in review without a clear next step. Resolve the stalled reviews below or remove them as blockers.",
+          "stalledReviewOne": "Work on this task is blocked by the linked task, but the chain is stalled in review without a clear next step. Resolve the stalled review below or remove it as a blocker.",
+          "stalledReviewMany": "Work on this task is blocked by the linked tasks, but the chain is stalled in review without a clear next step. Resolve the stalled review below or remove it as a blocker.",
+          "reopenSuppressedOne": "A message won’t restart this task yet — it stays blocked by the linked task until it is done, then it reopens automatically. Comments still notify {{name}} for questions or triage in the meantime.",
+          "reopenSuppressedMany": "A message won’t restart this task yet — it stays blocked by the linked tasks until they are done, then it reopens automatically. Comments still notify {{name}} for questions or triage in the meantime.",
+          "untilCompleteOne": "Work on this task is blocked by the linked task until it is complete. Comments still notify the assignee for questions or triage.",
+          "untilCompleteMany": "Work on this task is blocked by the linked tasks until they are complete. Comments still notify the assignee for questions or triage.",
+          "untilMovedBack": "Work on this task is blocked until someone moves it back to To do. Comments still notify the assignee for questions or triage."
+        },
+        "stillBlocked": {
+          "base": "Still blocked by <id>{{id}}</id>.",
+          "status": "Still blocked by <id>{{id}}</id> ({{status}}).",
+          "otherOne": "Still blocked by <id>{{id}}</id> and {{count}} other task.",
+          "otherMany": "Still blocked by <id>{{id}}</id> and {{count}} other tasks.",
+          "statusOtherOne": "Still blocked by <id>{{id}}</id> ({{status}}) and {{count}} other task.",
+          "statusOtherMany": "Still blocked by <id>{{id}}</id> ({{status}}) and {{count}} other tasks."
+        },
+        "stalledInReview": "Stalled in review",
+        "ultimatelyWaitingOn": "Ultimately waiting on"
+      },
+      "issueContinuationHandoff": {
+        "title": "Continuation handoff",
+        "collapse": "Collapse continuation handoff",
+        "expand": "Expand continuation handoff",
+        "badge": "handoff",
+        "updatedRevision": "Updated {{time}} - revision {{revision}}",
+        "updated": "Updated {{time}}"
+      },
+      "issueDocumentAnnotations": {
+        "disabled": {
+          "historical": "New comments are disabled while previewing a historical revision.",
+          "conflict": "Resolve the document conflict before adding new comments.",
+          "dirty": "Save the draft to anchor new comments.",
+          "noRevision": "Document has no saved revision yet."
+        },
+        "openComments": "Open comments on {{key}}",
+        "openUnresolved": "Open {{count}} unresolved comments on {{key}}",
+        "commentOne": "comment",
+        "commentMany": "comments"
+      },
+      "issueDocumentsSection": {
+        "errors": {
+          "deleteUnavailable": "Document deletion is not available",
+          "deleteFailed": "Failed to delete document",
+          "restoreUnavailable": "Document revision restore is not available",
+          "restoreFailed": "Failed to restore document revision",
+          "lockUnavailable": "Document locking is not available",
+          "lockFailed": "Failed to update document lock",
+          "keyHint": "Use lowercase letters, numbers, -, or _, and start with a letter or number.",
+          "keyAndBodyRequired": "Document key and body are required",
+          "bodyEmpty": "Document body cannot be empty",
+          "keyInvalid": "Document key must start with a letter or number and use only lowercase letters, numbers, -, or _.",
+          "locked": "Document is locked. Unlock it before editing.",
+          "remoteLoadFailed": "Document changed remotely and the latest version could not be loaded",
+          "saveFailed": "Failed to save document",
+          "copyFailed": "Could not copy document",
+          "saveBeforeHistory": "Save or cancel your local changes before viewing an older revision.",
+          "saveBeforeLock": "Save or cancel local changes before changing the document lock."
+        },
+        "newDocument": "New document",
+        "keyPlaceholder": "Document key",
+        "optionalTitle": "Optional title",
+        "markdownBody": "Markdown body",
+        "saving": "Saving...",
+        "createDocument": "Create document",
+        "unlock": "Unlock document",
+        "lock": "Lock document",
+        "unlockKey": "Unlock {{key}} document",
+        "lockKey": "Lock {{key}} document",
+        "locked": "Locked document",
+        "copyDocument": "Copy document",
+        "actions": "Document actions",
+        "editDocument": "Edit document",
+        "downloadDocument": "Download document",
+        "viewDiff": "View diff",
+        "deleteDocument": "Delete document",
+        "viewingRevision": "Viewing revision {{revision}}",
+        "historicalNote": "This is a historical preview. Restoring it creates a new latest revision and keeps history append-only.",
+        "returnToLatest": "Return to latest",
+        "restoring": "Restoring...",
+        "restoreRevision": "Restore this revision",
+        "outOfDate": "Out of date",
+        "conflictNote": "This document changed while you were editing. Your local draft is preserved and autosave is paused.",
+        "hideRemote": "Hide remote",
+        "reviewRemote": "Review remote",
+        "keepDraft": "Keep my draft",
+        "reloadRemote": "Reload remote",
+        "overwriteRemote": "Overwrite remote",
+        "remoteRevision": "Remote revision {{revision}}",
+        "viewingHistorical": "Viewing historical revision",
+        "autosaving": "Autosaving...",
+        "couldNotSave": "Could not save",
+        "deleteConfirm": "Delete this document? This cannot be undone.",
+        "planBadge": "PLAN"
+      },
+      "issueLinkQuicklook": {
+        "loadFailed": "Unable to load task preview."
+      },
+      "issueMonitorBanner": {
+        "waitingForWorkspace": "Waiting for workspace",
+        "workspaceBusyBanner": "Another task is using this workspace. Work starts automatically when it is available.",
+        "workspaceBusyStrip": "Work starts automatically when the workspace is available.",
+        "agentResumes": "Agent resumes {{eta}}",
+        "monitorResumes": "Waiting on monitor — resumes {{eta}}",
+        "resumes": "Resumes {{eta}}",
+        "agentRetryDueNow": "Agent retry due now",
+        "monitorDueNow": "Waiting on monitor — due now",
+        "dueNow": "Due now",
+        "checkingMomentarily": "Checking momentarily…",
+        "agentRetryEta": "Agent retry {{eta}}",
+        "monitorEta": "Waiting on monitor — {{eta}}",
+        "firesNextTick": "Fires on next tick",
+        "attempt": "Attempt {{count}}",
+        "watching": "Watching: {{name}}",
+        "yourTime": "{{time}} (your time)",
+        "checkNow": "Check now",
+        "keepSending": "You can keep sending instructions while the agent waits.",
+        "replyWakes": "Sending a reply wakes the agent now — before the scheduled check."
+      },
+      "issuePlanDecompositionsSection": {
+        "inFlight": "In flight",
+        "title": "Plan decomposition",
+        "oneAccepted": "1 accepted plan revision",
+        "manyAccepted": "{{count}} accepted plan revisions",
+        "agentFallback": "agent",
+        "planRevision": "Plan revision {{revision}}",
+        "childCreatedOne": "{{created}} of {{requested}} child task created",
+        "childCreatedMany": "{{created}} of {{requested}} child tasks created",
+        "idempotentTitle": "Repeat attempts with this fingerprint reuse this record instead of creating new children",
+        "idempotentClaim": "Idempotent claim",
+        "owner": "Owner: {{name}}",
+        "started": "Started {{time}}",
+        "completed": "Completed {{time}}",
+        "updated": "Updated {{time}}",
+        "planDocument": "Plan document"
+      },
+      "issueRecoveryActionCard": {
+        "kind": {
+          "missingDisposition": "Missing Disposition",
+          "waitWithoutTarget": "Wait Without A Target",
+          "strandedTask": "Stranded Task",
+          "workspaceValidation": "Workspace Validation",
+          "configurationValidation": "Configuration Validation",
+          "activeWatchdog": "Active Watchdog",
+          "taskNeedsNextStep": "Task Needs Next Step"
+        },
+        "headline": {
+          "missingDisposition": "This task's run finished, but no next step was chosen. Choose what happens next — try the task again, mark it done, or send it for review.",
+          "waitWithoutTarget": "This task's last run stopped to wait, but there is no reviewer, blocker, monitor, or approval to wait for. Paperclip is repairing the next step; the task stays with its owner.",
+          "strandedTask": "Paperclip retried this task's last run, but there is still no queued run, reviewer, blocker, or other next owner. To get it moving, choose what happens next — try the task again, mark it done, or send it for review.",
+          "workspaceValidation": "Paperclip stopped this run because the task's git workspace could not be validated.",
+          "configurationValidation": "Paperclip stopped before dispatching this run because required secret/env bindings are missing.",
+          "activeWatchdog": "The active run has been silent. Recovery is observing without interrupting it.",
+          "taskNeedsNextStep": "Paperclip could not find a clear next step for this open task. Choose whether to continue work, send it for review, mark it done, or record what is blocking it."
+        },
+        "state": {
+          "needed": "RECOVERY NEEDED",
+          "inProgress": "RECOVERY IN PROGRESS",
+          "observeOnly": "OBSERVING ACTIVE RUN",
+          "escalated": "RECOVERY ESCALATED",
+          "resolved": "RECOVERY RESOLVED"
+        },
+        "outcome": {
+          "restored": "restored",
+          "handedBack": "handed back to original owner",
+          "ownerCompleted": "completed by recovery owner",
+          "delegated": "delegated to follow-up",
+          "falsePositive": "false positive",
+          "escalated": "escalated"
+        },
+        "ancestry": {
+          "ancestor": "Forward-only",
+          "diverged": "Diverged",
+          "unknown": "Ancestry unknown"
+        },
+        "branch": {
+          "detachedUnknown": "detached / unknown",
+          "expectedRecorded": "Expected · recorded",
+          "liveCheckedOut": "Live · checked out",
+          "recordedExpected": "Recorded · expected",
+          "detached": "detached"
+        },
+        "divergence": {
+          "title": "Divergence diagnosis"
+        },
+        "contention": {
+          "activeRun": "Worktree claimed by <code>{{label}}</code> (active run) — the lossless repair can't run while another workspace holds the live branch.",
+          "claimHeld": "Worktree claimed by <code>{{label}}</code> (claim held) — the lossless repair can't run while another workspace holds the live branch.",
+          "issueFallback": "issue {{id}}",
+          "anotherTask": "another task"
+        },
+        "breakGlass": {
+          "trigger": "I've verified this — reconcile anyway",
+          "title": "Break-glass reconciliation",
+          "body": "This overrides Paperclip's safety check and points the recorded workspace at the live branch <strong>without an ancestry proof</strong>. Confirm the divergence below and record why before continuing.",
+          "verdict": "Ancestry verdict",
+          "reason": "Reason <hint>(required — recorded in the audit log)</hint>",
+          "placeholder": "e.g. Verified the live branch carries only the intended follow-up commits; safe to adopt.",
+          "reconciling": "Reconciling…",
+          "confirm": "Reconcile anyway (break-glass)"
+        },
+        "repair": {
+          "uncommitted": "Uncommitted changes",
+          "uncommittedOne": "{{count}} uncommitted change",
+          "uncommittedMany": "{{count}} uncommitted changes",
+          "trigger": "Repair workspace — quarantine changes & restore branch",
+          "title": "Repair workspace",
+          "body": "This is lossless — no reason required. Your uncommitted changes are committed onto a fresh rescue branch, then the recorded branch is restored so the task can resume. The live branch is left exactly as it is.",
+          "dirty": "Dirty changes",
+          "liveBranch": "Live branch",
+          "leftUntouched": "(left untouched)",
+          "rescueBranch": "Rescue branch",
+          "restoreTo": "Restore to",
+          "recordedBranch": "recorded branch",
+          "repairing": "Repairing…",
+          "confirm": "Quarantine changes & restore branch"
+        },
+        "wake": {
+          "wakeOwner": "An agent will be asked to choose the next step",
+          "ownerRepair": "Paperclip is retrying the original owner",
+          "recoveryOwner": "A recovery owner is repairing the next step",
+          "boardEscalation": "Board decision required",
+          "manual": "Manual follow-up needed",
+          "manualRepair": "Repair needed before retry",
+          "checkScheduledInterval": "Check scheduled · {{interval}}",
+          "checkScheduled": "Check scheduled",
+          "retryExpired": "The scheduled retry did not run — a retry or a decision is needed",
+          "retriesFinished": "Automatic retries are finished — a decision is needed"
+        },
+        "time": {
+          "inMinutes": "in {{count}}m",
+          "minutesAgo": "{{count}}m ago"
+        },
+        "agentFallback": "agent {{id}}",
+        "runChip": "run {{id}}",
+        "lineage": {
+          "retryExpired": "This task's automatic retry came due and did not run, so nothing is moving it forward right now. Someone must retry it or record the next step. The task stays with its original owner.",
+          "sourceExhausted": "This task's last run stopped to wait, but nothing was waiting for it. The original owner has used every automatic repair attempt, so the next step needs a decision. The task stays with its owner.",
+          "sourceRetrying": "This task's last run stopped to wait, but nothing was waiting for it. Paperclip is retrying the original owner to record a real next step. The task stays with its owner, and no action is needed yet.",
+          "recoveryOwner": "The original owner could not record a next step within its retry budget. A recovery owner is now repairing the path only — the task itself still belongs to its original owner.",
+          "board": "Automatic recovery is exhausted, so the board must choose the next step. The task itself still belongs to its original owner."
+        },
+        "resolve": {
+          "tryAgain": {
+            "description": "Dismiss recovery and return the source task to todo."
+          },
+          "markDone": {
+            "label": "Mark task done",
+            "description": "Restore by recording the requested work as complete."
+          },
+          "sendReview": {
+            "label": "Send for review",
+            "description": "Hand off to a reviewer with a real review path."
+          },
+          "falsePositiveDone": {
+            "label": "False positive, done",
+            "description": "Dismiss recovery and mark the source task complete."
+          },
+          "falsePositiveReview": {
+            "label": "False positive, review",
+            "description": "Dismiss recovery and send the source task for review."
+          }
+        },
+        "resolvedHeadline": "Recovery resolved as {{outcome}}.",
+        "humanDecision": "This recovery needs a human decision. Review the recorded failure and choose the next step.",
+        "aria": {
+          "needed": "Recovery action: needed",
+          "inProgress": "Recovery action: in progress",
+          "observeOnly": "Recovery action: observing active run",
+          "escalated": "Recovery action: escalated",
+          "resolved": "Recovery action: resolved"
+        },
+        "heldByReissue": "Held by {{label}} — re-issue on an isolated workspace instead.",
+        "heldBy": "Held by {{label}}.",
+        "meta": {
+          "taskOwner": "Task owner",
+          "recoveryOwner": "Recovery owner",
+          "retryProgress": "Retry progress",
+          "ownerRetries": "Owner retries",
+          "owner": "Owner",
+          "sourceRun": "Source run",
+          "correctiveRun": "Corrective run",
+          "evidence": "Evidence",
+          "nextAction": "Next action",
+          "followUp": "Follow-up",
+          "resolution": "Resolution"
+        },
+        "unassigned": "unassigned",
+        "keepsTask": "keeps this task",
+        "originalRetrying": "Original owner — retrying itself",
+        "repairsNextStep": "repairs the next step only",
+        "decidesNextStep": "decides the next step only",
+        "userFallback": "user {{id}}",
+        "unassignedPick": "unassigned — pick one to wake them",
+        "attemptsUnbounded": "Attempts not bounded",
+        "attemptRunning": "Attempt running now",
+        "retryMissedAt": "Retry missed {{offset}}",
+        "retryMissed": "Retry missed",
+        "nextTryNow": "Next try now",
+        "nextTryAt": "Next try {{offset}}",
+        "retriesUsedUp": "Automatic retries used up",
+        "ownerUsed": "The original owner used {{used}} of {{max}} automatic attempts.",
+        "recoveryPrefix": "Recovery:",
+        "returnsTo": "→ Returns to:",
+        "attemptOf": "attempt {{count}} of {{max}}",
+        "timesOut": "Times out {{time}}",
+        "soon": "soon",
+        "resolvedAsAt": "Resolved as {{outcome}} · {{time}}",
+        "resolvedAs": "Resolved as {{outcome}}",
+        "resolveRecovery": "Resolve recovery",
+        "resolveEllipsis": "Resolve…",
+        "reconcileForward": "Reconcile forward & continue",
+        "reissue": {
+          "title": "Re-issue on isolated workspace",
+          "recommended": "Recommended",
+          "body": "Creates a fresh copy of this task on an isolated git worktree based on the live branch. Your current workspace and its commits are left untouched.",
+          "baseRef": "Base ref",
+          "recorded": "Recorded",
+          "ancestry": "Ancestry",
+          "confirm": "Create isolated re-issue"
+        },
+        "footer": {
+          "observing": "Recovery is observing without interrupting the live run.",
+          "staysOpen": "The card stays open until an explicit decision is recorded."
+        }
+      },
+      "issueReferencePill": {
+        "taskAria": "Task {{label}}: {{title}}",
+        "removeBlocker": "Remove {{label}} as blocker",
+        "taskTitleAria": "Task: {{title}}"
+      },
+      "issueRelatedWorkPanel": {
+        "external": {
+          "title": "External objects",
+          "description": "Remote work referenced from this issue — pull requests, deployments, tickets in other systems, and more.",
+          "loadFailed": "Couldn't load external objects.",
+          "loading": "Loading external objects…",
+          "empty": "This issue does not reference any external objects yet."
+        },
+        "references": {
+          "title": "References",
+          "description": "Other tasks this task currently points at in its title, description, comments, or documents.",
+          "empty": "This task does not reference any other tasks yet."
+        },
+        "referencedBy": {
+          "title": "Referenced by",
+          "description": "Other tasks that currently point at this task.",
+          "empty": "No other tasks reference this task yet."
+        }
+      },
+      "issueRow": {
+        "openSr": "Open {{identifier}}: {{title}}"
+      },
+      "issueRunLedger": {
+        "liveness": {
+          "completed": {
+            "description": "Task reached a terminal state."
+          },
+          "advanced": {
+            "label": "Advanced",
+            "description": "Run produced concrete evidence of progress."
+          },
+          "planOnly": {
+            "label": "Plan only",
+            "description": "Run described future work without concrete action evidence."
+          },
+          "emptyResponse": {
+            "label": "Empty response",
+            "description": "Run finished without useful output."
+          },
+          "blocked": {
+            "description": "Run or task declared a blocker."
+          },
+          "failed": {
+            "description": "Run ended unsuccessfully."
+          },
+          "needsFollowup": {
+            "label": "Needs follow-up",
+            "description": "Run produced useful output but did not prove concrete progress."
+          },
+          "pending": {
+            "label": "Checks after finish",
+            "description": "Liveness is evaluated after the run finishes."
+          },
+          "retryPending": {
+            "description": "Paperclip queued an automatic retry that has not started yet."
+          },
+          "missing": {
+            "label": "No liveness data",
+            "description": "This run has no persisted liveness classification."
+          }
+        },
+        "retryPending": "Retry pending",
+        "silence": {
+          "suspicious": "Output silence",
+          "critical": "Critical silence",
+          "snoozed": "Silence snoozed",
+          "criticalTitle": "Critical output silence",
+          "warningTitle": "Output silence watchdog warning",
+          "silentForReview": "Latest active run has been silent for {{age}}. Review <link>{{identifier}}</link> for recovery context.",
+          "silentFor": "Latest active run has been silent for {{age}}.",
+          "extendedPeriod": "an extended period",
+          "infoDelegated": "This signal is informational. Paperclip did not create new delegated recovery work.",
+          "infoNoTask": "This signal is informational. Paperclip did not create or assign a recovery task."
+        },
+        "summary": {
+          "running": "Running now by {{name}}",
+          "queued": "Queued for {{name}}",
+          "scheduledRetry": "Automatic retry scheduled for {{name}}",
+          "statusBy": "{{status}} by {{name}}"
+        },
+        "stop": {
+          "timeoutSeconds": "{{seconds}}s timeout",
+          "timeoutWith": "timeout ({{timeout}})",
+          "timeout": "timeout",
+          "maxTurns": "max turns exhausted",
+          "budgetPaused": "budget paused",
+          "pausedByBoard": "paused by board",
+          "processLost": "process lost",
+          "unmanagedStopped": "unmanaged background task stopped",
+          "adapterFailed": "adapter failed",
+          "completedWith": "completed ({{timeout}})"
+        },
+        "stopStatus": {
+          "waitingToStart": "Waiting to start",
+          "stillRunning": "Still running",
+          "none": "No stop reason"
+        },
+        "lastAction": {
+          "waitingNext": "Waiting for next attempt",
+          "noneYet": "No action recorded yet",
+          "noConcrete": "No concrete action",
+          "noUseful": "No useful output",
+          "noneRecorded": "None recorded"
+        },
+        "continuationAttempt": "Continuation attempt {{count}}",
+        "age": {
+          "underMinute": "under 1 minute",
+          "minuteOne": "{{count}} minute",
+          "minutes": "{{count}} minutes",
+          "hourOne": "{{count}} hour",
+          "hours": "{{count}} hours"
+        },
+        "watchdog": {
+          "forbidden": "Only the board or the assigned recovery owner can record watchdog decisions",
+          "failed": "Paperclip could not record the watchdog decision.",
+          "toastTitle": "Watchdog decision not recorded",
+          "continue": "Continue monitoring",
+          "snooze": "Snooze 1h",
+          "falsePositive": "Mark false positive"
+        },
+        "trace": {
+          "skipped": "Trace re-run was skipped.",
+          "notStarted": "Trace re-run not started",
+          "failed": "Paperclip could not start the trace re-run."
+        },
+        "ariaLabel": "Task run ledger",
+        "title": "Run ledger",
+        "waitingFirst": "Waiting for the first run record.",
+        "noRuns": "No runs linked yet.",
+        "latestRun": "Latest run",
+        "childWork": "Child work",
+        "children": {
+          "active": "{{active}} active, {{done}} done, {{cancelled}} cancelled",
+          "terminal": "all {{total}} terminal ({{done}} done, {{cancelled}} cancelled)"
+        },
+        "moreChildren": "+{{count}} more",
+        "empty": {
+          "withActivity": "Runs and activity will appear here once this task has history.",
+          "runsOnly": "Historical runs without liveness metadata will appear here once linked to this task."
+        },
+        "byAgent": "by {{name}}",
+        "actingOnBehalf": "Acting on behalf of {{name}}",
+        "onBehalfOf": "on behalf of <name>{{name}}</name>",
+        "live": "live",
+        "exhausted": "Exhausted",
+        "inspectRun": "Inspect run",
+        "elapsed": "Elapsed",
+        "unknown": "unknown",
+        "lastUsefulAction": "Last useful action",
+        "stopLabel": "Stop",
+        "retryOf": "Retry of <link>{{id}}</link>",
+        "nextAction": "Next action:",
+        "olderHidden": "{{count}} older items not shown"
+      },
+      "issueScheduledRetryCard": {
+        "retryScheduled": "Retry scheduled",
+        "title": {
+          "continuationDueNow": "Automatic continuation due now",
+          "retryDueNow": "Automatic retry due now",
+          "continuationRelative": "Automatic continuation {{relative}}",
+          "retryRelative": "Automatic retry {{relative}}",
+          "continuationPending": "Automatic continuation pending schedule",
+          "retryPending": "Automatic retry pending schedule"
+        },
+        "pullsRetryForward": "Pulls retry forward immediately",
+        "replacesRun": "Replaces run <link>{{id}}</link>",
+        "lastAttemptFailed": "Last attempt failed: {{error}}. Paperclip will retry automatically.",
+        "promoting": "Promoting scheduled retry",
+        "alreadyPromotedStarting": "Already promoted — run starting",
+        "promotedStarting": "Promoted — run starting",
+        "retryFailed": "Couldn't retry now"
+      },
+      "issueSiblingNavigation": {
+        "ariaLabel": "Sub-task navigation",
+        "previous": "Previous",
+        "previousAria": "Previous sub-task: {{identifier}} - {{title}}",
+        "nextAria": "Next sub-task: {{identifier}} - {{title}}",
+        "next": "Next"
+      },
+      "issueThreadInteractionCard": {
+        "status": {
+          "pending": "Pending",
+          "accepted": "Accepted",
+          "rejected": "Rejected",
+          "answered": "Answered"
+        },
+        "kind": {
+          "suggestTasks": "Suggested tasks",
+          "askUserQuestions": "Ask user questions",
+          "requestConfirmation": "Confirmation",
+          "checkboxConfirmation": "Checkbox confirmation",
+          "itemVerdicts": "Item verdicts",
+          "connectionIntent": "Connection request"
+        },
+        "plan": {
+          "approvedResumeFailed": "Approved — agent resume failed",
+          "approved": "Approved",
+          "changesRequested": "Changes requested",
+          "inReview": "In review",
+          "label": "Plan"
+        },
+        "withdrawn": "Withdrawn",
+        "tool": {
+          "running": "Running…",
+          "executed": "Executed",
+          "awaitingApproval": "Awaiting approval",
+          "waitingApproval": "Waiting for approval",
+          "approvedRunning": "Approved · Running…",
+          "succeeded": "Succeeded",
+          "executionFailed": "Execution failed",
+          "couldNotComplete": "The action could not complete.",
+          "alwaysAllowedSuffix": " · Always allowed",
+          "hideResult": "Hide result details",
+          "showResult": "Show result details",
+          "viewResult": "View result",
+          "declining": "Declining…",
+          "approveRequest": "Approve request",
+          "approveRun": "Approve & run",
+          "approvalOptions": "Approval options",
+          "alwaysAllow": "Always allow"
+        },
+        "taskField": "{{label}}: {{value}}",
+        "tasks": {
+          "include": "Include {{title}}",
+          "childTask": "Child task",
+          "skipped": "Skipped",
+          "billing": "Billing",
+          "hiddenOne": "1 follow-on task hidden in preview",
+          "hiddenMany": "{{count}} follow-on tasks hidden in preview",
+          "oneDraft": "1 draft issue",
+          "manyDrafts": "{{count}} draft issues",
+          "defaultParent": "Default parent",
+          "resolutionSummary": "Resolution summary",
+          "createdSkippedOne": "Created {{created}} draft issue and skipped {{skipped}} during review.",
+          "createdSkippedMany": "Created {{created}} draft issues and skipped {{skipped}} during review.",
+          "createdAllOne": "Created all {{count}} draft issue.",
+          "createdAllMany": "Created all {{count}} draft issues.",
+          "rejectionReason": "Rejection reason",
+          "noReason": "No reason provided.",
+          "allSelectedOne": "All {{count}} draft issue selected",
+          "allSelectedMany": "All {{count}} draft issues selected",
+          "someSelectedOne": "{{selected}} of {{total}} draft issue selected",
+          "someSelectedMany": "{{selected}} of {{total}} draft issues selected",
+          "willSkip": "{{count}} will be skipped if you accept this interaction.",
+          "accepting": "Accepting...",
+          "acceptDrafts": "Accept drafts",
+          "acceptSelected": "Accept selected drafts",
+          "resetSelection": "Reset selection",
+          "rejectPlaceholder": "Add a short reason for rejecting this suggestion",
+          "saveRejection": "Save rejection"
+        },
+        "savingAscii": "Saving...",
+        "questions": {
+          "one": "1 question",
+          "many": "{{count}} questions",
+          "number": "Question {{number}}",
+          "pick": "Pick",
+          "pickMany": "Pick many",
+          "required": "Required",
+          "describeAnswer": "Describe your answer for {{prompt}}",
+          "typeAnswer": "Type your answer",
+          "other": "Other",
+          "otherAnswer": "Other answer for {{prompt}}",
+          "submitOnce": "Submit once after you finish the full form.",
+          "cancelling": "Cancelling...",
+          "cancel": "Cancel question",
+          "submitting": "Submitting...",
+          "submit": "Submit answers",
+          "withdrawnOne": "Question withdrawn",
+          "withdrawnMany": "Questions withdrawn",
+          "cancelled": "Question cancelled",
+          "noAnswerWasRecorded": "No answer was recorded.",
+          "expiredClosedOne": "Question expired when the issue closed",
+          "expiredClosedMany": "Questions expired when the issue closed",
+          "expiredCommentOne": "Question expired by comment",
+          "expiredCommentMany": "Questions expired by comment",
+          "expiredClosedBody": "This question request expired automatically when the issue reached a terminal state.",
+          "expiredCommentBody": "A later board/user comment superseded this question request. Create a fresh request if answers are still needed.",
+          "answer": "Answer",
+          "noAnswerRecorded": "No answer recorded.",
+          "submittedSummary": "Submitted summary"
+        },
+        "jumpToComment": "Jump to comment",
+        "planTarget": "Plan{{revision}}",
+        "confirmed": "Confirmed",
+        "resume": {
+          "failed": "Agent resume failed",
+          "retrying": "Paperclip is retrying the agent resume after approval (attempt {{attempt}}/{{max}}).",
+          "needsAttention": "Paperclip needs attention before the agent can resume this approved work.",
+          "latestCause": "Latest cause: <code>{{code}}</code>"
+        },
+        "confirm": {
+          "expiredByComment": "Expired by comment",
+          "expiredByTarget": "Expired by target change",
+          "expiredCommentBody": "A board comment superseded this confirmation before it was resolved.",
+          "expiredClosedBody": "This confirmation expired automatically when the issue reached a terminal state.",
+          "expiredTargetBody": "The requested target changed before this confirmation was resolved.",
+          "revise": "Revise…",
+          "noteRequired": "Add a note describing the changes you want.",
+          "sendRevision": "Send revision",
+          "tellAgent": "Optional: tell the agent what you'd change.",
+          "whatRevised": "Optional: what would you like revised?",
+          "uploadFailed": "Couldn't upload that image. Try again.",
+          "removeShot": "Remove {{name}}",
+          "uploading": "Uploading...",
+          "attachScreenshots": "Attach screenshots"
+        },
+        "unresolvable": "This request could not be resolved. Try again or create a new request.",
+        "approving": "Approving…",
+        "secret": {
+          "failedBadge": "FAILED",
+          "title": "Bind an existing secret",
+          "sourceSecret": "Source secret",
+          "targetAgent": "Target agent",
+          "configPath": "New config path",
+          "theBoard": "the board",
+          "approvedCreating": "Approved by {{who}} — creating the binding",
+          "rechecking": "Paperclip is re-checking authority and the proposal snapshot before writing.",
+          "created": "Binding created · approved by {{who}}",
+          "canUseAt": "The target agent can now use the proposed config path · {{when}}.",
+          "canUse": "The target agent can now use the proposed config path.",
+          "failedTitle": "FAILED · binding was not created",
+          "failedBody": "The request was accepted, but execution failed closed. No secret value was exposed.",
+          "errorCode": "Error code",
+          "rejectedBy": "Rejected by {{who}}",
+          "notCreated": "The binding was not created.",
+          "expiredAt": "Proposal expired · {{when}}",
+          "expired": "Proposal expired",
+          "expiredBody": "The binding was not created. A fresh proposal is required.",
+          "expires": "Expires {{time}}",
+          "approveBind": "Approve & bind",
+          "addReason": "Add reason…",
+          "reasonPlaceholder": "Optional: explain why this binding should not be created.",
+          "binding": "Secret binding"
+        },
+        "rejecting": "Rejecting…",
+        "connection": {
+          "actionRequired": "Action required",
+          "waitingFor": "Waiting for {{name}}",
+          "connected": "{{provider}} connected",
+          "expired": "Authorization expired",
+          "anAgent": "An agent",
+          "leadYou": "{{agent}} needs your {{provider}} identity for work running as you.",
+          "leadNeeded": "{{agent}} needed {{name}}'s {{provider}} identity for work running as them.",
+          "leadNeeds": "{{agent}} needs {{name}}'s {{provider}} identity for work running as them.",
+          "consent": "No one else can complete this step.",
+          "leadWithConsent": "{{lead}} {{consent}}",
+          "connect": "Connect {{provider}}",
+          "notNow": "Not now",
+          "linkUnavailable": "This authorization link is unavailable",
+          "askFresh": "Ask {{agent}} to send a fresh {{provider}} authorization link.",
+          "theAgent": "the agent",
+          "onlyAddressee": "Only {{name}} can connect their own {{provider}} account.",
+          "connectedByAt": "Connected by <name>{{name}}</name><chip></chip> on {{time}}",
+          "connectedBy": "Connected by <name>{{name}}</name><chip></chip>",
+          "youLower": "you",
+          "notConnectedHeadline": "{{provider}} was not connected",
+          "requestExpired": "This authorization request expired",
+          "askAgain": "{{agent}} can ask again with a new {{provider}} authorization link.",
+          "theAgentCap": "The agent"
+        },
+        "resolvedByAgentTooltip": "Resolved by an agent under the organization's interaction governance policy — audit-distinct from a human board resolution.",
+        "checkbox": {
+          "confirmedNone": "Confirmed with no options selected",
+          "confirmedOne": "Confirmed {{selected}} of {{total}} option",
+          "confirmedMany": "Confirmed {{selected}} of {{total}} options",
+          "selected": "Selected",
+          "showLess": "Show less",
+          "atLeastOne": "Select at least 1 option.",
+          "atLeastMany": "Select at least {{count}} options.",
+          "atMostOne": "Select at most 1 option.",
+          "atMostMany": "Select at most {{count}} options.",
+          "allSelected": "All {{count}} options selected",
+          "someSelectedOne": "{{selected}} of {{total}} option selected",
+          "someSelectedMany": "{{selected}} of {{total}} options selected",
+          "pickExactly": "Pick exactly {{count}}.",
+          "pickRange": "Pick {{min}}-{{max}}.",
+          "pickAtLeast": "Pick at least {{count}}.",
+          "selectAll": "Select all",
+          "clearSelection": "Clear selection",
+          "selectableOptions": "Selectable options"
+        },
+        "verdict": {
+          "defer": "Defer",
+          "approved": "Approved",
+          "rejected": "Rejected",
+          "deferred": "Deferred",
+          "choose": "Choose a verdict",
+          "approveItem": "Approve this item",
+          "rejectItem": "Reject this item",
+          "deferItem": "Defer this item",
+          "applyNone": "Apply 0 decisions",
+          "applyOne": "Apply {{count}} decision",
+          "applyMany": "Apply {{count}} decisions",
+          "expiredComment": "This review expired after a later comment.",
+          "expiredTarget": "This review expired after the target changed.",
+          "expired": "This review expired.",
+          "appliedOne": "1 item was already applied and cannot be reverted. Remaining items were cancelled.",
+          "appliedMany": "{{count}} items were already applied and cannot be reverted. Remaining items were cancelled.",
+          "itemsToReview": "Items to review",
+          "applying": "Applying…",
+          "notDecided": "Not decided",
+          "reasonPlaceholder": "Give the agent a reason so it can act on this item.",
+          "reasonRequiredApprove": "A reason is required to approve this item.",
+          "reasonRequiredReject": "A reason is required to reject this item.",
+          "reasonRequiredDefer": "A reason is required to defer this item.",
+          "summaryDeferred": "{{decided}} decided · {{approved}} approved · {{rejected}} rejected · {{deferred}} deferred",
+          "summary": "{{decided}} decided · {{approved}} approved · {{rejected}} rejected",
+          "draftsReadyOne": "{{count}} draft verdict ready to apply",
+          "draftsReadyMany": "{{count}} draft verdicts ready to apply",
+          "markThenApply": "Mark verdicts, then apply them in one pass.",
+          "approveAll": "Approve all",
+          "reasonNeeded": "Reason needed",
+          "progress": "{{decided}} of {{total}} decided"
+        },
+        "addressedPerson": "the addressed person",
+        "expiredIssueClosed": "Expired · issue closed",
+        "addressee": {
+          "for": "For {{name}}",
+          "tooltip": "Directed to {{name}}. Agent-addressed interactions are owned by that agent and are kept out of the open organization attention feed."
+        },
+        "title": {
+          "suggestedTree": "Suggested task tree",
+          "questionsOperator": "Questions for the operator",
+          "questionsAnswer": "Questions to answer",
+          "checkbox": "Checkbox confirmation requested",
+          "secret": "Secret binding requested",
+          "connect": "Connect your {{provider}} to continue",
+          "tool": "Tool approval requested",
+          "verdicts": "Review these items",
+          "plan": "Plan review",
+          "confirmation": "Confirmation requested"
+        },
+        "proposedBy": "proposed by {{name}}",
+        "createdAt": "Created {{time}}",
+        "footer": {
+          "withdrawnByOn": "Withdrawn by <name>{{name}}</name><chip></chip> on {{date}}",
+          "withdrawnBy": "Withdrawn by <name>{{name}}</name><chip></chip>",
+          "anAgent": "an agent",
+          "resolvedByOn": "Resolved by <name>{{name}}</name><chip></chip> on {{date}}",
+          "resolvedBy": "Resolved by <name>{{name}}</name><chip></chip>"
+        }
+      }
     }
   }
 }

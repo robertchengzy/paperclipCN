@@ -44,6 +44,8 @@ import {
   readRecoveryRetryLineage,
   type RecoveryRetryLineage,
 } from "@/lib/recovery-lineage";
+import { Trans } from "react-i18next";
+import { t, useTranslation } from "@/i18n";
 
 export type RecoveryCardCardState = RecoveryDisplayState;
 export const deriveRecoveryCardState = deriveRecoveryDisplayState;
@@ -129,39 +131,55 @@ export interface IssueRecoveryActionCardProps {
   className?: string;
 }
 
-const KIND_LABEL: Record<IssueRecoveryActionKind, string> = {
-  missing_disposition: "Missing Disposition",
-  deliberate_wait_without_target: "Wait Without A Target",
-  stranded_assigned_issue: "Stranded Task",
-  workspace_validation: "Workspace Validation",
-  configuration_validation: "Configuration Validation",
-  active_run_watchdog: "Active Watchdog",
-  issue_graph_liveness: "Task Needs Next Step",
-};
+/** Display label for a recovery kind, in the current UI language; unknown kinds show raw. */
+function kindLabel(kind: IssueRecoveryActionKind): string {
+  switch (kind) {
+    case "missing_disposition":
+      return t("app.issueUi.issueRecoveryActionCard.kind.missingDisposition");
+    case "deliberate_wait_without_target":
+      return t("app.issueUi.issueRecoveryActionCard.kind.waitWithoutTarget");
+    case "stranded_assigned_issue":
+      return t("app.issueUi.issueRecoveryActionCard.kind.strandedTask");
+    case "workspace_validation":
+      return t("app.issueUi.issueRecoveryActionCard.kind.workspaceValidation");
+    case "configuration_validation":
+      return t("app.issueUi.issueRecoveryActionCard.kind.configurationValidation");
+    case "active_run_watchdog":
+      return t("app.issueUi.issueRecoveryActionCard.kind.activeWatchdog");
+    case "issue_graph_liveness":
+      return t("app.issueUi.issueRecoveryActionCard.kind.taskNeedsNextStep");
+    default:
+      return kind;
+  }
+}
 
-const KIND_HEADLINE: Record<IssueRecoveryActionKind, string> = {
-  missing_disposition:
-    "This task's run finished, but no next step was chosen. Choose what happens next — try the task again, mark it done, or send it for review.",
-  deliberate_wait_without_target:
-    "This task's last run stopped to wait, but there is no reviewer, blocker, monitor, or approval to wait for. Paperclip is repairing the next step; the task stays with its owner.",
-  stranded_assigned_issue:
-    "Paperclip retried this task's last run, but there is still no queued run, reviewer, blocker, or other next owner. To get it moving, choose what happens next — try the task again, mark it done, or send it for review.",
-  workspace_validation:
-    "Paperclip stopped this run because the task's git workspace could not be validated.",
-  configuration_validation:
-    "Paperclip stopped before dispatching this run because required secret/env bindings are missing.",
-  active_run_watchdog:
-    "The active run has been silent. Recovery is observing without interrupting it.",
-  issue_graph_liveness:
-    "Paperclip could not find a clear next step for this open task. Choose whether to continue work, send it for review, mark it done, or record what is blocking it.",
-};
+/** Default headline for a recovery kind, in the current UI language. */
+function kindHeadline(kind: IssueRecoveryActionKind): string {
+  switch (kind) {
+    case "missing_disposition":
+      return t("app.issueUi.issueRecoveryActionCard.headline.missingDisposition");
+    case "deliberate_wait_without_target":
+      return t("app.issueUi.issueRecoveryActionCard.headline.waitWithoutTarget");
+    case "stranded_assigned_issue":
+      return t("app.issueUi.issueRecoveryActionCard.headline.strandedTask");
+    case "workspace_validation":
+      return t("app.issueUi.issueRecoveryActionCard.headline.workspaceValidation");
+    case "configuration_validation":
+      return t("app.issueUi.issueRecoveryActionCard.headline.configurationValidation");
+    case "active_run_watchdog":
+      return t("app.issueUi.issueRecoveryActionCard.headline.activeWatchdog");
+    case "issue_graph_liveness":
+      return t("app.issueUi.issueRecoveryActionCard.headline.taskNeedsNextStep");
+    default:
+      return t("app.issueUi.issueRecoveryActionCard.headline.missingDisposition");
+  }
+}
 
 /** Shared shell for the retry-timing pill so every timing state reads as the same control. */
 const RETRY_PILL_CLASS =
   "rounded-md border border-border/50 bg-background/60 px-1.5 py-0.5 text-(length:--text-micro) text-muted-foreground";
 
 const STATE_TONE: Record<RecoveryCardCardState, {
-  label: string;
   containerClass: string;
   iconWrapClass: string;
   iconClass: string;
@@ -170,7 +188,6 @@ const STATE_TONE: Record<RecoveryCardCardState, {
   divider: string;
 }> = {
   needed: {
-    label: "RECOVERY NEEDED",
     containerClass:
       "border-amber-300/70 bg-amber-50/85 text-amber-950 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-100",
     iconWrapClass: "bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-200",
@@ -180,7 +197,6 @@ const STATE_TONE: Record<RecoveryCardCardState, {
     divider: "border-amber-300/60 dark:border-amber-500/30",
   },
   in_progress: {
-    label: "RECOVERY IN PROGRESS",
     containerClass:
       "border-sky-300/70 bg-sky-50/80 text-sky-950 dark:border-sky-500/40 dark:bg-sky-500/10 dark:text-sky-100",
     iconWrapClass: "bg-sky-100 text-sky-800 dark:bg-sky-500/20 dark:text-sky-200",
@@ -190,7 +206,6 @@ const STATE_TONE: Record<RecoveryCardCardState, {
     divider: "border-sky-300/60 dark:border-sky-500/30",
   },
   observe_only: {
-    label: "OBSERVING ACTIVE RUN",
     containerClass:
       "border-border bg-muted/40 text-foreground dark:bg-muted/20",
     iconWrapClass: "bg-muted text-foreground/70",
@@ -200,7 +215,6 @@ const STATE_TONE: Record<RecoveryCardCardState, {
     divider: "border-border/70",
   },
   escalated: {
-    label: "RECOVERY ESCALATED",
     containerClass:
       "border-red-400/60 bg-red-50/85 text-red-950 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-100",
     iconWrapClass: "bg-red-100 text-red-800 dark:bg-red-500/20 dark:text-red-200",
@@ -210,7 +224,6 @@ const STATE_TONE: Record<RecoveryCardCardState, {
     divider: "border-red-400/50 dark:border-red-500/30",
   },
   resolved: {
-    label: "RECOVERY RESOLVED",
     containerClass:
       "border-emerald-300/70 bg-emerald-50/80 text-emerald-950 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-100",
     iconWrapClass: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-200",
@@ -221,16 +234,45 @@ const STATE_TONE: Record<RecoveryCardCardState, {
   },
 };
 
-const OUTCOME_LABEL: Record<IssueRecoveryActionOutcome, string> = {
-  restored: "restored",
-  handed_back: "handed back to original owner",
-  owner_completed: "completed by recovery owner",
-  delegated: "delegated to follow-up",
-  false_positive: "false positive",
-  blocked: "blocked",
-  escalated: "escalated",
-  cancelled: "cancelled",
-};
+/** Card-state eyebrow label, in the current UI language. */
+function stateLabel(state: RecoveryCardCardState): string {
+  switch (state) {
+    case "needed":
+      return t("app.issueUi.issueRecoveryActionCard.state.needed");
+    case "in_progress":
+      return t("app.issueUi.issueRecoveryActionCard.state.inProgress");
+    case "observe_only":
+      return t("app.issueUi.issueRecoveryActionCard.state.observeOnly");
+    case "escalated":
+      return t("app.issueUi.issueRecoveryActionCard.state.escalated");
+    case "resolved":
+      return t("app.issueUi.issueRecoveryActionCard.state.resolved");
+  }
+}
+
+/** Resolution outcome label, in the current UI language; unknown outcomes show raw. */
+function outcomeLabel(outcome: IssueRecoveryActionOutcome): string {
+  switch (outcome) {
+    case "restored":
+      return t("app.issueUi.issueRecoveryActionCard.outcome.restored");
+    case "handed_back":
+      return t("app.issueUi.issueRecoveryActionCard.outcome.handedBack");
+    case "owner_completed":
+      return t("app.issueUi.issueRecoveryActionCard.outcome.ownerCompleted");
+    case "delegated":
+      return t("app.issueUi.issueRecoveryActionCard.outcome.delegated");
+    case "false_positive":
+      return t("app.issueUi.issueRecoveryActionCard.outcome.falsePositive");
+    case "blocked":
+      return t("app.common.status.blocked");
+    case "escalated":
+      return t("app.issueUi.issueRecoveryActionCard.outcome.escalated");
+    case "cancelled":
+      return t("app.common.status.cancelled");
+    default:
+      return outcome;
+  }
+}
 
 function readEvidenceString(value: unknown): string | null {
   if (typeof value !== "string") return null;
@@ -391,23 +433,26 @@ function readWorkspaceDivergence(action: IssueRecoveryAction): WorkspaceDivergen
   };
 }
 
-const ANCESTRY_BADGE: Record<
-  GitWorktreeBranchAncestryVerdict,
-  { label: string; className: string }
-> = {
-  ancestor: {
-    label: "Forward-only",
-    className: "border-emerald-400/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  },
-  diverged: {
-    label: "Diverged",
-    className: "border-red-400/50 bg-red-500/10 text-red-700 dark:text-red-300",
-  },
-  unknown: {
-    label: "Ancestry unknown",
-    className: "border-border bg-muted/60 text-muted-foreground",
-  },
-};
+/** Ancestry verdict badge, with its label in the current UI language. */
+function ancestryBadge(verdict: GitWorktreeBranchAncestryVerdict): { label: string; className: string } {
+  switch (verdict) {
+    case "ancestor":
+      return {
+        label: t("app.issueUi.issueRecoveryActionCard.ancestry.ancestor"),
+        className: "border-emerald-400/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+      };
+    case "diverged":
+      return {
+        label: t("app.issueUi.issueRecoveryActionCard.ancestry.diverged"),
+        className: "border-red-400/50 bg-red-500/10 text-red-700 dark:text-red-300",
+      };
+    default:
+      return {
+        label: t("app.issueUi.issueRecoveryActionCard.ancestry.unknown"),
+        className: "border-border bg-muted/60 text-muted-foreground",
+      };
+  }
+}
 
 function BranchFacet({
   label,
@@ -418,6 +463,7 @@ function BranchFacet({
   branch: string | null;
   sha: string | null;
 }) {
+  const { t } = useTranslation();
   const shortSha = formatShortSha(sha);
   return (
     <div className="min-w-0 rounded-md border border-border/70 bg-background/60 px-2.5 py-2">
@@ -429,7 +475,7 @@ function BranchFacet({
         {branch ? (
           <code className="truncate font-mono text-xs text-foreground/90">{branch}</code>
         ) : (
-          <span className="text-xs italic text-muted-foreground">detached / unknown</span>
+          <span className="text-xs italic text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.branch.detachedUnknown")}</span>
         )}
       </div>
       <div className="mt-0.5 pl-5 font-mono text-(length:--text-micro) text-muted-foreground">
@@ -446,7 +492,8 @@ function DivergenceDiagnosis({
   divergence: WorkspaceDivergence;
   dividerClass: string;
 }) {
-  const badge = ANCESTRY_BADGE[divergence.ancestryVerdict ?? "unknown"];
+  const { t } = useTranslation();
+  const badge = ancestryBadge(divergence.ancestryVerdict ?? "unknown");
   return (
     <div
       data-testid="recovery-divergence-diagnosis"
@@ -457,7 +504,7 @@ function DivergenceDiagnosis({
     >
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-          Divergence diagnosis
+          {t("app.issueUi.issueRecoveryActionCard.divergence.title")}
         </span>
         <Badge variant="outline"
           data-testid="recovery-ancestry-verdict"
@@ -471,12 +518,12 @@ function DivergenceDiagnosis({
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         <BranchFacet
-          label="Expected · recorded"
+          label={t("app.issueUi.issueRecoveryActionCard.branch.expectedRecorded")}
           branch={divergence.expectedBranch}
           sha={divergence.expectedHeadSha}
         />
         <BranchFacet
-          label="Live · checked out"
+          label={t("app.issueUi.issueRecoveryActionCard.branch.liveCheckedOut")}
           branch={divergence.liveBranch}
           sha={divergence.liveHeadSha}
         />
@@ -491,10 +538,13 @@ function DivergenceDiagnosis({
         >
           <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
           <span>
-            Worktree claimed by{" "}
-            <code className="font-mono text-foreground/90">{contentionLabel(divergence.contention)}</code>{" "}
-            {divergence.contention.hasActiveRun ? "(active run)" : "(claim held)"} — the lossless repair
-            can&apos;t run while another workspace holds the live branch.
+            <Trans
+              i18nKey={divergence.contention.hasActiveRun
+                ? "app.issueUi.issueRecoveryActionCard.contention.activeRun"
+                : "app.issueUi.issueRecoveryActionCard.contention.claimHeld"}
+              values={{ label: contentionLabel(divergence.contention) }}
+              components={{ code: <code className="font-mono text-foreground/90" /> }}
+            />
           </span>
         </p>
       ) : null}
@@ -505,7 +555,9 @@ function DivergenceDiagnosis({
 function contentionLabel(contention: WorkspaceContention): string {
   return (
     contention.claimedByIssueIdentifier ??
-    (contention.claimedByIssueId ? `issue ${contention.claimedByIssueId.slice(0, 8)}` : "another task")
+    (contention.claimedByIssueId
+      ? t("app.issueUi.issueRecoveryActionCard.contention.issueFallback", { id: contention.claimedByIssueId.slice(0, 8) })
+      : t("app.issueUi.issueRecoveryActionCard.contention.anotherTask"))
   );
 }
 
@@ -525,10 +577,11 @@ function BreakGlassOverride({
   onConfirm: (reason: string) => void;
   pending: boolean;
 }) {
+  const { t } = useTranslation();
   const [reason, setReason] = useState("");
   const trimmedReason = reason.trim();
   const canSubmit = trimmedReason.length > 0 && !pending;
-  const verdictBadge = ANCESTRY_BADGE[divergence.ancestryVerdict ?? "unknown"];
+  const verdictBadge = ancestryBadge(divergence.ancestryVerdict ?? "unknown");
   const expectedSha = formatShortSha(divergence.expectedHeadSha);
   const liveSha = formatShortSha(divergence.liveHeadSha);
   return (
@@ -543,7 +596,7 @@ function BreakGlassOverride({
           className="border-red-400/60 text-red-700 hover:bg-red-500/10 dark:border-red-500/40 dark:text-red-300"
         >
           <OctagonAlert className="h-3.5 w-3.5" aria-hidden />
-          I&apos;ve verified this — reconcile anyway
+          {t("app.issueUi.issueRecoveryActionCard.breakGlass.trigger")}
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -558,13 +611,13 @@ function BreakGlassOverride({
             className="flex items-center gap-1.5 text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-red-700 dark:text-red-300"
           >
             <OctagonAlert className="h-3.5 w-3.5" aria-hidden />
-            Break-glass reconciliation
+            {t("app.issueUi.issueRecoveryActionCard.breakGlass.title")}
           </div>
           <p className="text-xs leading-5 text-muted-foreground">
-            This overrides Paperclip&apos;s safety check and points the recorded workspace at the live
-            branch{" "}
-            <span className="font-medium text-foreground/80">without an ancestry proof</span>. Confirm
-            the divergence below and record why before continuing.
+            <Trans
+              i18nKey="app.issueUi.issueRecoveryActionCard.breakGlass.body"
+              components={{ strong: <span className="font-medium text-foreground/80" /> }}
+            />
           </p>
         </div>
         <dl
@@ -572,33 +625,36 @@ function BreakGlassOverride({
           className="space-y-1.5 rounded-md border border-red-400/40 bg-red-500/5 px-2.5 py-2 text-(length:--text-micro)"
         >
           <div className="flex items-center justify-between gap-2">
-            <dt className="shrink-0 text-muted-foreground">Recorded · expected</dt>
+            <dt className="shrink-0 text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.branch.recordedExpected")}</dt>
             <dd className="min-w-0 truncate font-mono text-foreground/90">
-              {divergence.expectedBranch ?? "detached"}
+              {divergence.expectedBranch ?? t("app.issueUi.issueRecoveryActionCard.branch.detached")}
               {expectedSha ? ` @ ${expectedSha}` : ""}
             </dd>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <dt className="shrink-0 text-muted-foreground">Live · checked out</dt>
+            <dt className="shrink-0 text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.branch.liveCheckedOut")}</dt>
             <dd className="min-w-0 truncate font-mono text-foreground/90">
-              {divergence.liveBranch ?? "detached"}
+              {divergence.liveBranch ?? t("app.issueUi.issueRecoveryActionCard.branch.detached")}
               {liveSha ? ` @ ${liveSha}` : ""}
             </dd>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <dt className="shrink-0 text-muted-foreground">Ancestry verdict</dt>
+            <dt className="shrink-0 text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.breakGlass.verdict")}</dt>
             <dd className="font-medium">{verdictBadge.label}</dd>
           </div>
         </dl>
         <div className="space-y-1">
           <Label htmlFor="recovery-breakglass-reason" className="text-(length:--text-micro) text-muted-foreground">
-            Reason <span className="text-red-600 dark:text-red-400">(required — recorded in the audit log)</span>
+            <Trans
+              i18nKey="app.issueUi.issueRecoveryActionCard.breakGlass.reason"
+              components={{ hint: <span className="text-red-600 dark:text-red-400" /> }}
+            />
           </Label>
           <Textarea
             id="recovery-breakglass-reason"
             value={reason}
             onChange={(event) => setReason(event.target.value)}
-            placeholder="e.g. Verified the live branch carries only the intended follow-up commits; safe to adopt."
+            placeholder={t("app.issueUi.issueRecoveryActionCard.breakGlass.placeholder")}
             className="min-h-20 text-xs"
             data-testid="recovery-breakglass-reason"
             aria-required="true"
@@ -616,7 +672,7 @@ function BreakGlassOverride({
             onConfirm(trimmedReason);
           }}
         >
-          {pending ? "Reconciling…" : "Reconcile anyway (break-glass)"}
+          {pending ? t("app.issueUi.issueRecoveryActionCard.breakGlass.reconciling") : t("app.issueUi.issueRecoveryActionCard.breakGlass.confirm")}
         </Button>
       </PopoverContent>
     </Popover>
@@ -644,11 +700,14 @@ function RepairWorkspace({
   disabled: boolean;
   disabledReason: string | null;
 }) {
+  const { t } = useTranslation();
   const dirtyCount = divergence.dirtyFileCount;
   const dirtyLabel =
     dirtyCount === null
-      ? "Uncommitted changes"
-      : `${dirtyCount} uncommitted ${dirtyCount === 1 ? "change" : "changes"}`;
+      ? t("app.issueUi.issueRecoveryActionCard.repair.uncommitted")
+      : dirtyCount === 1
+        ? t("app.issueUi.issueRecoveryActionCard.repair.uncommittedOne", { count: dirtyCount })
+        : t("app.issueUi.issueRecoveryActionCard.repair.uncommittedMany", { count: dirtyCount });
   const trigger = (
     <Button
       type="button"
@@ -663,7 +722,7 @@ function RepairWorkspace({
       ) : (
         <Wrench className="h-3.5 w-3.5" aria-hidden />
       )}
-      Repair workspace — quarantine changes &amp; restore branch
+      {t("app.issueUi.issueRecoveryActionCard.repair.trigger")}
     </Button>
   );
   if (disabled) {
@@ -695,12 +754,10 @@ function RepairWorkspace({
             className="flex items-center gap-1.5 text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-sky-700 dark:text-sky-300"
           >
             <Wrench className="h-3.5 w-3.5" aria-hidden />
-            Repair workspace
+            {t("app.issueUi.issueRecoveryActionCard.repair.title")}
           </div>
           <p className="text-xs leading-5 text-muted-foreground">
-            This is lossless — no reason required. Your uncommitted changes are committed onto a fresh
-            rescue branch, then the recorded branch is restored so the task can resume. The live branch
-            is left exactly as it is.
+            {t("app.issueUi.issueRecoveryActionCard.repair.body")}
           </p>
         </div>
         <dl
@@ -708,20 +765,20 @@ function RepairWorkspace({
           className="space-y-1.5 rounded-md border border-sky-400/30 bg-sky-500/5 px-2.5 py-2 text-(length:--text-micro)"
         >
           <div className="flex items-center justify-between gap-2">
-            <dt className="shrink-0 text-muted-foreground">Dirty changes</dt>
+            <dt className="shrink-0 text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.repair.dirty")}</dt>
             <dd data-testid="recovery-repair-dirty-count" className="font-medium text-foreground/90">
               {dirtyLabel}
             </dd>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <dt className="shrink-0 text-muted-foreground">Live branch</dt>
+            <dt className="shrink-0 text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.repair.liveBranch")}</dt>
             <dd className="min-w-0 truncate font-mono text-foreground/90">
-              {divergence.liveBranch ?? "detached"}
-              <span className="ml-1 font-sans text-muted-foreground">(left untouched)</span>
+              {divergence.liveBranch ?? t("app.issueUi.issueRecoveryActionCard.branch.detached")}
+              <span className="ml-1 font-sans text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.repair.leftUntouched")}</span>
             </dd>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <dt className="shrink-0 text-muted-foreground">Rescue branch</dt>
+            <dt className="shrink-0 text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.repair.rescueBranch")}</dt>
             <dd
               data-testid="recovery-repair-rescue-branch"
               className="min-w-0 truncate font-mono text-foreground/90"
@@ -731,9 +788,9 @@ function RepairWorkspace({
             </dd>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <dt className="shrink-0 text-muted-foreground">Restore to</dt>
+            <dt className="shrink-0 text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.repair.restoreTo")}</dt>
             <dd className="min-w-0 truncate font-mono text-foreground/90">
-              {divergence.expectedBranch ?? "recorded branch"}
+              {divergence.expectedBranch ?? t("app.issueUi.issueRecoveryActionCard.repair.recordedBranch")}
             </dd>
           </div>
         </dl>
@@ -748,7 +805,7 @@ function RepairWorkspace({
             onConfirm();
           }}
         >
-          {pending ? "Repairing…" : "Quarantine changes & restore branch"}
+          {pending ? t("app.issueUi.issueRecoveryActionCard.repair.repairing") : t("app.issueUi.issueRecoveryActionCard.repair.confirm")}
         </Button>
       </PopoverContent>
     </Popover>
@@ -760,17 +817,17 @@ function readWakePolicySummary(action: IssueRecoveryAction): string | null {
   if (!policy) return null;
   const type = readEvidenceString(policy.type);
   if (!type) return null;
-  if (type === "wake_owner") return "An agent will be asked to choose the next step";
+  if (type === "wake_owner") return t("app.issueUi.issueRecoveryActionCard.wake.wakeOwner");
   if (type === "bounded_owner_disposition_repair") {
-    return "Paperclip is retrying the original owner";
+    return t("app.issueUi.issueRecoveryActionCard.wake.ownerRepair");
   }
-  if (type === "bounded_recovery_owner") return "A recovery owner is repairing the next step";
-  if (type === "board_escalation") return "Board decision required";
-  if (type === "manual") return "Manual follow-up needed";
-  if (type === "manual_repair_required") return "Repair needed before retry";
+  if (type === "bounded_recovery_owner") return t("app.issueUi.issueRecoveryActionCard.wake.recoveryOwner");
+  if (type === "board_escalation") return t("app.issueUi.issueRecoveryActionCard.wake.boardEscalation");
+  if (type === "manual") return t("app.issueUi.issueRecoveryActionCard.wake.manual");
+  if (type === "manual_repair_required") return t("app.issueUi.issueRecoveryActionCard.wake.manualRepair");
   if (type === "monitor") {
     const interval = readEvidenceString(policy.intervalLabel);
-    return interval ? `Check scheduled · ${interval}` : "Check scheduled";
+    return interval ? t("app.issueUi.issueRecoveryActionCard.wake.checkScheduledInterval", { interval }) : t("app.issueUi.issueRecoveryActionCard.wake.checkScheduled");
   }
   return type.replaceAll("_", " ");
 }
@@ -784,7 +841,7 @@ function formatTimeShort(value: string | Date | null | undefined): string | null
     const diffMs = date.getTime() - now;
     const absMin = Math.round(Math.abs(diffMs) / 60_000);
     if (absMin < 60) {
-      return diffMs >= 0 ? `in ${absMin}m` : `${absMin}m ago`;
+      return diffMs >= 0 ? t("app.issueUi.issueRecoveryActionCard.time.inMinutes", { count: absMin }) : t("app.issueUi.issueRecoveryActionCard.time.minutesAgo", { count: absMin });
     }
     return date.toLocaleString(undefined, {
       month: "short",
@@ -833,11 +890,12 @@ function AgentLink({
   agentMap?: ReadonlyMap<string, Agent>;
   fallback?: string | null;
 }) {
+  const { t } = useTranslation();
   if (!agentId) {
     return fallback ? <span>{fallback}</span> : <MissingValue />;
   }
   const agent = agentMap?.get(agentId);
-  const label = agent?.name ?? `agent ${agentId.slice(0, 8)}`;
+  const label = agent?.name ?? t("app.issueUi.issueRecoveryActionCard.agentFallback", { id: agentId.slice(0, 8) });
   if (agent) {
     return (
       <Link
@@ -860,12 +918,13 @@ function RunChip({
   agentId: string | null | undefined;
   status?: string | null;
 }) {
+  const { t } = useTranslation();
   if (!runId) return <MissingValue />;
   const short = shortenRunId(runId);
   const inner = (
     <>
       <code className="rounded bg-background/80 px-1.5 py-0.5 font-mono text-(length:--text-micro) text-foreground/80">
-        run {short}
+        {t("app.issueUi.issueRecoveryActionCard.runChip", { id: short })}
       </code>
       {status ? (
         <span className="font-sans text-(length:--text-micro) text-muted-foreground">{status}</span>
@@ -906,17 +965,17 @@ function lineageHeadline(lineage: RecoveryRetryLineage): string {
   // An attempt that came due and never ran leaves nobody working on this task, even though
   // attempts remain on paper. Say so before any lane wording that ends in "no action needed".
   if (lineage.retryExpired) {
-    return "This task's automatic retry came due and did not run, so nothing is moving it forward right now. Someone must retry it or record the next step. The task stays with its original owner.";
+    return t("app.issueUi.issueRecoveryActionCard.lineage.retryExpired");
   }
   if (lineage.lane === "source_owner") {
     return lineage.exhausted
-      ? "This task's last run stopped to wait, but nothing was waiting for it. The original owner has used every automatic repair attempt, so the next step needs a decision. The task stays with its owner."
-      : "This task's last run stopped to wait, but nothing was waiting for it. Paperclip is retrying the original owner to record a real next step. The task stays with its owner, and no action is needed yet.";
+      ? t("app.issueUi.issueRecoveryActionCard.lineage.sourceExhausted")
+      : t("app.issueUi.issueRecoveryActionCard.lineage.sourceRetrying");
   }
   if (lineage.lane === "recovery_owner") {
-    return "The original owner could not record a next step within its retry budget. A recovery owner is now repairing the path only — the task itself still belongs to its original owner.";
+    return t("app.issueUi.issueRecoveryActionCard.lineage.recoveryOwner");
   }
-  return "Automatic recovery is exhausted, so the board must choose the next step. The task itself still belongs to its original owner.";
+  return t("app.issueUi.issueRecoveryActionCard.lineage.board");
 }
 
 /** Spent/remaining attempts as pips. The readable count lives beside it in text. */
@@ -938,43 +997,46 @@ function AttemptMeter({ lineage }: { lineage: RecoveryRetryLineage }) {
   );
 }
 
-const RESOLVE_OPTIONS: Array<{
+/** Resolve menu options, with labels in the current UI language. */
+function getResolveOptions(): Array<{
   outcome: RecoveryResolveOutcome;
   label: string;
   description: string;
   destructive?: boolean;
   boardOnly?: boolean;
-}> = [
-  {
-    outcome: "todo",
-    label: "Try again",
-    description: "Dismiss recovery and return the source task to todo.",
-  },
-  {
-    outcome: "done",
-    label: "Mark task done",
-    description: "Restore by recording the requested work as complete.",
-  },
-  {
-    outcome: "in_review",
-    label: "Send for review",
-    description: "Hand off to a reviewer with a real review path.",
-  },
-  {
-    outcome: "false_positive_done",
-    label: "False positive, done",
-    description: "Dismiss recovery and mark the source task complete.",
-    destructive: true,
-    boardOnly: true,
-  },
-  {
-    outcome: "false_positive_in_review",
-    label: "False positive, review",
-    description: "Dismiss recovery and send the source task for review.",
-    destructive: true,
-    boardOnly: true,
-  },
-];
+}> {
+  return [
+    {
+      outcome: "todo",
+      label: t("app.common.actions.tryAgain"),
+      description: t("app.issueUi.issueRecoveryActionCard.resolve.tryAgain.description"),
+    },
+    {
+      outcome: "done",
+      label: t("app.issueUi.issueRecoveryActionCard.resolve.markDone.label"),
+      description: t("app.issueUi.issueRecoveryActionCard.resolve.markDone.description"),
+    },
+    {
+      outcome: "in_review",
+      label: t("app.issueUi.issueRecoveryActionCard.resolve.sendReview.label"),
+      description: t("app.issueUi.issueRecoveryActionCard.resolve.sendReview.description"),
+    },
+    {
+      outcome: "false_positive_done",
+      label: t("app.issueUi.issueRecoveryActionCard.resolve.falsePositiveDone.label"),
+      description: t("app.issueUi.issueRecoveryActionCard.resolve.falsePositiveDone.description"),
+      destructive: true,
+      boardOnly: true,
+    },
+    {
+      outcome: "false_positive_in_review",
+      label: t("app.issueUi.issueRecoveryActionCard.resolve.falsePositiveReview.label"),
+      description: t("app.issueUi.issueRecoveryActionCard.resolve.falsePositiveReview.description"),
+      destructive: true,
+      boardOnly: true,
+    },
+  ];
+}
 
 export function IssueRecoveryActionCard({
   action,
@@ -994,35 +1056,37 @@ export function IssueRecoveryActionCard({
   variant = "full",
   className,
 }: IssueRecoveryActionCardProps) {
+  const { t } = useTranslation();
   const { visible: workspaceIsolationControlsVisible } = useWorkspaceIsolationControls();
   const liveness = useMemo(() => ({ scheduledRetry }), [scheduledRetry]);
   const cardState: RecoveryCardCardState = forcedState ?? deriveRecoveryCardState(action, liveness);
   const tone = STATE_TONE[cardState];
+  const toneLabel = stateLabel(cardState);
   const ToneIcon = tone.Icon;
   const divergence = useMemo(() => readWorkspaceDivergence(action), [action]);
   const lineage = useMemo(() => readRecoveryRetryLineage(action, liveness), [action, liveness]);
 
   const headline = useMemo(() => {
     if (cardState === "resolved" && action.outcome) {
-      return `Recovery resolved as ${OUTCOME_LABEL[action.outcome] ?? action.outcome}.`;
+      return t("app.issueUi.issueRecoveryActionCard.resolvedHeadline", { outcome: outcomeLabel(action.outcome) });
     }
     if (
       (cardState === "needed" || cardState === "escalated") &&
       action.kind === "active_run_watchdog" &&
       action.ownerType === "board"
     ) {
-      return "This recovery needs a human decision. Review the recorded failure and choose the next step.";
+      return t("app.issueUi.issueRecoveryActionCard.humanDecision");
     }
     if (lineage) return lineageHeadline(lineage);
-    return KIND_HEADLINE[action.kind] ?? KIND_HEADLINE.missing_disposition;
-  }, [action.kind, action.outcome, action.ownerType, cardState, lineage]);
+    return kindHeadline(action.kind);
+  }, [action.kind, action.outcome, action.ownerType, cardState, lineage, t]);
 
   // A lane with no path left must not keep advertising a retry that will never run — whether
   // the budget ran out or the scheduled attempt simply never fired.
   const wakeSummary = lineage?.retryExpired
-    ? "The scheduled retry did not run — a retry or a decision is needed"
+    ? t("app.issueUi.issueRecoveryActionCard.wake.retryExpired")
     : lineage?.exhausted && lineage.lane !== "board"
-    ? "Automatic retries are finished — a decision is needed"
+    ? t("app.issueUi.issueRecoveryActionCard.wake.retriesFinished")
     : readWakePolicySummary(action);
   const evidenceSummary = pickEvidenceSummary(action);
   const sourceRunId = readEvidenceRunId(action, "sourceRunId") ?? readEvidenceRunId(action, "latestRunId");
@@ -1051,16 +1115,16 @@ export function IssueRecoveryActionCard({
   })();
   const updatedAtLabel = formatTimeShort(action.updatedAt);
 
-  const ariaState = ({
-    needed: "needed",
-    in_progress: "in progress",
-    observe_only: "observing active run",
-    escalated: "escalated",
-    resolved: "resolved",
+  const ariaLabel = ({
+    needed: t("app.issueUi.issueRecoveryActionCard.aria.needed"),
+    in_progress: t("app.issueUi.issueRecoveryActionCard.aria.inProgress"),
+    observe_only: t("app.issueUi.issueRecoveryActionCard.aria.observeOnly"),
+    escalated: t("app.issueUi.issueRecoveryActionCard.aria.escalated"),
+    resolved: t("app.issueUi.issueRecoveryActionCard.aria.resolved"),
   } satisfies Record<RecoveryCardCardState, string>)[cardState];
 
   const showResolveActions = onResolve !== undefined && cardState !== "resolved";
-  const visibleResolveOptions = RESOLVE_OPTIONS.filter((option) => {
+  const visibleResolveOptions = getResolveOptions().filter((option) => {
     if (option.outcome === "todo" && requiresExecutionReconciliation(action.cause)) return false;
     if (option.boardOnly && !canFalsePositive) return false;
     return true;
@@ -1073,7 +1137,7 @@ export function IssueRecoveryActionCard({
     divergence !== null &&
     reissueBaseRef !== null;
   const reissueVerdictBadge = divergence
-    ? ANCESTRY_BADGE[divergence.ancestryVerdict ?? "unknown"]
+    ? ancestryBadge(divergence.ancestryVerdict ?? "unknown")
     : null;
   // Action 1 — the ancestry-proven safe path. Only offered when the server-computed verdict is
   // "ancestor"; the server re-verifies before mutating, so this gate mirrors (not replaces) it.
@@ -1099,7 +1163,9 @@ export function IssueRecoveryActionCard({
     divergence !== null &&
     divergence.cleanliness === "dirty";
   const repairDisabledReason = repairContention
-    ? `Held by ${contentionLabel(repairContention)}${showReissueAction ? " — re-issue on an isolated workspace instead." : "."}`
+    ? showReissueAction
+      ? t("app.issueUi.issueRecoveryActionCard.heldByReissue", { label: contentionLabel(repairContention) })
+      : t("app.issueUi.issueRecoveryActionCard.heldBy", { label: contentionLabel(repairContention) })
     : null;
   // When contended, the re-issue is the recommended path, so it takes the primary emphasis and a
   // "Recommended" hint while the repair button is disabled.
@@ -1116,7 +1182,7 @@ export function IssueRecoveryActionCard({
   return (
     <section
       role="status"
-      aria-label={`Recovery action: ${ariaState}`}
+      aria-label={ariaLabel}
       data-recovery-state={cardState}
       data-recovery-kind={action.kind}
       data-recovery-lane={lineage?.lane}
@@ -1138,10 +1204,10 @@ export function IssueRecoveryActionCard({
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow)">
-            <span className={tone.labelClass}>{tone.label}</span>
+            <span className={tone.labelClass}>{toneLabel}</span>
             <span className="text-muted-foreground/60" aria-hidden>·</span>
             <code className="rounded bg-background/70 px-1.5 py-0.5 font-mono text-(length:--text-micro) tracking-normal text-muted-foreground">
-              {KIND_LABEL[action.kind] ?? action.kind}
+              {kindLabel(action.kind)}
             </code>
             {updatedAtLabel ? (
               <>
@@ -1159,7 +1225,7 @@ export function IssueRecoveryActionCard({
       <dl className={cn("border-t bg-background/40 dark:bg-background/20", tone.divider)}>
         {lineage ? (
           <>
-            <MetadataRow label="Task owner">
+            <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.taskOwner")}>
               <span
                 className="inline-flex flex-wrap items-center gap-1.5"
                 data-testid="recovery-source-owner"
@@ -1167,36 +1233,36 @@ export function IssueRecoveryActionCard({
                 <AgentLink
                   agentId={sourceOwnerAgentId}
                   agentMap={agentMap}
-                  fallback="unassigned"
+                  fallback={t("app.issueUi.issueRecoveryActionCard.unassigned")}
                 />
-                <span className="text-muted-foreground">keeps this task</span>
+                <span className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.keepsTask")}</span>
               </span>
             </MetadataRow>
-            <MetadataRow label="Recovery owner">
+            <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.recoveryOwner")}>
               <span
                 className="inline-flex flex-wrap items-center gap-1.5"
                 data-testid="recovery-recovery-owner"
               >
                 {recoveryOwnerIsSourceOwner ? (
-                  <span className="font-medium">Original owner — retrying itself</span>
+                  <span className="font-medium">{t("app.issueUi.issueRecoveryActionCard.originalRetrying")}</span>
                 ) : action.ownerType === "agent" && action.ownerAgentId ? (
                   <>
                     <AgentLink agentId={action.ownerAgentId} agentMap={agentMap} />
-                    <span className="text-muted-foreground">repairs the next step only</span>
+                    <span className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.repairsNextStep")}</span>
                   </>
                 ) : action.ownerType === "board" ? (
                   <>
-                    <span className="font-medium">Board</span>
-                    <span className="text-muted-foreground">decides the next step only</span>
+                    <span className="font-medium">{t("app.common.nouns.board")}</span>
+                    <span className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.decidesNextStep")}</span>
                   </>
                 ) : action.ownerType === "user" && action.ownerUserId ? (
-                  <span className="font-medium">user {action.ownerUserId.slice(0, 6)}</span>
+                  <span className="font-medium">{t("app.issueUi.issueRecoveryActionCard.userFallback", { id: action.ownerUserId.slice(0, 6) })}</span>
                 ) : (
-                  <span className="text-muted-foreground">unassigned — pick one to wake them</span>
+                  <span className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.unassignedPick")}</span>
                 )}
               </span>
             </MetadataRow>
-            <MetadataRow label="Retry progress">
+            <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.retryProgress")}>
               <span
                 className="inline-flex flex-wrap items-center gap-x-2 gap-y-1"
                 data-testid="recovery-retry-progress"
@@ -1205,14 +1271,14 @@ export function IssueRecoveryActionCard({
                 data-recovery-max-attempts={lineage.maxAttempts ?? undefined}
               >
                 <AttemptMeter lineage={lineage} />
-                <span>{attemptLabel ?? "Attempts not bounded"}</span>
+                <span>{attemptLabel ?? t("app.issueUi.issueRecoveryActionCard.attemptsUnbounded")}</span>
                 {lineage.liveRunId ? (
                   <span
                     className={RETRY_PILL_CLASS}
                     title={formatTimeAbsolute(lineage.nextRetryAt) ?? undefined}
                     data-testid="recovery-next-retry"
                   >
-                    Attempt running now
+                    {t("app.issueUi.issueRecoveryActionCard.attemptRunning")}
                   </span>
                 ) : lineage.retryExpired ? (
                   // The due time is stated plainly as missed. Rendering it as "Next try 5m
@@ -1223,7 +1289,7 @@ export function IssueRecoveryActionCard({
                     data-testid="recovery-next-retry"
                     data-recovery-retry-expired="true"
                   >
-                    {retryOffset ? `Retry missed ${retryOffset}` : "Retry missed"}
+                    {retryOffset ? t("app.issueUi.issueRecoveryActionCard.retryMissedAt", { offset: retryOffset }) : t("app.issueUi.issueRecoveryActionCard.retryMissed")}
                   </span>
                 ) : retryOffset ? (
                   <span
@@ -1231,59 +1297,61 @@ export function IssueRecoveryActionCard({
                     title={formatTimeAbsolute(lineage.nextRetryAt) ?? undefined}
                     data-testid="recovery-next-retry"
                   >
-                    {retryOffset === "now" ? "Next try now" : `Next try ${retryOffset}`}
+                    {retryOffset === "now" ? t("app.issueUi.issueRecoveryActionCard.nextTryNow") : t("app.issueUi.issueRecoveryActionCard.nextTryAt", { offset: retryOffset })}
                   </span>
                 ) : lineage.exhausted ? (
                   <span className={RETRY_PILL_CLASS} data-testid="recovery-next-retry">
-                    Automatic retries used up
+                    {t("app.issueUi.issueRecoveryActionCard.retriesUsedUp")}
                   </span>
                 ) : null}
               </span>
             </MetadataRow>
             {lineage.lane !== "source_owner" && lineage.sourceMaxAttempts !== null ? (
-              <MetadataRow label="Owner retries">
+              <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.ownerRetries")}>
                 <span data-testid="recovery-source-attempts">
-                  The original owner used {lineage.sourceAttempt ?? lineage.sourceMaxAttempts} of{" "}
-                  {lineage.sourceMaxAttempts} automatic attempts.
+                  {t("app.issueUi.issueRecoveryActionCard.ownerUsed", {
+                    used: lineage.sourceAttempt ?? lineage.sourceMaxAttempts,
+                    max: lineage.sourceMaxAttempts,
+                  })}
                 </span>
               </MetadataRow>
             ) : null}
           </>
         ) : (
-        <MetadataRow label="Owner">
+        <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.owner")}>
           <span className="inline-flex flex-wrap items-center gap-1.5">
             {action.ownerType === "agent" && action.ownerAgentId ? (
               <>
-                <span className="text-muted-foreground">Recovery:</span>
+                <span className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.recoveryPrefix")}</span>
                 <AgentLink agentId={action.ownerAgentId} agentMap={agentMap} />
               </>
             ) : action.ownerType === "board" ? (
-              <span className="font-medium">Board</span>
+              <span className="font-medium">{t("app.common.nouns.board")}</span>
             ) : action.ownerType === "user" && action.ownerUserId ? (
-              <span className="font-medium">user {action.ownerUserId.slice(0, 6)}</span>
+              <span className="font-medium">{t("app.issueUi.issueRecoveryActionCard.userFallback", { id: action.ownerUserId.slice(0, 6) })}</span>
             ) : action.ownerType === "system" ? (
-              <span className="font-medium">System</span>
+              <span className="font-medium">{t("app.common.labels.system")}</span>
             ) : (
-              <span className="text-muted-foreground">unassigned — pick one to wake them</span>
+              <span className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.unassignedPick")}</span>
             )}
             {action.returnOwnerAgentId ? (
               <>
-                <span className="text-muted-foreground">→ Returns to:</span>
+                <span className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.returnsTo")}</span>
                 <AgentLink agentId={action.returnOwnerAgentId} agentMap={agentMap} />
               </>
             ) : null}
           </span>
         </MetadataRow>
         )}
-        <MetadataRow label="Source run">
+        <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.sourceRun")}>
           <RunChip runId={sourceRunId} agentId={action.previousOwnerAgentId} />
         </MetadataRow>
         {correctiveRunId ? (
-          <MetadataRow label="Corrective run">
+          <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.correctiveRun")}>
             <RunChip runId={correctiveRunId} agentId={action.previousOwnerAgentId} />
           </MetadataRow>
         ) : null}
-        <MetadataRow label="Evidence">
+        <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.evidence")}>
           {evidenceSummary ? (
             evidenceSummary.isCode ? (
               <span className="break-words font-mono text-(length:--text-micro) text-foreground/80">
@@ -1296,29 +1364,30 @@ export function IssueRecoveryActionCard({
             <MissingValue />
           )}
         </MetadataRow>
-        <MetadataRow label="Next action">
+        <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.nextAction")}>
           {action.nextAction ? <span>{action.nextAction}</span> : <MissingValue />}
         </MetadataRow>
-        <MetadataRow label="Follow-up">
+        <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.followUp")}>
           <span className="inline-flex flex-wrap items-center gap-1.5">
             {wakeSummary ? <span>{wakeSummary}</span> : <MissingValue />}
             {showAttempt ? (
               <span className="rounded-md border border-border/50 bg-background/60 px-1.5 py-0.5 text-(length:--text-micro) text-muted-foreground">
-                attempt {action.attemptCount} of {action.maxAttempts}
+                {t("app.issueUi.issueRecoveryActionCard.attemptOf", { count: action.attemptCount, max: action.maxAttempts })}
               </span>
             ) : null}
             {showTimeoutInline ? (
               <span className="rounded-md border border-border/50 bg-background/60 px-1.5 py-0.5 text-(length:--text-micro) text-muted-foreground">
-                Times out {formatTimeShort(action.timeoutAt) ?? "soon"}
+                {t("app.issueUi.issueRecoveryActionCard.timesOut", { time: formatTimeShort(action.timeoutAt) ?? t("app.issueUi.issueRecoveryActionCard.soon") })}
               </span>
             ) : null}
           </span>
         </MetadataRow>
         {cardState === "resolved" && action.outcome ? (
-          <MetadataRow label="Resolution">
+          <MetadataRow label={t("app.issueUi.issueRecoveryActionCard.meta.resolution")}>
             <span className={cn("font-medium", tone.labelClass)}>
-              Resolved as {OUTCOME_LABEL[action.outcome]}
-              {action.resolvedAt ? ` · ${formatTimeShort(action.resolvedAt) ?? ""}` : ""}
+              {action.resolvedAt
+                ? t("app.issueUi.issueRecoveryActionCard.resolvedAsAt", { outcome: outcomeLabel(action.outcome), time: formatTimeShort(action.resolvedAt) ?? "" })
+                : t("app.issueUi.issueRecoveryActionCard.resolvedAs", { outcome: outcomeLabel(action.outcome) })}
             </span>
           </MetadataRow>
         ) : null}
@@ -1335,9 +1404,9 @@ export function IssueRecoveryActionCard({
                   size="sm"
                   variant="default"
                   data-testid="recovery-action-resolve-trigger"
-                  aria-label="Resolve recovery"
+                  aria-label={t("app.issueUi.issueRecoveryActionCard.resolveRecovery")}
                 >
-                  Resolve…
+                  {t("app.issueUi.issueRecoveryActionCard.resolveEllipsis")}
                 </Button>
               </PopoverTrigger>
               <PopoverContent
@@ -1346,7 +1415,7 @@ export function IssueRecoveryActionCard({
                 className="w-72 p-1.5"
               >
                 <div className="px-2 py-1 text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-                  Resolve recovery
+                  {t("app.issueUi.issueRecoveryActionCard.resolveRecovery")}
                 </div>
                 <div className="flex flex-col">
                   {visibleResolveOptions.map((option) => (
@@ -1382,7 +1451,7 @@ export function IssueRecoveryActionCard({
               ) : (
                 <RefreshCw className="h-3.5 w-3.5" aria-hidden />
               )}
-              Reconcile forward &amp; continue
+              {t("app.issueUi.issueRecoveryActionCard.reconcileForward")}
             </Button>
           ) : null}
           {showRepairAction && divergence ? (
@@ -1410,13 +1479,13 @@ export function IssueRecoveryActionCard({
                   ) : (
                     <GitBranchPlus className="h-3.5 w-3.5" aria-hidden />
                   )}
-                  Re-issue on isolated workspace
+                  {t("app.issueUi.issueRecoveryActionCard.reissue.title")}
                   {reissueRecommended ? (
                     <span
                       data-testid="recovery-reissue-recommended"
                       className="ml-1 rounded-sm bg-background/25 px-1.5 py-0.5 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-label)"
                     >
-                      Recommended
+                      {t("app.issueUi.issueRecoveryActionCard.reissue.recommended")}
                     </span>
                   ) : null}
                 </Button>
@@ -1424,27 +1493,26 @@ export function IssueRecoveryActionCard({
               <PopoverContent align="start" sideOffset={6} className="w-80 space-y-3 p-3">
                 <div className="space-y-1">
                   <div className="text-(length:--text-micro) font-semibold uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-                    Re-issue on isolated workspace
+                    {t("app.issueUi.issueRecoveryActionCard.reissue.title")}
                   </div>
                   <p className="text-xs leading-5 text-muted-foreground">
-                    Creates a fresh copy of this task on an isolated git worktree based on the live
-                    branch. Your current workspace and its commits are left untouched.
+                    {t("app.issueUi.issueRecoveryActionCard.reissue.body")}
                   </p>
                 </div>
                 <dl className="space-y-1 rounded-md border border-border/70 bg-muted/30 px-2.5 py-2 text-(length:--text-micro)">
                   <div className="flex items-center justify-between gap-2">
-                    <dt className="text-muted-foreground">Base ref</dt>
+                    <dt className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.reissue.baseRef")}</dt>
                     <dd className="min-w-0 truncate font-mono text-foreground/90">{reissueBaseRef}</dd>
                   </div>
                   <div className="flex items-center justify-between gap-2">
-                    <dt className="text-muted-foreground">Recorded</dt>
+                    <dt className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.reissue.recorded")}</dt>
                     <dd className="min-w-0 truncate font-mono text-foreground/80">
                       {divergence.expectedBranch ?? "—"}
                     </dd>
                   </div>
                   {reissueVerdictBadge ? (
                     <div className="flex items-center justify-between gap-2">
-                      <dt className="text-muted-foreground">Ancestry</dt>
+                      <dt className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.reissue.ancestry")}</dt>
                       <dd className="font-medium">{reissueVerdictBadge.label}</dd>
                     </div>
                   ) : null}
@@ -1464,7 +1532,7 @@ export function IssueRecoveryActionCard({
                     })
                   }
                 >
-                  {reissuePending ? "Creating…" : "Create isolated re-issue"}
+                  {reissuePending ? t("app.common.progress.creating") : t("app.issueUi.issueRecoveryActionCard.reissue.confirm")}
                 </Button>
               </PopoverContent>
             </Popover>
@@ -1479,11 +1547,11 @@ export function IssueRecoveryActionCard({
           {showResolveActions ? (
             cardState === "observe_only" ? (
               <span className="text-(length:--text-micro) text-muted-foreground">
-                Recovery is observing without interrupting the live run.
+                {t("app.issueUi.issueRecoveryActionCard.footer.observing")}
               </span>
             ) : (
               <span className="text-(length:--text-micro) text-muted-foreground">
-                The card stays open until an explicit decision is recorded.
+                {t("app.issueUi.issueRecoveryActionCard.footer.staysOpen")}
               </span>
             )
           ) : null}

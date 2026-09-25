@@ -6573,6 +6573,1094 @@
         "selectTeam": "请选择一个团队以查看详情。",
         "wasImported": "{{name}} 已导入。"
       }
+    },
+    "issueUi": {
+      "attentionInteractionResolver": {
+        "loading": "正在加载决策…",
+        "unavailable": "此决策已不可用，可能已在其他地方处理。"
+      },
+      "attentionQueueRow": {
+        "snooze": {
+          "oneHour": "1 小时",
+          "fourHours": "4 小时",
+          "tomorrowMorning": "明天上午",
+          "nextWeek": "下周",
+          "label": "稍后提醒",
+          "until": "稍后提醒至…"
+        },
+        "collapseDecision": "收起决策",
+        "expandDecision": "展开决策",
+        "seeLess": "收起",
+        "seeMore": "展开",
+        "setByTitle": "设置者：{{name}}",
+        "setByInline": "· 由 {{name}} 设置",
+        "reappearsAt": "{{time}} 重新出现",
+        "reappearsIn": "{{time}} 重新出现",
+        "rowActions": "行操作",
+        "openSource": "打开来源",
+        "missingIssueReference": "此决策缺少任务引用。",
+        "completeFromDetail": "此决策必须在其详情视图中完成。",
+        "decisionActions": "决策操作",
+        "failed": {
+          "sentForRevision": "无法提交修改请求",
+          "approved": "无法同意",
+          "rejected": "无法拒绝"
+        },
+        "success": {
+          "approvalSentForRevision": "审批已退回修改",
+          "approvalApproved": "审批已同意",
+          "approvalRejected": "审批已拒绝",
+          "joinRequestSentForRevision": "加入申请已退回修改",
+          "joinRequestApproved": "加入申请已同意",
+          "joinRequestRejected": "加入申请已拒绝",
+          "confirmationAccepted": "确认已接受",
+          "confirmationDeclined": "确认已拒绝"
+        },
+        "moreImages": "另外 {{count}} 张",
+        "viewIssue": "查看任务",
+        "provenance": {
+          "anAgent": "某个智能体",
+          "you": "你"
+        },
+        "reappear": {
+          "soon": "即将",
+          "minutes": "{{count}} 分钟后",
+          "hours": "{{count}} 小时后",
+          "days": "{{count}} 天后"
+        },
+        "optionalNote": "可选的决策说明…",
+        "requestRevision": "要求修改"
+      },
+      "blockedReasonChip": {
+        "ariaLabel": "原因：{{label}}，严重程度 {{severity}}"
+      },
+      "commentAttributionChip": {
+        "tooltip": "{{agentName}} 代表 {{userName}} 发布了此内容。{{agentName}} 不是此任务的负责人，它在此处的写入权限来自 {{userName}}，且不会超出该权限。",
+        "thisAgent": "此智能体",
+        "ariaLabel": "代表 {{user}} 发布",
+        "chip": "代表 {{user}}"
+      },
+      "decisionCard": {
+        "unknownStatus": "未知",
+        "issueFallback": "任务 {{id}}",
+        "effect": {
+          "commentOn": "评论 {{target}}",
+          "createIssue": "在 {{parent}} 下创建任务“{{title}}”",
+          "setStatus": "将 {{target}} 设为 {{status}}",
+          "reassign": "重新分配 {{target}}",
+          "unblockOne": "解除 {{target}} 的阻塞：移除 {{count}} 个阻塞项",
+          "unblockMany": "解除 {{target}} 的阻塞：移除 {{count}} 个阻塞项",
+          "cancelTreeOne": "取消 {{target}} 及其子树（{{count}} 个任务）",
+          "cancelTreeMany": "取消 {{target}} 及其子树（{{count}} 个任务）",
+          "apply": "应用效果"
+        },
+        "cause": {
+          "denyDecisionIntersection": "被权限边界阻止（默认拒绝）",
+          "invalidEffectReference": "引用的任务已不存在",
+          "targetChanged": "自提议以来目标已变更",
+          "effectExecutionFailed": "效果运行时出错",
+          "couldNotRun": "效果无法运行"
+        },
+        "result": {
+          "skipped": "已跳过 {{target}}：自提议以来目标已变更",
+          "failed": "{{target}} 执行失败：{{cause}}",
+          "running": "正在 {{target}} 上运行…",
+          "commented": "已评论 {{target}}",
+          "created": "已创建 {{target}}",
+          "aNewIssue": "一个新任务",
+          "setStatus": "已将 {{target}} 设为 {{status}}",
+          "reassigned": "已重新分配 {{target}}",
+          "removedBlockersOne": "已从 {{target}} 移除 {{count}} 个阻塞项",
+          "removedBlockersMany": "已从 {{target}} 移除 {{count}} 个阻塞项",
+          "cancelledOne": "已取消 {{target}} 下的 {{count}} 个任务",
+          "cancelledMany": "已取消 {{target}} 下的 {{count}} 个任务",
+          "applied": "已在 {{target}} 上应用效果"
+        },
+        "badge": {
+          "pending": "待处理",
+          "dismissed": "已忽略",
+          "decided": "已决策",
+          "partial": "部分完成"
+        },
+        "destructive": "破坏性",
+        "provenance": {
+          "proposedBy": "由 <agent>{{agent}}</agent> 提议",
+          "anAgent": "某个智能体",
+          "whileRunning": "运行于 <link>{{issue}}</link>",
+          "appliesTo": " · 适用于 ",
+          "viewRun": "查看运行"
+        },
+        "stale": {
+          "titleOne": "自提议以来 {{count}} 个目标已变更",
+          "titleMany": "自提议以来 {{count}} 个目标已变更",
+          "changed": "已变更",
+          "optionsDisabled": "下方需要目标未变更的选项已禁用。"
+        },
+        "blockedStale": "受阻 · 已过期",
+        "cancelTree": {
+          "title": "这会取消整个任务树",
+          "willCancelOne": "将取消 {{count}} 个任务：",
+          "willCancelMany": "将取消 {{count}} 个任务：",
+          "willCancelAll": "此任务及其下的所有子任务都将被取消。",
+          "typeToConfirm": "输入 <token>{{token}}</token> 以确认。",
+          "confirmAria": "输入任务标识以确认",
+          "cancelOne": "取消 {{count}} 个任务",
+          "cancelMany": "取消 {{count}} 个任务",
+          "cancelTree": "取消任务树"
+        },
+        "notNow": "暂不处理？",
+        "dismissNoEffects": "忽略（不执行任何效果）",
+        "expired": {
+          "title": "决策窗口已关闭",
+          "targetGone": "在做出决策前，某个目标任务已被取消。",
+          "targetCompleted": "在做出决策前，所有目标任务均已完成。",
+          "noResponse": "截止时间前未收到回应。",
+          "proposerRewoken": "已重新唤醒提议者。"
+        },
+        "withdrawn": "提议者在收到回应前撤回了此决策。",
+        "dismissedNoEffects": "已忽略，未执行任何效果。",
+        "partialWarning": "部分效果可能已经应用。请先检查结果，再请提议者重新提议。"
+      },
+      "decisionDateChips": {
+        "from": "开始",
+        "to": "结束"
+      },
+      "decisionQueueRail": {
+        "ariaLabel": "决策队列",
+        "recentActivity": "近期有活动"
+      },
+      "decisionResolver": {
+        "loading": "正在加载决策…",
+        "unavailable": "此决策已不可用，可能已在其他地方处理。"
+      },
+      "decisionShelf": {
+        "keptToast": "已保留在工作台",
+        "keepFailed": "无法保留此决策",
+        "idleOneDay": "已闲置 {{count}} 天",
+        "idleDays": "已闲置 {{count}} 天",
+        "kept": "已保留",
+        "keepOnDesk": "保留在工作台"
+      },
+      "decisionTriageStrip": {
+        "snoozeTomorrow": "明天",
+        "expiresInMinutes": "{{count}} 分钟后过期",
+        "expiresInHours": "{{count}} 小时后过期",
+        "expiresInDays": "{{count}} 天后过期",
+        "failed": {
+          "setDecideBy": "无法设置决策时间",
+          "snooze": "无法稍后提醒",
+          "addToQueue": "无法加入队列",
+          "removeFromQueue": "无法移出队列",
+          "askAgent": "无法请该智能体给出建议",
+          "createQueue": "无法创建队列"
+        },
+        "noLinkedTaskError": "此决策没有可用于转交的关联任务。",
+        "askedToast": "已请 {{name}} 给出建议",
+        "whenToDecide": "决策时间",
+        "pickDate": "选择日期",
+        "queues": "队列",
+        "removeFrom": "从 {{title}} 移除",
+        "snoozedUntil": "稍后提醒至 {{time}}",
+        "noLinkedTask": "没有可询问的关联任务",
+        "queue": "队列",
+        "newQueueName": "新队列名称…",
+        "noOtherQueues": "还没有其他队列。",
+        "newQueue": "新建队列…",
+        "askAgent": "请智能体给出建议"
+      },
+      "decisionsToolbar": {
+        "oneDecision": "{{count}} 项决策",
+        "manyDecisions": "{{count}} 项决策",
+        "severity": "严重程度",
+        "workspace": "工作区",
+        "noWorkspace": "无工作区"
+      },
+      "documentAnnotationLayer": {
+        "openThread": "打开批注讨论",
+        "anchorMoved": "锚点已移动，需要检查",
+        "selectionActions": "选区操作",
+        "addCommentOnSelection": "为选区添加评论（⌘⇧M）"
+      },
+      "documentAnnotationPanel": {
+        "sheetTitle": "{{key}} 修订 {{revision}} 的评论",
+        "ariaLabel": "{{key}} 的批注，修订 {{revision}}",
+        "rev": "修订 {{revision}}",
+        "close": "关闭批注面板",
+        "writeComment": "写评论…",
+        "posting": "发布中…",
+        "replyPlaceholder": "回复…",
+        "reopen": "重新打开",
+        "resolve": "解决",
+        "sending": "发送中…",
+        "reply": "回复",
+        "moreThreadActions": "更多讨论操作",
+        "oneComment": "{{count}} 条评论",
+        "manyComments": "{{count}} 条评论",
+        "agentSuffix": "· 智能体",
+        "linkCopied": "链接已复制"
+      },
+      "documentAnnotationPopover": {
+        "addComment": "添加批注评论",
+        "thread": "批注讨论"
+      },
+      "documentDiffModal": {
+        "actor": {
+          "board": "管理员",
+          "agent": "智能体",
+          "system": "系统"
+        },
+        "revisionLabel": "修订 {{revision}} — {{time}} • {{actor}}",
+        "title": "差异 — <key>{{key}}</key>",
+        "old": "旧",
+        "new": "新",
+        "selectRevision": "选择修订",
+        "loadingRevisions": "正在加载修订…",
+        "selectTwo": "请选择两个修订进行比较。",
+        "sameRevision": "两侧是同一个修订。",
+        "content": "内容"
+      },
+      "documentFrameHeader": {
+        "expand": "展开 {{key}} 文档",
+        "collapse": "收起 {{key}} 文档",
+        "revisionHistory": "修订历史",
+        "noRevisions": "还没有修订",
+        "updated": "更新于 {{time}}"
+      },
+      "issueAssignedBacklogNotice": {
+        "theAssignee": "负责人",
+        "parked": "<strong>已搁置</strong> — 在状态改为待办或进行中之前，不会要求 <strong>{{assignee}}</strong> 处理此任务。",
+        "commentsNotify": "评论仍会通知负责人，以便提问或分诊。仅当工作确实需要暂缓时才保持搁置。",
+        "resumeNow": "立即恢复"
+      },
+      "issueAttachmentsSection": {
+        "browseGallery": "浏览图库",
+        "browseInGallery": "在图库中浏览 {{filename}}",
+        "openInNewTab": "在新标签页中打开",
+        "openFile": "打开 {{filename}}",
+        "downloadFile": "下载 {{filename}}",
+        "deleteAttachment": "删除附件",
+        "meta": "附件 · {{contentType}} · {{size}}",
+        "loadingPreview": "正在加载预览…",
+        "previewFailed": "无法加载 Markdown 预览。",
+        "title": "附件",
+        "altFallback": "附件",
+        "deleteQuestion": "删除？",
+        "deleteConfirm": "要删除此附件吗？此操作无法撤销。",
+        "deleting": "删除中…"
+      },
+      "issueBlockedNotice": {
+        "recoveryTitleDetail": "{{label}} — {{detail}}。请打开来源任务进行处理。",
+        "recoveryTitle": "{{label}} — 请打开来源任务进行处理。",
+        "nextStep": {
+          "dueNow": "Paperclip 将立即请负责人选择下一步。点击立即重试会马上开始该跟进。",
+          "scheduledRelative": "Paperclip 将在 {{relative}} 请负责人选择下一步。点击立即重试会马上开始该跟进。",
+          "scheduled": "Paperclip 将按计划请负责人选择下一步。点击立即重试会马上开始该跟进。"
+        },
+        "retrying": "重试中…",
+        "alreadyPromoted": "已提前",
+        "promoted": "已提前",
+        "retryNow": "立即重试",
+        "statusTitle": "状态：{{status}}",
+        "inFlight": "修正运行正在进行中，智能体正在处理。如果运行停止时仍未选择下一步，此提醒会再次出现。",
+        "runId": "运行 {{id}}",
+        "live": {
+          "title": "等待进行中的工作",
+          "queuedOne": "排在 {{count}} 个按顺序处理的任务之后。链条完成后此任务会自动恢复。评论仍会通知负责人。",
+          "queuedMany": "排在 {{count}} 个按顺序处理的任务之后。链条完成后此任务会自动恢复。评论仍会通知负责人。",
+          "progressRunning": "已完成 {{done}}/{{total}} · {{running}} 个运行中",
+          "progress": "已完成 {{done}}/{{total}}",
+          "progressAria": "阻塞链进度",
+          "thisTask": "此任务 — 链条完成后自动恢复",
+          "nowRunning": "正在运行"
+        },
+        "blockedByParked": "被搁置的工作阻塞",
+        "theAssignee": "负责人",
+        "handoff": {
+          "title": "此任务仍需要确定下一步。",
+          "body": "一次运行已成功完成，但任务仍处于打开状态。Paperclip 需要有人决定接下来怎么做。",
+          "markDone": "将其标记为已完成或已取消。",
+          "sendReview": "提交审核或请求输入。",
+          "recordBlocker": "记录阻塞原因以及该阻塞项的负责人。",
+          "delegate": "委派后续工作或排队续跑。",
+          "asked": "已请 {{name}} 选择下一步",
+          "detectedProgress": "检测到的进展：{{summary}}"
+        },
+        "blocked": {
+          "stalledReviewsOne": "此任务被关联任务阻塞，但链条停滞在审核中，没有明确的下一步。请处理下方停滞的审核，或将其从阻塞项中移除。",
+          "stalledReviewsMany": "此任务被关联任务阻塞，但链条停滞在审核中，没有明确的下一步。请处理下方停滞的审核，或将其从阻塞项中移除。",
+          "stalledReviewOne": "此任务被关联任务阻塞，但链条停滞在审核中，没有明确的下一步。请处理下方停滞的审核，或将其从阻塞项中移除。",
+          "stalledReviewMany": "此任务被关联任务阻塞，但链条停滞在审核中，没有明确的下一步。请处理下方停滞的审核，或将其从阻塞项中移除。",
+          "reopenSuppressedOne": "发送消息暂时不会重启此任务：在关联任务完成前它会保持受阻，完成后会自动重新打开。在此期间，评论仍会通知 {{name}}，以便提问或分诊。",
+          "reopenSuppressedMany": "发送消息暂时不会重启此任务：在关联任务完成前它会保持受阻，完成后会自动重新打开。在此期间，评论仍会通知 {{name}}，以便提问或分诊。",
+          "untilCompleteOne": "在关联任务完成前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分诊。",
+          "untilCompleteMany": "在关联任务完成前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分诊。",
+          "untilMovedBack": "在有人将其移回待办之前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分诊。"
+        },
+        "stillBlocked": {
+          "base": "仍被 <id>{{id}}</id> 阻塞。",
+          "status": "仍被 <id>{{id}}</id>（{{status}}）阻塞。",
+          "otherOne": "仍被 <id>{{id}}</id> 及另外 {{count}} 个任务阻塞。",
+          "otherMany": "仍被 <id>{{id}}</id> 及另外 {{count}} 个任务阻塞。",
+          "statusOtherOne": "仍被 <id>{{id}}</id>（{{status}}）及另外 {{count}} 个任务阻塞。",
+          "statusOtherMany": "仍被 <id>{{id}}</id>（{{status}}）及另外 {{count}} 个任务阻塞。"
+        },
+        "stalledInReview": "停滞在审核中",
+        "ultimatelyWaitingOn": "最终等待"
+      },
+      "issueContinuationHandoff": {
+        "title": "续跑交接",
+        "collapse": "收起续跑交接",
+        "expand": "展开续跑交接",
+        "badge": "交接",
+        "updatedRevision": "更新于 {{time}} - 修订 {{revision}}",
+        "updated": "更新于 {{time}}"
+      },
+      "issueDocumentAnnotations": {
+        "disabled": {
+          "historical": "预览历史修订时无法添加新评论。",
+          "conflict": "请先解决文档冲突，再添加新评论。",
+          "dirty": "请先保存草稿，以便为新评论定位。",
+          "noRevision": "文档还没有已保存的修订。"
+        },
+        "openComments": "打开 {{key}} 的评论",
+        "openUnresolved": "打开 {{key}} 的 {{count}} 条未解决评论",
+        "commentOne": "条评论",
+        "commentMany": "条评论"
+      },
+      "issueDocumentsSection": {
+        "errors": {
+          "deleteUnavailable": "无法删除文档",
+          "deleteFailed": "删除文档失败",
+          "restoreUnavailable": "无法恢复文档修订",
+          "restoreFailed": "恢复文档修订失败",
+          "lockUnavailable": "无法锁定文档",
+          "lockFailed": "更新文档锁定状态失败",
+          "keyHint": "请使用小写字母、数字、- 或 _，并以字母或数字开头。",
+          "keyAndBodyRequired": "文档键和正文为必填项",
+          "bodyEmpty": "文档正文不能为空",
+          "keyInvalid": "文档键必须以字母或数字开头，且只能包含小写字母、数字、- 或 _。",
+          "locked": "文档已锁定。请先解锁再编辑。",
+          "remoteLoadFailed": "文档已在远端变更，且无法加载最新版本",
+          "saveFailed": "保存文档失败",
+          "copyFailed": "无法复制文档",
+          "saveBeforeHistory": "查看旧修订前，请先保存或取消本地更改。",
+          "saveBeforeLock": "更改文档锁定状态前，请先保存或取消本地更改。"
+        },
+        "newDocument": "新建文档",
+        "keyPlaceholder": "文档键",
+        "optionalTitle": "可选标题",
+        "markdownBody": "Markdown 正文",
+        "saving": "保存中…",
+        "createDocument": "创建文档",
+        "unlock": "解锁文档",
+        "lock": "锁定文档",
+        "unlockKey": "解锁 {{key}} 文档",
+        "lockKey": "锁定 {{key}} 文档",
+        "locked": "已锁定的文档",
+        "copyDocument": "复制文档",
+        "actions": "文档操作",
+        "editDocument": "编辑文档",
+        "downloadDocument": "下载文档",
+        "viewDiff": "查看差异",
+        "deleteDocument": "删除文档",
+        "viewingRevision": "正在查看修订 {{revision}}",
+        "historicalNote": "这是历史预览。恢复它会创建一个新的最新修订，历史记录只追加不修改。",
+        "returnToLatest": "返回最新",
+        "restoring": "恢复中…",
+        "restoreRevision": "恢复此修订",
+        "outOfDate": "已过期",
+        "conflictNote": "你编辑期间此文档已发生变更。本地草稿已保留，自动保存已暂停。",
+        "hideRemote": "隐藏远端版本",
+        "reviewRemote": "查看远端版本",
+        "keepDraft": "保留我的草稿",
+        "reloadRemote": "重新加载远端版本",
+        "overwriteRemote": "覆盖远端版本",
+        "remoteRevision": "远端修订 {{revision}}",
+        "viewingHistorical": "正在查看历史修订",
+        "autosaving": "自动保存中…",
+        "couldNotSave": "无法保存",
+        "deleteConfirm": "要删除此文档吗？此操作无法撤销。",
+        "planBadge": "计划"
+      },
+      "issueLinkQuicklook": {
+        "loadFailed": "无法加载任务预览。"
+      },
+      "issueMonitorBanner": {
+        "waitingForWorkspace": "等待工作区",
+        "workspaceBusyBanner": "另一个任务正在使用此工作区。工作区可用时将自动开始工作。",
+        "workspaceBusyStrip": "工作区可用时将自动开始工作。",
+        "agentResumes": "智能体将于 {{eta}} 恢复",
+        "monitorResumes": "等待监控 — 将于 {{eta}} 恢复",
+        "resumes": "将于 {{eta}} 恢复",
+        "agentRetryDueNow": "智能体重试已到期",
+        "monitorDueNow": "等待监控 — 已到期",
+        "dueNow": "已到期",
+        "checkingMomentarily": "即将检查…",
+        "agentRetryEta": "智能体重试 {{eta}}",
+        "monitorEta": "等待监控 — {{eta}}",
+        "firesNextTick": "将在下一个周期触发",
+        "attempt": "第 {{count}} 次尝试",
+        "watching": "监控对象：{{name}}",
+        "yourTime": "{{time}}（本地时间）",
+        "checkNow": "立即检查",
+        "keepSending": "智能体等待期间，你仍可以继续发送指令。",
+        "replyWakes": "发送回复会立即唤醒智能体，无需等到计划检查时间。"
+      },
+      "issuePlanDecompositionsSection": {
+        "inFlight": "进行中",
+        "title": "计划拆解",
+        "oneAccepted": "1 个已接受的计划修订",
+        "manyAccepted": "{{count}} 个已接受的计划修订",
+        "agentFallback": "智能体",
+        "planRevision": "计划修订 {{revision}}",
+        "childCreatedOne": "已创建 {{created}}/{{requested}} 个子任务",
+        "childCreatedMany": "已创建 {{created}}/{{requested}} 个子任务",
+        "idempotentTitle": "使用相同指纹的重复尝试会复用此记录，而不会创建新的子任务",
+        "idempotentClaim": "幂等认领",
+        "owner": "负责人：{{name}}",
+        "started": "开始于 {{time}}",
+        "completed": "完成于 {{time}}",
+        "updated": "更新于 {{time}}",
+        "planDocument": "计划文档"
+      },
+      "issueRecoveryActionCard": {
+        "kind": {
+          "missingDisposition": "缺少处置",
+          "waitWithoutTarget": "无目标等待",
+          "strandedTask": "停滞任务",
+          "workspaceValidation": "工作区校验",
+          "configurationValidation": "配置校验",
+          "activeWatchdog": "活跃看门狗",
+          "taskNeedsNextStep": "任务需要下一步"
+        },
+        "headline": {
+          "missingDisposition": "此任务的运行已结束，但没有选择下一步。请决定接下来怎么做：重试任务、标记为已完成，或提交审核。",
+          "waitWithoutTarget": "此任务的上次运行停下来等待，但没有可等待的审核人、阻塞项、监控或审批。Paperclip 正在修复下一步；任务仍由其负责人负责。",
+          "strandedTask": "Paperclip 已重试此任务的上次运行，但仍没有排队的运行、审核人、阻塞项或其他下一位负责人。要让它继续推进，请决定接下来怎么做：重试任务、标记为已完成，或提交审核。",
+          "workspaceValidation": "由于无法校验此任务的 git 工作区，Paperclip 停止了此运行。",
+          "configurationValidation": "由于缺少必需的密钥/环境变量绑定，Paperclip 在派发此运行前已停止。",
+          "activeWatchdog": "活跃运行一直处于静默状态。恢复流程正在观察，不会打断它。",
+          "taskNeedsNextStep": "Paperclip 无法为这个未关闭的任务找到明确的下一步。请选择继续工作、提交审核、标记为已完成，或记录阻塞原因。"
+        },
+        "state": {
+          "needed": "需要恢复",
+          "inProgress": "恢复进行中",
+          "observeOnly": "正在观察活跃运行",
+          "escalated": "恢复已升级",
+          "resolved": "恢复已解决"
+        },
+        "outcome": {
+          "restored": "已恢复",
+          "handedBack": "已交还给原负责人",
+          "ownerCompleted": "已由恢复负责人完成",
+          "delegated": "已委派为后续任务",
+          "falsePositive": "误报",
+          "escalated": "已升级"
+        },
+        "ancestry": {
+          "ancestor": "仅向前",
+          "diverged": "已分叉",
+          "unknown": "祖先关系未知"
+        },
+        "branch": {
+          "detachedUnknown": "分离 / 未知",
+          "expectedRecorded": "预期 · 已记录",
+          "liveCheckedOut": "实际 · 已检出",
+          "recordedExpected": "已记录 · 预期",
+          "detached": "分离"
+        },
+        "divergence": {
+          "title": "分叉诊断"
+        },
+        "contention": {
+          "activeRun": "工作树已被 <code>{{label}}</code> 占用（运行中）— 另一个工作区持有实际分支时，无损修复无法运行。",
+          "claimHeld": "工作树已被 <code>{{label}}</code> 占用（仍持有占用）— 另一个工作区持有实际分支时，无损修复无法运行。",
+          "issueFallback": "任务 {{id}}",
+          "anotherTask": "另一个任务"
+        },
+        "breakGlass": {
+          "trigger": "我已核实 — 仍然调和",
+          "title": "紧急调和",
+          "body": "这会绕过 Paperclip 的安全检查，并在<strong>没有祖先关系证明</strong>的情况下将已记录的工作区指向实际分支。请先确认下方的分叉情况并记录原因，再继续。",
+          "verdict": "祖先关系判定",
+          "reason": "原因 <hint>（必填 — 将记录到审计日志）</hint>",
+          "placeholder": "例如：已核实实际分支只包含预期的后续提交，可以安全采用。",
+          "reconciling": "调和中…",
+          "confirm": "仍然调和（紧急）"
+        },
+        "repair": {
+          "uncommitted": "未提交的更改",
+          "uncommittedOne": "{{count}} 处未提交的更改",
+          "uncommittedMany": "{{count}} 处未提交的更改",
+          "trigger": "修复工作区 — 隔离更改并恢复分支",
+          "title": "修复工作区",
+          "body": "这是无损操作，无需填写原因。未提交的更改会提交到一个新的救援分支，然后恢复已记录的分支，以便任务继续。实际分支保持原样。",
+          "dirty": "未提交更改",
+          "liveBranch": "实际分支",
+          "leftUntouched": "（保持不变）",
+          "rescueBranch": "救援分支",
+          "restoreTo": "恢复到",
+          "recordedBranch": "已记录的分支",
+          "repairing": "修复中…",
+          "confirm": "隔离更改并恢复分支"
+        },
+        "wake": {
+          "wakeOwner": "将请智能体选择下一步",
+          "ownerRepair": "Paperclip 正在重试原负责人",
+          "recoveryOwner": "恢复负责人正在修复下一步",
+          "boardEscalation": "需要管理员决策",
+          "manual": "需要人工跟进",
+          "manualRepair": "重试前需要修复",
+          "checkScheduledInterval": "已计划检查 · {{interval}}",
+          "checkScheduled": "已计划检查",
+          "retryExpired": "计划的重试没有运行 — 需要重试或做出决策",
+          "retriesFinished": "自动重试已结束 — 需要做出决策"
+        },
+        "time": {
+          "inMinutes": "{{count}} 分钟后",
+          "minutesAgo": "{{count}} 分钟前"
+        },
+        "agentFallback": "智能体 {{id}}",
+        "runChip": "运行 {{id}}",
+        "lineage": {
+          "retryExpired": "此任务的自动重试已到期但没有运行，目前没有任何东西在推进它。需要有人重试或记录下一步。任务仍由原负责人负责。",
+          "sourceExhausted": "此任务的上次运行停下来等待，但并没有需要等待的对象。原负责人已用完所有自动修复尝试，下一步需要做出决策。任务仍由其负责人负责。",
+          "sourceRetrying": "此任务的上次运行停下来等待，但并没有需要等待的对象。Paperclip 正在重试原负责人，以记录真正的下一步。任务仍由其负责人负责，目前无需操作。",
+          "recoveryOwner": "原负责人未能在重试额度内记录下一步。恢复负责人现在只负责修复路径，任务本身仍属于原负责人。",
+          "board": "自动恢复已用尽，需要管理员选择下一步。任务本身仍属于原负责人。"
+        },
+        "resolve": {
+          "tryAgain": {
+            "description": "关闭恢复，并将来源任务退回待办。"
+          },
+          "markDone": {
+            "label": "将任务标记为已完成",
+            "description": "将请求的工作记录为已完成，以此恢复。"
+          },
+          "sendReview": {
+            "label": "提交审核",
+            "description": "交给具备真实审核路径的审核人。"
+          },
+          "falsePositiveDone": {
+            "label": "误报，已完成",
+            "description": "关闭恢复，并将来源任务标记为已完成。"
+          },
+          "falsePositiveReview": {
+            "label": "误报，提交审核",
+            "description": "关闭恢复，并将来源任务提交审核。"
+          }
+        },
+        "resolvedHeadline": "恢复已解决：{{outcome}}。",
+        "humanDecision": "此恢复需要人工决策。请查看记录的失败原因并选择下一步。",
+        "aria": {
+          "needed": "恢复操作：需要处理",
+          "inProgress": "恢复操作：进行中",
+          "observeOnly": "恢复操作：正在观察活跃运行",
+          "escalated": "恢复操作：已升级",
+          "resolved": "恢复操作：已解决"
+        },
+        "heldByReissue": "被 {{label}} 占用 — 请改为在隔离工作区中重新发起。",
+        "heldBy": "被 {{label}} 占用。",
+        "meta": {
+          "taskOwner": "任务负责人",
+          "recoveryOwner": "恢复负责人",
+          "retryProgress": "重试进度",
+          "ownerRetries": "负责人重试",
+          "owner": "负责人",
+          "sourceRun": "来源运行",
+          "correctiveRun": "修正运行",
+          "evidence": "证据",
+          "nextAction": "下一步操作",
+          "followUp": "跟进",
+          "resolution": "处理结果"
+        },
+        "unassigned": "未分配",
+        "keepsTask": "保留此任务",
+        "originalRetrying": "原负责人 — 正在自行重试",
+        "repairsNextStep": "仅修复下一步",
+        "decidesNextStep": "仅决定下一步",
+        "userFallback": "用户 {{id}}",
+        "unassignedPick": "未分配 — 选择一位以唤醒",
+        "attemptsUnbounded": "尝试次数不限",
+        "attemptRunning": "尝试正在运行",
+        "retryMissedAt": "重试已错过 {{offset}}",
+        "retryMissed": "重试已错过",
+        "nextTryNow": "立即进行下一次尝试",
+        "nextTryAt": "下一次尝试 {{offset}}",
+        "retriesUsedUp": "自动重试已用完",
+        "ownerUsed": "原负责人已使用 {{used}}/{{max}} 次自动尝试。",
+        "recoveryPrefix": "恢复：",
+        "returnsTo": "→ 交还给：",
+        "attemptOf": "第 {{count}}/{{max}} 次尝试",
+        "timesOut": "{{time}} 超时",
+        "soon": "即将",
+        "resolvedAsAt": "已解决：{{outcome}} · {{time}}",
+        "resolvedAs": "已解决：{{outcome}}",
+        "resolveRecovery": "处理恢复",
+        "resolveEllipsis": "处理…",
+        "reconcileForward": "向前调和并继续",
+        "reissue": {
+          "title": "在隔离工作区中重新发起",
+          "recommended": "推荐",
+          "body": "基于实际分支，在隔离的 git 工作树上创建此任务的新副本。当前工作区及其提交保持不变。",
+          "baseRef": "基准引用",
+          "recorded": "已记录",
+          "ancestry": "祖先关系",
+          "confirm": "创建隔离的重新发起"
+        },
+        "footer": {
+          "observing": "恢复流程正在观察，不会打断实时运行。",
+          "staysOpen": "在记录明确决策之前，此卡片会保持打开。"
+        }
+      },
+      "issueReferencePill": {
+        "taskAria": "任务 {{label}}：{{title}}",
+        "removeBlocker": "移除阻塞项 {{label}}",
+        "taskTitleAria": "任务：{{title}}"
+      },
+      "issueRelatedWorkPanel": {
+        "external": {
+          "title": "外部对象",
+          "description": "此任务引用的远程工作，例如拉取请求、部署、其他系统中的工单等。",
+          "loadFailed": "无法加载外部对象。",
+          "loading": "正在加载外部对象…",
+          "empty": "此任务还没有引用任何外部对象。"
+        },
+        "references": {
+          "title": "引用",
+          "description": "此任务在标题、描述、评论或文档中当前引用的其他任务。",
+          "empty": "此任务还没有引用任何其他任务。"
+        },
+        "referencedBy": {
+          "title": "被引用",
+          "description": "当前引用此任务的其他任务。",
+          "empty": "还没有其他任务引用此任务。"
+        }
+      },
+      "issueRow": {
+        "openSr": "打开 {{identifier}}：{{title}}"
+      },
+      "issueRunLedger": {
+        "liveness": {
+          "completed": {
+            "description": "任务已进入终止状态。"
+          },
+          "advanced": {
+            "label": "有进展",
+            "description": "运行产生了具体的进展证据。"
+          },
+          "planOnly": {
+            "label": "仅有计划",
+            "description": "运行只描述了后续工作，没有具体行动的证据。"
+          },
+          "emptyResponse": {
+            "label": "空响应",
+            "description": "运行结束但没有有用的输出。"
+          },
+          "blocked": {
+            "description": "运行或任务声明了阻塞项。"
+          },
+          "failed": {
+            "description": "运行未成功结束。"
+          },
+          "needsFollowup": {
+            "label": "需要跟进",
+            "description": "运行产生了有用的输出，但未证明有具体进展。"
+          },
+          "pending": {
+            "label": "结束后检查",
+            "description": "运行结束后才会评估活跃度。"
+          },
+          "retryPending": {
+            "description": "Paperclip 已排队一次自动重试，但尚未开始。"
+          },
+          "missing": {
+            "label": "无活跃度数据",
+            "description": "此运行没有已保存的活跃度分类。"
+          }
+        },
+        "retryPending": "重试待开始",
+        "silence": {
+          "suspicious": "输出静默",
+          "critical": "严重静默",
+          "snoozed": "静默已暂缓",
+          "criticalTitle": "严重输出静默",
+          "warningTitle": "输出静默看门狗警告",
+          "silentForReview": "最新的活跃运行已静默 {{age}}。请查看 <link>{{identifier}}</link> 了解恢复上下文。",
+          "silentFor": "最新的活跃运行已静默 {{age}}。",
+          "extendedPeriod": "较长时间",
+          "infoDelegated": "此信号仅供参考。Paperclip 未创建新的委派恢复工作。",
+          "infoNoTask": "此信号仅供参考。Paperclip 未创建或分配恢复任务。"
+        },
+        "summary": {
+          "running": "{{name}} 正在运行",
+          "queued": "已为 {{name}} 排队",
+          "scheduledRetry": "已为 {{name}} 计划自动重试",
+          "statusBy": "{{name}}：{{status}}"
+        },
+        "stop": {
+          "timeoutSeconds": "{{seconds}} 秒超时",
+          "timeoutWith": "超时（{{timeout}}）",
+          "timeout": "超时",
+          "maxTurns": "已达最大轮次",
+          "budgetPaused": "预算已暂停",
+          "pausedByBoard": "已被管理员暂停",
+          "processLost": "进程丢失",
+          "unmanagedStopped": "未托管的后台任务已停止",
+          "adapterFailed": "适配器失败",
+          "completedWith": "已完成（{{timeout}}）"
+        },
+        "stopStatus": {
+          "waitingToStart": "等待开始",
+          "stillRunning": "仍在运行",
+          "none": "无停止原因"
+        },
+        "lastAction": {
+          "waitingNext": "等待下一次尝试",
+          "noneYet": "尚未记录任何操作",
+          "noConcrete": "没有具体操作",
+          "noUseful": "没有有用的输出",
+          "noneRecorded": "无记录"
+        },
+        "continuationAttempt": "第 {{count}} 次续跑",
+        "age": {
+          "underMinute": "不到 1 分钟",
+          "minuteOne": "{{count}} 分钟",
+          "minutes": "{{count}} 分钟",
+          "hourOne": "{{count}} 小时",
+          "hours": "{{count}} 小时"
+        },
+        "watchdog": {
+          "forbidden": "只有管理员或指定的恢复负责人可以记录看门狗决策",
+          "failed": "Paperclip 无法记录看门狗决策。",
+          "toastTitle": "看门狗决策未记录",
+          "continue": "继续监控",
+          "snooze": "暂缓 1 小时",
+          "falsePositive": "标记为误报"
+        },
+        "trace": {
+          "skipped": "已跳过追踪重跑。",
+          "notStarted": "追踪重跑未开始",
+          "failed": "Paperclip 无法启动追踪重跑。"
+        },
+        "ariaLabel": "任务运行记录",
+        "title": "运行记录",
+        "waitingFirst": "正在等待第一条运行记录。",
+        "noRuns": "还没有关联的运行。",
+        "latestRun": "最新运行",
+        "childWork": "子任务工作",
+        "children": {
+          "active": "{{active}} 个进行中，{{done}} 个已完成，{{cancelled}} 个已取消",
+          "terminal": "全部 {{total}} 个已终止（{{done}} 个已完成，{{cancelled}} 个已取消）"
+        },
+        "moreChildren": "另外 {{count}} 个",
+        "empty": {
+          "withActivity": "此任务有历史记录后，运行和活动会显示在这里。",
+          "runsOnly": "没有活跃度元数据的历史运行关联到此任务后，会显示在这里。"
+        },
+        "byAgent": "由 {{name}}",
+        "actingOnBehalf": "代表 {{name}} 执行",
+        "onBehalfOf": "代表 <name>{{name}}</name>",
+        "live": "实时",
+        "exhausted": "已耗尽",
+        "inspectRun": "检查运行",
+        "elapsed": "耗时",
+        "unknown": "未知",
+        "lastUsefulAction": "最近有用操作",
+        "stopLabel": "停止",
+        "retryOf": "重试自 <link>{{id}}</link>",
+        "nextAction": "下一步操作：",
+        "olderHidden": "另有 {{count}} 条较早的记录未显示"
+      },
+      "issueScheduledRetryCard": {
+        "retryScheduled": "已计划重试",
+        "title": {
+          "continuationDueNow": "自动续跑已到期",
+          "retryDueNow": "自动重试已到期",
+          "continuationRelative": "自动续跑 {{relative}}",
+          "retryRelative": "自动重试 {{relative}}",
+          "continuationPending": "自动续跑待安排",
+          "retryPending": "自动重试待安排"
+        },
+        "pullsRetryForward": "立即提前重试",
+        "replacesRun": "替换运行 <link>{{id}}</link>",
+        "lastAttemptFailed": "上次尝试失败：{{error}}。Paperclip 会自动重试。",
+        "promoting": "正在提前计划的重试",
+        "alreadyPromotedStarting": "已提前 — 运行正在启动",
+        "promotedStarting": "已提前 — 运行正在启动",
+        "retryFailed": "暂时无法重试"
+      },
+      "issueSiblingNavigation": {
+        "ariaLabel": "子任务导航",
+        "previous": "上一个",
+        "previousAria": "上一个子任务：{{identifier}} - {{title}}",
+        "nextAria": "下一个子任务：{{identifier}} - {{title}}",
+        "next": "下一个"
+      },
+      "issueThreadInteractionCard": {
+        "status": {
+          "pending": "待处理",
+          "accepted": "已接受",
+          "rejected": "已拒绝",
+          "answered": "已回答"
+        },
+        "kind": {
+          "suggestTasks": "建议的任务",
+          "askUserQuestions": "向用户提问",
+          "requestConfirmation": "确认",
+          "checkboxConfirmation": "勾选确认",
+          "itemVerdicts": "逐项裁定",
+          "connectionIntent": "连接请求"
+        },
+        "plan": {
+          "approvedResumeFailed": "已批准 — 智能体恢复失败",
+          "approved": "已批准",
+          "changesRequested": "已要求修改",
+          "inReview": "审核中",
+          "label": "计划"
+        },
+        "withdrawn": "已撤回",
+        "tool": {
+          "running": "运行中…",
+          "executed": "已执行",
+          "awaitingApproval": "等待批准",
+          "waitingApproval": "等待批准",
+          "approvedRunning": "已批准 · 运行中…",
+          "succeeded": "成功",
+          "executionFailed": "执行失败",
+          "couldNotComplete": "操作无法完成。",
+          "alwaysAllowedSuffix": " · 始终允许",
+          "hideResult": "隐藏结果详情",
+          "showResult": "显示结果详情",
+          "viewResult": "查看结果",
+          "declining": "拒绝中…",
+          "approveRequest": "批准请求",
+          "approveRun": "批准并运行",
+          "approvalOptions": "批准选项",
+          "alwaysAllow": "始终允许"
+        },
+        "taskField": "{{label}}：{{value}}",
+        "tasks": {
+          "include": "包含 {{title}}",
+          "childTask": "子任务",
+          "skipped": "已跳过",
+          "billing": "计费",
+          "hiddenOne": "预览中隐藏了 1 个后续任务",
+          "hiddenMany": "预览中隐藏了 {{count}} 个后续任务",
+          "oneDraft": "1 个任务草稿",
+          "manyDrafts": "{{count}} 个任务草稿",
+          "defaultParent": "默认父任务",
+          "resolutionSummary": "处理摘要",
+          "createdSkippedOne": "已创建 {{created}} 个任务草稿，审核时跳过了 {{skipped}} 个。",
+          "createdSkippedMany": "已创建 {{created}} 个任务草稿，审核时跳过了 {{skipped}} 个。",
+          "createdAllOne": "已创建全部 {{count}} 个任务草稿。",
+          "createdAllMany": "已创建全部 {{count}} 个任务草稿。",
+          "rejectionReason": "拒绝原因",
+          "noReason": "未提供原因。",
+          "allSelectedOne": "已选择全部 {{count}} 个任务草稿",
+          "allSelectedMany": "已选择全部 {{count}} 个任务草稿",
+          "someSelectedOne": "已选择 {{selected}}/{{total}} 个任务草稿",
+          "someSelectedMany": "已选择 {{selected}}/{{total}} 个任务草稿",
+          "willSkip": "如果接受此交互，将跳过 {{count}} 个。",
+          "accepting": "接受中…",
+          "acceptDrafts": "接受草稿",
+          "acceptSelected": "接受所选草稿",
+          "resetSelection": "重置选择",
+          "rejectPlaceholder": "简要说明拒绝此建议的原因",
+          "saveRejection": "保存拒绝"
+        },
+        "savingAscii": "保存中…",
+        "questions": {
+          "one": "1 个问题",
+          "many": "{{count}} 个问题",
+          "number": "问题 {{number}}",
+          "pick": "单选",
+          "pickMany": "多选",
+          "required": "必填",
+          "describeAnswer": "描述你对“{{prompt}}”的回答",
+          "typeAnswer": "输入你的回答",
+          "other": "其他",
+          "otherAnswer": "“{{prompt}}”的其他回答",
+          "submitOnce": "填写完整个表单后再统一提交。",
+          "cancelling": "取消中…",
+          "cancel": "取消问题",
+          "submitting": "提交中…",
+          "submit": "提交回答",
+          "withdrawnOne": "问题已撤回",
+          "withdrawnMany": "问题已撤回",
+          "cancelled": "问题已取消",
+          "noAnswerWasRecorded": "未记录任何回答。",
+          "expiredClosedOne": "任务关闭时问题已过期",
+          "expiredClosedMany": "任务关闭时问题已过期",
+          "expiredCommentOne": "问题因评论而过期",
+          "expiredCommentMany": "问题因评论而过期",
+          "expiredClosedBody": "任务进入终止状态时，此提问请求已自动过期。",
+          "expiredCommentBody": "之后的管理员/用户评论取代了此提问请求。如果仍需要回答，请创建新的请求。",
+          "answer": "回答",
+          "noAnswerRecorded": "未记录回答。",
+          "submittedSummary": "已提交的摘要"
+        },
+        "jumpToComment": "跳转到评论",
+        "planTarget": "计划{{revision}}",
+        "confirmed": "已确认",
+        "resume": {
+          "failed": "智能体恢复失败",
+          "retrying": "批准后 Paperclip 正在重试恢复智能体（第 {{attempt}}/{{max}} 次）。",
+          "needsAttention": "智能体恢复这项已批准的工作之前，Paperclip 需要人工处理。",
+          "latestCause": "最近原因：<code>{{code}}</code>"
+        },
+        "confirm": {
+          "expiredByComment": "因评论而过期",
+          "expiredByTarget": "因目标变更而过期",
+          "expiredCommentBody": "在此确认处理之前，管理员的评论已将其取代。",
+          "expiredClosedBody": "任务进入终止状态时，此确认已自动过期。",
+          "expiredTargetBody": "在此确认处理之前，请求的目标已发生变更。",
+          "revise": "修改…",
+          "noteRequired": "请添加说明，描述你想要的修改。",
+          "sendRevision": "发送修改意见",
+          "tellAgent": "可选：告诉智能体你想改什么。",
+          "whatRevised": "可选：你希望修改哪些内容？",
+          "uploadFailed": "无法上传该图片，请重试。",
+          "removeShot": "移除 {{name}}",
+          "uploading": "上传中…",
+          "attachScreenshots": "附加截图"
+        },
+        "unresolvable": "无法处理此请求。请重试或创建新请求。",
+        "approving": "批准中…",
+        "secret": {
+          "failedBadge": "失败",
+          "title": "绑定现有密钥",
+          "sourceSecret": "来源密钥",
+          "targetAgent": "目标智能体",
+          "configPath": "新的配置路径",
+          "theBoard": "管理员",
+          "approvedCreating": "已由 {{who}} 批准 — 正在创建绑定",
+          "rechecking": "写入前，Paperclip 正在重新检查权限和提案快照。",
+          "created": "绑定已创建 · 由 {{who}} 批准",
+          "canUseAt": "目标智能体现在可以使用提议的配置路径 · {{when}}。",
+          "canUse": "目标智能体现在可以使用提议的配置路径。",
+          "failedTitle": "失败 · 未创建绑定",
+          "failedBody": "请求已被接受，但执行以安全方式失败。没有泄露任何密钥值。",
+          "errorCode": "错误代码",
+          "rejectedBy": "已由 {{who}} 拒绝",
+          "notCreated": "未创建绑定。",
+          "expiredAt": "提案已过期 · {{when}}",
+          "expired": "提案已过期",
+          "expiredBody": "未创建绑定。需要重新提交提案。",
+          "expires": "过期时间：{{time}}",
+          "approveBind": "批准并绑定",
+          "addReason": "添加原因…",
+          "reasonPlaceholder": "可选：说明为什么不应创建此绑定。",
+          "binding": "密钥绑定"
+        },
+        "rejecting": "拒绝中…",
+        "connection": {
+          "actionRequired": "需要操作",
+          "waitingFor": "等待 {{name}}",
+          "connected": "{{provider}} 已连接",
+          "expired": "授权已过期",
+          "anAgent": "某个智能体",
+          "leadYou": "{{agent}} 需要你的 {{provider}} 身份，用于以你的身份运行的工作。",
+          "leadNeeded": "{{agent}} 曾需要 {{name}} 的 {{provider}} 身份，用于以其身份运行的工作。",
+          "leadNeeds": "{{agent}} 需要 {{name}} 的 {{provider}} 身份，用于以其身份运行的工作。",
+          "consent": "其他人无法完成此步骤。",
+          "leadWithConsent": "{{lead}}{{consent}}",
+          "connect": "连接 {{provider}}",
+          "notNow": "暂不",
+          "linkUnavailable": "此授权链接不可用",
+          "askFresh": "请让 {{agent}} 发送新的 {{provider}} 授权链接。",
+          "theAgent": "该智能体",
+          "onlyAddressee": "只有 {{name}} 可以连接其本人的 {{provider}} 账号。",
+          "connectedByAt": "由 <name>{{name}}</name><chip></chip> 于 {{time}} 连接",
+          "connectedBy": "由 <name>{{name}}</name><chip></chip> 连接",
+          "youLower": "你",
+          "notConnectedHeadline": "{{provider}} 未连接",
+          "requestExpired": "此授权请求已过期",
+          "askAgain": "{{agent}} 可以使用新的 {{provider}} 授权链接再次请求。",
+          "theAgentCap": "该智能体"
+        },
+        "resolvedByAgentTooltip": "由智能体依据组织的交互治理策略处理 — 在审计中与管理员的人工处理区分记录。",
+        "checkbox": {
+          "confirmedNone": "已确认，未选择任何选项",
+          "confirmedOne": "已确认 {{selected}}/{{total}} 个选项",
+          "confirmedMany": "已确认 {{selected}}/{{total}} 个选项",
+          "selected": "已选择",
+          "showLess": "收起",
+          "atLeastOne": "请至少选择 1 个选项。",
+          "atLeastMany": "请至少选择 {{count}} 个选项。",
+          "atMostOne": "最多只能选择 1 个选项。",
+          "atMostMany": "最多只能选择 {{count}} 个选项。",
+          "allSelected": "已选择全部 {{count}} 个选项",
+          "someSelectedOne": "已选择 {{selected}}/{{total}} 个选项",
+          "someSelectedMany": "已选择 {{selected}}/{{total}} 个选项",
+          "pickExactly": "请恰好选择 {{count}} 个。",
+          "pickRange": "请选择 {{min}}-{{max}} 个。",
+          "pickAtLeast": "请至少选择 {{count}} 个。",
+          "selectAll": "全选",
+          "clearSelection": "清除选择",
+          "selectableOptions": "可选选项"
+        },
+        "verdict": {
+          "defer": "推迟",
+          "approved": "已同意",
+          "rejected": "已拒绝",
+          "deferred": "已推迟",
+          "choose": "选择裁定",
+          "approveItem": "同意此项",
+          "rejectItem": "拒绝此项",
+          "deferItem": "推迟此项",
+          "applyNone": "应用 0 项决定",
+          "applyOne": "应用 {{count}} 项决定",
+          "applyMany": "应用 {{count}} 项决定",
+          "expiredComment": "由于之后的评论，此审核已过期。",
+          "expiredTarget": "由于目标已变更，此审核已过期。",
+          "expired": "此审核已过期。",
+          "appliedOne": "1 项已应用且无法撤销。其余项已取消。",
+          "appliedMany": "{{count}} 项已应用且无法撤销。其余项已取消。",
+          "itemsToReview": "待审核项",
+          "applying": "应用中…",
+          "notDecided": "未决定",
+          "reasonPlaceholder": "给智能体一个原因，以便它处理此项。",
+          "reasonRequiredApprove": "同意此项需要填写原因。",
+          "reasonRequiredReject": "拒绝此项需要填写原因。",
+          "reasonRequiredDefer": "推迟此项需要填写原因。",
+          "summaryDeferred": "已决定 {{decided}} · 已同意 {{approved}} · 已拒绝 {{rejected}} · 已推迟 {{deferred}}",
+          "summary": "已决定 {{decided}} · 已同意 {{approved}} · 已拒绝 {{rejected}}",
+          "draftsReadyOne": "{{count}} 项裁定草稿可应用",
+          "draftsReadyMany": "{{count}} 项裁定草稿可应用",
+          "markThenApply": "先标记裁定，再一次性应用。",
+          "approveAll": "全部同意",
+          "reasonNeeded": "需要原因",
+          "progress": "已决定 {{decided}}/{{total}}"
+        },
+        "addressedPerson": "被指定的人",
+        "expiredIssueClosed": "已过期 · 任务已关闭",
+        "addressee": {
+          "for": "指定给 {{name}}",
+          "tooltip": "指定给 {{name}}。指定给智能体的交互归该智能体所有，不会出现在组织公开的待处理动态中。"
+        },
+        "title": {
+          "suggestedTree": "建议的任务树",
+          "questionsOperator": "给操作者的问题",
+          "questionsAnswer": "待回答的问题",
+          "checkbox": "请求勾选确认",
+          "secret": "请求密钥绑定",
+          "connect": "连接你的 {{provider}} 以继续",
+          "tool": "请求工具批准",
+          "verdicts": "审核这些项",
+          "plan": "计划审核",
+          "confirmation": "请求确认"
+        },
+        "proposedBy": "由 {{name}} 提议",
+        "createdAt": "创建于 {{time}}",
+        "footer": {
+          "withdrawnByOn": "由 <name>{{name}}</name><chip></chip> 于 {{date}} 撤回",
+          "withdrawnBy": "由 <name>{{name}}</name><chip></chip> 撤回",
+          "anAgent": "某个智能体",
+          "resolvedByOn": "由 <name>{{name}}</name><chip></chip> 于 {{date}} 处理",
+          "resolvedBy": "由 <name>{{name}}</name><chip></chip> 处理"
+        }
+      }
     }
   }
 }

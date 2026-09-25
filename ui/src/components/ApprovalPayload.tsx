@@ -3,11 +3,20 @@ import { MarkdownBody } from "./MarkdownBody";
 import { formatCents } from "../lib/utils";
 import { t } from "@/i18n";
 
+/** Approval type labels; each value resolves in the current UI language when read. */
 export const typeLabel: Record<string, string> = {
-  hire_agent: "Hire Agent",
-  approve_ceo_strategy: "CEO Strategy",
-  budget_override_required: "Budget Override",
-  request_board_approval: "Board Approval",
+  get hire_agent() {
+    return t("app.approvalTypes.hire_agent");
+  },
+  get approve_ceo_strategy() {
+    return t("app.approvalTypes.approve_ceo_strategy");
+  },
+  get budget_override_required() {
+    return t("app.approvalTypes.budget_override_required");
+  },
+  get request_board_approval() {
+    return t("app.approvalTypes.request_board_approval");
+  },
 };
 
 function firstNonEmptyString(...values: unknown[]): string | null {
@@ -67,7 +76,7 @@ function SkillList({ values }: { values: unknown }) {
 
   return (
     <div className="flex items-start gap-2">
-      <span className="text-muted-foreground w-20 sm:w-24 shrink-0 text-xs pt-0.5">{ t("app.approvalPayload.skills", { defaultValue: "Skills" }) }</span>
+      <span className="text-muted-foreground w-20 sm:w-24 shrink-0 text-xs pt-0.5">{t("app.approvalPayload.skills")}</span>
       <div className="flex flex-wrap gap-1.5">
         {items.map((item) => (
           <span
@@ -86,21 +95,21 @@ export function HireAgentPayload({ payload }: { payload: Record<string, unknown>
   return (
     <div className="mt-3 space-y-1.5 text-sm">
       <div className="flex items-center gap-2">
-        <span className="text-muted-foreground w-20 sm:w-24 shrink-0 text-xs">{ t("app.approvalPayload.name", { defaultValue: "Name" }) }</span>
+        <span className="text-muted-foreground w-20 sm:w-24 shrink-0 text-xs">{t("app.approvalPayload.name")}</span>
         <span className="font-medium">{String(payload.name ?? "—")}</span>
       </div>
-      <PayloadField label={t("app.approvalPayload.role", { defaultValue: "Role" })} value={payload.role} />
-      <PayloadField label={t("app.approvalPayload.title", { defaultValue: "Title" })} value={payload.title} />
-      <PayloadField label={t("app.approvalPayload.icon", { defaultValue: "Icon" })} value={payload.icon} />
+      <PayloadField label={t("app.approvalPayload.role")} value={payload.role} />
+      <PayloadField label={t("app.approvalPayload.title")} value={payload.title} />
+      <PayloadField label={t("app.approvalPayload.icon")} value={payload.icon} />
       {!!payload.capabilities && (
         <div className="flex items-start gap-2">
-          <span className="text-muted-foreground w-20 sm:w-24 shrink-0 text-xs pt-0.5">{ t("app.approvalPayload.capabilities", { defaultValue: "Capabilities" }) }</span>
+          <span className="text-muted-foreground w-20 sm:w-24 shrink-0 text-xs pt-0.5">{t("app.approvalPayload.capabilities")}</span>
           <span className="text-muted-foreground">{String(payload.capabilities)}</span>
         </div>
       )}
       {!!payload.adapterType && (
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground w-20 sm:w-24 shrink-0 text-xs">{ t("app.approvalPayload.adapter", { defaultValue: "Adapter" }) }</span>
+          <span className="text-muted-foreground w-20 sm:w-24 shrink-0 text-xs">{t("app.approvalPayload.adapter")}</span>
           <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">
             {String(payload.adapterType)}
           </span>
@@ -115,7 +124,7 @@ export function CeoStrategyPayload({ payload }: { payload: Record<string, unknow
   const plan = payload.plan ?? payload.description ?? payload.strategy ?? payload.text;
   return (
     <div className="mt-3 space-y-1.5 text-sm">
-      <PayloadField label={t("app.approvalPayload.title", { defaultValue: "Title" })} value={payload.title} />
+      <PayloadField label={t("app.approvalPayload.title")} value={payload.title} />
       {!!plan && (
         <div className="mt-2 rounded-md bg-muted/40 px-3 py-2 text-sm text-muted-foreground whitespace-pre-wrap font-mono text-xs max-h-48 overflow-y-auto">
           {String(plan)}
@@ -135,9 +144,9 @@ export function BudgetOverridePayload({ payload }: { payload: Record<string, unk
   const observedAmount = typeof payload.observedAmount === "number" ? payload.observedAmount : null;
   return (
     <div className="mt-3 space-y-1.5 text-sm">
-      <PayloadField label={t("app.approvalPayload.scope", { defaultValue: "Scope" })} value={payload.scopeName ?? payload.scopeType} />
-      <PayloadField label={t("app.approvalPayload.window", { defaultValue: "Window" })} value={payload.windowKind} />
-      <PayloadField label={t("app.approvalPayload.metric", { defaultValue: "Metric" })} value={payload.metric} />
+      <PayloadField label={t("app.approvalPayload.scope")} value={payload.scopeName ?? payload.scopeType} />
+      <PayloadField label={t("app.approvalPayload.window")} value={payload.windowKind} />
+      <PayloadField label={t("app.approvalPayload.metric")} value={payload.metric} />
       {(budgetAmount !== null || observedAmount !== null) ? (
         <div className="rounded-md bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
           {t("app.approvalPayload.limit")}: {budgetAmount !== null ? formatCents(budgetAmount) : "—"} · {t("app.approvalPayload.observed")}: {observedAmount !== null ? formatCents(observedAmount) : "—"}
@@ -188,31 +197,31 @@ function BoardApprovalPayloadContent({ payload }: { payload: Record<string, unkn
     <div className="mt-4 space-y-3.5 text-sm">
       {title && (
         <div className="space-y-1">
-          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{ t("app.approvalPayload.title", { defaultValue: "Title" }) }</p>
+          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{t("app.approvalPayload.title")}</p>
           <p className="font-medium leading-6 text-foreground">{title}</p>
         </div>
       )}
       {summary && (
         <div className="space-y-1">
-          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{ t("app.approvalPayload.summary", { defaultValue: "Summary" }) }</p>
+          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{t("app.approvalPayload.summary")}</p>
           <MarkdownBody className="leading-6 text-foreground/90">{summary}</MarkdownBody>
         </div>
       )}
       {recommendedAction && (
         <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-3.5 py-3">
-          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-amber-700 dark:text-amber-300"> { t("app.approvalPayload.recommendedAction", { defaultValue: "Recommended action" }) } </p>
+          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-amber-700 dark:text-amber-300"> {t("app.approvalPayload.recommendedAction")} </p>
           <MarkdownBody className="mt-1 leading-6 text-foreground">{recommendedAction}</MarkdownBody>
         </div>
       )}
       {nextActionOnApproval && (
         <div className="rounded-lg border border-border/60 bg-background/60 px-3.5 py-3">
-          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{ t("app.approvalPayload.onApproval", { defaultValue: "On approval" }) }</p>
+          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{t("app.approvalPayload.onApproval")}</p>
           <MarkdownBody className="mt-1 leading-6 text-foreground">{nextActionOnApproval}</MarkdownBody>
         </div>
       )}
       {risks.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{ t("app.approvalPayload.risks", { defaultValue: "Risks" }) }</p>
+          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">{t("app.approvalPayload.risks")}</p>
           <ul className="space-y-1 text-sm text-muted-foreground">
             {risks.map((risk, index) => (
               <li key={`${index}-${risk}`} className="flex items-start gap-2">
@@ -225,7 +234,7 @@ function BoardApprovalPayloadContent({ payload }: { payload: Record<string, unkn
       )}
       {proposedComment && (
         <div className="space-y-1.5">
-          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground"> { t("app.approvalPayload.proposedComment", { defaultValue: "Proposed comment" }) } </p>
+          <p className="text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground"> {t("app.approvalPayload.proposedComment")} </p>
           <pre className="max-h-48 overflow-auto rounded-lg border border-border/60 bg-muted/50 px-3.5 py-3 font-mono text-xs leading-5 text-muted-foreground whitespace-pre-wrap">
             {proposedComment}
           </pre>
