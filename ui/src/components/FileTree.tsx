@@ -13,6 +13,7 @@ import { statusBadge, statusBadgeDefault } from "../lib/status-colors";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { t as translate, useTranslation } from "@/i18n";
 
 // -- Tree types --------------------------------------------------------------
 
@@ -216,19 +217,20 @@ export function parseFrontmatter(content: string): { data: FrontmatterData; body
   return Object.keys(data).length > 0 ? { data, body } : null;
 }
 
+// Getters keep the exported record shape while translating at read time.
 export const FRONTMATTER_FIELD_LABELS: Record<string, string> = {
-  name: "Name",
-  title: "Title",
-  kind: "Kind",
-  reportsTo: "Reports to",
-  skills: "Skills",
-  status: "Status",
-  description: "Description",
-  priority: "Priority",
-  assignee: "Responsible",
-  project: "Project",
-  recurring: "Recurring",
-  targetDate: "Target date",
+  get name() { return translate("app.common.labels.name"); },
+  get title() { return translate("app.common.labels.title"); },
+  get kind() { return translate("app.workspaces.fileTree.field.kind"); },
+  get reportsTo() { return translate("app.workspaces.fileTree.field.reportsTo"); },
+  get skills() { return translate("app.common.nouns.skills"); },
+  get status() { return translate("app.common.labels.status"); },
+  get description() { return translate("app.common.labels.description"); },
+  get priority() { return translate("app.common.labels.priority"); },
+  get assignee() { return translate("app.common.nouns.responsible"); },
+  get project() { return translate("app.common.nouns.project"); },
+  get recurring() { return translate("app.workspaces.fileTree.field.recurring"); },
+  get targetDate() { return translate("app.workspaces.fileTree.field.targetDate"); },
 };
 
 // -- File tree component -----------------------------------------------------
@@ -275,8 +277,10 @@ export function FileTree({
   loading = false,
   error,
   empty,
-  ariaLabel = "Files",
+  ariaLabel: ariaLabelProp,
 }: FileTreeProps) {
+  const { t } = useTranslation();
+  const ariaLabel = ariaLabelProp ?? t("app.common.labels.files");
   const effectiveCheckedFiles = checkedFiles ?? new Set<string>();
   const visibleNodes = useMemo(
     () => flattenVisibleNodes(nodes, expandedDirs),
@@ -364,13 +368,13 @@ export function FileTree({
                 statusBadge.error ?? statusBadgeDefault,
               )}
             >
-              error
+              {t("app.common.status.error")}
             </Badge>
             <span className="min-w-0 text-destructive">{error.message}</span>
           </div>
           {error.retry && (
             <Button type="button" size="xs" variant="outline" onClick={error.retry}>
-              Retry
+              {t("app.common.actions.retry")}
             </Button>
           )}
         </div>
@@ -382,9 +386,9 @@ export function FileTree({
     return (
       <div aria-label={ariaLabel} role="tree" className="p-3">
         <div className="rounded-md border border-dashed border-border px-4 py-8 text-center">
-          <div className="text-sm font-medium">{empty?.title ?? "No files"}</div>
+          <div className="text-sm font-medium">{empty?.title ?? t("app.workspaces.fileTree.noFiles")}</div>
           <div className="mt-1 text-xs text-muted-foreground">
-            {empty?.description ?? "Files will appear here when they are available."}
+            {empty?.description ?? t("app.workspaces.fileTree.noFilesDescription")}
           </div>
         </div>
       </div>
@@ -484,7 +488,7 @@ export function FileTree({
                   event.stopPropagation();
                   onToggleDir(node.path);
                 }}
-                aria-label={expanded ? `Collapse ${node.name}` : `Expand ${node.name}`}
+                aria-label={expanded ? t("app.workspaces.fileTree.collapseNamed", { name: node.name }) : t("app.workspaces.fileTree.expandNamed", { name: node.name })}
               >
                 {expanded ? (
                   <ChevronDown className="h-3.5 w-3.5" />

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "../lib/utils";
 import type { WorkspaceAccessState } from "../lib/workspace-access-state";
+import { useTranslation } from "@/i18n";
 
 /**
  * Workspace access surface (PAP-17572).
@@ -30,13 +31,14 @@ const STATE_BADGE_CLASSES: Record<ActiveWorkspaceAccessState, string> = {
   failed: "border-destructive/50 text-destructive",
 };
 
-const STATE_LABELS: Record<ActiveWorkspaceAccessState, string> = {
-  provisioning: "Provisioning",
-  validating: "Validating clone",
-  ready: "Ready",
-  degraded: "Degraded",
-  repairing: "Repairing",
-  failed: "Failed",
+// i18n keys, translated at render.
+const STATE_LABEL_KEYS: Record<ActiveWorkspaceAccessState, string> = {
+  provisioning: "app.workspaces.workspaceAccessCard.state.provisioning",
+  validating: "app.workspaces.workspaceAccessCard.state.validating",
+  ready: "app.common.states.ready",
+  degraded: "app.workspaces.workspaceAccessCard.state.degraded",
+  repairing: "app.workspaces.workspaceAccessCard.state.repairing",
+  failed: "app.common.states.failed",
 };
 
 const ACTION_ICONS = {
@@ -64,6 +66,7 @@ export function WorkspaceAccessCard({
   onViewLogs: () => void;
   errorMessage?: string | null;
 }) {
+  const { t } = useTranslation();
   const Icon = ACTION_ICONS[access.action.kind];
   const isWaiting = access.action.kind === "wait";
   const handlers: Record<WorkspaceAccessState["action"]["kind"], () => void> = {
@@ -93,7 +96,7 @@ export function WorkspaceAccessCard({
               {(access.state === "repairing" || access.state === "provisioning") && (
                 <Loader2 className="mr-1.5 h-3 w-3 animate-spin" />
               )}
-              {STATE_LABELS[access.state]}
+              {t(STATE_LABEL_KEYS[access.state])}
             </span>
           ) : null}
         </div>
@@ -116,12 +119,12 @@ export function WorkspaceAccessCard({
           </Button>
           {access.state === "ready" && !access.handoffAvailable ? (
             <span className="text-xs text-muted-foreground">
-              Signs in with the snapshot-local credentials captured when this clone was made.
+              {t("app.workspaces.workspaceAccessCard.snapshotCredentials")}
             </span>
           ) : null}
           {access.state === "ready" && access.handoffAvailable ? (
             <span className="text-xs text-muted-foreground">
-              Uses a single-use login handoff — no password needed.
+              {t("app.workspaces.workspaceAccessCard.handoff")}
             </span>
           ) : null}
         </div>
