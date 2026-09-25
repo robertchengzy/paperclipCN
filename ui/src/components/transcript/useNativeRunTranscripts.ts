@@ -4,6 +4,7 @@ import type { TranscriptEntry } from "@/adapters";
 import { heartbeatsApi } from "@/api/heartbeats";
 import { nativeRunEventsToTranscript } from "./native-run-events";
 import { readTranscriptRequest } from "./read-transcript-request";
+import { t } from "@/i18n";
 
 const EVENT_PAGE_SIZE = 1_000;
 const EVENT_POLL_INTERVAL_MS = 2_000;
@@ -103,7 +104,7 @@ export function useNativeRunTranscripts(runs: readonly NativeRunTranscriptSource
           if (previous.has(run.id)) return previous;
           const next = new Map(previous);
           next.set(run.id, {
-            message: error instanceof Error ? error.message : "Native run activity could not be loaded",
+            message: error instanceof Error ? error.message : t("app.taskChat.useNativeRunTranscripts.loadFailed"),
             failedAt: new Date().toISOString(),
           });
           return next;

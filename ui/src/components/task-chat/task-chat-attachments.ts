@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { IssueAttachment } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export interface FileKind {
   icon: LucideIcon;
@@ -36,49 +37,55 @@ const IMAGE_EXTENSIONS = new Set([
   "heic",
 ]);
 
-const KIND_BY_EXTENSION: Record<string, FileKind> = {
-  pdf: { icon: FileText, label: "PDF" },
-  doc: { icon: FileText, label: "Doc" },
-  docx: { icon: FileText, label: "Doc" },
-  txt: { icon: FileText, label: "Text" },
-  md: { icon: FileText, label: "Markdown" },
-  rtf: { icon: FileText, label: "Text" },
-  csv: { icon: FileSpreadsheet, label: "CSV" },
-  tsv: { icon: FileSpreadsheet, label: "TSV" },
-  xls: { icon: FileSpreadsheet, label: "Sheet" },
-  xlsx: { icon: FileSpreadsheet, label: "Sheet" },
-  zip: { icon: FileArchive, label: "ZIP" },
-  gz: { icon: FileArchive, label: "Archive" },
-  tar: { icon: FileArchive, label: "Archive" },
-  tgz: { icon: FileArchive, label: "Archive" },
-  rar: { icon: FileArchive, label: "Archive" },
-  "7z": { icon: FileArchive, label: "Archive" },
-  mp3: { icon: FileAudio, label: "Audio" },
-  wav: { icon: FileAudio, label: "Audio" },
-  m4a: { icon: FileAudio, label: "Audio" },
-  ogg: { icon: FileAudio, label: "Audio" },
-  mp4: { icon: FileVideo, label: "Video" },
-  mov: { icon: FileVideo, label: "Video" },
-  webm: { icon: FileVideo, label: "Video" },
-  json: { icon: FileCode, label: "JSON" },
-  yaml: { icon: FileCode, label: "YAML" },
-  yml: { icon: FileCode, label: "YAML" },
-  xml: { icon: FileCode, label: "XML" },
-  html: { icon: FileCode, label: "HTML" },
-  css: { icon: FileCode, label: "CSS" },
-  js: { icon: FileCode, label: "Code" },
-  jsx: { icon: FileCode, label: "Code" },
-  ts: { icon: FileCode, label: "Code" },
-  tsx: { icon: FileCode, label: "Code" },
-  py: { icon: FileCode, label: "Code" },
-  rb: { icon: FileCode, label: "Code" },
-  go: { icon: FileCode, label: "Code" },
-  rs: { icon: FileCode, label: "Code" },
-  sh: { icon: FileCode, label: "Code" },
-  sql: { icon: FileCode, label: "SQL" },
-  log: { icon: FileText, label: "Log" },
-  patch: { icon: FileCode, label: "Patch" },
-  diff: { icon: FileCode, label: "Patch" },
+/** Labels resolve at call time so the chip follows the active UI language. */
+interface KindDef {
+  icon: LucideIcon;
+  label: () => string;
+}
+
+const KIND_BY_EXTENSION: Record<string, KindDef> = {
+  pdf: { icon: FileText, label: () => "PDF" },
+  doc: { icon: FileText, label: () => t("app.taskChat.taskChatAttachments.doc") },
+  docx: { icon: FileText, label: () => t("app.taskChat.taskChatAttachments.doc") },
+  txt: { icon: FileText, label: () => t("app.common.labels.text") },
+  md: { icon: FileText, label: () => "Markdown" },
+  rtf: { icon: FileText, label: () => t("app.common.labels.text") },
+  csv: { icon: FileSpreadsheet, label: () => "CSV" },
+  tsv: { icon: FileSpreadsheet, label: () => "TSV" },
+  xls: { icon: FileSpreadsheet, label: () => t("app.taskChat.taskChatAttachments.sheet") },
+  xlsx: { icon: FileSpreadsheet, label: () => t("app.taskChat.taskChatAttachments.sheet") },
+  zip: { icon: FileArchive, label: () => "ZIP" },
+  gz: { icon: FileArchive, label: () => t("app.taskChat.taskChatAttachments.archive") },
+  tar: { icon: FileArchive, label: () => t("app.taskChat.taskChatAttachments.archive") },
+  tgz: { icon: FileArchive, label: () => t("app.taskChat.taskChatAttachments.archive") },
+  rar: { icon: FileArchive, label: () => t("app.taskChat.taskChatAttachments.archive") },
+  "7z": { icon: FileArchive, label: () => t("app.taskChat.taskChatAttachments.archive") },
+  mp3: { icon: FileAudio, label: () => t("app.taskChat.taskChatAttachments.audio") },
+  wav: { icon: FileAudio, label: () => t("app.taskChat.taskChatAttachments.audio") },
+  m4a: { icon: FileAudio, label: () => t("app.taskChat.taskChatAttachments.audio") },
+  ogg: { icon: FileAudio, label: () => t("app.taskChat.taskChatAttachments.audio") },
+  mp4: { icon: FileVideo, label: () => t("app.taskChat.taskChatAttachments.video") },
+  mov: { icon: FileVideo, label: () => t("app.taskChat.taskChatAttachments.video") },
+  webm: { icon: FileVideo, label: () => t("app.taskChat.taskChatAttachments.video") },
+  json: { icon: FileCode, label: () => "JSON" },
+  yaml: { icon: FileCode, label: () => "YAML" },
+  yml: { icon: FileCode, label: () => "YAML" },
+  xml: { icon: FileCode, label: () => "XML" },
+  html: { icon: FileCode, label: () => "HTML" },
+  css: { icon: FileCode, label: () => "CSS" },
+  js: { icon: FileCode, label: () => t("app.common.labels.code") },
+  jsx: { icon: FileCode, label: () => t("app.common.labels.code") },
+  ts: { icon: FileCode, label: () => t("app.common.labels.code") },
+  tsx: { icon: FileCode, label: () => t("app.common.labels.code") },
+  py: { icon: FileCode, label: () => t("app.common.labels.code") },
+  rb: { icon: FileCode, label: () => t("app.common.labels.code") },
+  go: { icon: FileCode, label: () => t("app.common.labels.code") },
+  rs: { icon: FileCode, label: () => t("app.common.labels.code") },
+  sh: { icon: FileCode, label: () => t("app.common.labels.code") },
+  sql: { icon: FileCode, label: () => "SQL" },
+  log: { icon: FileText, label: () => t("app.taskChat.taskChatAttachments.log") },
+  patch: { icon: FileCode, label: () => t("app.taskChat.taskChatAttachments.patch") },
+  diff: { icon: FileCode, label: () => t("app.taskChat.taskChatAttachments.patch") },
 };
 
 function extensionOf(name: string): string {
@@ -113,14 +120,22 @@ export function isImageAttachment(ref: AttachmentRef): boolean {
   return isImageFilename(ref.name) || isImageFilename(ref.url.split("?")[0]);
 }
 
+function knownKindForName(name: string): FileKind | null {
+  const extension = extensionOf(name);
+  if (!Object.prototype.hasOwnProperty.call(KIND_BY_EXTENSION, extension)) return null;
+  const kind = KIND_BY_EXTENSION[extension];
+  return { icon: kind.icon, label: kind.label() };
+}
+
 /** Kind icon + short label for a filename; unknown extensions get File/"File". */
 export function fileKindForName(name: string): FileKind {
-  return KIND_BY_EXTENSION[extensionOf(name)] ?? { icon: FileIcon, label: "File" };
+  return knownKindForName(name) ?? { icon: FileIcon, label: t("app.taskChat.taskChatAttachments.file") };
 }
 
 export function fileKindForAttachment(ref: AttachmentRef): FileKind {
+  const known = knownKindForName(ref.name);
+  if (known) return known;
   const byName = fileKindForName(ref.name);
-  if (byName.label !== "File") return byName;
 
   const contentType = normalizedContentType(ref.contentType);
   if (contentType === "application/pdf") return { icon: FileText, label: "PDF" };
@@ -130,11 +145,11 @@ export function fileKindForAttachment(ref: AttachmentRef): FileKind {
   if (contentType === "text/csv" || contentType === "application/csv") {
     return { icon: FileSpreadsheet, label: "CSV" };
   }
-  if (contentType.startsWith("text/")) return { icon: FileText, label: "Text" };
-  if (contentType.startsWith("audio/")) return { icon: FileAudio, label: "Audio" };
-  if (contentType.startsWith("video/")) return { icon: FileVideo, label: "Video" };
+  if (contentType.startsWith("text/")) return { icon: FileText, label: t("app.common.labels.text") };
+  if (contentType.startsWith("audio/")) return { icon: FileAudio, label: t("app.taskChat.taskChatAttachments.audio") };
+  if (contentType.startsWith("video/")) return { icon: FileVideo, label: t("app.taskChat.taskChatAttachments.video") };
   if (contentType.includes("zip") || contentType.includes("archive")) {
-    return { icon: FileArchive, label: "Archive" };
+    return { icon: FileArchive, label: t("app.taskChat.taskChatAttachments.archive") };
   }
   return byName;
 }

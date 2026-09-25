@@ -6,23 +6,24 @@ import {
   type ToolIcon,
 } from "./tool-taxonomy";
 import { protocolActivityPresentation } from "./task-chat-activity-presentation";
+import { t } from "@/i18n";
 
 type Activity = TaskChatActivityPhaseItem["items"][number];
-const labels: Record<ToolFamily, string> = {
-  terminal: "Ran commands",
-  grep: "Searched files",
-  search: "Searched files",
-  read: "Read files",
-  edit: "Edited files",
-  web: "Searched the web",
-  plan: "Worked on a plan",
-  question: "Requested input",
-  agent: "Worked with agents",
-  safety: "Reviewed safety",
-  image: "Worked with images",
-  wait: "Waited",
-  mcp: "Used connected tools",
-  other: "Used tools",
+const labels: Record<ToolFamily, () => string> = {
+  terminal: () => t("app.taskChat.completedActivitySummary.ranCommands"),
+  grep: () => t("app.taskChat.completedActivitySummary.searchedFiles"),
+  search: () => t("app.taskChat.completedActivitySummary.searchedFiles"),
+  read: () => t("app.taskChat.completedActivitySummary.readFiles"),
+  edit: () => t("app.taskChat.completedActivitySummary.editedFiles"),
+  web: () => t("app.taskChat.completedActivitySummary.searchedTheWeb"),
+  plan: () => t("app.taskChat.completedActivitySummary.workedOnAPlan"),
+  question: () => t("app.taskChat.completedActivitySummary.requestedInput"),
+  agent: () => t("app.taskChat.completedActivitySummary.workedWithAgents"),
+  safety: () => t("app.taskChat.completedActivitySummary.reviewedSafety"),
+  image: () => t("app.taskChat.completedActivitySummary.workedWithImages"),
+  wait: () => t("app.taskChat.completedActivitySummary.waited"),
+  mcp: () => t("app.taskChat.completedActivitySummary.usedConnectedTools"),
+  other: () => t("app.taskChat.completedActivitySummary.usedTools"),
 };
 
 /** Describe observed activities, never infer success from a finished group. */
@@ -72,24 +73,24 @@ export function completedActivitySummary(items: Activity[]) {
         const label =
           (
             {
-              research: "Searched the web",
-              plan: "Worked on a plan",
-              delegation: "Worked with agents",
-              artifact: "Worked with artifacts",
-              context: "Managed context",
-              memory: "Checked memory",
-              model_identity: "Checked model settings",
-              review: "Worked in review mode",
-              hook: "Ran hooks",
-              safety: "Reviewed safety",
-              terminal: "Ran commands",
-              wait: "Waited",
-              provider_notice: "Received a provider update",
-              workspace_change: "Worked on files",
-              workspace_file: "Referenced files",
-              resource: "Added resources",
-            } as Record<string, string>
-          )[family] ?? "Used tools";
+              research: () => t("app.taskChat.completedActivitySummary.searchedTheWeb"),
+              plan: () => t("app.taskChat.completedActivitySummary.workedOnAPlan"),
+              delegation: () => t("app.taskChat.completedActivitySummary.workedWithAgents"),
+              artifact: () => t("app.taskChat.completedActivitySummary.workedWithArtifacts"),
+              context: () => t("app.taskChat.completedActivitySummary.managedContext"),
+              memory: () => t("app.taskChat.completedActivitySummary.checkedMemory"),
+              model_identity: () => t("app.taskChat.completedActivitySummary.checkedModelSettings"),
+              review: () => t("app.taskChat.completedActivitySummary.workedInReviewMode"),
+              hook: () => t("app.taskChat.completedActivitySummary.ranHooks"),
+              safety: () => t("app.taskChat.completedActivitySummary.reviewedSafety"),
+              terminal: () => t("app.taskChat.completedActivitySummary.ranCommands"),
+              wait: () => t("app.taskChat.completedActivitySummary.waited"),
+              provider_notice: () => t("app.taskChat.completedActivitySummary.receivedAProviderUpdate"),
+              workspace_change: () => t("app.taskChat.completedActivitySummary.workedOnFiles"),
+              workspace_file: () => t("app.taskChat.completedActivitySummary.referencedFiles"),
+              resource: () => t("app.taskChat.completedActivitySummary.addedResources"),
+            } as Record<string, () => string>
+          )[family]?.() ?? t("app.taskChat.completedActivitySummary.usedTools");
         add(label, p.icon, order);
       }
     }
@@ -102,29 +103,33 @@ export function completedActivitySummary(items: Activity[]) {
     const succeeded = completedFamilies.has(tool.family);
     const label =
       tool.family === "read" && !succeeded
-        ? "Checked files"
+        ? t("app.taskChat.completedActivitySummary.checkedFiles")
         : tool.family === "edit" && !succeeded
-          ? "Worked on files"
-          : labels[tool.family];
+          ? t("app.taskChat.completedActivitySummary.workedOnFiles")
+          : labels[tool.family]();
     add(label, tool.icon, tool.order);
   }
   if (!categories.size) {
     if (items.some((item) => item.kind === "thinking"))
-      add("Thought through the task", Brain);
+      add(t("app.taskChat.completedActivitySummary.thoughtThroughTheTask"), Brain);
     else if (items.some((item) => item.kind === "marker"))
-      add("Activity stopped", CirclePause);
-    else add("Recorded usage", Gauge);
+      add(t("app.taskChat.completedActivitySummary.activityStopped"), CirclePause);
+    else add(t("app.taskChat.completedActivitySummary.recordedUsage"), Gauge);
   }
   const values = [...categories.values()].sort((a, b) => a.order - b.order);
   const join = (parts: string[]) =>
     parts
       .map((p, i) => (i ? p.charAt(0).toLowerCase() + p.slice(1) : p))
-      .join(", ");
+      .reduce((previous, next) =>
+        t("app.taskChat.completedActivitySummary.listJoin", { previous, next }),
+      );
   const fullLabel = join(values.map((v) => v.label));
   return {
     label:
       values.length > 3
-        ? `${join(values.slice(0, 2).map((v) => v.label))}, and more`
+        ? t("app.taskChat.completedActivitySummary.andMore", {
+            items: join(values.slice(0, 2).map((v) => v.label)),
+          })
         : fullLabel,
     fullLabel,
     icon: values.length === 1 ? values[0].icon : Layers3,

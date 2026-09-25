@@ -12,6 +12,8 @@
  * harness, live wiring flagged). `surface` says where the state renders.
  */
 
+import { t } from "@/i18n";
+
 export const TASK_CHAT_STATES = [
   "session-start",
   "human-message",
@@ -40,7 +42,8 @@ export type TaskChatStateSurface = "thread" | "plan";
 
 export interface TaskChatStateMeta {
   id: TaskChatStateId;
-  label: string;
+  /** Resolved on read so the harness follows the active UI language. */
+  readonly label: string;
   tier: TaskChatStateTier;
   surface: TaskChatStateSurface;
   /** Real protocol source, quoted for the harness inspector. */
@@ -50,126 +53,162 @@ export interface TaskChatStateMeta {
 export const TASK_CHAT_STATE_META: Record<TaskChatStateId, TaskChatStateMeta> = {
   "session-start": {
     id: "session-start",
-    label: "Session start",
+    get label() {
+      return t("app.taskChat.taskChatStates.sessionStart");
+    },
     tier: "live",
     surface: "thread",
     protocol: 'acpx.session → TranscriptEntry kind:"init"',
   },
   "human-message": {
     id: "human-message",
-    label: "Human message",
+    get label() {
+      return t("app.taskChat.taskChatStates.humanMessage");
+    },
     tier: "live",
     surface: "thread",
     protocol: 'IssueComment authorType:"user"',
   },
   "agent-message": {
     id: "agent-message",
-    label: "Final response",
+    get label() {
+      return t("app.taskChat.taskChatStates.finalResponse");
+    },
     tier: "live",
     surface: "thread",
     protocol: 'PRP item.delta kind:"agentMessage" channel:"final"',
   },
   thinking: {
     id: "thinking",
-    label: "Thinking",
+    get label() {
+      return t("app.taskChat.taskChatStates.thinking");
+    },
     tier: "live",
     surface: "thread",
     protocol: "text_delta stream:thought (ACP agent_thought_chunk)",
   },
   responding: {
     id: "responding",
-    label: "Progress update (streaming)",
+    get label() {
+      return t("app.taskChat.taskChatStates.progressUpdateStreaming");
+    },
     tier: "live",
     surface: "thread",
     protocol: 'PRP item.delta kind:"agentMessage" channel:"progress"',
   },
   "responding-burst": {
     id: "responding-burst",
-    label: "Progress update burst",
+    get label() {
+      return t("app.taskChat.taskChatStates.progressUpdateBurst");
+    },
     tier: "live",
     surface: "thread",
     protocol: "text_delta stream:output ×N, tool calls between (PAP-368 dwell)",
   },
   "tool-call": {
     id: "tool-call",
-    label: "Tool call",
+    get label() {
+      return t("app.taskChat.taskChatStates.toolCall");
+    },
     tier: "live",
     surface: "thread",
     protocol: "acpx.tool_call (ACP tool_call / tool_call_update)",
   },
   diff: {
     id: "diff",
-    label: "Diff",
+    get label() {
+      return t("app.taskChat.taskChatStates.diff");
+    },
     tier: "live",
     surface: "thread",
     protocol: 'ToolCallContent type:"diff" → TranscriptEntry kind:"diff"',
   },
   working: {
     id: "working",
-    label: "Working",
+    get label() {
+      return t("app.taskChat.taskChatStates.working");
+    },
     tier: "live",
     surface: "thread",
     protocol: "heartbeat.run.progress + acpx.status",
   },
   running: {
     id: "running",
-    label: "Running",
+    get label() {
+      return t("app.taskChat.taskChatStates.running");
+    },
     tier: "live",
     surface: "thread",
     protocol: 'message.status.type === "running"',
   },
   completed: {
     id: "completed",
-    label: "Completed (collapsed)",
+    get label() {
+      return t("app.taskChat.taskChatStates.completedCollapsed");
+    },
     tier: "live",
     surface: "thread",
     protocol: "acpx.result (StopReason in subtype)",
   },
   "activity-phases": {
     id: "activity-phases",
-    label: "Long-run activity phases",
+    get label() {
+      return t("app.taskChat.taskChatStates.longRunActivityPhases");
+    },
     tier: "live",
     surface: "thread",
     protocol: "assistant boundaries + chronological tool calls",
   },
   "awaiting-approval": {
     id: "awaiting-approval",
-    label: "Awaiting approval",
+    get label() {
+      return t("app.taskChat.taskChatStates.awaitingApproval");
+    },
     tier: "tier-b",
     surface: "thread",
     protocol: "ACP RequestPermissionRequest + PermissionOptionKind",
   },
   "plan-todo": {
     id: "plan-todo",
-    label: "Plan / todo",
+    get label() {
+      return t("app.taskChat.taskChatStates.planTodo");
+    },
     tier: "tier-b",
     surface: "plan",
     protocol: "ACP Plan { entries: PlanEntry[] }, PlanEntryStatus",
   },
   interrupted: {
     id: "interrupted",
-    label: "Interrupted",
+    get label() {
+      return t("app.taskChat.taskChatStates.interrupted");
+    },
     tier: "tier-b",
     surface: "thread",
     protocol: 'AcpRuntimeTurnResult.status:"cancelled" / StopReason "cancelled"',
   },
   refused: {
     id: "refused",
-    label: "Refused",
+    get label() {
+      return t("app.taskChat.taskChatStates.refused");
+    },
     tier: "tier-b",
     surface: "thread",
     protocol: 'StopReason "refusal"',
   },
   truncated: {
     id: "truncated",
-    label: "Truncated",
+    get label() {
+      return t("app.taskChat.taskChatStates.truncated");
+    },
     tier: "tier-b",
     surface: "thread",
     protocol: 'StopReason "max_tokens" | "max_turn_requests"',
   },
   "live-token-cost": {
     id: "live-token-cost",
-    label: "Live token / cost",
+    get label() {
+      return t("app.taskChat.taskChatStates.liveTokenCost");
+    },
     tier: "tier-b",
     surface: "thread",
     protocol: "ACP UsageUpdate { used, size, cost }",

@@ -1,5 +1,6 @@
 import type { HeartbeatRunEvent } from "@paperclipai/shared";
 import type { TranscriptEntry } from "@/adapters";
+import { t } from "@/i18n";
 
 function record(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" && !Array.isArray(value)
@@ -193,7 +194,7 @@ function runtimeRequestEntry(input: {
     .map(record)
     .flatMap((field, index) => {
       const name = text(field?.name) ?? `answer_${index + 1}`;
-      const label = text(field?.label) ?? text(field?.name) ?? `Answer ${index + 1}`;
+      const label = text(field?.label) ?? text(field?.name) ?? t("app.taskChat.nativeRunEvents.answerNumber", { number: index + 1 });
       return name && label
         ? [{ name: name.slice(0, 160), label: label.slice(0, 240), placeholder: text(field?.placeholder)?.slice(0, 500) ?? null }]
         : [];
@@ -213,7 +214,7 @@ function runtimeRequestEntry(input: {
     status,
     prompt: text(request.prompt)
       ?? input.previous?.prompt
-      ?? "Runtime approval requested",
+      ?? t("app.taskChat.nativeRunEvents.runtimeApprovalRequested"),
     choices: choices.length > 0 ? choices : input.previous?.choices ?? [],
     fields: fields.length > 0 ? fields : input.previous?.fields ?? [],
     questionSet: canonicalQuestionSet(request.input)
@@ -242,14 +243,14 @@ function runResultEntry(
     kind: "run_result",
     ts,
     disposition,
-    summary: text(payload.summary) ?? "Run completed",
+    summary: text(payload.summary) ?? t("app.taskChat.nativeRunEvents.runCompleted"),
     objectiveSatisfied: typeof completion.objectiveSatisfied === "boolean"
       ? completion.objectiveSatisfied
       : null,
     verification: (Array.isArray(payload.verification) ? payload.verification : [])
       .map(record)
       .flatMap((item) => item ? [{
-        commandOrCheck: text(item.commandOrCheck) ?? "Verification",
+        commandOrCheck: text(item.commandOrCheck) ?? t("app.taskChat.nativeRunEvents.verification"),
         status: verificationStatus(item.status),
         ...(text(item.detail) ? { detail: text(item.detail)! } : {}),
         ...(text(item.artifactRef) ? { artifactRef: text(item.artifactRef)! } : {}),
@@ -264,7 +265,7 @@ function runResultEntry(
       .slice(0, 64),
     blocker: blocker ? {
       reasonCode: text(blocker.reasonCode) ?? "blocked",
-      unblockAction: text(blocker.unblockAction) ?? "Resolve the blocker to continue.",
+      unblockAction: text(blocker.unblockAction) ?? t("app.taskChat.nativeRunEvents.resolveBlocker"),
       scope: blocker.scope === "task_wide" ? "task_wide" : "current_track",
     } : null,
     artifacts: (Array.isArray(payload.artifacts) ? payload.artifacts : [])
@@ -544,7 +545,7 @@ function serializedNativeToolResult(item: NativeToolItemDetails): string {
   try {
     return JSON.stringify(item.result) ?? "";
   } catch {
-    return "Tool result could not be serialized";
+    return t("app.taskChat.nativeRunEvents.toolResultNotSerializable");
   }
 }
 
@@ -811,8 +812,8 @@ export function nativeRunEventsToTranscript(events: readonly HeartbeatRunEvent[]
         family: "provider_notice",
         eventType: event.eventType,
         status: payload.severity === "error" ? "failed" : "informational",
-        title: "Provider notice",
-        summary: text(payload.summary)?.trim() || text(payload.message)?.trim() || "Provider notice",
+        title: t("app.taskChat.nativeRunEvents.providerNotice"),
+        summary: text(payload.summary)?.trim() || text(payload.message)?.trim() || t("app.taskChat.nativeRunEvents.providerNotice"),
         payload,
       });
       continue;
@@ -1057,7 +1058,7 @@ export function nativeRunEventsToTranscript(events: readonly HeartbeatRunEvent[]
     entries.push({
       kind: "result",
       ...cumulativeUsageSummary,
-      text: "Provider-reported session-cumulative usage; a per-run delta was unavailable.",
+      text: t("app.taskChat.nativeRunEvents.sessionCumulativeUsage"),
       subtype: "paperclip_runner_session_usage",
       isError: false,
       errors: [],

@@ -1,6 +1,7 @@
 import { usePageVisibility } from "../../lib/page-visibility";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { readTranscriptRequest } from "./read-transcript-request";
+import { t } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import type { LiveEvent } from "@paperclipai/shared";
 import { ApiError } from "../../api/client";
@@ -349,7 +350,7 @@ export function useLiveRunTranscripts({
           setErrorsByRun((previous) => {
             if (previous.has(run.id)) return previous;
             const next = new Map(previous);
-            next.set(run.id, error instanceof Error ? error : new Error("Run history could not be loaded"));
+            next.set(run.id, error instanceof Error ? error : new Error(t("app.taskChat.useLiveRunTranscripts.loadFailed")));
             return next;
           });
         }

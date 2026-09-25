@@ -6,6 +6,7 @@
  * only showing a response after the turn settles.
  */
 import type { TranscriptEntry } from "@/adapters";
+import { t } from "@/i18n";
 import type {
   TaskChatDiff,
   TaskChatActivityPhaseItem,
@@ -195,7 +196,7 @@ export function summarizeToolInput(input: unknown): string | undefined {
  */
 export function toolDisplayName(name: string | undefined | null): string {
   const raw = (name ?? "").trim();
-  return isGenericToolName(raw) ? "Unnamed tool" : humanizeToolName(raw);
+  return isGenericToolName(raw) ? t("app.taskChat.toolTaxonomy.unnamedTool") : humanizeToolName(raw);
 }
 
 /** "Thought for Ns" once a coalesced thinking group spans ≥1s. */
@@ -210,8 +211,11 @@ function thoughtDurationLabel(
   const secs = Math.round((end - start) / 1000);
   if (secs < 1) return undefined;
   return secs < 60
-    ? `Thought for ${secs}s`
-    : `Thought for ${Math.floor(secs / 60)}m ${secs % 60}s`;
+    ? t("app.taskChat.transcriptAdapter.thoughtForSeconds", { seconds: secs })
+    : t("app.taskChat.transcriptAdapter.thoughtForMinutes", {
+        minutes: Math.floor(secs / 60),
+        seconds: secs % 60,
+      });
 }
 
 /** Append token deltas onto the open logical line while preserving real newlines. */
@@ -248,7 +252,7 @@ function stringValue(value: unknown): string | undefined {
 function scalarValue(value: unknown): string | undefined {
   if (typeof value === "string" && value.trim()) return value.trim();
   if (typeof value === "number" && Number.isFinite(value)) return String(value);
-  if (typeof value === "boolean") return value ? "Yes" : "No";
+  if (typeof value === "boolean") return value ? t("app.common.labels.yes") : t("app.common.labels.no");
   return undefined;
 }
 
@@ -399,7 +403,7 @@ function providerActivityItem(
                 : "pending";
             return {
               id: stringValue(step.stepId) ?? `${runId}:plan-step:${stepIndex}`,
-              label: stringValue(step.body) ?? "Plan step",
+              label: stringValue(step.body) ?? t("app.taskChat.transcriptAdapter.planStep"),
               status,
             };
           })
@@ -432,7 +436,7 @@ function providerActivityItem(
           .map((child, childIndex) => ({
             id:
               stringValue(child.childId) ?? `${runId}:delegation:${childIndex}`,
-            title: stringValue(child.role) ?? "Subagent",
+            title: stringValue(child.role) ?? t("app.taskChat.transcriptAdapter.subagent"),
             status: stringValue(child.status) ?? "unknown",
             metadata:
               [stringValue(child.model), stringValue(child.activitySummary)]
@@ -981,10 +985,10 @@ export function transcriptToTaskChatItems(
           kind: "usage",
           ...(entry.subtype === "paperclip_runner_session_usage"
             ? {
-                label: "Provider session total",
+                label: t("app.taskChat.transcriptAdapter.providerSessionTotal"),
                 detail:
                   entry.text ||
-                  "This cumulative usage can include earlier runs in the resumed provider session.",
+                  t("app.taskChat.transcriptAdapter.cumulativeUsageNote"),
               }
             : {}),
           usage: {
@@ -1023,8 +1027,8 @@ export function transcriptToTaskChatItems(
       ) {
         item.status = "interrupted";
         item.detail = item.detail
-          ? `${item.detail}\nInterrupted before the provider reported completion.`
-          : "Interrupted before the provider reported completion.";
+          ? `${item.detail}\n${t("app.taskChat.transcriptAdapter.interruptedBeforeProviderCompletion")}`
+          : t("app.taskChat.transcriptAdapter.interruptedBeforeProviderCompletion");
       } else if (
         item.kind === "protocol" &&
         item.surface === "provider_activity" &&
@@ -1032,8 +1036,8 @@ export function transcriptToTaskChatItems(
       ) {
         item.status = "interrupted";
         item.summary = item.summary
-          ? `${item.summary} · Interrupted before completion.`
-          : "Interrupted before completion.";
+          ? `${item.summary} · ${t("app.taskChat.transcriptAdapter.interruptedBeforeCompletion")}`
+          : t("app.taskChat.transcriptAdapter.interruptedBeforeCompletion");
       } else if (
         item.kind === "protocol" &&
         item.surface === "runtime_request" &&
@@ -1458,13 +1462,13 @@ function phaseSummary(
     if (count)
       phrases.push({ text: count === 1 ? singular : plural(count), count });
   };
-  add("read", "Read a file", (count) => `Read ${count} files`);
-  add("edit", "Edited a file", (count) => `Edited ${count} files`);
-  add("terminal", "Ran a command", (count) => `Ran ${count} commands`);
+  add("read", t("app.taskChat.transcriptAdapter.readAFile"), (count) => t("app.taskChat.transcriptAdapter.readFiles", { count }));
+  add("edit", t("app.taskChat.transcriptAdapter.editedAFile"), (count) => t("app.taskChat.transcriptAdapter.editedFiles", { count }));
+  add("terminal", t("app.taskChat.transcriptAdapter.ranACommand"), (count) => t("app.taskChat.transcriptAdapter.ranCommands", { count }));
   const searched = (counts.get("grep") ?? 0) + (counts.get("search") ?? 0);
   if (searched)
     phrases.push({
-      text: searched === 1 ? "Searched once" : `Searched ${searched} times`,
+      text: searched === 1 ? t("app.taskChat.transcriptAdapter.searchedOnce") : t("app.taskChat.transcriptAdapter.searchedTimes", { count: searched }),
       count: searched,
     });
   const known = new Set(["read", "edit", "terminal", "grep", "search"]);
@@ -1475,7 +1479,7 @@ function phaseSummary(
     ) + generic;
   if (other)
     phrases.push({
-      text: other === 1 ? "Used a tool" : `Used ${other} tools`,
+      text: other === 1 ? t("app.taskChat.transcriptAdapter.usedATool") : t("app.taskChat.transcriptAdapter.usedTools", { count: other }),
       count: other,
     });
   const providerCount = (family: TaskChatProviderActivityItem["family"]) =>
@@ -1489,58 +1493,58 @@ function phaseSummary(
     if (count)
       phrases.push({ text: count === 1 ? singular : plural(count), count });
   };
-  addProvider("plan", "Updated the plan", (count) => `Updated ${count} plans`);
+  addProvider("plan", t("app.taskChat.transcriptAdapter.updatedThePlan"), (count) => t("app.taskChat.transcriptAdapter.updatedPlans", { count }));
   addProvider(
     "research",
-    "Searched once",
-    (count) => `Searched ${count} times`,
+    t("app.taskChat.transcriptAdapter.searchedOnce"),
+    (count) => t("app.taskChat.transcriptAdapter.searchedTimes", { count }),
   );
   addProvider(
     "delegation",
-    "Used a subagent",
-    (count) => `Used ${count} subagents`,
+    t("app.taskChat.transcriptAdapter.usedASubagent"),
+    (count) => t("app.taskChat.transcriptAdapter.usedSubagents", { count }),
   );
   addProvider(
     "model_identity",
-    "Updated the model",
-    (count) => `Updated the model ${count} times`,
+    t("app.taskChat.transcriptAdapter.updatedTheModel"),
+    (count) => t("app.taskChat.transcriptAdapter.updatedTheModelTimes", { count }),
   );
   addProvider(
     "context",
-    "Compacted context",
-    (count) => `Compacted context ${count} times`,
+    t("app.taskChat.transcriptAdapter.compactedContext"),
+    (count) => t("app.taskChat.transcriptAdapter.compactedContextTimes", { count }),
   );
   addProvider(
     "artifact",
-    "Handled an artifact",
-    (count) => `Handled ${count} artifacts`,
+    t("app.taskChat.transcriptAdapter.handledAnArtifact"),
+    (count) => t("app.taskChat.transcriptAdapter.handledArtifacts", { count }),
   );
   addProvider(
     "review",
-    "Changed review mode",
-    (count) => `Changed review mode ${count} times`,
+    t("app.taskChat.transcriptAdapter.changedReviewMode"),
+    (count) => t("app.taskChat.transcriptAdapter.changedReviewModeTimes", { count }),
   );
-  addProvider("hook", "Ran a hook", (count) => `Ran ${count} hooks`);
+  addProvider("hook", t("app.taskChat.transcriptAdapter.ranAHook"), (count) => t("app.taskChat.transcriptAdapter.ranHooks", { count }));
   addProvider(
     "memory",
-    "Referenced memory",
-    (count) => `Referenced memory ${count} times`,
+    t("app.taskChat.transcriptAdapter.referencedMemory"),
+    (count) => t("app.taskChat.transcriptAdapter.referencedMemoryTimes", { count }),
   );
   addProvider(
     "safety",
-    "Ran a safety review",
-    (count) => `Ran ${count} safety reviews`,
+    t("app.taskChat.transcriptAdapter.ranASafetyReview"),
+    (count) => t("app.taskChat.transcriptAdapter.ranSafetyReviews", { count }),
   );
   addProvider(
     "terminal",
-    "Sent terminal input",
-    (count) => `Sent terminal input ${count} times`,
+    t("app.taskChat.transcriptAdapter.sentTerminalInput"),
+    (count) => t("app.taskChat.transcriptAdapter.sentTerminalInputTimes", { count }),
   );
-  addProvider("wait", "Waited", (count) => `Waited ${count} times`);
+  addProvider("wait", t("app.taskChat.transcriptAdapter.waited"), (count) => t("app.taskChat.transcriptAdapter.waitedTimes", { count }));
   addProvider(
     "provider_notice",
-    "Received a provider notice",
-    (count) => `Received ${count} provider notices`,
+    t("app.taskChat.transcriptAdapter.receivedAProviderNotice"),
+    (count) => t("app.taskChat.transcriptAdapter.receivedProviderNotices", { count }),
   );
   // A canonical tool-execution row can be the only tool representation for a
   // provider. Avoid double-counting when the adapter also produced native
@@ -1554,41 +1558,41 @@ function phaseSummary(
       let text: string;
       switch (key) {
         case "command":
-          text = count === 1 ? "Ran a command" : `Ran ${count} commands`;
+          text = count === 1 ? t("app.taskChat.transcriptAdapter.ranACommand") : t("app.taskChat.transcriptAdapter.ranCommands", { count });
           break;
         case "read":
-          text = count === 1 ? "Read a file" : `Read ${count} files`;
+          text = count === 1 ? t("app.taskChat.transcriptAdapter.readAFile") : t("app.taskChat.transcriptAdapter.readFiles", { count });
           break;
         case "search":
-          text = count === 1 ? "Searched once" : `Searched ${count} times`;
+          text = count === 1 ? t("app.taskChat.transcriptAdapter.searchedOnce") : t("app.taskChat.transcriptAdapter.searchedTimes", { count });
           break;
         case "file_change":
-          text = count === 1 ? "Edited a file" : `Edited ${count} files`;
+          text = count === 1 ? t("app.taskChat.transcriptAdapter.editedAFile") : t("app.taskChat.transcriptAdapter.editedFiles", { count });
           break;
         case "delegation":
-          text = count === 1 ? "Used a subagent" : `Used ${count} subagents`;
+          text = count === 1 ? t("app.taskChat.transcriptAdapter.usedASubagent") : t("app.taskChat.transcriptAdapter.usedSubagents", { count });
           break;
         case "wait":
-          text = count === 1 ? "Waited" : `Waited ${count} times`;
+          text = count === 1 ? t("app.taskChat.transcriptAdapter.waited") : t("app.taskChat.transcriptAdapter.waitedTimes", { count });
           break;
         case "tool_search":
           text =
             count === 1
-              ? "Searched available tools"
-              : `Searched available tools ${count} times`;
+              ? t("app.taskChat.transcriptAdapter.searchedAvailableTools")
+              : t("app.taskChat.transcriptAdapter.searchedAvailableToolsTimes", { count });
           break;
         case "paperclip_read":
           text =
             count === 1
-              ? "Read from Paperclip"
-              : `Read from Paperclip ${count} times`;
+              ? t("app.taskChat.transcriptAdapter.readFromPaperclip")
+              : t("app.taskChat.transcriptAdapter.readFromPaperclipTimes", { count });
           break;
         case "task_operation":
           text =
-            count === 1 ? "Used Paperclip" : `Used Paperclip ${count} times`;
+            count === 1 ? t("app.taskChat.transcriptAdapter.usedPaperclip") : t("app.taskChat.transcriptAdapter.usedPaperclipTimes", { count });
           break;
         default:
-          text = count === 1 ? "Used a tool" : `Used ${count} tools`;
+          text = count === 1 ? t("app.taskChat.transcriptAdapter.usedATool") : t("app.taskChat.transcriptAdapter.usedTools", { count });
       }
       phrases.push({
         text,
@@ -1600,8 +1604,8 @@ function phaseSummary(
     phrases.push({
       text:
         workspaceFiles === 1
-          ? "Changed a file"
-          : `Changed ${workspaceFiles} files`,
+          ? t("app.taskChat.transcriptAdapter.changedAFile")
+          : t("app.taskChat.transcriptAdapter.changedFiles", { count: workspaceFiles }),
       count: workspaceFiles,
     });
   if (phrases.length > 0) {
@@ -1615,21 +1619,21 @@ function phaseSummary(
           ? phrase.text
           : phrase.text.charAt(0).toLowerCase() + phrase.text.slice(1),
       )
-      .join(", ");
-    return `${summary}${hidden > 0 ? `, +${hidden} more` : ""}`;
+      .reduce((previous, next) => t("app.taskChat.transcriptAdapter.listJoin", { previous, next }));
+    return hidden > 0 ? t("app.taskChat.transcriptAdapter.moreSuffix", { summary, count: hidden }) : summary;
   }
   const protocolCount = items.filter((item) => item.kind === "protocol").length;
   if (protocolCount > 0)
     return protocolCount === 1
-      ? "Runner activity"
-      : `${protocolCount} runner updates`;
-  if (items.some((item) => item.kind === "thinking")) return "Reasoning";
+      ? t("app.taskChat.transcriptAdapter.runnerActivity")
+      : t("app.taskChat.transcriptAdapter.runnerUpdates", { count: protocolCount });
+  if (items.some((item) => item.kind === "thinking")) return t("app.taskChat.transcriptAdapter.reasoning");
   const interrupted = items.find(
     (item) => item.kind === "marker" && item.variant === "interrupted",
   );
   return interrupted?.kind === "marker"
     ? interrupted.label
-    : "No tool activity";
+    : t("app.taskChat.transcriptAdapter.noToolActivity");
 }
 
 /**
