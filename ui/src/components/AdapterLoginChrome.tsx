@@ -2,6 +2,9 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Copy, Check, Loader2 } from "lucide-react";
 
+import { Trans } from "react-i18next";
+
+import { useTranslation } from "@/i18n";
 import { Button } from "./ui/button";
 import { copyTextToClipboard } from "../lib/clipboard";
 import {
@@ -89,12 +92,13 @@ export function OnboardingLoginCard({
   loading?: boolean;
   children: ReactNode;
 }) {
+  const { t } = useTranslation();
   if (loading) {
     return (
       <div
         className="flex min-h-(--sz-108px) items-center justify-center rounded-xl bg-muted/40"
         role="status"
-        aria-label="Preparing the sign-in"
+        aria-label={t("app.settings.adapterLoginChrome.preparingSignIn")}
       >
         <Loader2 className="size-4 animate-spin text-muted-foreground" />
       </div>
@@ -224,6 +228,7 @@ export function OnboardingLoginCodeRow({
   code: string;
   autoCopy?: boolean;
 }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoCopiedRef = useRef(false);
@@ -304,13 +309,13 @@ export function OnboardingLoginCodeRow({
             animate={{ opacity: 1, y: 0, transition: COPIED_REVEAL }}
             exit={{ opacity: 0, transition: COPIED_REVEAL }}
           >
-            Copied!
+            {t("app.settings.adapterLoginChrome.copiedBang")}
           </motion.span>
         )}
       </AnimatePresence>
       <LoginCardCopyButton
         value={code}
-        label="Copy the code"
+        label={t("app.settings.adapterLoginChrome.copyTheCode")}
         onCopied={() => {
           // No wait here. A press is a direct action, and delaying its
           // acknowledgement would read as the button having missed.
@@ -360,8 +365,8 @@ export function OnboardingCardField({
   onSubmit,
   onPaste,
   disabled,
-  label = "Authorization code",
-  placeholder = "Paste authorization code here",
+  label: labelProp,
+  placeholder: placeholderProp,
   masked = false,
   autoFocus = false,
 }: {
@@ -389,6 +394,9 @@ export function OnboardingCardField({
    */
   autoFocus?: boolean;
 }) {
+  const { t } = useTranslation();
+  const label = labelProp ?? t("app.settings.adapterLoginChrome.authorizationCode");
+  const placeholder = placeholderProp ?? t("app.settings.adapterLoginChrome.pasteAuthorizationCode");
   return (
     <input
       // eslint-disable-next-line jsx-a11y/no-autofocus -- see the prop's note
@@ -432,17 +440,22 @@ export function ProviderSubscriptionCard({
       loading={loading}
       instruction={
         <>
-          <a
-            href={authorizationUrl}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="underline underline-offset-2 hover:text-foreground"
-          >
-            Sign in to {providerName}
-          </a>
-          {mode === "submitted_code"
-            ? " then come back and enter authorization code"
-            : " by providing the authorization code below"}
+          <Trans
+            i18nKey={mode === "submitted_code"
+              ? "app.settings.adapterLoginChrome.signInSubmittedCode"
+              : "app.settings.adapterLoginChrome.signInDisplayedCode"}
+            values={{ providerName }}
+            components={{
+              a: (
+                <a
+                  href={authorizationUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="underline underline-offset-2 hover:text-foreground"
+                />
+              ),
+            }}
+          />
         </>
       }
     >
@@ -457,11 +470,12 @@ export function ProviderApiKeyCard({
 }: Omit<Parameters<typeof OnboardingCardField>[0], "masked" | "label"> & {
   providerName: string;
 }) {
+  const { t } = useTranslation();
   return (
     <OnboardingLoginCard
-      instruction={`Provide your ${providerName} API key to connect`}
+      instruction={t("app.settings.adapterLoginChrome.provideApiKey", { providerName })}
     >
-      <OnboardingCardField {...field} label="API key" masked />
+      <OnboardingCardField {...field} label={t("app.common.labels.apiKey")} masked />
     </OnboardingLoginCard>
   );
 }
@@ -471,25 +485,26 @@ export function LocalProviderLoginInstructions({ adapterType, login }: {
   adapterType: string;
   login?: { isolated?: boolean; command?: string; preparing: boolean; status?: "ready" | "sign_in_required" | "expired" | null; error: string | null; retry: () => void };
 }) {
+  const { t } = useTranslation();
   const [showCommand, setShowCommand] = useState(false);
   const provider = adapterType === "claude_local" ? "Claude Code" : adapterType === "grok_local" ? "Grok CLI" : "Codex CLI";
   const isolated = login?.isolated ?? (adapterType === "codex_local" || adapterType === "grok_local");
   const command = isolated ? login?.command : "claude auth login";
-  if (login?.preparing) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Checking local {provider} sign-in…</p>;
+  if (login?.preparing) return <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />{t("app.settings.adapterLoginChrome.checkingLocalSignIn", { provider })}</p>;
   const ready = login?.status === "ready";
   return <div className="min-w-0 max-w-full space-y-3 text-sm text-muted-foreground">
     {ready ? <>
-      <p role="status" className="flex items-center gap-2 text-foreground"><Check className="size-4 shrink-0 text-(--status-task-icon-done)" />{provider} is signed in. Click Connect to use this account.</p>
-      {!showCommand && <button type="button" className="underline underline-offset-4" onClick={() => setShowCommand(true)}>Use a different account</button>}
-    </> : <p>{isolated ? `Sign in to ${provider} for this connection on the machine running Paperclip. Your existing terminal login stays separate.` : `Connect uses your local ${provider} account on the machine running Paperclip.`}</p>}
+      <p role="status" className="flex items-center gap-2 text-foreground"><Check className="size-4 shrink-0 text-(--status-task-icon-done)" />{t("app.settings.adapterLoginChrome.localSignedIn", { provider })}</p>
+      {!showCommand && <button type="button" className="underline underline-offset-4" onClick={() => setShowCommand(true)}>{t("app.settings.adapterLoginChrome.useDifferentAccount")}</button>}
+    </> : <p>{isolated ? t("app.settings.adapterLoginChrome.isolatedSignInHint", { provider }) : t("app.settings.adapterLoginChrome.sharedSignInHint", { provider })}</p>}
     {(!ready || showCommand) && !login?.error && <>
-      <p>Run this in a terminal on that machine and finish signing in in your browser. We’ll check automatically when you return.</p>
+      <p>{t("app.settings.adapterLoginChrome.runInTerminal")}</p>
       {command && <div className="flex min-w-0 max-w-full items-start gap-2 rounded-md border bg-muted p-3 text-foreground">
         <pre className="min-w-0 flex-1 whitespace-pre-wrap break-all font-mono text-xs"><code>{command}</code></pre>
-        <LoginCardCopyButton value={command} label="Copy sign-in command" />
+        <LoginCardCopyButton value={command} label={t("app.settings.adapterLoginChrome.copySignInCommand")} />
       </div>}
     </>}
     {login?.error && <p role="alert">{login.error}</p>}
-    {login && !login.preparing && (isolated || login.error) && <button type="button" className="underline underline-offset-4" onClick={login.retry}>{isolated ? "Start sign-in again" : "Check again"}</button>}
+    {login && !login.preparing && (isolated || login.error) && <button type="button" className="underline underline-offset-4" onClick={login.retry}>{isolated ? t("app.settings.adapterLoginChrome.startSignInAgain") : t("app.settings.adapterLoginChrome.checkAgain")}</button>}
   </div>;
 }

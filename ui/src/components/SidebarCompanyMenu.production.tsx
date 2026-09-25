@@ -38,6 +38,7 @@ import { useCloudInstance } from "@/hooks/useCloudInstance";
 import { useHiddenSettings } from "@/hooks/useHiddenSettings";
 import { useCompanyOrder } from "@/hooks/useCompanyOrder";
 import { useSignOut } from "@/hooks/useSignOut";
+import { useTranslation } from "@/i18n";
 import { navigateTopLevel } from "@/lib/browserNavigation";
 import { cloudStackCreateUrl, cloudStackEnterUrl } from "@/lib/cloudLinks";
 import { queryKeys } from "@/lib/queryKeys";
@@ -148,6 +149,7 @@ function SortableCompanyItem({
   isSelected: boolean;
   onSelect: (company: Company) => void;
 }) {
+  const { t } = useTranslation();
   const {
     attributes,
     listeners,
@@ -194,7 +196,7 @@ function SortableCompanyItem({
         <button
           type="button"
           ref={setActivatorNodeRef}
-          aria-label={`Reorder ${company.name}`}
+          aria-label={t("app.settings.sidebarCompanyMenu.reorder", { name: company.name })}
           className="inline-flex size-8 shrink-0 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-(length:--rad-2) focus-visible:ring-ring"
           onClick={(event) => {
             event.preventDefault();
@@ -223,6 +225,7 @@ export function SidebarCompanyMenu(props: SidebarCompanyMenuProps = {}) {
 }
 
 function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompanyMenuProps) {
+  const { t } = useTranslation();
   const [internalOpen, setInternalOpen] = useState(false);
   const [isEditingOrder, setIsEditingOrder] = useState(false);
   const { companies, selectedCompany, setSelectedCompanyId, companyListUnavailable, retryCompanies } =
@@ -289,7 +292,6 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
       ?? null
     : null;
   const createStackUrl = isCloud ? cloudStackCreateUrl(cloudBaseUrl) : null;
-  const switcherNoun = isCloud ? "organization" : "company";
   // The one name the chrome shows for "where am I": the stack in cloud, the
   // company when self-hosted.
   const currentName = isCloud
@@ -386,8 +388,8 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
           className="h-9 min-w-0 flex-1 justify-start gap-2 px-4 text-left hover:bg-accent/50 hover:text-foreground has-[>svg]:px-4 dark:hover:bg-accent/50"
           aria-label={
             currentName
-              ? `Open ${currentName} ${switcherNoun} switcher`
-              : `Open ${switcherNoun} switcher`
+              ? isCloud ? t("app.settings.sidebarCompanyMenu.openNamedOrgSwitcher", { name: currentName }) : t("app.settings.sidebarCompanyMenu.openNamedCompanySwitcher", { name: currentName })
+              : isCloud ? t("app.settings.sidebarCompanyMenu.openOrgSwitcher") : t("app.settings.sidebarCompanyMenu.openCompanySwitcher")
           }
         >
           <span className="flex min-w-0 flex-1 items-center gap-2">
@@ -405,7 +407,7 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
               )}
               title={currentName ?? undefined}
             >
-              {currentName ?? (isCloud ? "Select organization" : "Select company")}
+              {currentName ?? (isCloud ? t("app.settings.sidebarCompanyMenu.selectOrganization") : t("app.settings.sidebarCompanyMenu.selectCompany"))}
             </span>
           </span>
           {!rail && <ChevronsUpDown className="size-3.5 shrink-0 text-muted-foreground" />}
@@ -418,7 +420,7 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
       >
         <div className="flex h-(--organization-popover-header-height) items-center justify-between gap-2 px-3.5">
           <DropdownMenuLabel className="p-0 text-(length:--text-compact) font-semibold text-foreground">
-            Organizations
+            {t("app.settings.sidebarCompanyMenu.organizations")}
           </DropdownMenuLabel>
           {/* Stack order is owned by cloud's own portfolio in v1, so the
               drag-to-reorder affordance stays self-hosted-only. */}
@@ -432,7 +434,7 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
               }}
               className="rounded px-1.5 py-0.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
-              {isEditingOrder ? "Done" : "Edit"}
+              {isEditingOrder ? t("app.common.actions.done") : t("app.common.actions.edit")}
             </button>
           )}
         </div>
@@ -450,10 +452,10 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
               {stacks.length === 0 ? (
                 <DropdownMenuItem disabled>
                   {stacksQuery.isLoading
-                    ? "Loading organizations..."
+                    ? t("app.settings.sidebarCompanyMenu.loadingOrganizations")
                     : stacksQuery.isError
-                      ? "Could not load organizations"
-                      : "No organizations"}
+                      ? t("app.settings.sidebarCompanyMenu.couldNotLoadOrganizationsAlt")
+                      : t("app.settings.sidebarCompanyMenu.noOrganizations")}
                 </DropdownMenuItem>
               ) : null}
             </>
@@ -486,7 +488,7 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
                 // offer the way back.
                 companyListUnavailable ? (
                   <>
-                    <DropdownMenuItem disabled>Couldn&apos;t load companies</DropdownMenuItem>
+                    <DropdownMenuItem disabled>{t("app.settings.sidebarCompanyMenu.couldNotLoadCompanies")}</DropdownMenuItem>
                     <DropdownMenuItem
                       onSelect={(event) => {
                         // Keep the menu open so the result of the retry is visible.
@@ -495,11 +497,11 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
                       }}
                     >
                       <RefreshCw className="h-4 w-4 mr-2" />
-                      Try again
+                      {t("app.common.actions.tryAgain")}
                     </DropdownMenuItem>
                   </>
                 ) : (
-                  <DropdownMenuItem disabled>No companies</DropdownMenuItem>
+                  <DropdownMenuItem disabled>{t("app.settings.sidebarCompanyMenu.noCompanies")}</DropdownMenuItem>
                 )
               ) : null}
             </>
@@ -517,7 +519,7 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
               <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
                 <Plus className="size-4" />
               </span>
-              <span className="min-w-0 flex-1 truncate">Create organization</span>
+              <span className="min-w-0 flex-1 truncate">{t("app.settings.sidebarCompanyMenu.createOrganization")}</span>
             </DropdownMenuItem>
           )}
           {showInvitePeople ? (
@@ -541,8 +543,8 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
                 </span>
                 <span className="min-w-0 flex-1 truncate">
                   {currentName
-                    ? `Invite people to ${currentName}`
-                    : "Invite people"}
+                    ? t("app.settings.sidebarCompanyMenu.invitePeopleTo", { name: currentName })
+                    : t("app.settings.sidebarCompanyMenu.invitePeople")}
                 </span>
               </Link>
             </DropdownMenuItem>
@@ -557,7 +559,7 @@ function BuiltinCompanyMenu({ open: controlledOpen, onOpenChange }: SidebarCompa
                 <LogOut className="size-4" />
               </span>
               <span className="min-w-0 flex-1 truncate">
-                {signOutMutation.isPending ? "Signing out..." : "Sign out"}
+                {signOutMutation.isPending ? t("app.settings.sidebarCompanyMenu.signingOut") : t("app.common.actions.signOut")}
               </span>
             </DropdownMenuItem>
           ) : null}

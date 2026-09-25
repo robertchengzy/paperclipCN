@@ -3,10 +3,12 @@ import { useCompany } from "@/context/CompanyContext";
 import { useDialogState } from "@/context/DialogContext";
 import { useLocation } from "@/lib/router";
 import { isOnboardingPath } from "@/lib/onboarding-route";
+import { useTranslation } from "@/i18n";
 import type { PluginHostContext } from "@/plugins/bridge";
 import { PluginSlotMount, usePluginSlots, type PluginSlotContext } from "@/plugins/slots";
 
 function AppShellEntries({ context }: { context: PluginSlotContext }) {
+  const { t } = useTranslation();
   const { slots, errorMessage } = usePluginSlots({
     slotTypes: ["appShellOverlay"],
     companyId: context.companyId,
@@ -14,7 +16,7 @@ function AppShellEntries({ context }: { context: PluginSlotContext }) {
   // Optional extensions must not replace the application's normal error UI.
   if (errorMessage || slots.length === 0) return null;
   return (
-    <aside className="plugin-app-shell-overlays" aria-label="Application extensions">
+    <aside className="plugin-app-shell-overlays" aria-label={t("app.settings.pluginAppShellOverlays.applicationExtensions")}>
       {slots.map((slot) => (
         <PluginSlotMount
           key={`${slot.pluginId}:${slot.pluginVersion}:${slot.id}`}
