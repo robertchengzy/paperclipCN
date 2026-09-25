@@ -1,3 +1,4 @@
+import { t as translateCopy } from "@/i18n";
 import { DEFAULT_CODEX_LOCAL_MODEL } from "@paperclipai/adapter-codex-local";
 import { claudeLocalReasoningEffortsForModel, DEFAULT_CLAUDE_LOCAL_MODEL } from "@paperclipai/adapter-claude-local";
 import { grokLocalReasoningEffortsForModel } from "@paperclipai/adapter-grok-local";
@@ -44,14 +45,9 @@ export function setupEfforts(adapter: string, model = ""): string[] {
 }
 
 export const SETUP_LOGIN_HINTS: Record<string, string> = {
-  cursor:
-    "Use a Cursor API key, or run agent login on the selected environment's host.",
-  gemini_local:
-    "Use a Gemini API key, or an existing supported Gemini CLI login on the selected environment's host.",
-  kimi_local:
-    "Use a Kimi API key and model settings below, or run kimi login on the selected environment's host.",
-  grok_local:
-    "Grok Build uses its CLI sign-in. Run grok login on the selected environment's host, then test the connection here.",
-  hermes_local:
-    "Use a provider API key, or the existing Hermes provider configuration on the selected environment's host.",
+  get cursor() { return translateCopy("app.agentUi.agentSetupFields.useACursorAPIKeyOrRunAgentLogin"); },
+  get gemini_local() { return translateCopy("app.agentUi.agentSetupFields.useAGeminiAPIKeyOrAnExistingSupported"); },
+  get kimi_local() { return translateCopy("app.agentUi.agentSetupFields.useAKimiAPIKeyAndModelSettingsBelow"); },
+  get grok_local() { return translateCopy("app.agentUi.agentSetupFields.grokBuildUsesItsCLISigninRunGrokLogin"); },
+  get hermes_local() { return translateCopy("app.agentUi.agentSetupFields.useAProviderAPIKeyOrTheExistingHermes"); },
 };

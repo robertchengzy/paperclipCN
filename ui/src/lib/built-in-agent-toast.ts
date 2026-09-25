@@ -1,3 +1,4 @@
+import { t as translateCopy } from "@/i18n";
 import type { ToastInput } from "@/context/ToastContext";
 
 export interface BuiltInAgentPausedToastOptions {
@@ -17,12 +18,12 @@ export interface BuiltInAgentPausedToastOptions {
  * feature actions don't stack duplicate toasts.
  */
 export function buildBuiltInAgentPausedToast(options: BuiltInAgentPausedToastOptions): ToastInput {
-  const noun = options.featureNoun ?? "item";
+  const noun = options.featureNoun ?? translateCopy("app.agentUi.builtInAgentToast.item");
   return {
     dedupeKey: `built-in-agent-paused:${options.displayName}`,
-    title: `${options.displayName} is paused`,
-    body: `Resume the agent to generate this ${noun}.`,
+    title: translateCopy("app.agentUi.builtInAgentToast.pausedNamed", { name: options.displayName }),
+    body: translateCopy("app.agentUi.builtInAgentToast.resumeToGenerate", { item: noun }),
     tone: "warn",
-    action: { label: "View agent", href: options.agentHref },
+    action: { label: translateCopy("app.agentUi.builtInAgentToast.viewAgent"), href: options.agentHref },
   };
 }

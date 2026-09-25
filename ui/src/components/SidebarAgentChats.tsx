@@ -1,3 +1,4 @@
+import { t as translateCopy, useTranslation } from "@/i18n";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { agentsApi } from "@/api/agents";
@@ -33,6 +34,7 @@ export function SidebarAgentChats() {
 
 // A scope change unmounts the picker, including its open state and search.
 function CompanyAgentChats({ companyId, userId }: { companyId: string | null; userId?: string }) {
+  const { t: translateCopy } = useTranslation();
   const agentsQuery = useQuery({
     queryKey: queryKeys.agents.list(companyId!),
     queryFn: () => agentsApi.list(companyId!),
@@ -61,7 +63,7 @@ function CompanyAgentChats({ companyId, userId }: { companyId: string | null; us
           mutation.mutate({
             resourceType: "agent",
             resourceId: id,
-            resourceName: agents.find((agent) => agent.id === id)?.name ?? "Agent",
+            resourceName: agents.find((agent) => agent.id === id)?.name ?? translateCopy("app.agentUi.sidebarAgentChats.agent"),
             starred: !stars.includes(id),
           });
         }}

@@ -1,3 +1,4 @@
+import { t as translateCopy, useTranslation } from "@/i18n";
 import { AlertTriangle, ExternalLink } from "lucide-react";
 import type { AgentPermissions } from "@paperclipai/shared";
 import { getTrustPreset } from "@/lib/trust-policy-ui";
@@ -11,6 +12,7 @@ export function GitHubAgentTrustWarning({
   agent:
     { name: string; permissions: Partial<AgentPermissions> } | null | undefined;
 }) {
+  const { t: translateCopy } = useTranslation();
   if (!agent || getTrustPreset(agent.permissions) === "low_trust_review")
     return null;
   return (
@@ -23,13 +25,10 @@ export function GitHubAgentTrustWarning({
         {agent.name} is not configured for low-trust review
       </p>
       <p>
-        GitHub comments and pull requests can contain malicious instructions. We
-        recommend a low-trust agent with a scoped work boundary and an isolated
-        sandbox runtime.
+        {translateCopy("app.agentUi.gitHubAgentTrustWarning.gitHubCommentsAndPullRequestsCanContainMaliciousInstructions")}
       </p>
       <p className="text-xs text-muted-foreground">
-        Continuing keeps this agent’s current permissions. A restricted guest
-        profile does not replace the agent’s trust and runtime settings.
+        {translateCopy("app.agentUi.gitHubAgentTrustWarning.continuingKeepsThisAgentsCurrentPermissionsARestrictedGuest")}
       </p>
       <a
         className="inline-flex items-center gap-1 underline underline-offset-4"
@@ -37,7 +36,7 @@ export function GitHubAgentTrustWarning({
         target="_blank"
         rel="noreferrer"
       >
-        Learn about low-trust agents
+        {translateCopy("app.agentUi.gitHubAgentTrustWarning.learnAboutLowtrustAgents")}
         <ExternalLink className="size-3.5" />
       </a>
     </div>

@@ -1,3 +1,4 @@
+import { t as translateCopy } from "@/i18n";
 import { auditSectionHref, type AuditSection } from "./audit/audit-navigation";
 
 export type AgentDetailView =
@@ -20,28 +21,28 @@ export const AGENT_DETAIL_NAVIGATION: ReadonlyArray<{
   items: ReadonlyArray<{ value: AgentLocalDetailView; label: string }>;
 }> = [
   {
-    label: "Agent",
+    get label() { return translateCopy("app.agentUi.agentDetailNavigation.agent"); },
     items: [
-      { value: "overview", label: "Overview" },
-      { value: "instructions", label: "Instructions" },
-      { value: "skills", label: "Skills" },
+      { value: "overview", get label() { return translateCopy("app.agentUi.agentDetailNavigation.overview"); } },
+      { value: "instructions", get label() { return translateCopy("app.agentUi.agentDetailNavigation.instructions"); } },
+      { value: "skills", get label() { return translateCopy("app.agentUi.agentDetailNavigation.skills"); } },
     ],
   },
   {
-    label: "Runtime",
+    get label() { return translateCopy("app.agentUi.agentDetailNavigation.runtime"); },
     items: [
-      { value: "runtime", label: "Harness / Runtime" },
-      { value: "secrets", label: "Secrets" },
-      { value: "tools", label: "Tools" },
-      { value: "channels", label: "Channels" },
+      { value: "runtime", get label() { return translateCopy("app.agentUi.agentDetailNavigation.harnessRuntime"); } },
+      { value: "secrets", get label() { return translateCopy("app.agentUi.agentDetailNavigation.secrets"); } },
+      { value: "tools", get label() { return translateCopy("app.agentUi.agentDetailNavigation.tools"); } },
+      { value: "channels", get label() { return translateCopy("app.agentUi.agentDetailNavigation.channels"); } },
     ],
   },
   {
-    label: "Governance",
+    get label() { return translateCopy("app.agentUi.agentDetailNavigation.governance"); },
     items: [
-      { value: "permissions", label: "Permissions / Trust" },
-      { value: "api-keys", label: "API Keys" },
-      { value: "revisions", label: "Revisions" },
+      { value: "permissions", get label() { return translateCopy("app.agentUi.agentDetailNavigation.permissionsTrust"); } },
+      { value: "api-keys", get label() { return translateCopy("app.agentUi.agentDetailNavigation.aPIKeys"); } },
+      { value: "revisions", get label() { return translateCopy("app.agentUi.agentDetailNavigation.revisions"); } },
     ],
   },
 ] as const;

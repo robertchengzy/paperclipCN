@@ -1,3 +1,4 @@
+import { t as translateCopy } from "@/i18n";
 import { AgentCharacter } from "../components/AgentCharacter";
 import { characterStateForAgent } from "@paperclipai/shared";
 import { mergeRunLogChunks, readChunkSeq } from "../lib/run-log-chunks";
@@ -374,18 +375,20 @@ function scrollToContainerBottom(container: ScrollContainer, behavior: ScrollBeh
 export const AGENT_DETAIL_TABS = AGENT_DETAIL_NAVIGATION.flatMap((section) => section.items);
 
 const LEGACY_AGENT_DETAIL_TABS = [
-  { value: "dashboard", label: "Dashboard" },
-  { value: "instructions", label: "Instructions" },
-  { value: "skills", label: "Skills" },
-  { value: "configuration", label: "Configuration" },
-  { value: "secrets", label: "Secrets" },
-  { value: "tools", label: "Tools" },
-  { value: "runs", label: "Runs" },
-  { value: "audit", label: "Audit" },
-  { value: "budget", label: "Budget" },
+  { value: "dashboard", get label() { return translateCopy("app.agentUi.agentDetail.dashboard"); } },
+  { value: "instructions", get label() { return translateCopy("app.agentUi.agentDetail.instructions"); } },
+  { value: "skills", get label() { return translateCopy("app.agentUi.agentDetail.skills"); } },
+  { value: "configuration", get label() { return translateCopy("app.agentUi.agentDetail.configuration"); } },
+  { value: "secrets", get label() { return translateCopy("app.agentUi.agentDetail.secrets"); } },
+  { value: "tools", get label() { return translateCopy("app.agentUi.agentDetail.tools"); } },
+  { value: "runs", get label() { return translateCopy("app.agentUi.agentDetail.runs"); } },
+  { value: "audit", get label() { return translateCopy("app.agentUi.agentDetail.audit"); } },
+  { value: "budget", get label() { return translateCopy("app.agentUi.agentDetail.budget"); } },
 ] as const;
 
-export const DISCARD_AGENT_CONFIG_CHANGES_MESSAGE = "Discard unsaved agent configuration changes?";
+export function discardAgentConfigChangesMessage() {
+  return translateCopy("app.agentUi.agentDetail.discardChanges");
+}
 
 export function confirmAgentConfigNavigation(
   dirty: boolean,

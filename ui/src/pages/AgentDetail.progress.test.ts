@@ -4,7 +4,6 @@ import { describe, expect, it, vi } from "vitest";
 import { queryKeys } from "../lib/queryKeys";
 import {
   AGENT_DETAIL_TABS,
-  DISCARD_AGENT_CONFIG_CHANGES_MESSAGE,
   agentConfigHistoryRestoreDelta,
   buildHeartbeatProgressLogLine,
   confirmAgentConfigNavigation,
@@ -26,7 +25,7 @@ describe("agent detail tabs", () => {
     const confirm = vi.fn().mockReturnValue(false);
 
     expect(confirmAgentConfigNavigation(true, confirm)).toBe(false);
-    expect(confirm).toHaveBeenCalledWith(DISCARD_AGENT_CONFIG_CHANGES_MESSAGE);
+    expect(confirm).toHaveBeenCalledWith("Discard unsaved agent configuration changes?");
 
     confirm.mockReturnValue(true);
     expect(confirmAgentConfigNavigation(true, confirm)).toBe(true);

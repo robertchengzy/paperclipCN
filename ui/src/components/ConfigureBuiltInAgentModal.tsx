@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateCopy, useTranslation } from "@/i18n";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -60,6 +62,7 @@ export function ConfigureBuiltInAgentModal({
   onOpenChange,
   onConfigured,
 }: ConfigureBuiltInAgentModalProps) {
+  const { t: translateCopy } = useTranslation();
   const queryClient = useQueryClient();
   const { definition } = state;
 
@@ -111,7 +114,7 @@ export function ConfigureBuiltInAgentModal({
     models.some((candidate) => candidate.id === normalizedModel);
   const modelError = modelKnown
     ? null
-    : `Model “${normalizedModel}” is not available for ${adapterType}. Choose a known model.`;
+    : translateCopy("app.agentUi.configureBuiltInAgentModal.modelUnavailable", { model: normalizedModel, adapter: adapterType });
   const budgetMonthlyCents = parseBudgetMonthlyCents(budgetDollars);
   const budgetValid = !budgetDollars.trim() || budgetMonthlyCents !== undefined;
   const canSubmit =
@@ -119,8 +122,8 @@ export function ConfigureBuiltInAgentModal({
     modelKnown &&
     (setupSupportedInModal ? !modelRequired || normalizedModel.length > 0 : true);
   const submitLabel = setupSupportedInModal
-    ? `Configure & enable ${definition.displayName}`
-    : `Provision ${definition.displayName}`;
+    ? translateCopy("app.agentUi.configureBuiltInAgentModal.configureNamed", { name: definition.displayName })
+    : translateCopy("app.agentUi.configureBuiltInAgentModal.provisionNamed", { name: definition.displayName });
 
   const provision = useMutation({
     mutationFn: async () => {
@@ -143,7 +146,7 @@ export function ConfigureBuiltInAgentModal({
       onOpenChange(false);
     },
     onError: (err) => {
-      setError(err instanceof ApiError ? err.message : "Failed to configure the built-in agent.");
+      setError(err instanceof ApiError ? err.message : translateCopy("app.agentUi.configureBuiltInAgentModal.failedToConfigureTheBuiltinAgent"));
     },
   });
 
@@ -151,18 +154,16 @@ export function ConfigureBuiltInAgentModal({
     <Dialog open={open} onOpenChange={(next) => (provision.isPending ? undefined : onOpenChange(next))}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Set up the {definition.displayName}</DialogTitle>
+          <DialogTitle>{translateCopy("app.agentUi.configureBuiltInAgentModal.setupNamed", { name: definition.displayName })}</DialogTitle>
           <DialogDescription>{definition.shortPurpose}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <InlineBanner tone="info" compact>
-            Creates <strong>{definition.displayName}</strong> in your roster, badged{" "}
-            <strong>Built-in</strong>. Organizations that require hire approval will queue this for the
-            board.
+            <Trans i18nKey="app.agentUi.configureBuiltInAgentModal.createsBuiltin" values={{ name: definition.displayName }} components={{ name: <strong />, badge: <strong /> }} />
           </InlineBanner>
 
-          <Field label="Adapter type">
+          <Field label={translateCopy("app.agentUi.configureBuiltInAgentModal.adapterType")}>
             <AdapterTypeDropdown
               value={adapterType}
               onChange={(next) => {
@@ -196,12 +197,11 @@ export function ConfigureBuiltInAgentModal({
 
           {!setupSupportedInModal && (
             <InlineBanner tone="warning" compact>
-              This adapter needs command or endpoint fields before it can run. Provision the
-              built-in row now, then finish those fields from the full agent configuration.
+              {translateCopy("app.agentUi.configureBuiltInAgentModal.thisAdapterNeedsCommandOrEndpointFieldsBeforeIt")}
             </InlineBanner>
           )}
 
-          <Field label="Monthly budget (optional)" hint="Leave blank for no cap.">
+          <Field label={translateCopy("app.agentUi.configureBuiltInAgentModal.monthlyBudgetOptional")} hint={translateCopy("app.agentUi.configureBuiltInAgentModal.leaveBlankForNoCap")}>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">$</span>
               <Input
@@ -231,7 +231,7 @@ export function ConfigureBuiltInAgentModal({
             onClick={() => onOpenChange(false)}
             disabled={provision.isPending}
           >
-            Not now
+            {translateCopy("app.agentUi.configureBuiltInAgentModal.notNow")}
           </Button>
           <Button
             onClick={() => {
@@ -240,7 +240,7 @@ export function ConfigureBuiltInAgentModal({
             }}
             disabled={!canSubmit || provision.isPending}
           >
-            {provision.isPending ? "Configuring…" : submitLabel}
+            {provision.isPending ? translateCopy("app.agentUi.configureBuiltInAgentModal.configuring") : submitLabel}
           </Button>
         </DialogFooter>
       </DialogContent>
