@@ -74,9 +74,9 @@ export function StatusCardTile({
   const generatingIssue = useMemo<SummarySlotIssueRef | null>(
     () =>
       lifecycle === "updating" && card.generatingIssueId
-        ? { id: card.generatingIssueId, identifier: null, title: card.title ?? "Status update", status: "in_progress" }
+        ? { id: card.generatingIssueId, identifier: null, title: card.title ?? t("app.finalReview.statusUpdate"), status: "in_progress" }
         : null,
-    [lifecycle, card.generatingIssueId, card.title],
+    [lifecycle, card.generatingIssueId, card.title, t],
   );
   const draftStream = useSummaryDraftStream(companyId, generatingIssue);
 

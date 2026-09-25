@@ -19,7 +19,7 @@ import {
 import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
-import { useTranslation } from "@/i18n";
+import { t as translate, useTranslation } from "@/i18n";
 
 interface IssueAttachmentsSectionProps {
   attachments: IssueAttachment[];
@@ -40,7 +40,7 @@ async function fetchAttachmentText(attachment: IssueAttachment) {
     headers: { Accept: "text/markdown,text/plain;q=0.9,*/*;q=0.1" },
   });
   if (!response.ok) {
-    throw new Error(`Unable to load attachment preview (${response.status})`);
+    throw new Error(translate("app.finalReview.attachmentPreviewError", { status: response.status }));
   }
   return response.text();
 }

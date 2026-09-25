@@ -4126,7 +4126,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
     return () => {
       cancelled = true;
     };
-  }, [visible, run.id, run.logRef, run.logBytes, shouldPollShellLog]);
+  }, [visible, run.id, run.logRef, run.logBytes, shouldPollShellLog, t]);
 
   async function loadMorePersistedLog() {
     if (loadingMoreLog || !hasMoreLog) return;
@@ -4354,7 +4354,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
 
   const transcript = useMemo(
     () => buildTranscript(logLines, adapter, { censorUsernameInLogs }),
-    [adapter, censorUsernameInLogs, logLines, parserTick],
+    [adapter, censorUsernameInLogs, logLines, parserTick, t],
   );
   const toolDecisionLookup = useQuery({
     queryKey: queryKeys.tools.runDecisions(run.companyId, run.id),

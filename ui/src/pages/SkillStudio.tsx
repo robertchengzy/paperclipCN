@@ -531,7 +531,7 @@ function StudioNewSkillPanel({
       {draft.forkedFromName ? (
         <div className="flex items-center gap-2 rounded-md border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
           <GitFork className="h-4 w-4" />
-          {t("app.skills.skillStudio.forking")} {draft.forkedFromName}
+          {t("app.finalReview.forkingNamed", { name: draft.forkedFromName })}
         </div>
       ) : forkError ? (
         <div className="flex items-center gap-2 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -3151,7 +3151,7 @@ function RunDetailView({
 
         {/* snapshot property block */}
         <div className="rounded-md border border-border text-xs">
-          <PropRow label={t("app.skills.skillStudio.input")} value={detail.inputId ? "saved input" : "ad-hoc paste"} />
+          <PropRow label={t("app.skills.skillStudio.input")} value={detail.inputId ? t("app.finalReview.savedInput") : t("app.finalReview.adHocPaste")} />
           <PropRow label={t("app.skills.skillStudio.template")} value={detail.templateName ?? t("app.skills.skillStudio.noTemplate")} />
           <PropRow label={t("app.skills.skillStudio.skillVersion")} value={`v${detail.skillVersion.revisionNumber}`} />
           <PropRow label={t("app.skills.skillStudio.created")} value={relativeTime(detail.createdAt)} />

@@ -16440,6 +16440,26 @@
       "stopped": "已停止",
       "couldNotStart": "无法启动",
       "runCompleted": "运行已完成"
+    },
+    "finalReview": {
+      "missingTargetStage": "缺少目标阶段",
+      "missingRemovalStage": "缺少移除阶段",
+      "missingItemVersion": "缺少项目版本",
+      "itemNotReady": "此项目尚未准备好接受决策。",
+      "selectOrganization": "请先选择组织。",
+      "approvalFailed": "部分项目无法批准。",
+      "attachmentPreviewError": "无法加载附件预览（{{status}}）",
+      "announcementRequestError": "公告请求失败",
+      "statusUpdate": "状态更新",
+      "fileReference": "文件引用",
+      "terminal": "终止状态",
+      "runtimeRequest": "运行时 {{type}}",
+      "resultDisposition": "结果 · {{disposition}}",
+      "timelinePaginationError": "时间线分页未前进",
+      "timelineEmptyError": "时间线响应为空",
+      "savedInput": "已保存的输入",
+      "adHocPaste": "临时粘贴",
+      "forkingNamed": "复制自 {{name}}"
     }
   }
 }

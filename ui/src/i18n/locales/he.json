@@ -16440,6 +16440,26 @@
       "stopped": "Stopped",
       "couldNotStart": "Couldn't start",
       "runCompleted": "Run completed"
+    },
+    "finalReview": {
+      "missingTargetStage": "Missing target stage",
+      "missingRemovalStage": "Missing removal stage",
+      "missingItemVersion": "Missing item version",
+      "itemNotReady": "This item is not ready for a decision.",
+      "selectOrganization": "Select an organization first.",
+      "approvalFailed": "Some items could not be approved.",
+      "attachmentPreviewError": "Unable to load attachment preview ({{status}})",
+      "announcementRequestError": "Announcement request failed",
+      "statusUpdate": "Status update",
+      "fileReference": "file reference",
+      "terminal": "terminal",
+      "runtimeRequest": "runtime {{type}}",
+      "resultDisposition": "result · {{disposition}}",
+      "timelinePaginationError": "Timeline pagination did not advance",
+      "timelineEmptyError": "Timeline response was empty",
+      "savedInput": "saved input",
+      "adHocPaste": "ad-hoc paste",
+      "forkingNamed": "Forking {{name}}"
     }
   }
 }

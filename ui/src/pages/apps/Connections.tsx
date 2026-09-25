@@ -283,8 +283,7 @@ export function Connections() {
       }
       return appConnections.map((connection) => {
         const owner = connectionOwnerProfile(connection, userProfileById);
-        const type = connectionTypeLabel(connection.credentialPolicy);
-        const displayName = type === "Organization"
+        const displayName = connection.credentialPolicy !== "per_user" && connection.credentialPolicy !== "per_agent"
           ? connectionNameForCredentialPolicy(
               humanizeConnectionDisplayName(connection),
               connection.credentialPolicy,
@@ -309,7 +308,7 @@ export function Connections() {
         };
       });
     });
-  }, [actionCountByConnection, applications, connectionsByApplication, logoByKey, logoByName, userProfileById]);
+  }, [actionCountByConnection, applications, connectionsByApplication, logoByKey, logoByName, userProfileById, t]);
 
   const rowsNeedingAttention = rows.filter(rowNeedsAttention);
   const visibleRows = filter === "attention" ? rowsNeedingAttention : rows;

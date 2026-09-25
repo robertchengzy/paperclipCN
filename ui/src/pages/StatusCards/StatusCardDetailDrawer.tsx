@@ -106,9 +106,9 @@ export function StatusCardDetailDrawer({
   const generatingIssue = useMemo<SummarySlotIssueRef | null>(
     () =>
       card && lifecycle === "updating" && card.generatingIssueId
-        ? { id: card.generatingIssueId, identifier: null, title: card.title ?? "Status update", status: "in_progress" }
+        ? { id: card.generatingIssueId, identifier: null, title: card.title ?? t("app.finalReview.statusUpdate"), status: "in_progress" }
         : null,
-    [card, lifecycle],
+    [card, lifecycle, t],
   );
   const draftStream = useSummaryDraftStream(companyId, generatingIssue);
 

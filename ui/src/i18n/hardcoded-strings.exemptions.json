@@ -15,7 +15,9 @@
     "connect-flow-preview-main.tsx",
     "connect-model-preview-main.tsx",
     "wizard-preview-main.tsx",
-    "i18n/"
+    "i18n/",
+    "components/ai-connections/AiConnectionDesignExamples.tsx",
+    "lib/announcement-preview.ts"
   ],
   "values": [
     "ACP",
@@ -85,5 +87,280 @@
     "metadata.paperclip.catalogTeam",
     "updated:&gt;7d"
   ],
-  "entries": {}
+  "entries": {
+    "api/auth.ts": [
+      "AuthApiError",
+      "This means the browser never got a response from the server. Common causes:",
+      "connection was reset. A wrong password would instead return HTTP 401, not this.",
+      "or a proxy/tunnel that only forwards the page but not /api), an SSL error, or the",
+      "the page origin differs from the API host (mixed http/https, wrong hostname/port,"
+    ],
+    "api/client.ts": [
+      "ApiError"
+    ],
+    "components/AdapterLoginChrome.tsx": [
+      "Claude Code",
+      "Codex CLI",
+      "Grok",
+      "Grok CLI"
+    ],
+    "components/DecisionTriageStrip.tsx": [
+      "prepare a recommendation, and re-surface it on the decisions desk? (routed from the desk)",
+      "— could you look at this decision ,"
+    ],
+    "components/DocumentAnnotationPanel.tsx": [
+      "Document annotation panel requires an annotation target."
+    ],
+    "components/IssueDocumentsSection.tsx": [
+      "IssueDocumentsSection requires either issue or subject"
+    ],
+    "components/IssueRunLedger.tsx": [
+      "Dismissed from issue run ledger",
+      "Snoozed from issue run ledger"
+    ],
+    "components/OnboardingWizard.tsx": [
+      "--output-format json \"Respond with hello.\"",
+      "-p \"Respond with hello.\" --output-format stream-json",
+      "-p --mode ask --output-format json \"Respond with hello.\"",
+      "My API",
+      "Paperclip onboarding",
+      "Respond with hello.",
+      "run --format json \"Respond with hello.\""
+    ],
+    "components/PipelineItemBodyDocument.tsx": [
+      "Linked body to conversation for comments"
+    ],
+    "components/RunnerInspector.tsx": [
+      "KiB",
+      "MiB",
+      "Runner"
+    ],
+    "components/TaskChatThread.tsx": [
+      "Run completed. Agent did not post a summary comment this run (transcript withheld — see run log)."
+    ],
+    "components/ai-connections/model.ts": [
+      "Grok",
+      "OpenRouter"
+    ],
+    "components/chat/ExternallyConnectedTaskBanner.tsx": [
+      "Missing delivery scope",
+      "Unnamed attachment"
+    ],
+    "components/new-agent/AgentProviderConnection.tsx": [
+      "Grok",
+      "My API"
+    ],
+    "components/routine-triggers/TriggerWizard.tsx": [
+      "America/Chicago",
+      "Monday"
+    ],
+    "components/task-chat/TaskChatComposer.tsx": [
+      "Review unavailable",
+      "color-mix(in srgb, 12%, transparent)"
+    ],
+    "components/task-chat/motion-tokens.ts": [
+      "Durations",
+      "Easing",
+      "States"
+    ],
+    "components/task-chat/task-chat-states.ts": [
+      "AcpRuntimeTurnResult.status:\"cancelled\" / StopReason \"cancelled\"",
+      "IssueComment authorType:\"user\"",
+      "StopReason \"max_tokens\" | \"max_turn_requests\"",
+      "StopReason \"refusal\"",
+      "ToolCallContent type:\"diff\" → TranscriptEntry kind:\"diff\"",
+      "assistant boundaries + chronological tool calls"
+    ],
+    "components/task-chat/transcript-adapter.ts": [
+      "Edit",
+      "Responding",
+      "Running",
+      "Thinking"
+    ],
+    "components/transcript/RunTranscriptView.tsx": [
+      "files · · revision"
+    ],
+    "components/transcript/native-run-events.ts": [
+      "Bash",
+      "Provider notice",
+      "Tool"
+    ],
+    "context/BreadcrumbContext.tsx": [
+      "useBreadcrumbs must be used within BreadcrumbProvider"
+    ],
+    "context/CompanyContext.tsx": [
+      "useCompany must be used within CompanyProvider"
+    ],
+    "context/DialogContext.tsx": [
+      "useDialogActions must be used within DialogProvider",
+      "useDialogState must be used within DialogProvider"
+    ],
+    "context/FileViewerContext.tsx": [
+      "useRequiredFileViewer must be used within a FileViewerProvider"
+    ],
+    "context/PanelContext.tsx": [
+      "usePanel must be used within PanelProvider"
+    ],
+    "context/SidebarContext.tsx": [
+      "useSidebar must be used within SidebarProvider"
+    ],
+    "context/ThemeContext.tsx": [
+      "useTheme must be used within ThemeProvider"
+    ],
+    "context/ToastContext.tsx": [
+      "useToastActions must be used within a ToastProvider",
+      "useToastState must be used within a ToastProvider"
+    ],
+    "features/connections/ConnectionSetupFlow.tsx": [
+      "Vercel Connect",
+      "service/my-connector or scl_…"
+    ],
+    "lib/adapter-test-environment.ts": [
+      "ManagedSandboxUnavailableForTestError"
+    ],
+    "lib/app-brand-assets.ts": [
+      "App brand manifest is invalid",
+      "App brand manifest request failed ( )"
+    ],
+    "lib/comment-submit-result.ts": [
+      "CommentSubmissionUnknownError"
+    ],
+    "lib/cron-fires.ts": [
+      "Cron value out of range",
+      "Empty cron field",
+      "Empty cron field element",
+      "Invalid cron range",
+      "Invalid cron range (start > end)",
+      "Invalid cron start",
+      "Invalid cron step",
+      "Invalid cron value",
+      "Unable to resolve weekday for"
+    ],
+    "lib/external-objects.ts": [
+      "Asana",
+      "HubSpot",
+      "Jira",
+      "Linear",
+      "Notion"
+    ],
+    "lib/issue-filters.ts": [
+      "Active",
+      "All",
+      "Backlog",
+      "Done"
+    ],
+    "lib/issue-monitor.ts": [
+      "Invalid monitor date"
+    ],
+    "lib/issue-thread-interactions.ts": [
+      "No answer"
+    ],
+    "lib/onboarding-launch.ts": [
+      "Onboarding"
+    ],
+    "lib/pipeline-learnings.ts": [
+      "Unknown"
+    ],
+    "lib/provider-credential.ts": [
+      "Adapter credential supplied during agent setup.",
+      "Model provider credential for a new agent setup.",
+      "· agent setup"
+    ],
+    "lib/skill-create.ts": [
+      "Describe when agents should use this skill.",
+      "Fork",
+      "New Skill"
+    ],
+    "lib/successful-run-handoff.ts": [
+      "Paperclip could not resolve this issue's missing disposition automatically. The source assignment is unchanged and a board decision is required.",
+      "Paperclip needs a disposition before this issue can continue."
+    ],
+    "lib/transcriptPresentation.ts": [
+      "Command",
+      "Input"
+    ],
+    "lib/utils.ts": [
+      "Anthropic OAuth",
+      "ChatGPT",
+      "ChatGPT WHAM",
+      "Claude CLI",
+      "Google",
+      "JetBrains AI",
+      "Logpush",
+      "OpenRouter"
+    ],
+    "lib/vite-sw-build-id.ts": [
+      "service worker is missing the placeholder;"
+    ],
+    "lib/wait-for-stopped-runs.ts": [
+      "Stop verification timed out"
+    ],
+    "pages/BoardChat.tsx": [
+      "Create a hiring plan for . List the next roles to hire, in priority order, with a short rationale for each.",
+      "Draft a one-page Organization Brief for — include our mission, team roster, and first priorities.",
+      "Outline our first 30 days. Break it into weekly priorities with who owns what.",
+      "Write a short intro pitch for that I could reuse for investors, customers, or recruits.",
+      "paperclip.boardChat.draft."
+    ],
+    "pages/CompanyEnvironments.tsx": [
+      "RelinkConfirmationDeclined"
+    ],
+    "pages/CompanyExport.tsx": [
+      "Agent",
+      "Company",
+      "Engineer",
+      "Manager"
+    ],
+    "pages/ExecutionWorkspaceDetail.tsx": [
+      "{ \"commands\": [ { \"id\": \"web\", \"name\": \"web\", \"kind\": \"service\", \"command\": \"pnpm dev\", \"cwd\": \".\", \"port\": { \"type\": \"auto\" } }, { \"id\": \"db-migrate\", \"name\": \"db:migrate\", \"kind\": \"job\", \"command\": \"pnpm db:migrate\", \"cwd\": \".\" } ] }"
+    ],
+    "pages/PipelineSettings.tsx": [
+      "New stage"
+    ],
+    "pages/Pipelines.tsx": [
+      "Manual board override from item page: moved from to .",
+      "Removed from the item detail page.",
+      "headsUp:"
+    ],
+    "pages/ProfileSettings.tsx": [
+      "Board"
+    ],
+    "pages/ProjectWorkspaceDetail.tsx": [
+      "pnpm install && pnpm dev",
+      "{ \"commands\": [ { \"id\": \"web\", \"name\": \"web\", \"kind\": \"service\", \"command\": \"pnpm dev\", \"cwd\": \".\", \"port\": { \"type\": \"auto\" }, \"readiness\": { \"type\": \"http\", \"urlTemplate\": \"http://127.0.0.1:${port}\" }, \"expose\": { \"type\": \"url\", \"urlTemplate\": \"http://127.0.0.1:${port}\" }, \"lifecycle\": \"shared\", \"reuseScope\": \"project_workspace\" }, { \"id\": \"db-migrate\", \"name\": \"db:migrate\", \"kind\": \"job\", \"command\": \"pnpm db:migrate\", \"cwd\": \".\" } ] }"
+    ],
+    "pages/SkillStudio.tsx": [
+      "Code review",
+      "Focused smoke",
+      "Folder",
+      "Restore of v",
+      "Review repository changes for correctness, tests, and maintainability.",
+      "Short instructions for common skill checks"
+    ],
+    "pages/agent-skills/agent-skill-source.ts": [
+      "GitHub ·",
+      "skills.sh ·"
+    ],
+    "pages/apps/app-detail/RailwayAccessPanel.tsx": [
+      "ssh.railway.com ssh-ed25519 …"
+    ],
+    "pages/apps/app-detail/SetupPanel.tsx": [
+      "Gmail",
+      "Notion",
+      "PostHog"
+    ],
+    "pages/apps/chat/ChatEndpointSetup.tsx": [
+      "Application",
+      "ChannelMessage.Read.Group",
+      "ChatMessage.Read.Chat",
+      "Close the active chat conversation",
+      "Show the active Paperclip task status",
+      "Start a new Paperclip task in this chat",
+      "display_information: name: features: app_home: home_tab_enabled: false messages_tab_enabled: true messages_tab_read_only_enabled: false agent_view: agent_description: \"Work with a Paperclip agent in a task-backed conversation.\" bot_user: display_name: slash_commands: - command: description: usage_hint: should_escape: false url: oauth_config: scopes: bot: - app_mentions:read - assistant:write - channels:history - channels:read - chat:write - commands - files:read - files:write - groups:history - groups:read - im:history - im:read - mpim:history - mpim:read - reactions:read - reactions:write - users:read settings: org_deploy_enabled: false socket_mode_enabled: false token_rotation_enabled: false event_subscriptions: request_url: bot_events: - agent_session_stopped - app_mention - message.channels - message.groups - message.im - message.mpim - member_joined_channel - member_left_channel - channel_left - group_left - reaction_added - reaction_removed - channel_archive - group_archive - channel_unarchive - group_unarchive - channel_deleted - channel_rename - group_rename - app_uninstalled - tokens_revoked interactivity: is_enabled: true request_url:",
+      "you there?"
+    ],
+    "pages/tools/profiles/ProfileWizard.tsx": [
+      "Untitled profile"
+    ]
+  }
 }

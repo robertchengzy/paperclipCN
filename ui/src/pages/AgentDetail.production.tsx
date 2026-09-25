@@ -4183,7 +4183,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
 
   const transcript = useMemo(
     () => buildTranscript(logLines, adapter, { censorUsernameInLogs }),
-    [adapter, censorUsernameInLogs, logLines, parserTick],
+    [adapter, censorUsernameInLogs, logLines, parserTick, translateCopy],
   );
   const toolDecisionLookup = useQuery({
     queryKey: queryKeys.tools.runDecisions(run.companyId, run.id),

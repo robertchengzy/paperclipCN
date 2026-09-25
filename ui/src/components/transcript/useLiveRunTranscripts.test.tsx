@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { i18n } from "@/i18n";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError } from "../../api/client";
@@ -568,6 +569,30 @@ describe("useLiveRunTranscripts", () => {
       root.unmount();
     });
     container.remove();
+  });
+
+  it("rebuilds cached transcripts when the display language changes without refetching logs", async () => {
+    const runs = [{ id: "run-1", status: "succeeded", adapterType: "codex_local" }];
+    function Harness() {
+      useLiveRunTranscripts({ companyId: "company-1", runs, enableRealtimeUpdates: false });
+      return null;
+    }
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    try {
+      await act(async () => root.render(<Harness />));
+      buildTranscriptMock.mockClear();
+      const reads = logMock.mock.calls.length;
+      await act(async () => root.render(<Harness />));
+      expect(buildTranscriptMock).not.toHaveBeenCalled();
+      await act(async () => { await i18n.changeLanguage("zh-CN"); });
+      expect(buildTranscriptMock).toHaveBeenCalledTimes(1);
+      expect(logMock.mock.calls.length).toBe(reads);
+    } finally {
+      act(() => root.unmount());
+      await i18n.changeLanguage("en");
+      container.remove();
+    }
   });
 
   it("rebuilds only the transcript for the run that receives live output", async () => {

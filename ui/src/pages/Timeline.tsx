@@ -81,11 +81,11 @@ export async function loadTimelineWindow(
 
     if (!page.pagination.hasMore) break;
     const nextOffset = page.pagination.offset + page.pagination.limit;
-    if (nextOffset <= offset) throw new Error("Timeline pagination did not advance");
+    if (nextOffset <= offset) throw new Error(translate("app.finalReview.timelinePaginationError"));
     offset = nextOffset;
   }
 
-  if (!firstPage) throw new Error("Timeline response was empty");
+  if (!firstPage) throw new Error(translate("app.finalReview.timelineEmptyError"));
   return {
     actors: Array.from(actors.values()),
     spans: Array.from(spans.values()),

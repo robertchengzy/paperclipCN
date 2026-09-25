@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Connections } from "./Connections";
+import { i18n } from "@/i18n";
 
 const listGalleryMock = vi.hoisted(() => vi.fn());
 const listApplicationsMock = vi.hoisted(() => vi.fn());
@@ -339,6 +340,23 @@ describe("Connections table (M1b / PAP-13254 door 2)", () => {
     expect(container.querySelector('[title="Dotta"] [data-slot="avatar"]')).toBeTruthy();
     // Custom account labels remain untouched.
     expect(text).toContain("Slack Team");
+  });
+
+  it("preserves organization ownership when the display language changes", async () => {
+    listApplicationsMock.mockResolvedValue({ applications: [application({ id: "app-github", name: "GitHub" })] });
+    listConnectionsMock.mockResolvedValue({ connections: [connection({ id: "shared-github", applicationId: "app-github", name: "GitHub", credentialPolicy: "shared", createdByUserId: "user-1" })] });
+    listUserDirectoryMock.mockResolvedValue({ users: [{ principalId: "user-1", status: "active", user: { id: "user-1", name: "Dotta", email: "dotta@example.com", image: null } }] });
+    await renderApps();
+    expect(container.textContent).toContain("GitHub for the organization");
+    try {
+      await act(async () => { await i18n.changeLanguage("zh-CN"); });
+      await flushReact();
+      expect(container.textContent).toContain("GitHub for the organization");
+      expect(container.textContent).not.toContain("Dotta’s GitHub");
+      expect(container.textContent).not.toContain("Dotta 的 GitHub");
+    } finally {
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   // F6 (PAP-13254 §4): the row highlight and the Status pill derive from ONE

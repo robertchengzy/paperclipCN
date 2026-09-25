@@ -1,3 +1,4 @@
+import { useTranslation } from "@/i18n";
 import { usePageVisibility } from "../../lib/page-visibility";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { readTranscriptRequest } from "./read-transcript-request";
@@ -105,6 +106,8 @@ export function useLiveRunTranscripts({
   logReadLimitBytes = LOG_READ_LIMIT_BYTES,
   enableRealtimeUpdates = true,
 }: UseLiveRunTranscriptsOptions) {
+  const { i18n } = useTranslation();
+  const language = i18n.resolvedLanguage ?? i18n.language;
   // Ticker consumers opt into the silent chunk-count cap; full task views use a
   // byte budget that collapses (not discards) the oldest output when exceeded.
   const { visible } = usePageVisibility();
@@ -161,6 +164,7 @@ export function useLiveRunTranscripts({
     chunks: RunLogChunk[];
     censorUsernameInLogs: boolean;
     parserTick: number;
+    language: string;
     transcript: TranscriptEntry[];
   }>());
   // Tick counter to force transcript recomputation when dynamic parser loads
@@ -542,7 +546,8 @@ export function useLiveRunTranscripts({
         cached.adapterType === run.adapterType &&
         cached.chunks === chunks &&
         cached.censorUsernameInLogs === censorUsernameInLogs &&
-        cached.parserTick === parserTick
+        cached.parserTick === parserTick &&
+        cached.language === language
       ) {
         next.set(run.id, cached.transcript);
         continue;
@@ -557,6 +562,7 @@ export function useLiveRunTranscripts({
         chunks,
         censorUsernameInLogs,
         parserTick,
+        language,
         transcript,
       });
       next.set(run.id, transcript);
@@ -567,7 +573,7 @@ export function useLiveRunTranscripts({
       }
     }
     return next;
-  }, [chunksByRun, generalSettings?.censorUsernameInLogs, normalizedRuns, parserTick]);
+  }, [chunksByRun, generalSettings?.censorUsernameInLogs, normalizedRuns, parserTick, language]);
 
   return {
     transcriptByRun,

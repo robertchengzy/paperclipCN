@@ -2664,7 +2664,7 @@ export function PipelineItemDetailView({ pipelineId, caseId }: { pipelineId: str
   );
   const moveItemToStage = useMutation({
     mutationFn: () => {
-      if (!selectedMoveStage || !detail?.case.version) throw new Error("Missing target stage");
+      if (!selectedMoveStage || !detail?.case.version) throw new Error(t("app.finalReview.missingTargetStage"));
       return pipelinesApi.transitionCase(caseId, {
         toStageKey: selectedMoveStage.key,
         expectedVersion: detail.case.version,
@@ -2682,7 +2682,7 @@ export function PipelineItemDetailView({ pipelineId, caseId }: { pipelineId: str
   });
   const removeItem = useMutation({
     mutationFn: () => {
-      if (!removeStage || !detail?.case.version) throw new Error("Missing removal stage");
+      if (!removeStage || !detail?.case.version) throw new Error(t("app.finalReview.missingRemovalStage"));
       return pipelinesApi.transitionCase(caseId, {
         toStageKey: removeStage.key,
         expectedVersion: detail.case.version,
@@ -2719,7 +2719,7 @@ export function PipelineItemDetailView({ pipelineId, caseId }: { pipelineId: str
   }, [caseId, reviewQueueItems.data]);
   const decideReview = useMutation({
     mutationFn: ({ decision }: { decision: PipelineReviewDecision }) => {
-      if (!detail?.case.version) throw new Error("Missing item version");
+      if (!detail?.case.version) throw new Error(t("app.finalReview.missingItemVersion"));
       return pipelinesApi.reviewCase(caseId, {
         decision,
         reason: reviewDecisionNote.trim() || null,
@@ -5001,7 +5001,7 @@ export function ReviewQueue() {
   const decideRow = useMutation({
     mutationFn: async ({ row, decision, note }: { row: ReviewQueueRow; decision: "approve" | "decline" | "request_changes"; note?: string }) => {
       if (row.kind === "suggestion") {
-        if (!row.suggestionId) throw new Error("This item is not ready for a decision.");
+        if (!row.suggestionId) throw new Error(t("app.finalReview.itemNotReady"));
         await pipelinesApi.resolveSuggestion(row.caseId, {
           suggestionId: row.suggestionId,
           resolution: decision === "approve" ? "accept" : "dismiss",
@@ -5010,7 +5010,7 @@ export function ReviewQueue() {
         });
         return;
       }
-      if (row.expectedVersion === null) throw new Error("This item is not ready for a decision.");
+      if (row.expectedVersion === null) throw new Error(t("app.finalReview.itemNotReady"));
       await pipelinesApi.reviewCase(row.caseId, {
         decision: decision === "request_changes" ? "request_changes" : "approve",
         reason: note || null,
@@ -5051,20 +5051,20 @@ export function ReviewQueue() {
 
   const bulkApprove = useMutation({
     mutationFn: async (targetRows: ReviewQueueRow[]) => {
-      if (!selectedCompanyId) throw new Error("Select an organization first.");
+      if (!selectedCompanyId) throw new Error(t("app.finalReview.selectOrganization"));
       const reviewRows = targetRows.filter((row) => row.kind === "review");
       const suggestionRows = targetRows.filter((row) => row.kind === "suggestion" && row.suggestionId);
       const tasks: Promise<unknown>[] = [];
       if (reviewRows.length > 0) {
         const items = reviewRows.map((row) => {
-          if (row.expectedVersion === null) throw new Error("This item is not ready for a decision.");
+          if (row.expectedVersion === null) throw new Error(t("app.finalReview.itemNotReady"));
           return { caseId: row.caseId, decision: "approve" as const, expectedVersion: row.expectedVersion };
         });
         tasks.push(
           pipelinesApi.bulkReviewCases(selectedCompanyId, { items }).then((response) => {
             const failures = (response.results ?? []).filter((result) => !result.ok);
             if (failures.length > 0) {
-              throw new Error("Some items could not be approved.");
+              throw new Error(t("app.finalReview.approvalFailed"));
             }
           }),
         );
