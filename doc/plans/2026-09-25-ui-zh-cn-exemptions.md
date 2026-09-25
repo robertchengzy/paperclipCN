@@ -4,7 +4,7 @@
 
 仅对稳定程序数据、品牌、示例或开发者诊断保留原文；界面错误提示、数量句及状态标题仍须翻译。
 
-精确文本以 `ui/src/i18n/hardcoded-strings.exemptions.json` 的 `entries` 为准，不用宽泛文件豁免隐藏用户界面文案。
+精确文本以 `ui/src/i18n/hardcoded-strings.exemptions.json` 的 `entries` 为准。`files` 仅用于开发预览、性能测试页和执行器生成源码，不遮蔽产品界面文案。
 
 ## 已完成批次与跨文件收尾
 
@@ -73,6 +73,60 @@
 | `pages/tools/profiles/ProfileWizard.tsx` | 持久化工具配置档默认名称。 |
 
 `components/ai-connections/AiConnectionDesignExamples.tsx` 和 `lib/announcement-preview.ts` 仅服务开发用 DesignGuide/预览，按文件豁免。
+
+## 全站收尾补充（2026-09-25）
+
+下列文件的原文用于协议、持久化数据、示例或开发诊断；对应可见标签已在渲染层处理。
+
+| 文件（相对 ui/src） | 保留理由 |
+|---|---|
+| `adapters/adapter-display-registry.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/claude-local/config-fields.tsx` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/claude-local/index.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/codex-local/config-fields.tsx` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/cursor-cloud/index.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/dynamic-loader.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/gemini-local/config-fields.tsx` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/gemini-local/index.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/grok-local/index.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/hermes-gateway/index.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/kimi-local/index.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/openclaw-gateway/index.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `adapters/paperclip-runner/index.ts` | 适配器、CLI 产品名或 worker 初始化内部错误；显示字段按运行时语言取值。 |
+| `components/AgentConfigForm.tsx` | 模型强度/模式的稳定选项值、品牌和提示词示例；展示由标签 helper 翻译。 |
+| `components/JsonSchemaForm.tsx` | React 组件名与高级分组稳定 key；用户可见分组标题另行翻译。 |
+| `components/MarkdownEditor.tsx` | 代码块语言和 shell 名称，属于技术格式。 |
+| `components/RoutineVariablesEditor.tsx` | 日期输入示例。 |
+| `components/SidebarRecentTasks.tsx` | localStorage 键和写入任务操作的原始原因。 |
+| `components/new-agent/NewAgentSetup.tsx` | 执行器与提供商品牌名称。 |
+| `components/onboarding/ConnectModelPreview.tsx` | 产品名。 |
+| `components/onboarding/onboarding-character.ts` | 引导动画资源的开发者校验错误。 |
+| `components/routine-sections/context.tsx` | React Context 缺失 Provider 的开发者契约错误。 |
+| `components/task-chat/task-chat-adapter.ts` | 会话生命周期的稳定英文标识；由 marker 展示层翻译。 |
+| `components/ui/button.tsx` | React 组件 displayName，供开发调试。 |
+| `components/ui/resizable-panels.tsx` | React 组件 displayName，供开发调试。 |
+| `components/ui/toggle-switch.tsx` | React 组件 displayName，供开发调试。 |
+| `lib/agent-chat-draft.ts` | 持久化聊天草稿标题前缀。 |
+| `lib/agent-onboarding-prompt.ts` | 发送给外部智能体的入职操作指令。 |
+| `lib/duplicate-agent-payload.ts` | 复制智能体时写入 API 的默认名称。 |
+| `lib/onboarding-agent-role.ts` | 写入智能体配置的默认角色名称。 |
+| `lib/recent-agent-chats.ts` | localStorage 键。 |
+| `main.tsx` | 缺少 DOM 根节点的开发者契约错误。 |
+| `pages/AgentDetail.production.tsx` | ID 技术缩写。 |
+| `pages/Cases.tsx` | 案例创建输入示例。 |
+| `pages/IssueDetail.tsx` | 归因组件的稳定输入标识和写入 API 的任务操作原因；组件展示已翻译。 |
+| `pages/StatusCards/CreateStatusCardDialog.tsx` | 状态卡输入示例提示词。 |
+| `pages/apps/chat/GitHubSetupPrompt.tsx` | 复制给外部 AI 的操作指令，保持执行含义。 |
+| `pages/apps/chat/chat-setup-error.ts` | 旧英文兼容常量；运行时两条展示路径均取本地化词条。 |
+| `pages/apps/gateways/ConnectClientDialog.tsx` | 可复制的 HTTP Authorization 头格式示例。 |
+| `pages/apps/gateways/NewGatewayDialog.tsx` | 网关名称输入示例。 |
+| `plugins/bridge-init.ts` | 插件运行时的生成 JS/CSS 或开发者契约错误。 |
+| `plugins/bridge.ts` | 插件运行时的生成 JS/CSS 或开发者契约错误。 |
+| `plugins/launchers.tsx` | 插件运行时的生成 JS/CSS 或开发者契约错误。 |
+| `plugins/slots.tsx` | 插件运行时的生成 JS/CSS 或开发者契约错误。 |
+
+`pages/IssueChatLongThreadPerf.tsx` 是专用性能测试路由，`adapters/sandboxed-parser-worker.ts` 是送入 Worker 的 JS 源码字符串；两者整文件豁免。
+`components/TaskChatThread.tsx` 的生命周期 label 保持稳定英文，普通/折叠 marker、摘要与无障碍文字在显示时翻译。
 
 ## 扫描规则的已知边界
 

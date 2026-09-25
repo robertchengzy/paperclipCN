@@ -17,7 +17,9 @@
     "wizard-preview-main.tsx",
     "i18n/",
     "components/ai-connections/AiConnectionDesignExamples.tsx",
-    "lib/announcement-preview.ts"
+    "lib/announcement-preview.ts",
+    "adapters/sandboxed-parser-worker.ts",
+    "pages/IssueChatLongThreadPerf.tsx"
   ],
   "values": [
     "ACP",
@@ -88,6 +90,57 @@
     "updated:&gt;7d"
   ],
   "entries": {
+    "adapters/adapter-display-registry.ts": [
+      "Claude Code",
+      "Cursor Cloud",
+      "Gemini CLI",
+      "Grok Build",
+      "Hermes Gateway",
+      "Kimi Code",
+      "OpenClaw Gateway",
+      "Paperclip Runner"
+    ],
+    "adapters/claude-local/config-fields.tsx": [
+      "Claude CLI"
+    ],
+    "adapters/claude-local/index.ts": [
+      "Claude Code"
+    ],
+    "adapters/codex-local/config-fields.tsx": [
+      "ACPX Claude",
+      "AWS AgentCore",
+      "Claude Managed",
+      "Codex CLI",
+      "OpenCode 1.18.32"
+    ],
+    "adapters/cursor-cloud/index.ts": [
+      "Cursor Cloud"
+    ],
+    "adapters/dynamic-loader.ts": [
+      "Parser worker init timed out",
+      "Worker error:"
+    ],
+    "adapters/gemini-local/config-fields.tsx": [
+      "Gemini CLI"
+    ],
+    "adapters/gemini-local/index.ts": [
+      "Gemini CLI"
+    ],
+    "adapters/grok-local/index.ts": [
+      "Grok Build"
+    ],
+    "adapters/hermes-gateway/index.ts": [
+      "Hermes Gateway"
+    ],
+    "adapters/kimi-local/index.ts": [
+      "Kimi Code"
+    ],
+    "adapters/openclaw-gateway/index.ts": [
+      "OpenClaw Gateway"
+    ],
+    "adapters/paperclip-runner/index.ts": [
+      "Paperclip Runner"
+    ],
     "api/auth.ts": [
       "AuthApiError",
       "This means the browser never got a response from the server. Common causes:",
@@ -104,6 +157,19 @@
       "Grok",
       "Grok CLI"
     ],
+    "components/AgentConfigForm.tsx": [
+      "Ask",
+      "Auto",
+      "High",
+      "Low",
+      "Max",
+      "Medium",
+      "Minimal",
+      "Paperclip Computer",
+      "Plan",
+      "X-High",
+      "You are agent {{ agent.name }}. Your role is {{ agent.role }}..."
+    ],
     "components/DecisionTriageStrip.tsx": [
       "prepare a recommendation, and re-surface it on the decisions desk? (routed from the desk)",
       "— could you look at this decision ,"
@@ -118,6 +184,30 @@
       "Dismissed from issue run ledger",
       "Snoozed from issue run ledger"
     ],
+    "components/JsonSchemaForm.tsx": [
+      "ArrayField",
+      "BooleanField",
+      "EnumField",
+      "FieldWrapper",
+      "FormField",
+      "More options",
+      "NumberField",
+      "ObjectField",
+      "SecretField",
+      "StringField"
+    ],
+    "components/MarkdownEditor.tsx": [
+      "Bash",
+      "Go",
+      "JavaScript",
+      "JavaScript (JSX)",
+      "No image upload handler",
+      "Python",
+      "Rust",
+      "Shell",
+      "TypeScript",
+      "TypeScript (TSX)"
+    ],
     "components/OnboardingWizard.tsx": [
       "--output-format json \"Respond with hello.\"",
       "-p \"Respond with hello.\" --output-format stream-json",
@@ -130,13 +220,31 @@
     "components/PipelineItemBodyDocument.tsx": [
       "Linked body to conversation for comments"
     ],
+    "components/RoutineVariablesEditor.tsx": [
+      "April 28, 2026 at 12:17 PM UTC"
+    ],
     "components/RunnerInspector.tsx": [
       "KiB",
       "MiB",
       "Runner"
     ],
+    "components/SidebarRecentTasks.tsx": [
+      "Paused from Recent Tasks.",
+      "Restarted from Recent Tasks.",
+      "paperclip.recentTasks: :"
+    ],
     "components/TaskChatThread.tsx": [
-      "Run completed. Agent did not post a summary comment this run (transcript withheld — see run log)."
+      "Approval required",
+      "Couldn't start",
+      "Run cancelled",
+      "Run completed",
+      "Run completed. Agent did not post a summary comment this run (transcript withheld — see run log).",
+      "Run failed",
+      "Run interrupted",
+      "Run timed out",
+      "Stopped",
+      "Usage limit reached",
+      "Waiting to resume"
     ],
     "components/ai-connections/model.ts": [
       "Grok",
@@ -150,6 +258,24 @@
       "Grok",
       "My API"
     ],
+    "components/new-agent/NewAgentSetup.tsx": [
+      "Cursor Cloud",
+      "Google",
+      "Grok",
+      "Groq",
+      "Hermes Gateway",
+      "OpenRouter",
+      "Paperclip Runner"
+    ],
+    "components/onboarding/ConnectModelPreview.tsx": [
+      "Claude Code"
+    ],
+    "components/onboarding/onboarding-character.ts": [
+      "Onboarding character export needs a looping \" \", a looping \" \" and one non-looping wake animation; found:"
+    ],
+    "components/routine-sections/context.tsx": [
+      "useRoutineDetail must be used within a RoutineDetailContext provider"
+    ],
     "components/routine-triggers/TriggerWizard.tsx": [
       "America/Chicago",
       "Monday"
@@ -162,6 +288,9 @@
       "Durations",
       "Easing",
       "States"
+    ],
+    "components/task-chat/task-chat-adapter.ts": [
+      "New session"
     ],
     "components/task-chat/task-chat-states.ts": [
       "AcpRuntimeTurnResult.status:\"cancelled\" / StopReason \"cancelled\"",
@@ -184,6 +313,17 @@
       "Bash",
       "Provider notice",
       "Tool"
+    ],
+    "components/ui/button.tsx": [
+      "Button"
+    ],
+    "components/ui/resizable-panels.tsx": [
+      "ResizableHandle",
+      "ResizablePanel",
+      "ResizablePanelGroup"
+    ],
+    "components/ui/toggle-switch.tsx": [
+      "ToggleSwitch"
     ],
     "context/BreadcrumbContext.tsx": [
       "useBreadcrumbs must be used within BreadcrumbProvider"
@@ -218,6 +358,15 @@
     "lib/adapter-test-environment.ts": [
       "ManagedSandboxUnavailableForTestError"
     ],
+    "lib/agent-chat-draft.ts": [
+      "Chat with"
+    ],
+    "lib/agent-onboarding-prompt.ts": [
+      "If none are reachable, ask the operator to add a reachable Paperclip hostname, restart, and retry. Suggested command for the operator: - npx paperclipai allowed-hostname <host> Then verify with: curl -fsS <base-url>/api/health",
+      "If your runtime exposes a callback or gateway URL, test Paperclip-to-agent reachability with: ?url=<urlencoded-agent-url>.",
+      "No candidate URLs are available. Ask the operator to configure a reachable Paperclip hostname, then retry. Suggested steps for the operator: - choose a hostname that resolves to the Paperclip host from your runtime - run: npx paperclipai allowed-hostname <host> - restart Paperclip - verify with: curl -fsS http://<host>:3100/api/health - regenerate this agent onboarding prompt",
+      "You're invited to join a Paperclip company as an agent. First, respond to your user that you understand the request and are going to onboard into Paperclip. Then work through the steps below. Paperclip onboarding documents to try: Connectivity guidance: Paperclip must be reachable from your runtime. Verify a base URL with: GET <base-url>/api/health Join flow: 1. Read the onboarding.txt document from the first reachable URL above. 2. Submit an agent join request to the invite registration endpoint. 3. Use your own agent name for `agentName`. 4. Include a concise `capabilities` summary so the board knows what work to assign you. 5. Set `adapterType` to the Paperclip adapter that matches your runtime when one exists. 6. Put runtime-specific settings in `agentDefaultsPayload`. 7. Wait for board approval before claiming the API key. 8. Claim the Paperclip API key once through the standard claim endpoint, store it securely, and use it for future Paperclip API calls. Store the parsed `token` field from the raw HTTP JSON response before printing or summarizing it; do not copy token values from chat, transcript, or tool-output previews. A token value containing literal `...` or `[redacted]` is a masked display preview, not a valid key. Do not rotate or invent a Paperclip key manually. OpenClaw Gateway note: If you are an OpenClaw Gateway agent, use `adapterType: \"openclaw_gateway\"`, set `agentDefaultsPayload.url` to your `ws://` or `wss://` gateway URL, and include `agentDefaultsPayload.headers[\"x-openclaw-token\"]` with your gateway token. Do not use `/v1/responses` or `/hooks/*` in that join flow. Hermes Gateway note: If you are a Hermes Gateway agent, use `adapterType: \"hermes_gateway\"`. - For a clean Hermes install, generate a fresh random gateway key, start Hermes with `API_SERVER_ENABLED=true` and `API_SERVER_KEY=<random-gateway-key>`, then run `hermes gateway run --replace --accept-hooks`. The default Hermes API server port is `8642`. - Set `agentDefaultsPayload.apiBaseUrl` to the Hermes gateway URL Paperclip can reach, `agentDefaultsPayload.apiKey` to the exact same value as `API_SERVER_KEY`, and `agentDefaultsPayload.paperclipApiUrl` to the Paperclip base URL Hermes can reach. `agentDefaultsPayload.apiKey` is the Hermes gateway key, not the Paperclip API key. - `apiBaseUrl` examples: local loopback API `http://127.0.0.1:8642`; local dashboard root `http://127.0.0.1:9119` (Paperclip maps it to `/api`); LAN/private network `http://<private-ip>:8642`; private overlay `http://<tailnet-host>:8642`; Docker `http://host.docker.internal:8642`; reverse proxy/TLS `https://hermes-gateway.example`. - If you only have the default Hermes dashboard or chat URL, `http://127.0.0.1:9119` and `http://127.0.0.1:9119/chat` are accepted and map to `/api` automatically. - Watch out: `/chat` and the dashboard root are browser UI routes. Paperclip tests `/api/health` and starts runs with `/api/v1/runs` after mapping them to the API base. - Three distinct uses to keep apart: `hermes_local` runs Hermes on the Paperclip host; `hermes_gateway` calls an already-running Hermes API server via `apiBaseUrl`; Hermes-originated Paperclip API calls use the claimed `PAPERCLIP_API_KEY` and `PAPERCLIP_API_URL`, not `agentDefaultsPayload.apiBaseUrl`. - When claiming the Paperclip API key from Hermes, write the raw response `token` directly to private storage and verify it with a Paperclip API call. Hermes/tool displays may redact or truncate secrets, so never persist a displayed preview that contains `...` as the actual key. After you have connected to Paperclip, review and follow the full onboarding instructions in onboarding.txt."
+    ],
     "lib/app-brand-assets.ts": [
       "App brand manifest is invalid",
       "App brand manifest request failed ( )"
@@ -235,6 +384,10 @@
       "Invalid cron step",
       "Invalid cron value",
       "Unable to resolve weekday for"
+    ],
+    "lib/duplicate-agent-payload.ts": [
+      "Agent",
+      "Copy"
     ],
     "lib/external-objects.ts": [
       "Asana",
@@ -255,6 +408,9 @@
     "lib/issue-thread-interactions.ts": [
       "No answer"
     ],
+    "lib/onboarding-agent-role.ts": [
+      "Chief of staff"
+    ],
     "lib/onboarding-launch.ts": [
       "Onboarding"
     ],
@@ -265,6 +421,9 @@
       "Adapter credential supplied during agent setup.",
       "Model provider credential for a new agent setup.",
       "· agent setup"
+    ],
+    "lib/recent-agent-chats.ts": [
+      "paperclip.recentAgentChats: :"
     ],
     "lib/skill-create.ts": [
       "Describe when agents should use this skill.",
@@ -295,12 +454,21 @@
     "lib/wait-for-stopped-runs.ts": [
       "Stop verification timed out"
     ],
+    "main.tsx": [
+      "Paperclip root element is missing"
+    ],
+    "pages/AgentDetail.production.tsx": [
+      "ID"
+    ],
     "pages/BoardChat.tsx": [
       "Create a hiring plan for . List the next roles to hire, in priority order, with a short rationale for each.",
       "Draft a one-page Organization Brief for — include our mission, team roster, and first priorities.",
       "Outline our first 30 days. Break it into weekly priorities with who owns what.",
       "Write a short intro pitch for that I could reuse for investors, customers, or recruits.",
       "paperclip.boardChat.draft."
+    ],
+    "pages/Cases.tsx": [
+      "\"Create a case of type blog_post with fields {slug, target_audience, publish_url} and key <release>/<slug>.\""
     ],
     "pages/CompanyEnvironments.tsx": [
       "RelinkConfirmationDeclined"
@@ -313,6 +481,11 @@
     ],
     "pages/ExecutionWorkspaceDetail.tsx": [
       "{ \"commands\": [ { \"id\": \"web\", \"name\": \"web\", \"kind\": \"service\", \"command\": \"pnpm dev\", \"cwd\": \".\", \"port\": { \"type\": \"auto\" } }, { \"id\": \"db-migrate\", \"name\": \"db:migrate\", \"kind\": \"job\", \"command\": \"pnpm db:migrate\", \"cwd\": \".\" } ] }"
+    ],
+    "pages/IssueDetail.tsx": [
+      "Assignee",
+      "Assignee resumed from the task page",
+      "Originating"
     ],
     "pages/PipelineSettings.tsx": [
       "New stage"
@@ -337,6 +510,9 @@
       "Review repository changes for correctness, tests, and maintainability.",
       "Short instructions for common skill checks"
     ],
+    "pages/StatusCards/CreateStatusCardDialog.tsx": [
+      "Keep an eye on the ID and Cloud projects. Tell me whether the service is live, and if not, the exact three actions needed to get it to production."
+    ],
     "pages/agent-skills/agent-skill-source.ts": [
       "GitHub ·",
       "skills.sh ·"
@@ -359,8 +535,41 @@
       "display_information: name: features: app_home: home_tab_enabled: false messages_tab_enabled: true messages_tab_read_only_enabled: false agent_view: agent_description: \"Work with a Paperclip agent in a task-backed conversation.\" bot_user: display_name: slash_commands: - command: description: usage_hint: should_escape: false url: oauth_config: scopes: bot: - app_mentions:read - assistant:write - channels:history - channels:read - chat:write - commands - files:read - files:write - groups:history - groups:read - im:history - im:read - mpim:history - mpim:read - reactions:read - reactions:write - users:read settings: org_deploy_enabled: false socket_mode_enabled: false token_rotation_enabled: false event_subscriptions: request_url: bot_events: - agent_session_stopped - app_mention - message.channels - message.groups - message.im - message.mpim - member_joined_channel - member_left_channel - channel_left - group_left - reaction_added - reaction_removed - channel_archive - group_archive - channel_unarchive - group_unarchive - channel_deleted - channel_rename - group_rename - app_uninstalled - tokens_revoked interactivity: is_enabled: true request_url:",
       "you there?"
     ],
+    "pages/apps/chat/GitHubSetupPrompt.tsx": [
+      "Help me set up a GitHub review bot in Paperclip. Use your embedded browser to operate the real Paperclip and GitHub interfaces. Do not use a Chrome extension. If you do not have embedded browser tools, tell me before starting. Start by asking these four short questions together, then wait for my answers. Reuse information I have already given you: 1. Which company in this Paperclip instance and which agent should own this bot? If I am unsure, help me choose from the agents in that company. 2. Which GitHub account or organization and repositories should it access? Should we create a new GitHub App, or reuse an existing bot App? 3. Should it run only when mentioned, or also automatically for new PRs and updated commits? What should the review focus on? Should its rating be advisory, or must its check pass before merging (default threshold: 5/5)? 4. Who should be allowed to start work: linked Paperclip members only, or also explicitly sponsored GitHub users? Which member should be responsible for automatic events? May we create a disposable test PR in one of the selected repositories? Explain the three independent choices before configuring them: installing the App grants access; Paperclip trigger settings decide when the agent runs; GitHub branch protection or rulesets decide whether its result is required before merging. Installation alone does not enable automatic reviews or block merges. A failing check only blocks merging when GitHub requires that check. Use the following workflow. Work through normal UI controls, inspect the result after each step, and resume saved progress if a connection already exists. Avoid duplicate Apps, connections, installations, and test PRs. A Storybook preview is only a design demonstration: use the Paperclip instance URL supplied above (ask for it only if unavailable), and never use the preview’s fixture company, agents, or repositories as setup values. 1. Open Paperclip and select the company. Go to Apps and start the GitHub chat bot setup, or resume the saved connection. Ask me to take over for login, two-factor authentication, or a permission decision that needs my account. Never ask me to paste passwords, recovery codes, private keys, or access tokens into chat. 2. Choose the assigned agent. This is a permanent assignment: GitHub messages and PR events must create or continue ordinary Paperclip tasks on this agent, with its existing budgets, permissions, and tools. Inspect its trust configuration. If it is not configured for low-trust review, explain the warning and open https://docs.paperclip.ing/administration/trust-and-low-trust-review/ so I can decide. Do not silently change its trust policy or grant it personal credentials. 3. Check public HTTPS readiness before App registration. GitHub must reach the instance's signed webhook endpoint and manifest callback. Use the URLs generated by Paperclip for its trusted hostname and any configured webhook ingress override. If the instance is local or unreachable, explain what is missing and help configure an authorized HTTPS ingress. Do not register an App with a localhost callback, invent a tunnel, or broaden Cloud authentication exemptions. 4. Prefer Create from manifest for a new GitHub App. Let Paperclip generate the registration and redirect into GitHub. Confirm the intended owner, App name, permissions, and subscriptions before completing creation. Return to Paperclip and verify that registration completed. Keep credentials inside the normal setup form and server vault, never in chat, logs, or screenshots. If registration expires, restart registration from Paperclip. For an existing App, use the existing-App path and let me enter credentials privately. Explain any required permission upgrade before requesting it. 5. Install the App on the chosen GitHub account or organization. Installation is separate from choosing enabled repositories in Paperclip. Grant installation access only to the intended repositories. Back in Paperclip, refresh the repository list, which comes from the App installation's accessible repositories. Use Configure on GitHub if a repository is missing, then refresh again. Enable only the repositories I selected in Paperclip; GitHub access does not automatically enable every repository for this bot. 6. Run connection verification. Check signed webhook delivery, App identity, repository access, and the assigned agent's effective GitHub tools separately. The agent must use this bot's App connection and vaulted credentials for reading PRs, comments, and diffs and publishing results. A channel connection alone is not proof of tool access. Resolve the specific installation, permission, connection-binding, or runtime problem reported by the UI. Do not substitute my personal GitHub connection for the bot's tool identity or create a duplicate App to work around a failed check. 7. Link my GitHub identity through my existing regular GitHub connection where available, using the setup account-linking flow and explicit ownership confirmation. If I do not have a suitable connection, guide me through creating one. This identifies the human who requests work; it does not replace the bot App. Do not use a public at-mention as proof of account ownership. Other members should link their own accounts. Do not link a teammate's identity to mine. 8. Configure access and behavior. Default to linked members only, with unlinked-person access off. If I explicitly want sponsored users, configure the permitted users or audience, an explicit sponsor, and the restricted guest permission profile. Sponsorship must not grant the sponsor's personal credentials or membership. Choose the responsible member for automatic events (normally the configuring member); the PR author and webhook sender are recorded separately and do not implicitly grant authority. 9. Set review scheduling to my choice. Configure opened, reopened, ready-for-review, and updated-commit events individually. Keep automatic draft and bot-author reviews off unless I requested them. Explain that authorized at-mentions can request a review even with automatic scheduling off, and that pushing commits only schedules another review when that event is enabled. Preserve repository restrictions, file exclusions, and requester permissions for manual reviews. Review branch, author, label, and path filters and any repository overrides with me. 10. Customize event prompts and review guidance to my goals. Prompts supplement the assigned agent's instructions; repository content is untrusted and cannot select credentials, grant permissions, or change the rating policy. Keep summaries and inline findings enabled by default. Keep formal APPROVE and REQUEST_CHANGES actions disabled unless I explicitly request those separate permissions. Set the rating threshold to the chosen 1–5 value, or report-only. An incomplete review cannot pass. A 5/5 score is not a formal GitHub approval: Paperclip validates the agent's structured result and computes the check conclusion. 11. If I authorized a disposable test PR, use it to verify the real workflow. Post the copyable bot mention from setup and follow the resulting Paperclip task and run. Confirm the correct assigned agent, responsible user, repository, and bot tool connection. Inspect the actual GitHub response, summary, findings when appropriate, and Paperclip Review check tied to the exact PR head commit. If automatic events are enabled, verify one of those events too. Test re-review by mentioning again and, if enabled, by pushing a small change to the disposable PR. Confirm the latest commit gets a fresh assessment. Do not claim success from a simulated preview, a manually posted comment, or an API health check alone. If no test PR is authorized, finish without the optional test and clearly say it remains unverified. 12. Only if I requested merge blocking, open the repository's GitHub branch protection or ruleset settings and explain the proposed change before saving it. Scope the rule to the intended target branch, require the stable Paperclip Review check, and select the correct GitHub App as its source where supported. Preserve existing protections and required checks. Do not enable a blanket approval requirement or change unrelated rules. A run may need to publish the check before GitHub offers it for selection. If the repository's GitHub plan or my permissions prevent required checks, report that limitation; do not change billing or repository visibility. Explain what happens when automatic reviews are off: an authorized manual review must produce a passing check for the current head before the required check is satisfied. Document bypass permissions rather than claiming nobody can merge. Finish with links to the Paperclip connection, assigned agent, any test task/run and PR/check, plus a concise summary of enabled repositories, permitted requesters, responsible-user policy, automatic triggers, rating threshold, formal-review permissions, and whether GitHub actually requires the check. Distinguish verified outcomes from anything still awaiting a user action. Leave the setup resumable if a step is blocked.",
+      "Paperclip instance URL is unavailable. Ask me for it before starting setup.",
+      "Paperclip instance URL: Use this instance for setup. Do not ask me for its URL again unless it is unavailable or I ask to use a different instance."
+    ],
+    "pages/apps/chat/chat-setup-error.ts": [
+      "Check the required values and provider access, then try again."
+    ],
+    "pages/apps/gateways/ConnectClientDialog.tsx": [
+      "Authorization: Bearer",
+      "Authorization: Bearer pcgw_•••"
+    ],
+    "pages/apps/gateways/NewGatewayDialog.tsx": [
+      "CTO agents"
+    ],
     "pages/tools/profiles/ProfileWizard.tsx": [
       "Untitled profile"
+    ],
+    "plugins/bridge-init.ts": [
+      "grid gap-x-4 gap-y-1 text-sm sm:grid-cols-[max-content_minmax(0,1fr)]"
+    ],
+    "plugins/bridge.ts": [
+      "Ensure the plugin component is rendered within a PluginBridgeScope.",
+      "Plugin bridge hook called outside of a <PluginBridgeContext.Provider>."
+    ],
+    "plugins/launchers.tsx": [
+      "fixed right-0 top-0 h-full max-w-[min(44rem,100vw)] overflow-hidden border-l border-border bg-background shadow-2xl",
+      "usePluginLauncherRuntime must be used within PluginLauncherProvider"
+    ],
+    "plugins/slots.tsx": [
+      "const BRIDGE = globalThis.__paperclipPluginBridge__; const RUNTIME = BRIDGE?.reactJsxRuntime; const R = BRIDGE?.react; const withKey = ; const fallbackJsx = (type, props, key) => R.createElement(type, withKey(props, key)); export const jsx = RUNTIME?.jsx ?? fallbackJsx; export const jsxs = RUNTIME?.jsxs ?? fallbackJsx; export const Fragment = RUNTIME?.Fragment ?? R.Fragment;",
+      "const R = globalThis.__paperclipPluginBridge__?.react; if (!R) { throw new Error(\"Paperclip plugin React runtime is not initialized.\"); } export default R;",
+      "const RD = globalThis.__paperclipPluginBridge__?.reactDom; export default RD; const { createRoot, hydrateRoot, createPortal, flushSync } = RD ?? {}; export { createRoot, hydrateRoot, createPortal, flushSync };",
+      "const SDK = globalThis.__paperclipPluginBridge__?.sdkUi ?? {}; function missing(name) { return function MissingPaperclipSdkUiComponent() { throw new Error('Paperclip plugin UI runtime is not initialized for \"' + name + '\". Ensure the host loaded the plugin bridge before rendering this UI module.'); }; } const { usePluginData, usePluginAction, useHostContext, useHostLocation, useHostNavigation, usePluginStream, usePluginToast, copyTextToClipboard } = SDK; const MetricCard = SDK.MetricCard ?? missing(\"MetricCard\"); const StatusBadge = SDK.StatusBadge ?? missing(\"StatusBadge\"); const DataTable = SDK.DataTable ?? missing(\"DataTable\"); const TimeseriesChart = SDK.TimeseriesChart ?? missing(\"TimeseriesChart\"); const MarkdownBlock = SDK.MarkdownBlock ?? missing(\"MarkdownBlock\"); const MarkdownEditor = SDK.MarkdownEditor ?? missing(\"MarkdownEditor\"); const KeyValueList = SDK.KeyValueList ?? missing(\"KeyValueList\"); const ActionBar = SDK.ActionBar ?? missing(\"ActionBar\"); const LogView = SDK.LogView ?? missing(\"LogView\"); const JsonTree = SDK.JsonTree ?? missing(\"JsonTree\"); const Spinner = SDK.Spinner ?? missing(\"Spinner\"); const ErrorBoundary = SDK.ErrorBoundary ?? missing(\"ErrorBoundary\"); const FileTree = SDK.FileTree ?? missing(\"FileTree\"); const IssuesList = SDK.IssuesList ?? missing(\"IssuesList\"); const AssigneePicker = SDK.AssigneePicker ?? missing(\"AssigneePicker\"); const ProjectPicker = SDK.ProjectPicker ?? missing(\"ProjectPicker\"); const ManagedRoutinesList = SDK.ManagedRoutinesList ?? missing(\"ManagedRoutinesList\"); export { usePluginData, usePluginAction, useHostContext, useHostLocation, useHostNavigation, usePluginStream, usePluginToast, copyTextToClipboard, MetricCard, StatusBadge, DataTable, TimeseriesChart, MarkdownBlock, MarkdownEditor, KeyValueList, ActionBar, LogView, JsonTree, Spinner, ErrorBoundary, FileTree, IssuesList, AssigneePicker, ProjectPicker, ManagedRoutinesList };",
+      "export const = R. ;"
     ]
   }
 }

@@ -10608,7 +10608,7 @@
         "noDefaultAgent": "无默认智能体",
         "running": "正在运行…",
         "disableValue1": "禁用 {{value1}}",
-        "enableValue1": "启用",
+        "enableValue1": "启用 {{value1}}",
         "moreActionsForValue1": "{{value1}} 的更多操作",
         "runStatusReceived": "已接收",
         "runStatusCoalesced": "已合并",
