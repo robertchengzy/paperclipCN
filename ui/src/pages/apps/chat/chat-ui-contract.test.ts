@@ -51,10 +51,11 @@ describe("chat connector UI contract", () => {
     expect(issue).toMatch(/"Retry queued"|t\("app\.issueDetail\.toasts\.retryQueued"\)/);
     expect(en.app.issueDetail.toasts.retryQueued).toBe("Retry queued");
     expect(en.app.inbox.errors.retryRunFailed).toBe("Run retry failed");
+    expect(en.app.issueUi.legacyInbox.runRetryFailed).toBe("Run retry failed");
     for (const file of ["Inbox.tsx", "LegacyInbox.tsx"]) {
       const page = source(`../../${file}`);
       expect(page).toMatch(
-        /const retryRunMutation = useMutation\(\{[\s\S]*?onError: \(error\) => \{\s*pushToast\(\{\s*title: (?:"Run retry failed"|t\("app\.inbox\.errors\.retryRunFailed"\))/,
+        /const retryRunMutation = useMutation\(\{[\s\S]*?onError: \(error\) => \{\s*pushToast\(\{\s*title: (?:"Run retry failed"|t\("app\.inbox\.errors\.retryRunFailed"\)|translateCopy\("app\.issueUi\.legacyInbox\.runRetryFailed"\))/,
       );
     }
   });

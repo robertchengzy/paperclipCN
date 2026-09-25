@@ -51,10 +51,12 @@ function issueRelationLabel(event: CaseEvent): string {
 
 /** One event with actor + run→issue attribution (P4 §1). */
 export function CaseEventRow({ event, compact = false }: { event: CaseEvent; compact?: boolean }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  // English keeps the raw status tokens; other languages show translated labels.
+  const statusText = (status: string) => (i18n.language === "zh-CN" ? statusLabel(t, status) : status);
   const detail =
     event.kind === "status_changed" && event.payload
-      ? `${statusLabel(t, (event.payload.previousStatus as string) ?? "?")} → ${statusLabel(t, (event.payload.status as string) ?? "?")}`
+      ? `${statusText((event.payload.previousStatus as string) ?? "?")} → ${statusText((event.payload.status as string) ?? "?")}`
       : "";
   return (
     <div className={cn("flex items-start gap-2 text-xs", compact ? "py-1.5" : "py-2")}>

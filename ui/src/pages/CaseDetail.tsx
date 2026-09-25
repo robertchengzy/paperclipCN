@@ -139,7 +139,7 @@ function CaseRelationshipsSection({
       ) : null}
       {children.length > 0 ? (
         <div className="space-y-1">
-          <h2 className="text-xs font-medium text-muted-foreground">{t("app.reports.caseDetail.children")}{children.length}</h2>
+          <h2 className="text-xs font-medium text-muted-foreground">{t("app.reports.caseDetail.childrenCount", { count: children.length })}</h2>
           <CaseChildrenTree children={children} maxVisible={5} />
         </div>
       ) : null}
