@@ -2854,7 +2854,8 @@
     "connections": {
       "appConnectionSidebar": {
         "allApps": "所有应用",
-        "allConnectors": "所有连接器"
+        "allConnectors": "所有连接器",
+        "reviewCount": "{{count}} 项待审核"
       },
       "emailConnectionAccess": {
         "loadingAccess": "正在加载访问权限…",
@@ -8260,7 +8261,11 @@
         "deleteDescription": "此文件夹中的 {{count}} 个 {{items}} 不会被删除，它们将移到“未分类”。",
         "deletingDots": "删除中…",
         "selectedCount": "已选择 {{count}} 项",
-        "deselectAll": "取消全选"
+        "deselectAll": "取消全选",
+        "skillsLower": "技能",
+        "skillsTitle": "技能",
+        "routinesLower": "例程",
+        "routinesTitle": "例程"
       },
       "issueWorkspaceCard": {
         "projectDefault": "项目默认",
@@ -13291,6 +13296,12 @@
           "distilling": "提炼中",
           "deliberating": "斟酌中"
         }
+      }
+    },
+    "shell": {
+      "sidebarNavItem": {
+        "liveCount": "{{count}} 个正在运行",
+        "attentionNeeded": "需要关注"
       }
     }
   }

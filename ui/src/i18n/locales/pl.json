@@ -2854,7 +2854,8 @@
     "connections": {
       "appConnectionSidebar": {
         "allApps": "All apps",
-        "allConnectors": "All connectors"
+        "allConnectors": "All connectors",
+        "reviewCount": "{{count}} needing review"
       },
       "emailConnectionAccess": {
         "loadingAccess": "Loading access…",
@@ -8260,7 +8261,11 @@
         "deleteDescription": "The {{count}} {{items}} in this folder won't be deleted. They'll move to Unfiled.",
         "deletingDots": "Deleting...",
         "selectedCount": "{{count}} selected",
-        "deselectAll": "Deselect all"
+        "deselectAll": "Deselect all",
+        "skillsLower": "skills",
+        "skillsTitle": "Skills",
+        "routinesLower": "routines",
+        "routinesTitle": "Routines"
       },
       "issueWorkspaceCard": {
         "projectDefault": "Project default",
@@ -13291,6 +13296,12 @@
           "distilling": "Distilling",
           "deliberating": "Deliberating"
         }
+      }
+    },
+    "shell": {
+      "sidebarNavItem": {
+        "liveCount": "{{count}} live",
+        "attentionNeeded": "attention needed"
       }
     }
   }

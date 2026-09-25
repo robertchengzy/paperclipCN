@@ -54,6 +54,17 @@ import {
   type FolderTreeNode,
 } from "./skill-folder-tree";
 
+/** Preserve the English noun casing while localizing the supported folder kinds. */
+function folderItemLabel(label: string): string {
+  const keys: Record<string, string> = {
+    skills: "app.workspaces.folderControls.skillsLower",
+    Skills: "app.workspaces.folderControls.skillsTitle",
+    routines: "app.workspaces.folderControls.routinesLower",
+    Routines: "app.workspaces.folderControls.routinesTitle",
+  };
+  return Object.hasOwn(keys, label) ? translate(keys[label]) : label;
+}
+
 export type FolderSelection = "all" | "unfiled" | string;
 
 export const FOLDER_COLORS = [
@@ -224,7 +235,7 @@ export function FolderRail({
   }
 
   return (
-    <nav aria-label={t("app.workspaces.folderControls.itemFolders", { items: itemLabelPlural })} className="hidden w-(--sz-folder-rail) shrink-0 border-r border-border pr-3 md:block">
+    <nav aria-label={t("app.workspaces.folderControls.itemFolders", { items: folderItemLabel(itemLabelPlural) })} className="hidden w-(--sz-folder-rail) shrink-0 border-r border-border pr-3 md:block">
       <div className="mb-2 flex items-center justify-between gap-2">
         <div className="text-(length:--text-micro) font-medium uppercase tracking-wide text-muted-foreground">{t("app.workspaces.folderControls.folders")}</div>
         <Button variant="ghost" size="icon-sm" title={t("app.workspaces.folderControls.newFolder")} onClick={onCreate}>
@@ -393,7 +404,7 @@ export function AllUnfiledBanner({
     <div className="mb-3 flex flex-wrap items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2 text-sm">
       <FolderIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
       <span className="min-w-0 flex-1 text-muted-foreground">
-        {t("app.workspaces.folderControls.groupThese", { items: itemLabelPlural })}
+        {t("app.workspaces.folderControls.groupThese", { items: folderItemLabel(itemLabelPlural) })}
       </span>
       <Button size="sm" variant="outline" onClick={onCreateFolder}>
         {t("app.workspaces.folderControls.createFirstFolder")}
@@ -456,7 +467,7 @@ export function MobileFolderSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="max-h-(--sz-folder-sheet-max) rounded-t-lg pb-4">
         <SheetHeader className="border-b border-border px-4 py-3">
-          <SheetTitle>{t("app.workspaces.folderControls.itemFolders", { items: itemLabelPlural })}</SheetTitle>
+          <SheetTitle>{t("app.workspaces.folderControls.itemFolders", { items: folderItemLabel(itemLabelPlural) })}</SheetTitle>
         </SheetHeader>
         <div className="overflow-y-auto px-3">
           <MobileFolderRow
@@ -725,7 +736,7 @@ export function DeleteFolderDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>{t("app.workspaces.folderControls.deleteFolder")}</AlertDialogTitle>
           <AlertDialogDescription>
-            {t("app.workspaces.folderControls.deleteDescription", { count: folder?.itemCount ?? 0, items: itemLabelPlural })}
+            {t("app.workspaces.folderControls.deleteDescription", { count: folder?.itemCount ?? 0, items: folderItemLabel(itemLabelPlural) })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
