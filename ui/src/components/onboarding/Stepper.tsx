@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { cn } from "../../lib/utils";
 
 /**
@@ -5,6 +6,10 @@ import { cn } from "../../lib/utils";
  * wizard a customer walks as a numbered sequence. Company creation happens in
  * Cloud before the tenant is ever reached, so it is not one of these steps.
  */
+function translatedStepLabel(label: string | undefined) {
+  return label?.startsWith("app.shell.stepper.") ? t(label) : label;
+}
+
 export const AGENT_ARC_TOTAL_STEPS = 3;
 
 /**
@@ -14,9 +19,9 @@ export const AGENT_ARC_TOTAL_STEPS = 3;
  * than no number at all. The strip's own "Step N of 3" line carries the count.
  */
 export const AGENT_ARC_STEP_LABELS = [
-  "Create your first agent",
-  "Connect a model",
-  "Review",
+  "app.shell.stepper.createAgent",
+  "app.shell.stepper.connectModel",
+  "app.shell.stepper.review",
 ] as const;
 
 /** Wizard step numbers that make up the arc, in order. */
@@ -35,10 +40,10 @@ export const ONBOARDING_WIZARD_STEPS = [1, 3, 4, 5] as const;
 
 /** Destinations for the full walk, in the same order. */
 export const ONBOARDING_STEP_LABELS = [
-  "Name your organization",
-  "Create your first agent",
-  "Connect a model",
-  "Review",
+  "app.shell.stepper.nameOrganization",
+  "app.shell.stepper.createAgent",
+  "app.shell.stepper.connectModel",
+  "app.shell.stepper.review",
 ] as const;
 
 /**
@@ -100,13 +105,14 @@ export function Stepper({
   /**
    * What each segment goes to. Defaults to the arc's three; the full walk from
    * the front door passes its own four, since the same strip serves both and a
-   * segment announcing "Create your first agent" on the organization step would
+   * segment announcing "app.shell.stepper.createAgent" on the organization step would
    * be worse than a bare number.
    */
   labels?: readonly string[];
   canJumpToStep?: (target: number) => boolean;
   onJumpToStep?: (target: number) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="mb-11 flex items-center justify-center gap-2">
       {Array.from({ length: total }, (_, index) => index + 1).map((segment) => {
@@ -115,7 +121,7 @@ export function Stepper({
           <button
             key={segment}
             type="button"
-            aria-label={labels[segment - 1] ?? `Step ${segment}`}
+            aria-label={translatedStepLabel(labels[segment - 1]) ?? t("app.shell.stepper.step", { value0: segment })}
             aria-current={segment === step ? "step" : undefined}
             disabled={!jumpable}
             onClick={() => jumpable && onJumpToStep?.(segment)}
@@ -134,7 +140,7 @@ export function Stepper({
       })}
       {/* Out of flow, so it neither takes a row nor picks up the gap. */}
       <span className="sr-only">
-        Step {step} of {total}
+        {t("app.shell.stepper.position", { step, total })}
       </span>
     </div>
   );

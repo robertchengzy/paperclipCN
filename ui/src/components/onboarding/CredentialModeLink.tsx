@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { AnimatePresence, motion } from "motion/react";
 
 import { cn } from "../../lib/utils";
@@ -18,8 +19,8 @@ import { LINK_LABEL_FADE_IN, LINK_LABEL_FADE_OUT } from "./onboarding-motion";
  */
 
 const LINK_LABEL: Record<CredentialMode, string> = {
-  subscription: "Use API key instead",
-  api: "Use subscription instead",
+  get subscription() { return t("app.shell.credentialModeLink.useApiKeyInstead"); },
+  get api() { return t("app.shell.credentialModeLink.useSubscriptionInstead"); },
 };
 
 const OTHER_MODE: Record<CredentialMode, CredentialMode> = {
@@ -34,6 +35,7 @@ export function CredentialModeLink({
   mode: CredentialMode;
   onChange: (next: CredentialMode) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <button
       type="button"

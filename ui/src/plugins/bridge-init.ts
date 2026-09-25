@@ -1,3 +1,4 @@
+import { t as translate, useTranslation } from "@/i18n";
 /**
  * Plugin bridge initialization.
  *
@@ -124,6 +125,7 @@ function PluginSdkFileTree({
   onSelectFile,
   ...props
 }: PluginFileTreeProps) {
+  useTranslation();
   return createElement(FileTree, {
     ...props,
     selectedFile,
@@ -215,6 +217,7 @@ type PluginProjectPickerProps = {
 };
 
 function PluginSdkMarkdownEditor(props: PluginMarkdownEditorProps) {
+  useTranslation();
   const [Editor, setEditor] = useState<ComponentType<PluginMarkdownEditorProps> | null>(null);
 
   useEffect(() => {
@@ -256,6 +259,7 @@ function PluginSdkIssuesList({
   createIssueLabel,
   searchWithinLoadedIssues = true,
 }: PluginIssuesListProps) {
+  useTranslation();
   const queryClient = useQueryClient();
   const issueFilters = useMemo(
     () => compactIssueFilters({
@@ -324,7 +328,7 @@ function PluginSdkIssuesList({
   });
 
   if (!companyId) {
-    return createElement("div", { className: "text-sm text-muted-foreground" }, "Select an organization to view tasks.");
+    return createElement("div", { className: "text-sm text-muted-foreground" }, translate("app.shell.bridgeInit.selectOrganization"));
   }
 
   return createElement(HostIssuesList, {
@@ -347,15 +351,16 @@ function PluginSdkAssigneePicker({
   companyId,
   value,
   onChange,
-  placeholder = "Responsible",
-  noneLabel = "No responsible",
-  searchPlaceholder = "Search responsible...",
-  emptyMessage = "No responsible found.",
+  placeholder = translate("app.shell.bridgeInit.responsible"),
+  noneLabel = translate("app.shell.bridgeInit.noneResponsible"),
+  searchPlaceholder = translate("app.shell.bridgeInit.searchResponsible"),
+  emptyMessage = translate("app.shell.bridgeInit.noResponsibleFound"),
   includeUsers = true,
   includeTerminatedAgents = false,
   className,
   onConfirm,
 }: PluginAssigneePickerProps) {
+  useTranslation();
   const hostContext = useHostContext();
   const resolvedCompanyId = companyId ?? hostContext.companyId ?? null;
   const { data: session } = useQuery({
@@ -457,14 +462,15 @@ function PluginSdkProjectPicker({
   companyId,
   value,
   onChange,
-  placeholder = "Project",
-  noneLabel = "No project",
-  searchPlaceholder = "Search projects...",
-  emptyMessage = "No projects found.",
+  placeholder = translate("app.shell.bridgeInit.project"),
+  noneLabel = translate("app.shell.bridgeInit.noProject"),
+  searchPlaceholder = translate("app.shell.bridgeInit.searchProjects"),
+  emptyMessage = translate("app.shell.bridgeInit.noProjectsFound"),
   includeArchived = false,
   className,
   onConfirm,
 }: PluginProjectPickerProps) {
+  useTranslation();
   const hostContext = useHostContext();
   const resolvedCompanyId = companyId ?? hostContext.companyId ?? null;
   const { data: session } = useQuery({
@@ -542,6 +548,7 @@ function PluginSdkProjectPicker({
 }
 
 function FragmentSafe({ children }: { children?: ReactNode }) {
+  const { t } = useTranslation();
   return createElement("span", { className: "contents" }, children);
 }
 
@@ -551,6 +558,7 @@ type PluginStatusBadgeProps = {
 };
 
 function PluginSdkStatusBadge({ label, status }: PluginStatusBadgeProps) {
+  useTranslation();
   const className = {
     ok: "border-emerald-300 bg-emerald-50 text-emerald-700",
     warning: "border-amber-300 bg-amber-50 text-amber-800",
@@ -579,8 +587,9 @@ type PluginDataTableProps = {
   emptyMessage?: string;
 };
 
-function PluginSdkDataTable({ columns, rows, loading, emptyMessage = "No rows." }: PluginDataTableProps) {
-  if (loading) return createElement("div", { className: "text-sm text-muted-foreground" }, "Loading...");
+function PluginSdkDataTable({ columns, rows, loading, emptyMessage = translate("app.shell.bridgeInit.noRows") }: PluginDataTableProps) {
+  useTranslation();
+  if (loading) return createElement("div", { className: "text-sm text-muted-foreground" }, translate("app.shell.bridgeInit.loading"));
   if (!rows.length) return createElement("div", { className: "text-sm text-muted-foreground" }, emptyMessage);
   const gridColumns = columns.map((column) => column.width ?? "minmax(0, 1fr)").join(" ");
   return createElement(
@@ -620,6 +629,7 @@ type PluginKeyValueListProps = {
 };
 
 function PluginSdkKeyValueList({ pairs }: PluginKeyValueListProps) {
+  useTranslation();
   return createElement(
     "dl",
     { className: "grid gap-x-4 gap-y-1 text-sm sm:grid-cols-[max-content_minmax(0,1fr)]" },
@@ -631,6 +641,7 @@ function PluginSdkKeyValueList({ pairs }: PluginKeyValueListProps) {
 }
 
 function PluginSdkMetricCard({ label, value, unit }: { label: string; value: string | number; unit?: string }) {
+  useTranslation();
   return createElement(
     "div",
     { className: "rounded-md border bg-card p-3" },
@@ -640,10 +651,12 @@ function PluginSdkMetricCard({ label, value, unit }: { label: string; value: str
 }
 
 function PluginSdkJsonTree({ data }: { data: unknown }) {
+  useTranslation();
   return createElement("pre", { className: "max-h-80 overflow-auto rounded-md border bg-muted/30 p-2 text-xs" }, JSON.stringify(data, null, 2));
 }
 
-function PluginSdkSpinner({ label = "Loading" }: { size?: "sm" | "md" | "lg"; label?: string }) {
+function PluginSdkSpinner({ label = translate("app.shell.bridgeInit.loadingLabel") }: { size?: "sm" | "md" | "lg"; label?: string }) {
+  useTranslation();
   return createElement("span", {
     className: "inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-muted-foreground/30 border-t-foreground align-middle",
     role: "status",
@@ -660,7 +673,7 @@ class PluginSdkErrorBoundary extends Component<{ children: ReactNode; fallback?:
 
   override render() {
     if (this.state.hasError) {
-      return this.props.fallback ?? createElement("div", { className: "rounded-md border border-destructive/30 p-3 text-sm text-destructive" }, "Plugin UI failed to render.");
+      return this.props.fallback ?? createElement("div", { className: "rounded-md border border-destructive/30 p-3 text-sm text-destructive" }, createElement(PluginSdkRenderError));
     }
     return this.props.children;
   }
@@ -723,4 +736,9 @@ export function initPluginBridge(
       ManagedRoutinesList: HostManagedRoutinesList,
     },
   };
+}
+
+function PluginSdkRenderError() {
+  const { t } = useTranslation();
+  return t("app.shell.bridgeInit.renderFailed");
 }

@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 /**
  * @fileoverview Plugin UI slot system — dynamic loading, error isolation,
  * and rendering of plugin-contributed UI extensions.
@@ -154,7 +155,7 @@ function requiresEntityType(slotType: PluginUiSlotType): boolean {
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error && error.message) return error.message;
-  return "Unknown error";
+  return t("app.common.messages.unknownError");
 }
 
 /**
@@ -430,7 +431,7 @@ async function importPluginModule(url: string): Promise<Record<string, unknown>>
   // Fetch the module source text
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Failed to fetch plugin module: ${response.status} ${response.statusText}`);
+    throw new Error(t("app.shell.slots.failedToFetchPluginModule", { value0: response.status, value1: response.statusText }));
   }
 
   const source = await response.text();
@@ -735,7 +736,7 @@ class PluginSlotErrorBoundary extends Component<PluginSlotErrorBoundaryProps, Pl
       if (this.props.fallback !== undefined) return this.props.fallback;
       return (
         <div className={cn("rounded-md border border-destructive/30 bg-destructive/5 px-2 py-1 text-xs text-destructive", this.props.className)}>
-          {this.props.slot.pluginDisplayName}: failed to render
+          <PluginRenderError name={this.props.slot.pluginDisplayName} />
         </div>
       );
     }
@@ -754,6 +755,7 @@ function PluginWebComponentMount({
   context: PluginSlotContext;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -818,6 +820,7 @@ function PluginBridgeScope({
   context: PluginSlotContext;
   children: ReactNode;
 }) {
+  const { t } = useTranslation();
   const { data: session } = useQuery({
     queryKey: queryKeys.auth.session,
     queryFn: () => authApi.getSession(),
@@ -841,6 +844,7 @@ export function PluginSlotMount({
   componentProps,
   fallback,
 }: PluginSlotMountProps) {
+  const { t } = useTranslation();
   usePluginRegistrySubscription();
   const [, forceRerender] = useState(0);
   const component = resolveRegisteredComponent(slot);
@@ -916,6 +920,7 @@ export function PluginSlotOutlet({
   errorClassName,
   missingBehavior = "hidden",
 }: PluginSlotOutletProps) {
+  const { t } = useTranslation();
   const { slots, errorMessage } = usePluginSlots({
     slotTypes,
     entityType,
@@ -925,7 +930,7 @@ export function PluginSlotOutlet({
   if (errorMessage) {
     return (
       <div className={cn("rounded-md border border-destructive/30 bg-destructive/5 px-2 py-1 text-xs text-destructive", errorClassName)}>
-        Plugin extensions unavailable: {errorMessage}
+        {t("app.shell.slots.pluginExtensionsUnavailable")}{" "}{errorMessage}
       </div>
     );
   }
@@ -973,3 +978,8 @@ export const _applyJsxRuntimeKeyForTests = applyJsxRuntimeKey;
 export const _createReactShimSourceForTests = createReactShimSource;
 export const _rewriteBareSpecifiersForTests = rewriteBareSpecifiers;
 export const _collectRegisterableExportNamesForTests = collectRegisterableExportNames;
+
+function PluginRenderError({ name }: { name: string }) {
+  const { t } = useTranslation();
+  return <>{t("app.shell.slots.renderFailed", { name })}</>;
+}

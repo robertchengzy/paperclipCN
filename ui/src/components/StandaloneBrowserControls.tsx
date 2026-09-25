@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { ExternalLink, RefreshCw, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ function ControlButton({
   children: ReactNode;
   onClick: () => void | Promise<void>;
 }) {
+  const { t } = useTranslation();
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -35,6 +37,7 @@ function ControlButton({
 }
 
 export function StandaloneBrowserControls({ mobile }: { mobile: boolean }) {
+  const { t } = useTranslation();
   const [chromeless, setChromeless] = useState(() =>
     typeof window !== "undefined" && mobile ? isChromelessDisplayMode() : false,
   );
@@ -73,12 +76,12 @@ export function StandaloneBrowserControls({ mobile }: { mobile: boolean }) {
         return;
       }
       await copyTextToClipboard(url);
-      toastActions?.pushToast({ title: "Link copied", tone: "success" });
+      toastActions?.pushToast({ title: t("app.shell.standaloneBrowserControls.linkCopied"), tone: "success" });
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
-      toastActions?.pushToast({ title: "Share failed", body: "Try opening the page in your browser.", tone: "error" });
+      toastActions?.pushToast({ title: t("app.shell.standaloneBrowserControls.shareFailed"), body: t("app.shell.standaloneBrowserControls.tryOpeningThePageInYourBrowser"), tone: "error" });
     }
-  }, [toastActions]);
+  }, [t, toastActions]);
 
   const openInBrowser = useCallback(() => {
     window.open(window.location.href, "_blank", "noopener,noreferrer");
@@ -88,13 +91,13 @@ export function StandaloneBrowserControls({ mobile }: { mobile: boolean }) {
 
   return (
     <div className="flex h-10 items-center justify-end gap-1 border-b border-border bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/85">
-      <ControlButton label="Refresh" onClick={refresh}>
+      <ControlButton label={t("app.common.actions.refresh")} onClick={refresh}>
         <RefreshCw className="h-4 w-4" />
       </ControlButton>
-      <ControlButton label="Share" onClick={share}>
+      <ControlButton label={t("app.shell.standaloneBrowserControls.share")} onClick={share}>
         <Share2 className="h-4 w-4" />
       </ControlButton>
-      <ControlButton label="Open in Browser" onClick={openInBrowser}>
+      <ControlButton label={t("app.shell.standaloneBrowserControls.openInBrowser")} onClick={openInBrowser}>
         <ExternalLink className="h-4 w-4" />
       </ControlButton>
     </div>

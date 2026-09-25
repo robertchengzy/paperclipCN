@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useState, type ReactNode } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, Loader2, RotateCcw, Undo2 } from "lucide-react";
@@ -28,9 +29,9 @@ interface StalledReviewActionsProps {
 }
 
 const ACTION_PAST_TENSE: Record<StalledReviewDecisionAction, string> = {
-  approve: "Review approved — issue marked done.",
-  request_changes: "Changes requested — issue returned to the assignee.",
-  send_back: "Sent back to work — issue returned to the assignee.",
+  get approve() { return t("app.shell.stalledReviewActions.reviewApprovedIssueMarkedDone"); },
+  get request_changes() { return t("app.shell.stalledReviewActions.changesRequestedIssueReturnedToTheAssignee"); },
+  get send_back() { return t("app.shell.stalledReviewActions.sentBackToWorkIssueReturnedToThe"); },
 };
 
 /**
@@ -51,6 +52,7 @@ export function StalledReviewActions({
   reviewPolicy,
   className,
 }: StalledReviewActionsProps) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { pushToast } = useToastActions();
   const [note, setNote] = useState("");
@@ -71,8 +73,8 @@ export function StalledReviewActions({
     },
     onError: (error) => {
       pushToast({
-        title: "Could not record the review decision",
-        body: error instanceof Error ? error.message : "Please try again.",
+        title: t("app.shell.stalledReviewActions.couldNotRecordTheReviewDecision"),
+        body: error instanceof Error ? error.message : t("app.common.messages.pleaseTryAgain"),
         tone: "error",
       });
     },
@@ -104,7 +106,7 @@ export function StalledReviewActions({
       <Textarea
         value={note}
         onChange={(event) => setNote(event.target.value)}
-        placeholder="Add a note — required to request changes, optional otherwise…"
+        placeholder={t("app.shell.stalledReviewActions.addANoteRequiredToRequestChangesOptional")}
         className="min-h-16 text-sm"
         data-testid="stalled-review-note"
         disabled={pending}
@@ -126,7 +128,7 @@ export function StalledReviewActions({
             ) : (
               <Undo2 className="h-3.5 w-3.5" aria-hidden />
             )}
-            Send back to work
+            {t("app.shell.stalledReviewActions.sendBackToWork")}
           </Button>
           <Button
             type="button"
@@ -134,7 +136,7 @@ export function StalledReviewActions({
             size="sm"
             className="w-full border-amber-400/70 text-amber-900 hover:bg-amber-100 dark:border-amber-500/50 dark:text-amber-100 dark:hover:bg-amber-500/15 sm:w-auto sm:flex-1 @xl:flex-none"
             disabled={pending || noteEmpty}
-            title={noteEmpty ? "Add a note to request changes" : undefined}
+            title={noteEmpty ? t("app.shell.stalledReviewActions.addANoteToRequestChanges") : undefined}
             onClick={() => decide.mutate("request_changes")}
             data-testid="stalled-review-request-changes"
           >
@@ -143,7 +145,7 @@ export function StalledReviewActions({
             ) : (
               <RotateCcw className="h-3.5 w-3.5" aria-hidden />
             )}
-            Request changes
+            {t("app.shell.stalledReviewActions.requestChanges")}
           </Button>
           <Button
             type="button"
@@ -158,7 +160,7 @@ export function StalledReviewActions({
             ) : (
               <CheckCircle2 className="h-3.5 w-3.5" aria-hidden />
             )}
-            Approve
+            {t("app.common.actions.approve")}
           </Button>
         </div>
       </div>

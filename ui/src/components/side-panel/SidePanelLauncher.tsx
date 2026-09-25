@@ -1,3 +1,4 @@
+import { t as translate, useTranslation } from "@/i18n";
 import { useState, type ReactNode } from "react";
 import { AlertCircle, Check, Loader2 } from "lucide-react";
 import {
@@ -35,6 +36,7 @@ function LauncherContent({
   emptyMessage,
   panel,
 }: Pick<SidePanelLauncherProps, "sections" | "onSelect" | "placeholder" | "emptyMessage"> & { panel: boolean }) {
+  const { t } = useTranslation();
   return (
     <Command className={cn(panel && "border border-border shadow-sm")}>
       <CommandInput placeholder={placeholder} aria-label={placeholder} />
@@ -47,7 +49,7 @@ function LauncherContent({
               {section.loading ? (
                 <div className="flex items-center gap-2 px-2 py-3 text-sm text-muted-foreground" role="status">
                   <Loader2 className="size-4 animate-spin" aria-hidden />
-                  Loading…
+                  {t("app.common.loading")}
                 </div>
               ) : null}
               {section.error ? (
@@ -74,7 +76,7 @@ function LauncherContent({
                       </span>
                     ) : null}
                   </span>
-                  {item.alreadyOpen ? <Check className="size-4 text-muted-foreground" aria-label="Already open" /> : null}
+                  {item.alreadyOpen ? <Check className="size-4 text-muted-foreground" aria-label={t("app.shell.sidePanelLauncher.alreadyOpen")} /> : null}
                   {item.shortcut ? <CommandShortcut>{item.shortcut}</CommandShortcut> : null}
                 </CommandItem>
               ))}
@@ -93,12 +95,13 @@ export function SidePanelLauncher({
   trigger,
   open: controlledOpen,
   onOpenChange,
-  title = "Open a side panel tab",
-  description = "Choose a view or resource to open.",
-  placeholder = "Search tabs and resources…",
-  emptyMessage = "No matching tabs or resources.",
+  title = translate("app.shell.sidePanelLauncher.title"),
+  description = translate("app.shell.sidePanelLauncher.description"),
+  placeholder = translate("app.shell.sidePanelLauncher.search"),
+  emptyMessage = translate("app.shell.sidePanelLauncher.empty"),
   className,
 }: SidePanelLauncherProps) {
+  const { t } = useTranslation();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const open = controlledOpen ?? uncontrolledOpen;
   const setOpen = onOpenChange ?? setUncontrolledOpen;

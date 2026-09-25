@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 /**
  * Plugin UI bridge runtime — concrete implementations of the bridge hooks.
  *
@@ -656,7 +657,7 @@ export function usePluginStream<T = unknown>(
     source.onerror = () => {
       setConnecting(false);
       setConnected(false);
-      setError(new Error(`Failed to connect to plugin stream "${channel}"`));
+      setError(new Error(t("app.shell.bridge.failedToConnectToPluginStream", { value0: channel })));
       source.close();
       if (sourceRef.current === source) {
         sourceRef.current = null;

@@ -1,3 +1,4 @@
+import { t, t as translate, useTranslation } from "@/i18n";
 import type { CSSProperties, ReactNode } from "react";
 import { Maximize2, Minimize2, PanelRightClose, PanelRightOpen, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,12 +34,13 @@ export function SidePanelFrame({
   open = true,
   maximized = false,
   resizing = false,
-  label = "Side panel",
+  label = translate("app.shell.sidePanelFrame.label"),
   headerSize = "default",
   className,
   bodyClassName,
   style,
 }: SidePanelFrameProps) {
+  const { t } = useTranslation();
   const handleScroll = useScrollbarWhileScrolling();
   return (
     <section
@@ -108,7 +110,8 @@ export function SidePanelToggleButton({
   shortcut?: string;
   className?: string;
 }) {
-  const label = "Toggle side panel";
+  const { t } = useTranslation();
+  const label = t("app.shell.sidePanelFrame.toggleSidePanel");
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -146,6 +149,7 @@ export function SidePanelWindowControls({
   onToggle: () => void;
   closeControl?: "toggle" | "close";
 }) {
+  const { t } = useTranslation();
   return (
     <>
       <Button
@@ -154,8 +158,8 @@ export function SidePanelWindowControls({
         size="icon-sm"
         className="h-(--side-panel-tab-height) w-(--side-panel-tab-height) text-muted-foreground hover:text-foreground focus-visible:text-foreground"
         onClick={() => onMaximizedChange(!maximized)}
-        aria-label={maximized ? "Restore side panel" : "Maximize side panel"}
-        title={maximized ? "Restore side panel" : "Maximize side panel"}
+        aria-label={maximized ? t("app.shell.sidePanelFrame.restoreSidePanel") : t("app.shell.sidePanelFrame.maximizeSidePanel")}
+        title={maximized ? t("app.shell.sidePanelFrame.restoreSidePanel") : t("app.shell.sidePanelFrame.maximizeSidePanel")}
       >
         {maximized ? <Minimize2 aria-hidden /> : <Maximize2 aria-hidden />}
       </Button>
@@ -166,8 +170,8 @@ export function SidePanelWindowControls({
           size="icon-sm"
           className="h-(--side-panel-tab-height) w-(--side-panel-tab-height) text-muted-foreground hover:text-foreground focus-visible:text-foreground"
           onClick={onToggle}
-          aria-label="Close side panel"
-          title="Close side panel"
+          aria-label={t("app.shell.sidePanelFrame.closeSidePanel")}
+          title={t("app.shell.sidePanelFrame.closeSidePanel")}
         >
           <X aria-hidden />
         </Button>

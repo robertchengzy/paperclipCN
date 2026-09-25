@@ -1,3 +1,4 @@
+import { t as translate, useTranslation } from "@/i18n";
 import { useEffect, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { createPortal } from "react-dom";
@@ -6,6 +7,7 @@ import { useSidebar } from "@/context/SidebarContext";
 import { cn } from "@/lib/utils";
 
 export function SetupWizardSidebar() {
+  const { t } = useTranslation();
   const sidebar = useSetupWizardSidebar();
   return (
     <aside className="flex h-full min-h-0 w-full flex-col border-r border-border bg-background">
@@ -16,7 +18,7 @@ export function SetupWizardSidebar() {
 
 export function SetupWizardNavigation({
   labels,
-  ariaLabel = "Setup progress",
+  ariaLabel = translate("app.shell.setupWizard.progress"),
   takeover = false,
   inline = false,
   step,
@@ -33,6 +35,7 @@ export function SetupWizardNavigation({
   disabled?: boolean;
   onSelect: (step: number) => void;
 }) {
+  const { t } = useTranslation();
   const sidebar = useSetupWizardSidebar();
   const { isMobile, setSidebarOpen } = useSidebar();
   const setActive = sidebar?.setActive;
@@ -84,14 +87,16 @@ export function SetupWizardNavigation({
 
 /** Lets a form temporarily replace the section menu, without replacing global navigation. */
 export function SetupWizardSidebarOutlet({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
   const sidebar = useSetupWizardSidebar();
   return sidebar?.active ? <SetupWizardSidebar /> : children;
 }
 
 /** Each step owns one footer row; secondary actions stay with the primary action. */
 export function SetupWizardFooter({ onSaveExit, children, disabled = false }: { onSaveExit: () => void; children: ReactNode; disabled?: boolean }) {
+  const { t } = useTranslation();
   return <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-    <Button type="button" variant="ghost" className="text-muted-foreground" onClick={onSaveExit} disabled={disabled}>Save &amp; exit</Button>
+    <Button type="button" variant="ghost" className="text-muted-foreground" onClick={onSaveExit} disabled={disabled}>{t("app.shell.setupWizard.saveExit")}</Button>
     <div className="ml-auto flex flex-wrap items-center gap-2">{children}</div>
   </div>;
 }

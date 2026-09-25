@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCompany } from "../context/CompanyContext";
@@ -33,6 +34,7 @@ import {
 } from "lucide-react";
 
 export function Companies() {
+  const { t } = useTranslation();
   const {
     companies,
     selectedCompanyId,
@@ -89,8 +91,8 @@ export function Companies() {
   });
 
   useEffect(() => {
-    setBreadcrumbs([{ label: "Organizations" }]);
-  }, [setBreadcrumbs]);
+    setBreadcrumbs([{ label: t("app.shell.companies.organizations") }]);
+  }, [t, setBreadcrumbs]);
 
   function startEdit(companyId: string, currentName: string) {
     setEditingId(companyId);
@@ -113,13 +115,13 @@ export function Companies() {
         {isCloud ? null : (
           <Button size="sm" onClick={() => openOnboarding()}>
             <Plus className="h-3.5 w-3.5 mr-1.5" />
-            New Organization
+            {t("app.shell.companies.newOrganization")}
           </Button>
         )}
       </div>
 
       <div className="h-6">
-        {loading && <p className="text-sm text-muted-foreground">Loading organizations...</p>}
+        {loading && <p className="text-sm text-muted-foreground">{t("app.shell.companies.loadingOrganizations")}</p>}
         {error && <p className="text-sm text-destructive">{error.message}</p>}
       </div>
 
@@ -236,7 +238,7 @@ export function Companies() {
                         onClick={() => startEdit(company.id, company.name)}
                       >
                         <Pencil className="h-3.5 w-3.5" />
-                        Rename
+                        {t("app.common.actions.rename")}
                       </DropdownMenuItem>
                       {company.status === "archived" && (
                         <DropdownMenuItem
@@ -244,7 +246,7 @@ export function Companies() {
                           onClick={() => unarchiveMutation.mutate(company.id)}
                         >
                           <ArchiveRestore className="h-3.5 w-3.5" />
-                          Unarchive
+                          {t("app.common.actions.unarchive")}
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuSeparator />
@@ -253,7 +255,7 @@ export function Companies() {
                         onClick={() => setConfirmDeleteId(company.id)}
                       >
                         <Trash2 className="h-3.5 w-3.5" />
-                        Delete Organization
+                        {t("app.shell.companies.deleteOrganization")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -265,13 +267,13 @@ export function Companies() {
                 <div className="flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5" />
                   <span>
-                    {agentCount} {agentCount === 1 ? "agent" : "agents"}
+                    {t(agentCount === 1 ? "app.shell.companies.agentCountOne" : "app.shell.companies.agentCountMany", { count: agentCount })}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CircleDot className="h-3.5 w-3.5" />
                   <span>
-                    {issueCount} {issueCount === 1 ? "task" : "tasks"}
+                    {t(issueCount === 1 ? "app.shell.companies.taskCountOne" : "app.shell.companies.taskCountMany", { count: issueCount })}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 tabular-nums">
@@ -280,12 +282,12 @@ export function Companies() {
                     {formatCents(company.spentMonthlyCents)}
                     {company.budgetMonthlyCents > 0
                       ? <> / {formatCents(company.budgetMonthlyCents)} <span className="text-xs">({budgetPct}%)</span></>
-                      : <span className="text-xs ml-1">Unlimited budget</span>}
+                      : <span className="text-xs ml-1">{t("app.shell.companies.unlimitedBudget")}</span>}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 ml-auto">
                   <Calendar className="h-3.5 w-3.5" />
-                  <span>Created {relativeTime(company.createdAt)}</span>
+                  <span>{t("app.common.labels.created")}{" "}{relativeTime(company.createdAt)}</span>
                 </div>
               </div>
 
@@ -296,7 +298,7 @@ export function Companies() {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <p className="text-sm text-destructive font-medium">
-                    Delete this organization and all its data? This cannot be undone.
+                    {t("app.shell.companies.deleteThisOrganizationAndAllItsDataThis")}
                   </p>
                   <div className="flex items-center gap-2 ml-4 shrink-0">
                     <Button
@@ -305,7 +307,7 @@ export function Companies() {
                       onClick={() => setConfirmDeleteId(null)}
                       disabled={deleteMutation.isPending}
                     >
-                      Cancel
+                      {t("app.common.actions.cancel")}
                     </Button>
                     <Button
                       variant="destructive"
@@ -313,7 +315,7 @@ export function Companies() {
                       onClick={() => deleteMutation.mutate(company.id)}
                       disabled={deleteMutation.isPending}
                     >
-                      {deleteMutation.isPending ? "Deleting…" : "Delete"}
+                      {deleteMutation.isPending ? t("app.common.progress.deleting") : t("app.common.actions.delete")}
                     </Button>
                   </div>
                 </div>

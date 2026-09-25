@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { Download, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn, relativeTime } from "@/lib/utils";
@@ -12,6 +13,7 @@ interface OutputRowProps {
 
 /** Compact row for a non-primary output ("ALSO PRODUCED"). */
 export function OutputRow({ item, creatorName }: OutputRowProps) {
+  const { t } = useTranslation();
   const filename = outputFilename(item);
   const meta = item.metadata;
 
@@ -36,18 +38,18 @@ export function OutputRow({ item, creatorName }: OutputRowProps) {
             item.degraded ? "text-destructive" : "text-muted-foreground",
           )}
         >
-          {item.degraded ? "File details unavailable" : metaBits.join(" · ")}
+          {item.degraded ? t("app.shell.outputRow.fileDetailsUnavailable") : metaBits.join(" · ")}
         </p>
       </div>
       {meta ? (
         <div className="flex shrink-0 items-center gap-1">
-          <Button asChild variant="ghost" size="icon-sm" title="Open in new tab">
-            <a href={meta.openPath} target="_blank" rel="noreferrer" aria-label={`Open ${filename}`}>
+          <Button asChild variant="ghost" size="icon-sm" title={t("app.shell.outputRow.openInNewTab")}>
+            <a href={meta.openPath} target="_blank" rel="noreferrer" aria-label={t("app.shell.outputRow.open", { value0: filename })}>
               <ExternalLink className="h-4 w-4" />
             </a>
           </Button>
-          <Button asChild variant="ghost" size="icon-sm" title="Download">
-            <a href={meta.downloadPath} aria-label={`Download ${filename}`}>
+          <Button asChild variant="ghost" size="icon-sm" title={t("app.common.actions.download")}>
+            <a href={meta.downloadPath} aria-label={t("app.shell.outputRow.download", { value0: filename })}>
               <Download className="h-4 w-4" />
             </a>
           </Button>

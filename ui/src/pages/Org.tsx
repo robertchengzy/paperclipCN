@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useEffect, useState } from "react";
 import { Link } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -21,6 +22,7 @@ function OrgTree({
   depth?: number;
   hrefFn: (id: string) => string;
 }) {
+  const { t } = useTranslation();
   return (
     <div>
       {nodes.map((node) => (
@@ -39,6 +41,7 @@ function OrgTreeNode({
   depth: number;
   hrefFn: (id: string) => string;
 }) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(true);
   const hasChildren = node.reports.length > 0;
 
@@ -85,12 +88,13 @@ function OrgTreeNode({
 }
 
 export function Org() {
+  const { t } = useTranslation();
   const { selectedCompanyId } = useCompany();
   const { setBreadcrumbs } = useBreadcrumbs();
 
   useEffect(() => {
-    setBreadcrumbs([{ label: "Org Chart" }]);
-  }, [setBreadcrumbs]);
+    setBreadcrumbs([{ label: t("app.shell.org.orgChart") }]);
+  }, [t, setBreadcrumbs]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: queryKeys.org(selectedCompanyId!),
@@ -99,7 +103,7 @@ export function Org() {
   });
 
   if (!selectedCompanyId) {
-    return <EmptyState icon={GitBranch} message="Select an organization to view org chart." />;
+    return <EmptyState icon={GitBranch} message={t("app.shell.org.selectAnOrganizationToViewOrgChart")} />;
   }
 
   if (isLoading) {
@@ -113,7 +117,7 @@ export function Org() {
       {data && data.length === 0 && (
         <EmptyState
           icon={GitBranch}
-          message="No agents in the organization. Create agents to build your org chart."
+          message={t("app.shell.org.noAgentsInTheOrganizationCreateAgentsTo")}
         />
       )}
 

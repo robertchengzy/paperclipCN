@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useId, useState, type ReactNode } from "react";
 import {
   ChevronDown,
@@ -112,6 +113,7 @@ function formatTimestamp(ts: string) {
 }
 
 function MetadataRow({ row, tone }: { row: SystemNoticeMetadataRow; tone: ToneTokens }) {
+  const { t } = useTranslation();
   return (
     <div className="grid grid-cols-(--gtc-8) gap-x-3 gap-y-0.5 px-3 py-1.5 text-xs">
       <div className="truncate text-(length:--text-micro) font-medium uppercase tracking-(--tracking-label) text-muted-foreground">
@@ -217,6 +219,7 @@ export function SystemNoticeMetadataSections({
   sections: SystemNoticeMetadataSection[];
   tone?: SystemNoticeTone;
 }) {
+  const { t } = useTranslation();
   const tokens = TONE_TOKENS[tone];
   return (
     <div className="divide-y divide-border/50 px-1 py-1">
@@ -248,6 +251,7 @@ export function SystemNotice({
   timestamp,
   className,
 }: SystemNoticeProps) {
+  const { t } = useTranslation();
   const tokens = TONE_TOKENS[tone];
   const ToneIcon = tokens.icon;
   const [open, setOpen] = useState(detailsDefaultOpen);
@@ -256,11 +260,11 @@ export function SystemNotice({
   const resolvedLabel =
     label ??
     {
-      neutral: "System notice",
-      info: "System notice",
-      success: "System notice",
-      warning: "System warning",
-      danger: "System alert",
+      neutral: t("app.shell.systemNotice.systemNotice"),
+      info: t("app.shell.systemNotice.systemNotice"),
+      success: t("app.shell.systemNotice.systemNotice"),
+      warning: t("app.shell.systemNotice.systemWarning"),
+      danger: t("app.shell.systemNotice.systemAlert"),
     }[tone];
 
   return (
@@ -326,7 +330,7 @@ export function SystemNotice({
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
             )}
           >
-            <span>{open ? "Hide details" : "Details"}</span>
+            <span>{open ? t("app.shell.systemNotice.hideDetails") : t("app.common.actions.details")}</span>
             <ChevronDown
               className={cn(
                 "h-3.5 w-3.5 transition-transform duration-150",

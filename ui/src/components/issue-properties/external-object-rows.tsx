@@ -1,3 +1,4 @@
+import { t, useTranslation } from "@/i18n";
 import { useEffect, useState, type ReactNode } from "react";
 import type { IssueExternalObjectGroup } from "../../hooks/useIssueExternalObjects";
 import {
@@ -16,7 +17,6 @@ import { cn } from "../../lib/utils";
 import { ExternalObjectStatusIcon } from "../ExternalObjectStatusIcon";
 import { PropertyRow } from "./primitives";
 import { ExpandRelationListButton } from "./relation-controls";
-import { useTranslation } from "@/i18n";
 
 const EXTERNAL_OBJECT_PROPERTY_PREVIEW_COUNT = 5;
 
@@ -33,8 +33,8 @@ function externalObjectRowDisplayKey(group: IssueExternalObjectGroup): string {
   const displayKey = pill.displayKey?.trim();
   if (displayKey) return displayKey;
   if (pill.providerKey === "github") {
-    if (pill.objectType === "pull_request") return "Github PR";
-    if (pill.objectType === "issue") return "Github Issue";
+    if (pill.objectType === "pull_request") return t("app.shell.externalObjectRows.githubPr");
+    if (pill.objectType === "issue") return t("app.shell.externalObjectRows.githubIssue");
   }
   return externalObjectDisplayLabel(pill.providerKey, pill.objectType);
 }
@@ -59,7 +59,7 @@ function githubObjectPropertyValue(url: string | null | undefined): string | nul
     const [, owner, repo, kind, number] = parsed.pathname.split("/");
     if (!owner || !repo || !number) return null;
     if (kind === "pull") return `PR ${number}`;
-    if (kind === "issues") return `Issue ${number}`;
+    if (kind === "issues") return t("app.shell.externalObjectRows.issue", { value0: number });
     return null;
   } catch {
     return null;
@@ -102,6 +102,7 @@ function externalObjectPropertyTitle(group: IssueExternalObjectGroup): string {
 }
 
 function ExternalObjectPropertyValue({ group }: { group: IssueExternalObjectGroup }) {
+  const { t } = useTranslation();
   const { pill } = group;
   const statusLabel = externalObjectPropertyStatusLabel(group);
   const providerLabel = externalObjectProviderLabel(pill.providerKey);
