@@ -3,9 +3,9 @@ import { t } from "@/i18n";
 export type TaskDateGroup = "today" | "yesterday" | "earlier";
 
 export const taskDateGroupLabels: Record<TaskDateGroup, string> = {
-  today: "Today",
-  yesterday: "Yesterday",
-  earlier: "Earlier",
+  get today() { return t("app.format.dateGroups.today"); },
+  get yesterday() { return t("app.format.dateGroups.yesterday"); },
+  get earlier() { return t("app.format.dateGroups.earlier"); },
 };
 
 export function taskDateGroupLabel(group: TaskDateGroup): string {

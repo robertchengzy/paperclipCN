@@ -1,5 +1,6 @@
 import type { IssueChangeReceiptEntry } from "@paperclipai/shared";
 import { formatReviewPolicyValue } from "./review-policy";
+import { t } from "@/i18n";
 
 /**
  * Read + format the field-level change receipts carried on an `issue.updated`
@@ -17,28 +18,28 @@ import { formatReviewPolicyValue } from "./review-policy";
 
 /** Field names whose raw ids carry no meaning in a scannable summary. */
 const FIELD_LABELS: Record<string, string> = {
-  assigneeAgentId: "Assignee",
-  assigneeUserId: "Assignee (user)",
-  responsibleUserId: "Responsible user",
-  blockedByIssueIds: "Blockers",
-  labelIds: "Labels",
-  parentId: "Parent",
-  projectId: "Project",
-  goalId: "Goal",
-  workMode: "Work mode",
-  reviewPolicy: "Who can approve",
-  billingCode: "Billing code",
-  checkoutRunId: "Checkout run",
-  executionRunId: "Execution run",
-  hiddenAt: "Hidden",
-  startedAt: "Started",
-  completedAt: "Completed",
-  cancelledAt: "Cancelled",
-  requestDepth: "Request depth",
-  sourceTrust: "Source trust",
-  executionPolicy: "Execution policy",
-  executionWorkspaceId: "Execution workspace",
-  projectWorkspaceId: "Project workspace",
+  get assigneeAgentId() { return t("app.lib.issueChangeReceipt.field.assigneeAgentId"); },
+  get assigneeUserId() { return t("app.lib.issueChangeReceipt.field.assigneeUserId"); },
+  get responsibleUserId() { return t("app.lib.issueChangeReceipt.field.responsibleUserId"); },
+  get blockedByIssueIds() { return t("app.lib.issueChangeReceipt.field.blockedByIssueIds"); },
+  get labelIds() { return t("app.lib.issueChangeReceipt.field.labelIds"); },
+  get parentId() { return t("app.lib.issueChangeReceipt.field.parentId"); },
+  get projectId() { return t("app.lib.issueChangeReceipt.field.projectId"); },
+  get goalId() { return t("app.lib.issueChangeReceipt.field.goalId"); },
+  get workMode() { return t("app.lib.issueChangeReceipt.field.workMode"); },
+  get reviewPolicy() { return t("app.lib.issueChangeReceipt.field.reviewPolicy"); },
+  get billingCode() { return t("app.lib.issueChangeReceipt.field.billingCode"); },
+  get checkoutRunId() { return t("app.lib.issueChangeReceipt.field.checkoutRunId"); },
+  get executionRunId() { return t("app.lib.issueChangeReceipt.field.executionRunId"); },
+  get hiddenAt() { return t("app.lib.issueChangeReceipt.field.hiddenAt"); },
+  get startedAt() { return t("app.lib.issueChangeReceipt.field.startedAt"); },
+  get completedAt() { return t("app.lib.issueChangeReceipt.field.completedAt"); },
+  get cancelledAt() { return t("app.lib.issueChangeReceipt.field.cancelledAt"); },
+  get requestDepth() { return t("app.lib.issueChangeReceipt.field.requestDepth"); },
+  get sourceTrust() { return t("app.lib.issueChangeReceipt.field.sourceTrust"); },
+  get executionPolicy() { return t("app.lib.issueChangeReceipt.field.executionPolicy"); },
+  get executionWorkspaceId() { return t("app.lib.issueChangeReceipt.field.executionWorkspaceId"); },
+  get projectWorkspaceId() { return t("app.lib.issueChangeReceipt.field.projectWorkspaceId"); },
 };
 
 /** Human label for a changed field, e.g. `assigneeAgentId` → "Assignee". */
@@ -69,24 +70,24 @@ export function formatIssueChangeValue(
   // `reviewPolicy` is nullable-by-default: a cleared column means "anyone can
   // approve", not "no value" (PAP-16506), so it resolves before the null branch.
   if (options.field === "reviewPolicy") return formatReviewPolicyValue(value);
-  if (value === null || value === undefined || value === "") return "none";
-  if (typeof value === "boolean") return value ? "yes" : "no";
+  if (value === null || value === undefined || value === "") return t("app.lib.issueChangeReceipt.valueNone");
+  if (typeof value === "boolean") return value ? t("app.lib.issueChangeReceipt.valueYes") : t("app.lib.issueChangeReceipt.valueNo");
   if (typeof value === "number") return String(value);
 
   if (Array.isArray(value)) {
-    if (value.length === 0) return "none";
+    if (value.length === 0) return t("app.lib.issueChangeReceipt.valueNone");
     const strings = value.filter((entry): entry is string => typeof entry === "string");
-    if (strings.length !== value.length) return `${value.length} items`;
+    if (strings.length !== value.length) return t("app.lib.issueChangeReceipt.valueItems", { count: value.length });
     return strings.length <= 3
       ? strings.map((id) => shortenId(id)).join(", ")
-      : `${strings.length} items`;
+      : t("app.lib.issueChangeReceipt.valueItems", { count: strings.length });
   }
 
   if (value instanceof Date) return value.toLocaleString();
 
   if (typeof value === "string") {
     const trimmed = value.trim();
-    if (!trimmed) return "none";
+    if (!trimmed) return t("app.lib.issueChangeReceipt.valueNone");
     // Ids resolve to names when the directory is loaded; otherwise they shorten.
     const resolved = options.field?.toLowerCase().includes("agent")
       ? options.resolveAgentLabel?.(trimmed)
@@ -102,7 +103,7 @@ export function formatIssueChangeValue(
 
   // Objects (execution policy, workspace settings) are structural — the receipt
   // records that they moved, and the audit log holds the full value.
-  return "updated";
+  return t("app.lib.issueChangeReceipt.valueUpdated");
 }
 
 function truncate(value: string): string {
@@ -165,17 +166,17 @@ export function readIssueChangeReceipt(
 
 /** Authorization reasons, as recorded by the server's write-policy decision. */
 const AUTHORIZATION_REASON_LABELS: Record<string, string> = {
-  allow_visible_issue_write: "default-open write on a visible task",
-  allow_scoped_agent_write: "scoped agent write",
-  allow_board_actor: "board actor",
-  allow_self: "own task",
-  allow_issue_mention_grant: "mention grant",
-  allow_direct_parent_report: "direct parent report",
-  allow_low_trust_boundary: "low-trust boundary allowance",
-  allow_explicit_grant: "explicit permission grant",
-  allow_instance_admin: "instance admin",
-  allow_local_board: "local board",
-  internal_agent_write: "internal agent write",
+  get allow_visible_issue_write() { return t("app.lib.issueChangeReceipt.reason.allow_visible_issue_write"); },
+  get allow_scoped_agent_write() { return t("app.lib.issueChangeReceipt.reason.allow_scoped_agent_write"); },
+  get allow_board_actor() { return t("app.lib.issueChangeReceipt.reason.allow_board_actor"); },
+  get allow_self() { return t("app.lib.issueChangeReceipt.reason.allow_self"); },
+  get allow_issue_mention_grant() { return t("app.lib.issueChangeReceipt.reason.allow_issue_mention_grant"); },
+  get allow_direct_parent_report() { return t("app.lib.issueChangeReceipt.reason.allow_direct_parent_report"); },
+  get allow_low_trust_boundary() { return t("app.lib.issueChangeReceipt.reason.allow_low_trust_boundary"); },
+  get allow_explicit_grant() { return t("app.lib.issueChangeReceipt.reason.allow_explicit_grant"); },
+  get allow_instance_admin() { return t("app.lib.issueChangeReceipt.reason.allow_instance_admin"); },
+  get allow_local_board() { return t("app.lib.issueChangeReceipt.reason.allow_local_board"); },
+  get internal_agent_write() { return t("app.lib.issueChangeReceipt.reason.internal_agent_write"); },
 };
 
 /**

@@ -9,6 +9,7 @@ import type {
   AttentionSourceKind,
   AttentionWorkspaceRef,
 } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export type AttentionListOptions = AttentionFeedQuery;
 
@@ -47,23 +48,25 @@ interface SourceMeta {
   label: string;
 }
 
-const SOURCE_META: Record<AttentionSourceKind, SourceMeta> = {
-  approval: { label: "Approval" },
-  decision: { label: "Decision" },
-  issue_thread_interaction: { label: "Decision requested" },
-  join_request: { label: "Join request" },
-  recovery_action: { label: "Recovery" },
-  // Read compatibility for persisted decisions from the retired feature.
-  productivity_review: { label: "Task" },
-  blocker_attention: { label: "Blocked dependency" },
-  review: { label: "Review" },
-  failed_run: { label: "Failed run" },
-  budget_alert: { label: "Budget" },
-  agent_error_alert: { label: "Agent error" },
-};
+function sourceMetaTable(): Record<AttentionSourceKind, SourceMeta> {
+  return {
+    approval: { label: t("app.lib.attention.source.approval") },
+    decision: { label: t("app.lib.attention.source.decision") },
+    issue_thread_interaction: { label: t("app.lib.attention.source.decisionRequested") },
+    join_request: { label: t("app.lib.attention.source.joinRequest") },
+    recovery_action: { label: t("app.lib.attention.source.recovery") },
+    // Read compatibility for persisted decisions from the retired feature.
+    productivity_review: { label: t("app.common.nouns.task") },
+    blocker_attention: { label: t("app.lib.attention.source.blockedDependency") },
+    review: { label: t("app.common.actions.review") },
+    failed_run: { label: t("app.lib.attention.source.failedRun") },
+    budget_alert: { label: t("app.common.nouns.budget") },
+    agent_error_alert: { label: t("app.lib.attention.source.agentError") },
+  };
+}
 
 export function sourceMeta(kind: AttentionSourceKind): SourceMeta {
-  return SOURCE_META[kind] ?? { label: kind.replaceAll("_", " ") };
+  return sourceMetaTable()[kind] ?? { label: kind.replaceAll("_", " ") };
 }
 
 interface SeverityStyle {
@@ -74,10 +77,10 @@ interface SeverityStyle {
 }
 
 const SEVERITY_STYLE: Record<AttentionSeverity, SeverityStyle> = {
-  critical: { accent: "bg-red-500", dot: "bg-red-500", label: "Critical" },
-  high: { accent: "bg-orange-500", dot: "bg-orange-500", label: "High" },
-  medium: { accent: "bg-yellow-500", dot: "bg-yellow-500", label: "Medium" },
-  low: { accent: "bg-blue-500", dot: "bg-blue-500", label: "Low" },
+  critical: { accent: "bg-red-500", dot: "bg-red-500", get label() { return t("app.common.priority.critical"); } },
+  high: { accent: "bg-orange-500", dot: "bg-orange-500", get label() { return t("app.common.priority.high"); } },
+  medium: { accent: "bg-yellow-500", dot: "bg-yellow-500", get label() { return t("app.common.priority.medium"); } },
+  low: { accent: "bg-blue-500", dot: "bg-blue-500", get label() { return t("app.common.priority.low"); } },
 };
 
 export function severityStyle(severity: AttentionSeverity): SeverityStyle {
@@ -187,9 +190,6 @@ function quote(text: string | null | undefined): string | null {
   return `“${trimmed}”`;
 }
 
-function countNoun(count: number, singular: string): string {
-  return `${count} ${count === 1 ? singular : `${singular}s`}`;
-}
 
 /**
  * A concise human-readable detail line for a row, e.g.
@@ -210,21 +210,30 @@ export function attentionDetailLine(item: AttentionItem): string | null {
       return quote(detail.promptExcerpt);
     case "checkbox_confirmation": {
       const q = quote(detail.promptExcerpt);
-      return q ? `${countNoun(detail.optionCount, "option")} — ${q}` : countNoun(detail.optionCount, "option");
+      const label = detail.optionCount === 1
+        ? t("app.lib.attention.oneOption")
+        : t("app.lib.attention.manyOptions", { count: detail.optionCount });
+      return q ? `${label} — ${q}` : label;
     }
     case "questions": {
       const q = quote(detail.firstQuestionText);
-      const label = countNoun(detail.questionCount, "question");
+      const label = detail.questionCount === 1
+        ? t("app.lib.attention.oneQuestion")
+        : t("app.lib.attention.manyQuestions", { count: detail.questionCount });
       return q ? `${label} — ${q}` : label;
     }
     case "suggested_tasks": {
       const q = quote(detail.firstTaskTitle);
-      const label = countNoun(detail.taskCount, "suggested task");
+      const label = detail.taskCount === 1
+        ? t("app.lib.attention.oneSuggestedTask")
+        : t("app.lib.attention.manySuggestedTasks", { count: detail.taskCount });
       return q ? `${label} — ${q}` : label;
     }
     case "item_verdicts": {
       const q = quote(detail.promptExcerpt);
-      const label = `${countNoun(detail.itemCount, "item")} to verdict`;
+      const label = detail.itemCount === 1
+        ? t("app.lib.attention.oneItemToVerdict")
+        : t("app.lib.attention.manyItemsToVerdict", { count: detail.itemCount });
       return q ? `${label} — ${q}` : label;
     }
     case "failed_run":
@@ -236,11 +245,19 @@ export function attentionDetailLine(item: AttentionItem): string | null {
     case "blocker": {
       const b = detail.blockingIssue;
       if (!b) return null;
-      const id = b.identifier ? `${b.identifier} ` : "";
-      return b.title ? `Blocked by ${id}${b.title}` : b.identifier ? `Blocked by ${b.identifier}` : null;
+      if (b.title) {
+        return b.identifier
+          ? t("app.lib.attention.blockedByIdTitle", { identifier: b.identifier, title: b.title })
+          : t("app.lib.attention.blockedByTitle", { title: b.title });
+      }
+      return b.identifier ? t("app.lib.attention.blockedById", { identifier: b.identifier }) : null;
     }
     case "budget":
-      return `${Math.round(detail.observedPercent)}% of budget used ($${detail.amountObserved} / $${detail.amountLimit})`;
+      return t("app.lib.attention.budgetUsed", {
+        percent: Math.round(detail.observedPercent),
+        observed: detail.amountObserved,
+        limit: detail.amountLimit,
+      });
     case "generic":
       return quote(detail.summaryExcerpt);
     default:
@@ -371,9 +388,9 @@ export function buildDeskShelves(items: AttentionItem[], now: number): DeskShelf
   const earlier = rest.filter((item) => !attentionIsNewToday(item, now));
 
   const shelves: DeskShelf[] = [];
-  if (decideNow.length > 0) shelves.push({ key: "desk:decide-now", label: "Decide now", items: decideNow });
-  if (newToday.length > 0) shelves.push({ key: "desk:new-today", label: "New today", items: newToday });
-  if (earlier.length > 0) shelves.push({ key: "desk:earlier", label: "Earlier", items: earlier });
+  if (decideNow.length > 0) shelves.push({ key: "desk:decide-now", label: t("app.lib.attention.decideNow"), items: decideNow });
+  if (newToday.length > 0) shelves.push({ key: "desk:new-today", label: t("app.lib.attention.newToday"), items: newToday });
+  if (earlier.length > 0) shelves.push({ key: "desk:earlier", label: t("app.common.labels.earlier"), items: earlier });
   return shelves;
 }
 
@@ -412,18 +429,25 @@ export function attentionIdleDays(item: AttentionItem, now: number): number {
 
 export type DecideByPreset = "today" | "this_week" | "whenever";
 
+/** A `[value, label]` option whose label resolves in the current UI language on each read. */
+function lazyOption<T>(value: T, label: () => string): [T, string] {
+  const option = [value, ""] as [T, string];
+  Object.defineProperty(option, 1, { get: label, enumerable: true });
+  return option;
+}
+
 export const DECIDE_BY_OPTIONS: ReadonlyArray<[DecideByPreset, string]> = [
-  ["today", "Today"],
-  ["this_week", "This week"],
-  ["whenever", "Whenever"],
+  lazyOption("today", () => t("app.common.labels.today")),
+  lazyOption("this_week", () => t("app.lib.attention.thisWeek")),
+  lazyOption("whenever", () => t("app.lib.attention.whenever")),
 ];
 
 /** Human label for any stored `decideBy` value (preset or `YYYY-MM-DD`). */
 export function decideByLabel(decideBy: string | null): string {
-  if (!decideBy) return "Not set";
-  if (decideBy === "today") return "Today";
-  if (decideBy === "this_week") return "This week";
-  if (decideBy === "whenever") return "Whenever";
+  if (!decideBy) return t("app.lib.attention.notSet");
+  if (decideBy === "today") return t("app.common.labels.today");
+  if (decideBy === "this_week") return t("app.lib.attention.thisWeek");
+  if (decideBy === "whenever") return t("app.lib.attention.whenever");
   if (/^\d{4}-\d{2}-\d{2}$/.test(decideBy)) {
     const parsed = new Date(`${decideBy}T00:00:00.000Z`);
     return Number.isFinite(parsed.getTime())
@@ -442,11 +466,11 @@ export function decideByLabel(decideBy: string | null): string {
 export type AttentionDateRangeId = "all" | "today" | "yesterday" | "last_7_days" | "this_month" | "custom";
 
 export const ATTENTION_DATE_RANGE_OPTIONS: ReadonlyArray<[AttentionDateRangeId, string]> = [
-  ["all", "All"],
-  ["today", "Today"],
-  ["yesterday", "Yesterday"],
-  ["last_7_days", "Last 7 days"],
-  ["this_month", "This month"],
+  lazyOption("all", () => t("app.common.labels.all")),
+  lazyOption("today", () => t("app.common.labels.today")),
+  lazyOption("yesterday", () => t("app.lib.attention.yesterday")),
+  lazyOption("last_7_days", () => t("app.lib.attention.last7Days")),
+  lazyOption("this_month", () => t("app.lib.attention.thisMonth")),
 ];
 
 export interface AttentionActivityBounds {
@@ -522,16 +546,16 @@ export type AttentionSortOrder = "newest" | "oldest";
 
 /** Ordered list used to render the group-by picker (label + value). */
 export const ATTENTION_GROUP_BY_OPTIONS: ReadonlyArray<[AttentionGroupBy, string]> = [
-  ["none", "None"],
-  ["date", "Date"],
-  ["type", "Type"],
-  ["project", "Project"],
-  ["severity", "Severity"],
+  lazyOption("none", () => t("app.common.labels.none")),
+  lazyOption("date", () => t("app.lib.attention.groupByDate")),
+  lazyOption("type", () => t("app.common.labels.type")),
+  lazyOption("project", () => t("app.common.nouns.project")),
+  lazyOption("severity", () => t("app.lib.attention.groupBySeverity")),
 ];
 
 export const ATTENTION_SORT_OPTIONS: ReadonlyArray<[AttentionSortOrder, string]> = [
-  ["newest", "Newest first"],
-  ["oldest", "Oldest first"],
+  lazyOption("newest", () => t("app.lib.attention.newestFirst")),
+  lazyOption("oldest", () => t("app.lib.attention.oldestFirst")),
 ];
 
 /**
@@ -811,10 +835,10 @@ const DATE_BUCKET_ORDER = ["today", "yesterday", "this_week", "earlier"] as cons
 type DateBucket = (typeof DATE_BUCKET_ORDER)[number];
 
 const DATE_BUCKET_LABELS: Record<DateBucket, string> = {
-  today: "Today",
-  yesterday: "Yesterday",
-  this_week: "This week",
-  earlier: "Earlier",
+  get today() { return t("app.common.labels.today"); },
+  get yesterday() { return t("app.lib.attention.yesterday"); },
+  get this_week() { return t("app.lib.attention.thisWeek"); },
+  get earlier() { return t("app.common.labels.earlier"); },
 };
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -834,10 +858,10 @@ export function attentionDateBucket(activityAt: string, now: number): DateBucket
 }
 
 const SEVERITY_LABEL: Record<AttentionSeverity, string> = {
-  critical: "Critical",
-  high: "High",
-  medium: "Medium",
-  low: "Low",
+  get critical() { return t("app.common.priority.critical"); },
+  get high() { return t("app.common.priority.high"); },
+  get medium() { return t("app.common.priority.medium"); },
+  get low() { return t("app.common.priority.low"); },
 };
 
 /**
@@ -896,7 +920,7 @@ export function groupAttentionItems(
         ? { key: `type:${item.sourceKind}`, label: sourceMeta(item.sourceKind).label }
         : item.project
           ? { key: `project:${item.project.id}`, label: item.project.name }
-          : { key: `project:${NO_GROUP_SENTINEL}`, label: "No project" };
+          : { key: `project:${NO_GROUP_SENTINEL}`, label: t("app.common.noProject") };
     const existing = groups.get(resolved.key);
     const ts = attentionActivityTimestamp(item);
     if (existing) {

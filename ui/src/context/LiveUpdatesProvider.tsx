@@ -50,6 +50,7 @@ import { useLocation } from "../lib/router";
 import { agentRouteRef } from "../lib/utils";
 import { buildSameOriginWebSocketUrl } from "../lib/websocket-url";
 import { tryCreateWebSocket } from "../lib/websocket";
+import { t } from "@/i18n";
 
 const TOAST_COOLDOWN_WINDOW_MS = 10_000;
 const TOAST_COOLDOWN_MAX = 3;
@@ -181,14 +182,14 @@ function resolveActorLabel(
   if (actorType === "agent" && actorId) {
     return (
       resolveAgentName(queryClient, companyId, actorId) ??
-      `Agent ${shortId(actorId)}`
+      t("app.lib.liveUpdatesProvider.agentShort", { id: shortId(actorId) })
     );
   }
-  if (actorType === "system") return "System";
+  if (actorType === "system") return t("app.common.labels.system");
   if (actorType === "user" && actorId) {
-    return resolveUserName(queryClient, companyId, actorId) ?? "Board";
+    return resolveUserName(queryClient, companyId, actorId) ?? t("app.common.nouns.board");
   }
-  return "Someone";
+  return t("app.common.labels.someone");
 }
 
 interface IssueToastContext {
@@ -271,7 +272,7 @@ function resolveIssueToastContext(
     readString(details?.identifier) ??
     readString(details?.issueIdentifier) ??
     cachedIssue?.identifier ??
-    `Task ${shortId(issueId)}`;
+    t("app.lib.liveUpdatesProvider.taskShort", { id: shortId(issueId) });
   const title =
     readString(details?.title) ??
     readString(details?.issueTitle) ??
@@ -883,30 +884,30 @@ function describeIssueUpdate(
   if (!details) return null;
   const changes: string[] = [];
   if (typeof details.status === "string")
-    changes.push(`status -> ${details.status.replace(/_/g, " ")}`);
+    changes.push(t("app.lib.liveUpdatesProvider.statusChange", { status: t(`app.common.status.${details.status}`, { defaultValue: details.status.replace(/_/g, " ") }) }));
   if (typeof details.priority === "string")
-    changes.push(`priority -> ${details.priority}`);
+    changes.push(t("app.lib.liveUpdatesProvider.priorityChange", { priority: t(`app.lib.liveUpdatesProvider.priorityValue.${details.priority}`, { defaultValue: details.priority }) }));
   if (
     typeof details.assigneeAgentId === "string" ||
     typeof details.assigneeUserId === "string"
   ) {
-    changes.push("reassigned");
+    changes.push(t("app.lib.liveUpdatesProvider.reassigned"));
   } else if (
     details.assigneeAgentId === null ||
     details.assigneeUserId === null
   ) {
-    changes.push("unassigned");
+    changes.push(t("app.lib.liveUpdatesProvider.unassigned"));
   }
   if (details.reopened === true) {
     const from = readString(details.reopenedFrom);
     changes.push(
-      from ? `reopened from ${from.replace(/_/g, " ")}` : "reopened",
+      from ? t("app.lib.liveUpdatesProvider.reopenedFrom", { from: from.replace(/_/g, " ") }) : t("app.lib.liveUpdatesProvider.reopened"),
     );
   }
-  if (typeof details.title === "string") changes.push("title changed");
+  if (typeof details.title === "string") changes.push(t("app.lib.liveUpdatesProvider.titleChanged"));
   if (typeof details.description === "string")
-    changes.push("description changed");
-  if (changes.length > 0) return changes.join(", ");
+    changes.push(t("app.lib.liveUpdatesProvider.descriptionChanged"));
+  if (changes.length > 0) return changes.join(t("app.lib.liveUpdatesProvider.listSeparator"));
   return null;
 }
 
@@ -950,10 +951,10 @@ function buildActivityToast(
 
   if (action === "issue.created") {
     return {
-      title: `${actor} created ${issue.ref}`,
+      title: t("app.lib.liveUpdatesProvider.issueCreated", { actor, ref: issue.ref }),
       body: issue.title ? truncate(issue.title, 96) : undefined,
       tone: "success",
-      action: { label: `View ${issue.ref}`, href: issue.href },
+      action: { label: t("app.lib.liveUpdatesProvider.viewRef", { ref: issue.ref }), href: issue.href },
       dedupeKey: `activity:${action}:${entityId}`,
     };
   }
@@ -972,10 +973,10 @@ function buildActivityToast(
         ? truncate(issue.title, 96)
         : issue.label;
     return {
-      title: `${actor} updated ${issue.ref}`,
+      title: t("app.lib.liveUpdatesProvider.issueUpdated", { actor, ref: issue.ref }),
       body: truncate(body, 100),
       tone: "info",
-      action: { label: `View ${issue.ref}`, href: issue.href },
+      action: { label: t("app.lib.liveUpdatesProvider.viewRef", { ref: issue.ref }), href: issue.href },
       dedupeKey: `activity:${action}:${entityId}`,
     };
   }
@@ -987,14 +988,14 @@ function buildActivityToast(
   const reopenedFrom = readString(details?.reopenedFrom);
   const reopenedLabel = reopened
     ? reopenedFrom
-      ? `reopened from ${reopenedFrom.replace(/_/g, " ")}`
-      : "reopened"
+      ? t("app.lib.liveUpdatesProvider.reopenedFrom", { from: reopenedFrom.replace(/_/g, " ") })
+      : t("app.lib.liveUpdatesProvider.reopened")
     : null;
   const title = reopened
-    ? `${actor} reopened and commented on ${issue.ref}`
+    ? t("app.lib.liveUpdatesProvider.reopenedAndCommented", { actor, ref: issue.ref })
     : updated
-      ? `${actor} commented and updated ${issue.ref}`
-      : `${actor} commented on ${issue.ref}`;
+      ? t("app.lib.liveUpdatesProvider.commentedAndUpdated", { actor, ref: issue.ref })
+      : t("app.lib.liveUpdatesProvider.commentedOn", { actor, ref: issue.ref });
   const body = bodySnippet
     ? reopenedLabel
       ? `${reopenedLabel} - ${bodySnippet.replace(/^#+\s*/m, "").replace(/\n/g, " ")}`
@@ -1008,7 +1009,7 @@ function buildActivityToast(
     title,
     body: body ? truncate(body, 96) : undefined,
     tone: "info",
-    action: { label: `View ${issue.ref}`, href: issue.href },
+    action: { label: t("app.lib.liveUpdatesProvider.viewRef", { ref: issue.ref }), href: issue.href },
     dedupeKey: `activity:${action}:${entityId}:${commentId ?? "na"}`,
   };
 }
@@ -1026,13 +1027,15 @@ function buildJoinRequestToast(
     return null;
 
   const requestType = readString(details?.requestType);
-  const label = requestType === "agent" ? "Agent" : "Someone";
+  const title = requestType === "agent"
+    ? t("app.lib.liveUpdatesProvider.agentWantsToJoin")
+    : t("app.lib.liveUpdatesProvider.someoneWantsToJoin");
 
   return {
-    title: `${label} wants to join`,
-    body: "A new join request is waiting for approval.",
+    title,
+    body: t("app.lib.liveUpdatesProvider.joinRequestWaiting"),
     tone: "info",
-    action: { label: "View inbox", href: "/inbox/mine" },
+    action: { label: t("app.lib.liveUpdatesProvider.viewInbox"), href: "/inbox/mine" },
     dedupeKey: `join-request:${entityId}`,
   };
 }
@@ -1048,8 +1051,8 @@ function buildAgentStatusToast(
   if (!agentId || !status || !AGENT_TOAST_STATUSES.has(status)) return null;
 
   const tone = status === "error" ? "error" : "info";
-  const name = nameOf(agentId) ?? `Agent ${shortId(agentId)}`;
-  const title = status === "running" ? `${name} started` : `${name} errored`;
+  const name = nameOf(agentId) ?? t("app.lib.liveUpdatesProvider.agentShort", { id: shortId(agentId) });
+  const title = status === "running" ? t("app.lib.liveUpdatesProvider.agentStarted", { name }) : t("app.lib.liveUpdatesProvider.agentErrored", { name });
 
   const agents = queryClient.getQueryData<Agent[]>(
     queryKeys.agents.list(companyId),
@@ -1061,7 +1064,7 @@ function buildAgentStatusToast(
     title,
     body,
     tone,
-    action: { label: "View agent", href: `/agents/${agentId}` },
+    action: { label: t("app.lib.liveUpdatesProvider.viewAgent"), href: `/agents/${agentId}` },
     dedupeKey: `agent-status:${agentId}:${status}`,
   };
 }
@@ -1085,18 +1088,18 @@ function buildRunStatusToast(
   if (errorCode === "workspace_busy") return null;
   const contextSource = readString(payload.contextSource);
   const triggerDetail = readString(payload.triggerDetail);
-  const name = nameOf(agentId) ?? "Agent";
+  const name = nameOf(agentId) ?? t("app.common.nouns.agent");
   if (
     status === "failed" &&
     errorCode === "low_trust_isolation_unavailable" &&
     contextSource?.startsWith("chat:")
   ) {
     return {
-      title: `${name} couldn't start this chat`,
-      body: "This external chat identity isn't linked, and isolated guest workspaces are disabled. Link the identity in Connectors or enable isolated workspaces, then start a new task.",
+      title: t("app.lib.liveUpdatesProvider.chatStartFailed", { name }),
+      body: t("app.lib.liveUpdatesProvider.chatIdentityUnlinked"),
       tone: "warn",
       ttlMs: 10_000,
-      action: { label: "Open chat connections", href: "/apps" },
+      action: { label: t("app.lib.liveUpdatesProvider.openChatConnections"), href: "/apps" },
       dedupeKey: `run-status:${runId}:${status}`,
     };
   }
@@ -1106,21 +1109,20 @@ function buildRunStatusToast(
       : status === "cancelled"
         ? "info"
         : "error";
-  const statusLabel =
+  const title =
     status === "succeeded"
-      ? "succeeded"
+      ? t("app.lib.liveUpdatesProvider.runSucceeded", { name })
       : status === "failed"
-        ? "failed"
+        ? t("app.lib.liveUpdatesProvider.runFailed", { name })
         : status === "timed_out"
-          ? "timed out"
-          : "cancelled";
-  const title = `${name} run ${statusLabel}`;
+          ? t("app.lib.liveUpdatesProvider.runTimedOut", { name })
+          : t("app.lib.liveUpdatesProvider.runCancelled", { name });
 
   let body: string | undefined;
   if (error) {
     body = truncate(error, 100);
   } else if (triggerDetail) {
-    body = `Trigger: ${triggerDetail}`;
+    body = t("app.lib.liveUpdatesProvider.trigger", { detail: triggerDetail });
   }
 
   return {
@@ -1128,7 +1130,7 @@ function buildRunStatusToast(
     body,
     tone,
     ttlMs: status === "succeeded" ? 5000 : 7000,
-    action: { label: "View run", href: `/agents/${agentId}/runs/${runId}` },
+    action: { label: t("app.lib.liveUpdatesProvider.viewRun"), href: `/agents/${agentId}/runs/${runId}` },
     dedupeKey: `run-status:${runId}:${status}`,
   };
 }

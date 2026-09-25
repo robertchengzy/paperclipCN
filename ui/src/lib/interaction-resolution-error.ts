@@ -13,6 +13,7 @@
  */
 
 import type { InteractionAudienceDescription } from "./interaction-audience";
+import { t } from "@/i18n";
 
 /**
  * Denials that mean "you are outside this card's resolver audience". Mirrors the
@@ -117,7 +118,7 @@ export function describeInteractionResolutionFailure(
     // which happens whenever the snapshot the client holds is wider than the
     // policy the server just enforced (PAP-17289).
     const responder = audience && !audience.isOpen && audience.shortSummary
-      ? `${audience.shortSummary}.`
+      ? t("app.lib.interactionResolutionError.responderSentence", { summary: audience.shortSummary })
       : null;
     // Without a code the server has told us only that this is forbidden, not
     // *why*. Restate the status; do not invent a resolver-audience cause it
@@ -130,12 +131,12 @@ export function describeInteractionResolutionFailure(
       message: [
         reason
           ?? (coded
-            ? "You are not in this card's resolver audience."
-            : "You do not have permission to respond to this card."),
+            ? t("app.lib.interactionResolutionError.notInAudience")
+            : t("app.lib.interactionResolutionError.noPermission")),
         responder,
       ]
         .filter(Boolean)
-        .join(" "),
+        .join(t("app.lib.interactionResolutionError.sentenceSeparator")),
     };
   }
 
@@ -143,14 +144,14 @@ export function describeInteractionResolutionFailure(
     return {
       kind: "settled",
       code,
-      message: reason ?? "This request is no longer waiting for a decision.",
+      message: reason ?? t("app.lib.interactionResolutionError.noLongerWaiting"),
     };
   }
 
   return {
     kind: "transient",
     code,
-    message: reason ? `${reason} Try again.` : "Couldn't submit. Try again.",
+    message: reason ? t("app.lib.interactionResolutionError.reasonTryAgain", { reason }) : t("app.lib.interactionResolutionError.submitFailed"),
   };
 }
 

@@ -1,4 +1,5 @@
 import type { Environment } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 /**
  * The managed-sandbox-only policy hides the local environment and runs every
@@ -10,11 +11,7 @@ import type { Environment } from "@paperclipai/shared";
  */
 export class ManagedSandboxUnavailableForTestError extends Error {
   constructor() {
-    super(
-      "This instance runs agents only in its managed sandbox environment, but no " +
-        "managed sandbox environment is available to test in. Check that the managed " +
-        "sandbox provider is active, then retry the test.",
-    );
+    super(t("app.lib.adapterTestEnvironment.managedSandboxUnavailable"));
     this.name = "ManagedSandboxUnavailableForTestError";
   }
 }

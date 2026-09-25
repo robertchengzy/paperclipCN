@@ -4800,6 +4800,844 @@
         "toolIdPlaceholder": "tool ID",
         "addRule": "Add rule"
       }
+    },
+    "lib": {
+      "useDateRange": {
+        "mtd": "Month to Date",
+        "last7Days": "Last 7 Days",
+        "last30Days": "Last 30 Days",
+        "ytd": "Year to Date",
+        "allTime": "All Time"
+      },
+      "audit": {
+        "exportFailed": "Export failed: {{status}}"
+      },
+      "auth": {
+        "loadSessionFailed": "Failed to load session ({{status}})",
+        "loadProfileFailed": "Failed to load profile ({{status}})"
+      },
+      "health": {
+        "loadFailed": "Failed to load health ({{status}})",
+        "restartFailed": "Failed to request restart ({{status}})"
+      },
+      "heartbeats": {
+        "traceDownloadFailed": "Trace download failed: {{status}}"
+      },
+      "issues": {
+        "queuedMessagesChanged": "The queued messages changed. Refresh and try again."
+      },
+      "appGalleryCopy": {
+        "zapier": {
+          "tagline": "Reach 9,000+ apps your team already uses.",
+          "short": "Reach 9,000+ apps from your agents."
+        },
+        "github": {
+          "tagline": "Read code and pull requests, comment on issues."
+        },
+        "slack": {
+          "tagline": "Send and read messages in your team's channels.",
+          "short": "Send and read messages in your channels."
+        },
+        "notion": {
+          "tagline": "Read and update pages in your workspace."
+        },
+        "railway": {
+          "tagline": "Inspect services, read logs, and manage deployments.",
+          "short": "Connect Railway for deployments, logs, and container access."
+        },
+        "posthog": {
+          "tagline": "Explore product usage, errors, flags, and experiments.",
+          "short": "Sign in with PostHog. Project pinning and access controls are optional."
+        },
+        "linear": {
+          "tagline": "Create, update and read tickets."
+        },
+        "googleSheets": {
+          "tagline": "Read and update selected spreadsheets.",
+          "short": "Read spreadsheets or update the files you choose."
+        },
+        "gmail": {
+          "tagline": "Read mail and create drafts for your review."
+        },
+        "googleDrive": {
+          "tagline": "Find, read, and create files in Drive."
+        },
+        "googleDocs": {
+          "tagline": "Read and update documents."
+        },
+        "googleSlides": {
+          "tagline": "Read and update presentations."
+        },
+        "googleCalendar": {
+          "tagline": "Review calendars and manage events."
+        },
+        "googleChat": {
+          "tagline": "Read conversations and send messages."
+        },
+        "googlePeople": {
+          "tagline": "Look up contacts and people in your directory."
+        },
+        "googleWorkspaceSearch": {
+          "tagline": "Search across your Google workspace."
+        },
+        "hubspot": {
+          "tagline": "Look up contacts and update deal stages."
+        },
+        "intercom": {
+          "tagline": "Read and reply to customer conversations."
+        },
+        "figma": {
+          "tagline": "Read files and post comments on frames."
+        },
+        "stripe": {
+          "tagline": "Read customers, invoices, and payouts."
+        },
+        "context7": {
+          "tagline": "Look up up-to-date docs for your libraries."
+        },
+        "generic": "Give your agents access to this app.",
+        "yourKey": "Your {{appName}} key"
+      },
+      "attention": {
+        "source": {
+          "approval": "Approval",
+          "decision": "Decision",
+          "decisionRequested": "Decision requested",
+          "joinRequest": "Join request",
+          "recovery": "Recovery",
+          "blockedDependency": "Blocked dependency",
+          "failedRun": "Failed run",
+          "agentError": "Agent error"
+        },
+        "oneOption": "1 option",
+        "manyOptions": "{{count}} options",
+        "oneQuestion": "1 question",
+        "manyQuestions": "{{count}} questions",
+        "oneSuggestedTask": "1 suggested task",
+        "manySuggestedTasks": "{{count}} suggested tasks",
+        "oneItemToVerdict": "1 item to verdict",
+        "manyItemsToVerdict": "{{count}} items to verdict",
+        "blockedByIdTitle": "Blocked by {{identifier}} {{title}}",
+        "blockedByTitle": "Blocked by {{title}}",
+        "blockedById": "Blocked by {{identifier}}",
+        "budgetUsed": "{{percent}}% of budget used (${{observed}} / ${{limit}})",
+        "decideNow": "Decide now",
+        "newToday": "New today",
+        "thisWeek": "This week",
+        "whenever": "Whenever",
+        "notSet": "Not set",
+        "yesterday": "Yesterday",
+        "last7Days": "Last 7 days",
+        "thisMonth": "This month",
+        "groupByDate": "Date",
+        "groupBySeverity": "Severity",
+        "newestFirst": "Newest first",
+        "oldestFirst": "Oldest first"
+      },
+      "useCopyAction": {
+        "copyFailed": "Couldn’t copy to clipboard",
+        "copyManually": "Select and copy the value manually."
+      },
+      "clipboard": {
+        "unavailable": "Clipboard unavailable",
+        "execCommandFailed": "execCommand copy failed"
+      },
+      "cronReadable": {
+        "sunday": "Sunday",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "everyDayAt": "Every day at {{time}}",
+        "everyWeekdayAt": "Every weekday at {{time}}",
+        "everyWeekendAt": "Every weekend at {{time}}",
+        "everyDayOfWeekAt": "Every {{day}} at {{time}}",
+        "everyDaysOfWeekAt": "Every {{days}} and {{last}} at {{time}}",
+        "daySeparator": ", ",
+        "everyMinutes": "Every {{interval}} minutes",
+        "everyHoursAt": "Every {{interval}} hours at :{{minute}}",
+        "everyHourAt": "Every hour at :{{minute}}",
+        "dayOfMonthAt": "Day {{day}} of every month at {{time}}"
+      },
+      "zip": {
+        "unsupportedCompression": "Unsupported zip archive: only STORE and DEFLATE entries are supported.",
+        "noDecompression": "Unsupported zip archive: this browser cannot read compressed zip entries.",
+        "unsupportedHeader": "Invalid zip archive: unsupported local file header.",
+        "truncatedHeader": "Invalid zip archive: truncated local file header.",
+        "dataDescriptors": "Unsupported zip archive: data descriptors are not supported.",
+        "truncatedContents": "Invalid zip archive: truncated file contents."
+      },
+      "waitForStoppedRuns": {
+        "unverified": "The stop was requested, but stopping could not be verified. Refresh and try Stop again if work is still running.",
+        "stillStopping": "The stop was requested, but work is still stopping. Try Stop again if it continues."
+      },
+      "commentSubmitResult": {
+        "unknown": "We couldn’t confirm whether this comment was saved. Review the conversation before starting another draft."
+      },
+      "adapterTestEnvironment": {
+        "managedSandboxUnavailable": "This instance runs agents only in its managed sandbox environment, but no managed sandbox environment is available to test in. Check that the managed sandbox provider is active, then retry the test."
+      },
+      "useComposerStop": {
+        "stopFailed": "Unable to stop. Try again."
+      },
+      "useRetryNowMutation": {
+        "requestFailedStatus": "Request failed ({{status}})",
+        "requestFailed": "The request failed. Try again in a moment.",
+        "promoted": "Retry promoted",
+        "alreadyPromoted": "Retry already running",
+        "noScheduledRetry": "No scheduled retry",
+        "couldNotRetry": "Couldn't retry now",
+        "missingIssueId": "Missing issue id"
+      },
+      "inbox": {
+        "defaultWorkspaceNamed": "{{name}} (default)"
+      },
+      "interactionAudience": {
+        "labelAnyone": "Anyone",
+        "labelNotCreator": "Anyone except creator",
+        "labelHumanOnly": "Human only",
+        "effectAnyone": "Anyone in the organization can respond — the board or any agent, including the one that asked.",
+        "effectNotCreator": "Anyone in the organization except the agent that created the card, and its run. Use this when the answer has to come from someone else.",
+        "effectHumanOnly": "Only a person on the board can respond. Agents are turned away.",
+        "youMidSentence": "you",
+        "addressedUser": "the addressed user",
+        "addressedAgent": "the addressed agent",
+        "creatorFallback": "the agent that created it",
+        "summaryOnlyAddressee": "Only {{addressee}} can respond.",
+        "summaryHumanOnlyAssigned": "Assigned to {{addressee}}. Only a person on the board can respond — agents cannot resolve this card.",
+        "summaryHumanOnly": "Only a person on the board can respond — agents cannot resolve this card.",
+        "summaryAddresseeOrBoard": "Only {{addressee}} or a person on the board can respond.",
+        "summaryNotCreator": "Anyone in the organization except {{creator}} can respond.",
+        "shortOnlyAddressee": "Only {{addressee}} can respond",
+        "shortAssignedBoardOnly": "Assigned to {{addressee}} · board only",
+        "shortBoardOnly": "Only the board can respond",
+        "shortAddresseeOrBoard": "Only {{addressee}} or the board can respond",
+        "shortNotCreator": "Anyone except {{creator}} can respond",
+        "shortAnyone": "Anyone can respond",
+        "noteGovernedAction": "This card runs a governed action, so it stays human-only whatever audience was requested.",
+        "noteCompanyCap": "Organization interaction governance narrowed this from {{requested}} to {{effective}}.",
+        "noteLegacy": "Created before Anyone became the default, so it stays restricted. A new card would be open.",
+        "labelAddressed": "Addressed"
+      },
+      "interactionResolutionError": {
+        "responderSentence": "{{summary}}.",
+        "notInAudience": "You are not in this card's resolver audience.",
+        "noPermission": "You do not have permission to respond to this card.",
+        "sentenceSeparator": " ",
+        "noLongerWaiting": "This request is no longer waiting for a decision.",
+        "reasonTryAgain": "{{reason}} Try again.",
+        "submitFailed": "Couldn't submit. Try again."
+      },
+      "interruptHandoff": {
+        "interruptHandOffTo": "Interrupt current run, hand off to",
+        "wake": "Wake",
+        "handOffTo": "Hand off to",
+        "noAgentNotifiedSuffix": "— no agent will be notified",
+        "clearResponsible": "Clear responsible — no agent will be notified",
+        "notify": "Notify",
+        "mentionedAgent": "the mentioned agent",
+        "plainNameWarning": "No agent will be notified. Use @ to mention an agent.",
+        "responsibleAgent": "the responsible agent",
+        "wakeUserHandoff": "not created — this is a handoff to a board user",
+        "wakeUnassigned": "not created — no agent selected. Mention @agent or pick a responsible to dispatch.",
+        "anAgent": "An agent",
+        "confirmTitle": "Interrupt the current run?",
+        "confirmAction": "Interrupt & assign",
+        "bucketLiveRuns": "Live agent runs",
+        "bucketQueuedWakes": "Queued wakes",
+        "bucketAgentOwned": "Agent-owned",
+        "bucketHumanOwned": "Human-owned",
+        "bucketStatic": "Static",
+        "detailLiveRuns": "interrupted now, re-queued when you resume",
+        "detailQueuedWakes": "held — they won't start until you resume",
+        "detailAgentOwned": "responsible agent; no run is live",
+        "detailHumanOwned": "owned by a board user; pausing won't notify them",
+        "detailStatic": "no responsible; nothing was going to run",
+        "queuedFor": "queued for {{who}}",
+        "queuedForInterrupted": "queued for {{who}} (interrupted run attached)",
+        "runningBanner": "{{who}} is running — changing the responsible will interrupt this run."
+      },
+      "issueChangeReceipt": {
+        "field": {
+          "assigneeAgentId": "Assignee",
+          "assigneeUserId": "Assignee (user)",
+          "responsibleUserId": "Responsible user",
+          "blockedByIssueIds": "Blockers",
+          "labelIds": "Labels",
+          "parentId": "Parent",
+          "projectId": "Project",
+          "goalId": "Goal",
+          "workMode": "Work mode",
+          "reviewPolicy": "Who can approve",
+          "billingCode": "Billing code",
+          "checkoutRunId": "Checkout run",
+          "executionRunId": "Execution run",
+          "hiddenAt": "Hidden",
+          "startedAt": "Started",
+          "completedAt": "Completed",
+          "cancelledAt": "Cancelled",
+          "requestDepth": "Request depth",
+          "sourceTrust": "Source trust",
+          "executionPolicy": "Execution policy",
+          "executionWorkspaceId": "Execution workspace",
+          "projectWorkspaceId": "Project workspace"
+        },
+        "reason": {
+          "allow_visible_issue_write": "default-open write on a visible task",
+          "allow_scoped_agent_write": "scoped agent write",
+          "allow_board_actor": "board actor",
+          "allow_self": "own task",
+          "allow_issue_mention_grant": "mention grant",
+          "allow_direct_parent_report": "direct parent report",
+          "allow_low_trust_boundary": "low-trust boundary allowance",
+          "allow_explicit_grant": "explicit permission grant",
+          "allow_instance_admin": "instance admin",
+          "allow_local_board": "local board",
+          "internal_agent_write": "internal agent write"
+        },
+        "valueNone": "none",
+        "valueYes": "yes",
+        "valueNo": "no",
+        "valueItems": "{{count}} items",
+        "valueUpdated": "updated"
+      },
+      "issueChatMessages": {
+        "requestedFollowUp": "{{actor}} requested follow-up",
+        "updatedThisIssue": "{{actor}} updated this issue",
+        "statusChange": "Status: {{from}} -> {{to}}",
+        "none": "none",
+        "assigneeChange": "Assignee: {{from}} -> {{to}}",
+        "workspaceChange": "Workspace: {{from}} -> {{to}}",
+        "oneSecond": "1 second",
+        "seconds": "{{count}} seconds",
+        "hoursMinutes": "{{hours}} {{minutes}}",
+        "oneMinute": "1 minute",
+        "minutes": "{{count}} minutes",
+        "oneHour": "1 hour",
+        "hours": "{{count}} hours",
+        "workedFor": "Worked for {{duration}}",
+        "finishedWork": "Finished work",
+        "failedAfter": "Failed after {{duration}}",
+        "runFailed": "Run failed",
+        "timedOutAfter": "Timed out after {{duration}}",
+        "runTimedOut": "Run timed out",
+        "interruptedAfter": "Interrupted by board after {{duration}}",
+        "interrupted": "Interrupted by board",
+        "pausedAfter": "Paused by board after {{duration}}",
+        "paused": "Paused by board",
+        "cancelledAfter": "Cancelled after {{duration}}",
+        "runCancelled": "Run cancelled",
+        "workingDots": "Working...",
+        "runFinished": "Run finished",
+        "providerActivity": "Provider activity",
+        "runError": "Run error: {{message}}",
+        "queuedDots": "Queued...",
+        "historicalRun": "{{agent}} run {{runId}} {{status}}"
+      },
+      "issueThreadInteractions": {
+        "verdictDecided": "{{count}} decided",
+        "verdictApproved": "{{count}} approved",
+        "verdictRejected": "{{count}} rejected",
+        "verdictDeferred": "{{count}} deferred",
+        "verdictsExpiredAfterComment": "Verdicts expired after comment",
+        "verdictsExpiredAfterTargetChanged": "Verdicts expired after target changed",
+        "verdictsExpired": "Verdicts expired",
+        "verdictProgress": "{{decided}} of {{total}} decided",
+        "skipped": "Skipped interaction",
+        "withdrawn": "Withdrawn interaction",
+        "issueClosed": "Expired when issue closed",
+        "addresseeDeleted": "Cancelled when addressee was deleted",
+        "acceptedSomeTasks": "Accepted {{created}} of {{count}} tasks",
+        "acceptedOneTask": "Accepted 1 task",
+        "acceptedTasks": "Accepted {{count}} tasks",
+        "rejectedOneTask": "Rejected 1 task",
+        "rejectedTasks": "Rejected {{count}} tasks",
+        "suggestedOneTask": "Suggested 1 task",
+        "suggestedTasks": "Suggested {{count}} tasks",
+        "confirmedRequest": "Confirmed request",
+        "selectedLabel": "Selected “{{label}}”",
+        "declinedRequest": "Declined request",
+        "confirmationExpiredAfterComment": "Confirmation expired after comment",
+        "confirmationExpiredAfterTargetChanged": "Confirmation expired after target changed",
+        "confirmationExpired": "Confirmation expired",
+        "requestedConfirmation": "Requested confirmation",
+        "confirmedNoOptions": "Confirmed with no options selected",
+        "confirmedOneOfOptions": "Confirmed 1 of {{total}} options",
+        "confirmedSomeOfOptions": "Confirmed {{count}} of {{total}} options",
+        "declinedSelection": "Declined selection",
+        "selectionExpiredAfterComment": "Selection expired after comment",
+        "selectionExpiredAfterTargetChanged": "Selection expired after target changed",
+        "selectionExpired": "Selection expired",
+        "requestedSelectionOne": "Requested a selection from 1 option",
+        "requestedSelectionMany": "Requested a selection from {{count}} options",
+        "serviceConnected": "{{service}} connected",
+        "serviceDeclined": "{{service}} declined",
+        "serviceSuperseded": "{{service}} request superseded",
+        "serviceExpired": "{{service}} request expired",
+        "connectService": "Connect {{service}}",
+        "answeredOne": "Answered 1 question",
+        "answeredMany": "Answered {{count}} questions",
+        "cancelledOne": "Cancelled 1 question",
+        "cancelledMany": "Cancelled {{count}} questions",
+        "questionExpiredAfterComment": "Question expired after comment",
+        "questionsExpiredAfterComment": "Questions expired after comment",
+        "questionExpired": "Question expired",
+        "questionsExpired": "Questions expired",
+        "askedOne": "Asked 1 question",
+        "askedMany": "Asked {{count}} questions"
+      },
+      "liveUpdatesProvider": {
+        "agentShort": "Agent {{id}}",
+        "taskShort": "Task {{id}}",
+        "statusChange": "status -> {{status}}",
+        "priorityChange": "priority -> {{priority}}",
+        "priorityValue": {
+          "critical": "critical",
+          "high": "high",
+          "medium": "medium",
+          "low": "low"
+        },
+        "reassigned": "reassigned",
+        "unassigned": "unassigned",
+        "reopenedFrom": "reopened from {{from}}",
+        "reopened": "reopened",
+        "titleChanged": "title changed",
+        "descriptionChanged": "description changed",
+        "listSeparator": ", ",
+        "issueCreated": "{{actor}} created {{ref}}",
+        "issueUpdated": "{{actor}} updated {{ref}}",
+        "viewRef": "View {{ref}}",
+        "reopenedAndCommented": "{{actor}} reopened and commented on {{ref}}",
+        "commentedAndUpdated": "{{actor}} commented and updated {{ref}}",
+        "commentedOn": "{{actor}} commented on {{ref}}",
+        "agentWantsToJoin": "Agent wants to join",
+        "someoneWantsToJoin": "Someone wants to join",
+        "joinRequestWaiting": "A new join request is waiting for approval.",
+        "viewInbox": "View inbox",
+        "agentStarted": "{{name}} started",
+        "agentErrored": "{{name}} errored",
+        "viewAgent": "View agent",
+        "chatStartFailed": "{{name}} couldn't start this chat",
+        "chatIdentityUnlinked": "This external chat identity isn't linked, and isolated guest workspaces are disabled. Link the identity in Connectors or enable isolated workspaces, then start a new task.",
+        "openChatConnections": "Open chat connections",
+        "runSucceeded": "{{name}} run succeeded",
+        "runFailed": "{{name}} run failed",
+        "runTimedOut": "{{name}} run timed out",
+        "runCancelled": "{{name}} run cancelled",
+        "trigger": "Trigger: {{detail}}",
+        "viewRun": "View run"
+      },
+      "codexReasoningEffort": {
+        "minimal": "Minimal",
+        "xhigh": "X-High",
+        "max": "Max",
+        "ultra": "Ultra"
+      },
+      "companyExportSelection": {
+        "attachments": "Attachments"
+      },
+      "oauthHandoff": {
+        "invalidHandoff": "Paperclip Cloud returned an invalid sign-in handoff.",
+        "expired": "This sign-in expired. Start the connection again.",
+        "forbidden": "Paperclip Cloud could not authorize this connection for your account.",
+        "unavailable": "Paperclip Cloud couldn’t prepare secure sign-in. Try again.",
+        "invalidAuthorizationUrl": "Paperclip Cloud returned an invalid provider sign-in address."
+      },
+      "searchFilters": {
+        "sortRelevance": "Relevance",
+        "sortNewestCreated": "Newest created",
+        "last24Hours": "Last 24 hours",
+        "last7Days": "Last 7 days",
+        "last30Days": "Last 30 days",
+        "last90Days": "Last 90 days",
+        "updatedWithin": "Updated ≤ {{value}}",
+        "listSeparator": ", ",
+        "chipStatus": "Status: {{value}}",
+        "chipPriority": "Priority: {{value}}",
+        "chipAssignee": "Assignee: {{value}}",
+        "chipProject": "Project: {{value}}",
+        "chipLabel": "Label: {{value}}",
+        "chipUpdated": "Updated: {{value}}",
+        "updatedWindow": "Updated window"
+      },
+      "searchQueryParser": {
+        "openTodo": "Open todo tasks",
+        "filterByStatus": "Filter by task status",
+        "blockedTasks": "Blocked tasks",
+        "findBlocked": "Find blocked work",
+        "assignedToMe": "Assigned to me",
+        "useCurrentUser": "Use your current board user",
+        "projectName": "Project name",
+        "quoteProjectNames": "Quote multi-word project names",
+        "filterByLabel": "Filter by issue label",
+        "highPriority": "High priority",
+        "filterByPriority": "Filter by priority",
+        "updatedLast7Days": "Updated in the last 7 days"
+      },
+      "statusCardState": {
+        "compiling": {
+          "label": "Setting up",
+          "description": "Just created; setting up and generating the first summary."
+        },
+        "fresh": {
+          "label": "Fresh",
+          "description": "Summary reflects all known changes; nothing pending."
+        },
+        "stale": {
+          "label": "Stale",
+          "description": "Changes are pending since the last update."
+        },
+        "updating": {
+          "label": "Updating",
+          "description": "An update is streaming in now."
+        },
+        "error": {
+          "description": "The last run failed; the last good summary stays visible."
+        },
+        "pausedBudget": {
+          "label": "Paused — budget",
+          "description": "The daily token cap was hit; auto-updates are suspended."
+        },
+        "pausedHours": {
+          "label": "Paused — hours",
+          "description": "Outside active hours; changes batch into one update at window open."
+        },
+        "archived": {
+          "description": "No auto-updates and no watches. Restore to start watching again."
+        }
+      },
+      "systemNoticeComment": {
+        "notice": "System notice",
+        "warning": "System warning",
+        "alert": "System alert"
+      },
+      "systemNoticeHumanizer": {
+        "fallback": "System update",
+        "claudeAuth": "Task paused — Claude needs re-authentication",
+        "bindingMissing": "Task paused — a secret/config binding is missing",
+        "workspaceProblem": "Task paused — workspace problem",
+        "waitingOnOwner": "Task paused — waiting on {{owner}}",
+        "waitingOnRecoveryOwner": "Task paused — waiting on a recovery owner"
+      },
+      "toolInstalls": {
+        "installInfo": "Installing adds {{appName}}'s tools to the agent's context on every run — install only where it will actually be used.",
+        "autoExtend": "Installing on {{agentName}} will also grant access. A tool can't be installed on an agent that isn't allowed to use it, so we'll add {{agentName}} to who can use it. This is logged."
+      },
+      "transcriptPresentation": {
+        "executingCommand": "Executing command",
+        "inspectInput": "Inspect {{name}} input",
+        "toolFailed": "Tool failed",
+        "waitingForResult": "Waiting for result",
+        "failedWithExitCode": "Failed with exit code {{code}}"
+      },
+      "trustPolicyUi": {
+        "presetStandard": "Standard",
+        "presetLowTrustReview": "Low-trust review",
+        "presetStandardDescription": "Organization-visible collaboration. This is the default for normal work.",
+        "presetLowTrustReviewDescription": "Contained for hostile or untrusted input. Narrow Paperclip API, quarantined output. Use for PR review and external-content triage.",
+        "boundaryProject": "Project {{id}}",
+        "boundaryRootIssue": "Root issue {{id}}",
+        "boundaryIssue": "Issue {{id}}",
+        "noBoundary": "No boundary selected",
+        "boundaries": "{{count}} boundaries",
+        "promoted": "Promoted from low-trust",
+        "lowTrustSource": "Low-trust source"
+      },
+      "utils": {
+        "billingMeteredApi": "Metered API",
+        "billingSubscription": "Subscription",
+        "billingSubscriptionOverage": "Subscription overage",
+        "billingCredits": "Credits",
+        "billingFixed": "Fixed",
+        "quotaCodexAppServer": "Codex app server",
+        "financeInferenceCharge": "Inference charge",
+        "financePlatformFee": "Platform fee",
+        "financeCreditPurchase": "Credit purchase",
+        "financeCreditRefund": "Credit refund",
+        "financeCreditExpiry": "Credit expiry",
+        "financeByokFee": "BYOK fee",
+        "financeGatewayOverhead": "Gateway overhead",
+        "financeLogStorage": "Log storage",
+        "financeProvisionedCapacity": "Provisioned capacity",
+        "financeTraining": "Training",
+        "financeCustomModelImport": "Custom model import",
+        "financeCustomModelStorage": "Custom model storage",
+        "financeManualAdjustment": "Manual adjustment",
+        "financeCredit": "Credit",
+        "financeDebit": "Debit"
+      },
+      "activityFormat": {
+        "row": {
+          "issueCreated": "created",
+          "issueUpdated": "updated",
+          "issueReadMarked": "read",
+          "issueReadUnmarked": "marked unread",
+          "issueCheckedOut": "checked out",
+          "issueReleased": "released",
+          "issueCommentAdded": "commented on",
+          "issueCommentCancelled": "cancelled a queued comment on",
+          "issueQueuedCommentEdited": "edited a queued comment on",
+          "issueQueuedCommentsReordered": "reordered queued comments on",
+          "issueQueuedCommentDiscarded": "discarded a queued comment on",
+          "issueCommentDeleted": "deleted a comment on",
+          "issueAttachmentAdded": "attached file to",
+          "issueAttachmentRemoved": "removed attachment from",
+          "issueDocumentCreated": "created document for",
+          "issueDocumentUpdated": "updated document on",
+          "issueDocumentLocked": "locked document on",
+          "issueDocumentUnlocked": "unlocked document on",
+          "issueDocumentDeleted": "deleted document from",
+          "issueMonitorScheduled": "scheduled monitor on",
+          "issueMonitorTriggered": "triggered monitor for",
+          "issueMonitorCleared": "cleared monitor on",
+          "issueMonitorSkipped": "skipped monitor for",
+          "issueMonitorExhausted": "exhausted monitor on",
+          "issueMonitorRecoveryWakeQueued": "queued monitor recovery for",
+          "issueMonitorRecoveryIssueCreated": "created monitor recovery for",
+          "issueMonitorEscalatedToBoard": "escalated monitor for",
+          "issueCommented": "commented on",
+          "issueDeleted": "deleted",
+          "issueSuccessfulRunHandoffRequired": "flagged missing next step on",
+          "issueSuccessfulRunHandoffResolved": "recorded next step chosen on",
+          "issueSuccessfulRunHandoffEscalated": "escalated missing next step on",
+          "issueAcceptedPlanDecompositionUpdated": "updated accepted-plan decomposition on",
+          "issueRecoveryActionOpened": "opened a recovery action on",
+          "issueRecoveryActionResolved": "resolved the recovery action on",
+          "issueRecoveryActionEscalated": "escalated the recovery action on",
+          "agentCreated": "created",
+          "agentUpdated": "updated",
+          "agentPaused": "paused",
+          "agentResumed": "resumed",
+          "agentErrorCleared": "cleared error on",
+          "agentTerminated": "terminated",
+          "agentKeyCreated": "created API key for",
+          "agentBudgetUpdated": "updated budget for",
+          "agentRuntimeSessionReset": "reset session for",
+          "heartbeatInvoked": "invoked heartbeat for",
+          "heartbeatCancelled": "cancelled heartbeat for",
+          "heartbeatOutputStaleSourceResolved": "system-folded stale run on",
+          "heartbeatOutputStaleRecoveryRecursionRefused": "refused recovery-on-recovery for",
+          "approvalCreated": "requested approval",
+          "approvalApproved": "approved",
+          "approvalRejected": "rejected",
+          "issueThreadInteractionCreated": "asked for a decision on",
+          "issueThreadInteractionAccepted": "accepted the request on",
+          "issueThreadInteractionRejected": "rejected the request on",
+          "issueThreadInteractionAnswered": "answered the request on",
+          "issueThreadInteractionWithdrawn": "withdrew the request on",
+          "issueThreadInteractionCancelled": "cancelled the request on",
+          "issueThreadInteractionSkipped": "skipped the request on",
+          "issueThreadInteractionExpired": "expired the request on",
+          "issueThreadInteractionItemVerdictsSubmitted": "submitted verdicts on",
+          "issueStalledReviewDecided": "recorded a review verdict on",
+          "projectCreated": "created",
+          "projectUpdated": "updated",
+          "projectDeleted": "deleted",
+          "goalCreated": "created",
+          "goalUpdated": "updated",
+          "goalDeleted": "deleted",
+          "costReported": "reported cost for",
+          "costRecorded": "recorded cost for",
+          "companyCreated": "created organization",
+          "companyUpdated": "updated organization",
+          "companyArchived": "archived",
+          "companyReactivated": "reactivated",
+          "companyBudgetUpdated": "updated budget for",
+          "auditExported": "exported the agent audit log for",
+          "toolAppConnected": "connected",
+          "toolAppOauthConnected": "connected credentials for",
+          "toolAppOauthFailed": "failed to connect credentials for",
+          "toolAppOauthAccessFinalized": "finished credential access for",
+          "toolAppFinished": "finished setup for",
+          "toolAppReconnected": "reconnected",
+          "toolConnectionCreated": "created",
+          "toolConnectionUpdated": "updated",
+          "toolConnectionArchived": "removed",
+          "toolConnectionCatalogRefresh": "refreshed actions for",
+          "toolConnectionInstallsSynced": "changed agent installs for",
+          "toolConnectionInstallAccessExtended": "extended agent access for",
+          "toolConnectionGrantAudienceReplaced": "changed human access for",
+          "toolConnectionGrantAdded": "added credentials to",
+          "toolConnectionGrantRevoked": "revoked credentials from",
+          "toolConnectionGrantDelegated": "delegated credentials for",
+          "toolConnectionGrantDelegationRevoked": "revoked credential delegation for"
+        },
+        "detail": {
+          "issueCreated": "created the issue",
+          "issueUpdated": "updated the issue",
+          "issueCheckedOut": "checked out the issue",
+          "issueReleased": "released the issue",
+          "issueCommentAdded": "added a comment",
+          "issueCommentCancelled": "cancelled a queued comment",
+          "issueQueuedCommentEdited": "edited a queued comment",
+          "issueQueuedCommentsReordered": "reordered queued comments",
+          "issueQueuedCommentDiscarded": "discarded a queued comment",
+          "issueCommentDeleted": "deleted a comment",
+          "issueFeedbackVoteSaved": "saved feedback on an AI output",
+          "issueAttachmentAdded": "added an attachment",
+          "issueAttachmentRemoved": "removed an attachment",
+          "issueDocumentCreated": "created a document",
+          "issueDocumentUpdated": "updated a document",
+          "issueDocumentLocked": "locked a document",
+          "issueDocumentUnlocked": "unlocked a document",
+          "issueDocumentDeleted": "deleted a document",
+          "issueMonitorScheduled": "scheduled a monitor",
+          "issueMonitorTriggered": "triggered a monitor",
+          "issueMonitorCleared": "cleared a monitor",
+          "issueMonitorSkipped": "skipped a monitor",
+          "issueMonitorExhausted": "exhausted a monitor",
+          "issueMonitorRecoveryWakeQueued": "queued a monitor recovery wake",
+          "issueMonitorRecoveryIssueCreated": "created a monitor recovery issue",
+          "issueMonitorEscalatedToBoard": "escalated a monitor to the board",
+          "issueDeleted": "deleted the issue",
+          "issueSuccessfulRunHandoffRequired": "Run finished without a clear next step",
+          "issueSuccessfulRunHandoffResolved": "Next step chosen",
+          "issueSuccessfulRunHandoffEscalated": "Run finished without a next step - recovery escalated",
+          "issueCrossIssueInfluenceCapRejected": "hit the per-run cross-task write cap",
+          "issueCrossIssueInfluenceObserved": "made a cross-task write",
+          "issueAttributionSpoofRejected": "tried to choose its own responsible user",
+          "issueRecoveryActionOpened": "Opened a source-scoped recovery action",
+          "issueRecoveryActionResolved": "Resolved the recovery action",
+          "issueRecoveryActionEscalated": "Escalated the recovery action",
+          "issueAcceptedPlanDecompositionUpdated": "updated the accepted-plan decomposition",
+          "agentCreated": "created an agent",
+          "agentUpdated": "updated the agent",
+          "agentPaused": "paused the agent",
+          "agentResumed": "resumed the agent",
+          "agentErrorCleared": "cleared the agent error",
+          "agentTerminated": "terminated the agent",
+          "heartbeatInvoked": "invoked a heartbeat",
+          "heartbeatCancelled": "cancelled a heartbeat",
+          "heartbeatOutputStaleSourceResolved": "System folded a stale run",
+          "heartbeatOutputStaleRecoveryRecursionRefused": "Refused recovery-on-recovery escalation",
+          "approvalCreated": "requested approval",
+          "approvalApproved": "approved",
+          "approvalRejected": "rejected",
+          "issueThreadInteractionCreated": "asked for a decision",
+          "issueThreadInteractionAccepted": "accepted the request",
+          "issueThreadInteractionRejected": "rejected the request",
+          "issueThreadInteractionAnswered": "answered the request",
+          "issueThreadInteractionWithdrawn": "withdrew the request",
+          "issueThreadInteractionCancelled": "cancelled the request",
+          "issueThreadInteractionSkipped": "skipped the request",
+          "issueThreadInteractionExpired": "expired the request",
+          "issueThreadInteractionItemVerdictsSubmitted": "submitted verdicts on the request",
+          "issueStalledReviewDecided": "recorded a review verdict"
+        },
+        "stalledReview": {
+          "approve": "approved the review",
+          "approveRow": "approved the review on",
+          "requestChanges": "requested changes on the review",
+          "requestChangesRow": "requested changes on the review on",
+          "sendBack": "sent the review back to work",
+          "sendBackRow": "sent the review back to work on"
+        },
+        "interactionAccepted": {
+          "requestConfirmation": "approved the request",
+          "requestConfirmationRow": "approved the request on",
+          "requestCheckboxConfirmation": "approved the request",
+          "requestCheckboxConfirmationRow": "approved the request on",
+          "suggestTasks": "accepted the task suggestions",
+          "suggestTasksRow": "accepted the task suggestions on",
+          "askUserQuestions": "accepted the answers",
+          "askUserQuestionsRow": "accepted the answers on"
+        },
+        "interactionRejected": {
+          "requestConfirmation": "rejected the request",
+          "requestConfirmationRow": "rejected the request on",
+          "requestCheckboxConfirmation": "rejected the request",
+          "requestCheckboxConfirmationRow": "rejected the request on",
+          "suggestTasks": "declined the task suggestions",
+          "suggestTasksRow": "declined the task suggestions on",
+          "askUserQuestions": "declined the questions",
+          "askUserQuestionsRow": "declined the questions on"
+        },
+        "userShort": "user {{id}}",
+        "agentFallback": "agent",
+        "taskFallback": "task",
+        "decompositionCreated": "created {{count}} new",
+        "decompositionReused": "reused {{count}} existing",
+        "decompositionRequested": "{{count}} requested",
+        "listSeparator": ", ",
+        "decompositionCompletedWith": "decomposition completed ({{summary}})",
+        "decompositionCompleted": "decomposition completed",
+        "decompositionInFlight": "decomposition in flight ({{summary}})",
+        "rowStatusFromTo": "changed status from {{from}} to {{to}} on",
+        "rowStatusTo": "changed status to {{to}} on",
+        "rowPriorityFromTo": "changed priority from {{from}} to {{to}} on",
+        "rowPriorityTo": "changed priority to {{to}} on",
+        "statusFromTo": "changed the status from {{from}} to {{to}}",
+        "statusTo": "changed the status to {{to}}",
+        "priorityFromTo": "changed the priority from {{from}} to {{to}}",
+        "priorityTo": "changed the priority to {{to}}",
+        "madeResponsible": "made {{name}} responsible for the task",
+        "clearedResponsible": "cleared the responsible",
+        "changedApprover": "changed who can approve to {{value}}",
+        "updatedTitle": "updated the title",
+        "updatedDescription": "updated the description",
+        "change": {
+          "blocker": {
+            "addedOne": "added blocker {{label}}",
+            "addedOneRow": "added blocker {{label}} to",
+            "addedMany": "added {{count}} blockers",
+            "addedManyRow": "added {{count}} blockers to",
+            "removedOne": "removed blocker {{label}}",
+            "removedOneRow": "removed blocker {{label}} from",
+            "removedMany": "removed {{count}} blockers",
+            "removedManyRow": "removed {{count}} blockers from",
+            "updated": "updated blockers",
+            "updatedRow": "updated blockers on"
+          },
+          "reviewer": {
+            "addedOne": "added reviewer {{label}}",
+            "addedOneRow": "added reviewer {{label}} to",
+            "addedMany": "added {{count}} reviewers",
+            "addedManyRow": "added {{count}} reviewers to",
+            "removedOne": "removed reviewer {{label}}",
+            "removedOneRow": "removed reviewer {{label}} from",
+            "removedMany": "removed {{count}} reviewers",
+            "removedManyRow": "removed {{count}} reviewers from",
+            "updated": "updated reviewers",
+            "updatedRow": "updated reviewers on"
+          },
+          "approver": {
+            "addedOne": "added approver {{label}}",
+            "addedOneRow": "added approver {{label}} to",
+            "addedMany": "added {{count}} approvers",
+            "addedManyRow": "added {{count}} approvers to",
+            "removedOne": "removed approver {{label}}",
+            "removedOneRow": "removed approver {{label}} from",
+            "removedMany": "removed {{count}} approvers",
+            "removedManyRow": "removed {{count}} approvers from",
+            "updated": "updated approvers",
+            "updatedRow": "updated approvers on"
+          }
+        },
+        "priorityValue": {
+          "critical": "critical",
+          "high": "high",
+          "medium": "medium",
+          "low": "low"
+        },
+        "gateway": {
+          "anAppAction": "an app action",
+          "tested": "tested {{tool}} on",
+          "used": "used {{tool}} on",
+          "startedTest": "started a test of {{tool}} on",
+          "allowed": "was allowed to use {{tool}} on",
+          "denied": "was blocked from using {{tool}} on",
+          "askedToUse": "asked to use {{tool}} on",
+          "sessionCreated": "opened an app session for",
+          "sessionRejected": "was blocked from opening an app session for",
+          "discovery": "discovered app actions for"
+        },
+        "monitorForService": "{{base}} for {{service}}",
+        "documentFallback": "document",
+        "documentWithKey": "{{label}} {{key}}",
+        "documentWithTitle": "{{label}} {{key}} ({{title}})"
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { t } from "@/i18n";
 
 /** Keeps stop requests independent of draft submission and prevents double clicks. */
 export function useComposerStop(onStop?: () => Promise<void>, pending = false) {
@@ -15,7 +16,7 @@ export function useComposerStop(onStop?: () => Promise<void>, pending = false) {
       await onStop();
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Unable to stop. Try again.",
+        err instanceof Error ? err.message : t("app.lib.useComposerStop.stopFailed"),
       );
     } finally {
       inFlight.current = false;

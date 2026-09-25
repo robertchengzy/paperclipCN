@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 /**
  * Prosumer copy for the Apps surface (PAP-10856).
  *
@@ -49,107 +50,109 @@ export interface AppCopy {
  * (https://happy-grove-jzyc.here.now/). Apps without an entry fall back to a
  * generic, gate-safe line.
  */
-const APP_COPY: Record<string, AppCopy> = {
-  zapier: {
-    tagline: "Reach 9,000+ apps your team already uses.",
-    short: "Reach 9,000+ apps from your agents.",
-  },
-  github: {
-    tagline: "Read code and pull requests, comment on issues.",
-    short: "Read code and pull requests, comment on issues.",
-  },
-  slack: {
-    tagline: "Send and read messages in your team's channels.",
-    short: "Send and read messages in your channels.",
-  },
-  notion: {
-    tagline: "Read and update pages in your workspace.",
-    short: "Read and update pages in your workspace.",
-  },
-  railway: {
-    tagline: "Inspect services, read logs, and manage deployments.",
-    short: "Connect Railway for deployments, logs, and container access.",
-  },
-  posthog: {
-    tagline: "Explore product usage, errors, flags, and experiments.",
-    short: "Sign in with PostHog. Project pinning and access controls are optional.",
-  },
-  linear: {
-    tagline: "Create, update and read tickets.",
-    short: "Create, update and read tickets.",
-  },
-  "google-sheets": {
-    tagline: "Read and update selected spreadsheets.",
-    short: "Read spreadsheets or update the files you choose.",
-  },
-  gmail: {
-    tagline: "Read mail and create drafts for your review.",
-    short: "Read mail and create drafts for your review.",
-  },
-  "google-drive": {
-    tagline: "Find, read, and create files in Drive.",
-    short: "Find, read, and create files in Drive.",
-  },
-  "google-docs": {
-    tagline: "Read and update documents.",
-    short: "Read and update documents.",
-  },
-  "google-slides": {
-    tagline: "Read and update presentations.",
-    short: "Read and update presentations.",
-  },
-  "google-calendar": {
-    tagline: "Review calendars and manage events.",
-    short: "Review calendars and manage events.",
-  },
-  "google-chat": {
-    tagline: "Read conversations and send messages.",
-    short: "Read conversations and send messages.",
-  },
-  "google-people": {
-    tagline: "Look up contacts and people in your directory.",
-    short: "Look up contacts and people in your directory.",
-  },
-  "google-workspace-search": {
-    tagline: "Search across your Google workspace.",
-    short: "Search across your Google workspace.",
-  },
-  hubspot: {
-    tagline: "Look up contacts and update deal stages.",
-    short: "Look up contacts and update deal stages.",
-  },
-  intercom: {
-    tagline: "Read and reply to customer conversations.",
-    short: "Read and reply to customer conversations.",
-  },
-  figma: {
-    tagline: "Read files and post comments on frames.",
-    short: "Read files and post comments on frames.",
-  },
-  stripe: {
-    tagline: "Read customers, invoices, and payouts.",
-    short: "Read customers, invoices, and payouts.",
-  },
-  context7: {
-    tagline: "Look up up-to-date docs for your libraries.",
-    short: "Look up up-to-date docs for your libraries.",
-  },
-};
+function appCopyTable(): Record<string, AppCopy> {
+  return {
+    zapier: {
+      tagline: t("app.lib.appGalleryCopy.zapier.tagline"),
+      short: t("app.lib.appGalleryCopy.zapier.short"),
+    },
+    github: {
+      tagline: t("app.lib.appGalleryCopy.github.tagline"),
+      short: t("app.lib.appGalleryCopy.github.tagline"),
+    },
+    slack: {
+      tagline: t("app.lib.appGalleryCopy.slack.tagline"),
+      short: t("app.lib.appGalleryCopy.slack.short"),
+    },
+    notion: {
+      tagline: t("app.lib.appGalleryCopy.notion.tagline"),
+      short: t("app.lib.appGalleryCopy.notion.tagline"),
+    },
+    railway: {
+      tagline: t("app.lib.appGalleryCopy.railway.tagline"),
+      short: t("app.lib.appGalleryCopy.railway.short"),
+    },
+    posthog: {
+      tagline: t("app.lib.appGalleryCopy.posthog.tagline"),
+      short: t("app.lib.appGalleryCopy.posthog.short"),
+    },
+    linear: {
+      tagline: t("app.lib.appGalleryCopy.linear.tagline"),
+      short: t("app.lib.appGalleryCopy.linear.tagline"),
+    },
+    "google-sheets": {
+      tagline: t("app.lib.appGalleryCopy.googleSheets.tagline"),
+      short: t("app.lib.appGalleryCopy.googleSheets.short"),
+    },
+    gmail: {
+      tagline: t("app.lib.appGalleryCopy.gmail.tagline"),
+      short: t("app.lib.appGalleryCopy.gmail.tagline"),
+    },
+    "google-drive": {
+      tagline: t("app.lib.appGalleryCopy.googleDrive.tagline"),
+      short: t("app.lib.appGalleryCopy.googleDrive.tagline"),
+    },
+    "google-docs": {
+      tagline: t("app.lib.appGalleryCopy.googleDocs.tagline"),
+      short: t("app.lib.appGalleryCopy.googleDocs.tagline"),
+    },
+    "google-slides": {
+      tagline: t("app.lib.appGalleryCopy.googleSlides.tagline"),
+      short: t("app.lib.appGalleryCopy.googleSlides.tagline"),
+    },
+    "google-calendar": {
+      tagline: t("app.lib.appGalleryCopy.googleCalendar.tagline"),
+      short: t("app.lib.appGalleryCopy.googleCalendar.tagline"),
+    },
+    "google-chat": {
+      tagline: t("app.lib.appGalleryCopy.googleChat.tagline"),
+      short: t("app.lib.appGalleryCopy.googleChat.tagline"),
+    },
+    "google-people": {
+      tagline: t("app.lib.appGalleryCopy.googlePeople.tagline"),
+      short: t("app.lib.appGalleryCopy.googlePeople.tagline"),
+    },
+    "google-workspace-search": {
+      tagline: t("app.lib.appGalleryCopy.googleWorkspaceSearch.tagline"),
+      short: t("app.lib.appGalleryCopy.googleWorkspaceSearch.tagline"),
+    },
+    hubspot: {
+      tagline: t("app.lib.appGalleryCopy.hubspot.tagline"),
+      short: t("app.lib.appGalleryCopy.hubspot.tagline"),
+    },
+    intercom: {
+      tagline: t("app.lib.appGalleryCopy.intercom.tagline"),
+      short: t("app.lib.appGalleryCopy.intercom.tagline"),
+    },
+    figma: {
+      tagline: t("app.lib.appGalleryCopy.figma.tagline"),
+      short: t("app.lib.appGalleryCopy.figma.tagline"),
+    },
+    stripe: {
+      tagline: t("app.lib.appGalleryCopy.stripe.tagline"),
+      short: t("app.lib.appGalleryCopy.stripe.tagline"),
+    },
+    context7: {
+      tagline: t("app.lib.appGalleryCopy.context7.tagline"),
+      short: t("app.lib.appGalleryCopy.context7.tagline"),
+    },
+  };
+}
 
-const GENERIC: AppCopy = {
-  tagline: "Give your agents access to this app.",
-  short: "Give your agents access to this app.",
-};
+function genericCopy(): AppCopy {
+  const line = t("app.lib.appGalleryCopy.generic");
+  return { tagline: line, short: line };
+}
 
 /** Curated, gate-safe copy for a gallery app. */
 export function appCopyFor(key: string, fallbackTagline?: string | null): AppCopy {
-  const curated = APP_COPY[key];
+  const curated = appCopyTable()[key];
   if (curated) return curated;
   if (fallbackTagline) {
     const cleaned = sanitizeProsumerCopy(fallbackTagline);
     if (cleaned) return { tagline: cleaned, short: cleaned };
   }
-  return GENERIC;
+  return genericCopy();
 }
 
 /**
@@ -163,7 +166,7 @@ export function credentialFieldLabel(
   rawLabel: string,
   fieldCount: number,
 ): string {
-  if (fieldCount <= 1) return `Your ${appName} key`;
+  if (fieldCount <= 1) return t("app.lib.appGalleryCopy.yourKey", { appName });
   const cleaned = sanitizeProsumerCopy(rawLabel);
-  return cleaned || `Your ${appName} key`;
+  return cleaned || t("app.lib.appGalleryCopy.yourKey", { appName });
 }

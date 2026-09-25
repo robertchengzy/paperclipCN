@@ -57,6 +57,7 @@ import type {
   SuggestTasksInteraction,
   SuggestTasksResultCreatedTask,
 } from "@paperclipai/shared";
+import { t } from "@/i18n";
 
 export interface SuggestedTaskTreeNode {
   task: SuggestedTaskDraft;
@@ -141,19 +142,19 @@ export function buildItemVerdictsSummary(
     result: interaction.result,
   });
   if (interaction.status === "answered") {
-    const parts = [`${progress.decided} decided`];
-    if (progress.approved > 0) parts.push(`${progress.approved} approved`);
-    if (progress.rejected > 0) parts.push(`${progress.rejected} rejected`);
-    if (progress.deferred > 0) parts.push(`${progress.deferred} deferred`);
+    const parts = [t("app.lib.issueThreadInteractions.verdictDecided", { count: progress.decided })];
+    if (progress.approved > 0) parts.push(t("app.lib.issueThreadInteractions.verdictApproved", { count: progress.approved }));
+    if (progress.rejected > 0) parts.push(t("app.lib.issueThreadInteractions.verdictRejected", { count: progress.rejected }));
+    if (progress.deferred > 0) parts.push(t("app.lib.issueThreadInteractions.verdictDeferred", { count: progress.deferred }));
     return parts.join(" · ");
   }
   if (interaction.status === "expired") {
     const outcome = interaction.result?.outcome;
-    if (outcome === "superseded_by_comment") return "Verdicts expired after comment";
-    if (outcome === "stale_target") return "Verdicts expired after target changed";
-    return "Verdicts expired";
+    if (outcome === "superseded_by_comment") return t("app.lib.issueThreadInteractions.verdictsExpiredAfterComment");
+    if (outcome === "stale_target") return t("app.lib.issueThreadInteractions.verdictsExpiredAfterTargetChanged");
+    return t("app.lib.issueThreadInteractions.verdictsExpired");
   }
-  return `${progress.decided} of ${progress.total} decided`;
+  return t("app.lib.issueThreadInteractions.verdictProgress", { decided: progress.decided, total: progress.total });
 }
 
 export function getCheckboxConfirmationSelectedLabels(args: {
@@ -201,60 +202,60 @@ export function buildIssueThreadInteractionSummary(
   const administrativeOutcome = interaction.result && "outcome" in interaction.result
     ? interaction.result.outcome
     : null;
-  if (administrativeOutcome === "skipped") return "Skipped interaction";
-  if (administrativeOutcome === "withdrawn") return "Withdrawn interaction";
-  if (administrativeOutcome === "issue_closed") return "Expired when issue closed";
-  if (administrativeOutcome === "addressee_deleted") return "Cancelled when addressee was deleted";
+  if (administrativeOutcome === "skipped") return t("app.lib.issueThreadInteractions.skipped");
+  if (administrativeOutcome === "withdrawn") return t("app.lib.issueThreadInteractions.withdrawn");
+  if (administrativeOutcome === "issue_closed") return t("app.lib.issueThreadInteractions.issueClosed");
+  if (administrativeOutcome === "addressee_deleted") return t("app.lib.issueThreadInteractions.addresseeDeleted");
   if (interaction.kind === "suggest_tasks") {
     const count = interaction.payload.tasks.length;
     if (interaction.status === "accepted") {
       const createdCount = interaction.result?.createdTasks?.length ?? 0;
       const skippedCount = interaction.result?.skippedClientKeys?.length ?? 0;
       if (skippedCount > 0) {
-        return `Accepted ${createdCount} of ${count} tasks`;
+        return t("app.lib.issueThreadInteractions.acceptedSomeTasks", { created: createdCount, count });
       }
-      return createdCount === 1 ? "Accepted 1 task" : `Accepted ${createdCount} tasks`;
+      return createdCount === 1 ? t("app.lib.issueThreadInteractions.acceptedOneTask") : t("app.lib.issueThreadInteractions.acceptedTasks", { count: createdCount });
     }
     if (interaction.status === "rejected") {
-      return count === 1 ? "Rejected 1 task" : `Rejected ${count} tasks`;
+      return count === 1 ? t("app.lib.issueThreadInteractions.rejectedOneTask") : t("app.lib.issueThreadInteractions.rejectedTasks", { count });
     }
-    return count === 1 ? "Suggested 1 task" : `Suggested ${count} tasks`;
+    return count === 1 ? t("app.lib.issueThreadInteractions.suggestedOneTask") : t("app.lib.issueThreadInteractions.suggestedTasks", { count });
   }
 
   if (interaction.kind === "request_confirmation") {
-    if (interaction.status === "accepted") return "Confirmed request";
+    if (interaction.status === "accepted") return t("app.lib.issueThreadInteractions.confirmedRequest");
     if (interaction.status === "rejected") {
       const rejectLabel = interaction.payload.rejectLabel?.trim();
-      return rejectLabel ? `Selected “${rejectLabel}”` : "Declined request";
+      return rejectLabel ? t("app.lib.issueThreadInteractions.selectedLabel", { label: rejectLabel }) : t("app.lib.issueThreadInteractions.declinedRequest");
     }
     if (interaction.status === "expired") {
       const outcome = interaction.result?.outcome;
-      if (outcome === "superseded_by_comment") return "Confirmation expired after comment";
-      if (outcome === "stale_target") return "Confirmation expired after target changed";
-      return "Confirmation expired";
+      if (outcome === "superseded_by_comment") return t("app.lib.issueThreadInteractions.confirmationExpiredAfterComment");
+      if (outcome === "stale_target") return t("app.lib.issueThreadInteractions.confirmationExpiredAfterTargetChanged");
+      return t("app.lib.issueThreadInteractions.confirmationExpired");
     }
-    return "Requested confirmation";
+    return t("app.lib.issueThreadInteractions.requestedConfirmation");
   }
 
   if (interaction.kind === "request_checkbox_confirmation") {
     const optionCount = interaction.payload.options.length;
     if (interaction.status === "accepted") {
       const selectedCount = interaction.result?.selectedOptionIds?.length ?? 0;
-      if (selectedCount === 0) return "Confirmed with no options selected";
+      if (selectedCount === 0) return t("app.lib.issueThreadInteractions.confirmedNoOptions");
       return selectedCount === 1
-        ? `Confirmed 1 of ${optionCount} options`
-        : `Confirmed ${selectedCount} of ${optionCount} options`;
+        ? t("app.lib.issueThreadInteractions.confirmedOneOfOptions", { total: optionCount })
+        : t("app.lib.issueThreadInteractions.confirmedSomeOfOptions", { count: selectedCount, total: optionCount });
     }
-    if (interaction.status === "rejected") return "Declined selection";
+    if (interaction.status === "rejected") return t("app.lib.issueThreadInteractions.declinedSelection");
     if (interaction.status === "expired") {
       const outcome = interaction.result?.outcome;
-      if (outcome === "superseded_by_comment") return "Selection expired after comment";
-      if (outcome === "stale_target") return "Selection expired after target changed";
-      return "Selection expired";
+      if (outcome === "superseded_by_comment") return t("app.lib.issueThreadInteractions.selectionExpiredAfterComment");
+      if (outcome === "stale_target") return t("app.lib.issueThreadInteractions.selectionExpiredAfterTargetChanged");
+      return t("app.lib.issueThreadInteractions.selectionExpired");
     }
     return optionCount === 1
-      ? "Requested a selection from 1 option"
-      : `Requested a selection from ${optionCount} options`;
+      ? t("app.lib.issueThreadInteractions.requestedSelectionOne")
+      : t("app.lib.issueThreadInteractions.requestedSelectionMany", { count: optionCount });
   }
 
   if (interaction.kind === "request_item_verdicts") {
@@ -262,30 +263,30 @@ export function buildIssueThreadInteractionSummary(
   }
 
   if (interaction.kind === "connection_intent") {
-    if (interaction.status === "accepted") return `${interaction.payload.serviceName} connected`;
-    if (interaction.status === "rejected") return `${interaction.payload.serviceName} declined`;
+    if (interaction.status === "accepted") return t("app.lib.issueThreadInteractions.serviceConnected", { service: interaction.payload.serviceName });
+    if (interaction.status === "rejected") return t("app.lib.issueThreadInteractions.serviceDeclined", { service: interaction.payload.serviceName });
     if (interaction.status === "expired") {
       return interaction.result?.outcome === "superseded"
-        ? `${interaction.payload.serviceName} request superseded`
-        : `${interaction.payload.serviceName} request expired`;
+        ? t("app.lib.issueThreadInteractions.serviceSuperseded", { service: interaction.payload.serviceName })
+        : t("app.lib.issueThreadInteractions.serviceExpired", { service: interaction.payload.serviceName });
     }
-    return `Connect ${interaction.payload.serviceName}`;
+    return t("app.lib.issueThreadInteractions.connectService", { service: interaction.payload.serviceName });
   }
 
   const count = interaction.payload.questions.length;
   if (interaction.status === "answered") {
-    return count === 1 ? "Answered 1 question" : `Answered ${count} questions`;
+    return count === 1 ? t("app.lib.issueThreadInteractions.answeredOne") : t("app.lib.issueThreadInteractions.answeredMany", { count });
   }
   if (interaction.status === "cancelled") {
-    return count === 1 ? "Cancelled 1 question" : `Cancelled ${count} questions`;
+    return count === 1 ? t("app.lib.issueThreadInteractions.cancelledOne") : t("app.lib.issueThreadInteractions.cancelledMany", { count });
   }
   if (interaction.status === "expired") {
     if (interaction.result?.expirationReason === "superseded_by_comment") {
-      return count === 1 ? "Question expired after comment" : "Questions expired after comment";
+      return count === 1 ? t("app.lib.issueThreadInteractions.questionExpiredAfterComment") : t("app.lib.issueThreadInteractions.questionsExpiredAfterComment");
     }
-    return count === 1 ? "Question expired" : "Questions expired";
+    return count === 1 ? t("app.lib.issueThreadInteractions.questionExpired") : t("app.lib.issueThreadInteractions.questionsExpired");
   }
-  return count === 1 ? "Asked 1 question" : `Asked ${count} questions`;
+  return count === 1 ? t("app.lib.issueThreadInteractions.askedOne") : t("app.lib.issueThreadInteractions.askedMany", { count });
 }
 
 /** Readable model input for a durable answer delivered into a successor run. */

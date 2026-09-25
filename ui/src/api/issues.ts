@@ -37,6 +37,7 @@ import type {
 } from "@paperclipai/shared";
 import { api, ApiError, type RequestOptions } from "./client";
 import { CommentSubmissionUnknownError } from "../lib/comment-submit-result";
+import { t } from "@/i18n";
 
 function hasCommentReceipt(value: unknown): boolean {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
@@ -391,7 +392,7 @@ export const issuesApi = {
   interruptLatestQueuedComments: async (id: string, expectedTargetRunId: string | null): Promise<IssueQueuedCommentQueue> => {
     const queue = await issuesApi.getQueuedComments(id);
     if (!queue.queueId || (queue.targetRunId && queue.targetRunId !== expectedTargetRunId)) {
-      throw new Error("The queued messages changed. Refresh and try again.");
+      throw new Error(t("app.lib.issues.queuedMessagesChanged"));
     }
     return issuesApi.interruptQueuedComments(id, {
       queueId: queue.queueId, revision: queue.revision, targetRunId: queue.targetRunId,

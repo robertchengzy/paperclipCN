@@ -23,6 +23,7 @@ import { findUIAdapter } from "../adapters/registry";
 import {
   summarizeNotice,
 } from "./transcriptPresentation";
+import { t } from "@/i18n";
 
 type JsonValue = null | string | number | boolean | JsonValue[] | { [key: string]: JsonValue };
 type JsonObject = { [key: string]: JsonValue };
@@ -544,10 +545,10 @@ function authorNameForComment(
     return agentMap?.get(authorAgentId)?.name ?? (options?.isSystemNotice ? "Paperclip" : authorAgentId.slice(0, 8));
   }
   const authorUserId = comment.authorUserId ?? null;
-  if (!authorUserId) return options?.isSystemNotice ? "Paperclip" : "You";
+  if (!authorUserId) return options?.isSystemNotice ? "Paperclip" : t("app.common.labels.you");
   const userLabel = userLabelMap?.get(authorUserId)?.trim();
   if (userLabel) return userLabel;
-  return formatAssigneeUserLabel(authorUserId, currentUserId, userLabelMap) ?? "You";
+  return formatAssigneeUserLabel(authorUserId, currentUserId, userLabelMap) ?? t("app.common.labels.you");
 }
 
 function formatStatusLabel(status: string) {
@@ -650,29 +651,35 @@ function createTimelineEventMessage(args: {
   const actorName = event.actorType === "agent"
     ? (agentMap?.get(event.actorId)?.name ?? event.actorId.slice(0, 8))
     : event.actorType === "system"
-      ? "System"
-      : (formatAssigneeUserLabel(event.actorId, currentUserId, userLabelMap) ?? "Board");
+      ? t("app.common.labels.system")
+      : (formatAssigneeUserLabel(event.actorId, currentUserId, userLabelMap) ?? t("app.common.nouns.board"));
 
   const lines: string[] = [
-    event.followUpRequested ? `${actorName} requested follow-up` : `${actorName} updated this issue`,
+    event.followUpRequested ? t("app.lib.issueChatMessages.requestedFollowUp", { actor: actorName }) : t("app.lib.issueChatMessages.updatedThisIssue", { actor: actorName }),
   ];
   if (event.statusChange) {
     lines.push(
-      `Status: ${event.statusChange.from ?? "none"} -> ${event.statusChange.to ?? "none"}`,
+      t("app.lib.issueChatMessages.statusChange", {
+        from: event.statusChange.from ?? t("app.lib.issueChatMessages.none"),
+        to: event.statusChange.to ?? t("app.lib.issueChatMessages.none"),
+      }),
     );
   }
   if (event.assigneeChange) {
     const from = event.assigneeChange.from.agentId
       ? (agentMap?.get(event.assigneeChange.from.agentId)?.name ?? event.assigneeChange.from.agentId.slice(0, 8))
-      : (formatAssigneeUserLabel(event.assigneeChange.from.userId, currentUserId, userLabelMap) ?? "Unassigned");
+      : (formatAssigneeUserLabel(event.assigneeChange.from.userId, currentUserId, userLabelMap) ?? t("app.common.unassigned"));
     const to = event.assigneeChange.to.agentId
       ? (agentMap?.get(event.assigneeChange.to.agentId)?.name ?? event.assigneeChange.to.agentId.slice(0, 8))
-      : (formatAssigneeUserLabel(event.assigneeChange.to.userId, currentUserId, userLabelMap) ?? "Unassigned");
-    lines.push(`Assignee: ${from} -> ${to}`);
+      : (formatAssigneeUserLabel(event.assigneeChange.to.userId, currentUserId, userLabelMap) ?? t("app.common.unassigned"));
+    lines.push(t("app.lib.issueChatMessages.assigneeChange", { from, to }));
   }
   if (event.workspaceChange) {
     lines.push(
-      `Workspace: ${event.workspaceChange.from.label ?? "none"} -> ${event.workspaceChange.to.label ?? "none"}`,
+      t("app.lib.issueChatMessages.workspaceChange", {
+        from: event.workspaceChange.from.label ?? t("app.lib.issueChatMessages.none"),
+        to: event.workspaceChange.to.label ?? t("app.lib.issueChatMessages.none"),
+      }),
     );
   }
 
@@ -777,18 +784,32 @@ export function formatDurationWords(ms: number | null) {
   if (ms === null || !Number.isFinite(ms) || ms <= 0) return null;
   const totalSeconds = Math.max(1, Math.round(ms / 1000));
   if (totalSeconds < 60) {
-    return `${totalSeconds} second${totalSeconds === 1 ? "" : "s"}`;
+    return totalSeconds === 1
+      ? t("app.lib.issueChatMessages.oneSecond")
+      : t("app.lib.issueChatMessages.seconds", { count: totalSeconds });
   }
   const totalMinutes = Math.round(totalSeconds / 60);
   if (totalMinutes < 60) {
-    return `${totalMinutes} minute${totalMinutes === 1 ? "" : "s"}`;
+    return minutesText(totalMinutes);
   }
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
   if (minutes === 0) {
-    return `${hours} hour${hours === 1 ? "" : "s"}`;
+    return hoursText(hours);
   }
-  return `${hours} hour${hours === 1 ? "" : "s"} ${minutes} minute${minutes === 1 ? "" : "s"}`;
+  return t("app.lib.issueChatMessages.hoursMinutes", { hours: hoursText(hours), minutes: minutesText(minutes) });
+}
+
+function minutesText(count: number) {
+  return count === 1
+    ? t("app.lib.issueChatMessages.oneMinute")
+    : t("app.lib.issueChatMessages.minutes", { count });
+}
+
+function hoursText(count: number) {
+  return count === 1
+    ? t("app.lib.issueChatMessages.oneHour")
+    : t("app.lib.issueChatMessages.hours", { count });
 }
 
 function runDurationLabel(run: {
@@ -806,24 +827,24 @@ function runDurationLabel(run: {
   const stopReason = typeof run.resultJson?.stopReason === "string" ? run.resultJson.stopReason : null;
   switch (run.status) {
     case "succeeded":
-      return durationText ? `Worked for ${durationText}` : "Finished work";
+      return durationText ? t("app.lib.issueChatMessages.workedFor", { duration: durationText }) : t("app.lib.issueChatMessages.finishedWork");
     case "failed":
     case "error":
-      return durationText ? `Failed after ${durationText}` : "Run failed";
+      return durationText ? t("app.lib.issueChatMessages.failedAfter", { duration: durationText }) : t("app.lib.issueChatMessages.runFailed");
     case "timed_out":
-      return durationText ? `Timed out after ${durationText}` : "Run timed out";
+      return durationText ? t("app.lib.issueChatMessages.timedOutAfter", { duration: durationText }) : t("app.lib.issueChatMessages.runTimedOut");
     case "cancelled":
       if (isOperatorInterruptedRun(run.resultJson, run.errorCode)) {
-        return durationText ? `Interrupted by board after ${durationText}` : "Interrupted by board";
+        return durationText ? t("app.lib.issueChatMessages.interruptedAfter", { duration: durationText }) : t("app.lib.issueChatMessages.interrupted");
       }
       if (stopReason === "paused") {
-        return durationText ? `Paused by board after ${durationText}` : "Paused by board";
+        return durationText ? t("app.lib.issueChatMessages.pausedAfter", { duration: durationText }) : t("app.lib.issueChatMessages.paused");
       }
-      return durationText ? `Cancelled after ${durationText}` : "Run cancelled";
+      return durationText ? t("app.lib.issueChatMessages.cancelledAfter", { duration: durationText }) : t("app.lib.issueChatMessages.runCancelled");
     case "queued":
-      return "Queued";
+      return t("app.common.states.queued");
     case "running":
-      return "Working...";
+      return t("app.lib.issueChatMessages.workingDots");
     default:
       return formatStatusLabel(run.status);
   }
@@ -835,7 +856,11 @@ function createHistoricalRunMessage(run: IssueChatLinkedRun, agentMap?: Map<stri
     id: `run:${run.runId}`,
     role: "system",
     createdAt: toDate(runTimestamp(run)),
-    content: [{ type: "text", text: `${agentName} run ${run.runId.slice(0, 8)} ${formatStatusLabel(run.status)}` }],
+    content: [{ type: "text", text: t("app.lib.issueChatMessages.historicalRun", {
+      agent: agentName,
+      runId: run.runId.slice(0, 8),
+      status: t(`app.common.status.${run.status}`, { defaultValue: formatStatusLabel(run.status) }),
+    }) }],
     metadata: {
       custom: {
         kind: "run",
@@ -862,7 +887,7 @@ function createHistoricalTranscriptMessage(args: {
   const agentName = run.agentName ?? agentMap?.get(run.agentId)?.name ?? run.agentId.slice(0, 8);
   const compactedTranscript = compactIssueChatTranscript(transcript, issueChatTranscriptMaxVisibleEntries(run.adapterType));
   const { parts, notices, segments } = buildAssistantPartsFromTranscript(compactedTranscript);
-  const waitingText = hasOutput ? "" : "Run finished";
+  const waitingText = hasOutput ? "" : t("app.lib.issueChatMessages.runFinished");
   const content = parts.length > 0
     ? parts
     : waitingText
@@ -935,7 +960,7 @@ export function buildAssistantPartsFromTranscript(entries: readonly IssueChatTra
         family: entry.family ?? "provider_notice",
         eventType: entry.eventType ?? "provider.notice.recorded",
         status: entry.status ?? "informational",
-        title: entry.title ?? "Provider activity",
+        title: entry.title ?? t("app.lib.issueChatMessages.providerActivity"),
         summary: entry.summary ?? "",
         payload: entry.payload ?? {},
       });
@@ -1009,13 +1034,13 @@ export function buildAssistantPartsFromTranscript(entries: readonly IssueChatTra
     if (entry.kind === "result") {
       if (entry.isError && entry.errors?.length) {
         for (const error of entry.errors) {
-          orderedParts.push({ type: "reasoning", text: `Run error: ${summarizeNotice(error)}` });
+          orderedParts.push({ type: "reasoning", text: t("app.lib.issueChatMessages.runError", { message: summarizeNotice(error) }) });
         }
       } else if (entry.text) {
         orderedParts.push({
           type: "reasoning",
           text: entry.isError
-            ? `Run error: ${summarizeNotice(entry.text)}`
+            ? t("app.lib.issueChatMessages.runError", { message: summarizeNotice(entry.text) })
             : summarizeNotice(entry.text),
         });
       }
@@ -1106,10 +1131,10 @@ function createLiveRunMessage(args: {
   const { parts, notices, segments } = buildAssistantPartsFromTranscript(compactedTranscript);
   const waitingText =
     run.status === "queued"
-      ? "Queued..."
+      ? t("app.lib.issueChatMessages.queuedDots")
       : parts.length > 0
         ? ""
-        : "Working...";
+        : t("app.lib.issueChatMessages.workingDots");
 
   const content = parts;
 

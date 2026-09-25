@@ -5,6 +5,7 @@ import { ApiError } from "../api/client";
 import { issuesApi } from "../api/issues";
 import { useToastActions } from "../context/ToastContext";
 import { queryKeys } from "../lib/queryKeys";
+import { t } from "@/i18n";
 
 export type RetryNowError = {
   message: string;
@@ -15,17 +16,17 @@ export type RetryNowError = {
 function readErrorMessage(error: unknown): string {
   if (error instanceof ApiError) {
     if (typeof error.message === "string" && error.message.trim().length > 0) return error.message;
-    return `Request failed (${error.status})`;
+    return t("app.lib.useRetryNowMutation.requestFailedStatus", { status: error.status });
   }
   if (error instanceof Error && error.message) return error.message;
-  return "The request failed. Try again in a moment.";
+  return t("app.lib.useRetryNowMutation.requestFailed");
 }
 
 export const RETRY_NOW_OUTCOME_HEADLINE: Record<IssueRetryNowOutcome, string> = {
-  promoted: "Retry promoted",
-  already_promoted: "Retry already running",
-  no_scheduled_retry: "No scheduled retry",
-  gate_suppressed: "Couldn't retry now",
+  get promoted() { return t("app.lib.useRetryNowMutation.promoted"); },
+  get already_promoted() { return t("app.lib.useRetryNowMutation.alreadyPromoted"); },
+  get no_scheduled_retry() { return t("app.lib.useRetryNowMutation.noScheduledRetry"); },
+  get gate_suppressed() { return t("app.lib.useRetryNowMutation.couldNotRetry"); },
 };
 
 export function useRetryNowMutation(
@@ -38,7 +39,7 @@ export function useRetryNowMutation(
 
   const mutation = useMutation({
     mutationFn: () => {
-      if (!issueId) throw new Error("Missing issue id");
+      if (!issueId) throw new Error(t("app.lib.useRetryNowMutation.missingIssueId"));
       return issuesApi.retryScheduledRetryNow(issueId);
     },
     onSuccess: (response) => {
@@ -65,7 +66,7 @@ export function useRetryNowMutation(
     },
     onError: (error) => {
       pushToast({
-        title: "Couldn't retry now",
+        title: t("app.lib.useRetryNowMutation.couldNotRetry"),
         body: readErrorMessage(error),
         tone: "error",
       });

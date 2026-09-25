@@ -1,4 +1,5 @@
 import { heartbeatsApi } from "../api/heartbeats";
+import { t } from "@/i18n";
 
 const LIVE_STATUSES = new Set(["queued", "running", "scheduled_retry"]);
 
@@ -28,9 +29,7 @@ export async function waitForStoppedRuns(
         }),
       ]);
     } catch {
-      throw new Error(
-        "The stop was requested, but stopping could not be verified. Refresh and try Stop again if work is still running.",
-      );
+      throw new Error(t("app.lib.waitForStoppedRuns.unverified"));
     } finally {
       clearTimeout(timeout);
     }
@@ -53,9 +52,7 @@ export async function waitForStoppedRuns(
       .map((run) => run.id);
     if (remaining.length === 0) return;
     if (Date.now() >= deadline) {
-      throw new Error(
-        "The stop was requested, but work is still stopping. Try Stop again if it continues.",
-      );
+      throw new Error(t("app.lib.waitForStoppedRuns.stillStopping"));
     }
     await new Promise((resolve) =>
       setTimeout(resolve, options.intervalMs ?? 500),

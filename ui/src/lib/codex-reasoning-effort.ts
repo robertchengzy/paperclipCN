@@ -2,20 +2,21 @@ import {
   codexLocalReasoningEffortsForModel,
   type CodexLocalReasoningEffort,
 } from "@paperclipai/adapter-codex-local";
+import { t } from "@/i18n";
 
 const CODEX_REASONING_EFFORT_LABELS: Record<CodexLocalReasoningEffort, string> = {
-  minimal: "Minimal",
-  low: "Low",
-  medium: "Medium",
-  high: "High",
-  xhigh: "X-High",
-  max: "Max",
-  ultra: "Ultra",
+  get minimal() { return t("app.lib.codexReasoningEffort.minimal"); },
+  get low() { return t("app.common.priority.low"); },
+  get medium() { return t("app.common.priority.medium"); },
+  get high() { return t("app.common.priority.high"); },
+  get xhigh() { return t("app.lib.codexReasoningEffort.xhigh"); },
+  get max() { return t("app.lib.codexReasoningEffort.max"); },
+  get ultra() { return t("app.lib.codexReasoningEffort.ultra"); },
 };
 
 export function codexReasoningEffortOptions(
   model: string | null | undefined,
-  defaultLabel = "Default",
+  defaultLabel = t("app.common.labels.default"),
 ) {
   return [
     { value: "", label: defaultLabel },

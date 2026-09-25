@@ -7,6 +7,7 @@ import {
 } from "@paperclipai/shared";
 import { redactUrlSecrets } from "@/lib/redact-url-secrets";
 import { tenantSessionRecovery } from "@/lib/tenant-session-recovery";
+import { t } from "@/i18n";
 
 type AuthErrorBody =
   | {
@@ -62,7 +63,7 @@ function extractAuthError(payload: AuthErrorBody, status: number) {
         ? payload.message
         : typeof payload?.error === "string" && payload.error.trim().length > 0
           ? payload.error
-          : `Request failed: ${status}`;
+          : t("app.common.messages.requestFailed", { message: status });
 
   return new AuthApiError(message, status, payload, code);
 }
@@ -161,7 +162,7 @@ export const authApi = {
       const recovery = tenantSessionRecovery.recoverIfNeeded(res.status, payload);
       if (recovery) return recovery;
       if (res.status === 401) return null;
-      throw new Error(`Failed to load session (${res.status})`);
+      throw new Error(t("app.lib.auth.loadSessionFailed", { status: res.status }));
     }
     const direct = toSession(payload);
     if (direct) return direct;
@@ -186,7 +187,7 @@ export const authApi = {
     if (!res.ok) {
       const recovery = tenantSessionRecovery.recoverIfNeeded(res.status, payload);
       if (recovery) return recovery;
-      throw new Error((payload as { error?: string } | null)?.error ?? `Failed to load profile (${res.status})`);
+      throw new Error((payload as { error?: string } | null)?.error ?? t("app.lib.auth.loadProfileFailed", { status: res.status }));
     }
     return currentUserProfileSchema.parse(payload);
   },

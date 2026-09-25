@@ -1,3 +1,4 @@
+import { t } from "@/i18n";
 type TranscriptDensity = "comfortable" | "compact";
 
 type TranscriptActivity = {
@@ -118,7 +119,7 @@ export function isCommandTool(name: string, input: unknown): boolean {
 }
 
 export function displayToolName(name: string, input: unknown): string {
-  if (isCommandTool(name, input)) return "Executing command";
+  if (isCommandTool(name, input)) return t("app.lib.transcriptPresentation.executingCommand");
   return humanizeLabel(name);
 }
 
@@ -135,7 +136,7 @@ export function summarizeToolInput(
   const record = asRecord(input);
   if (!record) {
     const serialized = compactWhitespace(formatUnknown(input));
-    return serialized ? truncate(serialized, compactMax) : `Inspect ${name} input`;
+    return serialized ? truncate(serialized, compactMax) : t("app.lib.transcriptPresentation.inspectInput", { name });
   }
 
   const command = typeof record.command === "string"
@@ -242,15 +243,15 @@ export function summarizeToolResult(
   isError: boolean | undefined,
   density: TranscriptDensity = "comfortable",
 ): string {
-  if (!result) return isError ? "Tool failed" : "Waiting for result";
+  if (!result) return isError ? t("app.lib.transcriptPresentation.toolFailed") : t("app.lib.transcriptPresentation.waitingForResult");
   const structured = parseStructuredToolResult(result);
   if (structured) {
     if (structured.body) {
       return truncate(structured.body.split("\n")[0] ?? structured.body, density === "compact" ? 84 : 140);
     }
-    if (structured.status === "completed") return "Completed";
+    if (structured.status === "completed") return t("app.common.states.completed");
     if (structured.status === "failed" || structured.status === "error") {
-      return structured.exitCode ? `Failed with exit code ${structured.exitCode}` : "Failed";
+      return structured.exitCode ? t("app.lib.transcriptPresentation.failedWithExitCode", { code: structured.exitCode }) : t("app.common.states.failed");
     }
   }
   const lines = result

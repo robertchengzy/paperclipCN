@@ -148,12 +148,12 @@ export function providerDisplayName(provider: string): string {
 
 export function billingTypeDisplayName(billingType: BillingType): string {
   const map: Record<BillingType, string> = {
-    metered_api: "Metered API",
-    subscription_included: "Subscription",
-    subscription_overage: "Subscription overage",
-    credits: "Credits",
-    fixed: "Fixed",
-    unknown: "Unknown",
+    metered_api: t("app.lib.utils.billingMeteredApi"),
+    subscription_included: t("app.lib.utils.billingSubscription"),
+    subscription_overage: t("app.lib.utils.billingSubscriptionOverage"),
+    credits: t("app.lib.utils.billingCredits"),
+    fixed: t("app.lib.utils.billingFixed"),
+    unknown: t("app.common.labels.unknown"),
   };
   return map[billingType];
 }
@@ -163,7 +163,7 @@ export function quotaSourceDisplayName(source: string): string {
     "anthropic-oauth": "Anthropic OAuth",
     "claude-cli": "Claude CLI",
     "bedrock": "AWS Bedrock",
-    "codex-rpc": "Codex app server",
+    "codex-rpc": t("app.lib.utils.quotaCodexAppServer"),
     "codex-wham": "ChatGPT WHAM",
   };
   return map[source] ?? source;
@@ -203,26 +203,26 @@ export function visibleRunCostUsd(
 
 export function financeEventKindDisplayName(eventKind: FinanceEventKind): string {
   const map: Record<FinanceEventKind, string> = {
-    inference_charge: "Inference charge",
-    platform_fee: "Platform fee",
-    credit_purchase: "Credit purchase",
-    credit_refund: "Credit refund",
-    credit_expiry: "Credit expiry",
-    byok_fee: "BYOK fee",
-    gateway_overhead: "Gateway overhead",
-    log_storage_charge: "Log storage",
+    inference_charge: t("app.lib.utils.financeInferenceCharge"),
+    platform_fee: t("app.lib.utils.financePlatformFee"),
+    credit_purchase: t("app.lib.utils.financeCreditPurchase"),
+    credit_refund: t("app.lib.utils.financeCreditRefund"),
+    credit_expiry: t("app.lib.utils.financeCreditExpiry"),
+    byok_fee: t("app.lib.utils.financeByokFee"),
+    gateway_overhead: t("app.lib.utils.financeGatewayOverhead"),
+    log_storage_charge: t("app.lib.utils.financeLogStorage"),
     logpush_charge: "Logpush",
-    provisioned_capacity_charge: "Provisioned capacity",
-    training_charge: "Training",
-    custom_model_import_charge: "Custom model import",
-    custom_model_storage_charge: "Custom model storage",
-    manual_adjustment: "Manual adjustment",
+    provisioned_capacity_charge: t("app.lib.utils.financeProvisionedCapacity"),
+    training_charge: t("app.lib.utils.financeTraining"),
+    custom_model_import_charge: t("app.lib.utils.financeCustomModelImport"),
+    custom_model_storage_charge: t("app.lib.utils.financeCustomModelStorage"),
+    manual_adjustment: t("app.lib.utils.financeManualAdjustment"),
   };
   return map[eventKind];
 }
 
 export function financeDirectionDisplayName(direction: FinanceDirection): string {
-  return direction === "credit" ? "Credit" : "Debit";
+  return direction === "credit" ? t("app.lib.utils.financeCredit") : t("app.lib.utils.financeDebit");
 }
 
 /** Build an issue URL using the human-readable identifier when available. */
