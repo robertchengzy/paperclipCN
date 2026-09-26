@@ -335,7 +335,9 @@ export async function reapSetupTokenLeases(
   let failed = 0;
   for (const record of records) {
     try {
-      await deps.leases.releaseById(record.leaseId);
+      // An empty lease id has no sandbox lease to release (the lookup would only
+      // fail on the uuid cast), so the record is removed without a release.
+      if (record.leaseId) await deps.leases.releaseById(record.leaseId);
       await deps.store.remove({
         sessionId: record.sessionId,
         companyId: record.companyId,
@@ -1578,13 +1580,16 @@ export function createDbSetupTokenCleanupStore(db: Db): SetupTokenCleanupStore {
       // A record is reapable when its session is terminal, its deadline is past,
       // or its claim is already consumed. The scan filters by the setup-token
       // adapter, so it never reaps a Codex device-login row on the shared table.
-      // The deadline index supports the scan.
+      // The deadline index supports the scan. Setup-token rows never set
+      // `connection_method`; local subscription sign-ins share the table and the
+      // `claude_local` adapter, so they are excluded and never reaped here.
       const rows = await db
         .select()
         .from(adapterAuthSessions)
         .where(
           and(
             eq(adapterAuthSessions.adapterType, SETUP_TOKEN_ADAPTER_TYPE),
+            isNull(adapterAuthSessions.connectionMethod),
             or(
               inArray(adapterAuthSessions.status, [...SETUP_TOKEN_TERMINAL_STATES]),
               lte(adapterAuthSessions.expiresAt, new Date(now)),

@@ -98,6 +98,20 @@ describe("setup-token reaper", () => {
     expect(store.rows.has("live-1")).toBe(true);
   });
 
+  it("removes a record with an empty lease id without calling the release", async () => {
+    // An empty lease id has no sandbox lease; releasing it could only fail.
+    const store = createMemoryStore();
+    store.seed({ sessionId: "no-lease", leaseId: "", state: "timed_out" });
+    const leases = createFakeLeases();
+    const reaper = createSetupTokenReaper({ store, leases, now: () => NOW });
+
+    const result = await reaper.sweep();
+
+    expect(result).toEqual({ released: 1, failed: 0 });
+    expect(leases.releaseByIdCalls).toHaveLength(0);
+    expect(store.rows.size).toBe(0);
+  });
+
   it("keeps the record when the release fails, then clears it on the next sweep", async () => {
     const store = createMemoryStore();
     store.seed({ sessionId: "orphan-2", leaseId: "lease-orphan-2", state: "failed" });

@@ -1524,6 +1524,30 @@ describeEmbeddedPostgres("durable setup-token cleanup store (embedded postgres)"
     expect(ids.has(liveStored.sessionId)).toBe(false);
   });
 
+  it("never lists a local subscription sign-in that shares the claude_local adapter", async () => {
+    // Local AI sign-ins write `connection_method = local_subscription`, no lease,
+    // and a null deadline once timed out. They are not setup-token records.
+    const store = createDbSetupTokenCleanupStore(db);
+    const now = Date.now();
+    const local = await seedScope();
+    await db.insert(adapterAuthSessions).values({
+      publicSessionId: local.sessionId,
+      companyId: local.companyId,
+      environmentId: local.environmentId,
+      adapterType: "claude_local",
+      startedByUserId: local.ownerUserId,
+      connectionMethod: "local_subscription",
+      status: "timed_out",
+      expiresAt: null,
+    });
+    const terminal = await seedScope();
+    await insertRecord(terminal, "timed_out", now + 60_000);
+
+    const ids = new Set((await store.listReapable(now)).map((record) => record.sessionId));
+    expect(ids.has(terminal.sessionId)).toBe(true);
+    expect(ids.has(local.sessionId)).toBe(false);
+  });
+
   it("returns no row when the claim row lock holds until after the deadline", async () => {
     // This test proves the consume uses `clock_timestamp()`, not
     // `transaction_timestamp()`. The row starts with a far-future deadline, so
