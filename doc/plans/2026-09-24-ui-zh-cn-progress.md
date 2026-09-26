@@ -149,3 +149,17 @@
 新增 12 个词条（`en.json` / `zh-CN.json` 各 14535 个叶子词条）。上游新增界面中，静态扫描漏掉了 `RemoteMcpAccountChoice` 的说明段落（含插值），人工逐文件检查了上游改动的 UI 文件后补译。
 
 验证（`1fefa83b8`）：UI typecheck、`pnpm check:token-gates`、`pnpm locales:check`、严格扫描为 0、UI build 通过；全 UI 测试 640 个文件、6725 条全部通过；`codex-local` 的 `src` 测试 30 个文件、465 条通过。隔离实例走查结果与上次相同：168 个页面无异常，`lang` 均为 `zh-CN`，窄屏无溢出，3 个操作用例通过。新出现的英文只有 Zapier、Composio、Arcade、Executor 等应用名称及其目录描述，它们来自服务端应用定义，因聚合器默认开启而显示。服务端测试套件未运行，服务端改动以上游为准，由部署构建和现网启动检查覆盖。
+
+## 同步上游 `4ca404b49` 并修复 iPhone 无法加载（2026-09-26，分支 `sync/upstream-20260926b`）
+
+**iPhone 无法加载**：部署 `352843a24` 后，iPhone（iOS 26，Chrome/WebKit）打开页面只显示 “Paperclip couldn’t start”，桌面 Chrome 正常。nginx 日志显示 iPhone 下载新前端后再没有发出 `/api/` 请求。原因推测：`ui/src/i18n/locales.ts` 用 `import.meta.glob("./locales/*.json", { eager: true })` 把 40 个语言文件（各约 900 KB，其中 38 个是 `en.json` 的镜像）打进同一个约 30 MB 的 chunk。修复提交 `8c5a785fb`：glob 只包含界面可选的 `en` 与 `zh-CN`，该 chunk 降到约 2.2 MB。其他语言文件继续由 `pnpm locales:sync` 维护，只是不再打包。
+
+**合并上游**（合并提交 `4e7789f98`，6 个提交）：心跳 drain 期间的唤醒排队、恢复重试预算、工作区恢复失败的诊断与标记、处置恢复通知（`DispositionRecoveryNotice`）、工作产物的执行工作区引用校验。没有新迁移，lockfile 未变。3 个文件有冲突，均为上游改了英文文案、fork 已改为翻译调用的位置：
+
+- `TaskChatThread`：保留翻译调用，采用上游新增的工作区恢复失败逻辑。上游去掉了停止说明中的“before returning an answer”，`en`/`zh-CN` 的对应词条同步改为新措辞（键名不变）。
+- `TaskChatRichInput`：采用上游 `showImageAttachControls = false` 的默认值，`attachAriaLabel` 保留 fork 的翻译回退。
+- `TaskChatSystemNotice`：同时保留 `useTranslation` 和上游的 `useDispositionRecoverySnapshot`。
+
+新增 49 个词条：`DispositionRecoveryNotice` 全部文案、`lib/workspace-restore-marker.ts`、`IssueDetail` 的恢复重试不可用原因，以及“查看已保存的计划”“工作区恢复失败”。`DesignGuide` 新增的说明段落属于已豁免的设计页面，保持英文。
+
+验证（`8c5a785fb`）：UI typecheck、`pnpm check:token-gates`、`pnpm locales:check`、严格扫描为 0、UI build 通过；全 UI 测试 642 个文件、6774 条全部通过。构建后最大的 chunk 是 `index-*.js`（6.6 MB），语言包所在的 `createLucideIcon-*.js` 从 30 MB 降到 2.2 MB。iPhone 上是否恢复以部署后真机访问为准（本机无法运行 WebKit）。服务端测试套件未运行。
