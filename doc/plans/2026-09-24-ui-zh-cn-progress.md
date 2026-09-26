@@ -175,3 +175,11 @@
 ## 2026-09-26 中英文范围收敛
 
 按用户要求恢复上一批 18 条英文改写、保留中文修订，删除其它语言镜像，并将侧栏反馈入口改为语言切换。保留手机布局修复及功能回归，详见 [本批说明](2026-09-26-bilingual-only.md)。
+
+## 同步上游 `d3e0f0a23`（2026-09-26，分支 `sync/upstream-20260926c`）
+
+合并自 `4ca404b49` 之后的 4 个上游提交：CLI 认证 challenge ID 校验、Cloud connector 的白名单拒绝诊断、provider 默认获取超时与 Daytona 单次获取预算、移除内置侧栏旧 Cloud portfolio 切换器。内置菜单显示本实例公司，托管实例的创建入口由扩展负责。
+
+两处冲突位于 `SidebarCompanyMenu.tsx` 和 `.production.tsx`：采用上游行为，保留翻译调用；移除已不再使用的 Cloud 导航导入。词表和既有退出登录修复不变。无数据库迁移、lockfile、workspace overrides 或 `.github` 改动；Codex `http_headers` 配置保留。
+
+相关测试 8 文件 422 条通过；国际化与退出登录回归 4 文件 22 条通过；词表同步和设计 token 门禁通过。未运行全仓测试、浏览器或真实 provider/MCP 端到端验收。部署结果以实例文档 `/personal/paperclip/DEPLOYMENT.md` 的独立记录为准，合并本身不代表部署。
