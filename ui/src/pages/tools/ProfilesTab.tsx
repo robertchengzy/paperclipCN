@@ -250,12 +250,13 @@ function sourceFromEntry(
       : { kind: "explicit" };
   }
   if (entry.selectorType === "application") {
-    return { kind: "pattern", label: `app:${applicationsById.get(entry.applicationId ?? "") ?? entry.applicationId ?? "?"}` };
+    return { kind: "pattern", label: translate("app.tools.profilesTab.sourceApplication", { name: applicationsById.get(entry.applicationId ?? "") ?? entry.applicationId ?? "?" }) };
   }
   if (entry.selectorType === "connection") {
-    return { kind: "pattern", label: `conn:${connectionsById.get(entry.connectionId ?? "") ?? entry.connectionId ?? "?"}` };
+    return { kind: "pattern", label: translate("app.tools.profilesTab.sourceConnection", { name: connectionsById.get(entry.connectionId ?? "") ?? entry.connectionId ?? "?" }) };
   }
-  return { kind: "pattern", label: `risk:${entry.riskLevel ?? "?"}` };
+  const risk = entry.riskLevel ?? "?";
+  return { kind: "pattern", label: translate("app.tools.profilesTab.sourceRisk", { risk: translate(`app.tools.shared.risk.${risk}`, { defaultValue: risk }) }) };
 }
 
 export function resolveAllowList(
@@ -1284,7 +1285,7 @@ function ProfileDetail({
   const { t } = useTranslation();
   const rows = useMemo(
     () => resolveAllowList(profile, catalog, maps.applicationsById, maps.connectionsById),
-    [profile, catalog, maps.applicationsById, maps.connectionsById],
+    [profile, catalog, maps.applicationsById, maps.connectionsById, t],
   );
   const includeCount = profile.entries.filter((e) => e.effect === "include").length;
   const excludeCount = profile.entries.filter((e) => e.effect === "exclude").length;

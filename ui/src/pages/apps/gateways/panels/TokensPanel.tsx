@@ -151,7 +151,7 @@ export function TokensPanel({
     onSuccess: async (token) => {
       setConfirmToken(null);
       setRevokeName("");
-      pushToast({ title: t("app.apps.tokensPanel.tokenRevoked"), body: `${token.name} can no longer connect.`, tone: "success" });
+      pushToast({ title: t("app.apps.tokensPanel.tokenRevoked"), body: t("app.apps.tokensPanel.canNoLongerConnect", { name: token.name }), tone: "success" });
       await invalidate();
     },
     onError: (error) =>

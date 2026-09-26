@@ -13,7 +13,7 @@
  */
 
 import type { InteractionAudienceDescription } from "./interaction-audience";
-import { t } from "@/i18n";
+import { i18n, t } from "@/i18n";
 
 /**
  * Denials that mean "you are outside this card's resolver audience". Mirrors the
@@ -28,6 +28,7 @@ export const INTERACTION_AUDIENCE_DENIAL_CODES = [
   "interaction_governed_action_denied",
   "interaction_run_attribution_required",
   "interaction_scope_denied",
+  "review_policy_denied",
 ] as const;
 
 /**
@@ -41,6 +42,12 @@ const INTERACTION_SETTLED_CODES = [
   "interaction_stale_target",
   "interaction_issue_closed",
 ] as const;
+
+/** Stable server codes with a localized explanation, never inferred from free text. */
+const KNOWN_RESOLUTION_CODES = new Set<string>([
+  ...INTERACTION_AUDIENCE_DENIAL_CODES,
+  ...INTERACTION_SETTLED_CODES,
+]);
 
 export type InteractionResolutionFailureKind = "audience_denied" | "settled" | "transient";
 
@@ -109,7 +116,15 @@ export function describeInteractionResolutionFailure(
   audience?: InteractionResolutionAudience | null,
 ): InteractionResolutionFailure {
   const code = interactionResolutionErrorCode(error);
-  const reason = serverReason(error);
+  const serverMessage = serverReason(error);
+  // English keeps the server's existing wording. Chinese adds a code-specific
+  // explanation while retaining the original diagnostic text for inspection.
+  const reason = i18n.language === "zh-CN" && code && KNOWN_RESOLUTION_CODES.has(code)
+    ? [
+      t(`app.lib.interactionResolutionError.code.${code}`),
+      serverMessage ? t("app.lib.interactionResolutionError.serverDiagnostic", { reason: serverMessage }) : null,
+    ].filter(Boolean).join(t("app.lib.interactionResolutionError.sentenceSeparator"))
+    : serverMessage;
 
   if (isInteractionAudienceDenial(error)) {
     // Only a *narrowed* audience has a responder worth naming. Appending the

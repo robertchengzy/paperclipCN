@@ -31,7 +31,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { agentUrl } from "@/lib/utils";
+import { displayLocale, agentUrl } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -843,7 +843,7 @@ function formatTimeShort(value: string | Date | null | undefined): string | null
     if (absMin < 60) {
       return diffMs >= 0 ? t("app.issueUi.issueRecoveryActionCard.time.inMinutes", { count: absMin }) : t("app.issueUi.issueRecoveryActionCard.time.minutesAgo", { count: absMin });
     }
-    return date.toLocaleString(undefined, {
+    return date.toLocaleString(displayLocale(), {
       month: "short",
       day: "numeric",
       hour: "numeric",
@@ -948,7 +948,7 @@ function formatTimeAbsolute(value: string | Date | null | undefined): string | n
   if (!value) return null;
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) return null;
-  return date.toLocaleString(undefined, {
+  return date.toLocaleString(displayLocale(), {
     month: "short",
     day: "numeric",
     hour: "numeric",

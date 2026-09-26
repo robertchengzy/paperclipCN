@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { i18n, t } from "@/i18n";
+import { t } from "@/i18n";
+import { displayLocale } from "./utils";
 
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -113,7 +114,7 @@ export function formatMonitorEtaLabel(nextCheckAt: MonitorDate, now: MonitorDate
 
 function monitorDisplayLocale(locale: Intl.LocalesArgument): Intl.LocalesArgument {
   if (locale !== undefined) return locale;
-  return i18n.language === "zh-CN" ? "zh-CN" : undefined;
+  return displayLocale();
 }
 
 function zonedYmd(

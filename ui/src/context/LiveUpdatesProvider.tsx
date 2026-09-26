@@ -48,6 +48,7 @@ import { queryKeys } from "../lib/queryKeys";
 import { extractCompanyPrefixFromPath, toCompanyRelativePath } from "../lib/company-routes";
 import { useLocation } from "../lib/router";
 import { agentRouteRef } from "../lib/utils";
+import { formatIssuePriorityValue, formatIssueStatusValue } from "../lib/issue-change-receipt";
 import { buildSameOriginWebSocketUrl } from "../lib/websocket-url";
 import { tryCreateWebSocket } from "../lib/websocket";
 import { t } from "@/i18n";
@@ -884,9 +885,9 @@ function describeIssueUpdate(
   if (!details) return null;
   const changes: string[] = [];
   if (typeof details.status === "string")
-    changes.push(t("app.lib.liveUpdatesProvider.statusChange", { status: t(`app.common.status.${details.status}`, { defaultValue: details.status.replace(/_/g, " ") }) }));
+    changes.push(t("app.lib.liveUpdatesProvider.statusChange", { status: formatIssueStatusValue(details.status) }));
   if (typeof details.priority === "string")
-    changes.push(t("app.lib.liveUpdatesProvider.priorityChange", { priority: t(`app.lib.liveUpdatesProvider.priorityValue.${details.priority}`, { defaultValue: details.priority }) }));
+    changes.push(t("app.lib.liveUpdatesProvider.priorityChange", { priority: formatIssuePriorityValue(details.priority) }));
   if (
     typeof details.assigneeAgentId === "string" ||
     typeof details.assigneeUserId === "string"
@@ -901,7 +902,7 @@ function describeIssueUpdate(
   if (details.reopened === true) {
     const from = readString(details.reopenedFrom);
     changes.push(
-      from ? t("app.lib.liveUpdatesProvider.reopenedFrom", { from: from.replace(/_/g, " ") }) : t("app.lib.liveUpdatesProvider.reopened"),
+      from ? t("app.lib.liveUpdatesProvider.reopenedFrom", { from: formatIssueStatusValue(from) }) : t("app.lib.liveUpdatesProvider.reopened"),
     );
   }
   if (typeof details.title === "string") changes.push(t("app.lib.liveUpdatesProvider.titleChanged"));
@@ -1829,6 +1830,7 @@ function closeSocketQuietly(
 }
 
 export const __liveUpdatesTestUtils = {
+  describeIssueUpdate,
   applyRunLifecycleToCompanyLiveRuns,
   buildAgentStatusToast,
   buildRunStatusToast,

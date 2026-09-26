@@ -1,10 +1,14 @@
-import { describe, expect, it } from "vitest";
-import type { CompanySecret } from "@paperclipai/shared";
+import { afterEach, describe, expect, it } from "vitest";
+import { i18n } from "@/i18n";
+import type { AiManagedConnectionSummary, CompanySecret } from "@paperclipai/shared";
 import type { MyUserSecretEntry } from "../api/secrets";
 import {
   savedProviderKeys,
   savedCodexSubscriptions,
+  savedManagedProviderAccounts,
 } from "./saved-provider-credentials";
+
+afterEach(async () => { await i18n.changeLanguage("en"); });
 const secret = (overrides = {}) =>
   ({
     id: "s1",
@@ -28,6 +32,25 @@ const personal = (key = "ANTHROPIC_API_KEY.setup.abc", overrides = {}) =>
     secret: secret({ scope: "user" }),
   }) as MyUserSecretEntry;
 describe("saved provider keys", () => {
+  it("localizes labels without changing credential names or bindings", async () => {
+    const inputs = [personal("ANTHROPIC_API_KEY.setup.abc", { name: "my_key" })];
+    const english = savedProviderKeys("c1", "ANTHROPIC_API_KEY", inputs, [secret()]);
+    await i18n.changeLanguage("zh-CN");
+    const chinese = savedProviderKeys("c1", "ANTHROPIC_API_KEY", inputs, [secret()]);
+    expect(chinese.map(({ label }) => label)).toEqual(["my_key（你的密钥）", "Claude（组织密钥）"]);
+    expect(chinese.map(({ binding }) => binding)).toEqual(english.map(({ binding }) => binding));
+    expect(savedCodexSubscriptions("c1", [secret({ name: "CODEX_HOME_team" })])[0].label).toBe("ChatGPT 账户 · team");
+  });
+
+  it("localizes managed account ownership without changing account selection", async () => {
+    const shared = { id: "connection-1", grantId: "grant-1", companyId: "c1", provider: "openai", status: "connected", ownership: "shared", name: "Shared_team", method: "api_key" } as AiManagedConnectionSummary;
+    const accounts = [shared, { ...shared, id: "connection-2", grantId: "grant-2", ownership: "personal", ownerUserId: "user-1", isDefault: true, name: "Personal_team" } as AiManagedConnectionSummary];
+    const english = savedManagedProviderAccounts("c1", "openai", "user-1", accounts);
+    await i18n.changeLanguage("zh-CN");
+    const chinese = savedManagedProviderAccounts("c1", "openai", "user-1", accounts);
+    expect(chinese.map(({ label }) => label)).toEqual(["Shared_team（组织共享）", "Personal_team（你的默认账户）"]);
+    expect(chinese.map(({ aiConnection }) => aiConnection)).toEqual(english.map(({ aiConnection }) => aiConnection));
+  });
   it("reuses canonical and setup keys with references, including normalized organization keys", () => {
     expect(
       savedProviderKeys(

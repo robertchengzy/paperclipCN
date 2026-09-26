@@ -18,7 +18,7 @@ import { smokeLabApi } from "@/api/smokeLab";
 import { queryKeys } from "@/lib/queryKeys";
 import { useToast } from "@/context/ToastContext";
 import { useSmokeLabEnabled } from "@/hooks/useSmokeLabEnabled";
-import { cn } from "@/lib/utils";
+import { displayLocale, cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -45,7 +45,7 @@ function formatTime(value: string | Date | null | undefined): string {
   if (!value) return "—";
   const date = new Date(value as string | Date);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(date);
+  return new Intl.DateTimeFormat(displayLocale(), { dateStyle: "medium", timeStyle: "short" }).format(date);
 }
 
 function serviceTone(status: string): "success" | "warn" | "error" | "muted" {

@@ -1,8 +1,9 @@
-// @vitest-environment node
+// @vitest-environment jsdom
 
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ActivityEvent } from "@paperclipai/shared";
+import { i18n } from "@/i18n";
 import { IssueFieldChangeReceipt } from "./IssueFieldChangeReceipt";
 
 function event(overrides: Partial<ActivityEvent> = {}) {
@@ -127,3 +128,28 @@ describe("IssueFieldChangeReceipt", () => {
     expect(html).toContain("authorized by own task");
   });
 });
+
+for (const language of ["en", "zh-CN"]) {
+  it.each([
+    "Alex <strong>Admin</strong>",
+    '</name><name title="injected">Injected</name><name>',
+  ])(`keeps responsible-user markup as literal text in ${language}: %s`, async (name) => {
+    await i18n.changeLanguage(language);
+    try {
+      const container = document.createElement("div");
+      container.innerHTML = renderToStaticMarkup(
+        <IssueFieldChangeReceipt
+          event={event({ responsibleUserId: "user-1", details: { authorizationReason: "allow_self" } })}
+          resolveUserLabel={() => name}
+        />,
+      );
+      const receipt = container.querySelector("p")!;
+      expect(receipt.textContent).toContain(name);
+      expect(receipt.querySelector("strong, [title]")).toBeNull();
+      expect(receipt.querySelectorAll("span")).toHaveLength(1);
+      expect(receipt.querySelector("span")?.textContent).toBe(name);
+    } finally {
+      await i18n.changeLanguage("en");
+    }
+  });
+}

@@ -120,7 +120,7 @@ import { queryKeys } from "../lib/queryKeys";
 import { keepPreviousDataForSameQueryTail } from "../lib/query-placeholder-data";
 import { useProjectOrder } from "../hooks/useProjectOrder";
 import { shouldDisableRerunForPermission, type LivenessRetryKind } from "../lib/pipeline-liveness";
-import { cn, formatNumber, relativeTime } from "../lib/utils";
+import { displayLocale, cn, formatNumber, relativeTime } from "../lib/utils";
 import { issueStatusText, issueStatusTextDefault } from "../lib/status-colors";
 import { formatBytes } from "../lib/issue-output";
 import { createIssueDetailPath, withIssueDetailHeaderSeed } from "../lib/issueDetailBreadcrumb";
@@ -586,7 +586,7 @@ function formatPipelineActivity(value: string | Date | null) {
   if (diffDays < 7) return translate("app.pipelines.pipelines.activity.daysAgo", { count: diffDays });
   if (diffDays < 14) return translate("app.pipelines.pipelines.activity.lastWeek");
   if (diffDays < 30) return translate("app.pipelines.pipelines.activity.weeksAgo", { count: Math.round(diffDays / 7) });
-  return new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return new Date(value).toLocaleDateString(displayLocale(), { month: "short", day: "numeric" });
 }
 
 function PipelineStatusChip({ archivedAt }: { archivedAt: Date | string | null }) {
@@ -4242,7 +4242,7 @@ function BuiltFromTree({
 }
 
 function formatShortDate(value: Date | string) {
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat(displayLocale(), {
     month: "short",
     day: "numeric",
     hour: "numeric",
@@ -5343,7 +5343,7 @@ export function Learnings() {
                         forcedMove && "border-l-2 border-l-amber-400 bg-amber-50/50 dark:bg-amber-400/10",
                       )}
                     >
-                      <span className="text-xs text-muted-foreground" title={new Date(event.createdAt).toLocaleString()}>
+                      <span className="text-xs text-muted-foreground" title={new Date(event.createdAt).toLocaleString(displayLocale())}>
                         {relativeTime(event.createdAt)}
                       </span>
                       <div className="min-w-0">

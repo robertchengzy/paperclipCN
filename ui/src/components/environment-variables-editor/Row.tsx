@@ -195,7 +195,7 @@ export function EnvironmentVariableRow({
   const isDirty = dirtyFields.name || dirtyFields.value;
 
   const versions = boundSecret ? Math.max(0, boundSecret.latestVersion) : 0;
-  const versionTagLabel = row.version === "latest" ? "latest" : `v${row.version}`;
+  const versionTagLabel = row.version === "latest" ? t("app.secrets.latestVersion") : `v${row.version}`;
   const versionPinned = row.version !== "latest";
 
   return (
@@ -303,7 +303,7 @@ export function EnvironmentVariableRow({
                   <input
                     ref={valueInputRef}
                     className={valueTextInputClass}
-                    placeholder="value"
+                    placeholder={t("app.secrets.row.valuePlaceholder")}
                     value={row.textValue}
                     type={sensitive ? "password" : "text"}
                     spellCheck={false}
@@ -394,7 +394,7 @@ export function EnvironmentVariableRow({
                             row.version === "latest" && "font-medium",
                           )}
                         >
-                          latest <span className="text-(length:--text-micro) text-muted-foreground">{t("app.secrets.row.recommended")}</span>
+                          {t("app.secrets.latestVersion")} <span className="text-(length:--text-micro) text-muted-foreground">{t("app.secrets.row.recommended")}</span>
                         </button>
                         {Array.from({ length: versions }, (_, idx) => versions - idx)
                           .filter((v) => v > 0)
@@ -451,7 +451,7 @@ export function EnvironmentVariableRow({
                   ) : (
                     <input
                       className={valueTextInputClass}
-                      placeholder="user-secret key"
+                      placeholder={t("app.secrets.row.userSecretKey")}
                       value={row.userSecretKey}
                       spellCheck={false}
                       disabled={disabled}

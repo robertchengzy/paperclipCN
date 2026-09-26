@@ -1,14 +1,14 @@
 # Web UI 简体中文术语表
 
 这是 `ui/src/i18n/locales/zh-CN.json` 的译法约定。新增词条先查本表；本表没有的术语，沿用 `zh-CN.json` 里已有的译法。
-需要改译法时，先改本表，再全量替换。
+需要改译法时，先改本表，再按语境修订显示文案。不要全局替换用户内容、代码、命令、协议值或第三方字段名。
 
 ## 核心对象
 
 | 英文 | 中文 | 说明 |
 |---|---|---|
-| Organization / Company | 组织 | 界面上的 Company 与 Organization 是同一个对象，统一译为“组织”（旧词条 `app.sidebar.company` 的“公司”沿用） |
-| Agent | 智能体 | |
+| Organization / Company | 组织 | 界面上的 Company 与 Organization 是同一个对象；两种布局都使用“组织” |
+| Agent | Agent | Subagent → 子 Agent；保留技术术语英文 |
 | Task / Issue | 任务 | Sub-issue / Subtask → 子任务 |
 | Project | 项目 | |
 | Goal | 目标 | |
@@ -17,9 +17,13 @@
 | Heartbeat | 心跳 | |
 | Routine | 例程 | Trigger → 触发器，Schedule → 计划 |
 | Pipeline | 流水线 | Stage → 阶段，Step → 步骤 |
-| Skill | 技能 | Skills Studio → 技能工作室 |
+| Skill | Skill | Skill Studio 保留英文；日常能力描述按语义处理 |
 | Secret | 密钥 | Vault → 保管库，Rotate → 轮换 |
-| Workspace | 工作区 | Execution workspace → 执行工作区，Worktree → 工作树 |
+| Workspace | 工作区 | Execution workspace → 执行工作区，与 Git Worktree 区分 |
+| Worktree | Worktree | Git Worktree；命令 `git worktree` 原样保留 |
+| Harness | Harness | Runtime → 运行时 |
+| Token | Token | 认证与模型计量按上下文区分；完整外部字段名保留原样 |
+| Watchdog | Watchdog | 任务核验与恢复职责，不等同于 Board 权限 |
 | Environment | 环境 | Environment variable → 环境变量 |
 | Connector | 连接器 | |
 | Connection | 连接 | |
@@ -35,7 +39,7 @@
 | Timeline | 时间线 | |
 | Inbox | 收件箱 | |
 | Member | 成员 | Invite → 邀请，Join request → 加入申请 |
-| Board | 管理员 | 指 Board 身份（人类操作者） |
+| Board | Board | 身份/人类操作者；Board user → Board 用户；Board view → 看板视图，管理界面 → 管理面板；Admin 仍为管理员 |
 | Session | 会话 | |
 | Case | 案例 | |
 | Document | 文档 | Plan document → 计划文档 |
@@ -88,6 +92,8 @@
 
 - 产品和第三方名称：Paperclip、Claude、Codex、Cursor、OpenCode、Hermes、Pi、GitHub、Slack、Google Sheets、Railway、Zapier、Arcade、Composio 等。
 - 技术缩写与格式：API、MCP、ACP、JSON、YAML、CSV、TSV、XML、HTML、CSS、SQL、HTTP(S)、SSH、URL、PDF、ZIP、WASM、PID、ID。
+- 技术对象：Agent、Skill、Token、Worktree、Harness、Watchdog、Webhook、OAuth。推理强度的技术级别（如 Ultra）与 Ask 等运行模式名称保留英文，后台枚举值不变。
+- 外部控制台的正式字段名：如 `Bot User OAuth Token`、`Signing Secret`、`Application / Client ID`，保持原样以便对照。
 - 文件名、命令、环境变量、代码标识、示例值（如 `SKILL.md`、`PAPERCLIP_*`、`PAP-123`）。
 - 键盘按键名（Esc、Enter、Tab、Shift、Cmd、Ctrl）。
 - 语言切换里的“English”。

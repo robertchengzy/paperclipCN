@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { ChatSetupNavigation } from "@/components/chat/ChatSetupNavigation";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -755,7 +756,7 @@ export function EmailEndpointSettings({
       <p className="text-sm text-muted-foreground">
         {t("app.apps.emailEndpointSetup.settings.lastCheck", {
           time: inbox.lastSyncAt
-            ? new Date(inbox.lastSyncAt).toLocaleString()
+            ? new Date(inbox.lastSyncAt).toLocaleString(displayLocale())
             : t("app.apps.emailEndpointSetup.settings.notChecked"),
         })}
       </p>

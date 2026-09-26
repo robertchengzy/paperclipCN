@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { t, useTranslation } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { Clock3, FileDiff, GitCommit, type LucideIcon } from "lucide-react";
@@ -9,7 +10,7 @@ function formatTimestamp(value: string | null | undefined): string {
   if (!value) return t("app.common.states.unavailable");
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return t("app.common.states.unavailable");
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat(displayLocale(), {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date);

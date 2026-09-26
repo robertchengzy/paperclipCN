@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { i18n } from "@/i18n";
 import { describe, expect, it, vi } from "vitest";
 import { createElement } from "react";
 import { createRoot } from "react-dom/client";
@@ -58,3 +59,33 @@ it("removes a connector from editable library rows when its automatic assignment
     container.remove();
   }
 });
+
+for (const language of ["en", "zh-CN"]) {
+  it.each([
+    "team/<strong>review</strong>",
+    '</skill><skill title="injected">Injected</skill><skill>',
+  ])(`keeps missing-skill keys as literal text in ${language}: %s`, async (key) => {
+    await i18n.changeLanguage(language);
+    const client = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity, retry: false } } });
+    const agent = { id: "agent-literal", companyId: "company-1", adapterType: "codex_local", adapterConfig: {} } as Agent;
+    client.setQueryData(queryKeys.agents.skills(agent.id), {
+      adapterType: "codex_local", supported: true, mode: "ephemeral", desiredSkills: [key], entries: [], warnings: [],
+    });
+    client.setQueryData(queryKeys.companySkills.list(agent.companyId), []);
+    client.setQueryData(queryKeys.instance.experimentalSettings, { enableBetaSkills: false });
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    try {
+      flushSync(() => root.render(createElement(QueryClientProvider, { client }, createElement(TooltipProvider, { children: createElement(AgentSkillsTab, { agent, companyId: agent.companyId }) }))));
+      await vi.waitFor(() => expect(container.textContent).toContain(key));
+      expect(container.querySelector("strong, [title=injected]")).toBeNull();
+      expect([...container.querySelectorAll("span.font-medium")].filter((span) => span.textContent === key)).toHaveLength(1);
+    } finally {
+      flushSync(() => root.unmount());
+      client.clear();
+      container.remove();
+      await i18n.changeLanguage("en");
+    }
+  });
+}

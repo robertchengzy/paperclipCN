@@ -524,7 +524,7 @@ function QueryDebugSection({ card }: { card: StatusCardView }) {
       </CollapsibleTrigger>
       <CollapsibleContent className="space-y-2 border-t border-border px-3 py-3">
         <pre className="max-h-64 overflow-auto rounded-md bg-muted p-3 font-mono text-xs text-foreground">
-          {card.queries.length > 0 ? queryJson : "// query not compiled yet"}
+          {card.queries.length > 0 ? queryJson : t("app.reports.statusCardDetailDrawer.queryNotCompiled")}
         </pre>
         <p className="text-xs text-muted-foreground">
           {card.queryCompiledAt

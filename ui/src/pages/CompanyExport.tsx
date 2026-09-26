@@ -22,7 +22,7 @@ import { EmptyState } from "../components/EmptyState";
 import { PageSkeleton } from "../components/PageSkeleton";
 import { MarkdownBody } from "../components/MarkdownBody";
 import { toCompanyRelativePath } from "@/lib/company-routes";
-import { cn } from "../lib/utils";
+import { displayLocale, cn } from "../lib/utils";
 import { queryKeys } from "../lib/queryKeys";
 import { formatBytes } from "../lib/issue-output";
 import { createZipArchive, estimateZipArchiveSize } from "../lib/zip";
@@ -1093,8 +1093,8 @@ export function CompanyExport() {
             </span>
             <span className="text-muted-foreground">
               {totalFiles === 1
-                ? t("app.settings.companyExport.exportingOneFile", { selected: selectedCount.toLocaleString(), total: totalFiles.toLocaleString() })
-                : t("app.settings.companyExport.exportingFiles", { selected: selectedCount.toLocaleString(), total: totalFiles.toLocaleString() })}
+                ? t("app.settings.companyExport.exportingOneFile", { selected: selectedCount.toLocaleString(displayLocale()), total: totalFiles.toLocaleString(displayLocale()) })
+                : t("app.settings.companyExport.exportingFiles", { selected: selectedCount.toLocaleString(displayLocale()), total: totalFiles.toLocaleString(displayLocale()) })}
               {selectedCount > 0 && ` (~${formatBytes(estimatedZipBytes)})`}
             </span>
             {warnings.length > 0 && (
@@ -1120,8 +1120,8 @@ export function CompanyExport() {
             {downloadMutation.isPending
               ? t("app.settings.companyExport.buildingExport")
               : selectedCount === 1
-                ? t("app.settings.companyExport.exportOneFile", { count: selectedCount.toLocaleString() })
-                : t("app.settings.companyExport.exportFiles", { count: selectedCount.toLocaleString() })}
+                ? t("app.settings.companyExport.exportOneFile", { count: selectedCount.toLocaleString(displayLocale()) })
+                : t("app.settings.companyExport.exportFiles", { count: selectedCount.toLocaleString(displayLocale()) })}
           </Button>
         </div>
       </div>
@@ -1192,7 +1192,7 @@ export function CompanyExport() {
                     />
                     <span className="min-w-0 truncate">{EXPORT_CATEGORY_LABELS[key]}</span>
                     <span className="text-xs text-muted-foreground">
-                      {countLoaded ? count.toLocaleString() : "—"}
+                      {countLoaded ? count.toLocaleString(displayLocale()) : "—"}
                     </span>
                   </label>
                 );

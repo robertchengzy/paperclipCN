@@ -1,4 +1,4 @@
-import { t as translateCopy, useTranslation } from "@/i18n";
+import { useTranslation } from "@/i18n";
 import { AlertTriangle, ExternalLink } from "lucide-react";
 import type { AgentPermissions } from "@paperclipai/shared";
 import { getTrustPreset } from "@/lib/trust-policy-ui";
@@ -22,7 +22,7 @@ export function GitHubAgentTrustWarning({
     >
       <p className="flex items-center gap-2 font-medium">
         <AlertTriangle className="size-4 shrink-0" />
-        {agent.name} is not configured for low-trust review
+        {translateCopy("app.agentUi.gitHubAgentTrustWarning.notConfiguredForLowTrustReview", { name: agent.name })}
       </p>
       <p>
         {translateCopy("app.agentUi.gitHubAgentTrustWarning.gitHubCommentsAndPullRequestsCanContainMaliciousInstructions")}

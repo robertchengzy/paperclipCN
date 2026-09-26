@@ -29,7 +29,7 @@ import {
   zoomScaleForLevel,
 } from "@/components/timeline/WorkTimelineChart";
 import { formatDuration, TIMELINE_COLORS } from "@/lib/timeline/layout";
-import { cn } from "@/lib/utils";
+import { displayLocale, cn } from "@/lib/utils";
 import { useLocation } from "@/lib/router";
 import { useStreamlinedUiEnabled } from "@/hooks/useStreamlinedUiEnabled";
 import { t as translate, useTranslation } from "@/i18n";
@@ -137,11 +137,11 @@ function rangeError(range: DateRangeState): string | null {
 }
 
 function formatInteger(value: number): string {
-  return new Intl.NumberFormat("en-US").format(value);
+  return new Intl.NumberFormat(displayLocale()).format(value);
 }
 
 function formatCompactInteger(value: number): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat(displayLocale(), {
     notation: "compact",
     maximumFractionDigits: 1,
   }).format(value);
@@ -535,8 +535,8 @@ export function Timeline({ embedded = false }: { embedded?: boolean } = {}) {
               <p className="text-xs text-muted-foreground">
                 {t(data.spans.length === 1 ? "app.reports.timeline.footerOne" : "app.reports.timeline.footerMany", {
                   count: data.spans.length,
-                  from: new Date(data.window.from).toLocaleString(),
-                  to: new Date(data.window.to).toLocaleString(),
+                  from: new Date(data.window.from).toLocaleString(displayLocale()),
+                  to: new Date(data.window.to).toLocaleString(displayLocale()),
                 })}
                 {data.window.capped ? t("app.reports.timeline.windowCapped") : ""}
               </p>

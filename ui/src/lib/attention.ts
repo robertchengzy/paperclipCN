@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import type {
   AttentionDetailImage,
   AttentionFeed,
@@ -451,7 +452,7 @@ export function decideByLabel(decideBy: string | null): string {
   if (/^\d{4}-\d{2}-\d{2}$/.test(decideBy)) {
     const parsed = new Date(`${decideBy}T00:00:00.000Z`);
     return Number.isFinite(parsed.getTime())
-      ? parsed.toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" })
+      ? parsed.toLocaleDateString(displayLocale(), { month: "short", day: "numeric", timeZone: "UTC" })
       : decideBy;
   }
   return decideBy;

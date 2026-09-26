@@ -48,7 +48,7 @@ import {
   resolveIssueWorkspaceName,
   type InboxIssueColumn,
 } from "../lib/inbox";
-import { cn, formatDurationMs, formatTokens } from "../lib/utils";
+import { displayLocale, cn, formatDurationMs, formatTokens } from "../lib/utils";
 import { SHOW_TASK_PRIORITY_UI } from "../lib/ui-flags";
 import { collectSubtreeLiveCounts } from "../lib/liveIssueIds";
 import {
@@ -616,7 +616,7 @@ function SubIssueProgressSummaryStrip({
               <>
                 <span
                   className="text-muted-foreground tabular-nums"
-                  title={translateCopy(`app.issueUi.legacyIssuesList.${costSummary.runCount === 1 ? "oneRun" : "manyRuns"}${costSummary.issueCount === 1 ? "OneSubtask" : "ManySubtasks"}`, { runs: costSummary.runCount.toLocaleString(), tasks: costSummary.issueCount })}
+                  title={translateCopy(`app.issueUi.legacyIssuesList.${costSummary.runCount === 1 ? "oneRun" : "manyRuns"}${costSummary.issueCount === 1 ? "OneSubtask" : "ManySubtasks"}`, { runs: costSummary.runCount.toLocaleString(displayLocale()), tasks: costSummary.issueCount })}
                 >
                   {translateCopy("app.issueUi.legacyIssuesList.tokensCount", { count: formatTokens(totalTokens) })}
                 </span>

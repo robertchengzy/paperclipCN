@@ -1,7 +1,7 @@
 import { t, useTranslation } from "@/i18n";
 import type { ProviderTraceMetadata } from "@paperclipai/shared";
 import { Bug, CircleOff } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { displayLocale, cn } from "@/lib/utils";
 
 export function runRequestedProviderTrace(
   contextSnapshot: Record<string, unknown> | null | undefined,
@@ -73,7 +73,7 @@ export function ProviderTraceStatusBadge({
       )}
       title={
         trace
-          ? t("app.shell.providerTraceStatusBadge.framesBytesExpires", { value1: trace.frameCount, value2: trace.byteCount, value3: new Date(trace.expiresAt).toLocaleString() })
+          ? t("app.shell.providerTraceStatusBadge.framesBytesExpires", { value1: trace.frameCount, value2: trace.byteCount, value3: new Date(trace.expiresAt).toLocaleString(displayLocale()) })
           : requested
             ? t("app.shell.providerTraceStatusBadge.thisRunRequestedSensitiveProviderFrameCapture")
             : t("app.shell.providerTraceStatusBadge.rawProviderFrameCaptureWasDisabledFor")

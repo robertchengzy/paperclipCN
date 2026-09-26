@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { useTranslation } from "@/i18n";
 import { useEffect, useState } from "react";
 import { Clock3, RefreshCw, Save, Trash2, Webhook, Zap } from "lucide-react";
@@ -96,7 +97,7 @@ export function RoutineTriggerCard({
           ) : null}
           <span className="text-xs text-muted-foreground">
             {trigger.kind === "schedule" && trigger.nextRunAt
-              ? t("app.routines.routineTriggerCard.nextValue1", { value1: new Date(trigger.nextRunAt).toLocaleString() })
+              ? t("app.routines.routineTriggerCard.nextValue1", { value1: new Date(trigger.nextRunAt).toLocaleString(displayLocale()) })
               : trigger.kind === "webhook"
                 ? t("app.common.nouns.webhook")
                 : t("app.routines.routineTriggerCard.aPI")}

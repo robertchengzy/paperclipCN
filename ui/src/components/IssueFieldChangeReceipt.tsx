@@ -1,3 +1,5 @@
+import { useTranslation } from "@/i18n";
+import { Trans } from "react-i18next";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import type { ActivityEvent } from "@paperclipai/shared";
 import {
@@ -30,6 +32,7 @@ export function IssueFieldChangeReceipt({
   resolveUserLabel?: (userId: string) => string | null | undefined;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const rows = readIssueChangeReceipt(event.details, { resolveAgentLabel, resolveUserLabel });
   const reason = issueAuthorizationReasonLabel(
     typeof event.details?.authorizationReason === "string"
@@ -66,7 +69,7 @@ export function IssueFieldChangeReceipt({
                     rather than implying the whole value is shown. */}
                 {row.truncated ? (
                   <span className="text-(length:--text-nano) uppercase tracking-(--tracking-eyebrow) text-muted-foreground">
-                    preview
+                    {t("app.activity.issueFieldChangeReceipt.preview")}
                   </span>
                 ) : null}
               </dd>
@@ -85,11 +88,15 @@ export function IssueFieldChangeReceipt({
           />
           {responsibleUserName ? (
             <>
-              for <span className="text-foreground">{responsibleUserName}</span>
+              {/* Keep user text out of the translation markup parser. */}
+              <Trans
+                i18nKey="app.activity.issueFieldChangeReceipt.responsibleUser"
+                components={{ name: <span className="text-foreground">{responsibleUserName}</span> }}
+              />
               {" · "}
             </>
           ) : null}
-          authorized by {reason}
+          {t("app.activity.issueFieldChangeReceipt.authorizedBy", { reason })}
         </p>
       ) : null}
     </div>

@@ -10,17 +10,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ApiError } from "@/api/client";
 import { useTranslation } from "@/i18n";
+import { displayLocale } from "@/lib/utils";
 
 /** Risk classification badge for a catalog tool. */
 export function RiskBadge({ risk }: { risk: ToolRiskLevel | null | undefined }) {
-  if (!risk) return <Badge variant="outline">unknown</Badge>;
+  const { t } = useTranslation();
+  if (!risk) return <Badge variant="outline">{t("app.tools.shared.risk.unknown")}</Badge>;
   const variant =
     risk === "high" || risk === "critical"
       ? "destructive"
       : risk === "medium"
         ? "secondary"
         : "outline";
-  return <Badge variant={variant}>{risk}</Badge>;
+  return <Badge variant={variant}>{t(`app.tools.shared.risk.${risk}`, { defaultValue: risk })}</Badge>;
 }
 
 /** Read/Write/Destructive capability chips. */
@@ -33,11 +35,12 @@ export function CapabilityBadges({
   isWrite?: boolean;
   isDestructive?: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <span className="inline-flex flex-wrap gap-1">
-      {isReadOnly ? <Badge variant="outline">read-only</Badge> : null}
-      {isWrite ? <Badge variant="secondary">write</Badge> : null}
-      {isDestructive ? <Badge variant="destructive">destructive</Badge> : null}
+      {isReadOnly ? <Badge variant="outline">{t("app.tools.shared.capability.readOnly")}</Badge> : null}
+      {isWrite ? <Badge variant="secondary">{t("app.tools.shared.capability.write")}</Badge> : null}
+      {isDestructive ? <Badge variant="destructive">{t("app.tools.shared.capability.destructive")}</Badge> : null}
     </span>
   );
 }
@@ -76,8 +79,9 @@ export function HealthBadge({
   status: ToolConnectionHealthStatus | string | null | undefined;
   label?: string;
 }) {
+  const { t } = useTranslation();
   const raw = (status ?? "unknown").toString();
-  return <StatusBadge status={healthToStatusKey(raw)} label={label ?? raw} />;
+  return <StatusBadge status={healthToStatusKey(raw)} label={label ?? t(`app.tools.shared.health.${raw}`, { defaultValue: raw })} />;
 }
 
 function decisionToStatusKey(decision: string): { key: string; label: string } {
@@ -110,9 +114,10 @@ function decisionToStatusKey(decision: string): { key: string; label: string } {
 
 /** Policy/gateway decision badge — canonical status colors. */
 export function DecisionBadge({ decision }: { decision: ToolPolicyDecision | string | null | undefined }) {
+  const { t } = useTranslation();
   if (!decision) return <Badge variant="outline">—</Badge>;
   const { key, label } = decisionToStatusKey(decision.toString());
-  return <StatusBadge status={key} label={label} />;
+  return <StatusBadge status={key} label={t(`app.tools.shared.decision.${decision}`, { defaultValue: label })} />;
 }
 
 /** Compact relative time, falling back to absolute. */
@@ -128,12 +133,15 @@ export function RelativeTime({ value }: { value: Date | string | null | undefine
   let text: string;
   if (mins < 1) text = t("app.tools.shared.justNow");
   else {
-    const value =
-      mins < 60 ? `${mins}m` : mins < 1440 ? `${Math.round(mins / 60)}h` : `${Math.round(mins / 1440)}d`;
+    const value = mins < 60
+      ? t("app.tools.shared.durationMinutes", { count: mins })
+      : mins < 1440
+        ? t("app.tools.shared.durationHours", { count: Math.round(mins / 60) })
+        : t("app.tools.shared.durationDays", { count: Math.round(mins / 1440) });
     text = isFuture ? t("app.tools.shared.inFuture", { value }) : t("app.tools.shared.ago", { value });
   }
   return (
-    <span title={date.toLocaleString()} className="text-muted-foreground">
+    <span title={date.toLocaleString(displayLocale())} className="text-muted-foreground">
       {text}
     </span>
   );

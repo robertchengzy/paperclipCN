@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { useTranslation } from "@/i18n";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -406,7 +407,7 @@ export function GitHubChatSetup() {
                   <Button type="submit">{t("app.apps.gitHubChatSetup.createAppOnGithub")}<ExternalLink className="ml-2 size-4" />
                   </Button>
                   <p className="mt-2 text-xs text-muted-foreground">{t("app.apps.gitHubChatSetup.registrationExpiry", { time: " " })}
-                    {new Date(registration.expiresAt).toLocaleTimeString()}.
+                    {new Date(registration.expiresAt).toLocaleTimeString(displayLocale())}.
                   </p>
                 </form>
               )}

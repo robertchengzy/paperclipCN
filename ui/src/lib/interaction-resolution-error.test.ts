@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { i18n } from "@/i18n";
 import { ApiError } from "../api/client";
 import {
   describeInteractionResolutionFailure,
@@ -10,6 +11,8 @@ import {
 const addressedAudience = { shortSummary: "Only CodexCoder or the board can respond", isOpen: false };
 const humanOnlyAudience = { shortSummary: "Only the board can respond", isOpen: false };
 const openAudience = { shortSummary: "Anyone can respond", isOpen: true };
+
+afterEach(async () => { await i18n.changeLanguage("en"); });
 
 /** Shapes an `ApiError` the way `errorHandler` serializes an `HttpError`. */
 function denial(status: number, code: string, message: string) {
@@ -161,5 +164,42 @@ describe("describeInteractionResolutionFailure", () => {
     expect(
       interactionResolutionErrorMessage(denial(403, "interaction_human_only", "Agents cannot resolve this."), null),
     ).toBe("Agents cannot resolve this.");
+  });
+
+  it("does not invite retries for a review-policy refusal", () => {
+    const failure = describeInteractionResolutionFailure(
+      denial(403, "review_policy_denied", "A different writer must approve this request"),
+    );
+    expect(failure.kind).toBe("audience_denied");
+    expect(failure.message).toBe("A different writer must approve this request.");
+  });
+
+  it.each([
+    ["interaction_human_only", 403, "此交互仅允许人工回复。"],
+    ["interaction_creator_excluded", 403, "此交互必须由创建者或创建它的运行之外的人员或 Agent 处理。"],
+    ["interaction_addressee_mismatch", 403, "你不符合此交互指定的回复者要求。"],
+    ["interaction_governed_action_denied", 403, "此交互关联的受管控操作需要单独授权。"],
+    ["interaction_run_attribution_required", 422, "回复此交互需要有效且已通过身份验证的 Agent 运行。"],
+    ["interaction_scope_denied", 403, "你没有处理此交互的访问权限。"],
+    ["review_policy_denied", 403, "审核策略不允许你批准或拒绝此请求。"],
+    ["interaction_not_found", 404, "找不到此交互。"],
+    ["interaction_already_resolved", 409, "此交互已处理。"],
+    ["interaction_superseded", 409, "此交互已被后续请求或回复取代。"],
+    ["interaction_stale_target", 409, "此交互指向的目标已失效。"],
+    ["interaction_issue_closed", 409, "任务已关闭，无法再处理此交互。"],
+  ])("explains %s in Chinese while retaining the server diagnostic", async (code, status, expected) => {
+    await i18n.changeLanguage("zh-CN");
+    const failure = describeInteractionResolutionFailure(denial(Number(status), String(code), "Original server diagnostic"));
+    expect(failure.code).toBe(code);
+    expect(failure.message.startsWith(String(expected))).toBe(true);
+    expect(failure.message).toContain("（服务端诊断：Original server diagnostic.）");
+    expect(failure.message).not.toMatch(/重试|try again/i);
+  });
+
+  it("retains unknown server reasons without inventing a localized cause", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const failure = describeInteractionResolutionFailure(denial(503, "new_backend_error", "New backend diagnostic"));
+    expect(failure.message).toBe("New backend diagnostic. 请重试。");
+    expect(failure.code).toBe("new_backend_error");
   });
 });

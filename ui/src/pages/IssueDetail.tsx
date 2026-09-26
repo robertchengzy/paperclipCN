@@ -165,6 +165,7 @@ import {
 import { useProjectOrder } from "../hooks/useProjectOrder";
 import { recordRecentTask } from "../lib/recent-tasks";
 import {
+  displayLocale,
   relativeTime,
   cn,
   formatDurationMs,
@@ -2713,7 +2714,7 @@ function IssueDetailActivityTab({
                   <span className="font-medium text-foreground">
                     {t("app.issueDetail.cost.includingSubTasks", {
                       amount: (issueTreeCostSummary.costCents / 100).toLocaleString(
-                        undefined,
+                        displayLocale(),
                         {
                           style: "currency",
                           currency: "USD",

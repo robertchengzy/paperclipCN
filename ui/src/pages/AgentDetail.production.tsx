@@ -66,7 +66,7 @@ import { SourceResolvedFoldBadge } from "../components/SourceResolvedFoldBadge";
 import { readSourceResolvedWatchdogFold } from "../lib/source-resolved-watchdog-fold";
 import { buildSameOriginWebSocketUrl } from "../lib/websocket-url";
 import { tryCreateWebSocket } from "../lib/websocket";
-import { formatCents, formatDate, relativeTime, formatTokens, visibleRunCostUsd } from "../lib/utils";
+import { displayLocale, formatCents, formatDate, relativeTime, formatTokens, visibleRunCostUsd } from "../lib/utils";
 import { cn } from "../lib/utils";
 import { describeRunRetryState } from "../lib/runRetryState";
 import { Button } from "@/components/ui/button";
@@ -639,7 +639,7 @@ function WorkspaceOperationLogViewer({
               {chunks.map((chunk, index) => (
                 <div key={`${chunk.ts}-${index}`} className="flex gap-2">
                   <span className="shrink-0 text-neutral-500">
-                    {new Date(chunk.ts).toLocaleTimeString("en-US", { hour12: false })}
+                    {new Date(chunk.ts).toLocaleTimeString(displayLocale(), { hour12: false })}
                   </span>
                   <span
                     className={cn(
@@ -688,8 +688,9 @@ function WorkspaceOperationsSection({
                 <div className="text-sm font-medium">{workspaceOperationPhaseLabel(operation.phase)}</div>
                 <WorkspaceOperationStatusBadge status={operation.status} />
                 <div className="text-(length:--text-micro) text-muted-foreground">
-                  {relativeTime(operation.startedAt)}
-                  {operation.finishedAt && ` to ${relativeTime(operation.finishedAt)}`}
+                  {operation.finishedAt
+                    ? translateCopy("app.agentDetail.workspaceOps.timeRange", { start: relativeTime(operation.startedAt), end: relativeTime(operation.finishedAt) })
+                    : relativeTime(operation.startedAt)}
                 </div>
               </div>
               {operation.command && (
@@ -2064,7 +2065,7 @@ function AgentConfigurePage({
                     </div>
                     <p className="text-xs text-muted-foreground">
                       {translateCopy("app.agentUi.agentDetail.changed")}{" "}
-                      {revision.changedKeys.length > 0 ? revision.changedKeys.join(", ") : "no tracked changes"}
+                      {revision.changedKeys.length > 0 ? revision.changedKeys.join(", ") : translateCopy("app.agentDetail.revisions.noTrackedChanges")}
                     </p>
                   </div>
                 ))}
@@ -2743,7 +2744,7 @@ export function PromptsTab({
                 </span>
                 {currentMode === "managed" ? (
                   <div className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground pt-1.5">
-                    <span className="min-w-0 truncate" title={currentRootPath || undefined}>{currentRootPath || "(managed)"}</span>
+                    <span className="min-w-0 truncate" title={currentRootPath || undefined}>{currentRootPath || translateCopy("app.agentDetail.instructions.managedPlaceholder")}</span>
                     {currentRootPath && (
                       <CopyText text={currentRootPath} className="shrink-0">
                         <Copy className="h-3.5 w-3.5" />
@@ -2936,7 +2937,7 @@ export function PromptsTab({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <span className="ml-3 shrink-0 rounded border border-amber-500/40 bg-amber-500/10 text-amber-800 dark:text-amber-200 px-1.5 py-0.5 text-(length:--text-nano) uppercase tracking-wide cursor-help">
-                        virtual file
+                        {translateCopy("app.agentDetail.instructions.virtualFile")}
                       </span>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={4}>
@@ -2947,7 +2948,7 @@ export function PromptsTab({
               }
               return (
                 <span className="ml-3 shrink-0 rounded border border-border text-muted-foreground px-1.5 py-0.5 text-(length:--text-nano) uppercase tracking-wide">
-                  {file.isEntryFile ? "entry" : `${file.size}b`}
+                  {file.isEntryFile ? translateCopy("app.agentDetail.instructions.entryBadge") : `${file.size}b`}
                 </span>
               );
             }}
@@ -2982,7 +2983,7 @@ export function PromptsTab({
                   {selectedFileExists
                     ? selectedFileSummary?.deprecated
                       ? translateCopy("app.agentUi.agentDetail.deprecatedVirtualFile")
-                      : `${selectedFileDetail?.language ?? "text"} file`
+                      : translateCopy("app.agentDetail.instructions.fileLanguage", { language: selectedFileDetail?.language ?? translateCopy("app.common.labels.text") })
                     : translateCopy("app.agentUi.agentDetail.newFileInThisBundle")}
                 </p>
               </div>
@@ -3029,7 +3030,7 @@ export function PromptsTab({
               key={selectedOrEntryFile}
               value={displayValue}
               onChange={(value) => setDraft(value ?? "")}
-              placeholder="# Agent instructions"
+              placeholder={translateCopy("app.agentDetail.instructions.editorPlaceholder")}
               className="min-w-0 overflow-hidden"
               contentClassName="min-h-(--sz-420px) max-w-full break-words text-sm leading-7"
               imageUploadHandler={async (file) => {
@@ -3381,8 +3382,8 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
   }, [isRunning, run.startedAt]);
 
   const timeFormat: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false };
-  const startTime = run.startedAt ? new Date(run.startedAt).toLocaleTimeString("en-US", timeFormat) : null;
-  const endTime = run.finishedAt ? new Date(run.finishedAt).toLocaleTimeString("en-US", timeFormat) : null;
+  const startTime = run.startedAt ? new Date(run.startedAt).toLocaleTimeString(displayLocale(), timeFormat) : null;
+  const endTime = run.finishedAt ? new Date(run.finishedAt).toLocaleTimeString(displayLocale(), timeFormat) : null;
   const durationSec = run.startedAt && run.finishedAt
     ? Math.round((new Date(run.finishedAt).getTime() - new Date(run.startedAt).getTime()) / 1000)
     : null;
@@ -4297,8 +4298,8 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
             </Button>
             <span className="text-xs text-muted-foreground">
               {typeof run.logBytes === "number" && run.logBytes > 0
-                ? translateCopy("app.agentUi.agentDetail.showingLogOf", { shown: Math.round(logOffset / 1024).toLocaleString("en-US"), total: Math.round(run.logBytes / 1024).toLocaleString("en-US") })
-                : translateCopy("app.agentUi.agentDetail.showingLog", { shown: Math.round(logOffset / 1024).toLocaleString("en-US") })}
+                ? translateCopy("app.agentUi.agentDetail.showingLogOf", { shown: Math.round(logOffset / 1024).toLocaleString(displayLocale()), total: Math.round(run.logBytes / 1024).toLocaleString(displayLocale()) })
+                : translateCopy("app.agentUi.agentDetail.showingLog", { shown: Math.round(logOffset / 1024).toLocaleString(displayLocale()) })}
             </span>
           </div>
         )}
@@ -4359,7 +4360,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
               return (
                 <div key={evt.id} className="flex gap-2">
                   <span className="text-neutral-400 dark:text-neutral-600 shrink-0 select-none w-16">
-                    {new Date(evt.createdAt).toLocaleTimeString("en-US", { hour12: false })}
+                    {new Date(evt.createdAt).toLocaleTimeString(displayLocale(), { hour12: false })}
                   </span>
                   <span className={cn("shrink-0 w-14", evt.stream ? (streamColors[evt.stream] ?? "text-neutral-500") : "text-neutral-500")}>
                     {evt.stream ? `[${evt.stream}]` : ""}

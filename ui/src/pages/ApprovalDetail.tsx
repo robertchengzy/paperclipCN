@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { Trans } from "react-i18next";
 import { t as translateCopy, useTranslation } from "@/i18n";
 import { AgentIdentity } from "@/components/AgentIdentity";
@@ -344,7 +345,7 @@ export function ApprovalDetail() {
                   <Identity name="Board" size="sm" />
                 )}
                 <span className="text-xs text-muted-foreground">
-                  {new Date(comment.createdAt).toLocaleString()}
+                  {new Date(comment.createdAt).toLocaleString(displayLocale())}
                 </span>
               </div>
               <MarkdownBody className="text-sm">{comment.body}</MarkdownBody>

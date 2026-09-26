@@ -491,8 +491,10 @@ function CommandSection({
                   <div className="space-y-1">
                     <div className="text-sm font-medium">{item.title}</div>
                     <div className="text-xs text-muted-foreground">
-                      {item.kind} · {item.statusLabel}
-                      {item.lifecycle ? ` · ${item.lifecycle}` : ""}
+                      {t(`app.workspaces.workspaceRuntimeControls.kind.${item.kind}`)} · {item.statusLabel === "run once"
+                        ? t("app.workspaces.workspaceRuntimeControls.runOnce")
+                        : t(`app.workspaces.workspaceRuntimeControls.status.${item.statusLabel}`, { defaultValue: item.statusLabel })}
+                      {item.lifecycle ? ` · ${t(`app.workspaces.workspaceRuntimeControls.lifecycle.${item.lifecycle}`)}` : ""}
                     </div>
                   </div>
                   <CommandActionButtons
@@ -527,7 +529,7 @@ function CommandSection({
                           ? "border-destructive/30 bg-destructive/10 text-destructive"
                           : "border-border text-muted-foreground",
                     )}>
-                      {item.healthStatus}
+                      {t(`app.workspaces.workspaceRuntimeControls.health.${item.healthStatus}`)}
                     </Badge>
                   </div>
                 ) : null}

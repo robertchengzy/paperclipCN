@@ -834,6 +834,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
       currentUserId,
       issueAssigneeAgentId,
       verificationCaveatsByRunId,
+      t,
     ],
   );
 
@@ -3101,7 +3102,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                         pendingComposerInputs.length > 0
                           ? {
                               count: pendingComposerInputs.length,
-                              label: `${pendingComposerInputs.length} pending input${pendingComposerInputs.length === 1 ? "" : "s"}`,
+                              label: t("app.taskChat.taskChatThread.pendingInputCount", { count: pendingComposerInputs.length }),
                               onOpen: openPendingTakeover,
                             }
                           : null

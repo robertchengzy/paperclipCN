@@ -60,7 +60,7 @@ import { SourceResolvedFoldBadge } from "../components/SourceResolvedFoldBadge";
 import { readSourceResolvedWatchdogFold } from "../lib/source-resolved-watchdog-fold";
 import { buildSameOriginWebSocketUrl } from "../lib/websocket-url";
 import { tryCreateWebSocket } from "../lib/websocket";
-import { formatDate, relativeTime, formatTokens, visibleRunCostUsd } from "../lib/utils";
+import { displayLocale, formatDate, relativeTime, formatTokens, visibleRunCostUsd } from "../lib/utils";
 import { cn } from "../lib/utils";
 import { describeRunRetryState } from "../lib/runRetryState";
 import { Button } from "@/components/ui/button";
@@ -717,7 +717,7 @@ function WorkspaceOperationLogViewer({
               {chunks.map((chunk, index) => (
                 <div key={`${chunk.ts}-${index}`} className="flex gap-2">
                   <span className="shrink-0 text-neutral-500">
-                    {new Date(chunk.ts).toLocaleTimeString("en-US", { hour12: false })}
+                    {new Date(chunk.ts).toLocaleTimeString(displayLocale(), { hour12: false })}
                   </span>
                   <span
                     className={cn(
@@ -2978,7 +2978,7 @@ export function PromptsTab({
                   {selectedFileExists
                     ? selectedFileSummary?.deprecated
                       ? t("app.agentDetail.instructions.deprecatedVirtualFile")
-                      : t("app.agentDetail.instructions.fileLanguage", { language: selectedFileDetail?.language ?? "text" })
+                      : t("app.agentDetail.instructions.fileLanguage", { language: selectedFileDetail?.language ?? t("app.common.labels.text") })
                     : t("app.agentDetail.instructions.newFileInBundle")}
                 </p>
               </div>
@@ -3485,8 +3485,8 @@ function RunDetail({ run: initialRun, agentRouteId, adapterType, adapterConfig }
   }, [isRunning, run.startedAt]);
 
   const timeFormat: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false };
-  const startTime = run.startedAt ? new Date(run.startedAt).toLocaleTimeString("en-US", timeFormat) : null;
-  const endTime = run.finishedAt ? new Date(run.finishedAt).toLocaleTimeString("en-US", timeFormat) : null;
+  const startTime = run.startedAt ? new Date(run.startedAt).toLocaleTimeString(displayLocale(), timeFormat) : null;
+  const endTime = run.finishedAt ? new Date(run.finishedAt).toLocaleTimeString(displayLocale(), timeFormat) : null;
   const durationSec = run.startedAt && run.finishedAt
     ? Math.round((new Date(run.finishedAt).getTime() - new Date(run.startedAt).getTime()) / 1000)
     : null;
@@ -4469,10 +4469,10 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
             <span className="text-xs text-muted-foreground">
               {typeof run.logBytes === "number" && run.logBytes > 0
                 ? t("app.agentDetail.log.showingFirstOf", {
-                  shown: Math.round(logOffset / 1024).toLocaleString("en-US"),
-                  total: Math.round(run.logBytes / 1024).toLocaleString("en-US"),
+                  shown: Math.round(logOffset / 1024).toLocaleString(displayLocale()),
+                  total: Math.round(run.logBytes / 1024).toLocaleString(displayLocale()),
                 })
-                : t("app.agentDetail.log.showingFirst", { shown: Math.round(logOffset / 1024).toLocaleString("en-US") })}
+                : t("app.agentDetail.log.showingFirst", { shown: Math.round(logOffset / 1024).toLocaleString(displayLocale()) })}
             </span>
           </div>
         )}
@@ -4533,7 +4533,7 @@ export function LogViewer({ run, adapterType }: { run: HeartbeatRun; adapterType
               return (
                 <div key={evt.id} className="flex gap-2">
                   <span className="text-neutral-400 dark:text-neutral-600 shrink-0 select-none w-16">
-                    {new Date(evt.createdAt).toLocaleTimeString("en-US", { hour12: false })}
+                    {new Date(evt.createdAt).toLocaleTimeString(displayLocale(), { hour12: false })}
                   </span>
                   <span className={cn("shrink-0 w-14", evt.stream ? (streamColors[evt.stream] ?? "text-neutral-500") : "text-neutral-500")}>
                     {evt.stream ? `[${evt.stream}]` : ""}

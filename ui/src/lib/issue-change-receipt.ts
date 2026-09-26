@@ -1,5 +1,7 @@
 import type { IssueChangeReceiptEntry } from "@paperclipai/shared";
+import { ISSUE_PRIORITIES, ISSUE_STATUSES } from "@paperclipai/shared";
 import { formatReviewPolicyValue } from "./review-policy";
+import { formatDateTime } from "./utils";
 import { t } from "@/i18n";
 
 /**
@@ -18,6 +20,10 @@ import { t } from "@/i18n";
 
 /** Field names whose raw ids carry no meaning in a scannable summary. */
 const FIELD_LABELS: Record<string, string> = {
+  get status() { return t("app.lib.issueChangeReceipt.field.status"); },
+  get priority() { return t("app.lib.issueChangeReceipt.field.priority"); },
+  get title() { return t("app.lib.issueChangeReceipt.field.title"); },
+  get description() { return t("app.lib.issueChangeReceipt.field.description"); },
   get assigneeAgentId() { return t("app.lib.issueChangeReceipt.field.assigneeAgentId"); },
   get assigneeUserId() { return t("app.lib.issueChangeReceipt.field.assigneeUserId"); },
   get responsibleUserId() { return t("app.lib.issueChangeReceipt.field.responsibleUserId"); },
@@ -57,6 +63,19 @@ export function issueChangeFieldLabel(field: string): string {
 
 const VALUE_PREVIEW_BUDGET = 72;
 
+/** Translate only known protocol values; unknown values remain diagnostic text. */
+export function formatIssueStatusValue(value: string): string {
+  return (ISSUE_STATUSES as readonly string[]).includes(value)
+    ? t(`app.common.status.${value}`)
+    : value;
+}
+
+export function formatIssuePriorityValue(value: string): string {
+  return (ISSUE_PRIORITIES as readonly string[]).includes(value)
+    ? t(`app.lib.liveUpdatesProvider.priorityValue.${value}`)
+    : value;
+}
+
 /**
  * Render one side of a change for display. Never returns an empty string, so a
  * receipt row always reads as "from → to" rather than trailing into nothing.
@@ -83,11 +102,14 @@ export function formatIssueChangeValue(
       : t("app.lib.issueChangeReceipt.valueItems", { count: strings.length });
   }
 
-  if (value instanceof Date) return value.toLocaleString();
+  if (value instanceof Date) return formatDateTime(value, { includeSeconds: true });
 
   if (typeof value === "string") {
     const trimmed = value.trim();
     if (!trimmed) return t("app.lib.issueChangeReceipt.valueNone");
+    if (options.field === "status") return formatIssueStatusValue(value);
+    if (options.field === "priority") return formatIssuePriorityValue(value);
+    if (options.field === "title" || options.field === "description") return truncate(value);
     // Ids resolve to names when the directory is loaded; otherwise they shorten.
     const resolved = options.field?.toLowerCase().includes("agent")
       ? options.resolveAgentLabel?.(trimmed)
@@ -95,10 +117,9 @@ export function formatIssueChangeValue(
         ? options.resolveUserLabel?.(trimmed)
         : null;
     if (resolved) return resolved;
-    if (isIsoTimestamp(trimmed)) return new Date(trimmed).toLocaleString();
+    if (isIsoTimestamp(trimmed)) return formatDateTime(trimmed, { includeSeconds: true });
     if (looksLikeId(trimmed)) return shortenId(trimmed);
-    const humanized = trimmed.includes(" ") ? trimmed : trimmed.replace(/_/g, " ");
-    return truncate(humanized);
+    return truncate(value);
   }
 
   // Objects (execution policy, workspace settings) are structural — the receipt
@@ -181,11 +202,11 @@ const AUTHORIZATION_REASON_LABELS: Record<string, string> = {
 
 /**
  * Human phrasing for the authorization reason on a write receipt. Unknown
- * reasons degrade to their humanized code rather than disappearing — an
+ * reasons retain their original code rather than disappearing — an
  * unexplained write is worse than an ugly one.
  */
 export function issueAuthorizationReasonLabel(reason: string | null | undefined): string | null {
   const trimmed = reason?.trim();
   if (!trimmed) return null;
-  return AUTHORIZATION_REASON_LABELS[trimmed] ?? trimmed.replace(/_/g, " ");
+  return AUTHORIZATION_REASON_LABELS[trimmed] ?? trimmed;
 }

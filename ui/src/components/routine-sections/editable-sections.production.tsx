@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioCardGroup } from "@/components/ui/radio-card";
-import { cn } from "@/lib/utils";
+import { displayLocale, cn } from "@/lib/utils";
 import { nextCronFires, previewFirePolicies } from "../../lib/cron-fires";
 import { timeAgo } from "../../lib/timeAgo";
 import { EmptyState } from "../EmptyState";
@@ -147,8 +147,8 @@ export function OverviewSection({
       .filter((trigger) => trigger.kind === "schedule" && trigger.nextRunAt)
       .map((trigger) => new Date(trigger.nextRunAt as Date))
       .sort((a, b) => a.getTime() - b.getTime())[0];
-    return upcoming ? upcoming.toLocaleString() : null;
-  }, [routine.triggers]);
+    return upcoming ? upcoming.toLocaleString(displayLocale()) : null;
+  }, [routine.triggers, t]);
   const boundSecrets = editDraft.env ? Object.keys(editDraft.env).length : 0;
   const lastRun = (routineRuns ?? [])[0] ?? null;
   const recentActivity = (activity ?? []).slice(0, 5);
@@ -812,7 +812,7 @@ function NextFiresPreview({
 
 function formatFireTime(date: Date, timeZone: string): string {
   try {
-    return new Intl.DateTimeFormat(undefined, {
+    return new Intl.DateTimeFormat(displayLocale(), {
       timeZone,
       year: "numeric",
       month: "2-digit",

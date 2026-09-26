@@ -54,7 +54,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
+import { displayLocale, cn } from "@/lib/utils";
 import { useCopyAction } from "@/lib/use-copy-action";
 import { Trans } from "react-i18next";
 import { t as translate, useTranslation } from "@/i18n";
@@ -1241,7 +1241,7 @@ export function RunnerInspector({
 
           {canInspectRaw === true && inspection?.trace?.runId === runId ? (
             <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border p-3">
-              <p className="text-xs text-muted-foreground">{t("app.workspaces.runnerInspector.footerSummary", { count: inspection.trace.frameCount, size: formatBytes(inspection.trace.byteCount), expires: new Date(inspection.trace.expiresAt).toLocaleString() })}</p>
+              <p className="text-xs text-muted-foreground">{t("app.workspaces.runnerInspector.footerSummary", { count: inspection.trace.frameCount, size: formatBytes(inspection.trace.byteCount), expires: new Date(inspection.trace.expiresAt).toLocaleString(displayLocale()) })}</p>
               <div className="flex gap-2"><Button size="sm" variant="outline" onClick={() => void downloadTrace()}><Download className="mr-1.5 h-4 w-4" />{t("app.workspaces.runnerInspector.downloadTrace")}</Button><Button size="sm" variant="destructive" onClick={() => void deleteTrace()}><Trash2 className="mr-1.5 h-4 w-4" />{t("app.workspaces.runnerInspector.deleteTrace")}</Button></div>
             </div>
           ) : null}

@@ -12,7 +12,7 @@ import {
   decideByLabel,
   type DecideByPreset,
 } from "../lib/attention";
-import { cn } from "../lib/utils";
+import { displayLocale, cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import {
@@ -236,7 +236,7 @@ export function DecisionTriageStrip({ item, companyId, agents }: DecisionTriageS
         {item.snoozedUntil ? (
           <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
             <AlarmClock className="h-3.5 w-3.5" />
-            {t("app.issueUi.decisionTriageStrip.snoozedUntil", { time: new Date(item.snoozedUntil).toLocaleString() })}
+            {t("app.issueUi.decisionTriageStrip.snoozedUntil", { time: new Date(item.snoozedUntil).toLocaleString(displayLocale()) })}
             <button
               type="button"
               className="text-muted-foreground hover:text-foreground"

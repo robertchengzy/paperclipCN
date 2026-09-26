@@ -119,7 +119,7 @@ export function SecretPopoverForm({
             value={value}
             readOnly={mode === "store"}
             spellCheck={false}
-            placeholder={mode === "create" ? "value" : undefined}
+            placeholder={mode === "create" ? t("app.secrets.createSecretPopover.valuePlaceholder") : undefined}
             aria-label={t("app.secrets.createSecretPopover.secretValue")}
             aria-invalid={valueError ? true : undefined}
             onChange={mode === "create" ? (event) => setValue(event.target.value) : undefined}

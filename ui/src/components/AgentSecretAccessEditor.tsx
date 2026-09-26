@@ -456,7 +456,7 @@ export function AgentSecretAccessEditor({
                         disabled={disabled || !selectedSecret}
                         aria-label={t("app.common.labels.version")}
                       >
-                        <option value="latest">latest</option>
+                        <option value="latest">{t("app.secrets.latestVersion")}</option>
                         {selectedSecret
                           ? Array.from({ length: Math.max(0, selectedSecret.latestVersion) }, (_, index) => {
                               const version = selectedSecret.latestVersion - index;

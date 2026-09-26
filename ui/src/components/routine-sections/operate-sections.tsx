@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { useTranslation } from "@/i18n";
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -63,7 +64,7 @@ export function ActivitySection({ isLoading = false, error }: { isLoading?: bool
     for (const event of events) {
       let label = t("app.common.labels.earlier");
       try {
-        label = new Date(event.createdAt).toLocaleDateString(undefined, {
+        label = new Date(event.createdAt).toLocaleDateString(displayLocale(), {
           weekday: "short",
           month: "short",
           day: "numeric",

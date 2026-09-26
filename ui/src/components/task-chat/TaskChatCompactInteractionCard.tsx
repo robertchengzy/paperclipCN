@@ -56,7 +56,7 @@ import {
   type SuggestTasksInteraction,
   type SuggestedTaskTreeNode,
 } from "@/lib/issue-thread-interactions";
-import { cn } from "@/lib/utils";
+import { cn, displayLocale } from "@/lib/utils";
 import { useTranslation } from "@/i18n";
 import { QuestionForm } from "./QuestionForm";
 import {
@@ -546,7 +546,7 @@ function ReceiptDisclosure({
               {t("app.issueUi.issueThreadInteractionCard.secret.expires", {
                 time: new Date(
                   interaction.payload.toolAction.expiresAt,
-                ).toLocaleString(),
+                ).toLocaleString(displayLocale()),
               })}
             </p>
             <div className="mt-2">
@@ -584,7 +584,7 @@ function ReceiptDisclosure({
               <dd>
                 {new Date(
                   interaction.payload.secretProposal.expiresAt,
-                ).toLocaleString()}
+                ).toLocaleString(displayLocale())}
               </dd>
             </div>
           </dl>
@@ -909,7 +909,7 @@ function ConfirmationCard({
               {t("app.issueUi.issueThreadInteractionCard.secret.expires", {
                 time: new Date(
                   interaction.payload.toolAction.expiresAt,
-                ).toLocaleString(),
+                ).toLocaleString(displayLocale()),
               })}
             </span>
           </div>
@@ -951,7 +951,7 @@ function ConfirmationCard({
             <dd>
               {new Date(
                 interaction.payload.secretProposal.expiresAt,
-              ).toLocaleString()}
+              ).toLocaleString(displayLocale())}
             </dd>
           </div>
         </dl>
@@ -1319,6 +1319,7 @@ function SuggestedTaskRow({
   selected: Set<string>;
   onToggle: (node: SuggestedTaskTreeNode) => void;
 }) {
+  const { t } = useTranslation();
   if (node.task.hiddenInPreview) return null;
   const hiddenCount = collectSuggestedTaskClientKeys(node).filter(
     (key) =>
@@ -1341,7 +1342,9 @@ function SuggestedTaskRow({
           </span>
           {hiddenCount > 0 ? (
             <span className="block text-xs text-muted-foreground">
-              + {hiddenCount} hidden follow-up
+              {t(hiddenCount === 1
+                ? "app.taskChat.taskChatCompactInteractionCard.hiddenFollowUpOne"
+                : "app.taskChat.taskChatCompactInteractionCard.hiddenFollowUpMany", { count: hiddenCount })}
             </span>
           ) : null}
         </span>
@@ -1954,7 +1957,7 @@ export function TaskChatCompactInteractionCard({
         <ConnectionIntentInteractionBody
           interaction={interaction}
           currentUserId={currentUserId}
-          addresseeLabel={addresseeLabel ?? "the addressed user"}
+          addresseeLabel={addresseeLabel ?? t("app.taskChat.taskChatCompactInteractionCard.addressedUser")}
         />
       </InteractionShell>
     );

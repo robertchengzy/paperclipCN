@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { t as translateCopy, useTranslation } from "@/i18n";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -73,7 +74,7 @@ export function TaskDocumentPanel({
         <div className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
           <span>{translateCopy("app.issueUi.taskDocumentPanel.revisionNumber", { number: document.latestRevisionNumber ?? 1 })}</span>
           <span aria-hidden>·</span>
-          <span>{translateCopy("app.issueUi.taskDocumentPanel.updatedDate", { date: new Date(document.updatedAt).toLocaleString() })}</span>
+          <span>{translateCopy("app.issueUi.taskDocumentPanel.updatedDate", { date: new Date(document.updatedAt).toLocaleString(displayLocale()) })}</span>
           <DocumentAnnotationsCountChip
             issueId={issueId}
             docKey={document.key}

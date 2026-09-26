@@ -35,11 +35,11 @@ export function asFiniteNumber(value: unknown, fallback: number) {
 }
 
 export function formatCents(cents: number): string {
-  return `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `$${(cents / 100).toLocaleString(displayLocale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 export function formatNumber(n: number): string {
-  return n.toLocaleString("en-US");
+  return n.toLocaleString(displayLocale());
 }
 
 /**
@@ -51,12 +51,13 @@ export function formatProjectBudget(budget: { amountCents: number; windowKind: s
   return budget.windowKind === "calendar_month_utc" ? `${amount}/mo` : amount;
 }
 
-function displayDateLocale(): string {
+/** Locale for user-facing values, independent of the browser or host language. */
+export function displayLocale(): string {
   return i18n.language === "zh-CN" ? "zh-CN" : "en-US";
 }
 
 export function formatDate(date: Date | string): string {
-  return new Date(date).toLocaleDateString(displayDateLocale(), {
+  return new Date(date).toLocaleDateString(displayLocale(), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -67,7 +68,7 @@ export function formatDateTime(
   date: Date | string,
   options: { includeSeconds?: boolean } = {},
 ): string {
-  return new Date(date).toLocaleString(displayDateLocale(), {
+  return new Date(date).toLocaleString(displayLocale(), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -78,7 +79,7 @@ export function formatDateTime(
 }
 
 export function formatShortDate(date: Date | string): string {
-  return new Date(date).toLocaleString(displayDateLocale(), {
+  return new Date(date).toLocaleString(displayLocale(), {
     month: "short",
     day: "numeric",
   });

@@ -214,7 +214,7 @@ export function ConfigureBuiltInAgentModal({
                 onChange={(event) => setBudgetDollars(event.target.value)}
                 className="w-32"
               />
-              <span className="text-sm text-muted-foreground">/ month</span>
+              <span className="text-sm text-muted-foreground">{translateCopy("app.agentUi.configureBuiltInAgentModal.perMonth")}</span>
             </div>
           </Field>
 

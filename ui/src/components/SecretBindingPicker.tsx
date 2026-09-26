@@ -158,7 +158,7 @@ export function SecretBindingPicker({
   });
 
   const versionDisplay = (selector: SecretVersionSelector | undefined) => {
-    if (selector === undefined || selector === VERSION_LATEST) return "latest";
+    if (selector === undefined || selector === VERSION_LATEST) return t("app.secrets.latestVersion");
     return `v${selector}`;
   };
 
@@ -228,7 +228,7 @@ export function SecretBindingPicker({
             disabled={disabled || !value || !selectedSecret}
             aria-label={t("app.common.labels.version")}
           >
-            <option value={VERSION_LATEST}>latest</option>
+            <option value={VERSION_LATEST}>{t("app.secrets.latestVersion")}</option>
             {selectedSecret
               ? Array.from({ length: Math.max(0, selectedSecret.latestVersion) }, (_, index) => {
                   const version = selectedSecret.latestVersion - index;

@@ -3046,7 +3046,7 @@
       },
       "remoteMcpConnectionSetup": {
         "helpWith": "Help with {{label}}",
-        "boundary": "Paperclip controls access to the tools listed here. App and action permissions inside these tools are managed in <link>{{provider}}</link>.",
+        "boundary": "Paperclip controls access to the tools listed here. App and action permissions inside these tools are managed in <link/>.",
         "invalidUrlTitle": "Enter a valid MCP URL",
         "invalidUrlBody": "Paste the complete server URL, including https:// or http://. A dashboard page is not an MCP endpoint.",
         "oauthFailedTitle": "{{provider}} couldn’t connect",
@@ -3098,7 +3098,8 @@
         "refreshTools": "Refresh tools",
         "draftKept": "Your access choices and setup progress are kept with this connection.",
         "resumeSetup": "Resume setup",
-        "connectThroughProvider": "Connect {{service}} through {{provider}}"
+        "connectThroughProvider": "Connect {{service}} through {{provider}}",
+        "upstreamServiceBoundary": "{{provider}} is an external service that handles the connection and requests to {{service}}. After connecting, the agent will verify the app and guide you through any additional authorization."
       },
       "remoteMcpProductionSetup": {
         "savedCredentialsNotice": "Saved credentials are retained when these fields are left blank. Enter a replacement only to change them.",
@@ -3592,7 +3593,8 @@
           "wait": "Wait",
           "waitUntilAll": "Wait until all {{plural}} are finished, then move it to",
           "moveWhenFinished": "Move this case when all pieces finish",
-          "nothingToSplit": "If nothing is worth splitting, this case still moves to {{stage}}."
+          "nothingToSplit": "If nothing is worth splitting, this case still moves to {{stage}}.",
+          "pieceNounExample": "piece"
         },
         "chooseStage": "Choose a stage",
         "header": {
@@ -4653,7 +4655,10 @@
           "selectors": "Selectors",
           "noSelectors": "No selectors.",
           "deleteEntry": "Delete {{type}} entry"
-        }
+        },
+        "sourceApplication": "app:{{name}}",
+        "sourceConnection": "conn:{{name}}",
+        "sourceRisk": "risk:{{risk}}"
       },
       "shared": {
         "forbidden": "You do not have permission to view this. Tools & Access requires board/admin access.",
@@ -4664,7 +4669,54 @@
         "never": "never",
         "justNow": "just now",
         "inFuture": "in {{value}}",
-        "ago": "{{value}} ago"
+        "ago": "{{value}} ago",
+        "risk": {
+          "unknown": "unknown",
+          "low": "low",
+          "medium": "medium",
+          "high": "high",
+          "critical": "critical",
+          "read": "read",
+          "write": "write",
+          "destructive": "destructive"
+        },
+        "capability": {
+          "readOnly": "read-only",
+          "write": "write",
+          "destructive": "destructive"
+        },
+        "health": {
+          "unknown": "unknown",
+          "healthy": "healthy",
+          "degraded": "degraded",
+          "failed": "failed",
+          "unchecked": "unchecked",
+          "ok": "ok",
+          "error": "error",
+          "missing_secret": "missing_secret",
+          "warning": "warning",
+          "unhealthy": "unhealthy",
+          "critical": "critical"
+        },
+        "decision": {
+          "allow": "allowed",
+          "allowed": "allowed",
+          "deny": "denied",
+          "denied": "denied",
+          "block": "block",
+          "require_approval": "require approval",
+          "requires_approval": "require approval",
+          "redact": "redacted",
+          "redacted": "redacted",
+          "rate_limited": "rate limited",
+          "defer": "deferred",
+          "deferred": "deferred",
+          "hidden": "hidden",
+          "defer_runtime": "defer_runtime"
+        },
+        "durationMinutes": "{{count}}m",
+        "durationHours": "{{count}}h",
+        "durationDays": "{{count}}d"
       },
       "smokeLabMatrix": {
         "paths": {
@@ -5044,7 +5096,22 @@
         "sentenceSeparator": " ",
         "noLongerWaiting": "This request is no longer waiting for a decision.",
         "reasonTryAgain": "{{reason}} Try again.",
-        "submitFailed": "Couldn't submit. Try again."
+        "submitFailed": "Couldn't submit. Try again.",
+        "code": {
+          "interaction_human_only": "Only a human can respond to this interaction.",
+          "interaction_creator_excluded": "This interaction must be resolved by someone other than its creator or creating run.",
+          "interaction_addressee_mismatch": "You are not an eligible addressee for this interaction.",
+          "interaction_governed_action_denied": "This interaction is bound to a governed action that requires separate authorization.",
+          "interaction_run_attribution_required": "A valid authenticated Agent run is required to respond.",
+          "interaction_scope_denied": "You do not have access to resolve this interaction.",
+          "review_policy_denied": "The review policy does not permit you to approve or reject this request.",
+          "interaction_not_found": "This interaction could not be found.",
+          "interaction_already_resolved": "This interaction has already been resolved.",
+          "interaction_superseded": "This interaction has been superseded.",
+          "interaction_stale_target": "The target of this interaction is no longer current.",
+          "interaction_issue_closed": "This interaction can no longer be resolved because the task is closed."
+        },
+        "serverDiagnostic": "(Server diagnostic: {{reason}})"
       },
       "interruptHandoff": {
         "interruptHandOffTo": "Interrupt current run, hand off to",
@@ -5073,7 +5140,8 @@
         "detailStatic": "no responsible; nothing was going to run",
         "queuedFor": "queued for {{who}}",
         "queuedForInterrupted": "queued for {{who}} (interrupted run attached)",
-        "runningBanner": "{{who}} is running — changing the responsible will interrupt this run."
+        "runningBanner": "{{who}} is running — changing the responsible will interrupt this run.",
+        "interruptedByBoardComment": "interrupted by board comment"
       },
       "issueChangeReceipt": {
         "field": {
@@ -5098,7 +5166,11 @@
           "sourceTrust": "Source trust",
           "executionPolicy": "Execution policy",
           "executionWorkspaceId": "Execution workspace",
-          "projectWorkspaceId": "Project workspace"
+          "projectWorkspaceId": "Project workspace",
+          "status": "Status",
+          "priority": "Priority",
+          "title": "Title",
+          "description": "Description"
         },
         "reason": {
           "allow_visible_issue_write": "default-open write on a visible task",
@@ -5676,6 +5748,13 @@
         "filesNeedRecovery": "Workspace files need recovery.",
         "noFinalResponse": "No final response was recorded.",
         "affectedPath": "Affected path: {{path}}."
+      },
+      "savedProviderCredentials": {
+        "yourDefault": "{{name}} (Your default)",
+        "companyShared": "{{name}} (Company shared)",
+        "yourKey": "{{name}} (Your key)",
+        "organizationKey": "{{name}} (Organization key)",
+        "chatgptAccount": "ChatGPT account · {{name}}"
       }
     },
     "skills": {
@@ -5699,7 +5778,11 @@
         "loadingAgents": "Loading agents...",
         "addAgent": "Add agent…",
         "searchAgents": "Search agents...",
-        "allHaveSkill": "All eligible agents already have this skill."
+        "allHaveSkill": "All eligible agents already have this skill.",
+        "oneAgentUsesSkill": "{{count}} agent uses this skill",
+        "manyAgentsUseSkill": "{{count}} agents use this skill",
+        "oneAgent": "{{count}} agent",
+        "manyAgents": "{{count}} agents"
       },
       "companySkills": {
         "skillsShManaged": "skills.sh managed",
@@ -6391,7 +6474,13 @@
         "couldnTDeleteRun": "Couldn't delete run",
         "inputContentCopied": "Input content copied",
         "newSkillPreview": "New Skill",
-        "updatedAgo": "updated {{time}}"
+        "updatedAgo": "updated {{time}}",
+        "namePlaceholder": "Code review",
+        "descriptionPlaceholder": "Review repository changes for correctness, tests, and maintainability.",
+        "runTemplateNamePlaceholder": "Focused smoke",
+        "runTemplateDescriptionPlaceholder": "Short instructions for common skill checks",
+        "fieldRequired": "{{label}} is required.",
+        "removedAgent": "{{name}} (removed)"
       },
       "skillsContextualSidebar": {
         "discover": "Discover",
@@ -6451,7 +6540,8 @@
         "installSkillsToTheOrganizationThenEnableThemOn": "Install skills to the organization, then enable them on this agent.",
         "materializationNote": "Enabled skills are materialized into the stable Paperclip-managed prompt bundle on the agent's next run.",
         "betaRelease": "Beta · {{release}}",
-        "enabledOfTotal": "{{enabled}} of {{total}} enabled"
+        "enabledOfTotal": "{{enabled}} of {{total}} enabled",
+        "enabledSkillMissing": "<skill/> is enabled but missing from the organization library."
       },
       "agentSkillSource": {
         "localFolder": "Local folder",
@@ -6538,7 +6628,8 @@
         "workspaceRemote": "remote",
         "workspaceCountOne": "{{n}} workspace",
         "workspaceCountOther": "{{n}} workspaces",
-        "scannableCount": "{{n}} scannable"
+        "scannableCount": "{{n}} scannable",
+        "moreFolders": "+{{count}} more"
       }
     },
     "reports": {
@@ -6595,7 +6686,8 @@
         "changeKind": {
           "matched": "new issue matched the query",
           "left": "left the query"
-        }
+        },
+        "queryNotCompiled": "// query not compiled yet"
       },
       "statusCardTile": {
         "noSummaryYetLower": "no summary yet",
@@ -8715,7 +8807,11 @@
         "loadingTasks": "Loading tasks…",
         "couldNotLoadAllTasks": "Could not load all tasks.",
         "retry": "Retry",
-        "noTasksYet": "No tasks yet."
+        "noTasksYet": "No tasks yet.",
+        "goToProject": "Go to {{name}} project",
+        "projectTasks": "{{name}} tasks",
+        "ancestors": "Ancestors",
+        "subtasks": "Subtasks"
       },
       "taskDocumentPanel": {
         "loadingDocument": "Loading document…",
@@ -8739,7 +8835,8 @@
         "recentWorkspaceFiles": "Recent workspace files",
         "recentFilesAreTemporarilyUnavailable": "Recent files are temporarily unavailable.",
         "openANewTab": "Open a new tab",
-        "revisionNumber": "Revision {{number}}"
+        "revisionNumber": "Revision {{number}}",
+        "totalTasks": "{{count}} total"
       },
       "useDocumentAnnotationMutations": {
         "you": "You",
@@ -8952,7 +9049,8 @@
         "quotedHelp": "<label>Quoted phrases:</label> wrap a phrase in quotes to match the exact sequence.",
         "paletteHelp": "<label>⌘K:</label> reopens the command palette pre-seeded with your current query.",
         "or": "or",
-        "operatorExamples": "Try <status>status:todo</status>, <assignee>assignee:me</assignee>, or <updated>updated:>7d</updated>."
+        "operatorExamples": "Try <status>status:todo</status>, <assignee>assignee:me</assignee>, or <updated>updated:>7d</updated>.",
+        "partialResults": "Showing {{shown}} of {{total}} results"
       }
     },
     "workspaces": {
@@ -9610,7 +9708,28 @@
         "jobs": "Jobs",
         "jobsDescription": "One-shot commands that run now and exit when they finish.",
         "untrackedServices": "Untracked services",
-        "untrackedDescription": "Running services that no longer match the current workspace command config."
+        "untrackedDescription": "Running services that no longer match the current workspace command config.",
+        "kind": {
+          "service": "service",
+          "job": "job"
+        },
+        "runOnce": "run once",
+        "status": {
+          "provisioning": "provisioning",
+          "starting": "starting",
+          "running": "running",
+          "stopped": "stopped",
+          "failed": "failed"
+        },
+        "lifecycle": {
+          "shared": "shared",
+          "ephemeral": "ephemeral"
+        },
+        "health": {
+          "unknown": "unknown",
+          "healthy": "healthy",
+          "unhealthy": "unhealthy"
+        }
       },
       "workspaceServiceControlBar": {
         "provisioning": "Provisioning…",
@@ -9671,7 +9790,8 @@
         "secretName": "Secret name",
         "secretValue": "Secret value",
         "hideValue": "Hide value",
-        "showValue": "Show value"
+        "showValue": "Show value",
+        "valuePlaceholder": "value"
       },
       "importFromVaultDialog": {
         "statusImported": "Imported",
@@ -9876,7 +9996,8 @@
         "revertedToText": "Reverted to text —",
         "storeAsSecretEllipsis": "Store as secret…",
         "removeVariable": "Remove {{name}}",
-        "variable": "variable"
+        "variable": "variable",
+        "valuePlaceholder": "value"
       },
       "secretBindingPicker": {
         "externalProvider": "External · {{provider}}",
@@ -10251,7 +10372,8 @@
         "userSecretBadge": "User secret",
         "responsibleUser": "Responsible user:",
         "credentialOwner": "Credential owner:"
-      }
+      },
+      "latestVersion": "latest"
     },
     "routines": {
       "triggerCard": {
@@ -10417,7 +10539,20 @@
         "labelCopied": "{{label}} copied",
         "failedToCopyLabel": "Failed to copy {{label}}",
         "sectionDelivery": "Delivery",
-        "versionHistory": "Version history"
+        "versionHistory": "Version history",
+        "unsavedFields": {
+          "title": "the title",
+          "description": "the description",
+          "projectId": "the project",
+          "assigneeAgentId": "the default agent",
+          "priority": "the priority",
+          "concurrencyPolicy": "the concurrency policy",
+          "catchUpPolicy": "the catch-up policy",
+          "activityGatePolicy": "the advanced run policy",
+          "activityGateScope": "the activity gate scope",
+          "variables": "the variables",
+          "env": "the secrets"
+        }
       },
       "routines": {
         "coalesceIfActiveDescription": "If a run is already active, keep just one follow-up run queued.",
@@ -12276,7 +12411,15 @@
         "importManyFiles": "Import {{count}} files",
         "runningOnServerLong": "Import running on the server — safe to keep waiting; reconnecting won't lose it. Large packages can take several minutes.",
         "importFailedDetail": "Import failed: {{reason}} Nothing may have been created, or the import stopped partway — check the target company before retrying.",
-        "packageFiles": "Package files"
+        "packageFiles": "Package files",
+        "actionLabel": {
+          "create": "create",
+          "update": "update",
+          "overwrite": "overwrite",
+          "replace": "replace",
+          "skip": "skip",
+          "none": "none"
+        }
       }
     },
     "apps": {
@@ -13752,7 +13895,8 @@
         "backToGateways": "Back to gateways",
         "appsGateways": "Apps · Gateways",
         "clientSnippets": "Client snippets",
-        "gatewayTabs": "Gateway tabs"
+        "gatewayTabs": "Gateway tabs",
+        "exposingToolsAgain": "{{name}} is exposing its tools again."
       },
       "gatewaysList": {
         "gateways": "Gateways",
@@ -13846,7 +13990,8 @@
         "archiving": "Archiving…",
         "archiveGateway": "Archive gateway",
         "endpointUrl": "Endpoint URL",
-        "gatewayConfigJson": "Gateway config JSON"
+        "gatewayConfigJson": "Gateway config JSON",
+        "noLongerReachable": "{{name}} is no longer reachable."
       },
       "overviewPanel": {
         "toggleGateway": "Toggle gateway",
@@ -13898,7 +14043,8 @@
         "revokeToken": "Revoke token",
         "expiresRelative": "Expires <time />",
         "pagination": "Page {{page}} of {{pages}} · {{count}} tokens",
-        "revokeWarning": "Any client using <token>{{name}}</token> goes silent immediately. This can’t be undone. Type the token name to confirm."
+        "revokeWarning": "Any client using <token>{{name}}</token> goes silent immediately. This can’t be undone. Type the token name to confirm.",
+        "canNoLongerConnect": "{{name}} can no longer connect."
       },
       "genericMcpConnect": {
         "paperclipCouldnTConnectToThatAddress": "Paperclip couldn't connect to that address. Check it and try again.",
@@ -14458,7 +14604,10 @@
         "addShortReason": "Add a short reason",
         "submitRejectionReason": "Submit rejection reason",
         "applyCount": "Apply {{count}}",
-        "applyDecisions": "Apply decisions"
+        "applyDecisions": "Apply decisions",
+        "hiddenFollowUpOne": "+ {{count}} hidden follow-up",
+        "hiddenFollowUpMany": "+ {{count}} hidden follow-ups",
+        "addressedUser": "the addressed user"
       },
       "taskChatComposer": {
         "modeDescription": {
@@ -14591,7 +14740,10 @@
         "waitingToStart": "Waiting to start...",
         "stoppedBeforeResponse": "This run stopped before a response was available. Review the task’s connection or recovery action below.",
         "waitingForTranscript": "Waiting for transcript...",
-        "workspaceRestoreFailed": "Workspace restore failed"
+        "workspaceRestoreFailed": "Workspace restore failed",
+        "pendingInputCount_one": "{{count}} pending input",
+        "pendingInputCount_other": "{{count}} pending inputs",
+        "pendingInputCount": "{{count}} pending inputs"
       },
       "toolTaxonomy": {
         "applyingAPatch": "Applying a patch",
@@ -15072,7 +15224,15 @@
         "logLineCountOne": "{{n}} log line",
         "logLineCountOther": "{{n}} log lines",
         "systemMessageCountOne": "{{n}} system message",
-        "systemMessageCountOther": "{{n}} system messages"
+        "systemMessageCountOther": "{{n}} system messages",
+        "invocationDetail": "invocation {{id}}",
+        "auditDetail": "audit {{count}}",
+        "actionDetail": "action {{status}} {{id}}",
+        "cardDetail": "card {{id}}",
+        "emptyInput": "<empty>",
+        "workspaceDiffLabel": "workspace diff",
+        "workspaceChangesLabel": "workspace changes",
+        "initLabel": "init"
       },
       "boardChat": {
         "typing": "typing",
@@ -15138,6 +15298,10 @@
           "distilling": "Distilling",
           "deliberating": "Deliberating"
         }
+      },
+      "usage": {
+        "context": "{{used}}/{{size}} ctx",
+        "contextPercent": "{{used}}/{{size}} ctx ({{percent}}%)"
       }
     },
     "shell": {
@@ -16064,7 +16228,50 @@
         "retryRichEditor": "Retry rich editor",
         "drop": "Drop",
         "dropFile": "Drop file to upload",
-        "dropImage": "Drop image to upload"
+        "dropImage": "Drop image to upload",
+        "controls": {
+          "editableMarkdown": "editable markdown",
+          "selectCodeLanguage": "Select code block language",
+          "codeLanguage": "Language",
+          "deleteCodeBlock": "Delete code block",
+          "deleteTable": "Delete table",
+          "columnMenu": "Column menu",
+          "textAlignment": "Text alignment",
+          "alignLeft": "Align left",
+          "alignCenter": "Align center",
+          "alignRight": "Align right",
+          "insertColumnLeft": "Insert a column to the left of this one",
+          "insertColumnRight": "Insert a column to the right of this one",
+          "deleteColumn": "Delete this column",
+          "rowMenu": "Row menu",
+          "insertRowAbove": "Insert a row above this one",
+          "insertRowBelow": "Insert a row below this one",
+          "deleteRow": "Delete this row",
+          "uploadImage": "Upload an image",
+          "uploadImageInstructions": "Upload an image from your device:",
+          "imageUrlOrUpload": "Or add an image from an URL:",
+          "imageUrl": "Add an image from an URL:",
+          "imageSourcePlaceholder": "Select or paste an image src",
+          "imageAlt": "Alt:",
+          "imageTitle": "Title:",
+          "imageWidth": "Width:",
+          "imageHeight": "Height:",
+          "deleteImage": "Delete image",
+          "editImage": "Edit image",
+          "linkUrl": "URL",
+          "linkUrlPlaceholder": "Select or paste an URL",
+          "linkTextTooltip": "The text to be displayed for the link",
+          "linkText": "Anchor text",
+          "linkTitleTooltip": "The link's title attribute, shown on hover",
+          "linkTitle": "Link title",
+          "setLinkUrl": "Set URL",
+          "cancelLinkChange": "Cancel change",
+          "openLink": "Open {{url}} in new window",
+          "editLink": "Edit link URL",
+          "copyLink": "Copy to clipboard",
+          "linkCopied": "Copied!",
+          "removeLink": "Remove link"
+        }
       },
       "outputFeedbackButtons": {
         "helpful": "Helpful",
@@ -16229,12 +16436,14 @@
         "configureNamed": "Configure & enable {{name}}",
         "provisionNamed": "Provision {{name}}",
         "setupNamed": "Set up the {{name}}",
-        "createsBuiltin": "Creates <name>{{name}}</name> in your roster, badged <badge>Built-in</badge>. Organizations that require hire approval will queue this for the board."
+        "createsBuiltin": "Creates <name>{{name}}</name> in your roster, badged <badge>Built-in</badge>. Organizations that require hire approval will queue this for the board.",
+        "perMonth": "/ month"
       },
       "gitHubAgentTrustWarning": {
         "gitHubCommentsAndPullRequestsCanContainMaliciousInstructions": "GitHub comments and pull requests can contain malicious instructions. We recommend a low-trust agent with a scoped work boundary and an isolated sandbox runtime.",
         "continuingKeepsThisAgentsCurrentPermissionsARestrictedGuest": "Continuing keeps this agent’s current permissions. A restricted guest profile does not replace the agent’s trust and runtime settings.",
-        "learnAboutLowtrustAgents": "Learn about low-trust agents"
+        "learnAboutLowtrustAgents": "Learn about low-trust agents",
+        "notConfiguredForLowTrustReview": "{{name}} is not configured for low-trust review"
       },
       "sidebarAgentChats": {
         "agent": "Agent"
@@ -16946,7 +17155,8 @@
         "runOnceDescription": "Paperclip will create one routine task now. This does not enable the weekly schedule or turn on background work.",
         "disableDescription": "Paperclip will stop future scheduled Reflection Coach runs. Manual Run once remains available.",
         "enableDescription": "Paperclip will allow Reflection Coach to create routine tasks on the weekly schedule. It can spend tokens when those tasks run.",
-        "proposalDescription": "A proposed Reflection Coach update is waiting for review."
+        "proposalDescription": "A proposed Reflection Coach update is waiting for review.",
+        "routine": "routine"
       },
       "agentConfigForm": {
         "off": "off",
@@ -17096,6 +17306,36 @@
         "stopped": "Stopped",
         "explanation": "Recovery asked the assigned agent to record an outcome or a next step. Retrying keeps the same task and agent, and checks the task’s current controls before continuing.",
         "technicalReason": "Technical reason"
+      }
+    },
+    "finance": {
+      "financeBillerCard": {
+        "eventSummaryOne": "{{count}} event across {{kinds}}",
+        "eventSummaryMany": "{{count}} events across {{kinds}}",
+        "kindCountOne": "{{count}} kind",
+        "kindCountMany": "{{count}} kinds",
+        "net": "net",
+        "debits": "debits",
+        "credits": "credits",
+        "estimated": "estimated"
+      }
+    },
+    "activity": {
+      "issueFieldChangeReceipt": {
+        "preview": "preview",
+        "responsibleUser": "for <name/>",
+        "authorizedBy": "authorized by {{reason}}"
+      }
+    },
+    "adapters": {
+      "processConfigFields": {
+        "commandPlaceholder": "e.g. node, python",
+        "argumentsPlaceholder": "e.g. script.js, --flag"
+      }
+    },
+    "company": {
+      "companyPatternIcon": {
+        "logoAlt": "{{name}} logo"
       }
     }
   }

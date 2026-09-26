@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -351,7 +352,7 @@ export function CompanyAccess() {
                         : t("app.settings.companyAccess.joinInvite", { joinTypes: request.invite.allowedJoinTypes })
                       : t("app.settings.companyAccess.inviteMetadataUnavailable")
                   }
-                  detail={t("app.settings.companyAccess.submittedAt", { date: new Date(request.createdAt).toLocaleString() })}
+                  detail={t("app.settings.companyAccess.submittedAt", { date: new Date(request.createdAt).toLocaleString(displayLocale()) })}
                   approveLabel={t("app.settings.companyAccess.approveHuman")}
                   rejectLabel={t("app.settings.companyAccess.rejectHuman")}
                   disabled={joinRequestActionPending}

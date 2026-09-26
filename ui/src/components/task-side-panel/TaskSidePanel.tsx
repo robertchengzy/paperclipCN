@@ -500,7 +500,7 @@ export function TaskSidePanel({
   const launcherSections = useMemo<SidePanelLauncherSection[]>(() => {
     const primary: SidePanelLauncherItem[] = [
       { id: "properties", label: translateCopy("app.issueUi.taskSidePanel.properties"), icon: <SlidersHorizontal />, alreadyOpen: controller.tabs.some((tab) => tab.id === "properties") },
-      ...(subtasksAvailable ? [{ id: "subtasks", label: taskLabel, description: tasksTab?.hasError ? translateCopy("app.issueUi.taskSidePanel.couldNotLoadAllTasks") : `${taskCount} total`, icon: <ListTree />, alreadyOpen: controller.tabs.some((tab) => tab.id === "subtasks") }] : []),
+      ...(subtasksAvailable ? [{ id: "subtasks", label: taskLabel, description: tasksTab?.hasError ? translateCopy("app.issueUi.taskSidePanel.couldNotLoadAllTasks") : translateCopy("app.issueUi.taskSidePanel.totalTasks", { count: taskCount }), icon: <ListTree />, alreadyOpen: controller.tabs.some((tab) => tab.id === "subtasks") }] : []),
       { id: "artifacts", label: translateCopy("app.issueUi.taskSidePanel.artifacts"), icon: <Box />, alreadyOpen: controller.tabs.some((tab) => tab.id === "artifacts") },
     ];
     if (fileTabsEnabled) {

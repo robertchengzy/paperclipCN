@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import {
   useCallback,
   useEffect,
@@ -317,7 +318,7 @@ function readEnvironmentSandboxProvider(environment: Environment): string | null
 function formatDateTime(value: string | Date | null | undefined): string | null {
   if (!value) return null;
   const date = value instanceof Date ? value : new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date.toLocaleString();
+  return Number.isNaN(date.getTime()) ? null : date.toLocaleString(displayLocale());
 }
 
 function formatShortId(value: string): string {

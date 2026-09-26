@@ -3,13 +3,13 @@ import { t, useTranslation } from "@/i18n";
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import type { ActivityEvent } from "@paperclipai/shared";
-import { cn } from "@/lib/utils";
+import { displayLocale, cn } from "@/lib/utils";
 
 export type RoutineActivityEvent = Pick<ActivityEvent, "id" | "action" | "details" | "createdAt">;
 
 function formatTime(value: string | Date): string {
   try {
-    return new Date(value).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return new Date(value).toLocaleTimeString(displayLocale(), { hour: "2-digit", minute: "2-digit" });
   } catch {
     return String(value);
   }

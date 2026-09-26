@@ -1,5 +1,6 @@
 import type { AiConnectionBinding, AiManagedConnectionSummary, AiProvider, CompanySecret, EnvBinding } from "@paperclipai/shared";
 import type { MyUserSecretEntry } from "../api/secrets";
+import { t } from "@/i18n";
 
 export type SavedProviderKey = { id: string; label: string } & (
   | { binding: EnvBinding; aiConnection?: never }
@@ -13,10 +14,10 @@ export function savedManagedProviderAccounts(
   return connections.flatMap<SavedProviderKey>((account) => {
     if (account.companyId !== companyId || account.provider !== provider || account.status !== "connected") return [];
     if (account.ownership === "personal" && account.ownerUserId === currentUserId && account.isDefault) {
-      return [{ id: `ai:${account.grantId}`, label: `${account.name} (Your default)`, aiConnection: { provider, method: account.method, mode: "responsible_user" as const } }];
+      return [{ id: `ai:${account.grantId}`, label: t("app.lib.savedProviderCredentials.yourDefault", { name: account.name }), aiConnection: { provider, method: account.method, mode: "responsible_user" as const } }];
     }
     if (account.ownership === "shared") {
-      return [{ id: `ai:${account.grantId}`, label: `${account.name} (Company shared)`, aiConnection: { provider, method: account.method, mode: "shared" as const, connectionId: account.id, grantId: account.grantId } }];
+      return [{ id: `ai:${account.grantId}`, label: t("app.lib.savedProviderCredentials.companyShared", { name: account.name }), aiConnection: { provider, method: account.method, mode: "shared" as const, connectionId: account.id, grantId: account.grantId } }];
     }
     return [];
   });
@@ -42,7 +43,7 @@ export function savedProviderKeys(
         ? [
             {
               id: `user:${definition.id}`,
-              label: `${definition.name} (Your key)`,
+              label: t("app.lib.savedProviderCredentials.yourKey", { name: definition.name }),
               binding: {
                 type: "user_secret_ref" as const,
                 key: definition.key,
@@ -60,7 +61,7 @@ export function savedProviderKeys(
         ? [
             {
               id: `company:${secret.id}`,
-              label: `${secret.name} (Organization key)`,
+              label: t("app.lib.savedProviderCredentials.organizationKey", { name: secret.name }),
               binding: {
                 type: "secret_ref" as const,
                 secretId: secret.id,
@@ -88,7 +89,7 @@ export function savedCodexSubscriptions(
     )
     .map((secret) => ({
       id: `company:${secret.id}`,
-      label: secret.name.replace("CODEX_HOME_", "ChatGPT account · "),
+      label: t("app.lib.savedProviderCredentials.chatgptAccount", { name: secret.name.slice("CODEX_HOME_".length) }),
       binding: { type: "secret_ref", secretId: secret.id, version: "latest" },
     }));
 }

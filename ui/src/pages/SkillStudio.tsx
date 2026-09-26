@@ -561,7 +561,7 @@ function StudioNewSkillPanel({
                     : draft.markdown,
                 });
               }}
-              placeholder="Code review"
+              placeholder={t("app.skills.skillStudio.namePlaceholder")}
             />
           </div>
           <div className="space-y-1.5">
@@ -594,7 +594,7 @@ function StudioNewSkillPanel({
                   : draft.markdown,
               });
             }}
-            placeholder="Review repository changes for correctness, tests, and maintainability."
+            placeholder={t("app.skills.skillStudio.descriptionPlaceholder")}
             className="min-h-20"
           />
         </div>
@@ -1754,7 +1754,7 @@ function SkillPathDialog({
     if (!mode) return;
     const normalized = normalizeStudioPath(pathValue);
     if (!normalized) {
-      setError(`${label} is required.`);
+      setError(t("app.skills.skillStudio.fieldRequired", { label }));
       return;
     }
     if (mode === "file") {
@@ -2884,7 +2884,7 @@ function RunTemplateDialog({
               id="run-template-name"
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="Focused smoke"
+              placeholder={t("app.skills.skillStudio.runTemplateNamePlaceholder")}
             />
           </div>
           <div className="space-y-1">
@@ -2893,7 +2893,7 @@ function RunTemplateDialog({
               id="run-template-description"
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              placeholder="Short instructions for common skill checks"
+              placeholder={t("app.skills.skillStudio.runTemplateDescriptionPlaceholder")}
             />
           </div>
           <div className="space-y-1">
@@ -2950,7 +2950,7 @@ function RunHistoryRow({
     <EntityRow
       leading={<StatusBadge status={runBadgeStatus(run.status)} />}
       identifier={runShortId(run)}
-      title={removed ? `${name} (removed)` : name}
+      title={removed ? t("app.skills.skillStudio.removedAgent", { name }) : name}
       subtitle={relativeTime(run.createdAt)}
       trailing={
         <span className="font-mono text-xs text-muted-foreground">

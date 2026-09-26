@@ -8,6 +8,7 @@ import { QuotaBar } from "./QuotaBar";
 import { ClaudeSubscriptionPanel } from "./ClaudeSubscriptionPanel";
 import { CodexSubscriptionPanel } from "./CodexSubscriptionPanel";
 import {
+  displayLocale,
   billingTypeDisplayName,
   formatCents,
   formatTokens,
@@ -361,7 +362,7 @@ export function ProviderQuotaCard({
                             </p>
                           ) : qw.resetsAt ? (
                             <p className="text-xs text-muted-foreground">
-                              {t("app.shell.providerQuotaCard.resets", { date: new Date(qw.resetsAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }) })}
+                              {t("app.shell.providerQuotaCard.resets", { date: new Date(qw.resetsAt).toLocaleDateString(displayLocale(), { month: "short", day: "numeric" }) })}
                             </p>
                           ) : null}
                         </div>

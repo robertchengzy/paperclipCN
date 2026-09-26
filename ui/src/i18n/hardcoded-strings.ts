@@ -46,29 +46,30 @@ const COPY_CALLEES = new Set(["toast", "pushToast", "showToast", "notify", "aler
 
 const LETTER_WORD_RE = /[A-Za-z]{2,}/;
 
-function looksLikeCode(value: string): boolean {
+function looksLikeCode(value: string, visibleCopy = false): boolean {
   const v = value.replace(/&[a-z]+;|&#\d+;/g, " ").trim();
   if (!LETTER_WORD_RE.test(v)) return true;
   if (/^https?:\/\//.test(v) || /^mailto:/.test(v)) return true;
   if (/\b(var|rgba?|hsla?|oklch|calc|linear-gradient|radial-gradient|url)\(/.test(v)) return true;
-  if (/^[./~@#]/.test(v)) return true;
-  // identifiers: camelCase, snake_case, kebab-case, dotted keys, SCREAMING_CASE
-  if (/^[a-z0-9_.:\/-]+$/.test(v)) return true;
+  if (/^[./~@#]/.test(v) && (!visibleCopy || !/\s/.test(v))) return true;
+  // Identifiers: camelCase, snake_case, dotted keys, SCREAMING_CASE.
+  // A lowercase word in a display position is copy, not an identifier. Keep
+  // syntax-bearing identifiers separate from ambiguous words such as "credits".
+  if (/^[a-z0-9_.:\/-]+$/.test(v) && (!visibleCopy || /_|[a-z0-9][.:/][a-z0-9]/.test(v))) return true;
   if (/^[A-Z0-9_]+$/.test(v) && v.includes("_")) return true;
   if (/^[a-z]+[A-Z][A-Za-z0-9]*$/.test(v)) return true;
-  // CSS utility class lists
-  if (/^[a-z0-9:_\-\[\]\/.%#()!]+(\s+[a-z0-9:_\-\[\]\/.%#()!]+)+$/.test(v)) return true;
+  // Only non-display contexts may infer CSS from lowercase token lists.
+  if (!visibleCopy && /^[a-z0-9:_\-\[\]\/.%#()!]+(\s+[a-z0-9:_\-\[\]\/.%#()!]+)+$/.test(v)) return true;
   // placeholders that are sample values rather than copy
   if (/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(v)) return true;
   return false;
 }
 
-function isCopy(value: string, relaxed: boolean): boolean {
+function isCopy(value: string): boolean {
   const v = value.replace(/\s+/g, " ").trim();
-  if (!v || looksLikeCode(v)) return false;
-  if (relaxed) return true;
-  // attribute/property strings: require a capitalised word or a space-separated phrase
-  return /^[A-Z]/.test(v) || /[A-Za-z]{2,}\s+[A-Za-z]{2,}/.test(v);
+  // JSX children and copy-bearing attributes/properties already establish a
+  // display position. Case and CSS-like spacing must not hide natural language.
+  return Boolean(v) && !looksLikeCode(v, true);
 }
 
 type AstNode = { type: string; start: number; end: number; [key: string]: unknown };
@@ -176,7 +177,7 @@ function classifyLiteral(
   const sink = i >= 0 ? ancestors[i] : null;
   if (!sink) return null;
   const copy = (strict: boolean) =>
-    isTemplate ? templateIsCopy(node) : strict ? isPhrase(text) : isCopy(text, false) || (concat && isPhrase(text));
+    strict ? (isTemplate ? templateIsCopy(node) : isPhrase(text)) : isCopy(text) || (concat && isPhrase(text));
 
   switch (sink.type) {
     case "JSXAttribute": {
@@ -251,7 +252,7 @@ export function scanSource(file: string, source: string, exemptValues: Set<strin
 
     if (n.type === "JSXText") {
       const text = n.value as string;
-      if (isCopy(text, true)) report(n, "jsx-text", text);
+      if (isCopy(text)) report(n, "jsx-text", text);
     } else if (isStringNode(n)) {
       const hit = classifyLiteral(n, ancestors);
       if (hit) report(n, hit.kind, hit.text);

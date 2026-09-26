@@ -101,7 +101,7 @@ export function GatewaysList() {
         title: gateway.status === "active" ? t("app.apps.gatewaysList.gatewayOn") : t("app.apps.gatewaysList.gatewayOff"),
         body:
           gateway.status === "active"
-            ? `${gateway.name} is exposing its tools again.`
+            ? t("app.apps.gatewayDetail.exposingToolsAgain", { name: gateway.name })
             : t("app.apps.gatewaysList.isOffEveryClientGoesSilent", { value0: gateway.name }),
         tone: "success",
       });

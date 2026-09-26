@@ -50,7 +50,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { EmptyState } from "../../components/EmptyState";
-import { cn } from "../../lib/utils";
+import { displayLocale, cn } from "../../lib/utils";
 import { t as translate, useTranslation } from "@/i18n";
 
 type Step = "select" | "review" | "result";
@@ -190,7 +190,7 @@ function formatRelativeShort(value: string | null | undefined): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "—";
   const diff = Date.now() - date.getTime();
-  if (diff < 0) return date.toLocaleDateString();
+  if (diff < 0) return date.toLocaleDateString(displayLocale());
   const seconds = Math.floor(diff / 1000);
   if (seconds < 60) return translate("app.secrets.importFromVaultDialog.secondsAgo", { count: seconds });
   const minutes = Math.floor(seconds / 60);
@@ -199,7 +199,7 @@ function formatRelativeShort(value: string | null | undefined): string {
   if (hours < 48) return translate("app.secrets.importFromVaultDialog.hoursAgo", { count: hours });
   const days = Math.floor(hours / 24);
   if (days < 30) return translate("app.secrets.importFromVaultDialog.daysAgo", { count: days });
-  return date.toLocaleDateString();
+  return date.toLocaleDateString(displayLocale());
 }
 
 function readableErrorMessage(error: unknown): string {

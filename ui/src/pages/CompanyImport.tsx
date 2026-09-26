@@ -134,6 +134,10 @@ const ACTION_COLORS: Record<string, string> = {
   none: "text-muted-foreground border-border",
 };
 
+function importActionLabel(action: string) {
+  return t(`app.settings.companyImport.actionLabel.${action}`, { defaultValue: action });
+}
+
 function FrontmatterCard({ data }: { data: FrontmatterData }) {
   return (
     <div className="rounded-md border border-border bg-accent/20 px-4 py-3 mb-4">
@@ -176,7 +180,7 @@ function renderImportFileExtra(node: FileTreeNode, checked: boolean, renameMap: 
       "text-(length:--text-nano) uppercase tracking-wide",
       ACTION_COLORS[node.action] ?? ACTION_COLORS.skip,
     )}>
-      {checked ? node.action : "skip"}
+      {importActionLabel(checked ? node.action : "skip")}
     </Badge>
   ) : null;
 
@@ -255,7 +259,7 @@ function ImportPreviewPane({
               "uppercase tracking-wide",
               actionColor,
             )}>
-              {action}
+              {importActionLabel(action)}
             </Badge>
           )}
         </div>

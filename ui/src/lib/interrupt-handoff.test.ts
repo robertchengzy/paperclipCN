@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { i18n } from "@/i18n";
 import { buildAgentMentionHref } from "@paperclipai/shared";
 import {
   bodyHasAgentMention,
@@ -16,6 +17,8 @@ import {
 const QA_ID = "agent-qa-1111";
 const QA_HREF = buildAgentMentionHref(QA_ID, null);
 const qaMention = `[@QA](${QA_HREF})`;
+
+afterEach(async () => { await i18n.changeLanguage("en"); });
 
 describe("isOperatorInterruptedRun", () => {
   it("detects operator interrupts via errorCode", () => {
@@ -52,6 +55,14 @@ describe("resolveRunStatusPresentation", () => {
   it("leaves failed/succeeded untouched", () => {
     expect(resolveRunStatusPresentation("failed").className).toContain("red");
     expect(resolveRunStatusPresentation("timed_out").label).toBe("timed out");
+  });
+
+  it("localizes the interrupted label and accessible explanation while retaining unknown statuses", async () => {
+    await i18n.changeLanguage("zh-CN");
+    expect(resolveRunStatusPresentation("cancelled", { operatorInterrupted: true })).toMatchObject({ label: "已中断", srHint: "因 Board 评论而中断" });
+    expect(resolveRunStatusPresentation("timed_out").label).toBe("超时");
+    expect(resolveRunStatusPresentation("succeeded").label).toBe("成功");
+    expect(resolveRunStatusPresentation("future_status").label).toBe("future_status");
   });
 });
 

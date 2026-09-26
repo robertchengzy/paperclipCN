@@ -10,10 +10,29 @@ vi.mock("../api/issues", () => ({
   },
 }));
 
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { i18n } from "@/i18n";
 import { QueryClient } from "@tanstack/react-query";
 import { __liveUpdatesTestUtils } from "./LiveUpdatesProvider";
 import { queryKeys } from "../lib/queryKeys";
+
+afterEach(async () => { await i18n.changeLanguage("en"); });
+
+describe("LiveUpdatesProvider update descriptions", () => {
+  it("localizes known statuses, priorities and reopen origins", async () => {
+    await i18n.changeLanguage("zh-CN");
+    expect(__liveUpdatesTestUtils.describeIssueUpdate({ status: "in_progress", priority: "high", reopened: true, reopenedFrom: "done" }))
+      .toBe("状态 -> 进行中，优先级 -> 高，从 已完成 重新打开");
+  });
+
+  it("preserves future enum values without changing their diagnostic spelling", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const description = __liveUpdatesTestUtils.describeIssueUpdate({ status: "future_status", priority: "future_priority", reopened: true, reopenedFrom: "future_origin" });
+    expect(description).toContain("future_status");
+    expect(description).toContain("future_priority");
+    expect(description).toContain("future_origin");
+  });
+});
 
 describe("LiveUpdatesProvider issue invalidation", () => {
   it("refreshes the source task activity when a company skill is created", () => {

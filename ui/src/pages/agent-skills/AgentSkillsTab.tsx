@@ -1,4 +1,5 @@
 import { t, useTranslation } from "@/i18n";
+import { Trans } from "react-i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -463,7 +464,11 @@ export function AgentSkillsTab({ agent, companyId }: { agent: Agent; companyId?:
               className="flex items-center justify-between gap-3 border-b border-amber-300/40 bg-amber-50/60 px-3 py-2 text-xs text-amber-800 last:border-b-0 dark:border-amber-500/20 dark:bg-amber-950/20 dark:text-amber-200"
             >
               <span className="min-w-0 truncate">
-                <span className="font-medium">{key}</span> is enabled but missing from the organization library.
+                {/* Skill keys are React text, never translation markup. */}
+                <Trans
+                  i18nKey="app.skills.agentSkillsTab.enabledSkillMissing"
+                  components={{ skill: <span className="font-medium">{key}</span> }}
+                />
               </span>
               <button
                 type="button"

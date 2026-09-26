@@ -21,7 +21,7 @@ import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { useCompany } from "../context/CompanyContext";
 import { useManagedSandboxOnly } from "../hooks/useManagedSandboxOnly";
 import { queryKeys } from "../lib/queryKeys";
-import { projectRouteRef, projectWorkspaceUrl } from "../lib/utils";
+import { displayLocale, projectRouteRef, projectWorkspaceUrl } from "../lib/utils";
 import { t as translate, useTranslation } from "@/i18n";
 
 type WorkspaceFormState = {
@@ -708,7 +708,7 @@ export function ProjectWorkspaceDetail() {
               ) : t("app.common.none")}
             </DetailRow>
             <DetailRow label={t("app.workspaces.projectWorkspaceDetail.field.defaultRef")}>{workspace.defaultRef ?? t("app.common.none")}</DetailRow>
-            <DetailRow label={t("app.common.labels.updated")}>{new Date(workspace.updatedAt).toLocaleString()}</DetailRow>
+            <DetailRow label={t("app.common.labels.updated")}>{new Date(workspace.updatedAt).toLocaleString(displayLocale())}</DetailRow>
           </Card>
 
           <Card className="block p-5">

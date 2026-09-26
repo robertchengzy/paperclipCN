@@ -46,7 +46,7 @@ import {
   resolveIssueWorkspaceName,
   type InboxIssueColumn,
 } from "../lib/inbox";
-import { cn, formatDurationMs, formatTokens } from "../lib/utils";
+import { displayLocale, cn, formatDurationMs, formatTokens } from "../lib/utils";
 import { SHOW_TASK_PRIORITY_UI } from "../lib/ui-flags";
 import { collectSubtreeLiveCounts } from "../lib/liveIssueIds";
 import {
@@ -644,11 +644,11 @@ function SubIssueProgressSummaryStrip({
                   className="text-muted-foreground tabular-nums"
                   title={costSummary.runCount === 1
                     ? costSummary.issueCount === 1
-                      ? t("app.issues.progress.costRunOneTaskOne", { runs: costSummary.runCount.toLocaleString(), count: costSummary.issueCount })
-                      : t("app.issues.progress.costRunOneTaskMany", { runs: costSummary.runCount.toLocaleString(), count: costSummary.issueCount })
+                      ? t("app.issues.progress.costRunOneTaskOne", { runs: costSummary.runCount.toLocaleString(displayLocale()), count: costSummary.issueCount })
+                      : t("app.issues.progress.costRunOneTaskMany", { runs: costSummary.runCount.toLocaleString(displayLocale()), count: costSummary.issueCount })
                     : costSummary.issueCount === 1
-                      ? t("app.issues.progress.costRunManyTaskOne", { runs: costSummary.runCount.toLocaleString(), count: costSummary.issueCount })
-                      : t("app.issues.progress.costRunManyTaskMany", { runs: costSummary.runCount.toLocaleString(), count: costSummary.issueCount })}
+                      ? t("app.issues.progress.costRunManyTaskOne", { runs: costSummary.runCount.toLocaleString(displayLocale()), count: costSummary.issueCount })
+                      : t("app.issues.progress.costRunManyTaskMany", { runs: costSummary.runCount.toLocaleString(displayLocale()), count: costSummary.issueCount })}
                 >
                   {t("app.issues.progress.tokens", { value: formatTokens(totalTokens) })}
                 </span>

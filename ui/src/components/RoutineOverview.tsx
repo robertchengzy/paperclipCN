@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { t, useTranslation } from "@/i18n";
 import type {
   Issue,
@@ -26,7 +27,7 @@ export type RoutineScheduleSummary = {
 };
 
 export function formatRoutineTimestamp(value: Date | string) {
-  return new Date(value).toLocaleString(undefined, {
+  return new Date(value).toLocaleString(displayLocale(), {
     dateStyle: "medium",
     timeStyle: "short",
   });

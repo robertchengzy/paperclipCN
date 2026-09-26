@@ -52,7 +52,7 @@ export function ProcessConfigFields({
           }
           immediate
           className={inputClass}
-          placeholder="e.g. node, python"
+          placeholder={t("app.adapters.processConfigFields.commandPlaceholder")}
         />
       </Field>
       <Field configSection="advanced" label={t("app.agentUi.configFields.argsCommaSeparated")} hint={help.args}>
@@ -73,7 +73,7 @@ export function ProcessConfigFields({
           }
           immediate
           className={inputClass}
-          placeholder="e.g. script.js, --flag"
+          placeholder={t("app.adapters.processConfigFields.argumentsPlaceholder")}
         />
       </Field>
     </>

@@ -1022,10 +1022,10 @@ function ToolDecisionDetails({ decision, compact }: { decision: ToolRunDecision 
         </div>
       )}
       <div className="mt-2 grid gap-1 font-mono text-muted-foreground sm:grid-cols-2">
-        <span>invocation {decision.invocation.id.slice(0, 8)}</span>
-        <span>audit {decision.auditEvents.length}</span>
-        {actionRequest && <span>action {actionRequest.status} {actionRequest.id.slice(0, 8)}</span>}
-        {actionRequest?.interactionId && <span>card {actionRequest.interactionId.slice(0, 8)}</span>}
+        <span>{t("app.taskChat.runTranscriptView.invocationDetail", { id: decision.invocation.id.slice(0, 8) })}</span>
+        <span>{t("app.taskChat.runTranscriptView.auditDetail", { count: decision.auditEvents.length })}</span>
+        {actionRequest && <span>{t("app.taskChat.runTranscriptView.actionDetail", { status: actionRequest.status, id: actionRequest.id.slice(0, 8) })}</span>}
+        {actionRequest?.interactionId && <span>{t("app.taskChat.runTranscriptView.cardDetail", { id: actionRequest.interactionId.slice(0, 8) })}</span>}
       </div>
       {decision.pendingAction?.previewMarkdown && (
         <MarkdownBody className="mt-2 text-(length:--text-micro) leading-5 text-foreground/75 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
@@ -1122,7 +1122,7 @@ function TranscriptToolCard({
                   {t("app.common.labels.input")}
                 </div>
                 <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-(length:--text-micro) text-foreground/80">
-                  {formatToolPayload(block.input) || "<empty>"}
+                  {formatToolPayload(block.input) || t("app.taskChat.runTranscriptView.emptyInput")}
                 </pre>
               </div>
               <div>
@@ -1418,7 +1418,7 @@ function TranscriptToolGroup({
                 <div>
                   <div className="mb-0.5 text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-caps) text-muted-foreground">{t("app.common.labels.input")}</div>
                   <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-(length:--text-micro) text-foreground/80">
-                    {formatToolPayload(item.input) || "<empty>"}
+                    {formatToolPayload(item.input) || t("app.taskChat.runTranscriptView.emptyInput")}
                   </pre>
                 </div>
                 {item.result && (
@@ -1480,6 +1480,15 @@ function TranscriptEventRow({
   density: TranscriptDensity;
   externalReferences?: MarkdownExternalReferenceMap;
 }) {
+  const { t } = useTranslation();
+  // Keep the raw labels in normalized blocks: result handling and stable keys
+  // use them as discriminators. Only the rendered label follows the locale.
+  const eventLabels: Record<string, string> = {
+    "workspace diff": t("app.taskChat.runTranscriptView.workspaceDiffLabel"),
+    "workspace changes": t("app.taskChat.runTranscriptView.workspaceChangesLabel"),
+    init: t("app.taskChat.runTranscriptView.initLabel"),
+    result: t("app.taskChat.runTranscriptView.result"),
+  };
   const compact = density === "compact";
   const toneClasses =
     block.tone === "error"
@@ -1514,7 +1523,7 @@ function TranscriptEventRow({
           ) : (
             <div className={cn("whitespace-pre-wrap break-words", compact ? "text-(length:--text-micro)" : "text-xs")}>
               <span className="text-(length:--text-nano) font-semibold uppercase tracking-(--tracking-label) text-muted-foreground/70">
-                {block.label}
+                {eventLabels[block.label] ?? block.label}
               </span>
               {block.text ? <span className="ml-2">{block.text}</span> : null}
             </div>

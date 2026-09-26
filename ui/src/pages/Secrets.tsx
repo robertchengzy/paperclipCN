@@ -106,7 +106,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "../lib/utils";
+import { displayLocale, cn } from "../lib/utils";
 import { Trans } from "react-i18next";
 import { t as translate, useTranslation } from "@/i18n";
 import { copyTextToClipboard } from "../lib/clipboard";
@@ -300,7 +300,7 @@ function formatRelative(value: Date | string | null | undefined): string {
   const date = typeof value === "string" ? new Date(value) : value;
   if (Number.isNaN(date.getTime())) return "—";
   const diff = Date.now() - date.getTime();
-  if (diff < 0) return date.toLocaleString();
+  if (diff < 0) return date.toLocaleString(displayLocale());
   const seconds = Math.floor(diff / 1000);
   if (seconds < 60) return translate("app.secrets.importFromVaultDialog.secondsAgo", { count: seconds });
   const minutes = Math.floor(seconds / 60);
@@ -309,7 +309,7 @@ function formatRelative(value: Date | string | null | undefined): string {
   if (hours < 48) return translate("app.secrets.importFromVaultDialog.hoursAgo", { count: hours });
   const days = Math.floor(hours / 24);
   if (days < 30) return translate("app.secrets.importFromVaultDialog.daysAgo", { count: days });
-  return date.toLocaleDateString();
+  return date.toLocaleDateString(displayLocale());
 }
 
 function statusTextTone(status: SecretStatus) {

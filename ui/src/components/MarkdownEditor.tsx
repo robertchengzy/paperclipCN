@@ -52,6 +52,7 @@ import { MentionAwareLinkNode, mentionAwareLinkNodeReplacement } from "../lib/me
 import { mentionDeletionPlugin } from "../lib/mention-deletion";
 import { looksLikeMarkdownPaste } from "../lib/markdownPaste";
 import { normalizeMarkdown } from "../lib/normalize-markdown";
+import { createMdxEditorTranslation, mdxEditorTranslationPlugin } from "../lib/mdx-editor-translation";
 import {
   escapeUnsupportedAngleBrackets,
   unescapeAngleBracketEscapes,
@@ -720,6 +721,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
   readOnly = false,
 }: MarkdownEditorProps, forwardedRef) {
   const { t } = useTranslation();
+  const editorTranslation = useMemo(() => createMdxEditorTranslation(t), [t]);
   const editorValue = useMemo(() => prepareMarkdownForEditor(value), [value, t]);
   const { slashCommands: sharedSlashCommands } = useEditorAutocomplete();
   const slashCommands = useMemo(
@@ -787,7 +789,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       instance.setMarkdown(valueRef.current);
       latestValueRef.current = valueRef.current;
     }
-  }, [t]);
+  }, []);
 
   const filteredMentions = useMemo<AutocompleteOption[]>(() => {
     if (!mentionState) return [];
@@ -963,6 +965,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
         }
       : undefined;
     const all: RealmPlugin[] = [
+      mdxEditorTranslationPlugin({ translation: editorTranslation }),
       headingsPlugin(),
       listsPlugin(),
       quotePlugin(),
@@ -985,7 +988,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
       all.push(imagePlugin({ imageUploadHandler: imageHandler, disableImageSettingsButton: true }));
     }
     return all;
-  }, [hasImageUpload, t]);
+  }, [hasImageUpload, editorTranslation, t]);
 
   useEffect(() => {
     if (editorValue !== latestValueRef.current) {
@@ -1470,6 +1473,7 @@ export const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>
         <MDXEditor
           ref={setEditorRef}
           markdown={editorValue}
+          translation={editorTranslation}
           iconComponentFor={editorIconFor}
           suppressHtmlProcessing
           placeholder={placeholder}

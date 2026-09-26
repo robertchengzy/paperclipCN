@@ -72,13 +72,13 @@ export function resolveRunStatusPresentation(
 ): RunStatusPresentation {
   if (status === "cancelled" && opts.operatorInterrupted) {
     return {
-      label: "interrupted",
+      label: t("app.common.status.interrupted"),
       className: "text-amber-700 dark:text-amber-300",
-      srHint: "interrupted by board comment",
+      srHint: t("app.lib.interruptHandoff.interruptedByBoardComment"),
     };
   }
   return {
-    label: status === "timed_out" ? "timed out" : status.replace(/_/g, " "),
+    label: t(`app.common.status.${status}`, { defaultValue: status }),
     className: runStatusClassName(status),
     srHint: null,
   };

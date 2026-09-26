@@ -85,7 +85,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn } from "../lib/utils";
+import { displayLocale, cn } from "../lib/utils";
 import {
   extractModelName,
   extractProviderIdWithFallback
@@ -3172,7 +3172,7 @@ function AdapterEnvironmentResult({
       <div className="flex items-center justify-between gap-2">
         <span className="font-medium">{statusLabel}</span>
         <span className="opacity-80">
-          {new Date(result.testedAt).toLocaleTimeString()}
+          {new Date(result.testedAt).toLocaleTimeString(displayLocale())}
         </span>
       </div>
       <div className="mt-1.5 space-y-1">

@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserPlus2 } from "lucide-react";
@@ -185,7 +186,7 @@ export function JoinRequestQueue() {
                 </div>
                 <div className="rounded-lg border border-border bg-background px-3 py-2">
                   <div className="text-xs font-medium uppercase tracking-wide">{t("app.settings.joinRequestQueue.requestDetails")}</div>
-                  <div className="mt-2">{t("app.settings.joinRequestQueue.submitted", { date: new Date(request.createdAt).toLocaleString() })}</div>
+                  <div className="mt-2">{t("app.settings.joinRequestQueue.submitted", { date: new Date(request.createdAt).toLocaleString(displayLocale()) })}</div>
                   <div>{t("app.settings.joinRequestQueue.sourceIp", { ip: request.requestIp })}</div>
                   {request.requestType === "agent" && request.capabilities ? <div>{request.capabilities}</div> : null}
                 </div>

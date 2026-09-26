@@ -56,8 +56,9 @@ export function RemoteMcpConnectionSetup({ provider, state: s, actions: a, agent
   const busy = s.connectStatus === "connecting";
   const change = (patch: Partial<RemoteMcpSetupState>) => a.edit(patch);
   const external = (purpose: Parameters<typeof a.openProvider>[0], text: string) => <ExternalAction onOpen={() => a.openProvider(purpose)}>{text}</ExternalAction>;
+  // Pass provider names as React children so markup-like names stay literal.
   const boundary = <InlineBanner compact>
-    <Trans i18nKey="app.connections.remoteMcpConnectionSetup.boundary" values={{ provider: provider.name }} components={{ link: <ExternalAction onOpen={() => a.openProvider("manage")} /> }} />
+    <Trans i18nKey="app.connections.remoteMcpConnectionSetup.boundary" components={{ link: <ExternalAction onOpen={() => a.openProvider("manage")}>{provider.name}</ExternalAction> }} />
   </InlineBanner>;
   const footer = (children: ReactNode) => <SetupWizardFooter onSaveExit={a.saveExit} disabled={busy}>{children}</SetupWizardFooter>;
 
@@ -73,7 +74,7 @@ export function RemoteMcpConnectionSetup({ provider, state: s, actions: a, agent
       subtitle={currentStep >= 0 && !s.setupComplete ? t("app.connections.remoteMcpConnectionSetup.stepOf", { step: currentStep + 1, total: 2 }) : s.step === "draft" ? t("app.connections.remoteMcpConnectionSetup.readyToResume", { provider: provider.name }) : s.step === "permissions" ? (s.identity ? t("app.connections.remoteMcpConnectionSetup.connectedAsActions", { identity: s.identity, count: s.tools.length }) : t("app.connections.remoteMcpConnectionSetup.connectedActions", { count: s.tools.length })) : t("app.connections.remoteMcpConnectionSetup.manageProvider", { provider: provider.name })}
       step={currentStep >= 0 && !s.setupComplete ? "access" : "gallery"} activeIndex={currentStep} labels={[t("app.connections.remoteMcpConnectionSetup.stepAccess"), t("app.common.actions.connect")]} onCancel={busy || s.step === "management" || s.step === "permissions" || s.step === "draft" ? undefined : a.saveExit} />
     <main className="space-y-6">
-        {upstreamServiceName && <InlineBanner compact>{provider.name} is an external service that handles the connection and requests to {upstreamServiceName}. After connecting, the agent will verify the app and guide you through any additional authorization.</InlineBanner>}
+        {upstreamServiceName && <InlineBanner compact>{t("app.connections.remoteMcpConnectionSetup.upstreamServiceBoundary", { provider: provider.name, service: upstreamServiceName })}</InlineBanner>}
         {s.notice && <p role="status" className="text-sm text-muted-foreground">{s.notice}</p>}
 
         {s.step === "access" && <AccessStepContent agents={agents} lockedAgentId={lockedAgentId} authKind="oauth" grantKinds={fixedGrantKind ? [fixedGrantKind] : undefined} grantKind={s.grantKind} setGrantKind={(grantKind) => { if (grantKind !== "agent") change({ grantKind }); }}

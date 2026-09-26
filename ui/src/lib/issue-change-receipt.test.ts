@@ -1,4 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { i18n } from "@/i18n";
+import { formatDateTime } from "./utils";
 
 import {
   formatIssueChangeValue,
@@ -6,6 +8,8 @@ import {
   issueChangeFieldLabel,
   readIssueChangeReceipt,
 } from "./issue-change-receipt";
+
+afterEach(async () => { await i18n.changeLanguage("en"); });
 
 describe("issueChangeFieldLabel", () => {
   it("uses curated labels for id-bearing fields", () => {
@@ -31,8 +35,8 @@ describe("formatIssueChangeValue", () => {
     expect(formatIssueChangeValue([])).toBe("none");
   });
 
-  it("humanizes enum-ish values", () => {
-    expect(formatIssueChangeValue("in_progress")).toBe("in progress");
+  it("preserves values without a known enum field", () => {
+    expect(formatIssueChangeValue("in_progress")).toBe("in_progress");
     expect(formatIssueChangeValue("high")).toBe("high");
   });
 
@@ -84,6 +88,34 @@ describe("formatIssueChangeValue", () => {
 
   it("reports structural objects as 'updated'", () => {
     expect(formatIssueChangeValue({ mode: "isolated_workspace" })).toBe("updated");
+  });
+
+  it("localizes known status and priority values but leaves user text and unknown values intact", async () => {
+    await i18n.changeLanguage("zh-CN");
+    for (const [status, label] of Object.entries({ backlog: "待规划", todo: "待办", in_progress: "进行中", in_review: "审核中", done: "已完成", blocked: "受阻", cancelled: "已取消" })) {
+      expect(formatIssueChangeValue(status, { field: "status" })).toBe(label);
+    }
+    for (const [priority, label] of Object.entries({ critical: "紧急", high: "高", medium: "中", low: "低" })) {
+      expect(formatIssueChangeValue(priority, { field: "priority" })).toBe(label);
+    }
+    expect(formatIssueChangeValue("future_status", { field: "status" })).toBe("future_status");
+    expect(formatIssueChangeValue("future_priority", { field: "priority" })).toBe("future_priority");
+    expect(formatIssueChangeValue("in_progress", { field: "title" })).toBe("in_progress");
+    expect(formatIssueChangeValue("in_progress", { field: "description" })).toBe("in_progress");
+    expect(formatIssueChangeValue("in_progress", { field: "futureField" })).toBe("in_progress");
+    expect(formatIssueChangeValue("3108ef8e-5ed0-41d9-b561-6b41c41b8545", { field: "title" })).toBe("3108ef8e-5ed0-41d9-b561-6b41c41b8545");
+    expect(formatIssueChangeValue("user-1", { field: "assigneeUserId", resolveUserLabel: () => "in_progress" })).toBe("in_progress");
+  });
+
+  it("formats receipt dates with the selected UI language", async () => {
+    const date = new Date("2026-09-26T08:30:00Z");
+    await i18n.changeLanguage("zh-CN");
+    const chinese = formatIssueChangeValue(date);
+    expect(chinese).toBe(formatDateTime(date, { includeSeconds: true }));
+    expect(formatIssueChangeValue(date.toISOString(), { field: "completedAt" })).toBe(chinese);
+    expect(formatIssueChangeValue(date.toISOString(), { field: "description" })).toBe(date.toISOString());
+    await i18n.changeLanguage("en");
+    expect(formatIssueChangeValue(date)).not.toBe(chinese);
   });
 });
 
@@ -146,7 +178,7 @@ describe("issueAuthorizationReasonLabel", () => {
   });
 
   it("degrades unknown reasons rather than hiding them", () => {
-    expect(issueAuthorizationReasonLabel("some_future_reason")).toBe("some future reason");
+    expect(issueAuthorizationReasonLabel("some_future_reason")).toBe("some_future_reason");
   });
 
   it("returns null when no reason was recorded", () => {

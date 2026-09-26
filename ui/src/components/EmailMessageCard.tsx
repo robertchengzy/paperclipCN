@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { t, useTranslation } from "@/i18n";
 import { createContext, useContext, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -75,7 +76,7 @@ export function EmailMessageCard({
           {message.direction === "inbound" ? t("app.shell.emailMessageCard.emailReceived") : t("app.shell.emailMessageCard.emailSent")}
         </span>
         <span className="text-xs text-muted-foreground">
-          {new Date(message.timestamp).toLocaleString()}
+          {new Date(message.timestamp).toLocaleString(displayLocale())}
         </span>
       </div>
       <div className="space-y-1">

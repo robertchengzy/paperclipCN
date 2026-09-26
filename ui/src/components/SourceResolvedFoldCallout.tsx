@@ -1,7 +1,7 @@
 import { t, useTranslation } from "@/i18n";
 import { Sparkles } from "lucide-react";
 import { Link } from "@/lib/router";
-import { cn, relativeTime } from "@/lib/utils";
+import { displayLocale, cn, relativeTime } from "@/lib/utils";
 import {
   type SourceResolvedWatchdogFold,
   formatCleanupOutcome,
@@ -20,7 +20,7 @@ function isoOrLocaleString(value: string | null | undefined): string | null {
   if (!value) return null;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString();
+  return date.toLocaleString(displayLocale());
 }
 
 function issueLink(id: string, identifier: string | null) {

@@ -100,7 +100,7 @@ import {
   issueExecutionWorkspaceModeForExistingWorkspace,
 } from "../lib/project-workspace-defaults";
 import { orderReusableExecutionWorkspaces } from "../lib/reusable-execution-workspaces";
-import { cn, relativeTime } from "../lib/utils";
+import { displayLocale, cn, relativeTime } from "../lib/utils";
 import { useProjectOrder } from "../hooks/useProjectOrder";
 import { Link, useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { StageHealthWarnings } from "../components/PipelineHealthWarnings";
@@ -1260,7 +1260,7 @@ function StageEventsList({
           key={event.id}
           className="grid min-h-11 grid-cols-(--gtc-15) items-center gap-3 border-b border-border/70 px-3 py-2 text-sm last:border-b-0"
         >
-          <span className="text-xs text-muted-foreground" title={new Date(event.createdAt).toLocaleString()}>
+          <span className="text-xs text-muted-foreground" title={new Date(event.createdAt).toLocaleString(displayLocale())}>
             {relativeTime(event.createdAt)}
           </span>
           <div className="min-w-0">
@@ -2400,7 +2400,7 @@ export function PipelineSettings() {
                 aria-label={t("app.pipelines.pipelineSettings.breakdown.pieceNoun")}
                 value={breakdownPieceNoun}
                 onChange={(event) => setBreakdownPieceNoun(event.target.value)}
-                placeholder="piece"
+                placeholder={t("app.pipelines.pipelineSettings.breakdown.pieceNounExample")}
                 className="h-10 w-full max-w-sm"
               />
               <p className="text-xs text-muted-foreground">

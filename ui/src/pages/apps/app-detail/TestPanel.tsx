@@ -48,7 +48,7 @@ import {
   validateJsonSchemaForm,
   type JsonSchemaNode,
 } from "@/components/JsonSchemaForm";
-import { cn, relativeTime } from "@/lib/utils";
+import { displayLocale, cn, relativeTime } from "@/lib/utils";
 import { Trans } from "react-i18next";
 import { t as translate, useTranslation } from "@/i18n";
 import { appTabHref } from "../app-tabs";
@@ -1137,7 +1137,7 @@ function ProviderPendingResult({ pending, appName, connectionId, agent }: { pend
       {pending.links.length === 0 && !pending.resumeTool && <p>{t("app.apps.testPanel.openProviderDashboard")}</p>}
       {pending.executionId && <p>{t("app.apps.testPanel.executionLabel")} <code className="break-all">{pending.executionId}</code></p>}
       {pending.elicitationId && <p>{t("app.apps.testPanel.requestLabel")} <code className="break-all">{pending.elicitationId}</code></p>}
-      {pending.expiresAt && <p>{t("app.apps.testPanel.approvalExpires", { time: new Date(pending.expiresAt).toLocaleTimeString() })}</p>}
+      {pending.expiresAt && <p>{t("app.apps.testPanel.approvalExpires", { time: new Date(pending.expiresAt).toLocaleTimeString(displayLocale()) })}</p>}
       {pending.resumeTool && agent ? <ProviderResumeControls pending={pending} connectionId={connectionId} agent={agent} onResult={setResumed} /> :
       <p className="text-muted-foreground">{pending.resumeTool
         ? t("app.apps.testPanel.afterApprovalHint", { tool: pending.resumeTool })

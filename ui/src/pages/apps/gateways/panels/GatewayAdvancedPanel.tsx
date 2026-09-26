@@ -53,7 +53,7 @@ export function GatewayAdvancedPanel({
   const archiveMutation = useMutation({
     mutationFn: () => toolsApi.updateGateway(companyId, gateway.id, { status: "archived" }),
     onSuccess: async () => {
-      pushToast({ title: t("app.apps.gatewayAdvancedPanel.gatewayArchived"), body: `${gateway.name} is no longer reachable.`, tone: "success" });
+      pushToast({ title: t("app.apps.gatewayAdvancedPanel.gatewayArchived"), body: t("app.apps.gatewayAdvancedPanel.noLongerReachable", { name: gateway.name }), tone: "success" });
       await queryClient.invalidateQueries({ queryKey: gatewaysQueryKey(companyId) });
       navigate("/apps/gateways");
     },

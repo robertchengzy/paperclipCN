@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Issue, IssueThreadInteraction } from "@paperclipai/shared";
@@ -84,7 +85,7 @@ export function IssuePropertiesPlansTab({ issue }: IssuePropertiesPlansTabProps)
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             {t("app.newIssue.properties.plan.revisionUpdated", {
               revision: planDocument.latestRevisionNumber ?? 1,
-              date: new Date(planDocument.updatedAt).toLocaleString([], {
+              date: new Date(planDocument.updatedAt).toLocaleString(displayLocale(), {
                 month: "short",
                 day: "numeric",
                 hour: "numeric",

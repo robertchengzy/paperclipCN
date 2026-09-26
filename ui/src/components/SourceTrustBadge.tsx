@@ -4,7 +4,7 @@ import { BadgeCheck, ShieldAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { sourceTrustLabel } from "../lib/trust-policy-ui";
-import { cn } from "../lib/utils";
+import { displayLocale, cn } from "../lib/utils";
 
 export function SourceTrustBadge({
   sourceTrust,
@@ -21,7 +21,7 @@ export function SourceTrustBadge({
 
   const promoted = sourceTrust?.disposition === "promoted";
   const tooltip = promoted
-    ? (sourceTrust.promotedAt ? t("app.shell.sourceTrustBadge.promotedAt", { time: new Date(sourceTrust.promotedAt).toLocaleString() }) : t("app.shell.sourceTrustBadge.promoted"))
+    ? (sourceTrust.promotedAt ? t("app.shell.sourceTrustBadge.promotedAt", { time: new Date(sourceTrust.promotedAt).toLocaleString(displayLocale()) }) : t("app.shell.sourceTrustBadge.promoted"))
     : t("app.shell.sourceTrustBadge.authoredByALowTrustReviewAgentRaw", { value0: artifactLabel === "comment" ? t("app.shell.sourceTrustBadge.comment") : artifactLabel === "document" ? t("app.shell.sourceTrustBadge.document") : artifactLabel === "work product" ? t("app.shell.sourceTrustBadge.workProduct") : t("app.shell.sourceTrustBadge.content") });
 
   return (

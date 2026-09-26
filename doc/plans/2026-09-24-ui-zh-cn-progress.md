@@ -163,3 +163,7 @@
 新增 49 个词条：`DispositionRecoveryNotice` 全部文案、`lib/workspace-restore-marker.ts`、`IssueDetail` 的恢复重试不可用原因，以及“查看已保存的计划”“工作区恢复失败”。`DesignGuide` 新增的说明段落属于已豁免的设计页面，保持英文。
 
 验证（`8c5a785fb`）：UI typecheck、`pnpm check:token-gates`、`pnpm locales:check`、严格扫描为 0、UI build 通过；全 UI 测试 642 个文件、6774 条全部通过。构建后最大的 chunk 是 `index-*.js`（6.6 MB），语言包所在的 `createLucideIcon-*.js` 从 30 MB 降到 2.2 MB。iPhone 上是否恢复以部署后真机访问为准（本机无法运行 WebKit）。服务端测试套件未运行。
+
+## 中文审计修正（2026-09-26）
+
+审计发现静态扫描归零仍可能漏掉小写 JSX、动态状态和依赖组件的文案。本轮修复已识别问题并按用户偏好保留技术术语英文，详情见 [修正记录](2026-09-26-ui-zh-cn-audit-fixes.md)。全仓类型与 token gates 通过；全 UI/浏览器及最终部署结果随交付记录提供。实例版本按完整 SHA 验证，不以代码提交或本进度条目代替上线证据。

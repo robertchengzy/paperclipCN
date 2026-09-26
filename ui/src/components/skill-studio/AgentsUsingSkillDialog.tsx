@@ -55,9 +55,12 @@ export function AgentsUsingSkillBadge({
   skill: CompanySkillDetail;
   canManage?: boolean;
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const count = skill.usedByAgents.length;
-  const label = `${count} ${count === 1 ? "agent uses" : "agents use"} this skill`;
+  const label = t(count === 1
+    ? "app.skills.agentsUsingSkillDialog.oneAgentUsesSkill"
+    : "app.skills.agentsUsingSkillDialog.manyAgentsUseSkill", { count });
 
   return (
     <>
@@ -73,7 +76,9 @@ export function AgentsUsingSkillBadge({
         )}
       >
         <Users className="h-3.5 w-3.5" aria-hidden="true" />
-        {count} {count === 1 ? "agent" : "agents"}
+        {t(count === 1
+          ? "app.skills.agentsUsingSkillDialog.oneAgent"
+          : "app.skills.agentsUsingSkillDialog.manyAgents", { count })}
       </button>
       <AgentsUsingSkillDialog
         open={open}

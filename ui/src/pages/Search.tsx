@@ -890,7 +890,7 @@ function SearchTabContent({
       <div className="flex items-center justify-between py-2 text-(length:--text-micro) uppercase tracking-wide text-muted-foreground">
         <span>
           {allMatchTotal > totalResults
-            ? `${totalResults} of ${allMatchTotal} results`
+            ? translateCopy("app.issueUi.search.partialResults", { shown: totalResults, total: allMatchTotal })
             : totalResults === 1
               ? translateCopy("app.issueUi.search.oneResult")
               : translateCopy("app.issueUi.search.resultCount", { count: totalResults })}

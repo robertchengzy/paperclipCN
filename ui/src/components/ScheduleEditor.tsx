@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { i18n, t, useTranslation } from "@/i18n";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -291,7 +292,7 @@ export function ScheduleEditor({
           >
             {customValidation.message}
             {customValidation.valid && customValidation.nextFires.length > 0
-              ? t("app.shell.scheduleEditor.next", { value0: customValidation.nextFires.map((fire) => fire.toLocaleString()).join(", ") })
+              ? t("app.shell.scheduleEditor.next", { value0: customValidation.nextFires.map((fire) => fire.toLocaleString(displayLocale())).join(", ") })
               : null}
           </p>
         </div>

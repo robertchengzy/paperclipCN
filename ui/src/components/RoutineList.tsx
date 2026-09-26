@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { t, useTranslation } from "@/i18n";
 import type { AgentAppearance } from "@paperclipai/shared";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -40,7 +41,7 @@ export type RoutineListRowItem = {
 
 export function formatLastRunTimestamp(value: Date | string | null | undefined) {
   if (!value) return t("app.routines.routineList.never");
-  return new Date(value).toLocaleString();
+  return new Date(value).toLocaleString(displayLocale());
 }
 
 export function formatRoutineRunStatus(value: string | null | undefined) {
@@ -138,7 +139,7 @@ export function RoutineListRow<TRoutine extends RoutineListRowItem>({
           <span className="truncate text-sm font-medium">{routine.title}</span>
           {(isArchived || routine.status === "paused" || isDraft) ? (
             <span className="text-xs text-muted-foreground">
-              {isArchived ? "archived" : isDraft ? "draft" : "paused"}
+              {isArchived ? t("app.common.status.archived") : isDraft ? t("app.common.status.draft") : t("app.common.status.paused")}
             </span>
           ) : null}
           {managedByLabel ? (

@@ -10,6 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { RelationNavigationList, TaskDetailSubtasksPanel, TaskDetailTaskList } from "./TaskDetailRelationsPanel";
 
 function TaskGroup({ name, projectPath, children }: { name: string; projectPath?: string; children: ReactNode }) {
+  const { t } = useTranslation();
   return (
     <Collapsible defaultOpen asChild>
       <section aria-label={name}>
@@ -23,7 +24,7 @@ function TaskGroup({ name, projectPath, children }: { name: string; projectPath?
             </CollapsibleTrigger>
           </h2>
           {projectPath && (
-            <Link to={projectPath} aria-label={`Go to ${name} project`} title={`Go to ${name} project`} className="ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity duration-(--motion-duration-fast) ease-(--motion-ease-standard) hover:bg-accent hover:text-foreground group-hover/header:opacity-100 group-focus-within/header:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <Link to={projectPath} aria-label={t("app.issueUi.taskDetailTasksPanel.goToProject", { name })} title={t("app.issueUi.taskDetailTasksPanel.goToProject", { name })} className="ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity duration-(--motion-duration-fast) ease-(--motion-ease-standard) hover:bg-accent hover:text-foreground group-hover/header:opacity-100 group-focus-within/header:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <ArrowUpRight aria-hidden className="h-3.5 w-3.5" />
             </Link>
           )}
@@ -66,7 +67,7 @@ export function TaskDetailTasksPanel({ ancestors = [], subtasks, createdTasks, p
   return (
     <section className="flex flex-col gap-6" aria-label={translateCopy("app.issueUi.taskDetailTasksPanel.relatedTasks")}>
       {ancestors.length > 0 && (
-        <TaskGroup name="Ancestors">
+        <TaskGroup name={translateCopy("app.issueUi.taskDetailTasksPanel.ancestors")}>
           <RelationNavigationList
             items={[...ancestors].reverse()}
             emptyMessage=""
@@ -76,13 +77,13 @@ export function TaskDetailTasksPanel({ ancestors = [], subtasks, createdTasks, p
         </TaskGroup>
       )}
       {sortedSubtasks.length > 0 && (
-        <TaskGroup name="Subtasks">
+        <TaskGroup name={translateCopy("app.issueUi.taskDetailTasksPanel.subtasks")}>
           <TaskDetailSubtasksPanel items={sortedSubtasks} issueLinkState={issueLinkState} />
         </TaskGroup>
       )}
       {[...groups.entries()].sort(([, a], [, b]) => a.name.localeCompare(b.name)).map(([id, group]) => (
         <TaskGroup key={id} name={group.name} projectPath={group.path}>
-          <TaskDetailTaskList items={group.tasks} ariaLabel={`${group.name} tasks`} issueLinkState={issueLinkState} />
+          <TaskDetailTaskList items={group.tasks} ariaLabel={translateCopy("app.issueUi.taskDetailTasksPanel.projectTasks", { name: group.name })} issueLinkState={issueLinkState} />
         </TaskGroup>
       ))}
       {isLoading && <p role="status" className="text-sm text-muted-foreground">{translateCopy("app.issueUi.taskDetailTasksPanel.loadingTasks")}</p>}

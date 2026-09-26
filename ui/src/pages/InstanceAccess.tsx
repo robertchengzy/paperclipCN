@@ -1,3 +1,4 @@
+import { displayLocale } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Shield, ShieldCheck } from "lucide-react";
@@ -257,7 +258,7 @@ export function InstanceAccess() {
                         </div>
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        {new Date(membership.updatedAt).toLocaleDateString()}
+                        {new Date(membership.updatedAt).toLocaleDateString(displayLocale())}
                       </div>
                     </div>
                   ))}

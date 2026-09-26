@@ -122,7 +122,7 @@ export function GatewayDetail() {
         title: updated.status === "active" ? t("app.apps.gatewayDetail.gatewayOn") : t("app.apps.gatewayDetail.gatewayOff"),
         body:
           updated.status === "active"
-            ? `${updated.name} is exposing its tools again.`
+            ? t("app.apps.gatewayDetail.exposingToolsAgain", { name: updated.name })
             : t("app.apps.gatewayDetail.isOffEveryClientGoesSilent", { value0: updated.name }),
         tone: "success",
       });
