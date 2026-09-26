@@ -143,7 +143,7 @@ describe("BuiltInBundlePanel (PAP-13099)", () => {
     expect(text).toContain("Instructions");
     expect(text).toContain("Routine");
     // Disabled scheduling prevents automatic work, not a deliberate manual run.
-    expect(text).toContain("No scheduled work runs until you enable the weekly schedule");
+    expect(text).toContain("Nothing runs until you enable the weekly schedule");
     expect(text).toContain("Schedule off");
     expect(text).toContain("Ready");
     expect(text).toContain("Run once");

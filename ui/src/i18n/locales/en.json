@@ -79,7 +79,11 @@
       "shareFeedbackAction": "Share feedback"
     },
     "language": {
-      "label": "Language"
+      "label": "Language",
+      "switchToEnglish": "Switch to English",
+      "switchToChinese": "Switch to Chinese",
+      "englishShort": "EN",
+      "chineseShort": "中"
     },
     "themeToggle": {
       "switchToLight": "Switch to light mode",
@@ -1195,10 +1199,10 @@
           "promoted": "Promoted",
           "retryNow": "Retry now",
           "promoting": "Promoting scheduled retry",
-          "alreadyPromotedRunStarting": "Already queued or running",
-          "promotedRunStarting": "Added to the execution queue",
-          "pullsContinuationForward": "Requests an immediate continuation",
-          "pullsRetryForward": "Requests an immediate retry",
+          "alreadyPromotedRunStarting": "Already promoted — run starting",
+          "promotedRunStarting": "Promoted — run starting",
+          "pullsContinuationForward": "Pulls continuation forward immediately",
+          "pullsRetryForward": "Pulls retry forward immediately",
           "waitingForWorkspace": "Waiting for workspace"
         },
         "assignee": {
@@ -2215,7 +2219,7 @@
         "thinkingEffort": "Control model reasoning depth. Supported values vary by adapter/model.",
         "chrome": "Enable Claude's Chrome integration by passing --chrome.",
         "dangerouslySkipPermissions": "Run unattended by auto-approving adapter permission prompts when supported.",
-        "dangerouslyBypassSandbox": "Run Codex with approvals and sandbox restrictions bypassed.",
+        "dangerouslyBypassSandbox": "Run Codex without sandbox restrictions. Required for filesystem/network access.",
         "search": "Enable Codex web search capability during runs.",
         "fastMode": "Enable Codex Fast mode. This burns credits/tokens much faster and is supported on GPT-6, GPT-5.6, GPT-5.5, GPT-5.4, and manual Codex model IDs.",
         "workspaceStrategy": "How Paperclip should realize an execution workspace for this agent. Keep project_primary for normal cwd execution, or use git_worktree for issue-scoped isolated checkouts.",
@@ -5063,7 +5067,7 @@
         "requestFailedStatus": "Request failed ({{status}})",
         "requestFailed": "The request failed. Try again in a moment.",
         "promoted": "Retry promoted",
-        "alreadyPromoted": "Retry already queued or running",
+        "alreadyPromoted": "Retry already running",
         "noScheduledRetry": "No scheduled retry",
         "couldNotRetry": "Couldn't retry now",
         "missingIssueId": "Missing issue id"
@@ -5576,8 +5580,8 @@
           "toolConnectionGrantRevoked": "revoked credentials from",
           "toolConnectionGrantDelegated": "delegated credentials for",
           "toolConnectionGrantDelegationRevoked": "revoked credential delegation for",
-          "providerTraceMetadataListed": "listed only provider Trace metadata",
-          "instanceExperimentalSettingsUpdated": "updated instance experimental settings"
+          "providerTraceMetadataListed": "provider trace metadata listed",
+          "instanceExperimentalSettingsUpdated": "instance settings experimental updated"
         },
         "detail": {
           "issueCreated": "created the issue",
@@ -5640,8 +5644,8 @@
           "issueThreadInteractionExpired": "expired the request",
           "issueThreadInteractionItemVerdictsSubmitted": "submitted verdicts on the request",
           "issueStalledReviewDecided": "recorded a review verdict",
-          "providerTraceMetadataListed": "listed only provider Trace metadata",
-          "instanceExperimentalSettingsUpdated": "updated instance experimental settings"
+          "providerTraceMetadataListed": "provider trace metadata listed",
+          "instanceExperimentalSettingsUpdated": "instance settings experimental updated"
         },
         "stalledReview": {
           "approve": "approved the review",
@@ -7106,8 +7110,8 @@
         "noCapConfigured": "No cap configured",
         "remaining": "Remaining",
         "unlimited": "Unlimited",
-        "executionIsPausedForThisProjectUntilTheBudgetIsRaisedOr": "Execution is paused for this project. To clear a budget pause, set the budget above current spend, or set it to 0 for no limit. Dismissing the incident keeps it paused.",
-        "heartbeatsArePausedForThisScopeUntilTheBudgetIsRaisedOr": "Heartbeats are paused for this scope. To clear a budget pause, set the budget above current spend, or set it to 0 for no limit. Dismissing the incident keeps it paused.",
+        "executionIsPausedForThisProjectUntilTheBudgetIsRaisedOr": "Execution is paused for this project until the budget is raised or the incident is dismissed.",
+        "heartbeatsArePausedForThisScopeUntilTheBudgetIsRaisedOr": "Heartbeats are paused for this scope until the budget is raised or the incident is dismissed.",
         "budgetUSD": "Budget (USD)",
         "saving": "Saving...",
         "updateBudget": "Update budget",
@@ -7717,9 +7721,9 @@
         "recoveryTitleDetail": "{{label}} — {{detail}}. Open the source task to act.",
         "recoveryTitle": "{{label}} — open the source task to act.",
         "nextStep": {
-          "dueNow": "The follow-up asking the assignee to choose the next step is due now. Retry now requests an immediate retry; the task’s current execution checks still apply.",
-          "scheduledRelative": "Follow-up to ask the assignee for the next step: {{relative}}. Retry now requests an immediate retry; the task’s current execution checks still apply.",
-          "scheduled": "Paperclip will ask the assignee to choose the next step on schedule. Retry now requests an immediate retry; the task’s current execution checks still apply."
+          "dueNow": "Paperclip will ask the assignee to choose the next step due now. Retry now starts that follow-up immediately.",
+          "scheduledRelative": "Paperclip will ask the assignee to choose the next step scheduled {{relative}}. Retry now starts that follow-up immediately.",
+          "scheduled": "Paperclip will ask the assignee to choose the next step scheduled. Retry now starts that follow-up immediately."
         },
         "retrying": "Retrying...",
         "alreadyPromoted": "Already promoted",
@@ -8247,12 +8251,12 @@
           "continuationPending": "Automatic continuation pending schedule",
           "retryPending": "Automatic retry pending schedule"
         },
-        "pullsRetryForward": "Requests an immediate retry",
+        "pullsRetryForward": "Pulls retry forward immediately",
         "replacesRun": "Replaces run <link>{{id}}</link>",
         "lastAttemptFailed": "Last attempt failed: {{error}}. Paperclip will retry automatically.",
         "promoting": "Promoting scheduled retry",
-        "alreadyPromotedStarting": "Already queued or running",
-        "promotedStarting": "Added to the execution queue",
+        "alreadyPromotedStarting": "Already promoted — run starting",
+        "promotedStarting": "Promoted — run starting",
         "retryFailed": "Couldn't retry now"
       },
       "issueSiblingNavigation": {
@@ -10104,7 +10108,7 @@
         "optionalSuffix": "(optional)",
         "usagePlaceholder": "Tell members how to create their token, required scopes, etc.",
         "removeTitle": "Remove user secret?",
-        "removeDescription": "This removes the definition <mono>{{key}}</mono> for the whole company and deletes all member secret values saved for it. This cannot be undone.",
+        "removeDescription": "This removes the definition <mono>{{key}}</mono> for the whole company. Existing member values become unreferenced. This cannot be undone.",
         "coverage": "Coverage: {{summary}}",
         "notSetCount": "· {{count}} not set"
       },
@@ -16507,7 +16511,7 @@
         "controlModelReasoningDepthSupportedValuesVaryByAdaptermodel": "Control model reasoning depth. Supported values vary by adapter/model.",
         "enableClaudesChromeIntegrationByPassingChrome": "Enable Claude's Chrome integration by passing --chrome.",
         "runUnattendedByAutoapprovingAdapterPermissionPromptsWhenSupported": "Run unattended by auto-approving adapter permission prompts when supported.",
-        "runCodexWithoutSandboxRestrictionsRequiredForFilesystemnetworkAccess": "Run Codex with approvals and sandbox restrictions bypassed.",
+        "runCodexWithoutSandboxRestrictionsRequiredForFilesystemnetworkAccess": "Run Codex without sandbox restrictions. Required for filesystem/network access.",
         "enableCodexWebSearchCapabilityDuringRuns": "Enable Codex web search capability during runs.",
         "enableCodexFastModeThisBurnsCreditstokensMuchFaster": "Enable Codex Fast mode. This burns credits/tokens much faster and is supported on GPT-6, GPT-5.6, GPT-5.5, GPT-5.4, and manual Codex model IDs.",
         "howPaperclipShouldRealizeAnExecutionWorkspaceForThis": "How Paperclip should realize an execution workspace for this agent. Keep project_primary for normal cwd execution, or use git_worktree for issue-scoped isolated checkouts.",
@@ -17146,7 +17150,7 @@
         "updateToTheNewestDefault": "Update {{value0}} to the newest default?",
         "youHavenTEditedThisSoPaperclip": "You haven't edited this, so Paperclip will replace it with the newer shipped version. Nothing you customized is affected, and your adapter credentials and settings are not touched.",
         "resetToTheShippedDefault": "Reset {{value0}} to the shipped default?",
-        "thisReplacesYourEditedVersionWithPaperclip": "This replaces your edited version with Paperclip's current default. Your edits will be overwritten. Adapter credentials and settings are not touched.",
+        "thisReplacesYourEditedVersionWithPaperclip": "This replaces your edited version with Paperclip's current default. Your edits can't be recovered. Adapter credentials and settings are not touched.",
         "reset": "Reset {{value0}}",
         "recreate": "Recreate {{value0}}?",
         "thisResourceIsMissingPaperclipWillRecreate": "This resource is missing. Paperclip will recreate it from the shipped default. Adapter credentials and settings are not touched.",
@@ -17168,7 +17172,7 @@
         "proposal": "Proposal",
         "reviewProposal": "Review proposal",
         "scheduleEnabled": "The weekly schedule is enabled and can create background work.",
-        "scheduleDisabled": "No scheduled work runs until you enable the weekly schedule, so it uses no tokens by default.",
+        "scheduleDisabled": "Nothing runs until you enable the weekly schedule — it costs zero tokens by default.",
         "runOnceDescription": "Paperclip will create one routine task now. This does not enable the weekly schedule or turn on background work.",
         "disableDescription": "Paperclip will stop future scheduled Reflection Coach runs. Manual Run once remains available.",
         "enableDescription": "Paperclip will allow Reflection Coach to create routine tasks on the weekly schedule. It can spend tokens when those tasks run.",

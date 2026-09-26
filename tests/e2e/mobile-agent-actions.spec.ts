@@ -47,7 +47,9 @@ for (const streamlined of [true, false]) {
       try {
         await json(await request.patch("/api/instance/settings/experimental", { data: { enableStreamlinedUi: streamlined } }));
         await page.route("**/api/announcements/current", (route) => route.fulfill({ json: null }));
-        await page.addInitScript((language) => localStorage.setItem("paperclip.ui.language", language), scenario.language);
+        await page.addInitScript((language) => {
+          if (!localStorage.getItem("paperclip.ui.language")) localStorage.setItem("paperclip.ui.language", language);
+        }, scenario.language);
         await page.setViewportSize({ width: scenario.width, height: 844 });
         await page.goto(`/${company.issuePrefix}/agents/${agent.urlKey ?? agent.id}/runtime`);
         const nameInput = page.locator("input").filter({ visible: true }).first();
@@ -55,6 +57,20 @@ for (const streamlined of [true, false]) {
         await expect(nameInput).toHaveValue("Mobile actions fixture");
         await page.addStyleTag({ content: `:root { --sz-safe-bottom: ${scenario.safeBottom}px; }` });
         await nameInput.fill(draftName);
+        if (scenario.width < 768) {
+          await page.getByRole("button", { name: chinese ? "打开侧边栏" : "Open sidebar", exact: true }).click();
+        }
+        const firstToggle = page.getByRole("button", { name: chinese ? "切换到英文" : "Switch to Chinese", exact: true });
+        await firstToggle.focus();
+        await firstToggle.press("Enter");
+        await expect(page.locator("html")).toHaveAttribute("lang", chinese ? "en" : "zh-CN");
+        await page.getByRole("button", { name: chinese ? "Switch to Chinese" : "切换到英文", exact: true }).press("Space");
+        await expect(page.locator("html")).toHaveAttribute("lang", scenario.language);
+        if (scenario.width < 768) {
+          await page.getByRole("button", { name: chinese ? "关闭侧边栏" : "Close sidebar", exact: true }).click({ position: { x: scenario.width - 2, y: 400 } });
+        }
+        await expect(nameInput).toHaveValue(draftName);
+        expect((await json(await request.get(`/api/agents/${agent.id}`))).name).toBe("Mobile actions fixture");
         const save = page.getByRole("button", { name: saveLabel, exact: true });
         await expect(save).toBeEnabled();
         if (scenario.width < 768) {
@@ -98,6 +114,9 @@ for (const streamlined of [true, false]) {
         await save.click();
         await expect.poll(async () => (await json(await request.get(`/api/agents/${agent.id}`))).name).toBe(draftName);
         await expect(save).toBeDisabled();
+        await page.reload();
+        await expect(page.locator("html")).toHaveAttribute("lang", scenario.language);
+        await expect(nameInput).toHaveValue(draftName);
         await page.screenshot({ path: test.info().outputPath("saved-actions.png") });
       } finally {
         await request.patch("/api/instance/settings/experimental", { data: { enableStreamlinedUi: settings.enableStreamlinedUi } }).catch(() => {});

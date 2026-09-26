@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Sync every locale file to the English key structure.
+ * Sync Simplified Chinese to the English key structure.
  *
- * English (en.json) is the source of truth for the key tree. For each other
- * locale this script:
+ * English (en.json) is the source of truth for the key tree. For Simplified Chinese
+ * this script:
  *   - keeps existing translations (never overwrites them),
  *   - fills any missing key with the English string (UI falls back to it),
  *   - removes keys that no longer exist in English (the locale validator
@@ -14,9 +14,8 @@
  *   node scripts/sync-locales.mjs --check  # report only; exit 1 when out of sync
  *
  * This is the maintenance routine after any upstream change adds or removes
- * UI copy: run `pnpm locales:sync` once, then translate only the new keys in
- * zh-CN.json (and zh-TW.json if desired). Do NOT hand-edit the other 38
- * locale files - they are mirrors of en.json by construction.
+ * UI copy: run `pnpm locales:sync`, then translate new keys in zh-CN.json.
+ * Additional locale files are rejected rather than silently maintained.
  */
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -56,10 +55,14 @@ function syncTree(reference, current, localeName, prefix, report) {
   return out;
 }
 
-const localeFiles = fs
-  .readdirSync(localesDir)
-  .filter((f) => f.endsWith(".json") && f !== "en.json")
-  .sort();
+const allowedFiles = new Set(["en.json", "zh-CN.json"]);
+const unexpected = fs.readdirSync(localesDir)
+  .filter((file) => file.endsWith(".json") && !allowedFiles.has(file));
+if (unexpected.length > 0) {
+  console.error(`Unsupported locale files: ${unexpected.sort().join(", ")}. Only en and zh-CN are supported.`);
+  process.exit(1);
+}
+const localeFiles = ["zh-CN.json"];
 
 let anyDrift = false;
 let totalAdded = 0;

@@ -79,7 +79,11 @@
       "shareFeedbackAction": "反馈意见"
     },
     "language": {
-      "label": "语言"
+      "label": "语言",
+      "switchToEnglish": "切换到英文",
+      "switchToChinese": "切换到中文",
+      "englishShort": "EN",
+      "chineseShort": "中"
     },
     "themeToggle": {
       "switchToLight": "切换到浅色模式",

@@ -134,7 +134,10 @@ The preview server binds `0.0.0.0` and accepts any Host, so a tailnet or LAN add
 The UI defaults to Simplified Chinese and offers an English/Chinese switcher.
 The selected language is stored under `paperclip.ui.language` in the browser;
 the UI falls back to Chinese when no valid selection is stored. Translations
-live in `ui/src/i18n/locales/`; use `useTranslation` from `ui/src/i18n` for
+live in `ui/src/i18n/locales/`, which contains only `en.json` and `zh-CN.json`.
+`pnpm locales:sync` and `pnpm locales:check` reject any additional language
+files. Preserve existing English copy during Chinese localization; new keys
+may supply the original English display as a fallback. Use `useTranslation` from `ui/src/i18n` for
 new interface copy. This is a UI localization pass, not a translation of
 server messages or user-generated content. The current coverage and next
 steps are tracked in [the Simplified Chinese UI plan](plans/2026-09-24-ui-zh-cn-progress.md).

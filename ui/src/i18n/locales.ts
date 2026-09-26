@@ -4,10 +4,7 @@ import { assertValidLocaleMessages } from "./locale-validation";
 
 export const DEFAULT_LOCALE = "en" as const;
 
-// Only bundle the languages the UI can select (see UiLanguage in ./index.ts).
-// The other locale files are English mirrors kept for `pnpm locales:sync`;
-// eagerly bundling all of them produced a ~30 MB chunk that failed to start
-// on iOS WebKit.
+// Keep the runtime and repository language inventory limited to English and Simplified Chinese.
 const localeModules = import.meta.glob(["./locales/en.json", "./locales/zh-CN.json"], {
   eager: true,
   import: "default",

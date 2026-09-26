@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   BookOpen,
-  Flag,
   LogOut,
   type LucideIcon,
   UserRound,
@@ -13,19 +12,17 @@ import type { DeploymentMode } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
 import { authApi } from "@/api/auth";
 import { queryKeys } from "@/lib/queryKeys";
-import { useCloudInstance } from "@/hooks/useCloudInstance";
 import { useSignOut } from "@/hooks/useSignOut";
 import { useSidebar } from "../context/SidebarContext";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn, SIDEBAR_RAIL_HIDDEN_LABEL } from "../lib/utils";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 import { SidebarServerInfo } from "./SidebarServerInfo";
 
 const PROFILE_SETTINGS_PATH = "/company/settings/instance/profile";
 const DOCS_URL = "https://docs.paperclip.ing/";
-const FEEDBACK_URL = "https://paperclip.ing/feedback";
 
 interface SidebarAccountMenuProps {
   deploymentMode?: DeploymentMode;
@@ -110,7 +107,6 @@ export function SidebarAccountMenu({
   onOpenChange,
 }: SidebarAccountMenuProps) {
   const { t } = useTranslation();
-  const isCloud = Boolean(useCloudInstance());
   const [internalOpen, setInternalOpen] = useState(false);
   const { isMobile, setSidebarOpen, collapsed, peeking } = useSidebar();
   const rail = collapsed && !peeking;
@@ -203,6 +199,10 @@ export function SidebarAccountMenu({
                 external
                 onClick={() => setOpen(false)}
               />
+              <div className="flex items-center justify-between gap-2 px-3 py-2">
+                <span className="text-sm font-medium">{t("app.language.label")}</span>
+                <LanguageSwitcher />
+              </div>
               <ThemeToggle variant="menu-action" onAfterToggle={() => setOpen(false)} />
               {deploymentMode === "authenticated" ? (
                 <button
@@ -232,22 +232,7 @@ export function SidebarAccountMenu({
           </div>
         </PopoverContent>
         </Popover>
-        {!rail && !isCloud ? (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <a
-                href={FEEDBACK_URL}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={t("app.shell.sidebarAccountMenu.shareFeedback")}
-                className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground/50 transition-colors hover:bg-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <Flag className="h-4 w-4" aria-hidden="true" />
-              </a>
-            </TooltipTrigger>
-            <TooltipContent side="top">{t("app.shell.sidebarAccountMenu.shareFeedback")}</TooltipContent>
-          </Tooltip>
-        ) : null}
+        {!rail ? <LanguageSwitcher variant="toggle" /> : null}
       </div>
     </div>
   );

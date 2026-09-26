@@ -9,7 +9,7 @@ describe("activity formatting", () => {
   });
 
   it.each([
-    ["en", "listed only provider Trace metadata", "listed only provider Trace metadata", "updated instance experimental settings"],
+    ["en", "provider trace metadata listed", "provider trace metadata listed", "instance settings experimental updated"],
     ["zh-CN", "仅列出了提供方 Trace 元数据", "仅列出了提供方 Trace 元数据", "更新了实例实验设置"],
   ])("labels metadata listing and instance settings events accurately in %s", async (language, metadataRow, metadataDetail, settingsLabel) => {
     await i18n.changeLanguage(language);

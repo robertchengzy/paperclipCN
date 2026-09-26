@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 
+import { setUiLanguage, i18n } from "@/i18n";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -21,6 +22,7 @@ const mockInstanceSettingsApi = vi.hoisted(() => ({
 }));
 const mockToggleTheme = vi.hoisted(() => vi.fn());
 const mockSetSidebarOpen = vi.hoisted(() => vi.fn());
+const mockSidebar = vi.hoisted(() => ({ isMobile: false, collapsed: false, peeking: false }));
 const mockNavigateTopLevel = vi.hoisted(() => vi.fn());
 
 vi.mock("@/api/auth", () => ({
@@ -47,7 +49,7 @@ vi.mock("@/lib/router", () => ({
 
 vi.mock("../context/SidebarContext", () => ({
   useSidebar: () => ({
-    isMobile: false,
+    ...mockSidebar,
     setSidebarOpen: mockSetSidebarOpen,
   }),
 }));
@@ -78,7 +80,9 @@ async function flushReact() {
 describe("SidebarAccountMenu", () => {
   let container: HTMLDivElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await setUiLanguage("en");
+    Object.assign(mockSidebar, { isMobile: false, collapsed: false, peeking: false });
     container = document.createElement("div");
     document.body.appendChild(container);
     mockAuthApi.getSession.mockResolvedValue({
@@ -96,7 +100,8 @@ describe("SidebarAccountMenu", () => {
     mockAuthApi.signOut.mockResolvedValue({ success: true, redirectTo: "/cloud/logout" });
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await setUiLanguage("en");
     container.remove();
     document.body.innerHTML = "";
     vi.clearAllMocks();
@@ -129,25 +134,17 @@ describe("SidebarAccountMenu", () => {
     expect(accountTrigger?.classList).toContain("hover:text-sidebar-accent-foreground");
     expect(accountTrigger?.classList).not.toContain("hover:bg-background");
 
-    const feedbackButton = container.querySelector<HTMLAnchorElement>(
-      'a[aria-label="Share feedback"]',
-    );
-    expect(feedbackButton?.getAttribute("href")).toBe("https://paperclip.ing/feedback");
-    expect(feedbackButton?.getAttribute("target")).toBe("_blank");
-    expect(feedbackButton?.classList).toContain("text-muted-foreground/50");
-    expect(feedbackButton?.classList).not.toContain("text-border");
-    expect(feedbackButton?.classList).not.toContain("text-muted-foreground");
-    expect(feedbackButton?.classList).toContain("hover:bg-sidebar-accent");
-    expect(feedbackButton?.classList).toContain("hover:text-sidebar-accent-foreground");
-    expect(feedbackButton?.classList).not.toContain("hover:bg-background");
-    expect(feedbackButton?.querySelector("svg")?.classList).toContain("lucide-flag");
-    expect(feedbackButton?.getAttribute("data-slot")).toBe("tooltip-trigger");
-    expect(feedbackButton?.hasAttribute("title")).toBe(false);
+    const languageButton = container.querySelector<HTMLButtonElement>('button[aria-label="Switch to Chinese"]');
+    expect(languageButton).not.toBeNull();
+    expect(languageButton?.textContent).toBe("中");
+    expect(languageButton?.type).toBe("button");
+    expect(languageButton?.getAttribute("data-slot")).toBe("tooltip-trigger");
+    expect(container.querySelector('a[href="https://paperclip.ing/feedback"]')).toBeNull();
 
     await act(async () => root.unmount());
   });
 
-  it("keeps the classic feedback control visible beside the profile trigger", async () => {
+  it("keeps the classic language control beside the profile trigger", async () => {
     const root = createRoot(container);
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
@@ -168,17 +165,12 @@ describe("SidebarAccountMenu", () => {
     expect(accountTrigger?.classList).toContain("rounded-lg");
     expect(accountTrigger?.classList).toContain("hover:bg-accent/50");
 
-    const feedbackButton = container.querySelector<HTMLAnchorElement>(
-      'a[aria-label="Share feedback"]',
-    );
-    expect(feedbackButton?.getAttribute("href")).toBe("https://paperclip.ing/feedback");
-    expect(feedbackButton?.getAttribute("target")).toBe("_blank");
-    expect(feedbackButton?.classList).toContain("text-muted-foreground/50");
-    expect(feedbackButton?.classList).not.toContain("text-border");
-    expect(feedbackButton?.classList).not.toContain("text-muted-foreground");
-    expect(feedbackButton?.classList).toContain("hover:bg-accent/50");
-    expect(feedbackButton?.querySelector("svg")?.classList).toContain("lucide-flag");
-    expect(feedbackButton?.getAttribute("data-slot")).toBe("tooltip-trigger");
+    const languageButton = container.querySelector<HTMLButtonElement>('button[aria-label="Switch to Chinese"]');
+    expect(languageButton).not.toBeNull();
+    expect(languageButton?.textContent).toBe("中");
+    expect(languageButton?.type).toBe("button");
+    expect(languageButton?.getAttribute("data-slot")).toBe("tooltip-trigger");
+    expect(container.querySelector('a[href="https://paperclip.ing/feedback"]')).toBeNull();
 
     await act(async () => {
       accountTrigger?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -214,7 +206,7 @@ describe("SidebarAccountMenu", () => {
     await flushReact();
     await flushReact();
 
-    expect(container.querySelector('a[aria-label="Share feedback"]')).not.toBeNull();
+    expect(container.querySelector('button[aria-label="Switch to Chinese"]')).not.toBeNull();
     expect(container.textContent).toContain("Jane Example");
     expect(container.textContent).not.toContain("jane@example.com");
 
@@ -275,7 +267,7 @@ describe("SidebarAccountMenu", () => {
     });
   });
 
-  it.each([SidebarAccountMenu, ProductionSidebarAccountMenu])("hides cloud feedback and signs out through the harness (%#)", async (AccountMenu) => {
+  it.each([SidebarAccountMenu, ProductionSidebarAccountMenu])("keeps language switching in cloud and signs out through the harness (%#)", async (AccountMenu) => {
     const root = createRoot(container);
     const onOpenChange = vi.fn();
     const queryClient = new QueryClient({
@@ -308,6 +300,7 @@ describe("SidebarAccountMenu", () => {
     await flushReact();
 
     expect(container.querySelector('a[aria-label="Share feedback"]')).toBeNull();
+    expect(container.querySelector('button[aria-label="Switch to Chinese"]')).not.toBeNull();
 
     const signOutButton = Array.from(document.body.querySelectorAll("button")).find(
       (button) => button.textContent?.includes("Sign out"),
@@ -349,6 +342,33 @@ describe("SidebarAccountMenu", () => {
     await act(async () => {
       root.unmount();
     });
+  });
+
+  it.each([SidebarAccountMenu, ProductionSidebarAccountMenu])("keeps a language selector reachable in the collapsed account menu (%#)", async (AccountMenu) => {
+    mockSidebar.collapsed = true;
+    const root = createRoot(container);
+    const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    try {
+      await act(async () => root.render(
+        <QueryClientProvider client={queryClient}><TooltipProvider>
+          <AccountMenu deploymentMode="local_trusted" open />
+        </TooltipProvider></QueryClientProvider>,
+      ));
+      await flushReact();
+      expect(container.querySelector('button[aria-label="Switch to Chinese"]')).toBeNull();
+      const select = document.body.querySelector<HTMLSelectElement>('select[aria-label="Language"]');
+      expect(select).not.toBeNull();
+      await act(async () => {
+        select!.value = "zh-CN";
+        select!.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+      expect(i18n.resolvedLanguage).toBe("zh-CN");
+      expect(mockSetSidebarOpen).not.toHaveBeenCalled();
+      expect(mockAuthApi.signOut).not.toHaveBeenCalled();
+    } finally {
+      await act(async () => root.unmount());
+      queryClient.clear();
+    }
   });
 
 });
