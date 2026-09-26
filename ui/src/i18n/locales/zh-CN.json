@@ -60,7 +60,7 @@
     },
     "sidebarAccountMenu": {
       "signedIn": "已登录",
-      "localWorkspaceBoard": "本地工作区 Board",
+      "localWorkspaceBoard": "本地工作区董事会",
       "account": "账户",
       "local": "本地",
       "openAccountMenu": "打开账户菜单",
@@ -75,7 +75,7 @@
       "updateProfile": "更新你的显示名称与头像。",
       "openDocs": "在新标签页打开 Paperclip 文档。",
       "shareFeedback": "分享反馈或报告问题。",
-      "board": "Board",
+      "board": "董事会成员",
       "shareFeedbackAction": "反馈意见"
     },
     "language": {
@@ -168,7 +168,7 @@
       "hire_agent": "聘用智能体",
       "approve_ceo_strategy": "CEO 策略",
       "budget_override_required": "预算例外",
-      "request_board_approval": "Board 审批"
+      "request_board_approval": "董事会审批"
     },
     "dashboard": {
       "agentsEnabled": "已启用智能体",
@@ -176,7 +176,7 @@
       "monthSpend": "本月支出",
       "pendingApprovals": "待审批",
       "unlimitedBudget": "无限预算",
-      "awaitingBoardReview": "等待 Board 审核",
+      "awaitingBoardReview": "等待董事会审核",
       "runActivity": "运行活动",
       "tasksByPriority": "任务优先级分布",
       "tasksByStatus": "任务状态分布",
@@ -213,7 +213,7 @@
       "agentSummary": "{{running}} 个运行中，{{paused}} 个已暂停，{{errors}} 个出错",
       "taskSummary": "{{open}} 个未完成，{{blocked}} 个受阻",
       "budgetUtilization": "本月预算 {{budget}}，已使用 {{percent}}%",
-      "budgetOverridesAwaitingReview": "{{value}} 项预算例外等待 Board 审核"
+      "budgetOverridesAwaitingReview": "等待董事会审批的预算超限申请：{{value}} 项"
     },
     "cloudCreateUnavailable": "组织需在 Paperclip Cloud 中创建。此实例目前无法连接 Cloud，请稍后从 Cloud 控制台重试。",
     "common": {
@@ -510,7 +510,7 @@
         "project": "项目",
         "projects": "项目",
         "organization": "组织",
-        "board": "Board",
+        "board": "董事会",
         "task": "任务",
         "tasks": "任务",
         "issue": "任务",
@@ -741,7 +741,7 @@
           "low": "低"
         },
         "actorSystem": "系统",
-        "actorBoard": "Board",
+        "actorBoard": "董事会成员",
         "actorUnknown": "未知",
         "approvalFallback": "审批",
         "review": "查看 →"
@@ -775,7 +775,7 @@
         "noWorkspace": "无工作区",
         "defaultWorkspace": "默认工作区",
         "me": "我",
-        "board": "Board",
+        "board": "董事会成员",
         "user": "用户",
         "newTaskIn": "在 {{group}} 中新建任务"
       },
@@ -1005,7 +1005,7 @@
       "project": "项目",
       "searchProjects": "搜索项目…",
       "noProjectsFound": "未找到项目。",
-      "addParticipant": "添加审核人、审批人或 Watchdog",
+      "addParticipant": "添加审核人、审批人或任务守护智能体",
       "reviewer": "审核人",
       "noReviewer": "无审核人",
       "searchReviewers": "搜索审核人…",
@@ -1014,17 +1014,17 @@
       "noApprover": "无审批人",
       "searchApprovers": "搜索审批人…",
       "noApproversFound": "未找到审批人。",
-      "watchdog": "Watchdog",
-      "configureWatchdog": "配置 Watchdog",
-      "setWatchdog": "设置 Watchdog",
-      "watchdogAgent": "Watchdog 智能体",
+      "watchdog": "任务守护",
+      "configureWatchdog": "配置任务守护",
+      "setWatchdog": "设置任务守护",
+      "watchdogAgent": "任务守护智能体",
       "selectAgent": "选择智能体",
-      "noWatchdogAgent": "无 Watchdog 智能体",
+      "noWatchdogAgent": "无任务守护智能体",
       "searchAgents": "搜索智能体…",
       "noAgentsFound": "未找到智能体。",
       "instructions": "指令",
       "optional": "（可选）",
-      "watchdogInstructionsPlaceholder": "Watchdog 应关注什么？应如何推动工作持续进展？",
+      "watchdogInstructionsPlaceholder": "任务守护智能体应关注什么？应如何推动工作持续进展？",
       "subTaskOf": "父任务：",
       "executionWorkspace": {
         "label": "执行工作区",
@@ -1080,8 +1080,8 @@
       "upload": "上传",
       "workMode": {
         "standard": "自动模式",
-        "planning": "规划模式",
-        "ask": "Ask 模式"
+        "planning": "计划模式",
+        "ask": "问答模式"
       },
       "startDate": "开始日期",
       "dueDate": "截止日期",
@@ -1154,10 +1154,10 @@
         },
         "watchdog": {
           "disabled": "（已禁用）",
-          "task": "Watchdog 任务：",
+          "task": "守护任务：",
           "viewTask": "查看任务",
           "update": "更新",
-          "openTask": "打开 Watchdog 任务"
+          "openTask": "打开守护任务"
         },
         "labels": {
           "add": "添加标签",
@@ -1212,7 +1212,7 @@
           "assignToRequester": "分配给请求人",
           "requester": "请求人",
           "agents": "智能体",
-          "boardUsers": "Board 用户"
+          "boardUsers": "董事会成员"
         },
         "parent": {
           "parentTask": "父任务",
@@ -1289,7 +1289,7 @@
           "workspace": "工作区",
           "scheduledRetry": "已排期重试",
           "monitor": "监控",
-          "watchdog": "Watchdog",
+          "watchdog": "任务守护",
           "service": "服务",
           "branch": "分支",
           "folder": "文件夹",
@@ -1316,7 +1316,7 @@
         },
         "plan": {
           "loading": "正在加载计划…",
-          "noDocumentInPlanMode": "此任务处于规划模式，但尚未撰写计划文档。",
+          "noDocumentInPlanMode": "此任务处于计划模式，但尚未撰写计划文档。",
           "confirmationMissingDocument": "有一个待确认的计划，但它要确认的计划文档不存在。",
           "empty": "暂无计划。计划文档、已接受的计划及其修订将显示在这里。",
           "revisionUpdated": "修订 {{revision}} · 更新于 {{date}}"
@@ -1438,8 +1438,8 @@
           "statusTask": "行首的任务状态图标。",
           "id": "任务编号，如 PAP-1009。",
           "idTask": "行尾的任务编号，如 PAP-1009。",
-          "assignee": "负责的智能体或 Board 用户。",
-          "kickedOffBy": "创建该任务的 Board 用户或智能体。",
+          "assignee": "负责的智能体或董事会成员。",
+          "kickedOffBy": "创建该任务的董事会成员或智能体。",
           "project": "带颜色的关联项目标记。",
           "workspace": "任务使用的执行工作区或项目工作区。",
           "parent": "父任务的编号和标题。",
@@ -1500,7 +1500,7 @@
           "yesterday": "昨天",
           "earlier": "更早"
         },
-        "creatorBoard": "Board",
+        "creatorBoard": "董事会成员",
         "creatorMe": "我",
         "noWorkspace": "无工作区",
         "noProject": "无项目",
@@ -1753,8 +1753,8 @@
           "xhigh": "超高",
           "max": "最大",
           "ultra": "Ultra",
-          "plan": "Plan",
-          "ask": "Ask"
+          "plan": "计划模式",
+          "ask": "问答模式"
         },
         "debug": {
           "captureRawTraces": "捕获原始提供方追踪",
@@ -1861,7 +1861,7 @@
         "requestedChanges": "已要求修改"
       },
       "treeControl": {
-        "previewForbidden": "只有 Board 用户可以预览子树控制。",
+        "previewForbidden": "只有董事会成员可以预览子树控制。",
         "previewStale": "子树暂停状态已变化，预览已过期。请重试以刷新。",
         "previewInvalid": "该子树操作当前对所选任务无效。",
         "previewLoadFailed": "无法加载预览。",
@@ -1872,7 +1872,7 @@
       },
       "actors": {
         "system": "系统",
-        "board": "Board",
+        "board": "董事会成员",
         "unknown": "未知",
         "user": "用户",
         "agent": "智能体"
@@ -1889,8 +1889,8 @@
         "routineExecutionTitle": "来自例程 {{id}} 的例程执行",
         "routine": "例程",
         "live": "运行中",
-        "watchdogTitle": "这是自动生成的 Watchdog 任务，用于核实被监视任务树中停止的工作是否合理。",
-        "watchdog": "Watchdog",
+        "watchdogTitle": "这是自动生成的守护任务，用于核实被监视任务树中停止的工作是否合理。",
+        "watchdog": "守护任务",
         "workModeTitle": "此任务处于 {{mode}}。",
         "parkedBlockerTitle": "被搁置的工作阻塞——至少有一个已分配的阻塞项处于待规划状态，不会唤醒其负责人。",
         "parkedBlocker": "被搁置的工作阻塞"
@@ -2087,14 +2087,14 @@
       "assignees": {
         "you": "你",
         "me": "我",
-        "board": "Board"
+        "board": "董事会成员"
       },
       "workMode": {
         "auto": "自动模式",
-        "plan": "规划模式",
-        "ask": "Ask 模式",
-        "pendingAsk": "本次提交使用 Ask 模式。点击切换。负责人会在此对话中回答，不进行实现工作。",
-        "pendingPlan": "本次提交已开启规划模式。点击切换。",
+        "plan": "计划模式",
+        "ask": "问答模式",
+        "pendingAsk": "本次提交使用问答模式。点击切换。负责人会在此对话中回答，不进行实现工作。",
+        "pendingPlan": "本次提交已开启计划模式。点击切换。",
         "pendingAuto": "本次提交使用自动模式。点击切换。"
       },
       "reviewPolicy": {
@@ -2484,7 +2484,7 @@
         "description": "随 Paperclip 提供，为 <hl>{{feature}}</hl> 提供支持。你可以像配置其他智能体一样配置它（模型、指令、预算）。它可以暂停但不能删除；暂停它会同时暂停 {{feature}}。"
       },
       "pendingApproval": {
-        "body": "此智能体正在等待 Board 审批，暂时无法调用。",
+        "body": "此智能体正在等待董事会审批，暂时无法调用。",
         "approve": "同意启用智能体"
       },
       "secretsHeading": "密钥与变量",
@@ -2502,7 +2502,7 @@
         "adapterDefault": "适配器默认",
         "identity": "身份",
         "notSet": "未设置",
-        "board": "Board",
+        "board": "董事会",
         "directReports": "直接下属",
         "configure": "配置",
         "noSession": "无会话",
@@ -2690,7 +2690,7 @@
         "agent": "智能体",
         "you": "你",
         "system": "系统",
-        "board": "Board",
+        "board": "董事会成员",
         "user": "用户"
       },
       "fallback": {
@@ -3888,7 +3888,7 @@
           "moveToStageMenu": "移到阶段…",
           "removeItem": "移除条目",
           "moveDialogTitle": "移到阶段",
-          "moveDialogDescription": "手动移动可能会绕过此条目正常的智能体交接。尽量让自动化推动工作；仅在 Board 需要纠正条目状态时才使用此强制操作。",
+          "moveDialogDescription": "手动移动可能会绕过此条目正常的智能体交接。尽量让自动化推动工作；仅在董事会需要纠正条目状态时才使用此强制操作。",
           "moveDialogWarning": "移动此条目可能会跳过阶段自动化、审核要求和已配置的流转路径。Paperclip 仍会执行阻塞项和其他硬性安全检查。",
           "moving": "移动中…",
           "moveToNamed": "移到 {{stage}}",
@@ -4208,7 +4208,7 @@
         "endpointUrl": "端点 URL",
         "commandTemplate": "命令模板",
         "selectTemplate": "选择已批准的模板",
-        "templateHint": "只能运行 Board 批准的命令模板，绝不接受任意命令。",
+        "templateHint": "只能运行董事会批准的命令模板，绝不接受任意命令。",
         "credentialReferences": "凭据引用",
         "removeCredential": "移除 {{name}} 的凭据引用",
         "selectSecret": "选择保管库密钥",
@@ -4237,7 +4237,7 @@
           "issue": "任务 {{id}}"
         },
         "owner": {
-          "boardUser": "Board 用户 {{id}}"
+          "boardUser": "董事会成员 {{id}}"
         },
         "profileUnavailable": "配置档不可用",
         "noToolsAllowed": "不允许任何工具",
@@ -4667,7 +4667,7 @@
         "sourceRisk": "风险：{{risk}}"
       },
       "shared": {
-        "forbidden": "没有查看权限。工具与访问需要 Board 或管理员权限。",
+        "forbidden": "没有查看权限。工具与访问需要董事会或管理员权限。",
         "notAvailable": "此服务器暂不支持工具与访问，请在下次部署后刷新重试。",
         "somethingWentWrong": "出错了。",
         "couldNotLoad": "无法加载此视图",
@@ -5090,22 +5090,22 @@
         "labelAnyone": "任何人",
         "labelNotCreator": "创建者以外的任何人",
         "labelHumanOnly": "仅限人工",
-        "effectAnyone": "组织内任何人都可以回复——Board 或任意智能体，包括提问的智能体。",
+        "effectAnyone": "组织内任何人都可以回复——董事会成员或任意智能体，包括提问的智能体。",
         "effectNotCreator": "组织内除创建此卡片的智能体及其运行以外的任何人。需要由他人给出答案时使用。",
-        "effectHumanOnly": "只有 Board 可以回复，智能体会被拒绝。",
+        "effectHumanOnly": "只有董事会成员可以回复，智能体会被拒绝。",
         "youMidSentence": "你",
         "addressedUser": "被指定的用户",
         "addressedAgent": "被指定的智能体",
         "creatorFallback": "创建它的智能体",
         "summaryOnlyAddressee": "只有 {{addressee}} 可以回复。",
-        "summaryHumanOnlyAssigned": "已指派给 {{addressee}}。只有 Board 可以回复——智能体无法处理此卡片。",
-        "summaryHumanOnly": "只有 Board 可以回复——智能体无法处理此卡片。",
-        "summaryAddresseeOrBoard": "只有 {{addressee}} 或 Board 可以回复。",
+        "summaryHumanOnlyAssigned": "已指派给 {{addressee}}。只有董事会成员可以回复——智能体无法处理此卡片。",
+        "summaryHumanOnly": "只有董事会成员可以回复——智能体无法处理此卡片。",
+        "summaryAddresseeOrBoard": "只有 {{addressee}} 或董事会成员可以回复。",
         "summaryNotCreator": "组织内除 {{creator}} 以外的任何人都可以回复。",
         "shortOnlyAddressee": "只有 {{addressee}} 可以回复",
-        "shortAssignedBoardOnly": "已指派给 {{addressee}} · 仅限 Board",
-        "shortBoardOnly": "只有 Board 可以回复",
-        "shortAddresseeOrBoard": "只有 {{addressee}} 或 Board 可以回复",
+        "shortAssignedBoardOnly": "已指派给 {{addressee}} · 仅限董事会成员",
+        "shortBoardOnly": "只有董事会成员可以回复",
+        "shortAddresseeOrBoard": "只有 {{addressee}} 或董事会成员可以回复",
         "shortNotCreator": "除 {{creator}} 以外的任何人都可以回复",
         "shortAnyone": "任何人都可以回复",
         "noteGovernedAction": "此卡片会执行受管控的操作，因此无论请求的受众是什么，都仅限人工处理。",
@@ -5147,7 +5147,7 @@
         "mentionedAgent": "被提及的智能体",
         "plainNameWarning": "不会通知任何智能体。请使用 @ 提及智能体。",
         "responsibleAgent": "负责的智能体",
-        "wakeUserHandoff": "未创建——这是交接给 Board 用户",
+        "wakeUserHandoff": "未创建——这是交接给董事会成员",
         "wakeUnassigned": "未创建——未选择智能体。请 @提及智能体或选择负责人以派发。",
         "anAgent": "某个智能体",
         "confirmTitle": "要中断当前运行吗？",
@@ -5160,12 +5160,12 @@
         "detailLiveRuns": "立即中断，恢复后重新排队",
         "detailQueuedWakes": "已搁置——恢复前不会启动",
         "detailAgentOwned": "有负责的智能体；当前没有进行中的运行",
-        "detailHumanOwned": "由 Board 用户负责；暂停不会通知他们",
+        "detailHumanOwned": "由董事会成员负责；暂停不会通知他们",
         "detailStatic": "没有负责人；本来就不会运行",
         "queuedFor": "已为 {{who}} 排队",
         "queuedForInterrupted": "已为 {{who}} 排队（附带被中断的运行）",
         "runningBanner": "{{who}} 正在运行——更改负责人将中断此运行。",
-        "interruptedByBoardComment": "因 Board 评论而中断"
+        "interruptedByBoardComment": "因董事会成员评论而中断"
       },
       "issueChangeReceipt": {
         "field": {
@@ -5199,14 +5199,14 @@
         "reason": {
           "allow_visible_issue_write": "对可见任务的默认开放写入",
           "allow_scoped_agent_write": "限定范围的智能体写入",
-          "allow_board_actor": "Board 操作者",
+          "allow_board_actor": "董事会成员",
           "allow_self": "自己的任务",
           "allow_issue_mention_grant": "提及授权",
           "allow_direct_parent_report": "向直接父任务汇报",
           "allow_low_trust_boundary": "低信任边界许可",
           "allow_explicit_grant": "显式权限授予",
           "allow_instance_admin": "实例管理员",
-          "allow_local_board": "本地 Board",
+          "allow_local_board": "本地董事会",
           "internal_agent_write": "内部智能体写入"
         },
         "valueNone": "无",
@@ -5235,10 +5235,10 @@
         "runFailed": "运行失败",
         "timedOutAfter": "{{duration}} 后超时",
         "runTimedOut": "运行超时",
-        "interruptedAfter": "{{duration}} 后被 Board 中断",
-        "interrupted": "已被 Board 中断",
-        "pausedAfter": "{{duration}} 后被 Board 暂停",
-        "paused": "已被 Board 暂停",
+        "interruptedAfter": "{{duration}} 后被董事会成员中断",
+        "interrupted": "已被董事会成员中断",
+        "pausedAfter": "{{duration}} 后被董事会成员暂停",
+        "paused": "已被董事会成员暂停",
         "cancelledAfter": "{{duration}} 后取消",
         "runCancelled": "运行已取消",
         "workingDots": "处理中…",
@@ -5380,7 +5380,7 @@
         "blockedTasks": "受阻任务",
         "findBlocked": "查找受阻的工作",
         "assignedToMe": "指派给我",
-        "useCurrentUser": "使用当前 Board 用户",
+        "useCurrentUser": "使用当前董事会成员",
         "projectName": "项目名称",
         "quoteProjectNames": "多词项目名请加引号",
         "filterByLabel": "按任务标签筛选",
@@ -5621,7 +5621,7 @@
           "issueMonitorExhausted": "耗尽了监视器",
           "issueMonitorRecoveryWakeQueued": "已将监视器恢复唤醒加入队列",
           "issueMonitorRecoveryIssueCreated": "创建了监视器恢复任务",
-          "issueMonitorEscalatedToBoard": "将监视器上报给 Board",
+          "issueMonitorEscalatedToBoard": "将监视器上报给董事会",
           "issueDeleted": "删除了任务",
           "issueSuccessfulRunHandoffRequired": "运行结束，但没有明确的下一步",
           "issueSuccessfulRunHandoffResolved": "已选定下一步",
@@ -6937,7 +6937,7 @@
         "reinstallLatest": "重新安装最新版",
         "installTeam": "安装团队",
         "invalidManifest": "无法安装此团队：包清单无效。",
-        "requiresPermission": "需要 Board 操作员或创建智能体权限。",
+        "requiresPermission": "需要董事会成员权限或创建智能体权限。",
         "requiredSkills": "必需技能",
         "agentHierarchy": "智能体层级",
         "steps": {
@@ -7200,7 +7200,7 @@
         "diff": "差异",
         "thisRevisionHasNoBody": "此修订版本没有正文。",
         "via": "通过",
-        "board": "Board",
+        "board": "董事会成员",
         "system": "系统",
         "revisionLabel": "修订 {{number}} - {{time}} - {{actor}}",
         "revisionNumber": "修订 {{number}}",
@@ -7377,7 +7377,7 @@
         "activeIncidents": "活跃事件",
         "openSoftOrHardThresholdCrossings": "尚未处理的软阈值或硬阈值超限",
         "pendingApprovals": "待处理审批",
-        "budgetOverrideApprovalsAwaitingBoardAction": "等待 Board 处理的预算超限审批",
+        "budgetOverrideApprovalsAwaitingBoardAction": "等待董事会审批的预算超限申请",
         "pausedAgents": "已暂停的智能体",
         "agentHeartbeatsBlockedByBudget": "因预算而受阻的智能体心跳",
         "pausedProjects": "已暂停的项目",
@@ -7688,7 +7688,7 @@
       },
       "documentDiffModal": {
         "actor": {
-          "board": "Board",
+          "board": "董事会成员",
           "agent": "智能体",
           "system": "系统"
         },
@@ -7913,7 +7913,7 @@
           "strandedTask": "停滞任务",
           "workspaceValidation": "工作区校验",
           "configurationValidation": "配置校验",
-          "activeWatchdog": "活跃 Watchdog",
+          "activeWatchdog": "活跃运行监测",
           "taskNeedsNextStep": "任务需要下一步"
         },
         "headline": {
@@ -7991,7 +7991,7 @@
           "wakeOwner": "将请智能体选择下一步",
           "ownerRepair": "Paperclip 正在让原负责人重新尝试",
           "recoveryOwner": "恢复负责人正在修复后续执行路径",
-          "boardEscalation": "需要 Board 决策",
+          "boardEscalation": "需要董事会决策",
           "manual": "需要人工跟进",
           "manualRepair": "重试前需要修复",
           "checkScheduledInterval": "已计划检查 · {{interval}}",
@@ -8010,7 +8010,7 @@
           "sourceExhausted": "此任务的上次运行停下来等待，但并没有需要等待的对象。原负责人已用完所有自动修复尝试，下一步需要做出决策。任务仍由其负责人负责。",
           "sourceRetrying": "此任务的上次运行停下来等待，但并没有需要等待的对象。Paperclip 正在让原负责人重新尝试，以记录真正的下一步。任务仍由其负责人负责，目前无需操作。",
           "recoveryOwner": "原负责人未能在重试额度内记录下一步。恢复负责人现在只负责修复路径，任务本身仍属于原负责人。",
-          "board": "自动恢复已用尽，需要 Board 选择下一步。任务本身仍属于原负责人。"
+          "board": "自动恢复已用尽，需要董事会选择下一步。任务本身仍属于原负责人。"
         },
         "resolve": {
           "tryAgain": {
@@ -8168,7 +8168,7 @@
           "critical": "严重静默",
           "snoozed": "静默已暂缓",
           "criticalTitle": "严重输出静默",
-          "warningTitle": "输出静默 Watchdog 警告",
+          "warningTitle": "运行监测：输出静默警告",
           "silentForReview": "最新的活跃运行已静默 {{age}}。请查看 <link>{{identifier}}</link> 了解恢复上下文。",
           "silentFor": "最新的活跃运行已静默 {{age}}。",
           "extendedPeriod": "较长时间",
@@ -8187,7 +8187,7 @@
           "timeout": "超时",
           "maxTurns": "已达最大轮次",
           "budgetPaused": "因预算暂停",
-          "pausedByBoard": "已被 Board 暂停",
+          "pausedByBoard": "已被董事会成员暂停",
           "processLost": "进程丢失",
           "unmanagedStopped": "未托管的后台任务已停止",
           "adapterFailed": "适配器失败",
@@ -8214,9 +8214,9 @@
           "hours": "{{count}} 小时"
         },
         "watchdog": {
-          "forbidden": "只有 Board 或指定的恢复负责人可以记录 Watchdog 决策",
-          "failed": "Paperclip 无法记录 Watchdog 决策。",
-          "toastTitle": "Watchdog 决策未记录",
+          "forbidden": "只有董事会或指定的恢复负责人可以记录运行监测决策",
+          "failed": "Paperclip 无法记录运行监测决策。",
+          "toastTitle": "运行监测决策未记录",
           "continue": "继续监控",
           "snooze": "暂缓 1 小时",
           "falsePositive": "标记为误报"
@@ -8378,7 +8378,7 @@
           "expiredCommentOne": "问题因评论而过期",
           "expiredCommentMany": "问题因评论而过期",
           "expiredClosedBody": "任务进入终止状态时，此提问请求已自动过期。",
-          "expiredCommentBody": "之后的 Board/用户评论取代了此提问请求。如果仍需要回答，请创建新的请求。",
+          "expiredCommentBody": "之后的董事会成员/用户评论取代了此提问请求。如果仍需要回答，请创建新的请求。",
           "answer": "回答",
           "noAnswerRecorded": "未记录回答。",
           "submittedSummary": "已提交的摘要"
@@ -8395,7 +8395,7 @@
         "confirm": {
           "expiredByComment": "因评论而过期",
           "expiredByTarget": "因目标变更而过期",
-          "expiredCommentBody": "在此确认处理之前，Board 的评论已将其取代。",
+          "expiredCommentBody": "在此确认处理之前，董事会成员的评论已将其取代。",
           "expiredClosedBody": "任务进入终止状态时，此确认已自动过期。",
           "expiredTargetBody": "在此确认处理之前，请求的目标已发生变更。",
           "revise": "修改…",
@@ -8416,7 +8416,7 @@
           "sourceSecret": "来源密钥",
           "targetAgent": "目标智能体",
           "configPath": "新的配置路径",
-          "theBoard": "Board",
+          "theBoard": "董事会成员",
           "approvedCreating": "已由 {{who}} 同意 — 正在创建绑定",
           "rechecking": "写入前，Paperclip 正在重新检查权限和提案快照。",
           "created": "绑定已创建 · 由 {{who}} 同意",
@@ -8462,7 +8462,7 @@
           "askAgain": "{{agent}} 可以使用新的 {{provider}} 授权链接再次请求。",
           "theAgentCap": "该智能体"
         },
-        "resolvedByAgentTooltip": "由智能体依据组织的交互治理策略处理 — 在审计中与 Board 的人工处理区分记录。",
+        "resolvedByAgentTooltip": "由智能体依据组织的交互治理策略处理 — 在审计中与董事会成员的人工处理区分记录。",
         "checkbox": {
           "confirmedNone": "已确认，未选择任何选项",
           "confirmedOne": "已确认 {{selected}}/{{total}} 个选项",
@@ -8566,7 +8566,7 @@
         "noActiveSubtasks": "没有进行中的子任务",
         "allSubtasksDone": "所有子任务已完成",
         "noActionableSubtasks": "没有可执行的子任务",
-        "board": "Board",
+        "board": "董事会成员",
         "me": "我",
         "noWorkspace": "无工作区",
         "noProject": "无项目",
@@ -8892,7 +8892,7 @@
         "recoveryRequired": "需要恢复",
         "externalWait": "等待外部",
         "ownerPaused": "负责人已暂停",
-        "pendingBoardDecision": "等待 Board 决策",
+        "pendingBoardDecision": "等待董事会决策",
         "pendingUserDecision": "等待用户决策",
         "pickDisposition": "选择处理方式",
         "unassignedBlocker": "未分配的阻塞项",
@@ -8981,7 +8981,7 @@
         "approve": "同意",
         "reject": "拒绝",
         "inbox": "收件箱",
-        "board": "Board",
+        "board": "董事会成员",
         "me": "我",
         "runRetryFailed": "重试运行失败",
         "unableToRetryRun": "无法重试运行",
@@ -10773,7 +10773,7 @@
         "webhookRecreate": "Webhook 触发器 {{label}} 将使用新的 URL 和密钥重新创建。Paperclip 仅在恢复后显示一次密钥，请在关闭前复制。",
         "restoreDialogExplanation": "此操作会创建新修订 {{newRevisionNumber}}，内容与修订 {{targetRevisionNumber}} 相同。修订 {{targetRevisionNumber}}–{{currentRevisionNumber}} 会保留在历史记录中，不会修改。",
         "theRoutine": "此例程",
-        "actorBoard": "Board",
+        "actorBoard": "董事会成员",
         "actorAgent": "智能体",
         "actorSystem": "系统",
         "plainSet": "明文（已设置）",
@@ -11157,20 +11157,20 @@
         "removing": "移除中…"
       },
       "boardClaim": {
-        "invalidUrl": "无效的 Board 认领链接。",
+        "invalidUrl": "无效的董事会认领链接。",
         "loading": "正在加载认领验证…",
         "unavailableTitle": "认领验证不可用",
         "invalidOrExpired": "验证无效或已过期。",
         "unavailable": "认领验证不可用。",
-        "claimedTitle": "已认领 Board 所有权",
+        "claimedTitle": "已认领董事会所有权",
         "claimedBody": "此实例已关联到你的认证用户。",
         "openBoard": "打开管理面板",
         "signInRequired": "需要登录",
-        "signInBody": "请登录或创建账号，然后返回此页面认领 Board 所有权。",
+        "signInBody": "请登录或创建账号，然后返回此页面认领董事会所有权。",
         "signInOrCreate": "登录 / 创建账号",
-        "claimTitle": "认领 Board 所有权",
+        "claimTitle": "认领董事会所有权",
         "claimBody": "这会将你的用户提升为实例管理员，并从本地可信模式迁移组织所有权访问权限。",
-        "claimFailed": "认领 Board 所有权失败",
+        "claimFailed": "认领董事会所有权失败",
         "claiming": "认领中…",
         "claimOwnership": "认领所有权"
       },
@@ -11788,8 +11788,8 @@
         "saving": "保存中…",
         "failedToSave": "保存失败",
         "hiring": "招聘",
-        "requireApproval": "招聘新智能体需 Board 审批",
-        "requireApprovalHint": "新招聘的智能体在 Board 审批前保持待处理状态。",
+        "requireApproval": "招聘新智能体需董事会审批",
+        "requireApprovalHint": "新招聘的智能体在董事会审批前保持待处理状态。",
         "failedToSaveGovernance": "保存交互治理设置失败",
         "dangerZone": "危险区域",
         "archiveDescription": "归档此组织后，它将从侧边栏中隐藏。此设置会保存在数据库中。",
@@ -11842,8 +11842,8 @@
         "description": "配置实例级偏好设置。",
         "failedToSignOut": "退出登录失败。",
         "deploymentAndAuth": "部署与认证",
-        "localTrustedDescription": "本地可信模式针对本地操作员优化。浏览器请求以本地 Board 上下文运行，无需登录。",
-        "authenticatedPublicDescription": "认证公开模式需要登录才能以 Board 身份访问，适用于公开 URL。",
+        "localTrustedDescription": "本地可信模式针对本地操作员优化。浏览器请求以本地董事会上下文运行，无需登录。",
+        "authenticatedPublicDescription": "认证公开模式需要登录才能以董事会身份访问，适用于公开 URL。",
         "authenticatedPrivateDescription": "认证私有模式需要登录，适用于局域网、VPN 或其他私有网络部署。",
         "authReadiness": "认证就绪状态",
         "notReady": "未就绪",
@@ -12326,7 +12326,7 @@
         "introCreateAccount": "请先创建 Paperclip 账号。如果已有账号，请切换到登录，并使用同一邮箱继续接受邀请。",
         "introReady": "你的账号已就绪。请查看邀请详情，然后接受邀请以继续。",
         "invitedBy": "邀请人",
-        "paperclipBoard": "Paperclip Board",
+        "paperclipBoard": "Paperclip 董事会成员",
         "requestedAccess": "申请的访问权限",
         "agentJoinRequest": "智能体加入申请",
         "inviteExpires": "邀请过期时间",
@@ -12445,7 +12445,7 @@
         "newOrganizationNameHint": "可选覆盖。留空则使用包名称。",
         "newOrganizationPlaceholder": "导入的组织",
         "collisionStrategy": "冲突策略",
-        "collisionStrategyHint": "Board 导入可以重命名、跳过或替换匹配的组织内容。",
+        "collisionStrategyHint": "董事会导入可以重命名、跳过或替换匹配的组织内容。",
         "renameOnConflict": "冲突时重命名",
         "skipOnConflict": "冲突时跳过",
         "replaceExisting": "替换现有内容",
@@ -12934,7 +12934,7 @@
         "unavailableTitle": "此身份链接不可用",
         "unavailableBody": "链接无效、已过期、已被使用，或属于另一个 Paperclip 组织。",
         "checking": "正在检查身份链接…",
-        "localBoard": "本地 Board",
+        "localBoard": "本地董事会成员",
         "signedInAccount": "当前登录的账号",
         "linkedTitle": "身份已关联",
         "linkedBody": "今后来自 {{label}} 的消息将使用你在 {{company}} 中当前的 Paperclip 权限。",
@@ -13829,7 +13829,7 @@
         "saveIcon": "确认裁剪后，点击 Slack 中的 <strong>Save Changes</strong>。"
       },
       "slackIdentityStep": {
-        "localBoard": "本地 Board",
+        "localBoard": "本地董事会成员",
         "couldNotCreateTheAccountConfirmationTry": "无法创建账号确认。请重试。",
         "connectYourSlackAccount": "连接你的 Slack 账号",
         "sendThisCommandInSlackSoWe": "在 Slack 中发送此命令，以便我们识别你的账号。这不会启动智能体工作。",
@@ -13902,7 +13902,7 @@
         "selectedMembers": "已选择 {{count}} 位成员"
       },
       "connectionOwner": {
-        "boardMember": "Board 成员",
+        "boardMember": "董事会成员",
         "ownerAppEndingS": "{{owner}} 的 {{applicationName}}",
         "ownerApp": "{{owner}} 的 {{applicationName}}"
       },
@@ -14480,7 +14480,7 @@
           },
           "published": {
             "title": "已发送到频道",
-            "body": "Board 更新已发布到已连接的会话。"
+            "body": "董事会更新已发布到已连接的会话。"
           },
           "pending": {
             "title": "已排队等待发送到频道",
@@ -14554,7 +14554,7 @@
         "openProvider": "打开 {{provider}}",
         "sendToChannel": "发送到频道",
         "connection": "连接",
-        "boardUpdate": "Board 更新",
+        "boardUpdate": "董事会更新",
         "bodyPlaceholder": "只填写应在提供方会话中可见的内容。",
         "addMessageWithFiles": "请添加一条随文件发送的消息。",
         "attachFileLabel": "为频道更新附加文件",
@@ -14589,7 +14589,7 @@
         "statusRefreshFailed": "无法刷新投递状态。你的草稿已保留；Paperclip 会再次检查，不会重复发送更新。",
         "providerDetail": "提供方详情：{{detail}}",
         "dismissReceipt": "关闭投递回执",
-        "ordinaryCommentsNote": "普通 Board 评论仅保留在 Paperclip 中。",
+        "ordinaryCommentsNote": "董事会成员的普通评论仅保留在 Paperclip 中。",
         "retrySafely": "安全重试",
         "slackRepliesMirrored": "{{label}} · 你在这里发送的消息和智能体的回复也会同步发布到 Slack。",
         "slackCommentStartsAgent": "你的消息会以你的名字发布到 Slack，并启动智能体。"
@@ -14838,10 +14838,10 @@
         "listedTasks": "已列出任务",
         "readingATask": "正在读取任务",
         "readATask": "已读取任务",
-        "enteringPlanMode": "正在进入规划模式",
-        "enteredPlanMode": "已进入规划模式",
-        "leavingPlanMode": "正在退出规划模式",
-        "leftPlanMode": "已退出规划模式",
+        "enteringPlanMode": "正在进入计划模式",
+        "enteredPlanMode": "已进入计划模式",
+        "leavingPlanMode": "正在退出计划模式",
+        "leftPlanMode": "已退出计划模式",
         "loadingASkill": "正在加载技能",
         "loadedASkill": "已加载技能",
         "requestingInput": "正在请求输入",
@@ -15298,10 +15298,10 @@
         "typing": "正在输入",
         "thinking": "思考中…",
         "connecting": "连接中…",
-        "streamUnavailable": "Board 聊天流不可用",
-        "assistantCouldNotRespond": "Board 助手无法回复，请重试。",
-        "assistantUnavailable": "Board 助手暂时不可用，请稍后重试。",
-        "selectOrganization": "请选择一个组织，开始与 Board 礼宾助手聊天。",
+        "streamUnavailable": "董事会聊天流不可用",
+        "assistantCouldNotRespond": "董事会助手无法回复，请重试。",
+        "assistantUnavailable": "董事会助手暂时不可用，请稍后重试。",
+        "selectOrganization": "请选择一个组织，开始与董事会礼宾助手聊天。",
         "yourOrganization": "你的组织",
         "chatHistory": "聊天记录",
         "newChat": "新聊天",
@@ -15315,7 +15315,7 @@
         "jumpToLatest": "跳到最新消息",
         "composerPlaceholder": "关于你的组织，尽管问…",
         "sendMessage": "发送消息",
-        "resizePanes": "调整 Board 聊天与智能体动态的宽度",
+        "resizePanes": "调整董事会聊天与智能体动态的宽度",
         "openAgentFeed": "打开智能体动态"
       },
       "taskChatStatusPill": {
@@ -15431,7 +15431,7 @@
       },
       "sidebarAccountMenu": {
         "signedIn": "已登录",
-        "localWorkspaceBoard": "本地工作区 Board",
+        "localWorkspaceBoard": "本地工作区董事会",
         "openAccountMenu": "打开账户菜单",
         "viewProfile": "查看个人资料",
         "openYourActivityTaskAndUsageLedger": "打开活动、任务和用量记录。",
@@ -15468,12 +15468,12 @@
         "resizeSidebar": "调整侧边栏大小"
       },
       "sourceResolvedFoldBadge": {
-        "sourceResolvedWatchdogFold": "源任务已解决的 Watchdog 折叠",
+        "sourceResolvedWatchdogFold": "源任务已解决的运行监测折叠",
         "sourceResolved": "源任务已解决",
         "tooltip": "系统已将此运行作为源任务已解决的误报折叠。"
       },
       "sourceResolvedFoldCallout": {
-        "sourceResolvedWatchdogFold": "源任务已解决的 Watchdog 折叠",
+        "sourceResolvedWatchdogFold": "源任务已解决的运行监测折叠",
         "sourceResolvedFold": "源任务已解决折叠",
         "thisRunWasFoldedAsASourceResolved": "此运行已作为源任务已解决的误报折叠。",
         "sourceTask": "源任务",
@@ -15760,7 +15760,7 @@
         "signInOrCreateAnAccountThenReturn": "登录或创建账户后，返回此页面同意 CLI 访问请求。",
         "signInCreateAccount": "登录 / 创建账户",
         "approvePaperclipCliAccess": "同意 Paperclip CLI 访问",
-        "aLocalPaperclipCliProcessIsRequestingBoard": "本地 Paperclip CLI 进程正在请求此实例的 Board 访问权限。",
+        "aLocalPaperclipCliProcessIsRequestingBoard": "本地 Paperclip CLI 进程正在请求此实例的董事会访问权限。",
         "command2": "命令",
         "client": "客户端",
         "requestedAccess": "请求的访问权限",
@@ -16180,9 +16180,9 @@
         "connectionRequests": "连接请求",
         "anyoneDefault": "任何人（默认）",
         "noCap": "不限制",
-        "newCardsAreOpenTheBoardOr": "新卡片向所有人开放，Board 或任何智能体均可响应，包括提问者。",
+        "newCardsAreOpenTheBoardOr": "新卡片向所有人开放，董事会成员或任何智能体均可响应，包括提问者。",
         "newCardsExcludeTheAgentThatCreated": "新卡片排除创建它的智能体，由其他参与者回答。",
-        "newCardsWaitForAPersonOn": "新卡片等待 Board 响应，不接受智能体响应。",
+        "newCardsWaitForAPersonOn": "新卡片等待董事会成员响应，不接受智能体响应。",
         "evenACardThatAsksForAnyone": "即使卡片允许任何人响应，也会排除其创建者。",
         "everyCardOfThisKindWaitsFor": "此类卡片无论请求谁响应，都必须等待人工处理。",
         "interactionGovernance": "交互治理",
@@ -16193,7 +16193,7 @@
         "defaultResolverAudienceFor": "{{value1}} 的默认响应人范围",
         "resolverCapFor": "{{value1}} 的响应人范围上限",
         "requestAudience": "请求保留其指定的响应人范围。",
-        "introduction": "讨论串交互默认开放：组织中的<anyone>任何人</anyone>均可响应，包括 Board 和所有智能体（含提问者）。仅在必要时限制某类交互。<default>默认策略</default>决定请求者未指定时新卡片的响应人范围；<cap>上限</cap>限制此类请求的响应人范围，不能扩大。工具审批确认始终保持<human>仅限人工</human>。"
+        "introduction": "讨论串交互默认开放：组织中的<anyone>任何人</anyone>均可响应，包括董事会成员和所有智能体（含提问者）。仅在必要时限制某类交互。<default>默认策略</default>决定请求者未指定时新卡片的响应人范围；<cap>上限</cap>限制此类请求的响应人范围，不能扩大。工具审批确认始终保持<human>仅限人工</human>。"
       },
       "jsonSchemaForm": {
         "thisFieldIsRequired": "此字段为必填项",
@@ -16449,7 +16449,7 @@
         "weekly": "每周",
         "runsOnTheWeeklySchedule": "按每周计划运行",
         "pendingApproval": "等待审批",
-        "waitingOnBoardHireApprovalBeforeIt": "等待 Board 同意聘用后才能运行",
+        "waitingOnBoardHireApprovalBeforeIt": "等待董事会同意聘用后才能运行",
         "proposalPending": "提案待处理",
         "aProposedUpdateIsWaitingForYour": "更新提案正在等待你审核"
       },
@@ -16496,7 +16496,7 @@
         "configureNamed": "配置并启用 {{name}}",
         "provisionNamed": "创建 {{name}}",
         "setupNamed": "设置 {{name}}",
-        "createsBuiltin": "在智能体列表中创建 <name>{{name}}</name>，并标记为<badge>内置</badge>。如果组织要求聘用审批，此操作将提交给 Board 审批。",
+        "createsBuiltin": "在智能体列表中创建 <name>{{name}}</name>，并标记为<badge>内置</badge>。如果组织要求聘用审批，此操作将提交给董事会审批。",
         "perMonth": "/ 月"
       },
       "gitHubAgentTrustWarning": {
@@ -16654,7 +16654,7 @@
         "builtinAgent": "内置智能体",
         "resetting": "正在重置…",
         "resetToDefaults": "恢复默认设置",
-        "thisAgentIsPendingBoardApprovalAndCannotBe": "此智能体正在等待 Board 审批，暂时无法调用。",
+        "thisAgentIsPendingBoardApprovalAndCannotBe": "此智能体正在等待董事会审批，暂时无法调用。",
         "approveAgent": "同意启用智能体",
         "cancel": "取消",
         "saving": "保存中…",
@@ -17166,7 +17166,7 @@
         "moreSelected": "还有 {{count}} 个"
       },
       "builtInAgentBadges": {
-        "waitingOnBoardHireApprovalBeforeThe": "等待 Board 同意聘用后才能运行此功能",
+        "waitingOnBoardHireApprovalBeforeThe": "等待董事会同意聘用后才能运行此功能",
         "needsAdapterModelSetupBeforeTheFeature": "需要设置适配器/模型后才能运行此功能",
         "approval": "审批",
         "pendingApproval": "待审批",
@@ -17180,7 +17180,7 @@
         "resumeAgent": "恢复智能体",
         "setupAction": "设置 {{name}}",
         "pendingApproval": "{{name}} 正在等待审批",
-        "availableAfterApproval": "Board 同意聘用此内置智能体后，即可使用 {{label}}。",
+        "availableAfterApproval": "董事会同意聘用此内置智能体后，即可使用 {{label}}。",
         "pausedTitle": "{{label}} 已暂停。",
         "pausedBody": "其内置智能体已暂停，因此不再生成新的 {{label}}。",
         "pausedBodyAt": "其内置智能体于 {{time}} 暂停，因此不再生成新的 {{label}}。"
@@ -17197,7 +17197,7 @@
         "youVeEditedThisYourChangesAre": "你已编辑此项。重置前会保留更改。",
         "paperclipShippedANewerDefault": "Paperclip 发布了较新的默认版本。",
         "notMaterializedYetRecreateItFromThe": "尚未创建 — 请从内置默认版本重新创建。",
-        "waitingOnBoardHireApprovalBeforeThis": "等待 Board 同意聘用后，此教练才能运行。",
+        "waitingOnBoardHireApprovalBeforeThis": "等待董事会同意聘用后，此教练才能运行。",
         "pickAnAdapterThisCoachCanRun": "选择此教练可使用的适配器。",
         "weeklySchedule": "每周计划",
         "bundleStatus": "资源包状态",
