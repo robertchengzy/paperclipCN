@@ -17,6 +17,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ProviderVaultsTab, Secrets } from "./Secrets";
 import { ApiError } from "../api/client";
 import { queryKeys } from "../lib/queryKeys";
+import { i18n, t } from "@/i18n";
 
 const mockSecretsApi = vi.hoisted(() => ({
   list: vi.fn(),
@@ -390,11 +391,47 @@ describe("Secrets page layout", () => {
     mockAgentsApi.list.mockResolvedValue([]);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     unmountActiveRoots();
     container.remove();
     document.body.innerHTML = "";
     vi.clearAllMocks();
+    await i18n.changeLanguage("en");
+  });
+
+  it.each([
+    ["en", "company", "disabled", "Secret disabled"],
+    ["zh-CN", "company", "disabled", "密钥状态：已停用"],
+    ["en", "user", "disabled", "User-provided secret disabled"],
+    ["zh-CN", "user", "disabled", "用户提供的密钥状态：已停用"],
+    ["zh-CN", "company", "future_status", "密钥状态：future_status"],
+    ["zh-CN", "user", "future_status", "用户提供的密钥状态：future_status"],
+  ])("renders %s %s status notification without changing mutation values (%s)", async (locale, kind, responseStatus, expectedTitle) => {
+    await i18n.changeLanguage(locale);
+    const secret = makeCompanySecret({ name: "credential_user_name" });
+    const definition = makeUserSecretDefinition({ name: "credential_user_name" });
+    mockSecretsApi.list.mockResolvedValue(kind === "company" ? [secret] : []);
+    mockSecretsApi.listUserSecretDefinitions.mockResolvedValue(kind === "user" ? [definition] : []);
+    mockSecretsApi.disable.mockResolvedValue({ ...secret, status: responseStatus });
+    mockSecretsApi.updateUserSecretDefinition.mockResolvedValue({ ...definition, status: responseStatus });
+    const root = createRoot(container);
+    const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    await act(async () => {
+      root.render(<MemoryRouter><QueryClientProvider client={queryClient}><Secrets /></QueryClientProvider></MemoryRouter>);
+    });
+    const actionsLabel = t("app.secrets.secrets.actionsFor", { name: "credential_user_name" });
+    await waitForReact(() => [...container.querySelectorAll("button")].some((button) => button.getAttribute("aria-label") === actionsLabel));
+    const actionsButton = [...container.querySelectorAll("button")].find((button) => button.getAttribute("aria-label") === actionsLabel)!;
+    await act(async () => { actionsButton.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Enter" })); });
+    await waitForReact(() => document.querySelector('[role="menuitem"]') !== null);
+    const disableButton = [...document.querySelectorAll('[role="menuitem"]')].find((item) => item.textContent?.trim() === t("app.common.actions.disable")) as HTMLElement;
+    expect(disableButton).toBeDefined();
+    await act(async () => { disableButton.click(); });
+    await waitForReact(() => mockPushToast.mock.calls.length > 0);
+    expect(mockPushToast).toHaveBeenCalledWith({ title: expectedTitle, body: "credential_user_name", tone: "info" });
+    if (kind === "company") expect(mockSecretsApi.disable).toHaveBeenCalledWith(secret.id);
+    else expect(mockSecretsApi.updateUserSecretDefinition).toHaveBeenCalledWith("company-1", definition.id, { status: "disabled" });
+    queryClient.clear();
   });
 
   it("uses the shared search/filter/tab affordances and keeps vault sections quiet", async () => {

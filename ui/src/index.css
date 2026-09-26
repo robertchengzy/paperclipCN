@@ -361,6 +361,13 @@
   --tc-composer-bottom: var(--sz-calc-8);
   /* Together with the dock's pb-2, match the page's p-4 side gutters. */
   --tc-composer-hidden-nav-offset: calc(var(--sz-safe-bottom) + var(--spacing) * 2);
+
+  /* Shared mobile dock geometry. Layout publishes the occupied bottom inset
+     so page actions clear the navigation while it is visible and the device
+     safe area while it is hidden. Desktop keeps the zero default. */
+  --mobile-bottom-nav-content-height: calc(var(--spacing) * 16);
+  --mobile-bottom-nav-height: calc(var(--mobile-bottom-nav-content-height) + var(--sz-safe-bottom));
+  --mobile-action-bar-bottom: 0px;
 }
 
 .dark {
@@ -3037,8 +3044,17 @@ span.paperclip-mention-chip[data-mention-kind="external-object"] {
   --announcement-available-width: calc(100vw - var(--spacing) * 6);
   --announcement-image-height: 8.5rem;
   --announcement-image-mobile-height: 6rem;
-  --announcement-mobile-bottom: calc(var(--spacing) * 19 + env(safe-area-inset-bottom, 0px));
+  --announcement-mobile-default-bottom: calc(var(--spacing) * 19 + env(safe-area-inset-bottom, 0px));
+  --announcement-mobile-bottom: var(--announcement-mobile-default-bottom);
   --announcement-max-height: calc(100dvh - var(--spacing) * 6);
+  --announcement-mobile-max-height: calc(100dvh - var(--announcement-mobile-bottom) - var(--spacing) * 3);
+}
+
+.announcement-well[data-mobile-action-area="present"] {
+  --announcement-mobile-bottom: max(
+    var(--announcement-mobile-default-bottom),
+    calc(var(--announcement-action-bar-inset) + var(--spacing) * 3)
+  );
   --announcement-mobile-max-height: calc(100dvh - var(--announcement-mobile-bottom) - var(--spacing) * 3);
 }
 
@@ -3050,7 +3066,7 @@ span.paperclip-mention-chip[data-mention-kind="external-object"] {
   to { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .announcement-well { animation: none; }
+  .announcement-well { animation: none; transition: none; }
 }
 
 /* Native disclosure marker is replaced by the connection-health chevron. */

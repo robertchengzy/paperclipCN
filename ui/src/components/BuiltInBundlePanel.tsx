@@ -353,7 +353,7 @@ export function BuiltInBundlePanel({
             instructions,
           )}
 
-        {/* Routine — zero-token-by-default; the weekly schedule ships off. */}
+        {/* The weekly schedule ships off; a manual run remains available. */}
         <BundleRow
           label={t("app.common.nouns.routine")}
           secondary={bundle.routine.title}

@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "../lib/utils";
 import { t as translate, useTranslation } from "@/i18n";
+import { secretStatusLabel } from "@/i18n/labels";
 
 export interface SecretBindingValue {
   secretId: string;
@@ -256,7 +257,7 @@ export function SecretBindingPicker({
 
       {selectedSecret ? (
         <p className={cn("text-(length:--text-micro) text-muted-foreground", statusTone(selectedSecret.status))}>
-          {selectedSecret.status !== "active" ? t("app.secrets.secretBindingPicker.statusPrefix", { status: selectedSecret.status }) : null}
+          {selectedSecret.status !== "active" ? t("app.secrets.secretBindingPicker.statusPrefix", { status: secretStatusLabel(t, selectedSecret.status) }) : null}
           {t("app.secrets.secretBindingPicker.boundTo", { version: versionDisplay(value?.version), key: selectedSecret.key })}
         </p>
       ) : crossCompanyHint ? (
@@ -271,7 +272,7 @@ export function SecretBindingPicker({
           <AlertCircle className="h-3 w-3" />
           {missingHint.status === "deleted"
             ? t("app.secrets.secretBindingPicker.previousDeleted")
-            : t("app.secrets.secretBindingPicker.secretInactive", { status: missingHint.status })}
+            : t("app.secrets.secretBindingPicker.secretInactive", { status: secretStatusLabel(t, missingHint.status) })}
         </p>
       ) : hintsPending ? (
         <p className="text-(length:--text-micro) text-muted-foreground flex items-center gap-1">

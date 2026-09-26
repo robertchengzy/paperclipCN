@@ -14,6 +14,7 @@ import type {
 import { IssueBlockedNotice } from "./IssueBlockedNotice";
 import { deriveRecoveryCardState } from "./IssueRecoveryActionCard";
 import { ToastProvider } from "../context/ToastContext";
+import { i18n } from "@/i18n";
 
 const retryNowMock = vi.hoisted(() => vi.fn());
 
@@ -87,7 +88,7 @@ beforeEach(() => {
   retryNowMock.mockReset();
 });
 
-afterEach(() => {
+afterEach(async () => {
   if (root) {
     act(() => root?.unmount());
   }
@@ -96,6 +97,7 @@ afterEach(() => {
   container = null;
   dateNowSpy?.mockRestore();
   dateNowSpy = null;
+  await i18n.changeLanguage("en");
 });
 
 function withProviders(node: ReactNode) {
@@ -123,6 +125,35 @@ function render(element: ReactElement) {
 }
 
 describe("IssueBlockedNotice", () => {
+  describe.each(["en", "zh-CN"])("retry timing in %s", (language) => {
+    beforeEach(async () => { await i18n.changeLanguage(language); });
+    it.each([[30_000, false], [29_999, true], [0, true], [-59_999, true], [-60_000, false]])(
+      "selects the due-now next-step message at offset %i", (offset, dueNow) => {
+        const node = render(<IssueBlockedNotice
+          issueId="issue-1"
+          issueStatus="in_progress"
+          blockers={[]}
+          scheduledRetry={{ ...baseRetry, scheduledRetryAt: new Date(SYSTEM_NOW + offset).toISOString() }}
+          successfulRunHandoff={{
+            state: "required", required: true, hasLiveContinuation: false,
+            sourceRunId: "source-run", correctiveRunId: null, assigneeAgentId: "agent-1",
+            detectedProgressSummary: null, createdAt: new Date(SYSTEM_NOW),
+          }}
+        />);
+        const dueNowCopy = i18n.t("app.issueUi.issueBlockedNotice.nextStep.dueNow");
+        if (dueNow) expect(node.textContent).toContain(dueNowCopy);
+        else {
+          const relative = offset > 0
+            ? i18n.t("app.format.monitor.in", { duration: i18n.t("app.format.duration.s", { s: 30 }) })
+            : i18n.t("app.format.monitor.offsetAgo", { duration: i18n.t("app.format.duration.m", { m: 1 }) });
+          expect(node.textContent).toContain(i18n.t("app.issueUi.issueBlockedNotice.nextStep.scheduledRelative", { relative }));
+          expect(node.textContent).not.toContain(dueNowCopy);
+        }
+        expect(retryNowMock).not.toHaveBeenCalled();
+      },
+    );
+  });
+
   it("renders a successful-run next-step notice without requiring blockers", () => {
     const node = render(
       <IssueBlockedNotice
@@ -183,7 +214,7 @@ describe("IssueBlockedNotice", () => {
 
     const button = node.querySelector<HTMLButtonElement>('[data-testid="issue-next-step-retry-now"]');
     expect(button).not.toBeNull();
-    expect(node.textContent).toContain("Retry now starts that follow-up immediately.");
+    expect(node.textContent).toContain(i18n.t("app.issueUi.issueBlockedNotice.nextStep.scheduledRelative", { relative: "in 1d" }));
 
     act(() => {
       button!.click();

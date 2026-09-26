@@ -52,4 +52,53 @@ describe("announcement placement gates", () => {
     await act(async () => { dialog.remove(); }); expect(visible()).toBe(true);
     expect(state.dismiss).not.toHaveBeenCalled();
   });
+  it("measures only visible mobile action bars and releases the space when they leave", async () => {
+    const width = Object.getOwnPropertyDescriptor(window, "innerWidth");
+    Object.defineProperty(window, "innerWidth", { configurable: true, value: 390 });
+    let resize = () => {};
+    vi.stubGlobal("ResizeObserver", class {
+      constructor(callback: () => void) { resize = callback; }
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    });
+    const bar = document.createElement("footer");
+    bar.setAttribute("data-mobile-action-bar", "");
+    let barHeight = 73;
+    let naturalTop: number | null = null;
+    bar.getBoundingClientRect = () => new DOMRect(0, naturalTop ?? (window.innerHeight - 64 - barHeight), 390, barHeight);
+    document.body.append(bar);
+    const announcement = () => container.querySelector<HTMLElement>(".announcement-well")!;
+    const frame = async () => {
+      await act(async () => { await new Promise<void>((resolve) => requestAnimationFrame(() => resolve())); });
+    };
+    try {
+      await render();
+      expect(announcement().dataset.mobileActionArea).toBe("present");
+      expect(announcement().style.getPropertyValue("--announcement-action-bar-inset")).toBe("137px");
+      barHeight = 112;
+      await act(async () => { resize(); });
+      await frame();
+      expect(announcement().style.getPropertyValue("--announcement-action-bar-inset")).toBe("176px");
+      naturalTop = 300;
+      await act(async () => { resize(); });
+      await frame();
+      expect(announcement().style.getPropertyValue("--announcement-action-bar-inset")).toBe(`${window.innerHeight - 300}px`);
+      // Reduced motion changes the ancestor offset without transition events.
+      naturalTop = 350;
+      await act(async () => { document.body.style.setProperty("--mobile-action-bar-bottom", "34px"); });
+      expect(announcement().style.getPropertyValue("--announcement-action-bar-inset")).toBe(`${window.innerHeight - 350}px`);
+      await act(async () => { bar.remove(); });
+      await frame();
+      expect(announcement().dataset.mobileActionArea).toBeUndefined();
+      expect(announcement().style.getPropertyValue("--announcement-action-bar-inset")).toBe("0px");
+      expect(state.dismiss).not.toHaveBeenCalled();
+    } finally {
+      bar.remove();
+      document.body.style.removeProperty("--mobile-action-bar-bottom");
+      vi.unstubAllGlobals();
+      if (width) Object.defineProperty(window, "innerWidth", width);
+    }
+  });
+
 });

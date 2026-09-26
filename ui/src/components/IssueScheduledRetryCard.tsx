@@ -2,7 +2,7 @@ import { Clock, RotateCcw, AlertCircle, Loader2, CheckCircle2 } from "lucide-rea
 import { Link } from "@/lib/router";
 import { Button } from "@/components/ui/button";
 import { cn, formatDateTime } from "@/lib/utils";
-import { formatMonitorOffset } from "@/lib/issue-monitor";
+import { getMonitorOffset } from "@/lib/issue-monitor";
 import { formatRetryReason } from "@/lib/runRetryState";
 import type { IssueScheduledRetry } from "@paperclipai/shared";
 import { useRetryNowMutation, type RetryNowError } from "../hooks/useRetryNowMutation";
@@ -48,7 +48,8 @@ export function IssueScheduledRetryCard({
   const dueAtIso = scheduledRetry.scheduledRetryAt
     ? new Date(scheduledRetry.scheduledRetryAt).toISOString()
     : null;
-  const relative = dueAtIso ? formatMonitorOffset(dueAtIso) : null;
+  const offset = dueAtIso ? getMonitorOffset(dueAtIso) : null;
+  const relative = offset?.label ?? null;
   const absolute = scheduledRetry.scheduledRetryAt
     ? formatDateTime(scheduledRetry.scheduledRetryAt)
     : null;
@@ -62,7 +63,7 @@ export function IssueScheduledRetryCard({
 
   const badgeLabel = continuation ? t("app.shared.retry.continuationScheduled") : t("app.issueUi.issueScheduledRetryCard.retryScheduled");
   let title: string;
-  if (relative === "now") {
+  if (offset?.kind === "due-now") {
     title = continuation ? t("app.issueUi.issueScheduledRetryCard.title.continuationDueNow") : t("app.issueUi.issueScheduledRetryCard.title.retryDueNow");
   } else if (relative) {
     title = continuation ? t("app.issueUi.issueScheduledRetryCard.title.continuationRelative", { relative }) : t("app.issueUi.issueScheduledRetryCard.title.retryRelative", { relative });

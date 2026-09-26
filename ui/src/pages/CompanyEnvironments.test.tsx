@@ -705,6 +705,9 @@ describe("CompanyEnvironments — test provider button", () => {
     });
     await flushReact();
 
+    await waitForAssertion(() => {
+      expect(container.querySelector('[aria-label="Add environment"]')).not.toBeNull();
+    });
     await act(async () => {
       click(container.querySelector('[aria-label="Add environment"]'));
     });
@@ -718,7 +721,7 @@ describe("CompanyEnvironments — test provider button", () => {
     });
     await flushReact();
 
-    expect(getEnvironmentFormPage()).toBeNull();
+    await waitForAssertion(() => expect(getEnvironmentFormPage()).toBeNull());
   });
 
   it("opens the edit form on a standalone page with existing values and closes after save", async () => {
@@ -730,9 +733,7 @@ describe("CompanyEnvironments — test provider button", () => {
     });
     await flushReact();
 
-    await act(async () => {
-      click(findAction(container, "Edit"));
-    });
+    await openEnvironmentEditPage(container);
 
     await waitForAssertion(() => {
       expect(getEnvironmentFormPage()?.textContent).toContain("Edit environment");
@@ -770,7 +771,7 @@ describe("CompanyEnvironments — test provider button", () => {
       // bindings even when the environment has none yet.
       "company-1",
     );
-    expect(getEnvironmentFormPage()).toBeNull();
+    await waitForAssertion(() => expect(getEnvironmentFormPage()).toBeNull());
   });
 
   it("confirms before cancelling the edit page with unsaved environment variable drafts", async () => {
@@ -783,9 +784,7 @@ describe("CompanyEnvironments — test provider button", () => {
     });
     await flushReact();
 
-    await act(async () => {
-      click(findAction(container, "Edit"));
-    });
+    await openEnvironmentEditPage(container);
     await waitForAssertion(() => {
       expect(getEnvironmentFormPage()?.textContent).toContain("Edit environment");
     });
@@ -811,7 +810,7 @@ describe("CompanyEnvironments — test provider button", () => {
     await act(async () => click(findButton(document.body, "Cancel")));
     await flushReact();
 
-    expect(getEnvironmentFormPage()).toBeNull();
+    await waitForAssertion(() => expect(getEnvironmentFormPage()).toBeNull());
   });
 
   it("keeps unload and in-app link warnings after env var changes are staged into the form", async () => {
@@ -824,9 +823,7 @@ describe("CompanyEnvironments — test provider button", () => {
     });
     await flushReact();
 
-    await act(async () => {
-      click(findAction(container, "Edit"));
-    });
+    await openEnvironmentEditPage(container);
     await waitForAssertion(() => {
       expect(getEnvironmentFormPage()?.textContent).toContain("Edit environment");
     });

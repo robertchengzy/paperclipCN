@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { IssueRetryNowOutcome, IssueScheduledRetry } from "@paperclipai/shared";
 import { IssueScheduledRetryCard } from "./IssueScheduledRetryCard";
 import { ToastProvider } from "../context/ToastContext";
+import { i18n } from "@/i18n";
 
 const retryNowMock = vi.hoisted(() => vi.fn());
 
@@ -104,10 +105,11 @@ beforeEach(() => {
   root = createRoot(container);
 });
 
-afterEach(() => {
+afterEach(async () => {
   act(() => root.unmount());
   container.remove();
   dateNowSpy?.mockRestore();
+  await i18n.changeLanguage("en");
 });
 
 function getCard() {
@@ -121,6 +123,37 @@ function getRetryNowButton() {
 }
 
 describe("IssueScheduledRetryCard", () => {
+  describe.each(["en", "zh-CN"])("retry timing in %s", (language) => {
+    beforeEach(async () => { await i18n.changeLanguage(language); });
+
+    it.each([
+      [30_000, false],
+      [29_999, true],
+      [0, true],
+      [-59_999, true],
+      [-60_000, false],
+    ])("selects the due-now branch at offset %i independently of locale", (offset, dueNow) => {
+      renderWithProviders(
+        <IssueScheduledRetryCard
+          issueId="issue-1"
+          scheduledRetry={{ ...baseRetry, scheduledRetryAt: new Date(SYSTEM_NOW + offset).toISOString() }}
+        />,
+      );
+      const text = getCard()?.textContent ?? "";
+      const dueNowLabel = i18n.t("app.issueUi.issueScheduledRetryCard.title.retryDueNow");
+      expect(getCard()).not.toBeNull();
+      if (dueNow) expect(text).toContain(dueNowLabel);
+      else {
+        const relative = offset > 0
+          ? i18n.t("app.format.monitor.in", { duration: i18n.t("app.format.duration.s", { s: 30 }) })
+          : i18n.t("app.format.monitor.offsetAgo", { duration: i18n.t("app.format.duration.m", { m: 1 }) });
+        expect(text).toContain(i18n.t("app.issueUi.issueScheduledRetryCard.title.retryRelative", { relative }));
+        expect(text).not.toContain(dueNowLabel);
+      }
+      expect(retryNowMock).not.toHaveBeenCalled();
+    });
+  });
+
   it("shows workspace contention as an automatic wait without failure or retry controls", () => {
     renderWithProviders(<IssueScheduledRetryCard issueId="issue-1" scheduledRetry={{ ...baseRetry, scheduledRetryReason: "workspace_busy" }} />);
     expect(container.textContent).toContain("Waiting for workspace");
@@ -167,7 +200,7 @@ describe("IssueScheduledRetryCard", () => {
     const text = getCard()?.textContent ?? "";
     expect(text).toContain("Continuation scheduled");
     expect(text).toContain("Automatic continuation");
-    expect(text).toContain("Pulls continuation forward immediately");
+    expect(text).toContain(i18n.t("app.newIssue.properties.retry.pullsContinuationForward"));
   });
 
   it("uses 'due now' label when scheduledRetryAt is at the current time", () => {

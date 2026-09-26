@@ -11,7 +11,7 @@ import { Link } from "@/lib/router";
 import { cn } from "../lib/utils";
 import { Button } from "@/components/ui/button";
 import { createIssueDetailPath } from "../lib/issueDetailBreadcrumb";
-import { formatMonitorOffset } from "../lib/issue-monitor";
+import { getMonitorOffset } from "../lib/issue-monitor";
 import { useRetryNowMutation } from "../hooks/useRetryNowMutation";
 import { IssueLinkQuicklook } from "./IssueLinkQuicklook";
 import { RetryErrorBand } from "./IssueScheduledRetryCard";
@@ -85,8 +85,9 @@ function SuccessfulRunRetryNowControl({
   const dueAtIso = scheduledRetry.scheduledRetryAt
     ? new Date(scheduledRetry.scheduledRetryAt).toISOString()
     : null;
-  const relative = dueAtIso ? formatMonitorOffset(dueAtIso) : null;
-  const scheduleMessage = relative === "now"
+  const offset = dueAtIso ? getMonitorOffset(dueAtIso) : null;
+  const relative = offset?.label ?? null;
+  const scheduleMessage = offset?.kind === "due-now"
     ? t("app.issueUi.issueBlockedNotice.nextStep.dueNow")
     : relative
       ? t("app.issueUi.issueBlockedNotice.nextStep.scheduledRelative", { relative })

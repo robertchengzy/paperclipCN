@@ -3,6 +3,8 @@
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 import { flushSync } from "react-dom";
+import { act } from "react";
+import { i18n } from "@/i18n";
 import type { ToolCatalogEntry } from "@paperclipai/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AdvancedRule, WizardSelections } from "./profile-model";
@@ -55,11 +57,12 @@ describe("WizardToolsStep", () => {
     advancedRules = [];
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     flushSync(() => root.unmount());
     container.remove();
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+    await i18n.changeLanguage("en");
   });
 
   function render() {
@@ -120,5 +123,27 @@ describe("WizardToolsStep", () => {
       },
     ]);
     expect(container.textContent).toContain("Allow tools matching gmail.send*");
+  });
+
+  it("translates risk rule summaries on language switch without changing rule values", async () => {
+    const levels = ["low", "medium", "high", "critical", "read", "write", "destructive", "future_risk"];
+    advancedRules = levels.map((level, index) => ({ id: `risk-${index}`, kind: "risk_level", value: level, riskLevel: level, effect: index % 2 === 0 ? "include" : "exclude" })) as AdvancedRule[];
+    const originalRules = structuredClone(advancedRules);
+    render();
+    const trigger = [...container.querySelectorAll("button")].find((button) => button.textContent?.trim() === "Advanced rules")!;
+    flushSync(() => trigger.click());
+    expect(container.textContent).toContain("Allow high tools");
+    expect(container.textContent).toContain("Block future_risk tools");
+
+    await act(async () => { await i18n.changeLanguage("zh-CN"); });
+    const summaries = [...container.querySelectorAll("li")].map((item) => item.textContent);
+    expect(summaries).toEqual([
+      "允许 低风险 工具", "禁用 中风险 工具", "允许 高风险 工具", "禁用 严重风险 工具",
+      "允许 只读 工具", "禁用 写入 工具", "允许 破坏性 工具", "禁用 future_risk 工具",
+    ]);
+    expect(advancedRules).toEqual(originalRules);
+    await act(async () => { await i18n.changeLanguage("en"); });
+    expect(container.textContent).toContain("Allow high tools");
+    expect(container.textContent).toContain("Block future_risk tools");
   });
 });

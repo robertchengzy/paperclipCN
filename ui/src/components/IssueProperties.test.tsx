@@ -16,6 +16,7 @@ import type { Issue, IssueDocument } from "@paperclipai/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { IssueProperties } from "./IssueProperties";
 import { queryKeys } from "../lib/queryKeys";
+import { i18n } from "@/i18n";
 
 const mockAgentsApi = vi.hoisted(() => ({
   list: vi.fn(),
@@ -512,6 +513,40 @@ describe("IssueProperties", () => {
 
   afterEach(() => {
     document.body.innerHTML = "";
+  });
+
+  describe.each(["en", "zh-CN"])("retry timing in %s", (language) => {
+    beforeEach(async () => { await i18n.changeLanguage(language); });
+    afterEach(async () => { await i18n.changeLanguage("en"); });
+    it.each([[30_000, false], [29_999, true], [0, true], [-59_999, true], [-60_000, false]])(
+      "selects the due-now property label at offset %i", async (offset, dueNow) => {
+        const now = new Date("2026-09-26T00:00:00Z").getTime();
+        const clock = vi.spyOn(Date, "now").mockReturnValue(now);
+        const root = renderProperties(container, {
+          issue: createIssue({ scheduledRetry: {
+            runId: "retry-run", status: "scheduled_retry", agentId: "agent-1", agentName: "Test Agent",
+            retryOfRunId: null, scheduledRetryAt: new Date(now + offset), scheduledRetryAttempt: 1,
+            scheduledRetryReason: "transient_failure", retryExhaustedReason: null, error: null, errorCode: null,
+          } }),
+          childIssues: [], onUpdate: vi.fn(), inline: true,
+        });
+        try {
+          await flush();
+          const dueNowCopy = i18n.t("app.newIssue.properties.retry.retryDueNow");
+          if (dueNow) expect(container.textContent).toContain(dueNowCopy);
+          else {
+            const relative = offset > 0
+              ? i18n.t("app.format.monitor.in", { duration: i18n.t("app.format.duration.s", { s: 30 }) })
+              : i18n.t("app.format.monitor.offsetAgo", { duration: i18n.t("app.format.duration.m", { m: 1 }) });
+            expect(container.textContent).toContain(i18n.t("app.newIssue.properties.retry.retryRelative", { relative }));
+            expect(container.textContent).not.toContain(dueNowCopy);
+          }
+        } finally {
+          act(() => root.unmount());
+          clock.mockRestore();
+        }
+      },
+    );
   });
 
   it("marks the task-detail property typography and section rhythm", () => {

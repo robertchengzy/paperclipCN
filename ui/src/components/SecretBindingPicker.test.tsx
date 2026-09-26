@@ -4,6 +4,8 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { i18n } from "@/i18n";
+import { queryKeys } from "../lib/queryKeys";
 import {
   SecretBindingPicker,
   SecretRefHintsContext,
@@ -41,13 +43,14 @@ describe("SecretBindingPicker", () => {
     mockSecretsApi.list.mockResolvedValue([]);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     act(() => {
       root?.unmount();
     });
     root = null;
     container.remove();
     queryClient.clear();
+    await i18n.changeLanguage("en");
   });
 
   async function render(context: SecretRefHintsContextValue | undefined) {
@@ -108,6 +111,36 @@ describe("SecretBindingPicker", () => {
     expect(container.textContent).toContain("This secret is disabled");
     expect(container.textContent).not.toContain("keeps working");
     expect(container.querySelector("select")?.className).toContain("border-destructive");
+  });
+
+  it.each([
+    ["disabled", "已停用"],
+    ["archived", "已归档"],
+    ["future_status", "future_status"],
+  ])("localizes the %s hint while preserving unknown status codes and secret identities", async (status, label) => {
+    const context = readyContext(status);
+    await render(context);
+    expect(container.textContent).toContain(`This secret is ${status}`);
+    await act(async () => { await i18n.changeLanguage("zh-CN"); });
+    expect(container.textContent).toContain(`此密钥状态为 ${label}`);
+    expect(container.textContent).toContain("DAYTONA_API_KEY — Other Team");
+    expect(container.querySelector("select")?.className).toContain("border-destructive");
+    expect(context.hints["22222222-2222-2222-2222-222222222222"].status).toBe(status);
+    await act(async () => { await i18n.changeLanguage("en"); });
+    expect(container.textContent).toContain(`This secret is ${status}`);
+  });
+
+  it("localizes an existing inactive selection while retaining the credential key", async () => {
+    const secretId = "22222222-2222-2222-2222-222222222222";
+    const secrets = [{ id: secretId, name: "credential_name", key: "credential_key", status: "disabled", provider: "local_encrypted", latestVersion: 1 }];
+    mockSecretsApi.list.mockResolvedValue(secrets);
+    queryClient.setQueryData(queryKeys.secrets.list("company-1"), secrets);
+    await render(undefined);
+    expect(container.textContent).toContain("disabled");
+    await act(async () => { await i18n.changeLanguage("zh-CN"); });
+    expect(container.textContent).toContain("已停用");
+    expect(container.textContent).toContain("credential_key");
+    expect(mockSecretsApi.create).not.toHaveBeenCalled();
   });
 
   it("stays neutral while descriptors are loading", async () => {

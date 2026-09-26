@@ -1588,7 +1588,7 @@ export function AgentDetail() {
         />
       )}
 
-      {showConfigActionBar && <footer className="sticky bottom-0 z-10 flex flex-wrap items-center justify-between gap-3 border-t border-border bg-background py-4">
+      {showConfigActionBar && <footer data-mobile-action-bar className="sticky bottom-(--mobile-action-bar-bottom) transition-[bottom] duration-200 ease-out motion-reduce:transition-none z-10 flex flex-wrap items-center justify-between gap-3 border-t border-border bg-background py-4">
         <p role="status" className="text-xs text-muted-foreground">{configSaving ? t("app.agentDetail.footer.savingChanges") : configDirty ? t("app.agentDetail.footer.unsavedChanges") : ""}</p>
         <div className="flex gap-2">
           <Button variant="ghost" disabled={!configDirty || configSaving} onClick={() => cancelConfigActionRef.current?.()}>{t("app.agentDetail.footer.discard")}</Button>

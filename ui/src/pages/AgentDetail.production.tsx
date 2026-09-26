@@ -1460,10 +1460,9 @@ export function AgentDetail() {
 
       {/* Mobile bottom Save/Cancel bar */}
       {isMobile && showConfigActionBar && (
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur-sm">
+        <div data-mobile-action-bar className="fixed inset-x-0 bottom-(--mobile-action-bar-bottom) transition-[bottom] duration-200 ease-out motion-reduce:transition-none z-30 border-t border-border bg-background/95 backdrop-blur-sm">
           <div
             className="flex items-center justify-end gap-2 px-3 py-2"
-            style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.5rem)" }}
           >
             <Button
               variant="ghost"

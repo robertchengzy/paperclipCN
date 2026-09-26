@@ -104,7 +104,7 @@
       "requestedBy": "请求人",
       "decisionNote": "决策说明。",
       "viewDetails": "查看详情",
-      "created": "{{age}}创建了审批请求",
+      "created": "审批请求创建于 {{age}}",
       "status": {
         "pending": "待审批",
         "approved": "已同意",
@@ -183,15 +183,15 @@
       "noAgents": "尚无 Agent。",
       "createOneHere": "在这里创建",
       "openBudgets": "打开预算",
-      "activeBudgetIncident": "活跃预算事件",
+      "activeBudgetIncident": "未解决的预算事件",
       "agentsPaused": "Agent 已暂停",
       "projectsPaused": "项目已暂停",
       "pendingBudgetApprovals": "待处理的预算审批",
       "recentActivity": "最近活动",
       "recentTasks": "最近任务",
       "noTasksYet": "还没有任务。",
-      "agentsFromACompanyImportArrivePausedAsASafetyDefaultResumeTh": "从公司导入而来的 Agent 出于安全考虑默认暂停。请恢复它们,已分配的任务才能开始。",
-      "allAgentsInThisCompanyArePausedNothingWillRun": "该公司的所有 Agent 均处于暂停状态——不会有任何任务运行。",
+      "agentsFromACompanyImportArrivePausedAsASafetyDefaultResumeTh": "从组织导入的 Agent 出于安全考虑默认暂停。恢复后，已分配的任务才能开始。",
+      "allAgentsInThisCompanyArePausedNothingWillRun": "此组织的所有 Agent 均已暂停，不会有任务运行。",
       "reviewAgents": "查看 Agent",
       "resumeAtLeastOneAgentToLetAssignedTasksStart": "至少恢复一个 Agent，已分配的任务才能开始。",
       "welcomeToOrganization": "欢迎使用 Paperclip。先创建组织和 Agent。",
@@ -200,10 +200,10 @@
       "importedAgentPausedMany": "{{value}} 个导入的 Agent 已暂停，不会运行。",
       "resuming": "正在恢复…",
       "resumeAll": "全部恢复",
-      "importedAgentsPausedDescription": "从组织导入的 Agent 默认暂停。恢复后，已分配的任务才能开始。",
-      "allAgentsPaused": "此组织的所有 Agent 均已暂停，不会运行。",
-      "activeBudgetIncidentOne": "{{value}} 个活跃的预算事件",
-      "activeBudgetIncidentMany": "{{value}} 个活跃的预算事件",
+      "importedAgentsPausedDescription": "从组织导入的 Agent 出于安全考虑默认暂停。恢复后，已分配的任务才能开始。",
+      "allAgentsPaused": "此组织的所有 Agent 均已暂停，不会有任务运行。",
+      "activeBudgetIncidentOne": "{{value}} 个未解决的预算事件",
+      "activeBudgetIncidentMany": "{{value}} 个未解决的预算事件",
       "budgetPauseSummary": "{{agents}} 个 Agent 已暂停 · {{projects}} 个项目已暂停 · {{approvals}} 项预算审批待处理",
       "agentSummary": "{{running}} 个运行中，{{paused}} 个已暂停，{{errors}} 个出错",
       "taskSummary": "{{open}} 个待办，{{blocked}} 个受阻",
@@ -255,7 +255,7 @@
         "blocked": "受阻",
         "cancelled": "已取消",
         "queued": "排队中",
-        "scheduled_retry": "等待重试",
+        "scheduled_retry": "已安排重试",
         "succeeded": "成功",
         "failed": "失败",
         "interrupted": "已中断",
@@ -696,15 +696,15 @@
           "updated": "更新了",
           "wroteDocOn": "撰写了文档：",
           "editedDocOn": "编辑了文档：",
-          "deletedDocFrom": "删除了文档：",
+          "deletedDocFrom": "删除了文档，所属任务：",
           "deliveredWorkOn": "交付了工作成果：",
           "updatedWorkOn": "更新了工作成果：",
-          "removedWorkFrom": "移除了工作成果：",
+          "removedWorkFrom": "移除了工作成果，所属任务：",
           "pickedUp": "领取了",
           "released": "释放了",
           "commentedOn": "评论了",
           "attachedFileTo": "添加了附件：",
-          "removedAttachmentFrom": "移除了附件：",
+          "removedAttachmentFrom": "移除了附件，所属任务：",
           "deleted": "删除了",
           "needsApprovalOn": "需要审批：",
           "requestedApprovalOn": "申请审批：",
@@ -996,7 +996,7 @@
       "noAssignee": "无负责人",
       "searchAssignees": "搜索负责人…",
       "noAssigneesFound": "未找到负责人。",
-      "lowTrustReviewAgent": "低信任审核 Agent",
+      "lowTrustReviewAgent": "低信任审查 Agent",
       "project": "项目",
       "searchProjects": "搜索项目…",
       "noProjectsFound": "未找到项目。",
@@ -1083,7 +1083,7 @@
       "assignedBacklogNote": "指定负责人意味着任务可执行 - 只有想刻意暂缓时才把状态保留为<strong>待规划</strong>。状态变为<strong>待办</strong>或<strong>进行中</strong>之前，负责人不会被唤醒。",
       "pausedAssigneeNote": "<strong>{{name}}</strong> 已暂停，恢复前不会开始处理此任务。创建任务后，你可以在任务页面恢复它。",
       "pausedAssigneeImportNote": "<strong>{{name}}</strong> 已暂停，恢复前不会开始处理此任务 — 它在组织导入时即为暂停状态。创建任务后，你可以在任务页面恢复它。",
-      "lowTrustAssigneeNote": "低信任审核 Agent。它只能在分配的审核边界内操作；具体范围由任务、项目或运行策略决定。",
+      "lowTrustAssigneeNote": "低信任审查 Agent。它只能在分配的审核边界内操作；具体范围由任务、项目或运行策略决定。",
       "discardDraft": "丢弃草稿",
       "creating": "创建中…",
       "createTask": "创建任务",
@@ -1136,9 +1136,9 @@
         "execution": {
           "runReviewNow": "立即运行审核",
           "runApprovalNow": "立即运行审批",
-          "reviewChangesRequested": "审核要求修改",
+          "reviewChangesRequested": "审核中已要求修改",
           "reviewChangesRequestedBy": "{{participant}} 在审核中要求修改",
-          "approvalChangesRequested": "审批要求修改",
+          "approvalChangesRequested": "审批中已要求修改",
           "approvalChangesRequestedBy": "{{participant}} 在审批中要求修改",
           "reviewPending": "待审核",
           "reviewPendingWith": "等待 {{participant}} 审核",
@@ -1195,10 +1195,10 @@
           "promoted": "已提前",
           "retryNow": "立即重试",
           "promoting": "正在提前已排期的重试",
-          "alreadyPromotedRunStarting": "已提前 — 运行即将开始",
-          "promotedRunStarting": "已提前 — 运行即将开始",
-          "pullsContinuationForward": "立即提前续跑",
-          "pullsRetryForward": "立即提前重试",
+          "alreadyPromotedRunStarting": "已排队或正在运行",
+          "promotedRunStarting": "已加入执行队列",
+          "pullsContinuationForward": "请求立即续跑",
+          "pullsRetryForward": "请求立即重试",
           "waitingForWorkspace": "等待工作区"
         },
         "assignee": {
@@ -1381,7 +1381,7 @@
         "noResponsible": "无负责人",
         "me": "我",
         "creator": "创建者",
-        "removeCreator": "移除创建者 {{name}}",
+        "removeCreator": "移除创建者筛选条件 {{name}}",
         "searchCreators": "搜索创建者…",
         "noCreatorsMatch": "没有匹配的创建者。",
         "project": "项目",
@@ -1851,7 +1851,7 @@
         "taskNotLoaded": "任务尚未加载。"
       },
       "plan": {
-        "approved": "已同意计划",
+        "approved": "已同意的计划",
         "requestedChanges": "已要求修改"
       },
       "treeControl": {
@@ -2093,7 +2093,7 @@
       },
       "reviewPolicy": {
         "notCreatorLabel": "其他任何人",
-        "notCreatorDescription": "除发起审核的人之外，任何人都可以同意。",
+        "notCreatorDescription": "除审核发起者之外，其他人或 Agent 都可以同意。",
         "humanOnlyLabel": "仅限人工",
         "humanOnlyDescription": "只有人可以同意此审核，Agent 不能给出结论。",
         "valueAnyone": "任何人",
@@ -2127,13 +2127,13 @@
         "needed": "需要恢复",
         "inProgress": "恢复中",
         "observing": "正在观察活动运行",
-        "escalated": "恢复已升级",
+        "escalated": "恢复已上报",
         "workspaceNeeded": "需要恢复工作区",
         "inProgressCount": "恢复中 · {{attempt}}/{{max}}",
         "attemptOf": "第 {{attempt}} 次尝试，共 {{max}} 次",
         "attemptRunningNow": "尝试正在运行",
-        "retryMissedAt": "重试已错过（{{offset}}）",
-        "retryMissed": "重试已错过",
+        "retryMissedAt": "已错过重试时间（{{offset}}）",
+        "retryMissed": "已错过重试时间",
         "nextTryNow": "立即再次尝试",
         "nextTryAt": "下次尝试：{{offset}}",
         "retriesUsedUp": "重试次数已用完"
@@ -2215,7 +2215,7 @@
         "thinkingEffort": "控制模型推理深度。支持的取值因适配器/模型而异。",
         "chrome": "通过传入 --chrome 启用 Claude 的 Chrome 集成。",
         "dangerouslySkipPermissions": "在支持时自动同意适配器的权限提示，以无人值守方式运行。",
-        "dangerouslyBypassSandbox": "在没有沙箱限制的情况下运行 Codex。访问文件系统/网络时必需。",
+        "dangerouslyBypassSandbox": "绕过 Codex 的审批和沙箱限制运行。",
         "search": "在运行期间启用 Codex 的网页搜索能力。",
         "fastMode": "启用 Codex Fast 模式。这会更快地消耗额度/Token，支持 GPT-6、GPT-5.6、GPT-5.5、GPT-5.4 以及手动填写的 Codex 模型 ID。",
         "workspaceStrategy": "Paperclip 如何为此 Agent 创建执行工作区。常规 cwd 执行保持 project_primary，或使用 git_worktree 为每个任务隔离检出。",
@@ -2459,7 +2459,7 @@
       },
       "leftNotice": "你已离开此 Agent，它不会再出现在你的侧边栏中。",
       "dismissLeftNotice": "关闭 Agent 成员提示",
-      "escalationPaused": "升级路径已暂停",
+      "escalationPaused": "上报链路已暂停",
       "invalidChain": {
         "body": "在修复汇报链之前，{{name}} 无法接收任务或启动运行。",
         "guidance": "请将此 Agent 分配给一个活跃的上级/根节点，或明确暂停或终止受影响的 Agent/子树。"
@@ -2479,7 +2479,7 @@
       },
       "pendingApproval": {
         "body": "此 Agent 正在等待 Board 审批，暂时无法调用。",
-        "approve": "同意 Agent"
+        "approve": "同意启用 Agent"
       },
       "secretsHeading": "密钥与变量",
       "footer": {
@@ -2886,9 +2886,9 @@
         "defaultUnavailable": "默认账号不可用",
         "makeDefault": "设为默认",
         "notYourDefault": "不是你的默认账号",
-        "revokeIdentity": "撤销身份",
+        "revokeIdentity": "撤销身份授权",
         "revokeDescription": "使用此账号的新运行将被阻止。现有运行可能仍保留已签发给它们的凭据。系统不会自动选择其他账号。",
-        "revokeFailed": "无法撤销此账号，请重试。"
+        "revokeFailed": "无法撤销此账号的授权，请重试。"
       },
       "aiConnectionAuth": {
         "connectProvider": "连接 {{provider}}",
@@ -3114,7 +3114,7 @@
       },
       "connectionSetupFlow": {
         "oauthDenied": "授权已取消或被拒绝。已保存的连接未更改。",
-        "githubInstallRequired": "需要 GitHub 访问权限。请安装 Paperclip 并授予至少一个仓库的访问权限，然后重试。",
+        "githubInstallRequired": "需要 GitHub 访问权限。请安装 Paperclip GitHub App 并授予至少一个仓库的访问权限，然后重试。",
         "stepPickApp": "选择应用",
         "stepAddKey": "添加 key",
         "stepAddMcpUrl": "添加 MCP URL",
@@ -3480,7 +3480,7 @@
         "kind": {
           "working": "进行中",
           "workingDescription": "条目在这里等待工作完成。由 Agent 或人推动它们前进。",
-          "reviewDescription": "条目离开前需要有人同意。适用于需要人或 Agent 做出是否决定的情况。",
+          "reviewDescription": "条目离开前需要有人同意。适用于需要人工或 Agent 决定同意还是拒绝的情况。",
           "doneDescription": "最后一步。到达这里的条目即已完成。",
           "cancelledDescription": "终止点。到达这里的条目会被放弃或拒绝。"
         },
@@ -3862,7 +3862,7 @@
           "retryStarted": "已开始重试",
           "retryFailedBody": "无法重试此自动化。",
           "retryFailed": "无法重试此自动化",
-          "livenessRetryFailedBody": "无法重试。请重试。",
+          "livenessRetryFailedBody": "本次重试未能发起，请再试一次。",
           "livenessRetryFailed": "无法重试该自动化",
           "itemMoved": "条目已移动",
           "moveFailed": "无法移动该条目",
@@ -4057,7 +4057,7 @@
           "banner": "“有访问权限”表示应用已获许可；“已安装”表示其工具会添加到此 Agent 的运行时上下文中。",
           "empty": "还没有获许可的应用。绑定访问配置档后，应用会显示在这里。",
           "installOn": "在 {{agent}} 上安装 {{app}}",
-          "forAllHint": "已在应用页面为所有 Agent 安装。请在该页面移除全部 Agent 安装。",
+          "forAllHint": "已在应用页面为所有 Agent 安装。请在该页面移除面向所有 Agent 的安装。",
           "loadedHint": "已加载到此 Agent 的运行时上下文中。",
           "openPermissions": "打开权限设置",
           "notInstalledWarning": "已获许可但未安装——工具不会出现在运行中。"
@@ -4086,7 +4086,7 @@
           "policyTitle": "策略 #{{order}}：{{name}}",
           "unavailableTools": "不可用的工具",
           "checkingTools": "正在检查工具…",
-          "allAllowed": "此 Agent 可以调用的所有已知工具均已允许。",
+          "allAllowed": "此 Agent 可指定的所有已知工具均已获准使用。",
           "blockedIntro": "Agent 可以调用但会被 Paperclip 阻止的工具：",
           "more": "还有 {{count}} 个"
         }
@@ -4381,7 +4381,7 @@
           "bannerMany": "自上次审核以来，{{app}} 新增了 {{count}} 个工具",
           "bannerHint": "选择此配置档应允许哪些工具。",
           "title": "审核新工具",
-          "description": "允许此配置档应使用的工具，其余保持禁用。",
+          "description": "允许此配置档应使用的工具，其余工具仍不允许访问。",
           "loading": "正在加载新工具…",
           "empty": "没有等待审核的新工具。",
           "addedOn": "{{app}} · 新增于 {{date}}",
@@ -4866,7 +4866,16 @@
         "block": "禁用",
         "patternPlaceholder": "例如 gmail.send*",
         "toolIdPlaceholder": "工具 ID",
-        "addRule": "添加规则"
+        "addRule": "添加规则",
+        "riskLevel": {
+          "low": "低风险",
+          "medium": "中风险",
+          "high": "高风险",
+          "critical": "严重风险",
+          "read": "只读",
+          "write": "写入",
+          "destructive": "破坏性"
+        }
       }
     },
     "lib": {
@@ -5053,10 +5062,10 @@
       "useRetryNowMutation": {
         "requestFailedStatus": "请求失败（{{status}}）",
         "requestFailed": "请求失败，请稍后重试。",
-        "promoted": "已提前重试",
-        "alreadyPromoted": "重试已在运行",
+        "promoted": "已将重试提前加入执行队列",
+        "alreadyPromoted": "重试已排队或正在运行",
         "noScheduledRetry": "没有计划中的重试",
-        "couldNotRetry": "暂时无法重试",
+        "couldNotRetry": "无法立即重试",
         "missingIssueId": "缺少任务 ID"
       },
       "inbox": {
@@ -5226,8 +5235,8 @@
       },
       "issueThreadInteractions": {
         "verdictDecided": "已决定 {{count}} 项",
-        "verdictApproved": "同意 {{count}} 项",
-        "verdictRejected": "拒绝 {{count}} 项",
+        "verdictApproved": "已同意 {{count}} 项",
+        "verdictRejected": "已拒绝 {{count}} 项",
         "verdictDeferred": "推迟 {{count}} 项",
         "verdictsExpiredAfterComment": "有新评论，裁决已过期",
         "verdictsExpiredAfterTargetChanged": "目标已变更，裁决已过期",
@@ -5385,11 +5394,11 @@
           "description": "上次运行失败，仍显示上一份有效摘要。"
         },
         "pausedBudget": {
-          "label": "已暂停——预算",
+          "label": "因预算暂停",
           "description": "已达到每日 Token 上限，自动更新已暂停。"
         },
         "pausedHours": {
-          "label": "已暂停——时段",
+          "label": "已暂停——非活跃时段",
           "description": "当前不在活跃时段，变更将在时段开始时合并为一次更新。"
         },
         "archived": {
@@ -5485,20 +5494,20 @@
           "issueQueuedCommentEdited": "编辑了一条排队评论：",
           "issueQueuedCommentsReordered": "重新排序了排队评论：",
           "issueQueuedCommentDiscarded": "丢弃了一条排队评论：",
-          "issueCommentDeleted": "删除了一条评论：",
+          "issueCommentDeleted": "删除了一条评论，所属任务：",
           "issueAttachmentAdded": "添加了附件：",
-          "issueAttachmentRemoved": "移除了附件：",
+          "issueAttachmentRemoved": "移除了附件，所属任务：",
           "issueDocumentCreated": "创建了文档：",
           "issueDocumentUpdated": "更新了文档：",
           "issueDocumentLocked": "锁定了文档：",
           "issueDocumentUnlocked": "解锁了文档：",
-          "issueDocumentDeleted": "删除了文档：",
+          "issueDocumentDeleted": "删除了文档，所属任务：",
           "issueMonitorScheduled": "安排了监视器：",
           "issueMonitorTriggered": "触发了监视器：",
           "issueMonitorCleared": "清除了监视器：",
           "issueMonitorSkipped": "跳过了监视器：",
           "issueMonitorExhausted": "耗尽了监视器：",
-          "issueMonitorRecoveryWakeQueued": "排队了监视器恢复：",
+          "issueMonitorRecoveryWakeQueued": "已将监视器恢复加入队列：",
           "issueMonitorRecoveryIssueCreated": "创建了监视器恢复：",
           "issueMonitorEscalatedToBoard": "上报了监视器：",
           "issueCommented": "评论了",
@@ -5518,11 +5527,11 @@
           "agentTerminated": "终止了",
           "agentKeyCreated": "创建了 API 密钥：",
           "agentBudgetUpdated": "更新了预算：",
-          "agentRuntimeSessionReset": "重置了会话：",
+          "agentRuntimeSessionReset": "重置了会话，所属 Agent：",
           "heartbeatInvoked": "调用了心跳：",
           "heartbeatCancelled": "取消了心跳：",
           "heartbeatOutputStaleSourceResolved": "由系统合并了过期运行：",
-          "heartbeatOutputStaleRecoveryRecursionRefused": "拒绝了恢复套恢复：",
+          "heartbeatOutputStaleRecoveryRecursionRefused": "拒绝对恢复任务再次发起恢复：",
           "approvalCreated": "请求了审批",
           "approvalApproved": "同意了",
           "approvalRejected": "拒绝了",
@@ -5553,7 +5562,7 @@
           "toolAppConnected": "连接了",
           "toolAppOauthConnected": "连接了凭据：",
           "toolAppOauthFailed": "未能连接凭据：",
-          "toolAppOauthAccessFinalized": "完成了凭据访问：",
+          "toolAppOauthAccessFinalized": "完成了凭据访问设置：",
           "toolAppFinished": "完成了设置：",
           "toolAppReconnected": "重新连接了",
           "toolConnectionCreated": "创建了",
@@ -5565,8 +5574,10 @@
           "toolConnectionGrantAudienceReplaced": "更改了人员访问权限：",
           "toolConnectionGrantAdded": "添加了凭据：",
           "toolConnectionGrantRevoked": "撤销了凭据：",
-          "toolConnectionGrantDelegated": "委托了凭据：",
-          "toolConnectionGrantDelegationRevoked": "撤销了凭据委托："
+          "toolConnectionGrantDelegated": "授予了凭据代用权限：",
+          "toolConnectionGrantDelegationRevoked": "撤销了凭据委托：",
+          "providerTraceMetadataListed": "仅列出了提供方 Trace 元数据",
+          "instanceExperimentalSettingsUpdated": "更新了实例实验设置"
         },
         "detail": {
           "issueCreated": "创建了任务",
@@ -5592,7 +5603,7 @@
           "issueMonitorCleared": "清除了监视器",
           "issueMonitorSkipped": "跳过了监视器",
           "issueMonitorExhausted": "耗尽了监视器",
-          "issueMonitorRecoveryWakeQueued": "排队了监视器恢复唤醒",
+          "issueMonitorRecoveryWakeQueued": "已将监视器恢复唤醒加入队列",
           "issueMonitorRecoveryIssueCreated": "创建了监视器恢复任务",
           "issueMonitorEscalatedToBoard": "将监视器上报给 Board",
           "issueDeleted": "删除了任务",
@@ -5602,7 +5613,7 @@
           "issueCrossIssueInfluenceCapRejected": "达到了单次运行的跨任务写入上限",
           "issueCrossIssueInfluenceObserved": "进行了一次跨任务写入",
           "issueAttributionSpoofRejected": "试图自行选择负责用户",
-          "issueRecoveryActionOpened": "发起了限定来源的恢复操作",
+          "issueRecoveryActionOpened": "发起了限定于源任务的恢复操作",
           "issueRecoveryActionResolved": "解决了恢复操作",
           "issueRecoveryActionEscalated": "上报了恢复操作",
           "issueAcceptedPlanDecompositionUpdated": "更新了已接受计划的拆解",
@@ -5615,7 +5626,7 @@
           "heartbeatInvoked": "调用了心跳",
           "heartbeatCancelled": "取消了心跳",
           "heartbeatOutputStaleSourceResolved": "系统合并了过期运行",
-          "heartbeatOutputStaleRecoveryRecursionRefused": "拒绝了恢复套恢复的上报",
+          "heartbeatOutputStaleRecoveryRecursionRefused": "拒绝对恢复任务再次发起恢复上报",
           "approvalCreated": "请求了审批",
           "approvalApproved": "同意了",
           "approvalRejected": "拒绝了",
@@ -5628,15 +5639,17 @@
           "issueThreadInteractionSkipped": "跳过了请求",
           "issueThreadInteractionExpired": "使请求过期",
           "issueThreadInteractionItemVerdictsSubmitted": "提交了请求的裁决",
-          "issueStalledReviewDecided": "记录了审核裁决"
+          "issueStalledReviewDecided": "记录了审核裁决",
+          "providerTraceMetadataListed": "仅列出了提供方 Trace 元数据",
+          "instanceExperimentalSettingsUpdated": "更新了实例实验设置"
         },
         "stalledReview": {
           "approve": "同意了审核",
           "approveRow": "同意了审核：",
-          "requestChanges": "要求修改审核",
-          "requestChangesRow": "要求修改审核：",
-          "sendBack": "将审核退回工作",
-          "sendBackRow": "将审核退回工作："
+          "requestChanges": "在审核中要求修改",
+          "requestChangesRow": "在审核中要求修改：",
+          "sendBack": "将任务退回继续处理",
+          "sendBackRow": "将任务退回继续处理："
         },
         "interactionAccepted": {
           "requestConfirmation": "同意了请求",
@@ -5678,7 +5691,7 @@
         "priorityTo": "将优先级改为 {{to}}",
         "madeResponsible": "将 {{name}} 设为任务负责人",
         "clearedResponsible": "清除了负责人",
-        "changedApprover": "将审批人改为 {{value}}",
+        "changedApprover": "将可审批范围改为 {{value}}",
         "updatedTitle": "更新了标题",
         "updatedDescription": "更新了描述",
         "change": {
@@ -5688,9 +5701,9 @@
             "addedMany": "添加了 {{count}} 个阻塞项",
             "addedManyRow": "添加了 {{count}} 个阻塞项：",
             "removedOne": "移除了阻塞项 {{label}}",
-            "removedOneRow": "移除了阻塞项 {{label}}：",
+            "removedOneRow": "移除了阻塞项 {{label}}，所属任务：",
             "removedMany": "移除了 {{count}} 个阻塞项",
-            "removedManyRow": "移除了 {{count}} 个阻塞项：",
+            "removedManyRow": "移除了 {{count}} 个阻塞项，所属任务：",
             "updated": "更新了阻塞项",
             "updatedRow": "更新了阻塞项："
           },
@@ -5700,9 +5713,9 @@
             "addedMany": "添加了 {{count}} 个审核人",
             "addedManyRow": "添加了 {{count}} 个审核人：",
             "removedOne": "移除了审核人 {{label}}",
-            "removedOneRow": "移除了审核人 {{label}}：",
+            "removedOneRow": "移除了审核人 {{label}}，所属任务：",
             "removedMany": "移除了 {{count}} 个审核人",
-            "removedManyRow": "移除了 {{count}} 个审核人：",
+            "removedManyRow": "移除了 {{count}} 个审核人，所属任务：",
             "updated": "更新了审核人",
             "updatedRow": "更新了审核人："
           },
@@ -5712,9 +5725,9 @@
             "addedMany": "添加了 {{count}} 个审批人",
             "addedManyRow": "添加了 {{count}} 个审批人：",
             "removedOne": "移除了审批人 {{label}}",
-            "removedOneRow": "移除了审批人 {{label}}：",
+            "removedOneRow": "移除了审批人 {{label}}，所属任务：",
             "removedMany": "移除了 {{count}} 个审批人",
-            "removedManyRow": "移除了 {{count}} 个审批人：",
+            "removedManyRow": "移除了 {{count}} 个审批人，所属任务：",
             "updated": "更新了审批人",
             "updatedRow": "更新了审批人："
           }
@@ -6737,7 +6750,7 @@
         "upToPerHour": "最多每小时 {{perHour}} 次",
         "primary": "每天最多约 {{effective}} 次更新（{{cadence}}）≈ {{cost}}",
         "primaryWithinHours": "每天最多约 {{effective}} 次更新（{{cadence}}，仅活跃时段）≈ {{cost}}",
-        "cappedNote": "受 {{cap}} 每日 Token 上限约束，达到上限后卡片会暂停。",
+        "cappedNote": "受每日 Token 上限 {{cap}} 约束，达到上限后自动更新会暂停。",
         "reactiveNote": "仅在有变化时运行；否则只做一次低成本的空检查。",
         "tokenSplit": "输入 {{input}} / 输出 {{output}}",
         "kind": {
@@ -7093,8 +7106,8 @@
         "noCapConfigured": "未设置上限",
         "remaining": "剩余",
         "unlimited": "无限制",
-        "executionIsPausedForThisProjectUntilTheBudgetIsRaisedOr": "此项目的执行已暂停，提高预算或关闭事件后即可恢复。",
-        "heartbeatsArePausedForThisScopeUntilTheBudgetIsRaisedOr": "此范围的心跳已暂停，提高预算或关闭事件后即可恢复。",
+        "executionIsPausedForThisProjectUntilTheBudgetIsRaisedOr": "此项目的执行已暂停。将预算设为高于当前支出，或设为 0（不限额），可解除预算导致的暂停；关闭事件会保持暂停。",
+        "heartbeatsArePausedForThisScopeUntilTheBudgetIsRaisedOr": "此范围的心跳已暂停。将预算设为高于当前支出，或设为 0（不限额），可解除预算导致的暂停；关闭事件会保持暂停。",
         "budgetUSD": "预算（USD）",
         "saving": "保存中…",
         "updateBudget": "更新预算",
@@ -7372,7 +7385,7 @@
         "budgetAmount": "预算 {{amount}}",
         "spentOfBudget": "{{spent}} / {{budget}}",
         "eventCountMany": "此范围共 {{count}} 个事件",
-        "percentMonthly": "此范围消耗了月度预算的 {{percent}}%。",
+        "percentMonthly": "所选期间的支出占月度预算的 {{percent}}%。",
         "inputOutput": "输入 {{input}} · 输出 {{output}}",
         "apiRuns": "{{count}} 次 API 运行",
         "subscriptionRuns": "{{count}} 次订阅运行",
@@ -7507,7 +7520,7 @@
           "apply": "应用效果"
         },
         "cause": {
-          "denyDecisionIntersection": "被权限边界阻止（默认拒绝）",
+          "denyDecisionIntersection": "被权限边界阻止（未获授权则拒绝执行）",
           "invalidEffectReference": "引用的任务已不存在",
           "targetChanged": "自提议以来目标已变更",
           "effectExecutionFailed": "效果运行时出错",
@@ -7704,9 +7717,9 @@
         "recoveryTitleDetail": "{{label}} — {{detail}}。请打开来源任务进行处理。",
         "recoveryTitle": "{{label}} — 请打开来源任务进行处理。",
         "nextStep": {
-          "dueNow": "Paperclip 将立即请负责人选择下一步。点击立即重试会马上开始该跟进。",
-          "scheduledRelative": "Paperclip 将在 {{relative}} 请负责人选择下一步。点击立即重试会马上开始该跟进。",
-          "scheduled": "Paperclip 将按计划请负责人选择下一步。点击立即重试会马上开始该跟进。"
+          "dueNow": "请负责人选择下一步的跟进已到执行时间。点击“立即重试”会请求立即重试，仍需通过任务当前的执行检查。",
+          "scheduledRelative": "请负责人选择下一步的跟进计划时间：{{relative}}。点击“立即重试”会请求立即重试，仍需通过任务当前的执行检查。",
+          "scheduled": "Paperclip 将按计划请负责人选择下一步。点击“立即重试”会请求立即重试，仍需通过任务当前的执行检查。"
         },
         "retrying": "重试中…",
         "alreadyPromoted": "已提前",
@@ -7731,7 +7744,7 @@
           "title": "此任务仍需要确定下一步。",
           "body": "一次运行已成功完成，但任务仍处于打开状态。Paperclip 需要有人决定接下来怎么做。",
           "markDone": "将其标记为已完成或已取消。",
-          "sendReview": "提交审核或请求输入。",
+          "sendReview": "提交审核或请求补充信息。",
           "recordBlocker": "记录阻塞原因以及该阻塞项的负责人。",
           "delegate": "委派后续工作或排队续跑。",
           "asked": "已请 {{name}} 选择下一步",
@@ -7742,8 +7755,8 @@
           "stalledReviewsMany": "此任务被关联任务阻塞，但链条停滞在审核中，没有明确的下一步。请处理下方停滞的审核，或将其从阻塞项中移除。",
           "stalledReviewOne": "此任务被关联任务阻塞，但链条停滞在审核中，没有明确的下一步。请处理下方停滞的审核，或将其从阻塞项中移除。",
           "stalledReviewMany": "此任务被关联任务阻塞，但链条停滞在审核中，没有明确的下一步。请处理下方停滞的审核，或将其从阻塞项中移除。",
-          "reopenSuppressedOne": "发送消息暂时不会重启此任务：在关联任务完成前它会保持受阻，完成后会自动重新打开。在此期间，评论仍会通知 {{name}}，以便提问或分诊。",
-          "reopenSuppressedMany": "发送消息暂时不会重启此任务：在关联任务完成前它会保持受阻，完成后会自动重新打开。在此期间，评论仍会通知 {{name}}，以便提问或分诊。",
+          "reopenSuppressedOne": "发送消息暂时不会重启此任务：在关联任务完成前，它会保持受阻，之后会自动重新打开。在此期间，评论仍会通知 {{name}}，以便答疑或分流处理。",
+          "reopenSuppressedMany": "发送消息暂时不会重启此任务：在所有关联任务完成前，它会保持受阻，之后会自动重新打开。在此期间，评论仍会通知 {{name}}，以便答疑或分流处理。",
           "untilCompleteOne": "在关联任务完成前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分诊。",
           "untilCompleteMany": "在关联任务完成前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分诊。",
           "untilMovedBack": "在有人将其移回待办之前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分诊。"
@@ -7891,14 +7904,14 @@
           "strandedTask": "Paperclip 已重试此任务的上次运行，但仍没有排队的运行、审核人、阻塞项或其他下一位负责人。要让它继续推进，请决定接下来怎么做：重试任务、标记为已完成，或提交审核。",
           "workspaceValidation": "由于无法校验此任务的 git 工作区，Paperclip 停止了此运行。",
           "configurationValidation": "由于缺少必需的密钥/环境变量绑定，Paperclip 在派发此运行前已停止。",
-          "activeWatchdog": "活跃运行一直处于静默状态。恢复流程正在观察，不会打断它。",
+          "activeWatchdog": "当前运行一直没有输出。恢复流程正在观察，未中断该运行。",
           "taskNeedsNextStep": "Paperclip 无法为这个未关闭的任务找到明确的下一步。请选择继续工作、提交审核、标记为已完成，或记录阻塞原因。"
         },
         "state": {
           "needed": "需要恢复",
           "inProgress": "恢复进行中",
           "observeOnly": "正在观察活跃运行",
-          "escalated": "恢复已升级",
+          "escalated": "恢复已上报",
           "resolved": "恢复已解决"
         },
         "outcome": {
@@ -7959,7 +7972,7 @@
         "wake": {
           "wakeOwner": "将请 Agent 选择下一步",
           "ownerRepair": "Paperclip 正在重试原负责人",
-          "recoveryOwner": "恢复负责人正在修复下一步",
+          "recoveryOwner": "恢复负责人正在修复后续执行路径",
           "boardEscalation": "需要 Board 决策",
           "manual": "需要人工跟进",
           "manualRepair": "重试前需要修复",
@@ -7975,7 +7988,7 @@
         "agentFallback": "Agent {{id}}",
         "runChip": "运行 {{id}}",
         "lineage": {
-          "retryExpired": "此任务的自动重试已到期但没有运行，目前没有任何东西在推进它。需要有人重试或记录下一步。任务仍由原负责人负责。",
+          "retryExpired": "此任务的自动重试已到期但未执行，任务目前没有继续推进。需要有人重试或记录下一步。任务仍由原负责人负责。",
           "sourceExhausted": "此任务的上次运行停下来等待，但并没有需要等待的对象。原负责人已用完所有自动修复尝试，下一步需要做出决策。任务仍由其负责人负责。",
           "sourceRetrying": "此任务的上次运行停下来等待，但并没有需要等待的对象。Paperclip 正在重试原负责人，以记录真正的下一步。任务仍由其负责人负责，目前无需操作。",
           "recoveryOwner": "原负责人未能在重试额度内记录下一步。恢复负责人现在只负责修复路径，任务本身仍属于原负责人。",
@@ -7991,7 +8004,7 @@
           },
           "sendReview": {
             "label": "提交审核",
-            "description": "交给具备真实审核路径的审核人。"
+            "description": "交给具有可用审核流程的审核者。"
           },
           "falsePositiveDone": {
             "label": "误报，已完成",
@@ -8008,7 +8021,7 @@
           "needed": "恢复操作：需要处理",
           "inProgress": "恢复操作：进行中",
           "observeOnly": "恢复操作：正在观察活跃运行",
-          "escalated": "恢复操作：已升级",
+          "escalated": "恢复操作：已上报",
           "resolved": "恢复操作：已解决"
         },
         "heldByReissue": "被 {{label}} 占用 — 请改为在隔离工作区中重新发起。",
@@ -8035,8 +8048,8 @@
         "unassignedPick": "未分配 — 选择一位以唤醒",
         "attemptsUnbounded": "尝试次数不限",
         "attemptRunning": "尝试正在运行",
-        "retryMissedAt": "重试已错过 {{offset}}",
-        "retryMissed": "重试已错过",
+        "retryMissedAt": "已错过重试时间（{{offset}}）",
+        "retryMissed": "已错过重试时间",
         "nextTryNow": "立即进行下一次尝试",
         "nextTryAt": "下一次尝试 {{offset}}",
         "retriesUsedUp": "自动重试已用完",
@@ -8061,7 +8074,7 @@
           "confirm": "创建隔离的重新发起"
         },
         "footer": {
-          "observing": "恢复流程正在观察，不会打断实时运行。",
+          "observing": "恢复流程正在观察，未中断正在执行的运行。",
           "staysOpen": "在记录明确决策之前，此卡片会保持打开。"
         }
       },
@@ -8124,7 +8137,7 @@
             "description": "运行结束后才会评估活跃度。"
           },
           "retryPending": {
-            "description": "Paperclip 已排队一次自动重试，但尚未开始。"
+            "description": "Paperclip 已将一次自动重试加入队列，但尚未开始。"
           },
           "missing": {
             "label": "无活跃度数据",
@@ -8155,7 +8168,7 @@
           "timeoutWith": "超时（{{timeout}}）",
           "timeout": "超时",
           "maxTurns": "已达最大轮次",
-          "budgetPaused": "预算已暂停",
+          "budgetPaused": "因预算暂停",
           "pausedByBoard": "已被 Board 暂停",
           "processLost": "进程丢失",
           "unmanagedStopped": "未托管的后台任务已停止",
@@ -8203,7 +8216,7 @@
         "childWork": "子任务工作",
         "children": {
           "active": "{{active}} 个进行中，{{done}} 个已完成，{{cancelled}} 个已取消",
-          "terminal": "全部 {{total}} 个已终止（{{done}} 个已完成，{{cancelled}} 个已取消）"
+          "terminal": "全部 {{total}} 个均已结束（{{done}} 个已完成，{{cancelled}} 个已取消）"
         },
         "moreChildren": "另外 {{count}} 个",
         "empty": {
@@ -8220,7 +8233,7 @@
         "unknown": "未知",
         "lastUsefulAction": "最近有用操作",
         "stopLabel": "停止",
-        "retryOf": "重试自 <link>{{id}}</link>",
+        "retryOf": "对 <link>{{id}}</link> 的重试",
         "nextAction": "下一步操作：",
         "olderHidden": "另有 {{count}} 条较早的记录未显示"
       },
@@ -8234,13 +8247,13 @@
           "continuationPending": "自动续跑待安排",
           "retryPending": "自动重试待安排"
         },
-        "pullsRetryForward": "立即提前重试",
+        "pullsRetryForward": "请求立即重试",
         "replacesRun": "替换运行 <link>{{id}}</link>",
         "lastAttemptFailed": "上次尝试失败：{{error}}。Paperclip 会自动重试。",
         "promoting": "正在提前计划的重试",
-        "alreadyPromotedStarting": "已提前 — 运行正在启动",
-        "promotedStarting": "已提前 — 运行正在启动",
-        "retryFailed": "暂时无法重试"
+        "alreadyPromotedStarting": "已排队或正在运行",
+        "promotedStarting": "已加入执行队列",
+        "retryFailed": "无法立即重试"
       },
       "issueSiblingNavigation": {
         "ariaLabel": "子任务导航",
@@ -8276,7 +8289,7 @@
           "running": "运行中…",
           "executed": "已执行",
           "awaitingApproval": "等待批准",
-          "waitingApproval": "等待批准",
+          "waitingApproval": "等待审批",
           "approvedRunning": "已批准 · 运行中…",
           "succeeded": "成功",
           "executionFailed": "执行失败",
@@ -8288,7 +8301,7 @@
           "declining": "拒绝中…",
           "approveRequest": "批准请求",
           "approveRun": "批准并运行",
-          "approvalOptions": "批准选项",
+          "approvalOptions": "审批选项",
           "alwaysAllow": "始终允许"
         },
         "taskField": "{{label}}：{{value}}",
@@ -8392,7 +8405,7 @@
           "canUseAt": "目标 Agent 现在可以使用提议的配置路径 · {{when}}。",
           "canUse": "目标 Agent 现在可以使用提议的配置路径。",
           "failedTitle": "失败 · 未创建绑定",
-          "failedBody": "请求已被接受，但执行以安全方式失败。没有泄露任何密钥值。",
+          "failedBody": "请求已被接受，但执行失败后按安全策略拒绝了该操作。没有暴露任何密钥值。",
           "errorCode": "错误代码",
           "rejectedBy": "已由 {{who}} 拒绝",
           "notCreated": "未创建绑定。",
@@ -8498,7 +8511,7 @@
           "checkbox": "请求勾选确认",
           "secret": "请求密钥绑定",
           "connect": "连接你的 {{provider}} 以继续",
-          "tool": "请求工具批准",
+          "tool": "工具操作请求审批",
           "verdicts": "审核这些项",
           "plan": "计划审核",
           "confirmation": "请求确认"
@@ -8688,13 +8701,13 @@
         "subtreeIsPaused": "子树已暂停。",
         "taskIsPaused": "任务已暂停。",
         "wakeCount": "唤醒受影响的 Agent（{{count}}）",
-        "cancelTasks": "取消{{tasks}}",
+        "cancelTasks": "取消 {{tasks}}",
         "restoreTasks": "恢复{{tasks}}",
         "oneTask": "{{count}} 个任务",
         "manyTasks": "{{count}} 个任务",
-        "tasksCancelled": "将取消{{tasks}}。",
+        "tasksCancelled": "将取消 {{tasks}}。",
         "tasksRestored": "将恢复{{tasks}}。",
-        "tasksResumed": "{{tasks}}将继续运行。"
+        "tasksResumed": "{{tasks}} 将恢复。"
       },
       "issueOutputSection": {
         "taskOutputs": "任务输出",
@@ -8889,8 +8902,8 @@
         "commentFailed": "评论失败",
         "deleteFailed": "删除失败",
         "approvalNotFound": "找不到审批。",
-        "reviewLinkedTasks": "审核关联任务",
-        "reviewLinkedTask": "审核关联任务",
+        "reviewLinkedTasks": "查看关联任务",
+        "reviewLinkedTask": "查看关联任务",
         "openHiredAgent": "打开已聘用的 Agent",
         "backToApprovals": "返回审批列表",
         "approvalConfirmed": "审批已确认",
@@ -8911,7 +8924,7 @@
         "posting": "发布中…",
         "postComment": "发表评论",
         "commentsCount": "评论（{{count}}）",
-        "resolveBudget": "前往 <link>/costs</link> 的预算控制区域，解除此次预算暂停。"
+        "resolveBudget": "前往 <link>/costs</link> 的预算控制区域，处理此次预算暂停。"
       },
       "decisionQueuePage": {
         "decisions": "决策",
@@ -9069,7 +9082,7 @@
         "sharedSession": "这是共享工作区会话。归档后会移除此会话记录，但保留底层项目工作区。",
         "ownCheckout": "此执行工作区有独立的检出路径，可以单独归档。",
         "primaryPath": "此执行工作区当前指向项目的主工作区路径。",
-        "disposable": "此工作区为临时工作区，可以归档。",
+        "disposable": "此工作区可丢弃，可以归档。",
         "blockingTasks": "阻止关闭的任务",
         "blockingReasons": "阻止原因",
         "warnings": "警告",
@@ -9480,7 +9493,7 @@
         },
         "productionSurface": "生产展示位置：{{surface}} · 在 {{container}} 中 {{action}}",
         "inspectionFailed": "Runner 检查失败",
-        "confirmReveal": "此精确提供方帧可能包含提示词、工具参数、密钥或推理内容。现在显示吗？",
+        "confirmReveal": "这条提供方原始数据帧可能包含提示词、工具参数、密钥或推理内容。现在显示吗？",
         "confirmDownload": "下载精确原始追踪吗？其中可能包含敏感提示词、工具参数和仅限提供方的字段。",
         "confirmDelete": "立即删除此原始追踪吗？此操作无法撤销。",
         "deleteFailed": "删除原始追踪失败",
@@ -9853,7 +9866,7 @@
         "loadedCount": "已加载 {{count}} 个",
         "selectableCount": " · {{count}} 个可选",
         "loadMoreCount": "再加载 {{count}} 个",
-        "deniedTitle": "AWS 拒绝了列表访问",
+        "deniedTitle": "AWS 拒绝了列出密钥的请求",
         "throttledTitle": "AWS 限流了列表请求",
         "loadRemoteFailed": "无法加载远程密钥",
         "deniedBody": "此保管库对应的 AWS 主体缺少 secretsmanager:ListSecrets 权限。请更新 IAM 后重试。",
@@ -9929,8 +9942,8 @@
         "proposedSecretFallback": "提议的密钥",
         "secretFallback": "密钥",
         "somethingWentWrong": "出现问题，请重试。",
-        "secretApproved": "密钥已同意",
-        "bindingApproved": "绑定已同意",
+        "secretApproved": "密钥提案已同意",
+        "bindingApproved": "绑定提案已同意",
         "secretCreated": "密钥已创建",
         "bindingFallback": "绑定",
         "proposalRejected": "提议已拒绝",
@@ -9945,11 +9958,11 @@
         "deploymentDefault": "部署默认值",
         "approving": "同意中…",
         "approveCreate": "同意并创建",
-        "approveSecretBind": "同意密钥并绑定",
+        "approveSecretBind": "同意密钥提案并绑定",
         "targetAgent": "目标 Agent",
         "deliveredAs": "交付方式",
-        "alsoApproveLabel": "同时同意提议的密钥",
-        "alsoApproveBody": "同时同意提议的密钥 <strong>{{name}}</strong>，并在同一步中创建。没有它，绑定无法落地。",
+        "alsoApproveLabel": "同时同意密钥提案",
+        "alsoApproveBody": "同时同意密钥提案 <strong>{{name}}</strong>，并在同一步中创建密钥。否则无法创建绑定。",
         "rejectProposal": "拒绝提议",
         "rejectDescription": "理由会发回给 <agent></agent>。依赖的绑定也会一并拒绝。",
         "rejectPlaceholder": "为什么拒绝？",
@@ -10082,7 +10095,7 @@
         "loadFailed": "加载定义失败：{{message}}",
         "empty": "还没有用户密钥定义。创建一个即可要求每位成员提供自己的凭据。",
         "editUserSecret": "编辑用户密钥",
-        "dialogDescription": "成员会为此凭据提供自己的值，此处无需填写值。",
+        "dialogDescription": "成员会为此凭据提供各自的值，此处不填写凭据值。",
         "namePlaceholder": "个人 GitHub Token",
         "keyHint": "供环境变量绑定引用的稳定标识符。",
         "keyLocked": "不可更改。",
@@ -10090,8 +10103,8 @@
         "usageGuidance": "使用说明",
         "optionalSuffix": "（可选）",
         "usagePlaceholder": "告诉成员如何创建 Token、需要哪些权限范围等。",
-        "removeTitle": "移除用户密钥？",
-        "removeDescription": "这会为整个组织移除定义 <mono>{{key}}</mono>。成员已有的值将不再被引用。此操作无法撤销。",
+        "removeTitle": "移除用户密钥定义？",
+        "removeDescription": "这会从整个组织移除定义 <mono>{{key}}</mono>，并删除所有成员为此定义保存的密钥值。此操作无法撤销。",
         "coverage": "覆盖率：{{summary}}",
         "notSetCount": "· {{count}} 个未设置"
       },
@@ -10311,7 +10324,7 @@
         "discoveryManyCandidatesManySampled": "从 {{sampled}} 个抽样密钥中找到 {{count}} 个候选项",
         "discoveryDeniedTitle": "AWS 发现需要 ListSecrets 权限",
         "discoveryFailedTitle": "AWS 发现失败",
-        "discoveryDeniedBody": "发现功能需要 Paperclip 服务端运行时/提供方凭据路径在所选区域拥有 secretsmanager:ListSecrets 权限。",
+        "discoveryDeniedBody": "发现功能要求 Paperclip 服务端访问提供方时所用的身份，在所选区域拥有 secretsmanager:ListSecrets 权限。",
         "discoverySafeAlternative": "如果已经知道确切的 AWS Secrets Manager ARN，可以直接粘贴/关联该 ARN，而不使用发现功能。仍需要针对该资源的 DescribeSecret 和运行时读取权限。",
         "region": "区域",
         "operation": "操作",
@@ -10334,11 +10347,11 @@
         "coverageSet": "已设置",
         "coverageMissing": "缺失",
         "coverageInactive": "未启用",
-        "coverageNoteOne": "覆盖率仅统计 1 位成员的数量，此处从不显示密钥值。",
-        "coverageNoteMany": "覆盖率仅统计 {{count}} 位成员的数量，此处从不显示密钥值。",
+        "coverageNoteOne": "此处仅汇总 1 位成员的密钥设置状态数量，不会显示密钥值。",
+        "coverageNoteMany": "此处仅汇总 {{count}} 位成员的密钥设置状态数量，不会显示密钥值。",
         "userUsageHint": "选择<strong>用户密钥</strong>并选中 <code>{{key}}</code>，即可将运行时环境变量绑定到此用户提供的密钥。",
         "memberGuidance": "成员说明",
-        "userAccessEventsNote": "运行时解析发生时，访问事件会记录在每位成员保存的值上。",
+        "userAccessEventsNote": "每次运行时解析都会记录访问事件，并关联到相应成员存储的密钥。",
         "envVarExists": "{{name}} 已有名为 {{key}} 的环境变量。",
         "accessGranted": "已授予访问权限",
         "accessGrantedBody": "{{name}} 现在会收到 {{key}}",
@@ -10373,7 +10386,11 @@
         "responsibleUser": "负责人：",
         "credentialOwner": "凭据所有者："
       },
-      "latestVersion": "最新版本"
+      "latestVersion": "最新版本",
+      "secretStatus": {
+        "active": "已启用",
+        "deleted": "已删除"
+      }
     },
     "routines": {
       "triggerCard": {
@@ -10963,7 +10980,7 @@
         "advancedRunPolicy": "高级运行策略",
         "addAScheduleTriggerToGateRunsOnActivity": "添加计划触发器以根据活动决定是否运行。Webhook、手动和 API 触发始终运行。",
         "activityScope": "活动范围",
-        "activityGateScope": "活动门控范围",
+        "activityGateScope": "活动检查范围",
         "next5Fires": "接下来 5 次触发",
         "noEnabledScheduleTriggerToPreviewAddASchedule": "没有启用的计划触发器可供预览。在触发器中添加计划，查看此策略如何处理即将到来的触发。",
         "organizationWide": "整个组织",
@@ -11165,7 +11182,7 @@
         "invitesTab": "邀请",
         "instanceAdminNotice": "此账号可通过实例管理员权限在此管理访问权限，但当前没有有效的组织成员身份。",
         "pendingJoins": "待处理的人类加入申请",
-        "pendingJoinsHint": "在待处理的加入申请成为正式组织成员之前进行审核。",
+        "pendingJoinsHint": "请在申请人正式加入组织前，审核其待处理的加入申请。",
         "pendingCount": "{{count}} 个待处理",
         "unknownRequester": "未知申请人",
         "noEmail": "无邮箱",
@@ -11190,7 +11207,7 @@
         },
         "saveMember": "保存成员",
         "removeMember": "移除成员",
-        "removeMemberDescription": "归档 {{name}}，并在从负责人字段中隐藏该用户之前转移其进行中的任务。",
+        "removeMemberDescription": "归档 {{name}}，并在从负责人字段中隐藏该用户之前重新分配其尚未结束的任务。",
         "checkingTasks": "正在检查已分配的任务…",
         "oneOpenTask": "{{count}} 个未完成的已分配任务",
         "openTasks": "{{count}} 个未完成的已分配任务",
@@ -11204,7 +11221,7 @@
         "advancedTitle": "高级权限",
         "advancedDescription": "高级访问、范围分配和显式授权控制由已安装的组织设置扩展提供。",
         "advancedUnavailable": "高级权限不可用",
-        "advancedUnavailableBody": "Paperclip 核心会继续执行组织边界和已有的限制性策略数据，但编辑高级权限需要安装扩展。",
+        "advancedUnavailableBody": "Paperclip 核心仍会强制实施组织边界及已有的限制性策略，但编辑高级权限需要安装扩展。",
         "pluginExtensionsUnavailable": "插件扩展不可用：{{message}}",
         "openMembers": "打开成员",
         "openInvites": "打开邀请",
@@ -11662,7 +11679,7 @@
         "noWorkingAuth": "未找到可用的认证。请先修复报告的检查项，再雇用此 Agent。",
         "createAgentFailed": "创建 Agent 失败",
         "retryStillFailing": "已在适配器配置中取消设置 ANTHROPIC_API_KEY 并重试，但环境测试仍然失败。",
-        "unsetFailed": "取消设置 ANTHROPIC_API_KEY 并重试失败。",
+        "unsetFailed": "清除 ANTHROPIC_API_KEY 并重试时失败。",
         "titles": {
           "name": "你的组织叫什么名字？",
           "agent": "创建第一个 Agent",
@@ -11787,7 +11804,7 @@
         "selectUser": "请选择一个用户以查看其实例访问权限。",
         "loadingUserAccess": "正在加载用户访问权限…",
         "failedToLoadUserAccess": "加载用户访问权限失败。",
-        "removeAdmin": "移除实例管理员",
+        "removeAdmin": "取消实例管理员权限",
         "promoteAdmin": "设为实例管理员",
         "organizationAccess": "组织访问权限",
         "organizationAccessHint": "切换此用户的组织成员身份。新授予的访问权限默认为有效的操作员成员身份。",
@@ -12062,7 +12079,7 @@
           },
           "enableBetaSkills": {
             "title": "Beta Skill",
-            "description": "允许 Agent 固定使用 Paperclip 核心 Skill 的 Beta 版本。停用后所有 Agent 都会回到默认的正式 Skill，但不会删除已保存的固定设置。",
+            "description": "允许 Agent 固定使用 Paperclip 核心 Skill 的 Beta 版本。停用后所有 Agent 都会恢复使用默认 Skill，但不会删除已保存的固定设置。",
             "ariaLabel": "切换 Beta Skill 实验性设置"
           },
           "enableBuiltInAgents": {
@@ -12360,7 +12377,7 @@
         "paused": "已暂停",
         "activating": "激活中…",
         "activateSelected": "激活所选项（{{count}}）",
-        "leftPausedHint": "此处保持暂停的项目仍会显示在该组织的“Agent”和“例程”页面中，那里提供相同的恢复操作；离开此页面不会丢失任何内容。",
+        "leftPausedHint": "此处仍暂停的 Agent 和例程会继续显示在该组织的“Agent”和“例程”页面中，那里提供相同的恢复操作；离开此页面不会丢失任何内容。",
         "goToDashboard": "前往仪表盘",
         "resumeWatching": "继续查看导入",
         "resumeWatchingDescription": "你之前启动的导入仍在服务器上运行。",
@@ -12405,7 +12422,7 @@
         "manyConflicts": "{{count}} 个冲突",
         "oneError": "1 个错误",
         "manyErrors": "{{count}} 个错误",
-        "startPaused": "导入的 Agent 和例程以暂停状态启动",
+        "startPaused": "以暂停状态导入 Agent 和例程",
         "importing": "导入中…",
         "importOneFile": "导入 1 个文件",
         "importManyFiles": "导入 {{count}} 个文件",
@@ -12897,11 +12914,11 @@
           "review": "确认"
         },
         "trust": {
-          "configured": "已配置低信任审核",
+          "configured": "已配置低信任审查",
           "needsBoundary": "低信任需要设置工作边界",
           "notLowTrust": "{{name}} 不是低信任 Agent",
           "lowTrustHelp": "邮件任务会限制在已配置的项目或根任务边界内。输出会被隔离，等待可信审核。",
-          "recommend": "邮件可能包含恶意指令。建议使用低信任审核，以限制 Agent 对 Paperclip 工作的访问。",
+          "recommend": "邮件可能包含恶意指令。建议使用低信任审查，以限制 Agent 对 Paperclip 工作的访问。",
           "requirements": "低信任执行还要求在 Agent 的运行时设置中启用隔离工作区和可用的沙箱环境。",
           "review": "检查信任设置",
           "configure": "配置低信任",
@@ -12985,12 +13002,12 @@
           "when": "此 Agent 何时进行审查？",
           "linkedAuthors": "已关联成员的 PR 和已授权的提及",
           "mentionsOnly": "仅限已授权的提及",
-          "allowedAuthors": "允许作者的 PR 和已授权的提及",
+          "allowedAuthors": "获准作者的 PR 和已授权的提及",
           "whenHelp": "新添加的人员在“访问权限”中有单独的自动审查设置。",
           "events": "自动审查事件",
           "drafts": "包括草稿 PR",
           "botAuthors": "包括 bot 作者",
-          "botAuthorsHelp": "还需在“访问权限”中允许该 bot 账号，并为其指定发起人、启用自动审查。",
+          "botAuthorsHelp": "还需在“访问权限”中允许该 bot 账号，并为其指定 Sponsor、启用自动审查。",
           "instructions": "审查指令",
           "instructionsHelp": "给已分配 Agent 的附加指导。提供方内容无法更改其权限。",
           "eventPrompts": "事件提示词",
@@ -13053,16 +13070,16 @@
           "memberLabel": "已关联的组织成员",
           "guestLabel": "外部贡献者 · 受限访客权限",
           "autoReviews": "为 @{{login}} 自动审查 PR",
-          "sponsorNote": "发起人：{{sponsor}}。不会授予组织成员身份或个人凭据。",
+          "sponsorNote": "Sponsor：{{sponsor}}。不会授予组织成员身份或个人凭据。",
           "addMember": "添加已关联成员",
           "allowGuest": "允许外部贡献者",
           "addMemberHelp": "添加成员后，访问权限会切换为选定成员列表。自动 PR 审查默认关闭。",
           "refreshLinked": "添加此成员前，请先刷新已关联的身份。",
-          "guestHelp": "允许一个 GitHub 账号以受限访客权限提及该 bot。需要指定发起人。",
+          "guestHelp": "允许一个 GitHub 账号以受限访客权限提及该 bot。需要指定 Sponsor。",
           "username": "GitHub 用户名",
           "lookupFailed": "查找失败",
           "lookUp": "查找",
-          "sponsor": "发起人",
+          "sponsor": "Sponsor",
           "candidate": "@{{login}} · GitHub ID {{id}}",
           "allowAccount": "允许此账号",
           "loadFailed": "无法加载成员或已关联的账号。请刷新后重试。"
@@ -13179,7 +13196,7 @@
         "removeContainerKey": "移除容器密钥",
         "containerAccessEnabled": "此授权已启用容器访问。",
         "registerBeforeEnabling": "启用访问前，请先注册公钥并验证主机密钥。",
-        "removingKeyHint": "移除密钥后，Paperclip 将无法建立新连接。请同时从 Railway 中移除对应的公钥。",
+        "removingKeyHint": "移除密钥后，Paperclip 将无法再使用此密钥建立新连接。请同时从 Railway 中移除对应的公钥。",
         "updateFailed": "无法更新容器访问。"
       },
       "setupPanel": {
@@ -13332,9 +13349,9 @@
         "manyPeopleSelected": "已选择 {{count}} 人",
         "audienceHint": "此设置控制谁的工作可以使用此身份，不会改变哪些 Agent 拥有此连接。",
         "saveAudience": "保存使用范围",
-        "revokeYourIdentity": "撤销你的 {{provider}} 身份？",
-        "revokeThisIdentity": "撤销此 {{provider}} 身份？",
-        "revokeOrganizationIdentity": "撤销组织身份？",
+        "revokeYourIdentity": "撤销你的 {{provider}} 身份授权？",
+        "revokeThisIdentity": "撤销此 {{provider}} 身份授权？",
+        "revokeOrganizationIdentity": "撤销组织身份授权？",
         "revokeOwnBody": "Agent 将不再以你的身份行事。需要此身份的工作可以请你重新连接。",
         "revokeOtherBody": "Agent 将不再以此人的身份行事。此人可以自行重新连接；其他人无法代其操作。",
         "revokeInstalledAgentsBody": "已安装的 Agent 将立即失去此共享身份。",
@@ -13503,7 +13520,7 @@
         "badgesMeaning": "徽章含义",
         "badgeAllowed": "<b>允许</b> — 按下“运行”后立即执行。",
         "badgeAskFirst": "<b>先询问</b> — 运行请求会停留在审核中，等待你确认。",
-        "badgeOff": "<b>关</b> — 不会运行。可在<permissionsLink>权限</permissionsLink>中修改。",
+        "badgeOff": "<b>关闭</b> — 不会运行。可在<permissionsLink>权限</permissionsLink>中修改。",
         "badgesReflectAgent": "徽章反映的是此 Agent 的当前设置，而不是你的。切换 Agent 可查看操作对每个 Agent 的表现。",
         "gutCheckAllowed": "这会以 {{agent}} 的身份对 {{app}} 发起一次真实调用。",
         "gutCheckAskFirst": "此调用离开 Paperclip 前需等待你确认。",
@@ -13534,7 +13551,7 @@
         "afterApprovalHint": "审批后，请使用此执行 ID 测试 {{tool}} 操作。不要再次发起原始操作。",
         "afterAuthorizingHint": "授权后，请先检查提供方的结果，再使用“运行”。Paperclip 不会自动重复调用。",
         "reviewProviderRequest": "请审核提供方的请求，然后以 {{agent}} 的身份恢复此执行。原始操作不会被再次发起。",
-        "resumePermission": "恢复权限",
+        "resumePermission": "恢复操作权限",
         "approveAndResume": "同意并恢复",
         "cancelRequest": "取消请求",
         "providerApprovalExpired": "提供方审批已过期。发起新操作前请先检查提供方。",
@@ -13629,7 +13646,7 @@
       },
       "gitHubChatSetup": {
         "connectGithubBot": "连接 GitHub 机器人",
-        "couldNotResumeSetup": "无法恢复设置",
+        "couldNotResumeSetup": "无法继续设置",
         "couldNotSaveThisStepTryAgain": "无法保存此步骤。请重试。",
         "githubAccountLinking": "关联 GitHub 账号",
         "githubBotStepOf": "GitHub 机器人 · 第 {{value0}} 步，共 {{value1}} 步",
@@ -14473,7 +14490,7 @@
         },
         "viewActivity": "查看活动",
         "updateNotSent": "更新未发送",
-        "rejectedToastBody": "所选文件已属于另一条评论。请编辑被拒绝的发送以修正选择。",
+        "rejectedToastBody": "所选文件已属于另一条评论。请编辑被拒绝的发送请求，以修正选择。",
         "confirmFailedTitle": "无法确认频道投递",
         "confirmFailedBodyWithReason": "{{reason}} 你的草稿已保留；在此重试会复用同一请求标识。",
         "confirmFailedBody": "你的草稿已保留；在此重试会复用同一请求标识。",
@@ -14511,7 +14528,7 @@
         },
         "unnamedAttachment": "未命名附件",
         "rejectedBody": "所选文件已属于另一条评论。此请求在任何频道消息排队之前即被拒绝。你的草稿已原样保留。",
-        "editRejectedSend": "编辑被拒绝的发送",
+        "editRejectedSend": "编辑被拒绝的发送请求",
         "resultNotConfirmed": {
           "title": "投递结果未确认",
           "body": "你的草稿和请求标识已原样保留。安全重试即可获知权威的发布状态，且不会产生重复发送。"
@@ -14719,7 +14736,7 @@
         },
         "outputTooLarge": "提供方输出超出了安全上限。",
         "workspaceSetupFailed": "Agent 启动前工作区设置失败。",
-        "withRetryDetail": "{{detail}}{{retry}}",
+        "withRetryDetail": "{{detail}} {{retry}}",
         "legacyStop": {
           "retryScheduled": "已自动安排重试。",
           "canRetry": "现在可以重试此消息。",
@@ -15781,8 +15798,8 @@
         "snoozed": "已延后",
         "aging": "陈旧",
         "decided": "已决策",
-        "loadingDecidedDecisions": "正在加载已完成的决策…",
-        "noDecidedDecisions": "没有已完成的决策。",
+        "loadingDecidedDecisions": "正在加载已作出的决策…",
+        "noDecidedDecisions": "没有已作出的决策。",
         "loadingExpiredDecisions": "正在加载已过期的决策…",
         "noExpiredDecisions": "没有已过期的决策。",
         "anAgent": "某个 Agent",
@@ -15906,7 +15923,7 @@
         "loadingDocument": "正在加载文档…",
         "documentNotAvailableYet": "文档暂不可用。",
         "documentIsEmpty": "文档为空。",
-        "thisDocumentNeedsYourReview": "此文档需要审核。",
+        "thisDocumentNeedsYourReview": "此文档需要你审核。",
         "approvedHireTasksCreated": "已同意，已创建聘用任务",
         "changesRequestedCeoIsRevising": "已要求修改，CEO 正在修订"
       },
@@ -16184,7 +16201,7 @@
         "focusCommentComposer": "聚焦评论输入框",
         "decisions": "决策",
         "openOrCloseSelectedDecision": "打开或关闭选中决策",
-        "dismissSelectedDecision": "关闭选中决策",
+        "dismissSelectedDecision": "隐藏选中的决策",
         "global": "全局",
         "searchCurrentPageOrQuickSearch": "搜索当前页面或快速搜索",
         "newTask": "新建任务",
@@ -16325,7 +16342,7 @@
         "allocation": "占分配额度的 {{percent}}%",
         "weeklyBudget": "约 {{amount}} / 周",
         "tokenShare": "占提供商 Token 的 {{percent}}%",
-        "costShare": "占提供商成本的 {{percent}}%",
+        "costShare": "占提供方成本的 {{percent}}%",
         "tokens": "{{count}} Token",
         "subscriptionUsage": "{{percent}}% 的 Token 用量来自订阅",
         "used": "已使用 {{percent}}%",
@@ -16337,7 +16354,7 @@
         "traceCaptured": "已采集链路记录",
         "traceIncomplete": "链路记录不完整",
         "traceTruncated": "链路记录已截断",
-        "traceDeleted": "链路记录已删除",
+        "traceDeleted": "追踪记录已删除",
         "traceRequested": "已请求链路记录",
         "traceOff": "链路记录已关闭",
         "framesBytesExpires": "{{value1}} 帧 · {{value2}} 字节 · {{value3}} 过期",
@@ -16391,7 +16408,7 @@
         "pendingApproval": "等待审批",
         "waitingOnBoardHireApprovalBeforeIt": "等待 Board 批准聘用后才能运行",
         "proposalPending": "提案待处理",
-        "aProposedUpdateIsWaitingForYour": "更新提案正在等待审核"
+        "aProposedUpdateIsWaitingForYour": "更新提案正在等待你审核"
       },
       "routeErrorBoundary": {
         "thisPageHitAnError": "此页面发生错误",
@@ -16490,7 +16507,7 @@
         "controlModelReasoningDepthSupportedValuesVaryByAdaptermodel": "控制模型推理深度。支持的取值因适配器/模型而异。",
         "enableClaudesChromeIntegrationByPassingChrome": "通过传入 --chrome 启用 Claude 的 Chrome 集成。",
         "runUnattendedByAutoapprovingAdapterPermissionPromptsWhenSupported": "在支持时自动同意适配器的权限提示，以无人值守方式运行。",
-        "runCodexWithoutSandboxRestrictionsRequiredForFilesystemnetworkAccess": "在没有沙箱限制的情况下运行 Codex。访问文件系统/网络时必需。",
+        "runCodexWithoutSandboxRestrictionsRequiredForFilesystemnetworkAccess": "绕过 Codex 的审批和沙箱限制运行。",
         "enableCodexWebSearchCapabilityDuringRuns": "在运行期间启用 Codex 的网页搜索能力。",
         "enableCodexFastModeThisBurnsCreditstokensMuchFaster": "启用 Codex Fast 模式。这会更快地消耗额度/Token，支持 GPT-6、GPT-5.6、GPT-5.5、GPT-5.4 以及手动填写的 Codex 模型 ID。",
         "howPaperclipShouldRealizeAnExecutionWorkspaceForThis": "Paperclip 如何为此 Agent 创建执行工作区。常规 cwd 执行保持 project_primary，或使用 git_worktree 为每个任务隔离检出。",
@@ -16530,7 +16547,7 @@
       "builtInAgentToast": {
         "viewAgent": "查看 Agent",
         "pausedNamed": "{{name}} 已暂停",
-        "resumeToGenerate": "恢复 Agent 以生成此{{item}}。",
+        "resumeToGenerate": "恢复 Agent 以生成此 {{item}}。",
         "item": "项目"
       },
       "agentChat": {
@@ -16585,7 +16602,7 @@
         "agents": "Agent",
         "youLeftThisAgentItNoLongerAppearsIn": "你已离开此 Agent，它不会再出现在你的侧边栏中。",
         "dismissAgentMembershipNotice": "关闭 Agent 成员提示",
-        "escalationPathIsPaused": "升级路径已暂停",
+        "escalationPathIsPaused": "上报链路已暂停",
         "invalidReportingChain": "汇报链无效",
         "assignThisAgentToAnActiveManagerrootOrExplicitly": "请将此 Agent 分配给一个活跃的上级/根节点，或明确暂停或终止受影响的 Agent/子树。",
         "assignTask": "分配任务",
@@ -16595,7 +16612,7 @@
         "resetting": "正在重置…",
         "resetToDefaults": "恢复默认设置",
         "thisAgentIsPendingBoardApprovalAndCannotBe": "此 Agent 正在等待 Board 审批，暂时无法调用。",
-        "approveAgent": "同意 Agent",
+        "approveAgent": "同意启用 Agent",
         "cancel": "取消",
         "saving": "保存中…",
         "save": "保存",
@@ -16834,7 +16851,7 @@
         "fastModeWillBePassedThroughFor": "快速模式将传递给此手动模型。如果 Codex 拒绝，请关闭此开关。",
         "fastModeConsumesCreditsTokensMuchFaster": "快速模式消耗额度/Token 的速度远高于标准 Codex 运行。",
         "fastModeCurrentlyOnlyWorksOnOr": "快速模式目前仅支持 {{value0}} 或手动模型 ID。在切换模型之前，Paperclip 会忽略此开关。",
-        "theRunnerPersistsThisProviderWithEach": "运行器在每次运行时持久保存此提供方，避免配置更改后恢复时发生偏移。",
+        "theRunnerPersistsThisProviderWithEach": "Runner 会在每次运行的记录中保存所用提供方，避免配置更改后恢复时切换到其他提供方。",
         "managedAgentProfile": "托管 Agent 配置档",
         "companyScopedQualifiedProfileIdOrKey": "组织范围内已验证的配置档 ID 或键。远程资源标识从已保存的配置档加载，而非此 Agent 配置。",
         "sessionSpendCeilingUsd": "会话支出上限（USD）",
@@ -16950,7 +16967,7 @@
         "reviewMode": "审核模式",
         "hook": "钩子",
         "memoryCitation": "记忆引用",
-        "safetyReview": "安全审核",
+        "safetyReview": "安全审查",
         "terminalInput": "终端输入",
         "intentionalWait": "主动等待",
         "providerNotice": "提供方通知",
@@ -17129,7 +17146,7 @@
         "updateToTheNewestDefault": "将 {{value0}} 更新为最新默认版本？",
         "youHavenTEditedThisSoPaperclip": "你尚未编辑此项，Paperclip 将用较新的内置版本替换它。自定义内容不受影响，适配器凭据和设置也不会更改。",
         "resetToTheShippedDefault": "将 {{value0}} 重置为内置默认版本？",
-        "thisReplacesYourEditedVersionWithPaperclip": "这将用 Paperclip 当前的默认版本替换你编辑过的版本。编辑内容无法恢复。适配器凭据和设置不会更改。",
+        "thisReplacesYourEditedVersionWithPaperclip": "这将用 Paperclip 当前的默认版本替换你编辑过的版本。编辑内容将被覆盖。适配器凭据和设置不会更改。",
         "reset": "重置 {{value0}}",
         "recreate": "重新创建 {{value0}}？",
         "thisResourceIsMissingPaperclipWillRecreate": "此资源缺失。Paperclip 将从内置默认版本重新创建它。适配器凭据和设置不会更改。",
@@ -17151,11 +17168,11 @@
         "proposal": "提案",
         "reviewProposal": "审核提案",
         "scheduleEnabled": "每周计划已启用，可以创建后台任务。",
-        "scheduleDisabled": "启用每周计划之前不会运行 — 默认不消耗 Token。",
+        "scheduleDisabled": "启用每周计划之前不会按计划自动运行，默认不消耗 Token。",
         "runOnceDescription": "Paperclip 将立即创建一个例程任务。这不会启用每周计划或后台任务。",
         "disableDescription": "Paperclip 将停止今后的反思教练计划运行。仍可手动运行一次。",
         "enableDescription": "Paperclip 将允许反思教练按每周计划创建例程任务。这些任务运行时可能消耗 Token。",
-        "proposalDescription": "反思教练更新提案正在等待审核。",
+        "proposalDescription": "Reflection Coach 更新提案正在等待审核。",
         "routine": "例程"
       },
       "agentConfigForm": {
@@ -17242,9 +17259,9 @@
       "missingTargetStage": "缺少目标阶段",
       "missingRemovalStage": "缺少移除阶段",
       "missingItemVersion": "缺少项目版本",
-      "itemNotReady": "此项目尚未准备好接受决策。",
+      "itemNotReady": "此条目尚未准备好接受决策。",
       "selectOrganization": "请先选择组织。",
-      "approvalFailed": "部分项目无法批准。",
+      "approvalFailed": "部分条目无法同意。",
       "attachmentPreviewError": "无法加载附件预览（{{status}}）",
       "announcementRequestError": "公告请求失败",
       "statusUpdate": "状态更新",
@@ -17270,7 +17287,7 @@
         "assigneeChanged": "负责的 Agent 已变更，请先查看任务再重试。",
         "pendingInteraction": "请先回复待处理的问题或确认，再重试。",
         "activeRun": "任务已有正在进行的运行，请等待其完成。",
-        "pendingReview": "任务正在等待评审或批准。",
+        "pendingReview": "任务正在等待审核或审批。",
         "blocked": "请先解决任务的阻塞项，再重试。",
         "agentPaused": "负责的 Agent 已暂停，请先恢复该 Agent 再重试。",
         "agentTerminated": "负责的 Agent 已不可用。"

@@ -1,8 +1,31 @@
 import type { Agent } from "@paperclipai/shared";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { i18n } from "@/i18n";
 import { formatActivityVerb, formatIssueActivityAction } from "./activity-format";
 
 describe("activity formatting", () => {
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
+  });
+
+  it.each([
+    ["en", "listed only provider Trace metadata", "listed only provider Trace metadata", "updated instance experimental settings"],
+    ["zh-CN", "仅列出了提供方 Trace 元数据", "仅列出了提供方 Trace 元数据", "更新了实例实验设置"],
+  ])("labels metadata listing and instance settings events accurately in %s", async (language, metadataRow, metadataDetail, settingsLabel) => {
+    await i18n.changeLanguage(language);
+    const metadata = Object.freeze({ requestedRunCount: 2, traceCount: 1, payloadLogged: false });
+    expect(formatActivityVerb("provider_trace.metadata_listed", metadata)).toBe(metadataRow);
+    expect(formatIssueActivityAction("provider_trace.metadata_listed", metadata)).toBe(metadataDetail);
+    expect(formatActivityVerb("instance.settings.experimental_updated")).toBe(settingsLabel);
+    expect(formatIssueActivityAction("instance.settings.experimental_updated")).toBe(settingsLabel);
+  });
+
+  it("retains the existing fallback for unmapped event codes", async () => {
+    await i18n.changeLanguage("zh-CN");
+    expect(formatActivityVerb("future_provider.trace_exported")).toBe("future provider trace exported");
+    expect(formatIssueActivityAction("future_provider.trace_exported")).toBe("future provider trace exported");
+  });
+
   const agentMap = new Map<string, Agent>([
     ["agent-reviewer", { id: "agent-reviewer", name: "Reviewer Bot" } as Agent],
     ["agent-approver", { id: "agent-approver", name: "Approver Bot" } as Agent],

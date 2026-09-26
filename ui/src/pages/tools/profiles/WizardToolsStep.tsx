@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { TOOL_RISK_LEVELS } from "@paperclipai/shared";
 import { ChevronDown, ChevronRight, Plug, Plus, Search, X } from "lucide-react";
 import { Link } from "@/lib/router";
 import { cn } from "@/lib/utils";
@@ -326,7 +327,10 @@ function ruleSummary(rule: AdvancedRule): string {
       : translate("app.tools.wizardToolsStep.ruleSummary.blockMatching", { value: rule.value });
   }
   if (rule.kind === "risk_level") {
-    const level = rule.riskLevel ?? rule.value;
+    const rawLevel = rule.riskLevel ?? rule.value;
+    const level = (TOOL_RISK_LEVELS as readonly string[]).includes(rawLevel)
+      ? translate(`app.tools.wizardToolsStep.riskLevel.${rawLevel}`)
+      : rawLevel;
     return allow ? translate("app.tools.wizardToolsStep.ruleSummary.allowRisk", { level }) : translate("app.tools.wizardToolsStep.ruleSummary.blockRisk", { level });
   }
   return allow ? translate("app.tools.wizardToolsStep.ruleSummary.allowTool", { value: rule.value }) : translate("app.tools.wizardToolsStep.ruleSummary.blockTool", { value: rule.value });

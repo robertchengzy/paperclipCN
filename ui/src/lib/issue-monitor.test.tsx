@@ -10,8 +10,44 @@ import {
   formatMonitorEta,
   formatMonitorEtaLabel,
   formatMonitorOffset,
+  getMonitorOffset,
   useMonitorCountdown,
 } from "./issue-monitor";
+import { i18n } from "@/i18n";
+
+describe.each(["en", "zh-CN"])("monitor offset classification in %s", (language) => {
+  const now = new Date("2026-09-26T00:00:00Z");
+  beforeEach(async () => { await i18n.changeLanguage(language); });
+  afterEach(async () => { await i18n.changeLanguage("en"); });
+
+  it.each([
+    [30_000, "in"], [29_999, "due-now"], [0, "due-now"],
+    [-29_999, "due-now"], [-30_000, "due-now"], [-59_999, "due-now"],
+    [-60_000, "overdue"],
+  ] as const)("preserves existing display boundaries at offset %i", (offset, kind) => {
+    const date = new Date(now.getTime() + offset);
+    const result = getMonitorOffset(date, now);
+    expect(result.kind).toBe(kind);
+    expect(formatMonitorOffset(date, now)).toBe(result.label);
+    if (kind === "due-now") expect(result.label).toBe(i18n.t("app.format.monitor.offsetNow"));
+    if (kind === "in") expect(result.label).toBe(i18n.t("app.format.monitor.in", {
+      duration: i18n.t("app.format.duration.s", { s: 30 }),
+    }));
+    if (kind === "overdue") expect(result.label).toBe(i18n.t("app.format.monitor.offsetAgo", {
+      duration: i18n.t("app.format.duration.m", { m: 1 }),
+    }));
+  });
+
+  it("uses one clock snapshot for both classification and copy", () => {
+    const clock = vi.spyOn(Date, "now").mockReturnValueOnce(now.getTime()).mockReturnValue(now.getTime() + 60_000);
+    try {
+      expect(getMonitorOffset(new Date(now.getTime() + 30_000))).toMatchObject({ kind: "in" });
+      expect(clock).toHaveBeenCalledTimes(1);
+    } finally {
+      clock.mockRestore();
+    }
+  });
+});
 
 describe("monitor time formatting", () => {
   const now = new Date("2026-07-17T19:56:00.000Z");

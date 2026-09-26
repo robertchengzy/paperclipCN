@@ -21,3 +21,14 @@ export function agentStatusLabel(t: TFunction, status: string): string {
 export function priorityLabel(t: TFunction, priority: string): string {
   return t(`app.common.priority.${priority}`, { defaultValue: titleCase(priority) });
 }
+
+/** Secret lifecycle labels for prose; API values and unknown diagnostics stay unchanged. */
+export function secretStatusLabel(t: TFunction, status: string): string {
+  switch (status) {
+    case "active": return t("app.secrets.secretStatus.active");
+    case "disabled": return t("app.common.status.disabled");
+    case "archived": return t("app.common.status.archived");
+    case "deleted": return t("app.secrets.secretStatus.deleted");
+    default: return status;
+  }
+}

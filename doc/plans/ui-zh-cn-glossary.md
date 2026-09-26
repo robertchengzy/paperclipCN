@@ -47,7 +47,8 @@
 | Label | 标签 | |
 | Assignee / Responsible | 负责人 | 上游两个词指同一概念 |
 | Owner | 负责人 | 指资源所有者时译为“所有者” |
-| Sponsor | 发起人 | |
+| Sponsor | Sponsor | GitHub 访客授权中的有效组织成员；不是请求发起人，不向访客转授其个人凭据或成员身份 |
+| Low-trust review | 低信任审查 | 权限预设名称统一；任务审核、审批仍按各自动作和状态区分 |
 | Recovery | 恢复 | |
 | Status card | 状态卡片 | |
 | Dashboard | 仪表盘 | |

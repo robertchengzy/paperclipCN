@@ -286,12 +286,26 @@ export function useMonitorCountdown(nextCheckAt: MonitorDate | null | undefined)
   return now;
 }
 
-export function formatMonitorOffset(nextCheckAt: MonitorDate): string {
-  const now = new Date(Date.now());
-  const deltaMs = toTimestamp(nextCheckAt) - now.getTime();
-  if (Math.round(Math.abs(deltaMs) / MINUTE_MS) === 0) return t("app.format.monitor.offsetNow");
+// This display classification retains the rounded-minute and due-now grace bands.
+// Callers select copy by kind; the localized label never controls scheduling.
+export function getMonitorOffset(nextCheckAt: MonitorDate, now: MonitorDate = new Date(Date.now())): {
+  kind: MonitorEta["kind"];
+  label: string;
+} {
+  const deltaMs = toTimestamp(nextCheckAt) - toTimestamp(now);
+  if (Math.round(Math.abs(deltaMs) / MINUTE_MS) === 0) {
+    return { kind: "due-now", label: t("app.format.monitor.offsetNow") };
+  }
   const eta = monitorEta(nextCheckAt, now);
-  if (eta.kind === "due-now") return t("app.format.monitor.offsetNow");
-  if (eta.kind === "overdue") return t("app.format.monitor.offsetAgo", { duration: formatDuration(eta.durationMs) });
-  return t("app.format.monitor.in", { duration: formatDuration(eta.durationMs) });
+  if (eta.kind === "due-now") return { kind: eta.kind, label: t("app.format.monitor.offsetNow") };
+  return {
+    kind: eta.kind,
+    label: eta.kind === "overdue"
+      ? t("app.format.monitor.offsetAgo", { duration: formatDuration(eta.durationMs) })
+      : t("app.format.monitor.in", { duration: formatDuration(eta.durationMs) }),
+  };
+}
+
+export function formatMonitorOffset(nextCheckAt: MonitorDate, now?: MonitorDate): string {
+  return getMonitorOffset(nextCheckAt, now).label;
 }

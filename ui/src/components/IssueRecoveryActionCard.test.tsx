@@ -6,6 +6,7 @@ import type { AnchorHTMLAttributes, ReactElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Agent, IssueRecoveryAction } from "@paperclipai/shared";
 import { IssueRecoveryActionCard, deriveRecoveryCardState } from "./IssueRecoveryActionCard";
+import { i18n } from "@/i18n";
 
 vi.mock("@/lib/router", () => ({
   Link: ({ children, to, ...props }: AnchorHTMLAttributes<HTMLAnchorElement> & { to: string }) => (
@@ -35,13 +36,14 @@ function act<T>(callback: () => T): T {
 let root: ReturnType<typeof createRoot> | null = null;
 let container: HTMLDivElement | null = null;
 
-afterEach(() => {
+afterEach(async () => {
   if (root) {
     act(() => root?.unmount());
   }
   root = null;
   container?.remove();
   container = null;
+  await i18n.changeLanguage("en");
 });
 
 function render(element: ReactElement) {
@@ -886,6 +888,43 @@ describe("IssueRecoveryActionCard owner-sticky retry lineage", () => {
       ...overrides,
     });
   }
+
+  describe.each(["en", "zh-CN"])("retry timing in %s", (language) => {
+    beforeEach(async () => { await i18n.changeLanguage(language); });
+    it.each([
+      [30_000, "future"], [29_999, "due"], [0, "due"],
+      [-30_000, "due"], [-30_001, "missed"], [-60_000, "missed"],
+    ])("preserves expiry priority at offset %i", (offset, expected) => {
+      const node = render(<IssueRecoveryActionCard action={buildSourceLaneAction({
+        wakePolicy: {
+          type: "bounded_owner_disposition_repair", attempt: 2, maxAttempts: 5,
+          retryAt: at(offset), scheduledRunId: "retry-run",
+        },
+      })} agentMap={bothAgents} />);
+      const retry = node.querySelector('[data-testid="recovery-next-retry"]');
+      expect(retry).not.toBeNull();
+      expect(retry?.getAttribute("data-recovery-retry-expired")).toBe(expected === "missed" ? "true" : null);
+      const dueNowCopy = i18n.t("app.issueUi.issueRecoveryActionCard.nextTryNow");
+      if (expected === "due") expect(retry?.textContent).toBe(dueNowCopy);
+      else expect(retry?.textContent).not.toBe(dueNowCopy);
+    });
+
+    it.each(["queued", "running"] as const)("keeps a verified %s run ahead of an expired timestamp", (status) => {
+      const node = render(<IssueRecoveryActionCard action={buildSourceLaneAction({
+        wakePolicy: {
+          type: "bounded_owner_disposition_repair", attempt: 2, maxAttempts: 5,
+          retryAt: at(-60_000), scheduledRunId: "retry-run",
+        },
+      })} scheduledRetry={{
+        runId: "retry-run", status, agentId: returnAgent.id, agentName: returnAgent.name,
+        retryOfRunId: null, scheduledRetryAt: at(-60_000), scheduledRetryAttempt: 2,
+        scheduledRetryReason: null, retryExhaustedReason: null, error: null, errorCode: null,
+      }} agentMap={bothAgents} />);
+      const retry = node.querySelector('[data-testid="recovery-next-retry"]');
+      expect(retry?.textContent).toBe(i18n.t("app.issueUi.issueRecoveryActionCard.attemptRunning"));
+      expect(retry?.getAttribute("data-recovery-retry-expired")).toBeNull();
+    });
+  });
 
   it("stays quiet and names the retry lane while the original owner is being retried", () => {
     const node = render(

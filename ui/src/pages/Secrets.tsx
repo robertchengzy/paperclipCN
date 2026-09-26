@@ -52,6 +52,7 @@ import type {
   UserSecretDefinition,
 } from "@paperclipai/shared";
 import { hidesCompanySection } from "@paperclipai/shared";
+import { secretStatusLabel } from "@/i18n/labels";
 import { useCompany } from "../context/CompanyContext";
 import { useHiddenSettings } from "../hooks/useHiddenSettings";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
@@ -1210,7 +1211,7 @@ export function Secrets() {
       }
     },
     onSuccess: (updated) => {
-      pushToast({ title: t("app.secrets.secrets.secretStatusToast", { status: updated.status }), body: updated.name, tone: "info" });
+      pushToast({ title: t("app.secrets.secrets.secretStatusToast", { status: secretStatusLabel(t, updated.status) }), body: updated.name, tone: "info" });
       invalidateAll([updated.id]);
     },
     onError: (error) => {
@@ -1226,7 +1227,7 @@ export function Secrets() {
     mutationFn: ({ definition, status }: { definition: UserSecretDefinition; status: SecretStatus }) =>
       secretsApi.updateUserSecretDefinition(selectedCompanyId!, definition.id, { status }),
     onSuccess: (updated) => {
-      pushToast({ title: t("app.secrets.secrets.userSecretStatusToast", { status: updated.status }), body: updated.name, tone: "info" });
+      pushToast({ title: t("app.secrets.secrets.userSecretStatusToast", { status: secretStatusLabel(t, updated.status) }), body: updated.name, tone: "info" });
       invalidateAll([updated.id]);
     },
     onError: (error) => {

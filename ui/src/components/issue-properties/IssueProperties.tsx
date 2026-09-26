@@ -50,7 +50,7 @@ import {
   formatMonitorAbsoluteFull,
   formatMonitorEta,
   formatMonitorEtaLabel,
-  formatMonitorOffset,
+  getMonitorOffset,
   useMonitorCountdown,
 } from "../../lib/issue-monitor";
 import { extractProviderIdWithFallback } from "../../lib/model-utils";
@@ -1410,9 +1410,10 @@ export function IssueProperties({
   const scheduledRetryDueAtIso = scheduledRetry?.scheduledRetryAt
     ? new Date(scheduledRetry.scheduledRetryAt).toISOString()
     : null;
-  const scheduledRetryRelative = scheduledRetryDueAtIso
-    ? formatMonitorOffset(scheduledRetryDueAtIso)
+  const scheduledRetryOffset = scheduledRetryDueAtIso
+    ? getMonitorOffset(scheduledRetryDueAtIso)
     : null;
+  const scheduledRetryRelative = scheduledRetryOffset?.label ?? null;
   const scheduledRetryAbsolute = scheduledRetry?.scheduledRetryAt
     ? formatDateTime(scheduledRetry.scheduledRetryAt)
     : null;
@@ -1430,7 +1431,7 @@ export function IssueProperties({
     scheduledRetry?.scheduledRetryReason === "max_turns_continuation";
   const scheduledRetryRelativeLabel = (() => {
     if (!scheduledRetryRelative) return t("app.newIssue.properties.retry.pendingSchedule");
-    if (scheduledRetryRelative === "now") {
+    if (scheduledRetryOffset?.kind === "due-now") {
       return scheduledRetryIsContinuation
         ? t("app.newIssue.properties.retry.continuationDueNow")
         : t("app.newIssue.properties.retry.retryDueNow");

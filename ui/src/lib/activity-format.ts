@@ -25,6 +25,8 @@ interface ActivityFormatOptions {
 
 /** Action → i18n key of the verb phrase that precedes the entity in an activity row. */
 const ACTIVITY_ROW_VERBS: Record<string, string> = {
+  "provider_trace.metadata_listed": "app.lib.activityFormat.row.providerTraceMetadataListed",
+  "instance.settings.experimental_updated": "app.lib.activityFormat.row.instanceExperimentalSettingsUpdated",
   "issue.created": "app.lib.activityFormat.row.issueCreated",
   "issue.updated": "app.lib.activityFormat.row.issueUpdated",
   "issue.read_marked": "app.lib.activityFormat.row.issueReadMarked",
@@ -126,6 +128,8 @@ const ACTIVITY_ROW_VERBS: Record<string, string> = {
 
 /** Action → i18n key of the standalone phrase on the issue activity timeline. */
 const ISSUE_ACTIVITY_LABELS: Record<string, string> = {
+  "provider_trace.metadata_listed": "app.lib.activityFormat.detail.providerTraceMetadataListed",
+  "instance.settings.experimental_updated": "app.lib.activityFormat.detail.instanceExperimentalSettingsUpdated",
   "issue.created": "app.lib.activityFormat.detail.issueCreated",
   "issue.updated": "app.lib.activityFormat.detail.issueUpdated",
   "issue.checked_out": "app.lib.activityFormat.detail.issueCheckedOut",

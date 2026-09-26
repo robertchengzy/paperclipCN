@@ -89,7 +89,7 @@ async function flushReact() {
 const READY_RESOURCES = [
   resource("skill", "stock_current"),
   resource("instructions", "stock_current"),
-  resource("routine", "stock_current"),
+  resource("routine", "stock_current", { scheduleEnabled: false }),
 ];
 
 describe("BuiltInBundlePanel (PAP-13099)", () => {
@@ -132,20 +132,39 @@ describe("BuiltInBundlePanel (PAP-13099)", () => {
     document.body.querySelectorAll("[data-slot='alert-dialog-portal']").forEach((node) => node.remove());
   });
 
-  it("renders four resource rows with ready + schedule-off chips when healthy", () => {
-    render(makeState("ready", READY_RESOURCES));
+  it("keeps Run once available without enabling the disabled weekly schedule", async () => {
+    const onRunRoutine = vi.fn();
+    const onEnableSchedule = vi.fn();
+    render(makeState("ready", READY_RESOURCES), { onRunRoutine, onEnableSchedule });
     const text = container.textContent ?? "";
     expect(text).toContain("Bundle status");
     expect(text).toContain("Adapter");
     expect(text).toContain("Skill");
     expect(text).toContain("Instructions");
     expect(text).toContain("Routine");
-    // Zero-token guarantee copy is always present on the routine row.
-    expect(text).toContain("costs zero tokens by default");
+    // Disabled scheduling prevents automatic work, not a deliberate manual run.
+    expect(text).toContain("No scheduled work runs until you enable the weekly schedule");
     expect(text).toContain("Schedule off");
     expect(text).toContain("Ready");
     expect(text).toContain("Run once");
     expect(text).toContain("Enable weekly");
+
+    const runOnce = Array.from(container.querySelectorAll("button")).find((button) => button.textContent === "Run once");
+    expect(runOnce).toBeTruthy();
+    expect(runOnce!.disabled).toBe(false);
+    flushSync(() => runOnce!.click());
+    await flushReact();
+    const dialog = document.body.querySelector('[role="alertdialog"]');
+    expect(dialog?.textContent).toContain("This does not enable the weekly schedule or turn on background work.");
+    expect(onRunRoutine).not.toHaveBeenCalled();
+
+    const confirm = Array.from(dialog!.querySelectorAll("button")).find((button) => button.textContent === "Run once");
+    expect(confirm).toBeTruthy();
+    flushSync(() => confirm!.click());
+    await flushReact();
+    expect(onRunRoutine).toHaveBeenCalledExactlyOnceWith("recent-agent-reflection");
+    expect(onEnableSchedule).not.toHaveBeenCalled();
+    expect(container.textContent).toContain("Schedule off");
   });
 
   it("shows the active weekly schedule and disable action when enabled", () => {

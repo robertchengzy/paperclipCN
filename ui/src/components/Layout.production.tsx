@@ -641,6 +641,11 @@ export function Layout() {
     <ChatSetupSidebarProvider>
     <GeneralSettingsProvider value={{ keyboardShortcutsEnabled }}>
       <div
+        style={isMobile ? ({
+          "--mobile-action-bar-bottom": mobileNavVisible
+            ? "var(--mobile-bottom-nav-height)"
+            : "var(--sz-safe-bottom)",
+        } as CSSProperties) : undefined}
         className={cn(
           "bg-background text-foreground pt-(--sz-safe-top)",
           // overflow-x-clip on mobile keeps a stray wide descendant from making the

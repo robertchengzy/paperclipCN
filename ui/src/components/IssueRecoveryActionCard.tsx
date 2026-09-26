@@ -40,7 +40,7 @@ import {
 } from "@/lib/recovery-display";
 import {
   formatRecoveryAttemptLabel,
-  formatRecoveryRetryOffset,
+  getRecoveryRetryOffset,
   readRecoveryRetryLineage,
   type RecoveryRetryLineage,
 } from "@/lib/recovery-lineage";
@@ -1058,7 +1058,8 @@ export function IssueRecoveryActionCard({
 }: IssueRecoveryActionCardProps) {
   const { t } = useTranslation();
   const { visible: workspaceIsolationControlsVisible } = useWorkspaceIsolationControls();
-  const liveness = useMemo(() => ({ scheduledRetry }), [scheduledRetry]);
+  const now = Date.now();
+  const liveness = useMemo(() => ({ scheduledRetry, now }), [scheduledRetry, now]);
   const cardState: RecoveryCardCardState = forcedState ?? deriveRecoveryCardState(action, liveness);
   const tone = STATE_TONE[cardState];
   const toneLabel = stateLabel(cardState);
@@ -1099,7 +1100,7 @@ export function IssueRecoveryActionCard({
     action.ownerType === "agent" &&
     action.ownerAgentId !== null &&
     action.ownerAgentId === sourceOwnerAgentId;
-  const retryOffset = lineage ? formatRecoveryRetryOffset(lineage) : null;
+  const retryOffset = lineage ? getRecoveryRetryOffset(lineage, new Date(now)) : null;
   const attemptLabel = lineage ? formatRecoveryAttemptLabel(lineage) : null;
   const showTimeoutInline = (() => {
     // The retry-progress row is the single place a lineage reports its timing.
@@ -1107,7 +1108,7 @@ export function IssueRecoveryActionCard({
     if (!action.timeoutAt) return false;
     try {
       const date = action.timeoutAt instanceof Date ? action.timeoutAt : new Date(action.timeoutAt);
-      const diffMs = date.getTime() - Date.now();
+      const diffMs = date.getTime() - now;
       return diffMs > 0 && diffMs < 60 * 60 * 1000;
     } catch {
       return false;
@@ -1289,7 +1290,7 @@ export function IssueRecoveryActionCard({
                     data-testid="recovery-next-retry"
                     data-recovery-retry-expired="true"
                   >
-                    {retryOffset ? t("app.issueUi.issueRecoveryActionCard.retryMissedAt", { offset: retryOffset }) : t("app.issueUi.issueRecoveryActionCard.retryMissed")}
+                    {retryOffset ? t("app.issueUi.issueRecoveryActionCard.retryMissedAt", { offset: retryOffset.label }) : t("app.issueUi.issueRecoveryActionCard.retryMissed")}
                   </span>
                 ) : retryOffset ? (
                   <span
@@ -1297,7 +1298,7 @@ export function IssueRecoveryActionCard({
                     title={formatTimeAbsolute(lineage.nextRetryAt) ?? undefined}
                     data-testid="recovery-next-retry"
                   >
-                    {retryOffset === "now" ? t("app.issueUi.issueRecoveryActionCard.nextTryNow") : t("app.issueUi.issueRecoveryActionCard.nextTryAt", { offset: retryOffset })}
+                    {retryOffset.kind === "due-now" ? t("app.issueUi.issueRecoveryActionCard.nextTryNow") : t("app.issueUi.issueRecoveryActionCard.nextTryAt", { offset: retryOffset.label })}
                   </span>
                 ) : lineage.exhausted ? (
                   <span className={RETRY_PILL_CLASS} data-testid="recovery-next-retry">

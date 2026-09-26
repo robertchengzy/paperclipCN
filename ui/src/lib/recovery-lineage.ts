@@ -1,6 +1,6 @@
 import type { IssueRecoveryAction, IssueScheduledRetry } from "@paperclipai/shared";
 import { t } from "@/i18n";
-import { formatMonitorOffset } from "./issue-monitor";
+import { getMonitorOffset } from "./issue-monitor";
 
 /**
  * Which bounded retry budget the server is currently spending on a recovery action.
@@ -63,10 +63,9 @@ const LIVE_SCHEDULED_RUN_STATUSES = new Set(["queued", "running"]);
 /**
  * How far past its due time a stored attempt may sit before it counts as missed.
  *
- * `formatMonitorOffset` collapses anything inside a minute-rounded zero to "now", so reusing
- * that same band keeps the label and the verdict from ever contradicting each other: while a
- * surface still reads "next try now", the lane is still treated as durable. Past that, the
- * scheduler had its chance and did not take it.
+ * Recovery keeps its own thirty-second grace. The monitor offset formatter has a longer
+ * due-now display band, so surfaces must prefer `retryExpired` over that timing label.
+ * Past this grace, an unclaimed attempt no longer represents a durable path.
  */
 const RETRY_EXPIRY_GRACE_MS = 30_000;
 
@@ -203,13 +202,17 @@ export function formatRecoveryAttemptLabel(lineage: RecoveryRetryLineage): strin
 }
 
 /** "in 3m" / "now" / "3m ago" for the stored next attempt, or null when none is stored. */
-export function formatRecoveryRetryOffset(lineage: RecoveryRetryLineage): string | null {
+export function getRecoveryRetryOffset(lineage: RecoveryRetryLineage, now?: Date): ReturnType<typeof getMonitorOffset> | null {
   if (!lineage.nextRetryAt) return null;
   try {
-    return formatMonitorOffset(lineage.nextRetryAt);
+    return getMonitorOffset(lineage.nextRetryAt, now);
   } catch {
     return null;
   }
+}
+
+export function formatRecoveryRetryOffset(lineage: RecoveryRetryLineage): string | null {
+  return getRecoveryRetryOffset(lineage)?.label ?? null;
 }
 
 /**
@@ -220,18 +223,18 @@ export function formatRecoveryLineageSummary(lineage: RecoveryRetryLineage): str
   const parts: string[] = [];
   const attempt = formatRecoveryAttemptLabel(lineage);
   if (attempt) parts.push(attempt);
-  const offset = formatRecoveryRetryOffset(lineage);
+  const offset = getRecoveryRetryOffset(lineage);
   if (lineage.liveRunId) {
     parts.push(t("app.shared.recovery.attemptRunningNow"));
   } else if (lineage.retryExpired) {
     // Never "next try 5m ago": a due time in the past is a missed attempt, and phrasing it as
     // an upcoming one is exactly the false healthy state this helper exists to prevent.
-    parts.push(offset ? t("app.shared.recovery.retryMissedAt", { offset }) : t("app.shared.recovery.retryMissed"));
+    parts.push(offset ? t("app.shared.recovery.retryMissedAt", { offset: offset.label }) : t("app.shared.recovery.retryMissed"));
   } else if (offset) {
     parts.push(
-      offset === t("app.format.monitor.offsetNow")
+      offset.kind === "due-now"
         ? t("app.shared.recovery.nextTryNow")
-        : t("app.shared.recovery.nextTryAt", { offset }),
+        : t("app.shared.recovery.nextTryAt", { offset: offset.label }),
     );
   } else if (lineage.exhausted) {
     parts.push(t("app.shared.recovery.retriesUsedUp"));
