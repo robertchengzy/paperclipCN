@@ -8,7 +8,7 @@
 | 英文 | 中文 | 说明 |
 |---|---|---|
 | Organization / Company | 组织 | 界面上的 Company 与 Organization 是同一个对象；两种布局都使用“组织” |
-| Agent | Agent | Subagent → 子 Agent；保留技术术语英文 |
+| Agent / Agents | 智能体 | Subagent → 子智能体；中文不使用英文单复数形式，保留数量与范围限定 |
 | Task / Issue | 任务 | Sub-issue / Subtask → 子任务 |
 | Project | 项目 | |
 | Goal | 目标 | |
@@ -17,8 +17,11 @@
 | Heartbeat | 心跳 | |
 | Routine | 例程 | Trigger → 触发器，Schedule → 计划 |
 | Pipeline | 流水线 | Stage → 阶段，Step → 步骤 |
-| Skill | Skill | Skill Studio 保留英文；日常能力描述按语义处理 |
-| Secret | 密钥 | Vault → 保管库，Rotate → 轮换 |
+| Skill / Skills | 技能 | Skill Studio / Skills Studio → 技能工作室；Agent Skills 格式名、skills.sh 和 SKILL.md 保留原文 |
+| Secret / API key | 密钥 / API 密钥 | 认证说明中的 key 为密钥；技能 key 是标识；代码键与外部正式字段名不变。Vault → 保管库，Rotate → 轮换 |
+| HTTP header / Headers | 请求头 | 名称如 Authorization、Arcade-User-ID 原样保留；Arcade Headers 为外部正式名称 |
+| Slug | 路径标识 | 技能路由中使用的标识，实际值不翻译 |
+| Logo | 标志 | 组织标志图片 |
 | Workspace | 工作区 | Execution workspace → 执行工作区，与 Git Worktree 区分 |
 | Worktree | Worktree | Git Worktree；命令 `git worktree` 原样保留 |
 | Harness | Harness | Runtime → 运行时 |
@@ -67,7 +70,7 @@
 | Done | 已完成 |
 | Cancelled | 已取消 |
 | Paused | 已暂停 |
-| Idle | 等待中 |
+| Idle | 任务状态为“等待中”；智能体状态为“空闲” |
 | Running | 运行中 |
 | Failed | 失败 |
 | Pending | 待处理 |
@@ -93,7 +96,7 @@
 
 - 产品和第三方名称：Paperclip、Claude、Codex、Cursor、OpenCode、Hermes、Pi、GitHub、Slack、Google Sheets、Railway、Zapier、Arcade、Composio 等。
 - 技术缩写与格式：API、MCP、ACP、JSON、YAML、CSV、TSV、XML、HTML、CSS、SQL、HTTP(S)、SSH、URL、PDF、ZIP、WASM、PID、ID。
-- 技术对象：Agent、Skill、Token、Worktree、Harness、Watchdog、Webhook、OAuth。推理强度的技术级别（如 Ultra）与 Ask 等运行模式名称保留英文，后台枚举值不变。
+- 技术对象：Token、Worktree、Harness、Watchdog、Webhook、OAuth。Agent/Skill 作为产品对象译为智能体/技能；Agent Skills 格式名保留英文。推理强度的技术级别（如 Ultra）与 Ask 等运行模式名称保留英文，后台枚举值不变。
 - 外部控制台的正式字段名：如 `Bot User OAuth Token`、`Signing Secret`、`Application / Client ID`，保持原样以便对照。
 - 文件名、命令、环境变量、代码标识、示例值（如 `SKILL.md`、`PAPERCLIP_*`、`PAP-123`）。
 - 键盘按键名（Esc、Enter、Tab、Shift、Cmd、Ctrl）。
@@ -105,3 +108,9 @@
 - 省略号跟随英文原文：原文是 `…` 就用 `…`，原文是 `...` 也用 `…`。
 - 插值占位符（`{{count}}`、`{{name}}`）必须和英文词条一致。
 - 语气用陈述句和“请…”，不用“您”。
+
+## 2026-09-26 修订说明
+
+界面对象 Agent/Skill 改用“智能体/技能”。复数在中文中通过数量、所有/全部/任何等限定表达，不能丢失英文中的范围或插值；英文词表保持原样。
+本轮同时统一组织、产物、认证密钥、请求头及组织标志。保留 Board 的身份/看板分义，以及 Token、Worktree、Harness、Watchdog 等专业词的现有约定，不凭词面推断权限或运行行为。
+逐键修改与例外边界见 [本轮修正记录](2026-09-26-ui-menu-auth-terminology.md)。

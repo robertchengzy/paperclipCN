@@ -27,7 +27,13 @@ function NoBoardAccessPage() {
   );
 }
 
-export function CloudAccessGate({ allowMembershipRequest = false }: { allowMembershipRequest?: boolean } = {}) {
+export function CloudAccessGate({
+  allowMembershipRequest = false,
+  contentReady = true,
+}: {
+  allowMembershipRequest?: boolean;
+  contentReady?: boolean;
+} = {}) {
   const { t } = useTranslation();
   const location = useLocation();
   const queryClient = useQueryClient();
@@ -80,14 +86,12 @@ export function CloudAccessGate({ allowMembershipRequest = false }: { allowMembe
     return <PaperclipLoading />;
   }
 
-  if (healthQuery.error || boardAccessQuery.error) {
+  if (healthQuery.error) {
     return (
       <div className="mx-auto max-w-xl py-10 text-sm text-destructive">
         {healthQuery.error instanceof Error
           ? healthQuery.error.message
-          : boardAccessQuery.error instanceof Error
-            ? boardAccessQuery.error.message
-            : t("app.settings.cloudAccessGate.failedToLoadAppState")}
+          : t("app.settings.cloudAccessGate.failedToLoadAppState")}
       </div>
     );
   }
@@ -119,6 +123,19 @@ export function CloudAccessGate({ allowMembershipRequest = false }: { allowMembe
     return <Navigate to={`/auth?next=${next}`} replace />;
   }
 
+  // A sign-out resets and refetches account queries together. The access
+  // request can fail before or after the session resolves to null; that stale
+  // error must never take precedence over the signed-out redirect above.
+  if (isAuthenticatedMode && boardAccessQuery.error) {
+    return (
+      <div className="mx-auto max-w-xl py-10 text-sm text-destructive">
+        {boardAccessQuery.error instanceof Error
+          ? boardAccessQuery.error.message
+          : t("app.settings.cloudAccessGate.failedToLoadAppState")}
+      </div>
+    );
+  }
+
   // Private invitation pages may let signed-in nonmembers request access.
   // Their token APIs still enforce membership before granting any authority.
   if (
@@ -131,5 +148,7 @@ export function CloudAccessGate({ allowMembershipRequest = false }: { allowMembe
     return <NoBoardAccessPage />;
   }
 
-  return <Outlet />;
+  // Layout settings may be pending again after account caches reset. Keep
+  // authentication mounted so a signed-out user never waits on those settings.
+  return contentReady ? <Outlet /> : <PaperclipLoading />;
 }

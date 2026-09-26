@@ -113,7 +113,7 @@ export function ReportsToPicker({
           >
             <AgentAvatar agent={a} size={16} className="shrink-0 h-3 w-3 text-muted-foreground"/>
             <span className="min-w-0 truncate">{a.name}</span>
-            <span className="text-muted-foreground ml-auto shrink-0">{roleLabels[a.role] ?? a.role}</span>
+            <span className="text-muted-foreground ml-auto shrink-0">{t(`app.agents.roles.${a.role}`, { defaultValue: roleLabels[a.role] ?? a.role })}</span>
           </button>
         ))}
       </PopoverContent>

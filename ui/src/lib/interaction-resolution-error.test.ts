@@ -176,10 +176,10 @@ describe("describeInteractionResolutionFailure", () => {
 
   it.each([
     ["interaction_human_only", 403, "此交互仅允许人工回复。"],
-    ["interaction_creator_excluded", 403, "此交互必须由创建者或创建它的运行之外的人员或 Agent 处理。"],
+    ["interaction_creator_excluded", 403, "此交互必须由创建者或创建它的运行之外的人员或智能体处理。"],
     ["interaction_addressee_mismatch", 403, "你不符合此交互指定的回复者要求。"],
     ["interaction_governed_action_denied", 403, "此交互关联的受管控操作需要单独授权。"],
-    ["interaction_run_attribution_required", 422, "回复此交互需要有效且已通过身份验证的 Agent 运行。"],
+    ["interaction_run_attribution_required", 422, "回复此交互需要有效且已通过身份验证的智能体运行。"],
     ["interaction_scope_denied", 403, "你没有处理此交互的访问权限。"],
     ["review_policy_denied", 403, "审核策略不允许你批准或拒绝此请求。"],
     ["interaction_not_found", 404, "找不到此交互。"],

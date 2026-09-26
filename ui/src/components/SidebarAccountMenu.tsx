@@ -142,7 +142,7 @@ export function SidebarAccountMenu({
 
   return (
     <div className="bg-border/50 px-3 py-2 dark:bg-muted">
-      <div className={cn("flex items-center gap-0.5", !rail && "px-2")}>
+      <div className={cn("flex items-center gap-0.5", rail ? "flex-col" : "px-2")}>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <button
@@ -207,10 +207,6 @@ export function SidebarAccountMenu({
                 external
                 onClick={() => setOpen(false)}
               />
-              <div className="flex h-(--profile-popover-row-height) items-center justify-between gap-2 px-2.5">
-                <span className="text-(length:--text-compact) font-medium text-foreground">{t("app.language.label")}</span>
-                <LanguageSwitcher />
-              </div>
               <ThemeToggle variant="compact-menu-action" onAfterToggle={() => setOpen(false)} />
               {deploymentMode === "authenticated" ? (
                 <button
@@ -234,7 +230,7 @@ export function SidebarAccountMenu({
             </div>
           </PopoverContent>
         </Popover>
-        {!rail ? <LanguageSwitcher variant="toggle" /> : null}
+        <LanguageSwitcher variant="toggle" />
       </div>
     </div>
   );

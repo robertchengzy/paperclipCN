@@ -67,7 +67,7 @@ vi.mock("./components/OnboardingWizardVariant", () => ({
 // synchronously so this test does not poll its query transitions.
 vi.mock("./components/CloudAccessGate", async () => {
   const { Outlet } = await import("react-router-dom");
-  return { CloudAccessGate: () => <Outlet /> };
+  return { CloudAccessGate: ({ contentReady = true }: { contentReady?: boolean }) => contentReady ? <Outlet /> : null };
 });
 
 // Sentinel page that also reports the resolved path + query, so we can assert

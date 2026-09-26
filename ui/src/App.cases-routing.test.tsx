@@ -68,7 +68,7 @@ vi.mock("./pages/CaseDetail", () => ({ CaseDetail: () => <div>CASE_DETAIL_PAGE</
 // synchronously so this test does not poll its three query transitions.
 vi.mock("./components/CloudAccessGate", async () => {
   const { Outlet } = await import("react-router-dom");
-  return { CloudAccessGate: () => <Outlet /> };
+  return { CloudAccessGate: ({ contentReady = true }: { contentReady?: boolean }) => contentReady ? <Outlet /> : null };
 });
 
 // The prefix resolver + redirect logic both read the active company.

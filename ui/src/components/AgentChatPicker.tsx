@@ -68,14 +68,14 @@ function AgentChatPickerResults({ agents, onSelect, loading, error, onRetry }: O
               <CommandItem
                 key={agent.id}
                 value={agent.id}
-                keywords={[agent.name, agent.title ?? "", agent.role]}
+                keywords={[agent.name, agent.title ?? "", agent.role, t(`app.agents.roles.${agent.role}`, { defaultValue: agent.role })]}
                 onSelect={() => onSelect(agent)}
                 className="gap-3 px-3 py-3"
               >
                 <AgentIcon icon={agent.icon} className="size-4 shrink-0" />
                 <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span className="truncate font-medium">{agent.name}</span>
-                  <span className="truncate text-xs text-muted-foreground">{agent.title ?? agent.role}</span>
+                  <span className="truncate text-xs text-muted-foreground">{agent.title ?? t(`app.agents.roles.${agent.role}`, { defaultValue: agent.role })}</span>
                 </span>
                 {agent.status === "paused" && <span className="text-xs text-(--status-agent-paused)">{t("app.common.states.paused")}</span>}
                 {agent.status === "terminated" && <span className="text-xs text-muted-foreground">{t("app.agentUi.agentChatPicker.terminated")}</span>}

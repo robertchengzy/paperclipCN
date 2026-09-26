@@ -179,6 +179,8 @@ describe("SidebarAccountMenu", () => {
 
     const popover = document.body.querySelector('[data-slot="popover-content"]');
     expect(popover?.textContent).not.toContain("Feedback");
+    expect(popover?.querySelector("select")).toBeNull();
+    expect(popover?.textContent).not.toContain("Language");
     expect(popover?.querySelector('a[href="https://paperclip.ing/feedback"]')).toBeNull();
 
     await act(async () => root.unmount());
@@ -225,6 +227,8 @@ describe("SidebarAccountMenu", () => {
 
     const popover = document.body.querySelector('[data-slot="popover-content"]');
     expect(popover?.textContent).not.toContain("Feedback");
+    expect(popover?.querySelector("select")).toBeNull();
+    expect(popover?.textContent).not.toContain("Language");
     expect(popover?.querySelector('a[href="https://paperclip.ing/feedback"]')).toBeNull();
 
     // Documentation still appears before the theme toggle.
@@ -344,7 +348,7 @@ describe("SidebarAccountMenu", () => {
     });
   });
 
-  it.each([SidebarAccountMenu, ProductionSidebarAccountMenu])("keeps a language selector reachable in the collapsed account menu (%#)", async (AccountMenu) => {
+  it.each([SidebarAccountMenu, ProductionSidebarAccountMenu])("keeps language switching outside the collapsed account menu (%#)", async (AccountMenu) => {
     mockSidebar.collapsed = true;
     const root = createRoot(container);
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
@@ -355,12 +359,13 @@ describe("SidebarAccountMenu", () => {
         </TooltipProvider></QueryClientProvider>,
       ));
       await flushReact();
-      expect(container.querySelector('button[aria-label="Switch to Chinese"]')).toBeNull();
-      const select = document.body.querySelector<HTMLSelectElement>('select[aria-label="Language"]');
-      expect(select).not.toBeNull();
+      const button = container.querySelector<HTMLButtonElement>('button[aria-label="Switch to Chinese"]');
+      expect(button).not.toBeNull();
+      const popover = document.body.querySelector('[data-slot="popover-content"]');
+      expect(popover?.querySelector("select")).toBeNull();
+      expect(popover?.textContent).not.toContain("Language");
       await act(async () => {
-        select!.value = "zh-CN";
-        select!.dispatchEvent(new Event("change", { bubbles: true }));
+        button!.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
       expect(i18n.resolvedLanguage).toBe("zh-CN");
       expect(mockSetSidebarOpen).not.toHaveBeenCalled();

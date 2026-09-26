@@ -1300,7 +1300,7 @@ export function AgentDetail() {
               <h2 className="text-2xl font-bold truncate">{agent.name}</h2>
             </div>
             <p className="text-sm text-muted-foreground truncate">
-              {roleLabels[agent.role] ?? agent.role}
+              {translateCopy(`app.agents.roles.${agent.role}`, { defaultValue: roleLabels[agent.role] ?? agent.role })}
               {agent.title ? ` - ${agent.title}` : ""}
             </p>
           </div>

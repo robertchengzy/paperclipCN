@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { setUiLanguage } from "@/i18n";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -38,9 +39,24 @@ afterEach(async () => {
   await act(async () => root.unmount());
   container.remove();
   vi.unstubAllGlobals();
+  await setUiLanguage("en");
 });
 
 describe("AgentChatPicker", () => {
+  it("searches localized roles while preserving custom titles and names", async () => {
+    await setUiLanguage("zh-CN");
+    await render({ agents: [{ ...agents[0], title: null }, agents[1]] });
+    expect(options()[0].textContent).toContain("Alex");
+    expect(options()[0].textContent).toContain("工程师");
+    expect(options()[1].textContent).toContain("Product Designer");
+    await search("工程师");
+    expect(options()).toHaveLength(1);
+    expect(options()[0].textContent).toContain("工程师");
+    await search("designer");
+    expect(options()).toHaveLength(1);
+    expect(options()[0].textContent).toContain("Product Designer");
+  });
+
   it("searches by role and selects the correct same-name agent with Enter", async () => {
     await render();
     expect(options()).toHaveLength(2);
