@@ -676,6 +676,14 @@ describe("Secrets page layout", () => {
     expect(document.body.textContent).toContain("CodexCoder");
     expect(document.body.textContent).toContain("env.OPENAI_API_KEY");
 
+    expect(document.body.textContent).toContain("idle");
+    await act(async () => { await i18n.changeLanguage("zh-CN"); });
+    expect(document.body.textContent).toContain("空闲");
+    expect(document.body.textContent).toContain("CodexCoder");
+    expect(document.body.textContent).toContain("env.OPENAI_API_KEY");
+    await act(async () => { await i18n.changeLanguage("en"); });
+    expect(document.body.textContent).toContain("idle");
+
     await act(async () => {
       root.unmount();
     });

@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryKeys } from "../lib/queryKeys";
 import { PluginSettings } from "./PluginSettings";
+import { i18n } from "@/i18n";
 
 const mockPluginsApi = vi.hoisted(() => ({
   get: vi.fn(),
@@ -48,7 +49,9 @@ vi.mock("@/plugins/slots", () => ({
 }));
 
 vi.mock("@/components/PageTabBar", () => ({
-  PageTabBar: () => null,
+  PageTabBar: ({ onValueChange }: { onValueChange: (value: string) => void }) => (
+    <button data-testid="test-status-tab" onClick={() => onValueChange("status")}>Status tab</button>
+  ),
 }));
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -167,6 +170,42 @@ describe("PluginSettings", () => {
     container.remove();
     document.body.innerHTML = "";
     vi.clearAllMocks();
+  });
+
+
+  it("translates runtime badges and tooltips when language switches, preserving provider text", async () => {
+    await i18n.changeLanguage("en");
+    mockPluginsApi.get.mockResolvedValue(basePlugin({ status: "ready" }));
+    mockPluginsApi.dashboard.mockResolvedValue({
+      worker: { status: "running", pid: 123, uptime: 1000, pendingRequests: 0, totalCrashes: 0 },
+      recentJobRuns: [{ id: "job-1", status: "queued", trigger: "manual", jobKey: "raw_job_key", createdAt: "2026-09-26T00:00:00Z" }],
+      recentWebhookDeliveries: [{ id: "delivery-1", status: "success", webhookKey: "raw_hook_key", createdAt: "2026-09-26T00:00:00Z" }],
+      checkedAt: "2026-09-26T00:00:00Z",
+    });
+    mockPluginsApi.health.mockResolvedValue({ pluginId: "plugin-1", status: "ready", healthy: true, checks: [{ name: "provider_raw_check", passed: true }] });
+    const root = await renderSettings(container);
+    try {
+      await act(async () => { container.querySelector<HTMLButtonElement>('[data-testid="test-status-tab"]')?.click(); });
+      await flushReact();
+      expect(container.textContent).toContain("running");
+      expect(container.textContent).toContain("manual");
+      expect(container.querySelector('[title="queued"]')).not.toBeNull();
+      expect(container.querySelector('[title="success"]')).not.toBeNull();
+      await act(async () => { await i18n.changeLanguage("zh-CN"); });
+      expect(container.textContent).toContain("运行中");
+      expect(container.textContent).toContain("手动触发");
+      expect(container.textContent).toContain("已就绪");
+      expect(container.querySelector('[title="已排队"]')).not.toBeNull();
+      expect(container.querySelector('[title="成功"]')).not.toBeNull();
+      expect(container.textContent).toContain("provider_raw_check");
+      expect(container.textContent).toContain("raw_job_key");
+      expect(container.textContent).toContain("raw_hook_key");
+      await act(async () => { await i18n.changeLanguage("en"); });
+      expect(container.textContent).toContain("running");
+      expect(container.querySelector('[title="queued"]')).not.toBeNull();
+    } finally {
+      await act(async () => { root.unmount(); await i18n.changeLanguage("en"); });
+    }
   });
 
   it("routes environment-provider plugins to instance environments when they have no instance config", async () => {

@@ -41,6 +41,7 @@ import {
 } from "@/lib/trust-policy-ui";
 import { queryKeys } from "@/lib/queryKeys";
 import { useTranslation } from "@/i18n";
+import { toolDisplayLabel } from "@/pages/tools/shared";
 import type {
   AgentPermissions,
   EmailEndpointSummary,
@@ -750,7 +751,7 @@ export function EmailEndpointSettings({
     <div className="max-w-xl space-y-4">
       <h1 className="text-xl font-bold">{inbox.address}</h1>
       <p className="text-sm text-muted-foreground">
-        {inbox.status} ·{" "}
+        {toolDisplayLabel(t, inbox.status)} ·{" "}
         {inbox.receiveMode === "websocket" ? t("app.apps.emailEndpointSetup.liveConnection") : t("app.common.nouns.webhook")}
       </p>
       <p className="text-sm text-muted-foreground">

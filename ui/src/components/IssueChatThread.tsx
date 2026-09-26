@@ -1154,7 +1154,9 @@ export function SuccessfulRunHandoffCommentCallout({
 
 function humanizeValue(value: string | null) {
   if (!value) return t("app.common.none");
-  return statusLabel(i18n.t, value);
+  return i18n.language === "zh-CN"
+    ? t(`app.common.issueStatus.${value}`, { defaultValue: value })
+    : statusLabel(i18n.t, value);
 }
 
 function initialsForName(name: string) {
@@ -6037,6 +6039,9 @@ export function IssueChatThread({
       currentUserId,
       userLabelMap,
       issueStatus,
+      // Rebuild localized content and actor labels even when all data inputs
+      // stay referentially stable; stabilization then replaces changed text.
+      t,
     ],
   );
   const stableMessagesRef = useRef<readonly ThreadMessage[]>([]);

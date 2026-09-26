@@ -1,7 +1,7 @@
 import type { Agent } from "@paperclipai/shared";
 import type { CompanyUserProfile } from "./company-members";
 import { formatReviewPolicyValue } from "./review-policy";
-import { t } from "@/i18n";
+import { t, i18n } from "@/i18n";
 
 type ActivityDetails = Record<string, unknown> | null | undefined;
 
@@ -25,6 +25,7 @@ interface ActivityFormatOptions {
 
 /** Action → i18n key of the verb phrase that precedes the entity in an activity row. */
 const ACTIVITY_ROW_VERBS: Record<string, string> = {
+  "provider_trace.expired": "app.lib.activityFormat.row.providerTraceExpired",
   "provider_trace.metadata_listed": "app.lib.activityFormat.row.providerTraceMetadataListed",
   "instance.settings.experimental_updated": "app.lib.activityFormat.row.instanceExperimentalSettingsUpdated",
   "issue.created": "app.lib.activityFormat.row.issueCreated",
@@ -128,6 +129,7 @@ const ACTIVITY_ROW_VERBS: Record<string, string> = {
 
 /** Action → i18n key of the standalone phrase on the issue activity timeline. */
 const ISSUE_ACTIVITY_LABELS: Record<string, string> = {
+  "provider_trace.expired": "app.lib.activityFormat.detail.providerTraceExpired",
   "provider_trace.metadata_listed": "app.lib.activityFormat.detail.providerTraceMetadataListed",
   "instance.settings.experimental_updated": "app.lib.activityFormat.detail.instanceExperimentalSettingsUpdated",
   "issue.created": "app.lib.activityFormat.detail.issueCreated",
@@ -254,6 +256,9 @@ function humanizeValue(value: unknown): string {
 function humanizeFieldValue(field: "status" | "priority", value: unknown): string {
   const humanized = humanizeValue(value);
   if (typeof value !== "string") return humanized;
+  if (field === "status" && value === "idle" && i18n.resolvedLanguage === "zh-CN") {
+    return t("app.common.issueStatus.idle");
+  }
   return field === "status"
     ? t(`app.common.status.${value}`, { defaultValue: humanized })
     : t(`app.lib.activityFormat.priorityValue.${value}`, { defaultValue: humanized });

@@ -2365,7 +2365,13 @@ export function NewIssueDialog() {
         {selectedAssigneeAgent?.status === "paused" ? (
           <div data-testid="new-issue-paused-assignee-note" className="mx-4 mb-2">
             <InlineBanner tone="warning" icon={PauseCircle} compact>
-              {selectedAssigneeAgent.pauseReason === "import" ? (
+              {selectedAssigneeAgent.pauseReason === "budget" ? (
+                <Trans
+                  i18nKey="app.newIssue.pausedAssigneeBudgetNote"
+                  values={{ name: selectedAssigneeAgent.name }}
+                  components={{ strong: <span className="font-medium" /> }}
+                />
+              ) : selectedAssigneeAgent.pauseReason === "import" ? (
                 <Trans
                   i18nKey="app.newIssue.pausedAssigneeImportNote"
                   values={{ name: selectedAssigneeAgent.name }}

@@ -133,7 +133,8 @@
       "risks": "Risks",
       "proposedComment": "Proposed comment",
       "limit": "Limit",
-      "observed": "Observed"
+      "observed": "Observed",
+      "jobTitle": "Title"
     },
     "pages": {
       "routines": "Routines",
@@ -1341,7 +1342,8 @@
           "empty": "No artifacts yet. Work products, documents, and agent-produced files will appear here.",
           "run": "Run {{id}}"
         }
-      }
+      },
+      "pausedAssigneeBudgetNote": "<strong>{{name}}</strong> is paused by a budget limit and will not start work on this task until the budget pause is cleared."
     },
     "issues": {
       "page": {
@@ -4720,7 +4722,11 @@
         },
         "durationMinutes": "{{count}}m",
         "durationHours": "{{count}}h",
-        "durationDays": "{{count}}d"
+        "durationDays": "{{count}}d",
+        "invocationStatus": {
+          "authorized": "authorized",
+          "executing": "executing"
+        }
       },
       "smokeLabMatrix": {
         "paths": {
@@ -4807,7 +4813,12 @@
         "selectRun": "Select a run to see its steps.",
         "runTimes": "Started {{started}} · finished {{finished}}",
         "noSteps": "No steps recorded for this run.",
-        "viewScreenshot": "View screenshot"
+        "viewScreenshot": "View screenshot",
+        "health": {
+          "amber": "amber",
+          "green": "green",
+          "red": "red"
+        }
       },
       "toolTabs": {
         "pasteConfig": "Paste a config",
@@ -5581,7 +5592,8 @@
           "toolConnectionGrantDelegated": "delegated credentials for",
           "toolConnectionGrantDelegationRevoked": "revoked credential delegation for",
           "providerTraceMetadataListed": "provider trace metadata listed",
-          "instanceExperimentalSettingsUpdated": "instance settings experimental updated"
+          "instanceExperimentalSettingsUpdated": "instance settings experimental updated",
+          "providerTraceExpired": "provider trace expired"
         },
         "detail": {
           "issueCreated": "created the issue",
@@ -5645,7 +5657,8 @@
           "issueThreadInteractionItemVerdictsSubmitted": "submitted verdicts on the request",
           "issueStalledReviewDecided": "recorded a review verdict",
           "providerTraceMetadataListed": "provider trace metadata listed",
-          "instanceExperimentalSettingsUpdated": "instance settings experimental updated"
+          "instanceExperimentalSettingsUpdated": "instance settings experimental updated",
+          "providerTraceExpired": "provider trace expired"
         },
         "stalledReview": {
           "approve": "approved the review",
@@ -6187,7 +6200,8 @@
         "browseCatalog": "Browse catalog",
         "emptyNoSkills": "No skills yet. Create one or install from the catalog.",
         "emptyTab": "No skills in this tab yet.",
-        "noAgentsSupportSkillsCompany": "No agents in this company support skills yet."
+        "noAgentsSupportSkillsCompany": "No agents in this company support skills yet.",
+        "skillIdentifier": "Key"
       },
       "forkSkillDialog": {
         "editingCopy": "Editing a copy",
@@ -12071,7 +12085,32 @@
         "saveConfig": "Save Configuration",
         "testing": "Testing...",
         "testConfig": "Test Configuration",
-        "secondsAgo": "{{count}}s ago"
+        "secondsAgo": "{{count}}s ago",
+        "displayStatus": {
+          "backoff": "backoff",
+          "cancelled": "cancelled",
+          "crashed": "crashed",
+          "disabled": "disabled",
+          "error": "error",
+          "failed": "failed",
+          "installed": "installed",
+          "pending": "pending",
+          "queued": "queued",
+          "ready": "ready",
+          "running": "running",
+          "starting": "starting",
+          "stopped": "stopped",
+          "stopping": "stopping",
+          "succeeded": "succeeded",
+          "success": "success",
+          "uninstalled": "uninstalled",
+          "upgrade_pending": "upgrade_pending"
+        },
+        "jobTrigger": {
+          "manual": "manual",
+          "retry": "retry",
+          "schedule": "schedule"
+        }
       },
       "instanceExperimentalSettings": {
         "cards": {

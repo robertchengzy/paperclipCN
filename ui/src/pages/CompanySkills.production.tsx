@@ -2001,7 +2001,7 @@ function CatalogDetailPane({
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-          <span className="uppercase tracking-(--tracking-caps)">{t("app.common.labels.key")}</span>
+          <span className="uppercase tracking-(--tracking-caps)">{t("app.skills.companySkills.skillIdentifier")}</span>
           <span className="font-mono">{skill.key}</span>
           <span className="uppercase tracking-(--tracking-caps)">·</span>
           <span className="uppercase tracking-(--tracking-caps)">{t("app.skills.companySkills.catalog.hash")}</span>
@@ -3161,7 +3161,7 @@ export function SkillDetailPage({
         </section>
         <section className="grid min-w-0 gap-3 text-sm sm:grid-cols-2">
           <div className="min-w-0 border-b border-border py-2">
-            <div className="text-xs text-muted-foreground">{t("app.common.labels.key")}</div>
+            <div className="text-xs text-muted-foreground">{t("app.skills.companySkills.skillIdentifier")}</div>
             <div className="mt-1 truncate font-mono">{skill.key}</div>
           </div>
           <div className="min-w-0 border-b border-border py-2">
@@ -3907,7 +3907,7 @@ function SkillPane({
               </div>
             )}
             <div className="flex items-center gap-2">
-              <span className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">{t("app.common.labels.key")}</span>
+              <span className="text-(length:--text-micro) uppercase tracking-(--tracking-caps) text-muted-foreground">{t("app.skills.companySkills.skillIdentifier")}</span>
               <span className="font-mono text-xs">{detail.key}</span>
             </div>
             <div className="flex items-center gap-2">

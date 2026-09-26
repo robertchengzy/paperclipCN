@@ -5,8 +5,9 @@ import type {
   Project,
   ProjectWorkspace,
 } from "@paperclipai/shared";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import {
+  skillImportErrorCopy,
   defaultSelection,
   filterCandidates,
   groupCandidates,
@@ -18,6 +19,9 @@ import {
   selectionKey,
   suggestedConflictSlug,
 } from "./ImportSkillsFromProjectDialog";
+
+import { i18n } from "@/i18n";
+import { ApiError } from "../../api/client";
 
 const WS_A = "11111111-1111-1111-1111-111111111111";
 const WS_B = "22222222-2222-2222-2222-222222222222";
@@ -210,5 +214,47 @@ describe("scannable workspace detection", () => {
       ],
     } as unknown as Project;
     expect(scannableWorkspaces(project)).toHaveLength(0);
+  });
+});
+
+
+describe("skill import denial copy", () => {
+  afterEach(async () => { await i18n.changeLanguage("en"); });
+
+  it("uses policy remediation instead of asking for a legacy skills grant", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const copy = skillImportErrorCopy(new ApiError("Forbidden", 403, {
+      code: "skill_policy_denied",
+      remediation: "Contact a company administrator to change the skill policy.",
+    }));
+    expect(copy.restricted).toBe(true);
+    expect(copy.title).toBe("此操作受组织策略限制。");
+    expect(copy.message).toBe("组织管理员可以修改技能策略以允许此操作。");
+  });
+
+  it("explains workspace boundaries instead of asking an owner to grant access", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const copy = skillImportErrorCopy(new ApiError("Forbidden", 403, {
+      code: "skill_workspace_boundary_denied",
+      remediation: "Import from a configured Paperclip workspace or the company managed-skill directory.",
+    }));
+    expect(copy.restricted).toBe(true);
+    expect(copy.title).toBe("此技能来源不在允许的工作区内。");
+    expect(copy.message).toContain("已配置的 Paperclip 工作区");
+    expect(copy.message).not.toContain("授予");
+  });
+
+  it.each([403, 409, 500])("retains unknown %s diagnostics and the retry path", async (status) => {
+    await i18n.changeLanguage("zh-CN");
+    const copy = skillImportErrorCopy(new ApiError("Custom service diagnostic", status, {}));
+    expect(copy).toEqual({ restricted: false, title: "扫描失败", message: "Custom service diagnostic" });
+  });
+
+  it("keeps known platform restrictions distinct in English too", async () => {
+    await i18n.changeLanguage("en");
+    const copy = skillImportErrorCopy(new ApiError("Forbidden", 403, { code: "skill_unsafe_content_blocked" }));
+    expect(copy.restricted).toBe(true);
+    expect(copy.message).toContain("unsafe pattern");
+    expect(copy.message).not.toContain("grant");
   });
 });

@@ -24,7 +24,7 @@ import {
 } from "@/features/connections/ConnectionSetupFlow";
 import { endpointHost } from "@/pages/apps/generic-mcp-connect";
 import { McpConfigHelpDialog } from "./McpConfigHelpDialog";
-import { ErrorState } from "./shared";
+import { ErrorState, toolDisplayLabel } from "./shared";
 import { t as translate, useTranslation } from "@/i18n";
 
 const SAMPLE_CONFIG = `{
@@ -565,7 +565,7 @@ function ActionGroup({
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-medium text-foreground">{action.title || action.toolName}</div>
                 <div className="truncate text-xs text-muted-foreground">
-                  {askFirstLevels.includes(action.riskLevel) ? t("app.tools.pasteConfigTab.askFirstWhenEnabled") : action.riskLevel}
+                  {askFirstLevels.includes(action.riskLevel) ? t("app.tools.pasteConfigTab.askFirstWhenEnabled") : toolDisplayLabel(t, action.riskLevel, "risk")}
                 </div>
               </div>
               <ToggleSwitch checked={on} onCheckedChange={(next) => onToggle(action.catalogEntryId, next)} />

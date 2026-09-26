@@ -57,6 +57,7 @@ import {
   RelativeTime,
   RiskBadge,
   ToolsPageHeader,
+  toolDisplayLabel,
 } from "./shared";
 import { Trans } from "react-i18next";
 import { t as translate, useTranslation } from "@/i18n";
@@ -980,7 +981,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
                           <span className="truncate font-medium text-foreground">{profile.name}</span>
                           {profile.status !== "active" ? (
                             <Badge variant={statusVariant(profile.status)} className="text-(length:--text-nano)">
-                              {profile.status}
+                              {toolDisplayLabel(t, profile.status)}
                             </Badge>
                           ) : null}
                         </span>
@@ -1300,9 +1301,9 @@ function ProfileDetail({
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-medium text-foreground">{profile.name}</span>
               <Badge variant="outline">{profile.profileKey}</Badge>
-              <Badge variant={statusVariant(profile.status)}>{profile.status}</Badge>
+              <Badge variant={statusVariant(profile.status)}>{toolDisplayLabel(t, profile.status)}</Badge>
               <Badge variant={profile.defaultAction === "allow" ? "secondary" : "outline"}>
-                {t("app.tools.profilesTab.detail.defaultBadge", { action: profile.defaultAction })}
+                {t("app.tools.profilesTab.detail.defaultBadge", { action: toolDisplayLabel(t, profile.defaultAction, "action") })}
               </Badge>
             </div>
             {profile.description ? (
@@ -1359,7 +1360,7 @@ function ProfileDetail({
             <span className="rounded-md border border-border px-2 py-1 text-muted-foreground">
               <Trans
                 i18nKey="app.tools.profilesTab.detail.default"
-                values={{ action: profile.defaultAction }}
+                values={{ action: toolDisplayLabel(t, profile.defaultAction, "action") }}
                 components={{ b: <span className="font-medium text-foreground" /> }}
               />
             </span>

@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { TOOL_CONNECTION_HEALTH_STATUSES, TOOL_POLICY_DECISIONS, TOOL_RISK_LEVELS } from "@paperclipai/shared";
 import { i18n } from "@/i18n";
-import { CapabilityBadges, DecisionBadge, HealthBadge, RelativeTime, RiskBadge } from "./shared";
+import { CapabilityBadges, DecisionBadge, HealthBadge, RelativeTime, RiskBadge, toolDisplayLabel } from "./shared";
 
 afterEach(async () => {
   vi.useRealTimers();
@@ -13,7 +13,7 @@ describe("tool badge localization", () => {
   it("translates every supported risk, connection health and policy decision", async () => {
     await i18n.changeLanguage("zh-CN");
     const risks = { low: "低", medium: "中", high: "高", critical: "严重", read: "读取", write: "写入", destructive: "破坏性操作" };
-    const health = { unknown: "未知", healthy: "健康", degraded: "性能下降", failed: "失败", unchecked: "未检查", ok: "正常", error: "出错", missing_secret: "缺少密钥" };
+    const health = { unknown: "未知", healthy: "健康", degraded: "已降级", failed: "失败", unchecked: "未检查", ok: "正常", error: "出错", missing_secret: "缺少密钥" };
     const decisions = { allow: "已允许", deny: "已拒绝", require_approval: "需要审批", rate_limited: "已限流", defer_runtime: "等待运行时处理" };
     for (const risk of TOOL_RISK_LEVELS) expect(renderToStaticMarkup(<RiskBadge risk={risk} />)).toContain(`>${risks[risk]}<`);
     for (const status of TOOL_CONNECTION_HEALTH_STATUSES) expect(renderToStaticMarkup(<HealthBadge status={status} />)).toContain(`>${health[status]}<`);
@@ -60,5 +60,39 @@ describe("tool relative time", () => {
     await i18n.changeLanguage("zh-CN");
     expect(renderToStaticMarkup(<RelativeTime value={null} />)).toContain(">从未<");
     expect(renderToStaticMarkup(<RelativeTime value="invalid-date" />)).toContain(">—<");
+  });
+});
+
+
+describe("raw tool enum display", () => {
+  it("localizes display-only values without changing future diagnostic values", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const statuses = {
+      draft: "草稿", active: "已启用", disabled: "已停用", archived: "已归档",
+      paused: "已暂停", running: "运行中", stopped: "已停止", error: "出错",
+      pending: "待处理", authorized: "已授权", denied: "已拒绝", awaiting_approval: "待审批",
+      executing: "执行中", succeeded: "成功", failed: "失败", cancelled: "已取消",
+      timed_out: "超时", rate_limited: "已限流",
+    };
+    for (const [value, label] of Object.entries(statuses)) expect(toolDisplayLabel(i18n.t, value)).toBe(label);
+    expect(toolDisplayLabel(i18n.t, "allow", "action")).toBe("允许");
+    expect(toolDisplayLabel(i18n.t, "deny", "action")).toBe("拒绝");
+    expect(toolDisplayLabel(i18n.t, "read", "risk")).toBe("读取");
+    expect(toolDisplayLabel(i18n.t, "require_approval", "decision")).toBe("需要审批");
+    for (const kind of ["status", "risk", "decision", "action", "smoke_health"] as const) {
+      expect(toolDisplayLabel(i18n.t, "future_value-with_marker", kind)).toBe("future_value-with_marker");
+    }
+  });
+
+  it("preserves raw English enum spelling when switching languages", async () => {
+    for (const value of ["awaiting_approval", "rate_limited", "active"]) {
+      await i18n.changeLanguage("zh-CN");
+      expect(toolDisplayLabel(i18n.t, value)).not.toBe(value);
+      await i18n.changeLanguage("en");
+      expect(toolDisplayLabel(i18n.t, value)).toBe(value);
+    }
+    for (const [kind, value] of [["risk", "critical"], ["action", "deny"], ["decision", "require_approval"], ["smoke_health", "amber"]] as const) {
+      expect(toolDisplayLabel(i18n.t, value, kind)).toBe(value);
+    }
   });
 });

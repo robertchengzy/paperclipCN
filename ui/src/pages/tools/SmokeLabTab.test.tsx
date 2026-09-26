@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { i18n } from "@/i18n";
 import { SmokeLabTab } from "./SmokeLabTab";
 
 const getExperimentalMock = vi.hoisted(() => vi.fn());
@@ -125,7 +126,8 @@ describe("SmokeLabTab", () => {
     createRunMock.mockResolvedValue({ run: { ...RUN, id: "run-2", status: "running" } });
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
     flushSync(() => root?.unmount());
     container.remove();
     vi.clearAllMocks();
@@ -174,6 +176,19 @@ describe("SmokeLabTab", () => {
     expect(container.textContent).toContain("failing: P7");
     // Step drill-down shows the raw scenario step.
     expect(container.textContent).toContain("oauth-login");
+  });
+
+  it("translates fixture service and health labels without changing diagnostic detail", async () => {
+    await i18n.changeLanguage("zh-CN");
+    await render();
+    expect(container.textContent).toContain("运行中");
+    expect(container.textContent).toContain("失败");
+    expect(container.textContent).not.toContain("running");
+    expect(container.textContent).not.toContain("red");
+    expect(container.textContent).toContain("Quarantine not enforced");
+    await act(async () => { await i18n.changeLanguage("en"); });
+    expect(container.textContent).toContain("running");
+    expect(container.textContent).toContain("red");
   });
 
   it("starts a manual run when 'Run browser smoke now' is clicked", async () => {

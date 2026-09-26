@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+import { i18n } from "@/i18n";
 import type { Agent } from "@paperclipai/shared";
 import {
   buildAssistantPartsFromTranscript,
@@ -1806,5 +1807,51 @@ describe("AI recovery presentation", () => {
     const messages = buildIssueChatMessages({ comments: [notice], interactions: [interaction], timelineEvents: [], linkedRuns: [], liveRuns: [] });
     expect(messages).toHaveLength(1);
     expect(messages[0]?.metadata.custom).toMatchObject({ kind: "interaction" });
+  });
+});
+
+
+describe("localized timeline task status", () => {
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
+  });
+
+  function statusMessage(from: string | null, to: string | null) {
+    const event: IssueTimelineEvent = {
+      id: "localized-status",
+      createdAt: new Date("2026-09-26T00:00:00Z"),
+      actorType: "user",
+      actorId: "local-board",
+      statusChange: { from, to },
+    };
+    const messages = buildIssueChatMessages({
+      comments: [], timelineEvents: [event], linkedRuns: [], liveRuns: [],
+    });
+    return { event, message: messages[0]! };
+  }
+
+  it("localizes known task states without changing stored event values", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const { event, message } = statusMessage("in_progress", "done");
+    expect(message.content).toEqual([{ type: "text", text: expect.stringContaining("状态：进行中 -> 已完成") }]);
+    expect(event.statusChange).toEqual({ from: "in_progress", to: "done" });
+    expect(message.metadata?.custom?.statusChange).toEqual(event.statusChange);
+  });
+
+  it("uses task waiting semantics for idle, preserves unknown values, and localizes absence", async () => {
+    await i18n.changeLanguage("zh-CN");
+    expect(statusMessage("idle", "future_state").message.content).toEqual([
+      { type: "text", text: expect.stringContaining("状态：等待中 -> future_state") },
+    ]);
+    expect(statusMessage(null, "todo").message.content).toEqual([
+      { type: "text", text: expect.stringContaining("状态：无 -> 待办") },
+    ]);
+  });
+
+  it("preserves the original English protocol status text", async () => {
+    await i18n.changeLanguage("en");
+    expect(statusMessage("in_progress", "done").message.content).toEqual([
+      { type: "text", text: expect.stringContaining("Status: in_progress -> done") },
+    ]);
   });
 });

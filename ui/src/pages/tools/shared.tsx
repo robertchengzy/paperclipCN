@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { TFunction } from "i18next";
 import type {
   ToolRiskLevel,
   ToolConnectionHealthStatus,
@@ -9,8 +10,42 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ApiError } from "@/api/client";
-import { useTranslation } from "@/i18n";
+import { i18n, useTranslation } from "@/i18n";
 import { displayLocale } from "@/lib/utils";
+
+/** Localize known display enums without changing English or unknown diagnostics. */
+export function toolDisplayLabel(
+  t: TFunction,
+  value: string,
+  kind: "status" | "risk" | "decision" | "action" | "smoke_health" = "status",
+): string {
+  if (i18n.resolvedLanguage !== "zh-CN") return value;
+  if (kind === "risk") return t(`app.tools.shared.risk.${value}`, { defaultValue: value });
+  if (kind === "decision") return t(`app.tools.shared.decision.${value}`, { defaultValue: value });
+  if (kind === "action") {
+    if (value === "allow") return t("app.common.actions.allow");
+    if (value === "deny") return t("app.common.actions.deny");
+    return value;
+  }
+  if (kind === "smoke_health") {
+    if (value === "green") return t("app.tools.smokeLabTab.health.green");
+    if (value === "amber") return t("app.tools.smokeLabTab.health.amber");
+    if (value === "red") return t("app.tools.smokeLabTab.health.red");
+    return value;
+  }
+  switch (value) {
+    case "active": return t("app.common.status.enabled");
+    case "authorized": return t("app.tools.shared.invocationStatus.authorized");
+    case "executing": return t("app.tools.shared.invocationStatus.executing");
+    case "awaiting_approval": return t("app.common.status.pending_approval");
+    case "denied": return t("app.common.status.rejected");
+    case "rate_limited": return t("app.tools.shared.decision.rate_limited");
+    case "stopped": return t("app.common.states.stopped");
+    case "attention": return t("app.common.states.needsAttention");
+    case "revoked": return t("app.common.states.revoked");
+    default: return t(`app.common.status.${value}`, { defaultValue: value });
+  }
+}
 
 /** Risk classification badge for a catalog tool. */
 export function RiskBadge({ risk }: { risk: ToolRiskLevel | null | undefined }) {

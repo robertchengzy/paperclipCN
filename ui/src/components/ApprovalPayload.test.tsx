@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ApprovalPayloadRenderer, approvalLabel } from "./ApprovalPayload";
 import { ThemeProvider } from "../context/ThemeContext";
+import { i18n } from "@/i18n";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
@@ -29,6 +30,27 @@ describe("ApprovalPayloadRenderer", () => {
 
   afterEach(() => {
     container.remove();
+  });
+
+  it("distinguishes a hire's job title from a strategy title in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const root = createRoot(container);
+    try {
+      act(() => {
+        root.render(<ApprovalPayloadRenderer type="hire_agent" payload={{ name: "Example", title: "Staff Engineer" }} />);
+      });
+      expect(container.textContent).toContain("职位");
+      expect(container.textContent).toContain("Staff Engineer");
+      expect(container.textContent).not.toContain("标题");
+      act(() => {
+        root.render(<ApprovalPayloadRenderer type="approve_ceo_strategy" payload={{ title: "Launch plan", plan: "Example strategy" }} />);
+      });
+      expect(container.textContent).toContain("标题");
+      expect(container.textContent).not.toContain("职位");
+    } finally {
+      act(() => root.unmount());
+      await i18n.changeLanguage("en");
+    }
   });
 
   it("renders request_board_approval payload fields without falling back to raw JSON", () => {

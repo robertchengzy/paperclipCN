@@ -11,6 +11,7 @@
 | Agent / Agents | 智能体 | Subagent → 子智能体；中文不使用英文单复数形式，保留数量与范围限定 |
 | Task / Issue | 任务 | Sub-issue / Subtask → 子任务 |
 | Project | 项目 | |
+| Title | 标题 / 职位 | 策略、任务、文档使用标题；聘用智能体的职务字段使用职位，分别取显示词条 |
 | Goal | 目标 | |
 | Approval | 审批 | Approve → 同意，Reject → 拒绝，Request revision → 要求修改 |
 | Run | 运行 | Heartbeat run → 心跳运行 |
@@ -23,6 +24,7 @@
 | Slug | 路径标识 | 技能路由中使用的标识，实际值不翻译 |
 | Logo | 标志 | 组织标志图片 |
 | Workspace | 工作区 | Execution workspace → 执行工作区，与 Git Worktree 区分 |
+| Teardown command / Cleanup command | 拆除命令 / 清理命令 | 两个独立配置字段分别命名，不将归档工作区等同于删除磁盘文件 |
 | Worktree | Worktree | Git Worktree；命令 `git worktree` 原样保留 |
 | Harness | Harness | Runtime → 运行时 |
 | Token | Token | 认证与模型计量按上下文区分；完整外部字段名保留原样 |
@@ -108,6 +110,7 @@
 - 省略号跟随英文原文：原文是 `…` 就用 `…`，原文是 `...` 也用 `…`。
 - 插值占位符（`{{count}}`、`{{name}}`）必须和英文词条一致。
 - 语气用陈述句和“请…”，不用“您”。
+- 中文时间选择和摘要使用 24 小时制；cron 的 weekdays 固定表示周一至周五，不暗示节假日或调休日历。
 
 ## 2026-09-26 修订说明
 

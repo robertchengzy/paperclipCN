@@ -99,7 +99,7 @@ export function HireAgentPayload({ payload }: { payload: Record<string, unknown>
         <span className="font-medium">{String(payload.name ?? "—")}</span>
       </div>
       <PayloadField label={t("app.approvalPayload.role")} value={payload.role} />
-      <PayloadField label={t("app.approvalPayload.title")} value={payload.title} />
+      <PayloadField label={t("app.approvalPayload.jobTitle")} value={payload.title} />
       <PayloadField label={t("app.approvalPayload.icon")} value={payload.icon} />
       {!!payload.capabilities && (
         <div className="flex items-start gap-2">

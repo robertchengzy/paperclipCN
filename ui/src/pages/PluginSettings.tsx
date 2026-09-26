@@ -1,4 +1,5 @@
 import { displayLocale } from "@/lib/utils";
+import { pluginJobTriggerLabel, pluginStatusLabel } from "@/lib/settings-status-labels";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Puzzle, ArrowLeft, ShieldAlert, ActivitySquare, CheckCircle, XCircle, Loader2, Clock, Cpu, Webhook, CalendarClock, AlertTriangle, FolderOpen, Save } from "lucide-react";
@@ -145,7 +146,7 @@ export function PluginSettings() {
     return <Navigate to="/company/settings/instance/plugins" replace />;
   }
 
-  const displayStatus = plugin.status;
+  const displayStatus = pluginStatusLabel(t, "lifecycle", plugin.status);
   const statusVariant =
     plugin.status === "ready"
       ? "default"
@@ -314,7 +315,7 @@ export function PluginSettings() {
                             <div className="flex justify-between">
                               <span className="text-muted-foreground">{t("app.common.labels.status")}</span>
                               <Badge variant={dashboardData.worker.status === "running" ? "default" : "secondary"}>
-                                {dashboardData.worker.status}
+                                {pluginStatusLabel(t, "worker", dashboardData.worker.status)}
                               </Badge>
                             </div>
                             <div className="flex justify-between">
@@ -377,7 +378,7 @@ export function PluginSettings() {
                                     {run.jobKey ?? run.jobId.slice(0, 8)}
                                   </span>
                                   <Badge variant="outline" className="px-1 py-0 text-(length:--text-nano)">
-                                    {run.trigger}
+                                    {pluginJobTriggerLabel(t, run.trigger)}
                                   </Badge>
                                 </div>
                                 <div className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
@@ -488,7 +489,7 @@ export function PluginSettings() {
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground">{t("app.settings.pluginSettings.overall")}</span>
                         <Badge variant={healthData.healthy ? "default" : "destructive"}>
-                          {healthData.status}
+                          {pluginStatusLabel(t, "lifecycle", healthData.status)}
                         </Badge>
                       </div>
 
@@ -1205,6 +1206,7 @@ function formatTimestamp(epochMs: number): string {
  * Status indicator dot for job run statuses.
  */
 function JobStatusDot({ status }: { status: string }) {
+  const { t } = useTranslation();
   const colorClass =
     status === "success" || status === "succeeded"
       ? "bg-green-500"
@@ -1218,7 +1220,7 @@ function JobStatusDot({ status }: { status: string }) {
   return (
     <span
       className={`inline-block h-2 w-2 rounded-full shrink-0 ${colorClass}`}
-      title={status}
+      title={pluginStatusLabel(t, "job", status)}
     />
   );
 }
@@ -1227,6 +1229,7 @@ function JobStatusDot({ status }: { status: string }) {
  * Status indicator dot for webhook delivery statuses.
  */
 function DeliveryStatusDot({ status }: { status: string }) {
+  const { t } = useTranslation();
   const colorClass =
     status === "processed" || status === "success"
       ? "bg-green-500"
@@ -1238,7 +1241,7 @@ function DeliveryStatusDot({ status }: { status: string }) {
   return (
     <span
       className={`inline-block h-2 w-2 rounded-full shrink-0 ${colorClass}`}
-      title={status}
+      title={pluginStatusLabel(t, "delivery", status)}
     />
   );
 }

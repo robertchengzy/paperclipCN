@@ -37,6 +37,7 @@ import { projectsApi } from "../../api/projects";
 import { useToastActions } from "../../context/ToastContext";
 import { queryKeys } from "../../lib/queryKeys";
 import { skillStudioRoute } from "../../lib/company-skill-routes";
+import { classifySkillDenial } from "../../lib/skill-policy-denial";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -226,9 +227,13 @@ function readableErrorMessage(error: unknown): string {
   return t("app.skills.importSkillsFromProjectDialog.unexpectedError");
 }
 
-export function isGrantError(error: unknown): boolean {
-  if (!(error instanceof ApiError)) return false;
-  return error.status === 403;
+export function skillImportErrorCopy(error: unknown) {
+  const denial = classifySkillDenial(error);
+  return {
+    restricted: denial !== null,
+    title: denial?.title ?? t("app.skills.importSkillsFromProjectDialog.scanFailed"),
+    message: denial?.remediation ?? readableErrorMessage(error),
+  };
 }
 
 function CandidateStatusBadge({
@@ -951,26 +956,24 @@ function SelectStep({
 }: SelectStepProps) {
   const { t } = useTranslation();
   if (scanError) {
-    const grant = isGrantError(scanError);
+    const errorCopy = skillImportErrorCopy(scanError);
     return (
       <div className="flex min-h-0 flex-1 items-center justify-center p-6" data-testid="scan-error">
         <div className="max-w-md text-center">
           <div className="mx-auto mb-4 w-fit bg-muted/50 p-4">
-            {grant ? (
+            {errorCopy.restricted ? (
               <ShieldAlert className="h-10 w-10 text-muted-foreground/60" />
             ) : (
               <AlertCircle className="h-10 w-10 text-muted-foreground/60" />
             )}
           </div>
           <p className="text-base font-semibold">
-            {grant ? t("app.skills.importSkillsFromProjectDialog.youCantImportSkillsHere") : t("app.skills.importSkillsFromProjectDialog.scanFailed")}
+            {errorCopy.title}
           </p>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            {grant
-              ? t("app.skills.importSkillsFromProjectDialog.yourAccountDoesntHavePermissionToAddSkillsTo")
-              : readableErrorMessage(scanError)}
+            {errorCopy.message}
           </p>
-          {!grant && (
+          {!errorCopy.restricted && (
             <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
               {t("app.skills.importSkillsFromProjectDialog.tryAgain")}
             </Button>

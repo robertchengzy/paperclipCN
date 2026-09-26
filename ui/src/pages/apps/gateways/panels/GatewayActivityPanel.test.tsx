@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ToolMcpGatewayWithTokens } from "@paperclipai/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { i18n } from "@/i18n";
 import { GatewayActivityPanel } from "./GatewayActivityPanel";
 
 const listActivityMock = vi.hoisted(() => vi.fn());
@@ -83,7 +84,8 @@ describe("GatewayActivityPanel", () => {
     listActivityMock.mockResolvedValue({ events: [event()], nextCursor: null });
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
     flushSync(() => root?.unmount());
     container.remove();
     vi.clearAllMocks();
@@ -130,6 +132,25 @@ describe("GatewayActivityPanel", () => {
     expect(container.textContent).toContain("***REDACTED***");
     expect(container.textContent).toContain("Result (redacted)");
     expect(container.textContent).toContain("125 ms");
+  });
+
+  it("localizes expanded call enums while preserving raw audit identifiers", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const sample = event();
+    sample.invocation.status = "awaiting_approval";
+    sample.invocation.policyDecision = "require_approval";
+    listActivityMock.mockResolvedValue({ events: [sample], nextCursor: null });
+    await render();
+    await clickButton("Send Email");
+    expect(container.textContent).toContain("待审批");
+    expect(container.textContent).toContain("需要审批");
+    expect(container.textContent).not.toContain("awaiting_approval");
+    expect(container.textContent).not.toContain("require_approval");
+    expect(container.textContent).toContain("tool_completed");
+    expect(container.textContent).toContain("gmail:send_email");
+    await act(async () => { await i18n.changeLanguage("en"); });
+    expect(container.textContent).toContain("awaiting_approval");
+    expect(container.textContent).toContain("require_approval");
   });
 
   it("loads the next cursor page", async () => {

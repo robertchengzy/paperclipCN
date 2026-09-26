@@ -9,6 +9,25 @@ describe("activity formatting", () => {
   });
 
   it.each([
+    ["en", "provider trace expired"],
+    ["zh-CN", "提供方 Trace 已过期"],
+  ])("labels trace expiry without changing event details in %s", async (language, expected) => {
+    await i18n.changeLanguage(language);
+    const details = Object.freeze({ traceId: "trace-1", reason: "retention_expired" });
+    expect(formatActivityVerb("provider_trace.expired", details)).toBe(expected);
+    expect(formatIssueActivityAction("provider_trace.expired", details)).toBe(expected);
+    expect(details).toEqual({ traceId: "trace-1", reason: "retention_expired" });
+  });
+
+  it("uses the task waiting state without changing the agent idle label in Chinese", async () => {
+    await i18n.changeLanguage("zh-CN");
+    const details = { status: "in_review", externalConversationState: "waiting" };
+    expect(formatActivityVerb("issue.updated", details)).toContain("等待中");
+    expect(formatIssueActivityAction("issue.updated", details)).toContain("等待中");
+    expect(i18n.t("app.common.status.idle")).toBe("空闲");
+  });
+
+  it.each([
     ["en", "provider trace metadata listed", "provider trace metadata listed", "instance settings experimental updated"],
     ["zh-CN", "仅列出了提供方 Trace 元数据", "仅列出了提供方 Trace 元数据", "更新了实例实验设置"],
   ])("labels metadata listing and instance settings events accurately in %s", async (language, metadataRow, metadataDetail, settingsLabel) => {

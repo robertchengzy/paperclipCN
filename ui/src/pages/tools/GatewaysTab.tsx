@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/context/ToastContext";
 import { queryKeys } from "@/lib/queryKeys";
 import { copyTextToClipboard } from "@/lib/clipboard";
-import { ErrorState, LoadingState, RelativeTime, ToolsPageHeader } from "./shared";
+import { ErrorState, LoadingState, RelativeTime, ToolsPageHeader, toolDisplayLabel } from "./shared";
 import { Trans } from "react-i18next";
 import { t as translate, useTranslation } from "@/i18n";
 
@@ -367,7 +367,7 @@ export function GatewaysTab({ companyId }: { companyId: string }) {
                     <div className="flex items-center gap-2">
                       <LinkIcon className="h-4 w-4 text-muted-foreground" />
                       <h3 className="truncate text-sm font-semibold text-foreground">{gateway.name}</h3>
-                      <span className="text-xs text-muted-foreground">{gateway.status}</span>
+                      <span className="text-xs text-muted-foreground">{toolDisplayLabel(t, gateway.status)}</span>
                     </div>
                     {gateway.description ? (
                       <p className="mt-1 text-sm text-muted-foreground">{gateway.description}</p>

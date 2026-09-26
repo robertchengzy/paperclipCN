@@ -11,6 +11,7 @@ import {
 } from "./SkillPolicySurfaces";
 import { classifySkillDenial } from "@/lib/skill-policy-denial";
 import { ApiError } from "@/api/client";
+import { i18n } from "@/i18n";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
@@ -34,11 +35,12 @@ function render(node: ReactNode) {
   return container;
 }
 
-afterEach(() => {
+afterEach(async () => {
   if (root) act(() => root!.unmount());
   root = null;
   container?.remove();
   container = null;
+  await i18n.changeLanguage("en");
 });
 
 function policyDenial() {
@@ -120,5 +122,48 @@ describe("useSkillPolicyDenial", () => {
     const el = render(<Harness error={transientError} />);
     act(() => (el.querySelector("[data-testid=capture]") as HTMLButtonElement).click());
     expect(el.querySelector("[data-testid=captured]")!.textContent).toBe("no-banner");
+  });
+});
+
+
+describe("persistent denial language switching", () => {
+  const denied = new ApiError("denied", 403, {
+    code: "skill_policy_denied",
+    remediation: "Contact a company administrator to change the skill policy.",
+  });
+  let captureResult: boolean | undefined;
+
+  function PersistentHarness() {
+    const controller = useSkillPolicyDenial();
+    return <div>
+      <button data-testid="capture" onClick={() => { captureResult = controller.capture(denied, "Installing skills"); }}>capture</button>
+      <button data-testid="transient" onClick={() => { captureResult = controller.capture(new ApiError("busy", 409, {})); }}>transient</button>
+      <button data-testid="reset" onClick={controller.reset}>reset</button>
+      {controller.denial && <SkillPolicyDenialNotice denial={controller.denial} />}
+    </div>;
+  }
+
+  it("reclassifies stored errors and uses a generic title instead of a stale action label", async () => {
+    await i18n.changeLanguage("en");
+    const el = render(<PersistentHarness />);
+    act(() => (el.querySelector("[data-testid=capture]") as HTMLButtonElement).click());
+    expect(captureResult).toBe(true);
+    expect(el.textContent).toContain("Installing skills is restricted");
+    expect(el.textContent).toContain("Contact a company administrator");
+    await act(() => i18n.changeLanguage("zh-CN"));
+    expect(el.textContent).toContain("此操作受组织策略限制。");
+    expect(el.textContent).toContain("组织管理员可以修改技能策略以允许此操作。");
+    expect(el.textContent).not.toContain("Installing skills");
+    expect(el.textContent).not.toContain("Contact a company administrator");
+    act(() => (el.querySelector("[data-testid=transient]") as HTMLButtonElement).click());
+    expect(captureResult).toBe(false);
+    expect(el.textContent).toContain("此操作受组织策略限制。");
+    await act(() => i18n.changeLanguage("en"));
+    expect(el.textContent).toContain("Installing skills is restricted");
+    expect(el.textContent).toContain("Contact a company administrator");
+    act(() => (el.querySelector("[data-testid=reset]") as HTMLButtonElement).click());
+    expect(el.textContent).not.toContain("restricted");
+    await act(() => i18n.changeLanguage("zh-CN"));
+    expect(el.textContent).not.toContain("组织策略");
   });
 });

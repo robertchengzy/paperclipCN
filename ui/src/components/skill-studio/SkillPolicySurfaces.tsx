@@ -41,16 +41,27 @@ export interface SkillPolicyDenialController {
  * reach the banner — they stay on the caller's toast path.
  */
 export function useSkillPolicyDenial(): SkillPolicyDenialController {
-  const [denial, setDenial] = useState<SkillDenial | null>(null);
+  const { i18n } = useTranslation();
+  const language = i18n.resolvedLanguage ?? i18n.language;
+  const [input, setInput] = useState<{
+    error: unknown;
+    actionLabel?: string;
+    language: string;
+  } | null>(null);
   const capture = useCallback((error: unknown, actionLabel?: string) => {
     const classified = classifySkillDenial(error, actionLabel);
     if (classified) {
-      setDenial(classified);
+      setInput({ error, actionLabel, language });
       return true;
     }
     return false;
-  }, []);
-  const reset = useCallback(() => setDenial(null), []);
+  }, [language]);
+  const reset = useCallback(() => setInput(null), []);
+  // Callers pass already-translated labels. After switching language, use the
+  // generic title rather than mixing the old label into the new translation.
+  const denial = input
+    ? classifySkillDenial(input.error, input.language === language ? input.actionLabel : undefined)
+    : null;
   return { denial, capture, reset };
 }
 

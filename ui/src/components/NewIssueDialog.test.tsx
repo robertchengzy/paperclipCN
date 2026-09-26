@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { queryKeys } from "../lib/queryKeys";
 import { NewIssueDialog } from "./NewIssueDialog";
+import { i18n } from "../i18n";
 
 const dialogState = vi.hoisted(() => ({
   newIssueOpen: true,
@@ -643,6 +644,51 @@ describe("NewIssueDialog", () => {
     expect(container.textContent).toContain("arrived paused from an organization import");
 
     act(() => root.unmount());
+  });
+
+  it.each(["en", "zh-CN"])("does not promise a task-page resume for a budget pause in %s", async (language) => {
+    await i18n.changeLanguage(language);
+    dialogState.newIssueDefaults = { title: "Budget-paused task", assigneeAgentId: "agent-1" };
+    mockAgentsApi.list.mockResolvedValue([
+      { id: "agent-1", name: "BudgetWorker", status: "paused", pauseReason: "budget", adapterType: "claude_local", adapterConfig: {}, runtimeConfig: {}, permissions: {} },
+    ]);
+    const { root } = renderDialog(container);
+    try {
+      await waitForAssertion(() => {
+        const note = container.querySelector('[data-testid="new-issue-paused-assignee-note"]');
+        expect(note?.textContent).toContain(language === "en" ? "paused by a budget limit" : "因预算限制而暂停");
+        expect(note?.textContent).toContain("BudgetWorker");
+        expect(note?.textContent).not.toContain(language === "en" ? "resume it from the task page" : "在任务页面恢复");
+      });
+    } finally {
+      act(() => root.unmount());
+      await i18n.changeLanguage("en");
+    }
+  });
+
+  it.each([
+    ["en", "manual"], ["en", "system"], ["en", "import"],
+    ["zh-CN", "manual"], ["zh-CN", "system"], ["zh-CN", "import"],
+  ])("preserves the task-page resume guidance in %s for %s pauses", async (language, pauseReason) => {
+    await i18n.changeLanguage(language);
+    dialogState.newIssueDefaults = { title: "Paused task", assigneeAgentId: "agent-1" };
+    mockAgentsApi.list.mockResolvedValue([
+      { id: "agent-1", name: "PausedWorker", status: "paused", pauseReason, adapterType: "claude_local", adapterConfig: {}, runtimeConfig: {}, permissions: {} },
+    ]);
+    const { root } = renderDialog(container);
+    try {
+      await waitForAssertion(() => {
+        const note = container.querySelector('[data-testid="new-issue-paused-assignee-note"]');
+        expect(note?.textContent).toContain(language === "en" ? "resume it from the task page" : "在任务页面恢复");
+        expect(note?.textContent).not.toContain(language === "en" ? "paused by a budget limit" : "因预算限制而暂停");
+        if (pauseReason === "import") {
+          expect(note?.textContent).toContain(language === "en" ? "organization import" : "组织导入");
+        }
+      });
+    } finally {
+      act(() => root.unmount());
+      await i18n.changeLanguage("en");
+    }
   });
 
   it("restores the planning mode from dialog defaults", async () => {

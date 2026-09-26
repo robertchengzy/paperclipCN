@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/components/StatusBadge";
 import { queryKeys } from "@/lib/queryKeys";
-import { ErrorState, RelativeTime } from "@/pages/tools/shared";
+import { ErrorState, RelativeTime, toolDisplayLabel } from "@/pages/tools/shared";
 
 const PAGE_SIZE = 25;
 
@@ -112,8 +112,8 @@ function ActivityRow({ event }: { event: ToolGatewayActivityEvent }) {
         <div className="border-t border-border bg-muted/30 px-4 py-3 pl-10 text-xs">
           <dl>
             {rawTool ? <Fact label={t("app.common.nouns.tool")} value={rawTool} mono /> : null}
-            {event.invocation?.status ? <Fact label={t("app.apps.gatewayActivityPanel.callStatus")} value={event.invocation.status} /> : null}
-            {event.invocation?.policyDecision ? <Fact label={t("app.apps.gatewayActivityPanel.decision")} value={event.invocation.policyDecision} /> : null}
+            {event.invocation?.status ? <Fact label={t("app.apps.gatewayActivityPanel.callStatus")} value={toolDisplayLabel(t, event.invocation.status)} /> : null}
+            {event.invocation?.policyDecision ? <Fact label={t("app.apps.gatewayActivityPanel.decision")} value={toolDisplayLabel(t, event.invocation.policyDecision, "decision")} /> : null}
             {reason ? <Fact label={t("app.common.labels.reason")} value={reason} mono /> : null}
             {duration ? <Fact label={t("app.apps.gatewayActivityPanel.duration")} value={duration} /> : null}
             {event.invocation?.id ? <Fact label={t("app.apps.gatewayActivityPanel.invocationId")} value={event.invocation.id} mono /> : null}

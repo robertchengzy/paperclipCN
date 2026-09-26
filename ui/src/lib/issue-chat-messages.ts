@@ -23,7 +23,7 @@ import { findUIAdapter } from "../adapters/registry";
 import {
   summarizeNotice,
 } from "./transcriptPresentation";
-import { t } from "@/i18n";
+import { i18n, t } from "@/i18n";
 
 type JsonValue = null | string | number | boolean | JsonValue[] | { [key: string]: JsonValue };
 type JsonObject = { [key: string]: JsonValue };
@@ -641,6 +641,14 @@ function createCommentMessage(args: {
   return message;
 }
 
+/** Localize task state only at the display boundary; preserve English protocol copy. */
+function timelineIssueStatusLabel(value: string | null | undefined): string {
+  if (value == null) return t("app.lib.issueChatMessages.none");
+  return i18n.language === "zh-CN"
+    ? t(`app.common.issueStatus.${value}`, { defaultValue: value })
+    : value;
+}
+
 function createTimelineEventMessage(args: {
   event: IssueTimelineEvent;
   agentMap?: Map<string, Agent>;
@@ -660,8 +668,8 @@ function createTimelineEventMessage(args: {
   if (event.statusChange) {
     lines.push(
       t("app.lib.issueChatMessages.statusChange", {
-        from: event.statusChange.from ?? t("app.lib.issueChatMessages.none"),
-        to: event.statusChange.to ?? t("app.lib.issueChatMessages.none"),
+        from: timelineIssueStatusLabel(event.statusChange.from),
+        to: timelineIssueStatusLabel(event.statusChange.to),
       }),
     );
   }

@@ -1,13 +1,13 @@
 import type { PipelineStage } from "../api/pipelines";
-import { t } from "@/i18n";
+import { i18n, t } from "@/i18n";
 
 /**
  * UI-side reader + copy helpers for the "Break into pieces" stage primitive.
  *
  * The server stores the breakdown config on `stage.config.breakdown` (see
  * `pipelineStageBreakdownSchema`). Only the singular `pieceNoun` is persisted;
- * the plural is derived here exactly the way the server's health checks derive
- * it (`${pieceNoun}s`) so every count/banner string stays consistent.
+ * English plurals match the server's health-check copy (`${pieceNoun}s`).
+ * Chinese display keeps the noun unchanged; stored configuration is unaffected.
  *
  * All copy in this module is prosumer-facing — no API terms ("case", "child",
  * "stage key") ever surface; the configured piece noun is the dominant token.
@@ -115,9 +115,10 @@ export function hasStageBreakdown(stage: PipelineStage | null | undefined): bool
   return readStageBreakdown(stage) !== null;
 }
 
-/** Plural form of the piece noun, derived the same way the server does. */
+/** Display-only plural form; Chinese nouns do not take an English suffix. */
 export function pieceNounPlural(noun: string): string {
   const trimmed = noun.trim() || "piece";
+  if ((i18n.resolvedLanguage ?? i18n.language) === "zh-CN") return trimmed;
   return `${trimmed}s`;
 }
 

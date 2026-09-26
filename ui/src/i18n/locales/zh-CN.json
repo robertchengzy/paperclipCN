@@ -1,7 +1,7 @@
 {
   "app": {
     "noCompanies": {
-      "title": "创建您的第一个组织",
+      "title": "创建第一个组织",
       "description": "创建一个组织，开始使用 Paperclip。",
       "newCompany": "新建组织"
     },
@@ -9,7 +9,7 @@
       "authenticationFailed": "身份验证失败",
       "signInToPaperclip": "登录 Paperclip",
       "createYourPaperclipAccount": "创建你的 Paperclip 账户",
-      "useYourEmailAndPasswordToAccessThisInstance": "使用您的邮箱和密码访问此实例。",
+      "useYourEmailAndPasswordToAccessThisInstance": "使用邮箱和密码访问此实例。",
       "createAnAccountForThisInstanceEmailConfirmationIsNotRequiredInV1": "为此实例创建账户。v1 中无需邮箱确认。",
       "name": "名称",
       "email": "邮箱",
@@ -91,7 +91,7 @@
       "description": "切换界面外观。"
     },
     "approvals": {
-      "failedToApprove": "批准失败",
+      "failedToApprove": "同意失败",
       "failedToReject": "拒绝失败",
       "selectACompanyFirst": "请先选择组织。",
       "pending": "待处理",
@@ -101,7 +101,7 @@
       "all": "全部"
     },
     "approvalCard": {
-      "approving": "正在处理…",
+      "approving": "正在同意…",
       "rejecting": "拒绝中…",
       "approve": "同意",
       "reject": "拒绝",
@@ -113,7 +113,7 @@
         "pending": "待审批",
         "approved": "已同意",
         "rejected": "已拒绝",
-        "revision_requested": "需要修改"
+        "revision_requested": "已要求修改"
       }
     },
     "approvalPayload": {
@@ -133,7 +133,8 @@
       "risks": "风险",
       "proposedComment": "拟议评论",
       "limit": "限额",
-      "observed": "实际"
+      "observed": "实际",
+      "jobTitle": "职位"
     },
     "pages": {
       "routines": "例程",
@@ -177,8 +178,8 @@
       "unlimitedBudget": "无限预算",
       "awaitingBoardReview": "等待 Board 审核",
       "runActivity": "运行活动",
-      "tasksByPriority": "按优先级",
-      "tasksByStatus": "按状态",
+      "tasksByPriority": "任务优先级分布",
+      "tasksByStatus": "任务状态分布",
       "successRate": "成功率",
       "last14Days": "最近 14 天",
       "getStarted": "开始使用",
@@ -210,7 +211,7 @@
       "activeBudgetIncidentMany": "{{value}} 个未解决的预算事件",
       "budgetPauseSummary": "{{agents}} 个智能体已暂停 · {{projects}} 个项目已暂停 · {{approvals}} 项预算审批待处理",
       "agentSummary": "{{running}} 个运行中，{{paused}} 个已暂停，{{errors}} 个出错",
-      "taskSummary": "{{open}} 个待办，{{blocked}} 个受阻",
+      "taskSummary": "{{open}} 个未完成，{{blocked}} 个受阻",
       "budgetUtilization": "本月预算 {{budget}}，已使用 {{percent}}%",
       "budgetOverridesAwaitingReview": "{{value}} 项预算例外等待 Board 审核"
     },
@@ -553,7 +554,7 @@
         "webhook": "Webhook",
         "assignee": "负责人",
         "responsible": "负责人",
-        "owner": "负责人",
+        "owner": "所有者",
         "audit": "审计",
         "access": "访问权限"
       },
@@ -694,9 +695,9 @@
       "feedCard": {
         "verbs": {
           "opened": "创建了",
-          "movedToIdle": "移至空闲",
-          "movedTo": "移至{{status}}",
-          "setPriorityOn": "将优先级设为{{priority}}：",
+          "movedToIdle": "移至等待中",
+          "movedTo": "移至 {{status}}",
+          "setPriorityOn": "将优先级设为 {{priority}}：",
           "updated": "更新了",
           "wroteDocOn": "撰写了文档：",
           "editedDocOn": "编辑了文档：",
@@ -938,18 +939,18 @@
         "noDescription": "无描述",
         "codebase": "代码库",
         "codebaseHelp": "代码库帮助",
-        "codebaseTooltipManaged": "仓库是可信来源，智能体会在平台托管的环境中检出它。",
-        "codebaseTooltipLocal": "仓库是可信来源，本地文件夹是智能体默认写入代码的位置。",
+        "codebaseTooltipManaged": "仓库是代码的基准来源，智能体会在平台托管的环境中检出代码。",
+        "codebaseTooltipLocal": "仓库是代码的基准来源，本地文件夹是智能体默认写入代码的位置。",
         "managedFolder": "由 Paperclip 管理的文件夹。",
         "localFolder": "本地文件夹",
         "changeLocalFolder": "更改本地文件夹",
         "setLocalFolder": "设置本地文件夹",
-        "clearLocalFolder": "清除本地文件夹",
+        "clearLocalFolder": "清除本地文件夹关联",
         "legacyWorkspaces": "此项目还存在其他旧版工作区记录，Paperclip 正在使用主工作区作为代码库视图。",
         "noUrl": "无 URL",
         "localPathError": "本地文件夹必须是完整的绝对路径。",
-        "confirmClearLocal": "要从此工作区清除本地文件夹吗？",
-        "confirmDeleteLocal": "要删除此工作区的本地文件夹吗？",
+        "confirmClearLocal": "要清除此工作区的本地文件夹关联吗？磁盘文件不会删除。",
+        "confirmDeleteLocal": "要移除此工作区记录吗？本地文件夹和磁盘文件不会删除。",
         "failedSaveWorkspace": "保存工作区失败。",
         "failedDeleteWorkspace": "删除工作区失败。",
         "failedUpdateWorkspace": "更新工作区失败。",
@@ -983,7 +984,7 @@
         "provisionCommand": "准备命令",
         "runtimeProvisionCommand": "运行时准备命令",
         "runtimeProvisionHint": "在首次启动运行时服务前运行一次（适合繁重的初始化，例如数据库填充）。留空则保持提前准备。",
-        "teardownCommand": "清理命令",
+        "teardownCommand": "拆除命令",
         "provisionFooter": "准备命令会在智能体执行前于派生的 Worktree 中运行。清理命令保存在此，供后续清理流程使用。",
         "dangerZone": "危险区域",
         "createSecretNoOrg": "选择一个组织以创建密钥"
@@ -1016,9 +1017,9 @@
       "watchdog": "Watchdog",
       "configureWatchdog": "配置 Watchdog",
       "setWatchdog": "设置 Watchdog",
-      "watchdogAgent": "看护智能体",
+      "watchdogAgent": "Watchdog 智能体",
       "selectAgent": "选择智能体",
-      "noWatchdogAgent": "无看护智能体",
+      "noWatchdogAgent": "无 Watchdog 智能体",
       "searchAgents": "搜索智能体…",
       "noAgentsFound": "未找到智能体。",
       "instructions": "指令",
@@ -1117,7 +1118,7 @@
         "searchTasks": "搜索任务…",
         "searchingTasks": "正在搜索任务…",
         "noMatchingTasks": "没有匹配的任务。",
-        "editLabel": "编辑{{label}}",
+        "editLabel": "编辑 {{label}}",
         "runtime": {
           "notAttached": "此任务未关联工作区。",
           "jobCompleted": "工作区作业已完成。",
@@ -1153,10 +1154,10 @@
         },
         "watchdog": {
           "disabled": "（已禁用）",
-          "task": "看护任务：",
+          "task": "Watchdog 任务：",
           "viewTask": "查看任务",
           "update": "更新",
-          "openTask": "打开看护任务"
+          "openTask": "打开 Watchdog 任务"
         },
         "labels": {
           "add": "添加标签",
@@ -1261,7 +1262,7 @@
         },
         "sections": {
           "work": "工作",
-          "triage": "分诊",
+          "triage": "分流处理",
           "relationships": "关联",
           "execution": "执行",
           "workspace": "工作区",
@@ -1341,7 +1342,8 @@
           "empty": "暂无产物。工作产物、文档和智能体生成的文件将显示在这里。",
           "run": "运行 {{id}}"
         }
-      }
+      },
+      "pausedAssigneeBudgetNote": "<strong>{{name}}</strong> 因预算限制而暂停。预算暂停解除前，不会开始处理此任务。"
     },
     "issues": {
       "page": {
@@ -1361,7 +1363,7 @@
         "inboxCategory": {
           "everything": "全部类别",
           "issuesITouched": "我最近的任务",
-          "joinRequests": "加入请求",
+          "joinRequests": "加入申请",
           "approvals": "审批",
           "failedRuns": "失败的运行",
           "alerts": "告警"
@@ -1375,7 +1377,7 @@
         "quickFilters": "快速筛选",
         "quickPreset": {
           "all": "全部",
-          "active": "进行中",
+          "active": "活跃任务",
           "backlog": "待规划",
           "done": "已完成"
         },
@@ -1480,7 +1482,7 @@
         "me": "我",
         "blockedBy": "被 {{label}} 阻塞",
         "blockedByStep": "被 {{label}} 阻塞 · 第 {{step}} 步",
-        "blockedByMore": "{{chip}} ... 等另外 {{count}} 项",
+        "blockedByMore": "{{chip}} … 等另外 {{count}} 项",
         "blockedByList": "{{first}}：{{others}}"
       },
       "kanban": {
@@ -1516,8 +1518,8 @@
         "enableNesting": "开启父子任务嵌套",
         "useComfortableCards": "使用宽松卡片",
         "useCompactCards": "使用紧凑卡片",
-        "expandColdLanes": "展开冷列",
-        "collapseColdLanes": "收起冷列",
+        "expandColdLanes": "展开待规划及已结束列",
+        "collapseColdLanes": "收起待规划及已结束列",
         "cardsPerColumn": "每列卡片数",
         "perColumn": "每列 {{count}} 个",
         "resetBoardDensity": "重置看板密度",
@@ -1723,7 +1725,7 @@
           "select": "选择模型",
           "selectRequired": "选择模型（必填）",
           "search": "搜索模型…",
-          "searchCreatable": "搜索模型...（输入即可创建）",
+          "searchCreatable": "搜索模型…（输入即可创建）",
           "detecting": "正在检测…",
           "detectModel": "检测模型",
           "redetectModel": "重新检测模型",
@@ -1751,8 +1753,8 @@
           "xhigh": "超高",
           "max": "最大",
           "ultra": "Ultra",
-          "plan": "规划",
-          "ask": "提问"
+          "plan": "Plan",
+          "ask": "Ask"
         },
         "debug": {
           "captureRawTraces": "捕获原始提供方追踪",
@@ -1889,7 +1891,7 @@
         "live": "运行中",
         "watchdogTitle": "这是自动生成的 Watchdog 任务，用于核实被监视任务树中停止的工作是否合理。",
         "watchdog": "Watchdog",
-        "workModeTitle": "此任务处于{{mode}}。",
+        "workModeTitle": "此任务处于 {{mode}}。",
         "parkedBlockerTitle": "被搁置的工作阻塞——至少有一个已分配的阻塞项处于待规划状态，不会唤醒其负责人。",
         "parkedBlocker": "被搁置的工作阻塞"
       },
@@ -1905,7 +1907,7 @@
         "properties": "属性",
         "hideTask": "隐藏此任务",
         "copyTaskAsMarkdown": "将任务复制为 Markdown",
-        "openFileTitle": "打开文件... (g f)",
+        "openFileTitle": "打开文件… (g f)",
         "openFileAria": "打开此任务中的文件",
         "moreTaskActions": "更多任务操作",
         "addSubtask": "添加子任务"
@@ -2005,7 +2007,7 @@
         "awaitingAckMany": "排队消息正在等待服务器确认。",
         "noActiveRunTarget": "排队消息已没有活跃的目标运行。",
         "alreadySending": "消息已在发送中",
-        "alreadySendingBody": "在确认丢弃前续写已开始，Paperclip 无法撤回该消息。"
+        "alreadySendingBody": "在确认丢弃前续跑已开始，Paperclip 无法撤回该消息。"
       },
       "comments": {
         "loadingEarlier": "正在加载更早的评论…",
@@ -2070,7 +2072,7 @@
       },
       "tabs": {
         "chat": "对话",
-        "activity": "动态",
+        "activity": "活动",
         "relatedWork": "相关工作"
       },
       "recovery": {
@@ -2091,7 +2093,7 @@
         "auto": "自动模式",
         "plan": "规划模式",
         "ask": "Ask 模式",
-        "pendingAsk": "本次提交使用提问模式。点击切换。负责人会在此对话中回答，不进行实现工作。",
+        "pendingAsk": "本次提交使用 Ask 模式。点击切换。负责人会在此对话中回答，不进行实现工作。",
         "pendingPlan": "本次提交已开启规划模式。点击切换。",
         "pendingAuto": "本次提交使用自动模式。点击切换。"
       },
@@ -2145,7 +2147,7 @@
       "externalObjects": {
         "category": {
           "unknown": "尚未解析",
-          "open": "打开",
+          "open": "未关闭",
           "waiting": "等待中",
           "running": "运行中",
           "succeeded": "成功",
@@ -2212,7 +2214,7 @@
         "role": "组织角色。决定职位和能力。",
         "reportsTo": "此智能体在组织层级中的汇报对象。",
         "capabilities": "描述此智能体能做什么。显示在组织架构图中，并用于任务路由。",
-        "adapterType": "此智能体的运行方式：本地 CLI（Claude/Codex/OpenCode）、OpenClaw Gateway、派生进程或通用 HTTP webhook。",
+        "adapterType": "此智能体的运行方式：本地 CLI（Claude/Codex/OpenCode）、OpenClaw Gateway、派生进程或通用 HTTP Webhook。",
         "cwd": "本地适配器已弃用的旧版工作目录回退。现有智能体可能仍带有此值，但新配置应改用项目工作区。",
         "promptTemplate": "每次心跳都会发送。请保持简短、动态。用于描述当前任务背景，而不是大段静态指令。支持 {{agentId}}、{{agentName}}、{{agentRole}} 等模板变量。",
         "model": "覆盖适配器使用的默认模型。",
@@ -2260,7 +2262,7 @@
         "macTitle": "macOS（访达）",
         "macStep1": "在访达中找到该文件夹。",
         "macStep2": "按住 <kbd>Option</kbd> 并右键点击该文件夹。",
-        "macStep3": "点击“将“<folder name>”拷贝为路径名称”。",
+        "macStep3": "点击“将「<folder name>」拷贝为路径名称”。",
         "pasteStep": "将结果粘贴到路径输入框中。",
         "winTitle": "Windows（文件资源管理器）",
         "winStep1": "在文件资源管理器中找到该文件夹。",
@@ -2280,7 +2282,7 @@
           "githubUrl": "请输入 GitHub 仓库 URL。",
           "cursorKey": "请输入 Cursor API 密钥。",
           "envKeyOrSecret": "请输入 {{envKey}} 或选择一个组织密钥。",
-          "hermesUrl": "请输入 Hermes API base URL。",
+          "hermesUrl": "请输入 Hermes API 基础 URL。",
           "kimiModel": "请输入 Kimi API 模型名称。",
           "testFailed": "无法测试智能体。",
           "createFailed": "无法创建智能体。",
@@ -2298,7 +2300,7 @@
           "saved": "确认"
         },
         "localMachine": "本机",
-        "nativeRunner": "原生 app server runner",
+        "nativeRunner": "原生 app server 运行器",
         "connectTitle": "连接模型",
         "connectLede": "将 {{name}} 连接到 {{provider}}。",
         "submittedForApproval": "智能体已提交审批",
@@ -2326,7 +2328,7 @@
         "kimiModel": "Kimi API 模型名称",
         "kimiProtocol": "Kimi API 协议",
         "kimiBaseUrl": "Kimi API 基础 URL",
-        "kimiBaseUrlHint": "可选，覆盖提供方的 endpoint。",
+        "kimiBaseUrlHint": "可选，用于覆盖提供方的端点。",
         "providerDefault": "提供方默认",
         "githubRepository": "GitHub 仓库",
         "branch": "分支",
@@ -2347,7 +2349,7 @@
         "namePlaceholder": "例如 Darnold",
         "invite": "邀请外部智能体",
         "loadingAdapters": "正在加载适配器…",
-        "runner": "Runner",
+        "runner": "运行器",
         "runnerCodex": "Codex（app server）",
         "runnerClaude": "Claude（ACPX）",
         "chooseAdapter": "选择适配器",
@@ -2548,8 +2550,8 @@
         "title": "权限",
         "canCreateAgents": "可创建新智能体",
         "canCreateAgentsHint": "允许此智能体创建或招聘智能体，同时授予任务分配权限。",
-        "canCreateSkills": "可创建/导入技能",
-        "canCreateSkillsHint": "允许此智能体安装、导入、创建和扫描组织技能，而无需创建智能体。",
+        "canCreateSkills": "旧版技能创建标记",
+        "canCreateSkillsHint": "此字段仅保留旧版设置，不控制当前技能操作权限。实际访问由组织技能策略和核心安全检查决定；关闭此开关不会单独禁止安装、导入、创建或扫描技能。",
         "canAssignTasks": "可分配任务"
       },
       "instructions": {
@@ -2668,9 +2670,9 @@
         "empty": "没有有效的 API 密钥。",
         "active": "有效密钥",
         "createdAt": "创建于 {{date}}",
-        "revoke": "吊销",
-        "revoked": "已吊销的密钥",
-        "revokedAt": "吊销于 {{date}}"
+        "revoke": "撤销",
+        "revoked": "已撤销的密钥",
+        "revokedAt": "撤销于 {{date}}"
       }
     },
     "issueChat": {
@@ -2699,7 +2701,7 @@
       "liveStatus": {
         "usingTool": "正在使用 {{tool}}",
         "noOutputStillRunning": "{{elapsed}} 无输出 - 仍在运行",
-        "ago": "{{elapsed}}前"
+        "ago": "{{elapsed}} 前"
       },
       "cot": {
         "ranCommandsOne": "运行了 {{count}} 条命令",
@@ -2901,7 +2903,7 @@
         "noSubscription": "此提供方不提供订阅连接。",
         "signInCancelled": "登录已取消，未创建连接。",
         "signInWith": "使用你的 {{subscription}} 登录。",
-        "submitCode": "提交代码",
+        "submitCode": "提交授权码",
         "waitingForSignIn": "等待登录…",
         "preparingSignIn": "正在准备登录…"
       },
@@ -2925,7 +2927,7 @@
         "chooseManaged": "选择托管连接"
       },
       "aiConnectionField": {
-        "incompatible": "此连接不支持当前的 harness 和模型。请在保存前选择兼容的连接。",
+        "incompatible": "此连接不支持当前的 Harness 和模型。请在保存前选择兼容的连接。",
         "adoptTitle": "为 {{agent}} 采用“连接”",
         "adoptDescription": "保存时会先在 {{agent}} 的环境中测试此账号，再替换其现有认证。其他智能体保持当前配置。",
         "responsibleDefault": "负责人的默认连接。对你而言：{{name}}。其他用户使用各自的默认连接。",
@@ -3030,7 +3032,7 @@
         "executor": {
           "description": "通过 Executor 工作区运行工具。",
           "instruction1": "在 Executor 中连接你的应用并配置操作策略。",
-          "instruction2": "打开 Integrations，复制“Connect an 智能体”下的 URL。",
+          "instruction2": "打开 Integrations，复制“Connect an agent”下的 URL。",
           "instruction3": "将其粘贴到此处，并在出现提示时登录。",
           "placeholder": "粘贴你的 Executor 工作区 MCP URL",
           "urlHelp": "使用托管的工作区 URL，或 Paperclip 可访问的自托管 HTTP 端点。服务器的端点策略同样适用。",
@@ -3044,7 +3046,7 @@
         "connectionSettings": "连接设置",
         "manageIn": "在 {{provider}} 中管理",
         "disconnectTitle": "断开与 {{provider}} 的连接？",
-        "disconnectDescription": "删除此连接已保存的凭据，并停止通过 Paperclip 发起后续调用。其他连接不受影响。已发送给提供方的操作可能仍会完成。再次连接需要重新登录或提供新的密钥。",
+        "disconnectDescription": "移除此连接的凭据访问并停止通过 Paperclip 发起后续调用。仅删除此连接专用的凭据；共享或另行管理的密钥会保留。其他连接不受影响。已发送给提供方的操作可能仍会完成。再次连接需要重新登录或提供新的密钥。",
         "disconnecting": "正在断开连接…",
         "disconnectConnection": "断开连接"
       },
@@ -3079,10 +3081,10 @@
         "advancedAuth": "高级认证",
         "authentication": "认证",
         "authAuto": "自动（需要时登录）",
-        "bearerToken": "Bearer token",
+        "bearerToken": "Bearer Token",
         "customHeaders": "自定义请求头",
         "authNone": "无额外认证",
-        "bearerTokenLower": "bearer Token",
+        "bearerTokenLower": "Bearer Token",
         "bearerHelp": "只粘贴 Token，不要包含 Bearer 一词。它会保存在此连接的凭据中。",
         "additionalHeaders": "额外请求头",
         "headers": "请求头",
@@ -3231,7 +3233,7 @@
           "autoHint": "Paperclip 会询问服务器需要什么，并引导你完成。建议从这里开始。",
           "none": "无需登录",
           "noneHint": "任何拥有地址的人都可以访问此服务器。",
-          "bearer": "Key 或 Token",
+          "bearer": "密钥或 Token",
           "bearerHint": "Paperclip 会将你的密钥作为 Authorization 请求头发送。",
           "customHeadersHint": "适用于自定义请求头名称的服务器。值会作为 Paperclip 密钥保存，且无法读回。",
           "oauth": "浏览器登录",
@@ -3332,11 +3334,11 @@
         "summary": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}。",
         "summaryCarry": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，并带上 {{fields}}。",
         "summaryMove": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，并将此条目移到 {{advanceTo}}。",
-        "summaryWait": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，然后等所有 {{noun}} 完成后再将其移到 {{whenFinished}}。",
+        "summaryWait": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，然后等所有 {{noun}} 完成后再将此条目移到 {{whenFinished}}。",
         "summaryCarryMove": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，带上 {{fields}}，并将此条目移到 {{advanceTo}}。",
-        "summaryCarryWait": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，带上 {{fields}}，然后等所有 {{noun}} 完成后再将其移到 {{whenFinished}}。",
-        "summaryMoveWait": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，将此条目移到 {{advanceTo}}，然后等所有 {{noun}} 完成后再将其移到 {{whenFinished}}。",
-        "summaryCarryMoveWait": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，带上 {{fields}}，将此条目移到 {{advanceTo}}，然后等所有 {{noun}} 完成后再将其移到 {{whenFinished}}。",
+        "summaryCarryWait": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，带上 {{fields}}，然后等所有 {{noun}} 完成后再将此条目移到 {{whenFinished}}。",
+        "summaryMoveWait": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，将此条目移到 {{advanceTo}}，然后等所有 {{noun}} 完成后再将此条目移到 {{whenFinished}}。",
+        "summaryCarryMoveWait": "Paperclip 会为每个条目在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}，带上 {{fields}}，将此条目移到 {{advanceTo}}，然后等所有 {{noun}} 完成后再将此条目移到 {{whenFinished}}。",
         "bulletCreates": "为智能体返回的每一项在 {{pipeline}} → {{stage}} 中创建一个 {{noun}}。",
         "destinationPipelineFallback": "目标流水线",
         "entryStepFallback": "其入口步骤",
@@ -3477,7 +3479,7 @@
         "nav": {
           "stage": "阶段",
           "automation": "自动化",
-          "operate": "运营",
+          "operate": "操作",
           "stageSection": "阶段分区",
           "stageSections": "阶段分区"
         },
@@ -3595,7 +3597,7 @@
           "stayOnStep": "停留在此步骤",
           "asSoonAsCreated": "各部分创建后立即执行",
           "wait": "等待",
-          "waitUntilAll": "等所有 {{plural}} 完成后，将其移到",
+          "waitUntilAll": "等所有 {{plural}} 完成后，将此条目移到",
           "moveWhenFinished": "所有部分完成后移动此条目",
           "nothingToSplit": "如果没有值得拆分的内容，此条目仍会移到 {{stage}}。",
           "pieceNounExample": "子项"
@@ -3770,7 +3772,7 @@
           "cleanupWithCount": "{{label}}（{{number}}）"
         },
         "index": {
-          "liveDownstream": "下游 {{number}} 个运行中",
+          "liveDownstream": "下游有 {{number}} 项工作进行中",
           "lastActivity": "最近活动",
           "sortMostToReview": "待审核最多",
           "sortMostInMotion": "进行中最多",
@@ -4068,7 +4070,7 @@
         },
         "saving": "保存中…",
         "badges": {
-          "installedForAll": "已为全部安装",
+          "installedForAll": "已为所有智能体安装",
           "permittedOnly": "仅获许可",
           "notPermitted": "未获许可"
         },
@@ -4091,7 +4093,7 @@
           "unavailableTools": "不可用的工具",
           "checkingTools": "正在检查工具…",
           "allAllowed": "此智能体可指定的所有已知工具均已获准使用。",
-          "blockedIntro": "智能体可以调用但会被 Paperclip 阻止的工具：",
+          "blockedIntro": "智能体可指定名称、但会被 Paperclip 阻止调用的工具：",
           "more": "还有 {{count}} 个"
         }
       },
@@ -4434,7 +4436,7 @@
         "apps": {
           "anApp": "某个应用",
           "two": "{{first}} 和 {{second}}",
-          "more": "{{first}} 等另外 {{count}} 个应用"
+          "more": "{{first}} 及其他 {{count}} 个应用"
         },
         "unknownRoutine": "未知例程",
         "scopedAssignment": "限定范围的分配"
@@ -4692,7 +4694,7 @@
         "health": {
           "unknown": "未知",
           "healthy": "健康",
-          "degraded": "性能下降",
+          "degraded": "已降级",
           "failed": "失败",
           "unchecked": "未检查",
           "ok": "正常",
@@ -4720,7 +4722,11 @@
         },
         "durationMinutes": "{{count}} 分钟",
         "durationHours": "{{count}} 小时",
-        "durationDays": "{{count}} 天"
+        "durationDays": "{{count}} 天",
+        "invocationStatus": {
+          "authorized": "已授权",
+          "executing": "执行中"
+        }
       },
       "smokeLabMatrix": {
         "paths": {
@@ -4807,7 +4813,12 @@
         "selectRun": "选择一次运行以查看其步骤。",
         "runTimes": "开始于 {{started}} · 结束于 {{finished}}",
         "noSteps": "此运行没有记录任何步骤。",
-        "viewScreenshot": "查看截图"
+        "viewScreenshot": "查看截图",
+        "health": {
+          "amber": "未完成",
+          "green": "正常",
+          "red": "失败"
+        }
       },
       "toolTabs": {
         "pasteConfig": "粘贴配置",
@@ -5078,7 +5089,7 @@
       "interactionAudience": {
         "labelAnyone": "任何人",
         "labelNotCreator": "创建者以外的任何人",
-        "labelHumanOnly": "仅限人类",
+        "labelHumanOnly": "仅限人工",
         "effectAnyone": "组织内任何人都可以回复——Board 或任意智能体，包括提问的智能体。",
         "effectNotCreator": "组织内除创建此卡片的智能体及其运行以外的任何人。需要由他人给出答案时使用。",
         "effectHumanOnly": "只有 Board 可以回复，智能体会被拒绝。",
@@ -5097,7 +5108,7 @@
         "shortAddresseeOrBoard": "只有 {{addressee}} 或 Board 可以回复",
         "shortNotCreator": "除 {{creator}} 以外的任何人都可以回复",
         "shortAnyone": "任何人都可以回复",
-        "noteGovernedAction": "此卡片会执行受管控的操作，因此无论请求的受众是什么，都仅限人类处理。",
+        "noteGovernedAction": "此卡片会执行受管控的操作，因此无论请求的受众是什么，都仅限人工处理。",
         "noteCompanyCap": "组织的交互治理规则将范围从“{{requested}}”收窄为“{{effective}}”。",
         "noteLegacy": "创建于“任何人”成为默认值之前，因此仍受限制。新卡片将对所有人开放。",
         "labelAddressed": "已指定"
@@ -5117,7 +5128,7 @@
           "interaction_governed_action_denied": "此交互关联的受管控操作需要单独授权。",
           "interaction_run_attribution_required": "回复此交互需要有效且已通过身份验证的智能体运行。",
           "interaction_scope_denied": "你没有处理此交互的访问权限。",
-          "review_policy_denied": "审核策略不允许你批准或拒绝此请求。",
+          "review_policy_denied": "审核策略不允许你同意或拒绝此请求。",
           "interaction_not_found": "找不到此交互。",
           "interaction_already_resolved": "此交互已处理。",
           "interaction_superseded": "此交互已被后续请求或回复取代。",
@@ -5171,10 +5182,10 @@
           "billingCode": "计费代码",
           "checkoutRunId": "签出运行",
           "executionRunId": "执行运行",
-          "hiddenAt": "已隐藏",
-          "startedAt": "已开始",
-          "completedAt": "已完成",
-          "cancelledAt": "已取消",
+          "hiddenAt": "隐藏时间",
+          "startedAt": "开始时间",
+          "completedAt": "完成时间",
+          "cancelledAt": "取消时间",
           "requestDepth": "请求深度",
           "sourceTrust": "来源信任",
           "executionPolicy": "执行策略",
@@ -5191,7 +5202,7 @@
           "allow_board_actor": "Board 操作者",
           "allow_self": "自己的任务",
           "allow_issue_mention_grant": "提及授权",
-          "allow_direct_parent_report": "直属上级汇报",
+          "allow_direct_parent_report": "向直接父任务汇报",
           "allow_low_trust_boundary": "低信任边界许可",
           "allow_explicit_grant": "显式权限授予",
           "allow_instance_admin": "实例管理员",
@@ -5238,14 +5249,14 @@
         "historicalRun": "{{agent}} 运行 {{runId}} {{status}}"
       },
       "issueThreadInteractions": {
-        "verdictDecided": "已决定 {{count}} 项",
+        "verdictDecided": "已裁定 {{count}} 项",
         "verdictApproved": "已同意 {{count}} 项",
         "verdictRejected": "已拒绝 {{count}} 项",
-        "verdictDeferred": "推迟 {{count}} 项",
+        "verdictDeferred": "已暂缓 {{count}} 项",
         "verdictsExpiredAfterComment": "有新评论，裁决已过期",
         "verdictsExpiredAfterTargetChanged": "目标已变更，裁决已过期",
         "verdictsExpired": "裁决已过期",
-        "verdictProgress": "已决定 {{decided}}/{{total}} 项",
+        "verdictProgress": "已裁定 {{decided}}/{{total}} 项",
         "skipped": "已跳过的交互",
         "withdrawn": "已撤回的交互",
         "issueClosed": "任务关闭时已过期",
@@ -5274,7 +5285,7 @@
         "requestedSelectionOne": "请求从 1 个选项中选择",
         "requestedSelectionMany": "请求从 {{count}} 个选项中选择",
         "serviceConnected": "{{service}} 已连接",
-        "serviceDeclined": "{{service}} 已拒绝",
+        "serviceDeclined": "已拒绝连接 {{service}}",
         "serviceSuperseded": "{{service}} 请求已被取代",
         "serviceExpired": "{{service}} 请求已过期",
         "connectService": "连接 {{service}}",
@@ -5364,7 +5375,7 @@
         "updatedWindow": "更新时间范围"
       },
       "searchQueryParser": {
-        "openTodo": "打开的待办任务",
+        "openTodo": "未关闭的待办任务",
         "filterByStatus": "按任务状态筛选",
         "blockedTasks": "受阻任务",
         "findBlocked": "查找受阻的工作",
@@ -5581,7 +5592,8 @@
           "toolConnectionGrantDelegated": "授予了凭据代用权限：",
           "toolConnectionGrantDelegationRevoked": "撤销了凭据委托：",
           "providerTraceMetadataListed": "仅列出了提供方 Trace 元数据",
-          "instanceExperimentalSettingsUpdated": "更新了实例实验设置"
+          "instanceExperimentalSettingsUpdated": "更新了实例实验设置",
+          "providerTraceExpired": "提供方 Trace 已过期"
         },
         "detail": {
           "issueCreated": "创建了任务",
@@ -5645,7 +5657,8 @@
           "issueThreadInteractionItemVerdictsSubmitted": "提交了请求的裁决",
           "issueStalledReviewDecided": "记录了审核裁决",
           "providerTraceMetadataListed": "仅列出了提供方 Trace 元数据",
-          "instanceExperimentalSettingsUpdated": "更新了实例实验设置"
+          "instanceExperimentalSettingsUpdated": "更新了实例实验设置",
+          "providerTraceExpired": "提供方 Trace 已过期"
         },
         "stalledReview": {
           "approve": "同意了审核",
@@ -5836,7 +5849,7 @@
           "invalid": "无效",
           "invalidTooltip": "无法安装此技能：内容不是有效的 Agent Skills markdown。"
         },
-        "provenanceTooltip": "从应用内置的技能目录安装，来源由包版本和内容哈希签名。",
+        "provenanceTooltip": "从应用内置的技能目录安装，来源信息包含包版本和内容哈希。",
         "sort": {
           "agents": "智能体最多",
           "stars": "星标最多",
@@ -6187,7 +6200,8 @@
         "browseCatalog": "浏览目录",
         "emptyNoSkills": "还没有技能。可以创建一个，或从目录安装。",
         "emptyTab": "此标签页中还没有技能。",
-        "noAgentsSupportSkillsCompany": "此组织中还没有支持技能的智能体。"
+        "noAgentsSupportSkillsCompany": "此组织中还没有支持技能的智能体。",
+        "skillIdentifier": "标识"
       },
       "forkSkillDialog": {
         "editingCopy": "正在编辑副本",
@@ -6311,9 +6325,9 @@
         "forking": "复制自",
         "forkSourceNotFoundYouCanStillCreateA": "找不到副本来源，仍可创建空白技能。",
         "basics": "基本信息",
-        "nameTheSkillAndSetTheRoutesafeSlug": "为技能命名，并设置可用于路由的标识。",
+        "nameTheSkillAndSetTheRoutesafeSlug": "为技能命名，并设置可用于路由的路径标识。",
         "name": "名称",
-        "slug": "标识",
+        "slug": "路径标识",
         "tagline": "简短介绍",
         "appearance": "外观",
         "tuneHowTheSkillAppearsInTheStoreAnd": "调整技能在商店和工作室切换器中的显示方式。",
@@ -6369,7 +6383,7 @@
         "filePath": "文件路径",
         "aFileAlreadyExistsAtThatPath": "该路径下已存在文件。",
         "aFolderAlreadyExistsAtThatPath": "该路径下已存在文件夹。",
-        "savedChangesCreateANewVersionImmediatelyExternalSources": "保存更改会立即创建新版本。发布或安装更新后，外部来源才会更新。",
+        "savedChangesCreateANewVersionImmediatelyExternalSources": "保存更改会立即写入技能文件并创建新版本。从项目引用的技能会直接写回项目文件，不会自动提交。",
         "aREADMEmdSeedFileIsCreatedSoTheFolder": "将创建初始 README.md 文件，以便在文件树中显示该文件夹。",
         "create": "创建",
         "folderPathIsRequired": "请填写文件夹路径。",
@@ -6411,7 +6425,7 @@
         "selectedRunTemplateIsNoLongerAvailableTheSelection": "所选运行模板已不可用，选择已重置。",
         "testRuns": "测试运行",
         "run": "运行",
-        "loadingRuns": "加载运行中…",
+        "loadingRuns": "正在加载运行记录…",
         "noTestRunsYetPickAnAgentAndRun": "暂无测试运行。选择智能体后点击运行。",
         "runOnlyTheInputText": "仅运行输入文本。",
         "builtIn": "内置",
@@ -6446,7 +6460,7 @@
         "noAgents": "暂无智能体。",
         "paused": "已暂停",
         "runDetailsAreStillLoading": "运行详情仍在加载中。",
-        "loadingRun": "加载运行中…",
+        "loadingRun": "正在加载运行详情…",
         "runNotFound": "找不到运行。",
         "template": "模板",
         "skillVersion": "技能版本",
@@ -6496,7 +6510,7 @@
         "descriptionPlaceholder": "检查仓库变更的正确性、测试和可维护性。",
         "runTemplateNamePlaceholder": "专项冒烟测试",
         "runTemplateDescriptionPlaceholder": "常见技能检查的简短说明",
-        "fieldRequired": "请填写{{label}}。",
+        "fieldRequired": "请填写 {{label}}。",
         "removedAgent": "{{name}}（已移除）"
       },
       "skillsContextualSidebar": {
@@ -6616,7 +6630,7 @@
         "searchDiscoveredSkills2": "搜索已发现的技能",
         "otherWorkspaces": "其他工作区",
         "importAs": "导入为",
-        "useALowercaseURLsafeSlug": "请使用由小写字符组成且适用于 URL 的标识。",
+        "useALowercaseURLsafeSlug": "请使用由小写字符组成且适用于 URL 的路径标识。",
         "noFilesWereCopied": "未复制任何文件。",
         "theseSkillsReferenceTheFilesInTheProjectWorkspace": "这些技能引用项目工作区中的文件，在技能工作室中的编辑将直接保存回这些文件。",
         "open": "打开",
@@ -6638,7 +6652,7 @@
         "summarySkipped": "⊘ 已跳过 {{count}} 项",
         "scanningProject": "正在扫描 {{project}} 中的技能…",
         "project": "项目",
-        "searchedFolders": "此项目工作区的常用技能文件夹中均未找到 <file>SKILL.md</file>。已搜索 {{folders}} 及另外 {{count}} 个智能体运行器文件夹。",
+        "searchedFolders": "此项目工作区的常用技能文件夹中均未找到 <file>SKILL.md</file>。已搜索 {{folders}} 及另外 {{count}} 个智能体 Harness 文件夹。",
         "nonStandardFolders": "对于非标准文件夹中的技能，请使用<link>从路径或 URL 导入</link>。",
         "workspaceLocal": "本地",
         "workspaceFolder": "文件夹",
@@ -6696,7 +6710,7 @@
         "interestLabel": "此卡片关注和报告的内容",
         "interestHelp": "这条消息驱动整张卡片：智能体据此编译关注查询，并在每次更新时按它执行。修改后会重建卡片。",
         "queryDebug": "查询调试",
-        "compiledBy": "由 Summarizer 编译于 {{time}} · 版本 {{version}}。修改上方的“此卡片关注的内容”即可重建。",
+        "compiledBy": "由 Summarizer 编译于 {{time}} · 版本 {{version}}。修改上方的“此卡片关注和报告的内容”即可重建。",
         "notCompiled": "尚未编译。卡片设置完成后会自动构建查询。",
         "noMatches": "编译后的查询当前没有匹配任何任务。",
         "mentionedLatest": "最新更新中提及",
@@ -7521,14 +7535,14 @@
           "unblockMany": "解除 {{target}} 的阻塞：移除 {{count}} 个阻塞项",
           "cancelTreeOne": "取消 {{target}} 及其子树（{{count}} 个任务）",
           "cancelTreeMany": "取消 {{target}} 及其子树（{{count}} 个任务）",
-          "apply": "应用效果"
+          "apply": "执行操作"
         },
         "cause": {
           "denyDecisionIntersection": "被权限边界阻止（未获授权则拒绝执行）",
           "invalidEffectReference": "引用的任务已不存在",
           "targetChanged": "自提议以来目标已变更",
-          "effectExecutionFailed": "效果运行时出错",
-          "couldNotRun": "效果无法运行"
+          "effectExecutionFailed": "操作执行时出错",
+          "couldNotRun": "操作无法执行"
         },
         "result": {
           "skipped": "已跳过 {{target}}：自提议以来目标已变更",
@@ -7543,7 +7557,7 @@
           "removedBlockersMany": "已从 {{target}} 移除 {{count}} 个阻塞项",
           "cancelledOne": "已取消 {{target}} 下的 {{count}} 个任务",
           "cancelledMany": "已取消 {{target}} 下的 {{count}} 个任务",
-          "applied": "已在 {{target}} 上应用效果"
+          "applied": "已对 {{target}} 执行操作"
         },
         "badge": {
           "pending": "待处理",
@@ -7555,7 +7569,7 @@
         "provenance": {
           "proposedBy": "由 <agent>{{agent}}</agent> 提议",
           "anAgent": "某个智能体",
-          "whileRunning": "运行于 <link>{{issue}}</link>",
+          "whileRunning": "执行 <link>{{issue}}</link> 期间",
           "appliesTo": " · 适用于 ",
           "viewRun": "查看运行"
         },
@@ -7578,7 +7592,7 @@
           "cancelTree": "取消任务树"
         },
         "notNow": "暂不处理？",
-        "dismissNoEffects": "忽略（不执行任何效果）",
+        "dismissNoEffects": "忽略（不执行任何操作）",
         "expired": {
           "title": "决策窗口已关闭",
           "targetGone": "在做出决策前，某个目标任务已被取消。",
@@ -7587,8 +7601,8 @@
           "proposerRewoken": "已重新唤醒提议者。"
         },
         "withdrawn": "提议者在收到回应前撤回了此决策。",
-        "dismissedNoEffects": "已忽略，未执行任何效果。",
-        "partialWarning": "部分效果可能已经应用。请先检查结果，再请提议者重新提议。"
+        "dismissedNoEffects": "已忽略，未执行任何操作。",
+        "partialWarning": "部分操作可能已经执行。请先检查结果，再请提议者重新提议。"
       },
       "decisionDateChips": {
         "from": "开始",
@@ -7698,7 +7712,7 @@
       "issueAssignedBacklogNotice": {
         "theAssignee": "负责人",
         "parked": "<strong>已搁置</strong> — 在状态改为待办或进行中之前，不会要求 <strong>{{assignee}}</strong> 处理此任务。",
-        "commentsNotify": "评论仍会通知负责人，以便提问或分诊。仅当工作确实需要暂缓时才保持搁置。",
+        "commentsNotify": "评论仍会通知负责人，以便提问或分流处理。仅当工作确实需要暂缓时才保持搁置。",
         "resumeNow": "立即恢复"
       },
       "issueAttachmentsSection": {
@@ -7761,9 +7775,9 @@
           "stalledReviewMany": "此任务被关联任务阻塞，但链条停滞在审核中，没有明确的下一步。请处理下方停滞的审核，或将其从阻塞项中移除。",
           "reopenSuppressedOne": "发送消息暂时不会重启此任务：在关联任务完成前，它会保持受阻，之后会自动重新打开。在此期间，评论仍会通知 {{name}}，以便答疑或分流处理。",
           "reopenSuppressedMany": "发送消息暂时不会重启此任务：在所有关联任务完成前，它会保持受阻，之后会自动重新打开。在此期间，评论仍会通知 {{name}}，以便答疑或分流处理。",
-          "untilCompleteOne": "在关联任务完成前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分诊。",
-          "untilCompleteMany": "在关联任务完成前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分诊。",
-          "untilMovedBack": "在有人将其移回待办之前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分诊。"
+          "untilCompleteOne": "在关联任务完成前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分流处理。",
+          "untilCompleteMany": "在所有关联任务完成前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分流处理。",
+          "untilMovedBack": "在有人将其移回待办之前，此任务处于受阻状态。评论仍会通知负责人，以便提问或分流处理。"
         },
         "stillBlocked": {
           "base": "仍被 <id>{{id}}</id> 阻塞。",
@@ -7924,7 +7938,7 @@
           "ownerCompleted": "已由恢复负责人完成",
           "delegated": "已委派为后续任务",
           "falsePositive": "误报",
-          "escalated": "已升级"
+          "escalated": "已上报"
         },
         "ancestry": {
           "ancestor": "仅向前",
@@ -7948,14 +7962,14 @@
           "anotherTask": "另一个任务"
         },
         "breakGlass": {
-          "trigger": "我已核实 — 仍然调和",
-          "title": "紧急调和",
+          "trigger": "我已核实 — 仍然对齐",
+          "title": "紧急对齐",
           "body": "这会绕过 Paperclip 的安全检查，并在<strong>没有祖先关系证明</strong>的情况下将已记录的工作区指向实际分支。请先确认下方的分叉情况并记录原因，再继续。",
           "verdict": "祖先关系判定",
           "reason": "原因 <hint>（必填 — 将记录到审计日志）</hint>",
           "placeholder": "例如：已核实实际分支只包含预期的后续提交，可以安全采用。",
-          "reconciling": "调和中…",
-          "confirm": "仍然调和（紧急）"
+          "reconciling": "对齐中…",
+          "confirm": "仍然对齐（紧急）"
         },
         "repair": {
           "uncommitted": "未提交的更改",
@@ -7975,7 +7989,7 @@
         },
         "wake": {
           "wakeOwner": "将请智能体选择下一步",
-          "ownerRepair": "Paperclip 正在重试原负责人",
+          "ownerRepair": "Paperclip 正在让原负责人重新尝试",
           "recoveryOwner": "恢复负责人正在修复后续执行路径",
           "boardEscalation": "需要 Board 决策",
           "manual": "需要人工跟进",
@@ -7994,7 +8008,7 @@
         "lineage": {
           "retryExpired": "此任务的自动重试已到期但未执行，任务目前没有继续推进。需要有人重试或记录下一步。任务仍由原负责人负责。",
           "sourceExhausted": "此任务的上次运行停下来等待，但并没有需要等待的对象。原负责人已用完所有自动修复尝试，下一步需要做出决策。任务仍由其负责人负责。",
-          "sourceRetrying": "此任务的上次运行停下来等待，但并没有需要等待的对象。Paperclip 正在重试原负责人，以记录真正的下一步。任务仍由其负责人负责，目前无需操作。",
+          "sourceRetrying": "此任务的上次运行停下来等待，但并没有需要等待的对象。Paperclip 正在让原负责人重新尝试，以记录真正的下一步。任务仍由其负责人负责，目前无需操作。",
           "recoveryOwner": "原负责人未能在重试额度内记录下一步。恢复负责人现在只负责修复路径，任务本身仍属于原负责人。",
           "board": "自动恢复已用尽，需要 Board 选择下一步。任务本身仍属于原负责人。"
         },
@@ -8067,7 +8081,7 @@
         "resolvedAs": "已解决：{{outcome}}",
         "resolveRecovery": "处理恢复",
         "resolveEllipsis": "处理…",
-        "reconcileForward": "向前调和并继续",
+        "reconcileForward": "向前对齐并继续",
         "reissue": {
           "title": "在隔离工作区中重新发起",
           "recommended": "推荐",
@@ -8075,7 +8089,7 @@
           "baseRef": "基准引用",
           "recorded": "已记录",
           "ancestry": "祖先关系",
-          "confirm": "创建隔离的重新发起"
+          "confirm": "创建隔离的重新派发任务"
         },
         "footer": {
           "observing": "恢复流程正在观察，未中断正在执行的运行。",
@@ -8282,8 +8296,8 @@
           "connectionIntent": "连接请求"
         },
         "plan": {
-          "approvedResumeFailed": "已批准 — 智能体恢复失败",
-          "approved": "已批准",
+          "approvedResumeFailed": "已同意 — 智能体恢复失败",
+          "approved": "已同意",
           "changesRequested": "已要求修改",
           "inReview": "审核中",
           "label": "计划"
@@ -8292,9 +8306,9 @@
         "tool": {
           "running": "运行中…",
           "executed": "已执行",
-          "awaitingApproval": "等待批准",
+          "awaitingApproval": "等待审批",
           "waitingApproval": "等待审批",
-          "approvedRunning": "已批准 · 运行中…",
+          "approvedRunning": "已同意 · 运行中…",
           "succeeded": "成功",
           "executionFailed": "执行失败",
           "couldNotComplete": "操作无法完成。",
@@ -8303,8 +8317,8 @@
           "showResult": "显示结果详情",
           "viewResult": "查看结果",
           "declining": "拒绝中…",
-          "approveRequest": "批准请求",
-          "approveRun": "批准并运行",
+          "approveRequest": "同意请求",
+          "approveRun": "同意并运行",
           "approvalOptions": "审批选项",
           "alwaysAllow": "始终允许"
         },
@@ -8374,8 +8388,8 @@
         "confirmed": "已确认",
         "resume": {
           "failed": "智能体恢复失败",
-          "retrying": "批准后 Paperclip 正在重试恢复智能体（第 {{attempt}}/{{max}} 次）。",
-          "needsAttention": "智能体恢复这项已批准的工作之前，Paperclip 需要人工处理。",
+          "retrying": "同意后 Paperclip 正在重试恢复智能体（第 {{attempt}}/{{max}} 次）。",
+          "needsAttention": "智能体恢复这项已获同意的工作之前，Paperclip 需要人工处理。",
           "latestCause": "最近原因：<code>{{code}}</code>"
         },
         "confirm": {
@@ -8395,7 +8409,7 @@
           "attachScreenshots": "附加截图"
         },
         "unresolvable": "无法处理此请求。请重试或创建新请求。",
-        "approving": "批准中…",
+        "approving": "正在同意…",
         "secret": {
           "failedBadge": "失败",
           "title": "绑定现有密钥",
@@ -8403,9 +8417,9 @@
           "targetAgent": "目标智能体",
           "configPath": "新的配置路径",
           "theBoard": "Board",
-          "approvedCreating": "已由 {{who}} 批准 — 正在创建绑定",
+          "approvedCreating": "已由 {{who}} 同意 — 正在创建绑定",
           "rechecking": "写入前，Paperclip 正在重新检查权限和提案快照。",
-          "created": "绑定已创建 · 由 {{who}} 批准",
+          "created": "绑定已创建 · 由 {{who}} 同意",
           "canUseAt": "目标智能体现在可以使用提议的配置路径 · {{when}}。",
           "canUse": "目标智能体现在可以使用提议的配置路径。",
           "failedTitle": "失败 · 未创建绑定",
@@ -8417,7 +8431,7 @@
           "expired": "提案已过期",
           "expiredBody": "未创建绑定。需要重新提交提案。",
           "expires": "过期时间：{{time}}",
-          "approveBind": "批准并绑定",
+          "approveBind": "同意并绑定",
           "addReason": "添加原因…",
           "reasonPlaceholder": "可选：说明为什么不应创建此绑定。",
           "binding": "密钥绑定"
@@ -8568,8 +8582,8 @@
         "enableParentchildNesting": "开启父子任务嵌套",
         "useComfortableCards": "使用宽松卡片",
         "useCompactCards": "使用紧凑卡片",
-        "expandColdLanes": "展开冷列",
-        "collapseColdLanes": "收起冷列",
+        "expandColdLanes": "展开待规划及已结束列",
+        "collapseColdLanes": "收起待规划及已结束列",
         "cardsPerColumn": "每列卡片数",
         "resetBoardDensity": "重置看板密度",
         "chooseWhichTaskColumnsStayVisible": "选择要显示的任务列",
@@ -8584,8 +8598,8 @@
         "noResponsible": "无负责人",
         "loadingMoreTasks": "正在加载更多任务…",
         "scrollToLoadMoreTasks": "滚动以加载更多任务",
-        "createNamed": "创建{{label}}",
-        "newNamed": "新建{{label}}",
+        "createNamed": "创建 {{label}}",
+        "newNamed": "新建 {{label}}",
         "newTaskIn": "在 {{group}} 中新建任务",
         "stepSuffix": " · 第 {{step}} 步",
         "blockedBy": "被 {{label}} 阻塞{{step}}",
@@ -8649,7 +8663,7 @@
         "alphabetical": "按字母顺序",
         "recent": "最近",
         "projectPausedByBudget": "项目因预算暂停",
-        "leaving": "正在离开…",
+        "leaving": "正在退出…",
         "leaveProject": "退出项目",
         "projects": "项目",
         "newProject": "新建项目",
@@ -8706,11 +8720,11 @@
         "taskIsPaused": "任务已暂停。",
         "wakeCount": "唤醒受影响的智能体（{{count}}）",
         "cancelTasks": "取消 {{tasks}}",
-        "restoreTasks": "恢复{{tasks}}",
+        "restoreTasks": "恢复 {{tasks}}",
         "oneTask": "{{count}} 个任务",
         "manyTasks": "{{count}} 个任务",
         "tasksCancelled": "将取消 {{tasks}}。",
-        "tasksRestored": "将恢复{{tasks}}。",
+        "tasksRestored": "将恢复 {{tasks}}。",
         "tasksResumed": "{{tasks}} 将恢复。"
       },
       "issueOutputSection": {
@@ -8786,12 +8800,12 @@
         "clearAllFilters": "清除所有筛选条件",
         "oneResultOneFilterQuery": "1 个结果匹配“{{query}}”，但当前筛选条件隐藏了所有结果。",
         "oneResultOneFilter": "1 个结果符合搜索条件，但当前筛选条件隐藏了所有结果。",
-        "oneResultManyFiltersQuery": "1 个结果匹配“{{query}}”，但{{filters}} 个当前筛选条件隐藏了所有结果。",
-        "oneResultManyFilters": "1 个结果符合搜索条件，但{{filters}} 个当前筛选条件隐藏了所有结果。",
+        "oneResultManyFiltersQuery": "1 个结果匹配“{{query}}”，但 {{filters}} 个当前筛选条件隐藏了所有结果。",
+        "oneResultManyFilters": "1 个结果符合搜索条件，但 {{filters}} 个当前筛选条件隐藏了所有结果。",
         "manyResultsOneFilterQuery": "{{total}} 个结果匹配“{{query}}”，但当前筛选条件隐藏了所有结果。",
         "manyResultsOneFilter": "{{total}} 个结果符合搜索条件，但当前筛选条件隐藏了所有结果。",
-        "manyResultsManyFiltersQuery": "{{total}} 个结果匹配“{{query}}”，但{{filters}} 个当前筛选条件隐藏了所有结果。",
-        "manyResultsManyFilters": "{{total}} 个结果符合搜索条件，但{{filters}} 个当前筛选条件隐藏了所有结果。",
+        "manyResultsManyFiltersQuery": "{{total}} 个结果匹配“{{query}}”，但 {{filters}} 个当前筛选条件隐藏了所有结果。",
+        "manyResultsManyFilters": "{{total}} 个结果符合搜索条件，但 {{filters}} 个当前筛选条件隐藏了所有结果。",
         "oneMoreResult": "增加 {{count}} 个结果",
         "moreResults": "增加 {{count}} 个结果"
       },
@@ -9053,10 +9067,10 @@
         "updating": "更新中…",
         "insertOperator": "插入运算符 {{token}}",
         "serverReturned": "服务器返回 {{status}}。",
-        "sortedBy": " · 按{{sort}}排序",
+        "sortedBy": " · 按 {{sort}} 排序",
         "searchingQuery": "正在搜索“{{query}}”…",
         "noResultsQuery": "没有“{{query}}”的搜索结果",
-        "noScopeMatch": "在{{scope}}中未找到匹配结果。请扩大范围或调整搜索词。",
+        "noScopeMatch": "在 {{scope}} 中未找到匹配结果。请扩大范围或调整搜索词。",
         "identifierTip": "使用标识符快捷搜索，例如 <code>PAP-123</code>。",
         "resultCount": "{{count}} 个结果",
         "oneResult": "1 个结果",
@@ -9083,7 +9097,7 @@
         "blocked": "无法关闭",
         "allowedWithWarnings": "可以关闭，但有警告",
         "ready": "可以关闭",
-        "sharedSession": "这是共享工作区会话。归档后会移除此会话记录，但保留底层项目工作区。",
+        "sharedSession": "这是共享工作区会话。归档后会解除任务与此会话的关联，并保留会话记录和底层项目工作区。",
         "ownCheckout": "此执行工作区有独立的检出路径，可以单独归档。",
         "primaryPath": "此执行工作区当前指向项目的主工作区路径。",
         "disposable": "此工作区可丢弃，可以归档。",
@@ -9152,7 +9166,7 @@
         "saveFailed": "保存执行工作区失败。",
         "loading": "正在加载工作区…",
         "loadFailed": "加载工作区失败",
-        "buildUpdateFailed": "构建工作区更新失败。",
+        "buildUpdateFailed": "生成工作区更新失败。",
         "services": {
           "noneStarted": "此执行工作区还没有启动过服务。",
           "noConfig": "此执行工作区还没有定义工作区命令配置。",
@@ -9177,7 +9191,7 @@
           "lifecycleCommands": "生命周期命令",
           "provisionCommandHint": "在 Paperclip 准备此执行工作区时运行",
           "runtimeProvisionCommandHint": "在首次启动运行时服务前运行一次。留空则保持预先准备。",
-          "teardownCommand": "清理命令",
+          "teardownCommand": "拆除命令",
           "teardownCommandHint": "在执行工作区归档或清理时运行",
           "cleanupCommand": "清理命令",
           "cleanupCommandHint": "拆除前执行的工作区专属清理"
@@ -9728,7 +9742,7 @@
         "untrackedDescription": "已不再匹配当前工作区命令配置的运行中服务。",
         "kind": {
           "service": "服务",
-          "job": "单次任务"
+          "job": "作业"
         },
         "runOnce": "运行一次",
         "status": {
@@ -9753,7 +9767,7 @@
         "starting": "启动中…",
         "stopping": "停止中…",
         "restarting": "重启中…",
-        "unhealthy": "不健康",
+        "unhealthy": "异常",
         "urlCopied": "已复制 URL",
         "copyUrl": "复制 URL",
         "noUrl": "无 URL",
@@ -9894,7 +9908,7 @@
       },
       "index": {
         "defaultHint": "将 KEY 设为进程所需的环境变量名，例如 GH_TOKEN。选择密钥可在运行开始时解析已存储的值。PAPERCLIP_* 变量会自动注入。",
-        "namesMore": "{{names}} 等另外 {{count}} 个",
+        "namesMore": "{{names}}，另有 {{count}} 个",
         "summaryNew": "新增：{{names}}",
         "summaryEdited": "已编辑：{{names}}",
         "summaryRemoved": "已移除：{{names}}",
@@ -9960,7 +9974,7 @@
         "enterName": "请输入名称",
         "providerVault": "提供方保管库",
         "deploymentDefault": "部署默认值",
-        "approving": "同意中…",
+        "approving": "正在同意…",
         "approveCreate": "同意并创建",
         "approveSecretBind": "同意密钥提案并绑定",
         "targetAgent": "目标智能体",
@@ -10069,7 +10083,7 @@
         "saveFailed": "保存值失败",
         "updateTitle": "更新你的值",
         "setTitle": "设置你的值",
-        "description": "此值仅属于你。当你作为负责人用户执行需要 <mono>{{key}}</mono> 的运行时会使用它。",
+        "description": "此值仅属于你。当你是需要 <mono>{{key}}</mono> 的运行的负责人时，会使用此值。",
         "externalReference": "外部引用",
         "externalPlaceholder": "提供方引用或 ARN",
         "externalHint": "指向你在已配置提供方中的凭据。Paperclip 只存储引用，不存储值。",
@@ -10232,7 +10246,7 @@
         "removeFolderPrefix": "移除文件夹前缀",
         "creatingIn": "将创建在 {{path}} 中 — 移除该标记可输入其他路径。",
         "valuePlaceholder": "仅保存一次，之后不再显示",
-        "externalHint": "已有的提供方密钥在 Paperclip 中只做解析。请在提供方中轮换值；只有路径、ARN 或版本变化时才需要更新此引用。",
+        "externalHint": "Paperclip 通过此引用解析提供方中的密钥。支持外部值写入的提供方可在“更新值”中写入新值；否则请在提供方中轮换。只有路径、ARN 或版本变化时才需要更新此引用。",
         "userModeHint": "每位成员在“我的密钥”中提供自己的值。智能体在运行时解析负责人的值。",
         "keyAutoPlaceholder": "根据名称自动生成",
         "keyHintEditing": "稳定的环境变量绑定键，不能更改。",
@@ -10273,7 +10287,7 @@
         "writtenTo": "写入提供方中的 <code>{{reference}}</code>。",
         "deleteSecretDescription": "将永久删除 <strong>{{name}}</strong>。在重新映射之前，现有绑定会失效。",
         "deleteUserProvidedSecret": "删除用户提供的密钥",
-        "deleteDefinitionDescription": "将为整个组织永久删除 <strong>{{name}}</strong>。现有成员值将不再被引用，现有绑定需要重新映射。",
+        "deleteDefinitionDescription": "将为整个组织永久删除 <strong>{{name}}</strong> 定义，并删除所有成员为此定义保存的密钥值。现有绑定需要重新映射。",
         "removeVaultTitle": "移除提供方保管库",
         "removeVaultLead": "仅从 Paperclip 中移除 <strong>{{name}}</strong>。",
         "removeVaultAws": "不会删除远程 AWS Secrets Manager 保管库、密钥或任何 AWS 数据。",
@@ -10281,7 +10295,7 @@
         "removeVaultTail": "使用此保管库的密钥会失去保管库关联，直到重新指定另一个保管库。",
         "removeFromPaperclip": "从 Paperclip 中移除",
         "howToTitle": "通过绑定到运行时环境变量来使用密钥。",
-        "howToSteps": "在这里创建或关联密钥，然后打开智能体的“环境变量”或项目的 Env 字段。添加进程需要的环境变量键（例如 <code>GH_TOKEN</code>），选择<strong>密钥</strong>，再选择已保存的密钥版本。",
+        "howToSteps": "在这里创建或关联密钥，然后打开智能体的“环境变量”或项目的 Env 字段。添加进程需要的环境变量键（例如 <code>GH_TOKEN</code>），选择<strong>组织密钥</strong>，再选择已保存的密钥版本。",
         "howToRuntime": "运行开始时，Paperclip 在服务端解析该值并作为对应环境变量注入。项目环境变量作用于项目中的每个任务，并在键相同时覆盖智能体的环境变量。",
         "allStatuses": "全部状态",
         "filtersCount": "筛选条件：{{count}}",
@@ -10436,7 +10450,7 @@
       "routineRunDisplay": {
         "skippedNoActivity": "已跳过 — 上次运行以来无活动",
         "skippedPaused": "已跳过 — 例程已暂停",
-        "skippedWorktreeCutoff": "已跳过 — 已过 Worktree 执行截止点",
+        "skippedWorktreeCutoff": "已跳过 — Worktree 执行时间限制",
         "runFailed": "运行失败"
       },
       "routineAuditActivity": {
@@ -10580,7 +10594,7 @@
         "alwaysEnqueueDescription": "即使例程正在运行，也将每次触发都加入队列。",
         "skipIfActiveDescription": "仍有运行在进行时，丢弃新的触发。",
         "skipMissedDescription": "忽略调度器或例程暂停期间错过的时间窗口。",
-        "enqueueMissedWithCapDescription": "恢复后补跑错过的计划窗口；间隔小于一小时的计划会合并为一次补跑，间隔更长的计划会逐个重放错过的窗口，直至达到上限。",
+        "enqueueMissedWithCapDescription": "恢复后补跑错过的计划窗口；频率高于每小时一次的计划会合并为一次补跑，其他计划会逐个重放错过的窗口，直至达到上限。",
         "unfiled": "未分类",
         "unknownFolder": "未知文件夹",
         "customRoutines": "自定义例程",
@@ -10922,28 +10936,28 @@
         "typeDate": "日期"
       },
       "editableSections": {
-        "coalesceIfActive": "活跃时合并",
+        "coalesceIfActive": "运行中则合并",
         "keepOneFollowUpRunQueuedWhileAnActive": "当前运行仍在执行时，保留一个后续运行排队。",
         "alwaysEnqueue": "始终入队",
         "queueEveryTriggerOccurrenceEvenIfSeveralRunsStack": "每次触发都排队，即使多次运行积压。",
-        "skipIfActive": "活跃时跳过",
+        "skipIfActive": "运行中则跳过",
         "dropOverlappingTriggerOccurrencesWhileTheRoutineIsAlready": "例程正在运行时，丢弃重叠触发。",
         "skipMissed": "跳过错过的执行",
         "ignoreScheduleWindowsThatWereMissedWhilePaused": "忽略暂停期间错过的计划执行窗口。",
         "enqueueMissedWithCap": "限量补跑入队",
-        "catchUpMissedScheduleWindowsAfterRecoverySubHourly": "恢复后补跑错过的计划执行窗口；不足一小时的计划会合并为一次补跑，频率更低的计划则逐一重放错过的窗口，直到达到上限。",
+        "catchUpMissedScheduleWindowsAfterRecoverySubHourly": "恢复后补跑错过的计划执行窗口；频率高于每小时一次的计划会合并为一次补跑，其他计划则逐一重放错过的窗口，直到达到上限。",
         "runOnEveryScheduledTick": "每次计划触发都运行",
         "fireOnTheScheduleNoMatterWhatTheDefault": "无论发生什么都按计划触发，这是默认行为。",
         "skipWhenThereSBeenNoActivitySinceThe": "自上次运行后无活动时跳过",
-        "onAScheduledTickOnlyRunIfSomethingHappened": "计划触发时，仅在上次运行完成后有新活动才运行。这样，监控型例程可以在系统稳定时休眠，避免消耗 Token。",
+        "onAScheduledTickOnlyRunIfSomethingHappened": "计划触发时，仅在上次实际触发运行后有符合条件的新活动才运行。这样，监控型例程可以在系统稳定时休眠，避免消耗 Token。",
         "companyWide": "整个组织",
-        "anyActivityAcrossTheCompanyCountsAsAReason": "组织内的任何活动都可触发运行。",
+        "anyActivityAcrossTheCompanyCountsAsAReason": "组织内的任何活动都可作为按计划运行的依据。",
         "thisProject": "此项目",
-        "onlyActivityInTheRoutineSProjectCountsAs": "仅例程所属项目中的活动可触发运行。",
+        "onlyActivityInTheRoutineSProjectCountsAs": "仅例程所属项目中的活动可作为按计划运行的依据。",
         "sendAuthorizationBearerSecretWithEachRequest": "每个请求都发送 Authorization: Bearer <secret>。",
-        "sendXPaperclipTimestampAndXPaperclipSignatureSha256": "发送 X-Paperclip-Timestamp 和 X-Paperclip-Signature: sha256=<hex>，对时间戳 + 点号 + 完整 JSON 请求体进行签名。",
+        "sendXPaperclipTimestampAndXPaperclipSignatureSha256": "发送 X-Paperclip-Timestamp 和 X-Paperclip-Signature: sha256=<hex>，对时间戳 + 点号 + 原始 JSON 请求体进行签名。",
         "acceptGitHubStyleXHubSignature256HeaderHMAC": "接受 GitHub 风格的 X-Hub-Signature-256 请求头（对原始请求体进行 HMAC 签名，不含时间戳）。",
-        "acceptABearerTokenOrAnHMACSHA256Signature": "接受 bearer Token，或在 X-Hub-Signature 或 X-Hub-Signature-256 中提供对完整请求体的 HMAC-SHA256 签名。",
+        "acceptABearerTokenOrAnHMACSHA256Signature": "接受 bearer Token，或在 X-Hub-Signature 或 X-Hub-Signature-256 中提供对原始请求体的 HMAC-SHA256 签名。",
         "signedWebhookLegacy": "已签名的 Webhook（旧版）。",
         "noAuthenticationTheWebhookURLItselfActsAsA": "无身份验证，Webhook URL 本身作为共享密钥。",
         "for": "用于",
@@ -10988,7 +11002,7 @@
         "next5Fires": "接下来 5 次触发",
         "noEnabledScheduleTriggerToPreviewAddASchedule": "没有启用的计划触发器可供预览。在触发器中添加计划，查看此策略如何处理即将到来的触发。",
         "organizationWide": "整个组织",
-        "anyActivityAcrossTheOrganizationCountsAsAReason": "组织内的任何活动都可触发运行。",
+        "anyActivityAcrossTheOrganizationCountsAsAReason": "组织内的任何活动都可作为按计划运行的依据。",
         "previewTimezone": "预览假设下次触发时上次运行仍在进行。显示时间所用时区为 {{timezone}}。",
         "variableDetection": "从标题和指令中的 <code>{{placeholder}}</code> 自动检测变量。变量名只读，要重命名请编辑占位符。",
         "secretScope": "例程密钥应用于此例程创建的每个任务，并覆盖项目和智能体环境变量中的同名键。<code>PAPERCLIP_*</code> 名称为保留名称。",
@@ -11033,7 +11047,7 @@
         "replaceKey": "替换密钥",
         "hideKey": "隐藏密钥",
         "thisWebhookUsesItsURLAsTheSharedSecret": "此 Webhook 使用其 URL 作为共享密钥。",
-        "signTheTimestampAPeriodAndTheExactJSON": "使用 HMAC-SHA256 对时间戳、点号和完整 JSON 请求体进行签名。发送 X-Paperclip-Timestamp 和 X-Paperclip-Signature: sha256=<signature>。",
+        "signTheTimestampAPeriodAndTheExactJSON": "使用 HMAC-SHA256 对时间戳、点号和原始 JSON 请求体进行签名。发送 X-Paperclip-Timestamp 和 X-Paperclip-Signature: sha256=<signature>。",
         "checkConnection": "检查连接",
         "replaceTheWebhookKey": "替换 Webhook 密钥？",
         "theOldKeyWillStopWorkingUpdateYourSending": "旧密钥将失效。请在发送方应用中更新为新密钥。",
@@ -11216,7 +11230,7 @@
         "oneOpenTask": "{{count}} 个未完成的已分配任务",
         "openTasks": "{{count}} 个未完成的已分配任务",
         "taskReassignment": "任务重新分配",
-        "leaveUnassigned": "保持未分配",
+        "leaveUnassigned": "设为未分配",
         "humans": "人类成员",
         "oneMoreTask": "还有 {{count}} 个任务",
         "moreTasks": "还有 {{count}} 个任务",
@@ -11455,7 +11469,7 @@
           "remotePath": "远程工作区路径",
           "remotePathHint": "Paperclip 在 SSH 连接测试时会验证的绝对路径。",
           "privateKey": "私钥",
-          "privateKeyHint": "可选的 PEM 私钥。留空则使用服务器的 SSH 智能体或默认密钥链。",
+          "privateKeyHint": "可选的 PEM 私钥。留空则使用服务器的 SSH 认证代理（ssh-agent）或默认密钥链。",
           "noSavedSecret": "不使用已保存的密钥",
           "knownHosts": "已知主机",
           "knownHostsHint": "可选的 known_hosts 内容，启用严格主机密钥检查时使用。",
@@ -11615,7 +11629,7 @@
         "noMatches": "无匹配结果。",
         "noPeopleSelected": "未选择成员",
         "countSelected": "已选择 {{count}} 个",
-        "andMore": "等另外 {{count}} 人"
+        "andMore": "另有 {{count}} 人"
       },
       "missingPluginTabPlaceholder": {
         "unavailable": "工作区插件标签页不可用。"
@@ -11649,7 +11663,7 @@
         "loadingConversation": "正在加载对话…",
         "hiringPlanDetected": "已识别招聘计划",
         "planPrepared": "{{agentName}} 已准备好招聘计划",
-        "reviewEditApprove": "请审阅、修改，然后批准。",
+        "reviewEditApprove": "请审阅、修改，然后同意。",
         "reviewPlan": "审阅计划",
         "askToRevise": "让 {{agentName}} 修改计划…",
         "messageAgent": "给 {{agentName}} 发消息…",
@@ -11828,7 +11842,7 @@
         "description": "配置实例级偏好设置。",
         "failedToSignOut": "退出登录失败。",
         "deploymentAndAuth": "部署与认证",
-        "localTrustedDescription": "本地受信模式针对本地操作员优化。浏览器请求以本地 Board 上下文运行，无需登录。",
+        "localTrustedDescription": "本地可信模式针对本地操作员优化。浏览器请求以本地 Board 上下文运行，无需登录。",
         "authenticatedPublicDescription": "认证公开模式需要登录才能以 Board 身份访问，适用于公开 URL。",
         "authenticatedPrivateDescription": "认证私有模式需要登录，适用于局域网、VPN 或其他私有网络部署。",
         "authReadiness": "认证就绪状态",
@@ -12007,14 +12021,14 @@
         "openEnvironments": "打开环境",
         "noSettingsRequired": "此插件不需要任何设置。",
         "runtimeDashboard": "运行时仪表盘",
-        "runtimeDashboardDescription": "Worker 进程、计划任务和 Webhook 投递",
-        "workerProcess": "Worker 进程",
+        "runtimeDashboardDescription": "工作进程、计划任务和 Webhook 投递",
+        "workerProcess": "工作进程",
         "uptime": "运行时长",
         "pendingRpcs": "待处理 RPC",
         "crashes": "崩溃",
         "crashCounts": "连续 {{consecutive}} 次 / 共 {{total}} 次",
         "lastCrash": "最近一次崩溃",
-        "noWorker": "没有已注册的 Worker 进程。",
+        "noWorker": "没有已注册的工作进程。",
         "recentJobRuns": "最近的作业运行",
         "noJobRuns": "尚无作业运行记录。",
         "recentWebhookDeliveries": "最近的 Webhook 投递",
@@ -12029,7 +12043,7 @@
         "lifecycle": "生命周期",
         "healthChecksWhenReady": "插件就绪后才会运行健康检查。",
         "pluginId": "插件 ID",
-        "pluginKey": "插件 Key",
+        "pluginKey": "插件标识",
         "npmPackage": "NPM 包",
         "noPermissions": "未请求特殊权限。",
         "selectOrganizationForFolders": "请选择一个组织以配置此插件的本地文件夹。",
@@ -12071,7 +12085,32 @@
         "saveConfig": "保存配置",
         "testing": "测试中…",
         "testConfig": "测试配置",
-        "secondsAgo": "{{count}} 秒前"
+        "secondsAgo": "{{count}} 秒前",
+        "displayStatus": {
+          "backoff": "等待重启",
+          "cancelled": "已取消",
+          "crashed": "已崩溃",
+          "disabled": "已停用",
+          "error": "错误",
+          "failed": "失败",
+          "installed": "已安装",
+          "pending": "待处理",
+          "queued": "已排队",
+          "ready": "已就绪",
+          "running": "运行中",
+          "starting": "启动中",
+          "stopped": "已停止",
+          "stopping": "停止中",
+          "succeeded": "成功",
+          "success": "成功",
+          "uninstalled": "已卸载",
+          "upgrade_pending": "等待升级"
+        },
+        "jobTrigger": {
+          "manual": "手动触发",
+          "retry": "重试",
+          "schedule": "计划触发"
+        }
       },
       "instanceExperimentalSettings": {
         "cards": {
@@ -12194,12 +12233,12 @@
           },
           "enableServerInfoDebugView": {
             "title": "服务器信息调试视图",
-            "description": "在账号抽屉中显示“Server”部分，包含当前服务器重启时间和正在运行的提交。",
+            "description": "在账号抽屉中显示“服务器”部分，包含当前服务器重启时间和正在运行的提交。",
             "ariaLabel": "切换服务器信息调试视图实验性设置"
           },
           "enableSmokeLab": {
             "title": "Smoke Lab",
-            "description": "在“应用 → 开发者”下添加“Smoke Lab”标签页，并在仪表盘上添加“Integration smoke”卡片，用于针对确定性的本地测试夹具（模拟 OAuth 提供方 + 回环 MCP 服务器）演练每条集成路径。仅限私有（非公开）部署。",
+            "description": "在“应用 → 开发者”下添加“Smoke Lab”标签页，并在仪表盘上添加“集成冒烟测试”卡片，用于针对确定性的本地测试夹具（模拟 OAuth 提供方 + 回环 MCP 服务器）演练每条集成路径。仅限私有（非公开）部署。",
             "ariaLabel": "切换 Smoke Lab 实验性设置"
           },
           "enableIssuePlanDecompositions": {
@@ -12357,9 +12396,9 @@
         "packageReadFailed": "读取包失败",
         "failedToReadFolder": "读取文件夹失败。",
         "activationFailed": "激活失败。",
-        "someNotActivated": "部分项目未激活",
-        "oneActivationFailed": "1 个项目激活失败；其余已激活。",
-        "manyActivationsFailed": "{{count}} 个项目激活失败；其余已激活。",
+        "someNotActivated": "部分所选项未激活",
+        "oneActivationFailed": "1 个所选项激活失败；其余已激活。",
+        "manyActivationsFailed": "{{count}} 个所选项激活失败；其余已激活。",
         "expiredReadyNamed": "导入已完成，<bold>{{name}}</bold> 已就绪。详细摘要已不可用。",
         "expiredReady": "导入已完成，你的组织已就绪。详细摘要已不可用，但组织已添加，请从组织切换器中选择它进行查看。",
         "importedPausedHint": "导入的智能体处于暂停状态，请在该组织的“智能体”页面恢复它们，以便开始处理已分配的任务。",
@@ -13017,13 +13056,13 @@
           "eventPrompts": "事件提示词",
           "eventPrompt": "{{event}} 提示词",
           "promptsHelp": "Paperclip 会以类型化上下文提供仓库、PR、base 和 head 提交、发送者以及之前的 head。已保存的修订会保持关联到审查活动。",
-          "categories": "发现类别",
+          "categories": "审查发现类别",
           "categoriesHelp": "以逗号分隔的评估类别。",
           "severity": "行内评论的最低严重级别",
           "severityHelp": "隐藏的评论仍会计入评估。",
           "publication": "发布权限",
           "publishSummary": "发布摘要",
-          "publishInline": "发布行内发现",
+          "publishInline": "发布行内审查发现",
           "allowApprove": "允许正式批准",
           "allowApproveHelp": "这是一个单独的智能体操作；5/5 分也不会自动批准。",
           "allowRequestChanges": "允许正式要求修改",
@@ -13301,7 +13340,7 @@
         "signInAgain": "重新登录 {{provider}}。",
         "disconnectIdentityHint": "断开此应用当前使用的身份。",
         "removeThisApp": "移除此应用",
-        "removeAppHint": "删除 {{app}} 的凭据并移除智能体访问权限。重新连接需要重新登录或提供新密钥。",
+        "removeAppHint": "移除 {{app}} 的连接凭据访问和智能体访问权限。仅删除此连接专用的凭据；共享或另行管理的密钥会保留。重新连接需要重新登录或提供新密钥。",
         "yesRemoveIt": "确认移除",
         "removeApp": "移除应用",
         "localCommand": "本地命令",
@@ -13358,8 +13397,8 @@
         "revokeOrganizationIdentity": "撤销组织身份授权？",
         "revokeOwnBody": "智能体将不再以你的身份行事。需要此身份的工作可以请你重新连接。",
         "revokeOtherBody": "智能体将不再以此人的身份行事。此人可以自行重新连接；其他人无法代其操作。",
-        "revokeInstalledAgentsBody": "已安装的智能体将立即失去此共享身份。",
-        "revokeSharedBody": "符合条件的成员和已安装的智能体将立即失去此共享身份。"
+        "revokeInstalledAgentsBody": "已安装此应用的智能体将立即失去此共享身份。",
+        "revokeSharedBody": "符合条件的成员和已安装此应用的智能体将立即失去此共享身份。"
       },
       "appDetail": {
         "appConnected": "{{app}} 已连接",
@@ -13406,7 +13445,7 @@
         "connectionDeleted": "连接已删除",
         "stillHasOneConnection": "{{app}} 仍有 {{count}} 个可供智能体使用的活动连接。",
         "stillHasManyConnections": "{{app}} 仍有 {{count}} 个可供智能体使用的活动连接。",
-        "noLongerAvailable": "{{app}} 已不再对智能体可用，其凭据已删除。重新连接需要重新登录或提供新密钥。",
+        "noLongerAvailable": "{{app}} 已不再对智能体可用，此连接的凭据访问已移除。连接专用凭据已删除，共享或另行管理的密钥仍保留。重新连接需要重新登录或提供新密钥。",
         "couldNotDelete": "无法删除连接",
         "subtitle": "你已连接的工具，以及它们是否正常工作。",
         "connectAnApp": "连接应用",
@@ -13429,9 +13468,9 @@
         "defaultAvailabilityHint": "你连接的应用默认对所有智能体可用，除非你修改“谁可以使用”。",
         "deleteNamedConnectionTitle": "删除 {{app}} 连接？",
         "deleteThisConnectionTitle": "删除此连接？",
-        "deleteBodyOneRemaining": "此连接保存的凭据将被删除，智能体会立即失去通过它的访问。智能体仍可通过其他 {{count}} 个活动连接使用 {{app}}。",
-        "deleteBodyManyRemaining": "此连接保存的凭据将被删除，智能体会立即失去通过它的访问。智能体仍可通过其他 {{count}} 个活动连接使用 {{app}}。",
-        "deleteBody": "保存的凭据将被删除，智能体会立即失去访问。之后重新连接需要重新登录或提供新密钥。",
+        "deleteBodyOneRemaining": "此连接的凭据访问将被移除，智能体会立即失去通过它的访问权限。仅删除此连接专用的凭据；共享或另行管理的密钥会保留。智能体仍可通过其他 {{count}} 个活动连接使用 {{app}}。",
+        "deleteBodyManyRemaining": "此连接的凭据访问将被移除，智能体会立即失去通过它的访问权限。仅删除此连接专用的凭据；共享或另行管理的密钥会保留。智能体仍可通过其他 {{count}} 个活动连接使用 {{app}}。",
+        "deleteBody": "此连接的凭据访问将被移除，智能体会立即失去访问权限。仅删除此连接专用的凭据；共享或另行管理的密钥会保留。之后重新连接需要重新登录或提供新密钥。",
         "deleting": "删除中…",
         "deleteConnection": "删除连接",
         "managedSignInReady": "Paperclip 托管登录已就绪",
@@ -13458,7 +13497,7 @@
         "connectorUnavailable": "此连接器在当前实例上不可用。",
         "connectionRemoved": "连接已移除",
         "chatDisconnected": "{{provider}} 已断开连接。现有的 Paperclip 任务仍然可用。",
-        "noLongerAvailable": "智能体已无法通过此连接使用 {{provider}}。其保存的凭据已删除。",
+        "noLongerAvailable": "智能体已无法通过此连接使用 {{provider}}，此连接的凭据访问已移除。连接专用凭据已删除，共享或另行管理的密钥仍保留。",
         "couldNotRemove": "无法移除连接",
         "imessageDescription": "通过专用 Photon 号码，在 Apple 信息中给智能体发消息和分享照片。",
         "slackDescription": "在 Slack 频道和私信中与智能体聊天。",
@@ -13478,9 +13517,9 @@
         "removeNamedConnectionTitle": "移除 {{name}} 连接？",
         "removeThisConnectionTitle": "移除此连接？",
         "removeChatBody": "此连接将不再接收来自 {{provider}} 的新工作。现有的 Paperclip 任务和对话历史仍然可用。此操作不会删除 {{provider}} 中的应用、机器人或账号。",
-        "removeBodyOneRemaining": "此连接保存的凭据将被删除，智能体会立即失去通过它的访问。它们仍可通过其他 {{count}} 个活动连接使用 {{provider}}。",
-        "removeBodyManyRemaining": "此连接保存的凭据将被删除，智能体会立即失去通过它的访问。它们仍可通过其他 {{count}} 个活动连接使用 {{provider}}。",
-        "removeBody": "保存的凭据将被删除，智能体会立即失去访问。之后重新连接需要重新登录或提供新密钥。",
+        "removeBodyOneRemaining": "此连接的凭据访问将被移除，智能体会立即失去通过它的访问权限。仅删除此连接专用的凭据；共享或另行管理的密钥会保留。它们仍可通过其他 {{count}} 个活动连接使用 {{provider}}。",
+        "removeBodyManyRemaining": "此连接的凭据访问将被移除，智能体会立即失去通过它的访问权限。仅删除此连接专用的凭据；共享或另行管理的密钥会保留。它们仍可通过其他 {{count}} 个活动连接使用 {{provider}}。",
+        "removeBody": "此连接的凭据访问将被移除，智能体会立即失去访问权限。仅删除此连接专用的凭据；共享或另行管理的密钥会保留。之后重新连接需要重新登录或提供新密钥。",
         "removeConnection": "移除连接",
         "actionForConnector": "{{action}} {{name}}",
         "chat": "聊天",
@@ -13505,7 +13544,7 @@
         "couldNotLoadAgentPermissions": "无法加载 {{name}} 的权限。",
         "couldNotLoadThisAgentPermissions": "无法加载此智能体的权限。",
         "loadingAgentPermissions": "正在加载智能体权限…",
-        "actAs": "扮演",
+        "actAs": "执行身份",
         "noAgentsToTestAs": "没有可用于测试的智能体",
         "noAgentsToTestAsHint": "只有你可以分配任务的智能体才能预览 {{app}}。请在<permissionsLink>权限</permissionsLink>中为某个智能体授予访问权限，然后在此测试。",
         "newGroup": "新增（{{count}}）",
@@ -13553,7 +13592,7 @@
         "openProviderDashboard": "请打开提供方的控制台以完成此请求。",
         "approvalExpires": "审批将于 {{time}} 过期。",
         "afterApprovalHint": "审批后，请使用此执行 ID 测试 {{tool}} 操作。不要再次发起原始操作。",
-        "afterAuthorizingHint": "授权后，请先检查提供方的结果，再使用“运行”。Paperclip 不会自动重复调用。",
+        "afterAuthorizingHint": "授权后，请先检查提供方的结果，再使用“再次运行”。Paperclip 不会自动重复调用。",
         "reviewProviderRequest": "请审核提供方的请求，然后以 {{agent}} 的身份恢复此执行。原始操作不会被再次发起。",
         "resumePermission": "恢复操作权限",
         "approveAndResume": "同意并恢复",
@@ -13762,7 +13801,7 @@
         "connectAgent": "将 {{agentName}} 连接到 Photon Cloud。Pro 支持通过共享线路发送私信。专用号码还支持单独启用的群组。",
         "dedicatedNumber": "专用号码",
         "reconnectAllocation": "重新连接会保留此项目和 {{allocation}}。密钥留空可复用已保存的连接。",
-        "projectAllocation": "{{project}} 中的{{allocation}}"
+        "projectAllocation": "{{project}} 中的 {{allocation}}"
       },
       "slackAvatarStep": {
         "avatarUnavailable": "头像不可用",
@@ -13933,7 +13972,7 @@
         "turn": "将 {{value0}} {{value1}}",
         "gateway": "网关",
         "whyAGateway": "为什么使用网关？",
-        "youPickWhichAppsGoThroughIt": "你可以选择哪些应用通过网关、谁可以使用以及如何使用。撤销 Token 即可停止整个网关，无需逐个清理应用。",
+        "youPickWhichAppsGoThroughIt": "你可以选择哪些应用通过网关、谁可以使用以及如何使用。撤销 Token 即可停止使用该 Token 的客户端访问，无需逐个清理应用。若要停止所有客户端访问，请关闭或归档整个网关。",
         "noGatewaysYet": "暂无网关",
         "groupYourConnectedAppsIntoOneSafe": "将已连接的应用整合为一个安全端点，交给客户端使用，之后可一次性撤销。",
         "noMatchingGateways": "没有匹配“{{search}}”的网关。",
@@ -14005,7 +14044,7 @@
         "publicId": "公开 ID",
         "rawConfiguration": "原始配置",
         "copyJson": "复制 JSON",
-        "dangerZone": "危险区域",
+        "dangerZone": "危险操作",
         "archivingTakesTheGatewayOfflineForEvery": "归档会使网关对所有客户端离线，现有 Token 将失效。输入网关名称以确认。",
         "typeTheGatewayNameToConfirmArchive": "输入网关名称以确认归档",
         "archiving": "归档中…",
@@ -14436,7 +14475,7 @@
       "externallyConnectedTaskBanner": {
         "publication": {
           "awaitingConsent": {
-            "title": "正在等待文件同意",
+            "title": "等待接收方同意接收文件",
             "body": "接收方需要在 Microsoft Teams 中接受文件卡片。文件尚未送达；在 Paperclip 等待期间会保留此发送标识。"
           },
           "published": {
@@ -14469,10 +14508,10 @@
           }
         },
         "filePhase": {
-          "consentPending": "同意卡片已排队",
-          "consentSending": "正在发送同意卡片",
-          "consentUnknown": "同意卡片投递未确认",
-          "awaitingConsent": "等待同意",
+          "consentPending": "文件接收确认卡片已排队",
+          "consentSending": "正在发送文件接收确认卡片",
+          "consentUnknown": "文件接收确认卡片投递未确认",
+          "awaitingConsent": "等待接收方同意",
           "uploadPending": "上传已排队",
           "uploading": "正在上传文件",
           "uploadUnknown": "文件上传未确认",
@@ -14481,7 +14520,7 @@
           "fileInfoUnknown": "文件通知未确认",
           "delivered": "已送达",
           "declined": "已拒绝",
-          "expired": "同意已过期",
+          "expired": "文件接收确认已过期",
           "cancelled": "已取消；远端可能仍保留文件内容",
           "conflict": "文件投递需要检查"
         },
@@ -14506,7 +14545,7 @@
           "body": "并非所有部分都已确认送达。请查看下方结果；关闭此回执不会重新发送任何内容。"
         },
         "remainingConsent": {
-          "title": "正在等待其余文件的同意",
+          "title": "等待接收方同意接收其余文件",
           "body": "部分内容已结束。其余文件卡片仍需接收方回应；整批处理完成前，此次发送保持锁定。"
         },
         "externalConversation": "外部会话",
@@ -14540,7 +14579,7 @@
         "openActivity": "打开活动",
         "batch": {
           "published": "{{count}} 项已发布",
-          "awaitingConsent": "{{count}} 项等待同意",
+          "awaitingConsent": "{{count}} 项等待接收方同意",
           "declined": "{{count}} 项已拒绝",
           "expired": "{{count}} 项已过期",
           "cancelled": "{{count}} 项已取消",
@@ -14697,7 +14736,7 @@
       "taskChatThread": {
         "input": {
           "reviewPlan": "审核计划",
-          "approveToolAction": "批准工具操作",
+          "approveToolAction": "同意工具操作",
           "reviewSecretProposal": "审核密钥提案"
         },
         "errors": {
@@ -14720,7 +14759,7 @@
           "detail": "继续工作前需要检查上一次执行。下一步操作请查看任务的执行暂停项。各项检查仍保留在运行历史中。"
         },
         "nativeStop": {
-          "approvalRequired": "需要批准",
+          "approvalRequired": "需要审批",
           "usageLimitReached": "已达到用量上限",
           "runCancelled": "运行已取消",
           "runInterrupted": "运行已中断",
@@ -14730,7 +14769,7 @@
           "cancelledBeforeAnswer": "运行已被取消。",
           "interruptedAfterResponse": "运行在返回最终回复后被中断。",
           "interruptedBeforeAnswer": "运行已被中断。",
-          "approvalRequiredDetail": "此操作需要批准，但该 Runner 没有交互式审批处理程序。请检查该操作并更新智能体的权限设置后再重试。",
+          "approvalRequiredDetail": "此操作需要审批，但该 Runner 没有交互式审批处理程序。请检查该操作并更新智能体的权限设置后再重试。",
           "modelRejectedDetail": "提供方拒绝了所选模型。请检查模型 ID 和账号的访问权限，保存智能体配置后重试。完整错误信息请查看该运行。",
           "usageLimitDetail": "模型提供方已达到当前用量上限，请在额度重置后重试。",
           "timedOutAfterResponse": "Runner 在返回最终回复后超时（{{code}}）。",
@@ -14760,7 +14799,7 @@
         "loadingConversation": "正在加载会话",
         "waitingToStart": "等待开始…",
         "stoppedBeforeResponse": "此运行在产生回复前已停止。请查看下方任务的连接或恢复操作。",
-        "waitingForTranscript": "等待转录…",
+        "waitingForTranscript": "等待运行记录…",
         "workspaceRestoreFailed": "工作区恢复失败",
         "pendingInputCount_one": "{{count}} 项待处理输入",
         "pendingInputCount_other": "{{count}} 项待处理输入",
@@ -14799,10 +14838,10 @@
         "listedTasks": "已列出任务",
         "readingATask": "正在读取任务",
         "readATask": "已读取任务",
-        "enteringPlanMode": "正在进入计划模式",
-        "enteredPlanMode": "已进入计划模式",
-        "leavingPlanMode": "正在退出计划模式",
-        "leftPlanMode": "已退出计划模式",
+        "enteringPlanMode": "正在进入规划模式",
+        "enteredPlanMode": "已进入规划模式",
+        "leavingPlanMode": "正在退出规划模式",
+        "leftPlanMode": "已退出规划模式",
         "loadingASkill": "正在加载技能",
         "loadedASkill": "已加载技能",
         "requestingInput": "正在请求输入",
@@ -15162,7 +15201,7 @@
         "finalResponse": "最终回复",
         "thinking": "思考中",
         "progressUpdateStreaming": "进度更新（流式）",
-        "progressUpdateBurst": "进度更新突发",
+        "progressUpdateBurst": "密集进度更新",
         "toolCall": "工具调用",
         "diff": "差异",
         "working": "工作中",
@@ -15214,7 +15253,7 @@
         "oneChangedFile": "1 个文件已更改",
         "changedFiles": "{{count}} 个文件已更改",
         "verifiedFromWorkspace": "已从工作区验证",
-        "reportedByHarness": "由运行框架报告",
+        "reportedByHarness": "由 Harness 报告",
         "modelSessionLine": "模型 {{model}} • 会话 {{sessionId}}",
         "modelLine": "模型 {{model}}",
         "runFailed": "运行失败",
@@ -15334,7 +15373,7 @@
         "everyMinute": "每分钟",
         "everyHour": "每小时",
         "everyDay": "每天",
-        "weekdays": "工作日",
+        "weekdays": "周一至周五",
         "weekly": "每周",
         "monthly": "每月",
         "customCron": "自定义（cron）",
@@ -15347,7 +15386,7 @@
         "sun": "周日",
         "everyHourAt": "每小时第 {{value0}} 分钟",
         "everyDayAt": "每天 {{value0}}",
-        "weekdaysAt": "工作日 {{value0}}",
+        "weekdaysAt": "周一至周五 {{value0}}",
         "everyAt": "每{{value0}} {{value1}}",
         "noScheduleSet": "未设置计划",
         "enterA5FieldCronExpression": "输入包含 5 个字段的 cron 表达式。",
@@ -15448,7 +15487,7 @@
         "unknown": "未知"
       },
       "sourceTrustBadge": {
-        "authoredByALowTrustReviewAgentRaw": "由低信任审查智能体创建。原始{{value0}}不会自动分享给更高信任级别的智能体。",
+        "authoredByALowTrustReviewAgentRaw": "由低信任审查智能体创建。原始 {{value0}} 不会自动分享给更高信任级别的智能体。",
         "promotedAt": "已于 {{time}} 从低信任级别提升。",
         "promoted": "已从低信任级别提升。",
         "comment": "评论",
@@ -15621,14 +15660,14 @@
         "videoOutput2": "视频输出"
       },
       "externalObjectRows": {
-        "githubPr": "Github PR",
-        "githubIssue": "Github 任务",
+        "githubPr": "GitHub PR",
+        "githubIssue": "GitHub 任务",
         "issue": "任务 {{value0}}"
       },
       "helpers": {
         "minimal": "最低",
         "xHigh": "超高",
-        "max": "最高"
+        "max": "最大"
       },
       "connectModelPreview": {
         "connectAModel": "连接模型",
@@ -15711,16 +15750,16 @@
         "cliAuthChallengeUnavailable": "CLI 认证质询不可用",
         "challengeIsInvalidOrExpired": "质询无效或已过期。",
         "cliAuthChallengeUnavailable2": "CLI 认证质询不可用。",
-        "cliAccessApproved": "CLI 访问已获批准",
+        "cliAccessApproved": "CLI 访问已获同意",
         "thePaperclipCliCanNowFinishAuthenticationOn": "Paperclip CLI 现在可以在发起请求的机器上完成认证。",
         "command": "命令：",
         "cliAuthChallengeExpired": "CLI 认证质询已过期",
         "cliAuthChallengeCancelled": "CLI 认证质询已取消",
         "startTheCliAuthFlowAgainFromYour": "请在终端中重新启动 CLI 认证流程，生成新的审批请求。",
         "signInRequired": "需要登录",
-        "signInOrCreateAnAccountThenReturn": "登录或创建账户后，返回此页面批准 CLI 访问请求。",
+        "signInOrCreateAnAccountThenReturn": "登录或创建账户后，返回此页面同意 CLI 访问请求。",
         "signInCreateAccount": "登录 / 创建账户",
-        "approvePaperclipCliAccess": "批准 Paperclip CLI 访问",
+        "approvePaperclipCliAccess": "同意 Paperclip CLI 访问",
         "aLocalPaperclipCliProcessIsRequestingBoard": "本地 Paperclip CLI 进程正在请求此实例的 Board 访问权限。",
         "command2": "命令",
         "client": "客户端",
@@ -15728,9 +15767,9 @@
         "instanceAdmin": "实例管理员",
         "requestedOrganization": "请求的组织",
         "failedToUpdateCliAuthChallenge": "更新 CLI 认证质询失败",
-        "thisChallengeRequiresInstanceAdminAccessSignIn": "此质询需要实例管理员权限。请使用实例管理员账户登录后批准。",
-        "approving": "批准中…",
-        "approveCliAccess": "批准 CLI 访问",
+        "thisChallengeRequiresInstanceAdminAccessSignIn": "此质询需要实例管理员权限。请使用实例管理员账户登录后同意。",
+        "approving": "正在同意…",
+        "approveCliAccess": "同意 CLI 访问",
         "cancelling": "取消中…"
       },
       "companies": {
@@ -15800,7 +15839,7 @@
         "dismissed": "已忽略",
         "selectAnOrganizationFirst": "请先选择组织。",
         "snoozed": "已延后",
-        "aging": "陈旧",
+        "aging": "长期未处理",
         "decided": "已决策",
         "loadingDecidedDecisions": "正在加载已作出的决策…",
         "noDecidedDecisions": "没有已作出的决策。",
@@ -16097,7 +16136,7 @@
         "expectedAListEditInYaml": "应为列表，请在 YAML 中编辑。",
         "frontmatter": "前置元数据",
         "fields": "字段",
-        "switchToYamlToEditThisFrontmatter": "请切换到 YAML 编辑。此前置元数据使用了表单无法无损保留的 YAML 特性（如注释、锚点或自定义顺序）。在此编辑可逐字节保留内容。",
+        "switchToYamlToEditThisFrontmatter": "请切换到 YAML 编辑。此前置元数据使用了表单无法无损保留的 YAML 特性（如注释、锚点或自定义顺序）。使用 YAML 模式编辑可保留原始格式。",
         "addFrontmatter": "添加前置元数据",
         "thisFileHasNoFrontmatter": "此文件没有前置元数据。",
         "addATool": "添加工具…",
@@ -16142,7 +16181,7 @@
         "anyoneDefault": "任何人（默认）",
         "noCap": "不限制",
         "newCardsAreOpenTheBoardOr": "新卡片向所有人开放，Board 或任何智能体均可响应，包括提问者。",
-        "newCardsExcludeTheAgentThatCreated": "新卡片排除创建它的智能体，由其他人回答。",
+        "newCardsExcludeTheAgentThatCreated": "新卡片排除创建它的智能体，由其他参与者回答。",
         "newCardsWaitForAPersonOn": "新卡片等待 Board 响应，不接受智能体响应。",
         "evenACardThatAsksForAnyone": "即使卡片允许任何人响应，也会排除其创建者。",
         "everyCardOfThisKindWaitsFor": "此类卡片无论请求谁响应，都必须等待人工处理。",
@@ -16315,10 +16354,10 @@
         "alternativelyHoldShiftAndRightClickThe": "也可以按住 Shift 并右键单击文件夹，然后选择“复制为路径”。",
         "inMostFileManagersCtrlLReveals": "在大多数文件管理器中，按 Ctrl+L 可在地址栏中显示完整路径。",
         "howToGetAFullPath": "如何获取完整路径",
-        "finder": "打开 Finder 并前往该文件夹。",
+        "finder": "打开访达并前往该文件夹。",
         "rightClick": "右键单击（或按住 Control 单击）该文件夹。",
-        "option": "按住 Option (⌥) 键，“复制”会变为“复制为路径名称”。",
-        "copyPathname": "单击“复制为路径名称”，然后粘贴到此处。",
+        "option": "按住 Option (⌥) 键，“拷贝”会变为“拷贝为路径名称”。",
+        "copyPathname": "单击“拷贝为路径名称”，然后粘贴到此处。",
         "explorer": "打开文件资源管理器并前往该文件夹。",
         "address": "单击顶部地址栏，显示完整路径。",
         "pastePath": "复制路径，然后粘贴到此处。",
@@ -16353,14 +16392,14 @@
         "resets": "{{date}} 重置"
       },
       "providerTraceStatusBadge": {
-        "traceExpired": "链路记录已过期",
-        "rawTracingEnabled": "原始链路记录已启用",
-        "traceCaptured": "已采集链路记录",
-        "traceIncomplete": "链路记录不完整",
-        "traceTruncated": "链路记录已截断",
+        "traceExpired": "追踪记录已过期",
+        "rawTracingEnabled": "原始追踪记录已启用",
+        "traceCaptured": "已采集追踪记录",
+        "traceIncomplete": "追踪记录不完整",
+        "traceTruncated": "追踪记录已截断",
         "traceDeleted": "追踪记录已删除",
-        "traceRequested": "已请求链路记录",
-        "traceOff": "链路记录已关闭",
+        "traceRequested": "已请求追踪记录",
+        "traceOff": "追踪记录已关闭",
         "framesBytesExpires": "{{value1}} 帧 · {{value2}} 字节 · {{value3}} 过期",
         "thisRunRequestedSensitiveProviderFrameCapture": "此次运行请求采集敏感的提供商数据帧。",
         "rawProviderFrameCaptureWasDisabledFor": "此次运行已禁用原始提供商数据帧采集。"
@@ -16410,7 +16449,7 @@
         "weekly": "每周",
         "runsOnTheWeeklySchedule": "按每周计划运行",
         "pendingApproval": "等待审批",
-        "waitingOnBoardHireApprovalBeforeIt": "等待 Board 批准聘用后才能运行",
+        "waitingOnBoardHireApprovalBeforeIt": "等待 Board 同意聘用后才能运行",
         "proposalPending": "提案待处理",
         "aProposedUpdateIsWaitingForYour": "更新提案正在等待你审核"
       },
@@ -16504,7 +16543,7 @@
         "organizationalRoleDeterminesPositionAndCapabilities": "组织角色。决定职位和能力。",
         "theAgentThisOneReportsToInTheOrg": "此智能体在组织层级中的汇报对象。",
         "describesWhatThisAgentCanDoShownInThe": "描述此智能体能做什么。显示在组织架构图中，并用于任务路由。",
-        "howThisAgentRunsLocalCLIClaudeCodexOpenCodeOpenClawGateway": "此智能体的运行方式：本地 CLI（Claude/Codex/OpenCode）、OpenClaw Gateway、派生进程或通用 HTTP webhook。",
+        "howThisAgentRunsLocalCLIClaudeCodexOpenCodeOpenClawGateway": "此智能体的运行方式：本地 CLI（Claude/Codex/OpenCode）、OpenClaw Gateway、派生进程或通用 HTTP Webhook。",
         "deprecatedLegacyWorkingDirectoryFallbackForLocalAdaptersExisting": "本地适配器已弃用的旧版工作目录回退。现有智能体可能仍带有此值，但新配置应改用项目工作区。",
         "sentOnEveryHeartbeatKeepThisSmallAndDynamic": "每次心跳时发送。请保持简短并动态更新，用于说明当前任务，避免放入大量固定指令。支持 {{ agent.id }}、{{ agent.name }}、{{ agent.role }} 等模板变量。",
         "overrideTheDefaultModelUsedByTheAdapter": "覆盖适配器使用的默认模型。",
@@ -16542,7 +16581,7 @@
         "monthlySpendingLimitInCents0MeansNoLimit": "每月支出上限（单位：美分）。0 表示不限。"
       },
       "agentSetupFields": {
-        "useACursorAPIKeyOrRunAgentLogin": "使用 Cursor API 密钥，或在所选环境的主机上运行智能体 login。",
+        "useACursorAPIKeyOrRunAgentLogin": "使用 Cursor API 密钥，或在所选环境的主机上运行 agent login。",
         "useAGeminiAPIKeyOrAnExistingSupported": "使用 Gemini API 密钥，或所选环境主机上已有的受支持 Gemini CLI 登录凭据。",
         "useAKimiAPIKeyAndModelSettingsBelow": "使用 Kimi API 密钥及下方的模型设置，或在所选环境的主机上运行 kimi login。",
         "grokBuildUsesItsCLISigninRunGrokLogin": "Grok Build 使用 CLI 登录。请在所选环境的主机上运行 grok login，再在此测试连接。",
@@ -16552,7 +16591,7 @@
         "viewAgent": "查看智能体",
         "pausedNamed": "{{name}} 已暂停",
         "resumeToGenerate": "恢复智能体以生成此 {{item}}。",
-        "item": "项目"
+        "item": "内容项"
       },
       "agentChat": {
         "loadingConversation": "加载对话中…",
@@ -16624,8 +16663,8 @@
         "latestRun": "最近运行",
         "runActivity": "运行活动",
         "last14Days": "最近 14 天",
-        "tasksByPriority": "按优先级",
-        "tasksByStatus": "按状态",
+        "tasksByPriority": "任务优先级分布",
+        "tasksByStatus": "任务状态分布",
         "successRate": "成功率",
         "recentTasks": "最近任务",
         "seeAllRarr": "查看全部 →",
@@ -16653,12 +16692,12 @@
         "enabledViaExplicitCompanyPermissionGrant": "已通过组织明确授予的权限启用。",
         "enabledBySimpleCompanywideTaskAssignmentDefaults": "已通过组织范围的简单任务分配默认设置启用。",
         "disabledUnlessExplicitlyGranted": "除非显式授予，否则禁用。",
-        "savedAdapterConfigAffectsTheNextRunActiveRuns": "保存的适配器配置将在下次运行时生效。正在运行的任务继续使用启动时的配置，配置更改可能会开启新的适配器会话。",
+        "savedAdapterConfigAffectsTheNextRunActiveRuns": "保存的适配器配置将在下次运行时生效。进行中的运行继续使用启动时的配置，配置更改可能会开启新的适配器会话。",
         "permissions": "权限",
         "canCreateNewAgents": "可创建新智能体",
         "letsThisAgentCreateOrHireAgentsThisAlso": "允许此智能体创建或招聘智能体，同时授予任务分配权限。",
-        "canCreateimportSkills": "可创建/导入技能",
-        "letsThisAgentInstallImportCreateAndScanCompany": "允许此智能体安装、导入、创建和扫描组织技能，无需授予创建智能体的权限。",
+        "canCreateimportSkills": "旧版技能创建标记",
+        "letsThisAgentInstallImportCreateAndScanCompany": "此字段仅保留旧版设置，不控制当前技能操作权限。实际访问由组织技能策略和核心安全检查决定；关闭此开关不会单独禁止安装、导入、创建或扫描技能。",
         "canAssignTasks": "可分配任务",
         "selectACompanyToUploadImages": "选择组织以上传图片",
         "instructionsBundlesAreOnlyAvailableForLocalAdapters": "指令包仅适用于本地适配器。",
@@ -16731,7 +16770,7 @@
         "activeKeys": "有效密钥",
         "created": "创建时间",
         "revoke": "撤销",
-        "revokedKeys": "已吊销的密钥",
+        "revokedKeys": "已撤销的密钥",
         "revoked": "已撤销",
         "discardChanges": "放弃未保存的智能体配置更改？",
         "runId": "运行 {{id}}",
@@ -16739,7 +16778,7 @@
         "deleteNamed": "删除 {{path}}？",
         "workspaceCount": "工作区（{{count}}）",
         "tasksTouched": "涉及的任务（{{count}}）",
-        "transcriptCount": "转录记录（{{count}}）",
+        "transcriptCount": "对话记录（{{count}}）",
         "eventsCount": "事件（{{count}}）",
         "signal": "（信号：{{signal}}）",
         "clearSessionForIssueTouchedByThisRun": "清除此运行涉及任务的会话？",
@@ -16936,7 +16975,7 @@
         "disableDeviceAuth": "禁用设备认证",
         "skipDeviceKeyAuthentication": "跳过设备密钥认证",
         "autoPairOnFirstConnect": "首次连接时自动配对",
-        "automaticallyApproveDevicePairing": "自动批准设备配对",
+        "automaticallyApproveDevicePairing": "自动同意设备配对",
         "deviceAuth": "设备认证",
         "whenEnabledPaperclipPersistsADeviceKey": "启用后，Paperclip 在引导设置期间持久保存设备密钥，让配对审批在多次运行间保持稳定。",
         "command": "命令",
@@ -16951,7 +16990,7 @@
           "allow": "全自动（允许）",
           "ask": "请求权限",
           "deny": "拒绝操作",
-          "approve-all": "全自动（全部批准）",
+          "approve-all": "全自动（全部同意）",
           "approve-paperclip": "自动执行 Paperclip 操作",
           "approve-reads": "允许 Paperclip 读取",
           "deny-all": "全部拒绝"
@@ -17034,7 +17073,7 @@
         }
       },
       "agentActionButtons": {
-        "clearErrorAndReturnAgentToIdle": "清除错误并将智能体恢复为等待中",
+        "clearErrorAndReturnAgentToIdle": "清除错误并将智能体恢复为空闲",
         "clearError": "清除错误",
         "actionFailed": "操作失败",
         "agentIsNotReadyToDuplicate": "智能体尚未准备好复制",
@@ -17127,7 +17166,7 @@
         "moreSelected": "还有 {{count}} 个"
       },
       "builtInAgentBadges": {
-        "waitingOnBoardHireApprovalBeforeThe": "等待 Board 批准聘用后才能运行此功能",
+        "waitingOnBoardHireApprovalBeforeThe": "等待 Board 同意聘用后才能运行此功能",
         "needsAdapterModelSetupBeforeTheFeature": "需要设置适配器/模型后才能运行此功能",
         "approval": "审批",
         "pendingApproval": "待审批",
@@ -17141,7 +17180,7 @@
         "resumeAgent": "恢复智能体",
         "setupAction": "设置 {{name}}",
         "pendingApproval": "{{name}} 正在等待审批",
-        "availableAfterApproval": "Board 批准聘用此内置智能体后，即可使用 {{label}}。",
+        "availableAfterApproval": "Board 同意聘用此内置智能体后，即可使用 {{label}}。",
         "pausedTitle": "{{label}} 已暂停。",
         "pausedBody": "其内置智能体已暂停，因此不再生成新的 {{label}}。",
         "pausedBodyAt": "其内置智能体于 {{time}} 暂停，因此不再生成新的 {{label}}。"
@@ -17150,7 +17189,7 @@
         "updateToTheNewestDefault": "将 {{value0}} 更新为最新默认版本？",
         "youHavenTEditedThisSoPaperclip": "你尚未编辑此项，Paperclip 将用较新的内置版本替换它。自定义内容不受影响，适配器凭据和设置也不会更改。",
         "resetToTheShippedDefault": "将 {{value0}} 重置为内置默认版本？",
-        "thisReplacesYourEditedVersionWithPaperclip": "这将用 Paperclip 当前的默认版本替换你编辑过的版本。编辑内容将被覆盖。适配器凭据和设置不会更改。",
+        "thisReplacesYourEditedVersionWithPaperclip": "这将用 Paperclip 当前的默认版本替换你编辑过的版本。你的编辑内容将被覆盖，且无法通过此操作恢复。适配器凭据和设置不会更改。",
         "reset": "重置 {{value0}}",
         "recreate": "重新创建 {{value0}}？",
         "thisResourceIsMissingPaperclipWillRecreate": "此资源缺失。Paperclip 将从内置默认版本重新创建它。适配器凭据和设置不会更改。",
@@ -17158,7 +17197,7 @@
         "youVeEditedThisYourChangesAre": "你已编辑此项。重置前会保留更改。",
         "paperclipShippedANewerDefault": "Paperclip 发布了较新的默认版本。",
         "notMaterializedYetRecreateItFromThe": "尚未创建 — 请从内置默认版本重新创建。",
-        "waitingOnBoardHireApprovalBeforeThis": "等待 Board 批准聘用后，此教练才能运行。",
+        "waitingOnBoardHireApprovalBeforeThis": "等待 Board 同意聘用后，此教练才能运行。",
         "pickAnAdapterThisCoachCanRun": "选择此教练可使用的适配器。",
         "weeklySchedule": "每周计划",
         "bundleStatus": "资源包状态",
@@ -17176,7 +17215,7 @@
         "runOnceDescription": "Paperclip 将立即创建一个例程任务。这不会启用每周计划或后台任务。",
         "disableDescription": "Paperclip 将停止今后的反思教练计划运行。仍可手动运行一次。",
         "enableDescription": "Paperclip 将允许反思教练按每周计划创建例程任务。这些任务运行时可能消耗 Token。",
-        "proposalDescription": "Reflection Coach 更新提案正在等待审核。",
+        "proposalDescription": "反思教练更新提案正在等待审核。",
         "routine": "例程"
       },
       "agentConfigForm": {
@@ -17185,7 +17224,7 @@
         "low": "低",
         "medium": "中",
         "high": "高",
-        "xhigh": "极高"
+        "xhigh": "超高"
       }
     },
     "reviewProtocolLabels": {
@@ -17262,7 +17301,7 @@
     "finalReview": {
       "missingTargetStage": "缺少目标阶段",
       "missingRemovalStage": "缺少移除阶段",
-      "missingItemVersion": "缺少项目版本",
+      "missingItemVersion": "缺少条目版本",
       "itemNotReady": "此条目尚未准备好接受决策。",
       "selectOrganization": "请先选择组织。",
       "approvalFailed": "部分条目无法同意。",

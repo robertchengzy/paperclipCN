@@ -20,7 +20,11 @@ const PRESETS: { value: SchedulePreset; label: string }[] = [
 
 const HOURS = Array.from({ length: 24 }, (_, i) => ({
   value: String(i),
-  get label() { return t(i < 12 ? "app.shell.scheduleEditor.hourAm" : "app.shell.scheduleEditor.hourPm", { hour: i % 12 || 12 }); },
+  get label() {
+    return i18n.language === "zh-CN"
+      ? String(i).padStart(2, "0")
+      : t(i < 12 ? "app.shell.scheduleEditor.hourAm" : "app.shell.scheduleEditor.hourPm", { hour: i % 12 || 12 });
+  },
 }));
 
 const MINUTES = Array.from({ length: 12 }, (_, i) => ({
@@ -123,7 +127,9 @@ export function buildCron(preset: SchedulePreset, hour: string, minute: string, 
 
 function describeSchedule(cron: string): string {
   const { preset, hour, minute, dayOfWeek, dayOfMonth } = parseCronToPreset(cron);
-  const timeStr = t(Number(hour) < 12 ? "app.shell.scheduleEditor.timeAm" : "app.shell.scheduleEditor.timePm", { hour: Number(hour) % 12 || 12, minute: minute.padStart(2, "0") });
+  const timeStr = i18n.language === "zh-CN"
+    ? `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`
+    : t(Number(hour) < 12 ? "app.shell.scheduleEditor.timeAm" : "app.shell.scheduleEditor.timePm", { hour: Number(hour) % 12 || 12, minute: minute.padStart(2, "0") });
 
   switch (preset) {
     case "every_minute":

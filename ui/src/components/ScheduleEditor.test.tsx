@@ -4,9 +4,11 @@ import { useState } from "react";
 import { flushSync } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { i18n } from "@/i18n";
 import {
   ScheduleEditor,
   buildCron,
+  describeSchedule,
   getScheduleCronValidation,
   parseCronToPreset,
 } from "./ScheduleEditor";
@@ -129,5 +131,53 @@ describe("ScheduleEditor", () => {
     expect(onValidityChange).toHaveBeenLastCalledWith(true);
 
     act(() => root.unmount());
+  });
+});
+
+describe("ScheduleEditor localized clock", () => {
+  afterEach(async () => {
+    await i18n.changeLanguage("en");
+    document.body.innerHTML = "";
+  });
+
+  it.each([0, 12, 23])("shows hour %i in Chinese with an unambiguous 24-hour clock", async (hour) => {
+    await i18n.changeLanguage("zh-CN");
+    const clockHour = String(hour).padStart(2, "0");
+    expect(describeSchedule(`0 ${hour} * * *`)).toBe(`每天 ${clockHour}:00`);
+    expect(describeSchedule(`35 ${hour} * * *`)).toBe(`每天 ${clockHour}:35`);
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+    const onChange = vi.fn();
+    try {
+      act(() => root.render(<ScheduleEditor value={`0 ${hour} * * *`} onChange={onChange} />));
+      const selects = container.querySelectorAll('[role="combobox"]');
+      expect(selects[1]?.textContent).toBe(clockHour);
+      expect(selects[2]?.textContent).toBe("00");
+      expect(container.textContent).not.toMatch(/上午|下午/);
+      expect(onChange).not.toHaveBeenCalled();
+    } finally {
+      act(() => root.unmount());
+      container.remove();
+    }
+  });
+
+  it.each([
+    [0, "12 AM", "12:00 AM"],
+    [12, "12 PM", "12:00 PM"],
+    [23, "11 PM", "11:00 PM"],
+  ] as const)("preserves the English label and summary for hour %i", async (hour, label, time) => {
+    await i18n.changeLanguage("en");
+    expect(describeSchedule(`0 ${hour} * * *`)).toBe(`Every day at ${time}`);
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+    try {
+      act(() => root.render(<ScheduleEditor value={`0 ${hour} * * *`} onChange={vi.fn()} />));
+      expect(container.querySelectorAll('[role="combobox"]')[1]?.textContent).toBe(label);
+    } finally {
+      act(() => root.unmount());
+      container.remove();
+    }
   });
 });

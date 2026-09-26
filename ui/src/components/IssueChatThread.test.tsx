@@ -14,6 +14,9 @@ import { createRoot } from "react-dom/client";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Agent } from "@paperclipai/shared";
+import { i18n } from "@/i18n";
+import * as issueChatMessages from "../lib/issue-chat-messages";
+import type { IssueTimelineEvent } from "../lib/issue-timeline-events";
 import { CommentSubmissionUnknownError } from "../lib/comment-submit-result";
 import {
   IssueAssigneePausedNotice,
@@ -390,6 +393,73 @@ describe("IssueChatThread", () => {
     restoreComposerViewportSnapshotMock.mockClear();
     shouldPreserveComposerViewportMock.mockClear();
     markdownBodyRenderMock.mockClear();
+  });
+
+  it("refreshes localized timeline messages and their stabilized cache when language changes with fixed inputs", async () => {
+    const root = createRoot(container);
+    const buildSpy = vi.spyOn(issueChatMessages, "buildIssueChatMessages");
+    const timelineEvents: IssueTimelineEvent[] = [{
+      id: "fixed-language-event",
+      createdAt: new Date("2026-09-26T00:00:00Z"),
+      actorType: "system",
+      actorId: "system",
+      statusChange: { from: "idle", to: "done" },
+    }];
+    // Keep every message-building dependency stable, including the transcript
+    // overrides, so a fresh mock Map or default [] cannot hide a stale memo.
+    const element = (
+      <MemoryRouter>
+        <IssueChatThread
+          comments={[]}
+          interactions={[]}
+          linkedRuns={[]}
+          timelineEvents={timelineEvents}
+          liveRuns={[]}
+          transcriptsByRunId={new Map()}
+          hasOutputForRun={() => false}
+          onAdd={async () => {}}
+          showComposer={false}
+          showJumpToLatest={false}
+          enableLiveTranscriptPolling={false}
+        />
+      </MemoryRouter>
+    );
+    try {
+      await act(async () => { await i18n.changeLanguage("en"); });
+      act(() => { root.render(element); });
+      const row = () => container.querySelector("#activity-fixed-language-event");
+      expect(row()?.textContent).toContain("System");
+      expect(row()?.textContent).toContain("idle");
+      expect(row()?.textContent).toContain("done");
+      buildSpy.mockClear();
+
+      await act(async () => { await i18n.changeLanguage("zh-CN"); });
+      expect(buildSpy).toHaveBeenCalled();
+      expect(row()?.textContent).toContain("系统");
+      expect(row()?.textContent).toContain("等待中");
+      expect(row()?.textContent).toContain("已完成");
+      expect(row()?.textContent).not.toContain("System");
+      const chineseMessage = buildSpy.mock.results.at(-1)?.value[0];
+      expect(chineseMessage.content).toEqual([
+        { type: "text", text: "系统 更新了此任务\n状态：等待中 -> 已完成" },
+      ]);
+      expect(chineseMessage.metadata.custom.statusChange).toEqual({ from: "idle", to: "done" });
+      buildSpy.mockClear();
+
+      await act(async () => { await i18n.changeLanguage("en"); });
+      expect(buildSpy).toHaveBeenCalled();
+      expect(row()?.textContent).toContain("System");
+      expect(row()?.textContent).toContain("idle");
+      expect(row()?.textContent).not.toContain("等待中");
+      expect(buildSpy.mock.results.at(-1)?.value[0].content).toEqual([
+        { type: "text", text: "System updated this issue\nStatus: idle -> done" },
+      ]);
+      expect(timelineEvents[0].statusChange).toEqual({ from: "idle", to: "done" });
+    } finally {
+      act(() => { root.unmount(); });
+      buildSpy.mockRestore();
+      await act(async () => { await i18n.changeLanguage("en"); });
+    }
   });
 
   it("drops the count heading and does not use an internal scrollbox", () => {

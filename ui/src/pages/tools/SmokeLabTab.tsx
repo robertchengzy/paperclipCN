@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Trans } from "react-i18next";
 import { useTranslation } from "@/i18n";
+import { toolDisplayLabel } from "./shared";
 import {
   LIFECYCLE_STAGES,
   getSmokePathLabels,
@@ -299,7 +300,7 @@ export function SmokeLabTab({ companyId }: { companyId: string }) {
                       serviceTone(service.status) === "muted" && "text-muted-foreground",
                     )}
                   >
-                    {service.status}
+                    {toolDisplayLabel(t, service.status)}
                   </span>
                 </span>
               </div>
@@ -391,7 +392,7 @@ export function SmokeLabTab({ companyId }: { companyId: string }) {
             <h2 className="text-sm font-semibold text-foreground">{t("app.common.nouns.runs")}</h2>
             <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
               <span className={cn("h-2 w-2 rounded-full", HEALTH_STYLES[health])} />
-              {health === "unknown" ? t("app.tools.smokeLabTab.noRunsYet") : health}
+              {health === "unknown" ? t("app.tools.smokeLabTab.noRunsYet") : toolDisplayLabel(t, health, "smoke_health")}
               {failing.length > 0 && t("app.tools.smokeLabTab.failing", { paths: failing.join(", ") })}
             </span>
           </div>

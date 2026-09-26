@@ -1,4 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+
+import { i18n } from "@/i18n";
 
 import { ApiError } from "../api/client";
 import {
@@ -92,5 +94,32 @@ describe("classifySkillDenial", () => {
     );
     // matchedRuleId must not leak into any user-facing string.
     expect(JSON.stringify(denial)).not.toContain("secret-internal-rule-id");
+  });
+});
+
+
+describe("localized server remediation", () => {
+  afterEach(async () => { await i18n.changeLanguage("en"); });
+
+  it.each([
+    ["skill_policy_denied", "Contact a company administrator to change the skill policy.", "组织管理员可以修改技能策略以允许此操作。"],
+    ["skill_policy_admin_required", "Ask a company administrator to manage the skill policy.", "此操作需要组织管理权限，请联系管理员进行修改。"],
+    ["skill_workspace_boundary_denied", "Import from a configured Paperclip workspace or the company managed-skill directory.", "请从已配置的 Paperclip 工作区或组织托管技能目录导入。"],
+  ])("localizes known remediation for %s and keeps the original English", async (code, remediation, chinese) => {
+    const error = apiError(403, { code, remediation });
+    await i18n.changeLanguage("zh-CN");
+    expect(classifySkillDenial(error)?.remediation).toBe(chinese);
+    await i18n.changeLanguage("en");
+    expect(classifySkillDenial(error)?.remediation).toBe(remediation);
+  });
+
+  it.each([
+    "Import from /srv/custom/project to fix this error.",
+    "Contact a company administrator to change the skill policy. More detail.",
+    "Contact a company administrator to change the skill policy. ",
+  ])("preserves non-exact diagnostics in Chinese: %s", async (remediation) => {
+    await i18n.changeLanguage("zh-CN");
+    expect(classifySkillDenial(apiError(403, { code: SKILL_POLICY_DENIAL_CODE, remediation }))?.remediation)
+      .toBe(remediation);
   });
 });

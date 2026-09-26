@@ -53,6 +53,7 @@ import type {
 } from "@paperclipai/shared";
 import { hidesCompanySection } from "@paperclipai/shared";
 import { secretStatusLabel } from "@/i18n/labels";
+import { secretBindingTargetStatusLabel } from "@/lib/settings-status-labels";
 import { useCompany } from "../context/CompanyContext";
 import { useHiddenSettings } from "../hooks/useHiddenSettings";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
@@ -4860,7 +4861,7 @@ export function SecretUsageTab({ loading, bindings }: { loading: boolean; bindin
               )}
               {binding.target.status ? (
                 <Badge variant="outline" className="h-5 px-1.5 text-(length:--text-nano) font-normal">
-                  {binding.target.status.replaceAll("_", " ")}
+                  {secretBindingTargetStatusLabel(t, binding.target.type, binding.target.status)}
                 </Badge>
               ) : null}
             </div>

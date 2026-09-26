@@ -17,7 +17,7 @@
  */
 
 import { ApiError } from "../api/client";
-import { t } from "@/i18n";
+import { i18n, t } from "@/i18n";
 
 /** Machine-readable error codes the server attaches to skill mutation failures. */
 export const SKILL_POLICY_DENIAL_CODE = "skill_policy_denied";
@@ -62,6 +62,22 @@ export interface SkillDenial {
 const DEFAULT_POLICY_REMEDIATION_KEY = "app.skills.skillPolicyDenial.defaultPolicyRemediation";
 const DEFAULT_ADMIN_REMEDIATION_KEY =
   "app.skills.skillPolicyDenial.defaultAdminRemediation";
+
+// Translate only known server-owned copy. Custom diagnostics must remain intact.
+const SERVER_REMEDIATION_KEYS = new Map<string, string>([
+  ["Contact a company administrator to change the skill policy.", DEFAULT_POLICY_REMEDIATION_KEY],
+  ["Ask a company administrator to manage the skill policy.", DEFAULT_ADMIN_REMEDIATION_KEY],
+  [
+    "Import from a configured Paperclip workspace or the company managed-skill directory.",
+    "app.skills.skillPolicyDenial.remediations.workspaceBoundaryDenied",
+  ],
+]);
+
+function localizedServerRemediation(value: string | null): string | null {
+  if (value === null || (i18n.resolvedLanguage ?? i18n.language) !== "zh-CN") return value;
+  const key = SERVER_REMEDIATION_KEYS.get(value);
+  return key ? t(key) : value;
+}
 
 /** i18n keys for the human-readable titles of the platform-invariant codes (State C). */
 const PLATFORM_TITLE_KEYS: Record<string, string> = {
@@ -120,7 +136,7 @@ export function classifySkillDenial(
   const body = asRecord(error.body);
   const code = asString(body?.code);
   const reason = asString(body?.reason);
-  const remediation = asString(body?.remediation);
+  const remediation = localizedServerRemediation(asString(body?.remediation));
 
   // State B — explicit company-policy denial. Resolvable by an administrator.
   const isPolicyDenial =
