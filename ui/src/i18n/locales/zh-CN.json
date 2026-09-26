@@ -2068,6 +2068,13 @@
         "chat": "对话",
         "activity": "动态",
         "relatedWork": "相关工作"
+      },
+      "recovery": {
+        "stateChanged": "任务状态已变化，请刷新查看当前状态。",
+        "noPermission": "你没有权限重试此恢复操作。",
+        "pauseCheckFailed": "无法检查此任务是否已暂停，请刷新后重试。",
+        "taskPaused": "任务已暂停，请先恢复再重试。",
+        "projectPaused": "项目已暂停，请先恢复再重试。"
       }
     },
     "shared": {
@@ -5662,6 +5669,13 @@
         "documentFallback": "文档",
         "documentWithKey": "{{label}} {{key}}",
         "documentWithTitle": "{{label}} {{key}}（{{title}}）"
+      },
+      "workspaceRestoreMarker": {
+        "failedAfterPlan": "计划保存后工作区恢复失败。已保存的计划仍可查看。",
+        "failed": "工作区恢复失败。",
+        "filesNeedRecovery": "工作区文件需要恢复。",
+        "noFinalResponse": "没有记录最终回复。",
+        "affectedPath": "受影响的路径：{{path}}。"
       }
     },
     "skills": {
@@ -13962,7 +13976,8 @@
         "reviewRequest": "查看请求"
       },
       "taskChatMarker": {
-        "tryingAgain": "正在重试…"
+        "tryingAgain": "正在重试…",
+        "viewSavedPlan": "查看已保存的计划"
       },
       "taskChatPausedTakeover": {
         "subtreePaused": "子树已暂停。",
@@ -14542,16 +14557,16 @@
           "runTimedOut": "运行超时",
           "runFailed": "运行失败",
           "cancelledAfterResponse": "运行在返回最终回复后被取消。",
-          "cancelledBeforeAnswer": "运行在返回回答前被取消。",
+          "cancelledBeforeAnswer": "运行已被取消。",
           "interruptedAfterResponse": "运行在返回最终回复后被中断。",
-          "interruptedBeforeAnswer": "运行在返回回答前被中断。",
+          "interruptedBeforeAnswer": "运行已被中断。",
           "approvalRequiredDetail": "此操作需要批准，但该 Runner 没有交互式审批处理程序。请检查该操作并更新智能体的权限设置后再重试。",
           "modelRejectedDetail": "提供方拒绝了所选模型。请检查模型 ID 和账号的访问权限，保存智能体配置后重试。完整错误信息请查看该运行。",
           "usageLimitDetail": "模型提供方已达到当前用量上限，请在额度重置后重试。",
           "timedOutAfterResponse": "Runner 在返回最终回复后超时（{{code}}）。",
-          "timedOutBeforeAnswer": "Runner 在返回回答前超时（{{code}}）。",
+          "timedOutBeforeAnswer": "Runner 超时（{{code}}）。",
           "stoppedAfterResponse": "Runner 在返回最终回复后停止（{{code}}）。",
-          "stoppedBeforeAnswer": "Runner 在返回回答前停止（{{code}}）。"
+          "stoppedBeforeAnswer": "Runner 已停止（{{code}}）。"
         },
         "outputTooLarge": "提供方输出超出了安全上限。",
         "workspaceSetupFailed": "智能体启动前工作区设置失败。",
@@ -14563,8 +14578,8 @@
           "aiAccountUnavailable": "所选 AI 账号不可用，请在连接卡片中修复。",
           "aiAccountStopped": "此运行因 AI 账号不可用而停止。",
           "reconciliationRequired": "此任务继续之前必须检查上一次执行。你的消息已保留。详情请查看已停止的运行。",
-          "stoppedBeforeAnswer": "执行在返回回答前已停止。",
-          "runnerStopped": "Runner 在返回回答前停止（{{code}}）。",
+          "stoppedBeforeAnswer": "执行已停止。",
+          "runnerStopped": "运行失败（{{code}}）。",
           "couldNotStart": "无法启动"
         },
         "runCompleted": "运行已完成",
@@ -14575,7 +14590,8 @@
         "loadingConversation": "正在加载会话",
         "waitingToStart": "等待开始…",
         "stoppedBeforeResponse": "此运行在产生回复前已停止。请查看下方任务的连接或恢复操作。",
-        "waitingForTranscript": "等待转录…"
+        "waitingForTranscript": "等待转录…",
+        "workspaceRestoreFailed": "工作区恢复失败"
       },
       "toolTaxonomy": {
         "applyingAPatch": "正在应用补丁",
@@ -17034,6 +17050,53 @@
     },
     "reviewIssueBadge": {
       "paused": "已暂停"
+    },
+    "dispositionRecovery": {
+      "unavailable": {
+        "openTask": "打开任务查看其当前状态。",
+        "inactive": "此恢复通知已失效。",
+        "stateChanged": "任务状态已变化，请先查看当前状态再重试。",
+        "recoveryChanged": "任务的恢复状态已变化，请刷新查看当前操作。",
+        "assigneeChanged": "负责的智能体已变更，请先查看任务再重试。",
+        "pendingInteraction": "请先回复待处理的问题或确认，再重试。",
+        "activeRun": "任务已有正在进行的运行，请等待其完成。",
+        "pendingReview": "任务正在等待评审或批准。",
+        "blocked": "请先解决任务的阻塞项，再重试。",
+        "agentPaused": "负责的智能体已暂停，请先恢复该智能体再重试。",
+        "agentTerminated": "负责的智能体已不可用。"
+      },
+      "description": {
+        "start": "智能体停止时没有记录结果或下一步。",
+        "budgetBlocked": "由于支出或暂停限制导致智能体无法运行，自动恢复已停止。",
+        "ownerUnavailable": "由于负责的智能体不可用，自动恢复已停止。",
+        "two": "两",
+        "attemptsFailedOne": "{{attempts}} 次自动尝试未能解决此问题。",
+        "attemptsFailedOther": "{{attempts}} 次自动尝试均未能解决此问题。",
+        "stopped": "自动恢复已停止，请查看详情后再重试。"
+      },
+      "retryError": "请刷新任务查看其当前状态，然后重试。",
+      "assignedAgentFallback": "负责的智能体",
+      "title": {
+        "requested": "已请求重试",
+        "historical": "智能体曾需要处理",
+        "active": "智能体需要处理"
+      },
+      "returnedToTodo": "任务已退回到“待办”，交给 {{agentName}}。",
+      "retryUnavailable": "无法重试。",
+      "retryConfirmFailed": "无法确认重试。",
+      "requestingRetry": "正在请求重试…",
+      "retryAgent": "重试智能体",
+      "hideDetails": "收起详情",
+      "viewDetails": "查看详情",
+      "details": {
+        "assignedAgent": "恢复停止时的负责人",
+        "attempts": "自动尝试次数",
+        "attemptsValue": "{{count}} / {{max}}",
+        "retries": "此次恢复的自动重试",
+        "stopped": "已停止",
+        "explanation": "恢复流程已要求负责的智能体记录结果或下一步。重试会沿用同一任务和智能体，并在继续前检查任务当前的控制状态。",
+        "technicalReason": "技术原因"
+      }
     }
   }
 }

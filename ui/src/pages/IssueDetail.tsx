@@ -1,3 +1,4 @@
+import { DispositionRecoveryProvider } from "../components/DispositionRecoveryNotice";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { clearLegacyChatMessageRequests } from "@/lib/chat-message-request";
@@ -4148,6 +4149,39 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       }
     },
   });
+  // The inline notice owns feedback; do not also emit a global error toast.
+  const retryDispositionRecovery = useMutation({
+    mutationFn: async (actionId: string) => {
+      const result = await issuesApi.resolveRecoveryAction(issueId!, {
+        actionId,
+        outcome: "restored",
+        sourceIssueStatus: "todo",
+      });
+      if (
+        result.issue.status !== "todo" ||
+        result.issue.assigneeAgentId !== result.recoveryAction.returnOwnerAgentId
+      ) {
+        throw new Error(translate("app.issueDetail.recovery.stateChanged"));
+      }
+      return result;
+    },
+    onSuccess: ({ issue: nextIssue }) => {
+      const issueRefs = new Set<string>([issueId!, nextIssue.id]);
+      if (nextIssue.identifier) issueRefs.add(nextIssue.identifier);
+      mergeIssueResponseIntoCaches(issueRefs, nextIssue);
+      invalidateIssueCollections();
+    },
+    onSettled: () => {
+      for (const queryKey of [
+        queryKeys.issues.detail(issueId!),
+        queryKeys.issues.activity(issueId!),
+        queryKeys.issues.runs(issueId!),
+        queryKeys.issues.liveRuns(issueId!),
+      ]) {
+        void queryClient.invalidateQueries({ queryKey });
+      }
+    },
+  });
   const executeTreeControl = useMutation({
     onMutate: () => setTreeControlWakeWarning(null),
     mutationFn: async ({
@@ -7753,6 +7787,21 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                 <ExecutionBlockerNotice companyId={issue.companyId} issueId={issue.id} blocker={issue.executionBlocker} onRetried={invalidateIssueDetail} />
               )}
               {resolvedDetailTab === "chat" ? (
+                <DispositionRecoveryProvider value={{
+                  issue,
+                  agentMap,
+                  hasPendingInteraction: interactions.some((interaction) => interaction.status === "pending"),
+                  unavailableReason: boardAccess && !canResolveBoardRecoveryAction
+                    ? t("app.issueDetail.recovery.noPermission")
+                    : treeControlStateError
+                    ? t("app.issueDetail.recovery.pauseCheckFailed")
+                    : activePauseHold
+                      ? t("app.issueDetail.recovery.taskPaused")
+                      : issue.project?.pausedAt
+                        ? t("app.issueDetail.recovery.projectPaused")
+                        : null,
+                  onRetry: (actionId) => retryDispositionRecovery.mutateAsync(actionId).then(() => undefined),
+                }}>
                 <IssueDetailChatTab
                   onOpenSkill={handleOpenSkill}
                   threadHeader={<>{taskChatThreadHeader}{instanceExperimentalSettings?.enableChatConnectors && <EmailTaskActivity key={issue.id} companyId={issue.companyId} issueId={issue.id} />}</>}
@@ -8002,6 +8051,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
                   }
                   linkCaseReferences={casesChipsEnabled}
                 />
+                </DispositionRecoveryProvider>
               ) : null}
             </TabsContent>
 

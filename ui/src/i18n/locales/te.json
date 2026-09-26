@@ -2068,6 +2068,13 @@
         "chat": "Chat",
         "activity": "Activity",
         "relatedWork": "Related work"
+      },
+      "recovery": {
+        "stateChanged": "The task’s state has changed. Refresh to see its current state.",
+        "noPermission": "You don’t have permission to retry this recovery action.",
+        "pauseCheckFailed": "Couldn’t check whether this task is paused. Refresh to try again.",
+        "taskPaused": "The task is paused. Resume it before retrying.",
+        "projectPaused": "The project is paused. Resume it before retrying."
       }
     },
     "shared": {
@@ -5662,6 +5669,13 @@
         "documentFallback": "document",
         "documentWithKey": "{{label}} {{key}}",
         "documentWithTitle": "{{label}} {{key}} ({{title}})"
+      },
+      "workspaceRestoreMarker": {
+        "failedAfterPlan": "Workspace restore failed after the plan was saved. The saved plan is available.",
+        "failed": "Workspace restore failed.",
+        "filesNeedRecovery": "Workspace files need recovery.",
+        "noFinalResponse": "No final response was recorded.",
+        "affectedPath": "Affected path: {{path}}."
       }
     },
     "skills": {
@@ -13962,7 +13976,8 @@
         "reviewRequest": "Review request"
       },
       "taskChatMarker": {
-        "tryingAgain": "Trying again..."
+        "tryingAgain": "Trying again...",
+        "viewSavedPlan": "View saved plan"
       },
       "taskChatPausedTakeover": {
         "subtreePaused": "Subtree is paused.",
@@ -14542,16 +14557,16 @@
           "runTimedOut": "Run timed out",
           "runFailed": "Run failed",
           "cancelledAfterResponse": "The run was cancelled after returning a final response.",
-          "cancelledBeforeAnswer": "The run was cancelled before returning an answer.",
+          "cancelledBeforeAnswer": "The run was cancelled.",
           "interruptedAfterResponse": "The run was interrupted after returning a final response.",
-          "interruptedBeforeAnswer": "The run was interrupted before returning an answer.",
+          "interruptedBeforeAnswer": "The run was interrupted.",
           "approvalRequiredDetail": "This operation requires approval, but this runner has no interactive approval handler. Review the operation and update the agent's permission setting before retrying.",
           "modelRejectedDetail": "The provider rejected the selected model. Check the model ID and your account's access, save the agent configuration, then retry. View the run for the provider's full error.",
           "usageLimitDetail": "The model provider has reached its current usage limit. Try again after the limit resets.",
           "timedOutAfterResponse": "The runner timed out after returning a final response ({{code}}).",
-          "timedOutBeforeAnswer": "The runner timed out before returning an answer ({{code}}).",
+          "timedOutBeforeAnswer": "The runner timed out ({{code}}).",
           "stoppedAfterResponse": "The runner stopped after returning a final response ({{code}}).",
-          "stoppedBeforeAnswer": "The runner stopped before returning an answer ({{code}})."
+          "stoppedBeforeAnswer": "The runner stopped ({{code}})."
         },
         "outputTooLarge": "Provider output exceeded the safe limit.",
         "workspaceSetupFailed": "Workspace setup failed before the agent started.",
@@ -14563,8 +14578,8 @@
           "aiAccountUnavailable": "The selected AI account is unavailable. Fix it in the connection card.",
           "aiAccountStopped": "This run stopped because its AI account was unavailable.",
           "reconciliationRequired": "The previous execution must be checked before this task can continue. Your message is preserved. View the stopped run for details.",
-          "stoppedBeforeAnswer": "Execution was stopped before returning an answer.",
-          "runnerStopped": "The runner stopped before returning an answer ({{code}}).",
+          "stoppedBeforeAnswer": "Execution was stopped.",
+          "runnerStopped": "The run failed ({{code}}).",
           "couldNotStart": "Couldn't start"
         },
         "runCompleted": "Run completed",
@@ -14575,7 +14590,8 @@
         "loadingConversation": "Loading conversation",
         "waitingToStart": "Waiting to start...",
         "stoppedBeforeResponse": "This run stopped before a response was available. Review the task’s connection or recovery action below.",
-        "waitingForTranscript": "Waiting for transcript..."
+        "waitingForTranscript": "Waiting for transcript...",
+        "workspaceRestoreFailed": "Workspace restore failed"
       },
       "toolTaxonomy": {
         "applyingAPatch": "Applying a patch",
@@ -17034,6 +17050,53 @@
     },
     "reviewIssueBadge": {
       "paused": "Paused"
+    },
+    "dispositionRecovery": {
+      "unavailable": {
+        "openTask": "Open the task to review its current state.",
+        "inactive": "This recovery notice is no longer active.",
+        "stateChanged": "The task’s state has changed. Review its current state before retrying.",
+        "recoveryChanged": "The task’s recovery state has changed. Refresh to see the current action.",
+        "assigneeChanged": "The assigned agent has changed. Review the task before retrying.",
+        "pendingInteraction": "Respond to the pending question or confirmation before retrying.",
+        "activeRun": "The task already has an active run. Wait for it to finish.",
+        "pendingReview": "The task is waiting for a review or approval.",
+        "blocked": "Resolve the task’s blockers before retrying.",
+        "agentPaused": "The assigned agent is paused. Resume the agent before retrying.",
+        "agentTerminated": "The assigned agent is no longer available."
+      },
+      "description": {
+        "start": "The agent stopped without recording an outcome or a next step.",
+        "budgetBlocked": "Automatic recovery stopped because a spending or pause limit prevents the agent from running.",
+        "ownerUnavailable": "Automatic recovery stopped because the assigned agent is unavailable.",
+        "two": "Two",
+        "attemptsFailedOne": "{{attempts}} automatic attempt to resolve this failed.",
+        "attemptsFailedOther": "{{attempts}} automatic attempts to resolve this failed.",
+        "stopped": "Automatic recovery stopped. Review the details before trying again."
+      },
+      "retryError": "Refresh the task to check its current state, then try again.",
+      "assignedAgentFallback": "the assigned agent",
+      "title": {
+        "requested": "Retry requested",
+        "historical": "Agent needed attention",
+        "active": "Agent needs attention"
+      },
+      "returnedToTodo": "The task was returned to To do for {{agentName}}.",
+      "retryUnavailable": "Retry unavailable. ",
+      "retryConfirmFailed": "Couldn’t confirm the retry. ",
+      "requestingRetry": "Requesting retry…",
+      "retryAgent": "Retry agent",
+      "hideDetails": "Hide details",
+      "viewDetails": "View details",
+      "details": {
+        "assignedAgent": "Assigned when recovery stopped",
+        "attempts": "Automatic attempts",
+        "attemptsValue": "{{count}} of {{max}}",
+        "retries": "Automatic retries for this recovery",
+        "stopped": "Stopped",
+        "explanation": "Recovery asked the assigned agent to record an outcome or a next step. Retrying keeps the same task and agent, and checks the task’s current controls before continuing.",
+        "technicalReason": "Technical reason"
+      }
     }
   }
 }

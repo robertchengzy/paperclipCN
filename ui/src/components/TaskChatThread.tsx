@@ -1,3 +1,5 @@
+import { hasWorkspaceRestoreFailure } from "@paperclipai/shared";
+import { workspaceRestoreMarkerDetail } from "@/lib/workspace-restore-marker";
 import type { ActivityEvent } from "@paperclipai/shared";
 import { useProjectCreatedItems } from "@/hooks/useProjectCreatedItems";
 import { skillCreatedItems } from "@/components/task-chat/skill-created-items";
@@ -1644,8 +1646,14 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           : canRetryFailedRun
             ? translate("app.taskChat.taskChatThread.legacyStop.canRetry")
             : translate("app.taskChat.taskChatThread.legacyStop.messagePreserved");
+        const restoreFailed = hasWorkspaceRestoreFailure(meta?.resultJson);
+        const savedPlan = Boolean(planDocument && (meta?.resultJson?.savedPlanRevisionId === planDocument.latestRevisionId || interactions?.some((interaction) =>
+          interaction.sourceRunId === source.id && interactionTargetsPlanRevision(interaction, planDocument),
+        )));
         const aiRequest = interactions?.find((interaction) => interaction.kind === "connection_intent" && interaction.payload.purpose === "ai" && interaction.sourceRunId === source.id);
-        const detail = aiRequest
+        const detail = restoreFailed
+          ? workspaceRestoreMarkerDetail({ result: meta?.resultJson, savedPlan, hasResponse: sourceHasPresentationComment || Boolean(acceptedSummary) })
+          : aiRequest
           ? aiRequest.status === "pending"
             ? translate("app.taskChat.taskChatThread.legacyStop.aiAccountUnavailable")
             : translate("app.taskChat.taskChatThread.legacyStop.aiAccountStopped")
@@ -1667,8 +1675,14 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "interrupted",
-            label: source.status === "cancelled" ? (meta?.startedAt ? "Stopped" : "Couldn't start") : "Run failed",
+            label: restoreFailed ? translate("app.taskChat.taskChatThread.workspaceRestoreFailed") : source.status === "cancelled" ? (meta?.startedAt ? "Stopped" : "Couldn't start") : "Run failed",
             runId: source.status === "cancelled" ? undefined : source.id,
+            ...(restoreFailed ? {
+              retryable: meta?.resultJson?.workspaceRestoreFailure !== "restore_unsafe_archive",
+              collapsible: true,
+              runHref: meta?.agentId ? `/agents/${encodeURIComponent(agentMap?.get(meta.agentId)?.urlKey ?? meta.agentId)}/runs/${encodeURIComponent(source.id)}` : undefined,
+              planHref: savedPlan ? "#document-plan" : undefined,
+            } : {}),
             tone: source.status === "cancelled" ? "neutral" : "error",
             detail,
           },
@@ -2053,6 +2067,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
     steeringAnchorsByRun,
     legacyTimelineAnchorsByRun,
     hasBrief,
+    planDocument,
     planDocumentSourceRunId,
     planTurnItem,
     agentMap,

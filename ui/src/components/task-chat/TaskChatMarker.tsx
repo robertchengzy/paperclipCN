@@ -101,8 +101,13 @@ export function TaskChatMarker({
                 {item.detail}
               </div>
             ) : null}
-            {item.runHref || onTryAgain ? (
+            {item.runHref || item.planHref || onTryAgain ? (
               <div className="flex items-center justify-end gap-2 border-t border-border/70 bg-background/50 px-3 py-2 dark:bg-background/30">
+                {item.planHref ? (
+                  <Button asChild variant="ghost" size="xs">
+                    <Link to={item.planHref}>{t("app.taskChat.taskChatMarker.viewSavedPlan")}</Link>
+                  </Button>
+                ) : null}
                 {item.runHref ? (
                   <Button asChild variant="ghost" size="xs">
                     <Link to={item.runHref}>{t("app.issueChat.run.viewRun")}</Link>
