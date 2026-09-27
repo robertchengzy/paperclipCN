@@ -16134,7 +16134,7 @@ describeEmbeddedPostgres("chat channel control-plane integration", () => {
         .from(issueComments)
         .where(eq(issueComments.issueId, conversation.issueId));
       expect(rows).toHaveLength(8);
-    }, { timeout: 10_000 });
+    });
     const comments = await db
       .select({ id: issueComments.id, body: issueComments.body })
       .from(issueComments)
@@ -36451,9 +36451,7 @@ describeEmbeddedPostgres("chat channel control-plane integration", () => {
       Promise.race([
         providerAcknowledgement.then(() => "acknowledged" as const),
         new Promise<"timed_out">((resolve) =>
-          // Allow local database scheduling under concurrent builds while
-          // retaining a bounded acknowledgement and the deferred-work assertion.
-          setTimeout(() => resolve("timed_out"), 2_500),
+          setTimeout(() => resolve("timed_out"), 250),
         ),
       ]),
     ).resolves.toBe("acknowledged");
@@ -63399,18 +63397,17 @@ describeEmbeddedPostgres("chat channel control-plane integration", () => {
       await vi.waitFor(() =>
         expect(dm.post).toHaveBeenCalledWith(visibleFailure),
       );
-      // Posting and persisting the provider effect are separate async steps.
-      await vi.waitFor(async () => expect(
-        await db
+      await expect(
+        db
           .select({ kind: chatActions.kind, status: chatActions.status })
           .from(chatActions)
           .where(eq(chatActions.deliveryId, delivery.id)),
-      ).toEqual(
+      ).resolves.toEqual(
         expect.arrayContaining([
           { kind: "inbound_wakeup", status: "failed" },
           { kind: "provider_effect", status: "processed" },
         ]),
-      ), { timeout: 10_000 });
+      );
     } finally {
       await retirePublicationFixture(service, endpoint.id);
     }
