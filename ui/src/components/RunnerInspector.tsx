@@ -621,7 +621,7 @@ function ProductionSurfacePreview({ event, runId }: { event: HeartbeatRunEvent; 
   );
   const item = transcriptToTaskChatItems(entries, {
     runId,
-    agentName: "Runner",
+    agentName: t("app.workspaces.runnerInspector.runner"),
     running: false,
   }).find((candidate): candidate is TaskChatProtocolItem => candidate.kind === "protocol");
   if (item) return <TaskChatProtocolCard item={item} />;

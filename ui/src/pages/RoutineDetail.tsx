@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -80,7 +81,7 @@ export function buildRoutineProjectOptions(
     .filter((project) => !project.archivedAt)
     .map((project) => ({
       id: project.id,
-      label: project.name,
+      label: projectDisplayName(project.name),
       searchText: project.description ?? "",
     }));
 }

@@ -1,3 +1,4 @@
+import { i18n as uiI18n } from "@/i18n";
 import { Trans } from "react-i18next";
 import { t as translateCopy, useTranslation } from "@/i18n";
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -959,11 +960,11 @@ export function Inbox() {
 
   const companyUserLabelMap = useMemo(
     () => buildCompanyUserLabelMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, uiI18n.language],
   );
   const companyUserProfileMap = useMemo(
     () => buildCompanyUserProfileMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, uiI18n.language],
   );
 
   const mineIssues = useMemo(

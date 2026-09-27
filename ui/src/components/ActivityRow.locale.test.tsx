@@ -25,7 +25,7 @@ describe("ActivityRow metadata event localization", () => {
 
   it.each([
     ["en", "provider trace metadata listed"],
-    ["zh-CN", "仅列出了提供方 Trace 元数据"],
+    ["zh-CN", "仅列出了提供方跟踪元数据"],
   ])("renders a complete metadata-only label without an entity name in %s", async (language, label) => {
     await i18n.changeLanguage(language);
     const html = renderToStaticMarkup(

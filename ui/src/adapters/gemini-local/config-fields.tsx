@@ -1,3 +1,4 @@
+import { ConfigSelect } from "@/components/ConfigSelect";
 import { t, useTranslation } from "@/i18n";
 import { configFieldsForSection } from "../config-sections";
 import type { AdapterConfigFieldsProps } from "../types";
@@ -39,11 +40,11 @@ export function GeminiLocalConfigFields({
         environment owns both, so the managed-sandbox-only policy hides them.
       */}
       {!managedSandboxOnly && <Field label={t("app.agentUi.configFields.executionEngine")} hint={t("app.agentUi.configFields.defaultUsesAcpIfAcpIsUnavailable")}>
-        <select
+        <ConfigSelect
           className={inputClass}
           value={engine}
-          onChange={(e) => {
-            const value = e.target.value === "acp" ? "acp" : e.target.value === "cli" ? "cli" : "auto";
+          onValueChange={(selectedValue) => {
+            const value = selectedValue === "acp" ? "acp" : selectedValue === "cli" ? "cli" : "auto";
             isCreate
               ? set!({ geminiEngine: value })
               : mark("adapterConfig", "engine", value === "auto" ? undefined : value);
@@ -52,7 +53,7 @@ export function GeminiLocalConfigFields({
           <option value="auto">{t("app.agentUi.configFields.defaultAcp")}</option>
           <option value="cli">Gemini CLI</option>
           <option value="acp">ACP</option>
-        </select>
+        </ConfigSelect>
       </Field>}
       {acpSelected && (
         <>
@@ -79,15 +80,15 @@ export function GeminiLocalConfigFields({
             </Field>
           )}
           <Field configSection="runPolicy" label={t("app.agentUi.configFields.acpSessionMode")} hint={t("app.agentUi.configFields.persistentKeepsAcpSessionStateBetweenRuns")}>
-            <select
+            <ConfigSelect
               className={inputClass}
               value={
                 isCreate
                   ? values!.geminiAcpMode ?? "persistent"
                   : eff("adapterConfig", "mode", String(config.mode ?? "persistent"))
               }
-              onChange={(e) => {
-                const value = e.target.value === "oneshot" ? "oneshot" : "persistent";
+              onValueChange={(selectedValue) => {
+                const value = selectedValue === "oneshot" ? "oneshot" : "persistent";
                 isCreate
                   ? set!({ geminiAcpMode: value })
                   : mark("adapterConfig", "mode", value);
@@ -95,21 +96,21 @@ export function GeminiLocalConfigFields({
             >
               <option value="persistent">{t("app.agentUi.configFields.persistent")}</option>
               <option value="oneshot">{t("app.agentUi.configFields.oneShot")}</option>
-            </select>
+            </ConfigSelect>
           </Field>
           <Field
             label={t("app.agentUi.configFields.acpNonInteractivePermissions")}
             hint={t("app.agentUi.configFields.fallbackIfTheAcpAgentAsksFor")}
           >
-            <select
+            <ConfigSelect
               className={inputClass}
               value={
                 isCreate
                   ? values!.geminiAcpNonInteractivePermissions ?? "deny"
                   : eff("adapterConfig", "nonInteractivePermissions", String(config.nonInteractivePermissions ?? "deny"))
               }
-              onChange={(e) => {
-                const value = e.target.value === "fail" ? "fail" : "deny";
+              onValueChange={(selectedValue) => {
+                const value = selectedValue === "fail" ? "fail" : "deny";
                 isCreate
                   ? set!({ geminiAcpNonInteractivePermissions: value })
                   : mark("adapterConfig", "nonInteractivePermissions", value);
@@ -117,7 +118,7 @@ export function GeminiLocalConfigFields({
             >
               <option value="deny">{t("app.common.actions.deny")}</option>
               <option value="fail">{t("app.agentUi.configFields.fail")}</option>
-            </select>
+            </ConfigSelect>
           </Field>
           {!managedSandboxOnly && (
             <Field

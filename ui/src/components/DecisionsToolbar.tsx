@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { type ReactNode } from "react";
 import { ArrowUpDown, Check, Layers, ListFilter } from "lucide-react";
 import {
@@ -222,7 +223,7 @@ function FilterMenu({
           {options.projects.map((project) => (
             <FilterRow
               key={project.id}
-              label={project.name}
+              label={projectDisplayName(project.name)}
               checked={filters.projectIds.includes(project.id)}
               onToggle={() => toggle("projectIds", project.id)}
             />

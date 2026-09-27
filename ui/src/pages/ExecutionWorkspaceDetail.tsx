@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useWorkspaceIsolationControls } from "@/hooks/useWorkspaceIsolationControls";
 import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate, useParams } from "@/lib/router";
@@ -923,7 +924,7 @@ export function ExecutionWorkspaceDetail() {
     if (!workspace) return;
     const crumbs = [
       { label: t("app.common.nouns.projects"), href: "/projects" },
-      ...(project ? [{ label: project.name, href: `/projects/${projectRef}` }] : []),
+      ...(project ? [{ label: projectDisplayName(project.name), href: `/projects/${projectRef}` }] : []),
       ...(project ? [{ label: t("app.common.nouns.workspaces"), href: `/projects/${projectRef}/workspaces` }] : []),
       { label: workspace.name },
     ];
@@ -1441,7 +1442,7 @@ export function ExecutionWorkspaceDetail() {
               </CardHeader>
               <CardContent>
               <DetailRow label={t("app.common.nouns.project")}>
-                {project ? <Link to={`/projects/${projectRef}`} className="hover:underline">{project.name}</Link> : <MonoValue value={workspace.projectId} />}
+                {project ? <Link to={`/projects/${projectRef}`} className="hover:underline">{projectDisplayName(project.name)}</Link> : <MonoValue value={workspace.projectId} />}
               </DetailRow>
               <DetailRow label={t("app.workspaces.projectWorkspaceSummaryCard.projectWorkspace")}>
                 {project && linkedProjectWorkspace ? (

@@ -1,3 +1,4 @@
+import { i18n as uiI18n } from "@/i18n";
 import { isRetiredComposioConnection, RETIRED_COMPOSIO_MESSAGE } from "@paperclipai/shared";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -251,7 +252,7 @@ export function Connections() {
   }, [connections]);
   const userProfileById = useMemo(
     () => buildCompanyUserProfileMap(userDirectoryQuery.data?.users),
-    [userDirectoryQuery.data],
+    [userDirectoryQuery.data, uiI18n.language],
   );
 
   const rows = useMemo<AppRow[]>(() => {

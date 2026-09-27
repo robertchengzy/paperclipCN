@@ -1,3 +1,4 @@
+import { ConfigSelect } from "@/components/ConfigSelect";
 import { t, useTranslation } from "@/i18n";
 import { useEffect, useMemo, useState } from "react";
 import type { AgentPermissions, TrustPreset } from "@paperclipai/shared";
@@ -112,15 +113,15 @@ export function TrustPresetSection({
       <h3 className="mb-3 text-sm font-medium">{t("app.shell.trustPresetSection.trust")}</h3>
       <div className="rounded-lg border border-border p-4 space-y-3">
         <Field label={t("app.shell.trustPresetSection.trustPreset")} hint={t("app.shell.trustPresetSection.chooseHowBroadlyThisAgentCanReadAnd")}>
-          <select
+          <ConfigSelect
             className={inputClass}
             value={preset}
-            onChange={(event) => handlePresetChange(event.target.value)}
+            onValueChange={(selectedValue) => handlePresetChange(selectedValue)}
             disabled={disabled}
           >
             <option value="standard">{TRUST_PRESET_LABELS.standard}</option>
             <option value="low_trust_review">{TRUST_PRESET_LABELS.low_trust_review}</option>
-          </select>
+          </ConfigSelect>
         </Field>
         <p className="text-xs text-muted-foreground">{TRUST_PRESET_DESCRIPTIONS[preset]}</p>
 
@@ -155,22 +156,22 @@ export function TrustPresetSection({
                 <div className="rounded-md border border-border/70 bg-background/70 p-3 text-foreground space-y-3">
                   <div className="grid gap-3 sm:grid-cols-(--gtc-12)">
                     <Field label={t("app.shell.trustPresetSection.boundaryType")}>
-                      <select
+                      <ConfigSelect
                         className={inputClass}
                         value={targetType}
-                        onChange={(event) => setTargetType(event.target.value as LowTrustBoundaryTargetType)}
+                        onValueChange={(selectedValue) => setTargetType(selectedValue as LowTrustBoundaryTargetType)}
                         disabled={disabled}
                       >
                         <option value="project">{t("app.common.nouns.project")}</option>
                         <option value="root_issue">{t("app.shell.trustPresetSection.rootIssue")}</option>
                         {allowSingleIssue && <option value="issue">{t("app.common.nouns.issue")}</option>}
-                      </select>
+                      </ConfigSelect>
                     </Field>
                     <Field label={BOUNDARY_TARGET_LABELS[targetType]}>
-                      <select
+                      <ConfigSelect
                         className={inputClass}
                         value={boundaryValue}
-                        onChange={(event) => handleBoundaryTargetChange(event.target.value)}
+                        onValueChange={(selectedValue) => handleBoundaryTargetChange(selectedValue)}
                         disabled={disabled || !companyId || candidatesLoading || targetCandidates.length === 0}
                       >
                         <option value="">
@@ -185,7 +186,7 @@ export function TrustPresetSection({
                             {candidate.label}
                           </option>
                         ))}
-                      </select>
+                      </ConfigSelect>
                     </Field>
                   </div>
                   <div className="flex flex-wrap items-center justify-between gap-2">

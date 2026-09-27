@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { t as translateCopy } from "@/i18n";
 import { useWorkspaceIsolationControls } from "@/hooks/useWorkspaceIsolationControls";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -1257,7 +1258,7 @@ export function NewIssueDialog() {
         searchText: `${agent.name} ${agent.role} ${agent.title ?? ""}`,
       })),
     ],
-    [agents, companyMembers?.users, currentUserId, recentAssigneeIds],
+    [agents, companyMembers?.users, currentUserId, recentAssigneeIds, t],
   );
   const watchdogAgentOptions = useMemo<InlineEntityOption[]>(
     () =>
@@ -1276,10 +1277,10 @@ export function NewIssueDialog() {
     () =>
       orderedProjects.map((project) => ({
         id: project.id,
-        label: project.name,
-        searchText: project.description ?? "",
+        label: projectDisplayName(project.name),
+        searchText: `${project.name} ${project.description ?? ""}`,
       })),
-    [orderedProjects],
+    [orderedProjects, t],
   );
   const savedDraft = useMemo(() => newIssueOpen ? loadDraft() : null, [newIssueOpen]);
   const hasSavedDraft = Boolean(savedDraft?.title.trim() || savedDraft?.description.trim());

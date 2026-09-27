@@ -1,3 +1,4 @@
+import { i18n as uiI18n } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { Trans } from "react-i18next";
 import { t as translate, useTranslation } from "@/i18n";
@@ -2160,11 +2161,11 @@ export function PipelineItemDetailView({ pipelineId, caseId }: { pipelineId: str
   }, [agents]);
   const userProfileMap = useMemo(
     () => buildCompanyUserProfileMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, uiI18n.language],
   );
   const userLabelMap = useMemo(
     () => buildCompanyUserLabelMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, uiI18n.language],
   );
   const mentionOptions = useStandardMarkdownMentionOptions({
     companyId: conversationCompanyId,

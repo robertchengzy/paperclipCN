@@ -141,7 +141,7 @@ function resolveActorLabel(args: {
     return agentMap?.get(agentId)?.name ?? agentId.slice(0, 8);
   }
   if (userId) {
-    return formatAssigneeUserLabel(userId, currentUserId, userLabelMap) ?? t("app.common.nouns.board");
+    return formatAssigneeUserLabel(userId, currentUserId, userLabelMap) ?? t("app.common.nouns.boardMember");
   }
   return t("app.common.labels.unknown");
 }

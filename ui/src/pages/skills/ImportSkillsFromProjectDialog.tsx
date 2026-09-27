@@ -1,3 +1,5 @@
+import { i18n as uiI18n } from "@/i18n";
+import { projectDisplayName } from "@/lib/project-display";
 import { Trans } from "react-i18next";
 import { t, useTranslation } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -332,8 +334,8 @@ export function ImportSkillsFromProjectDialog({
     const query = projectFilter.trim().toLowerCase();
     const sorted = [...projects].sort((a, b) => a.name.localeCompare(b.name));
     if (!query) return sorted;
-    return sorted.filter((project) => project.name.toLowerCase().includes(query));
-  }, [projects, projectFilter]);
+    return sorted.filter((project) => `${project.name} ${projectDisplayName(project.name)}`.toLowerCase().includes(query));
+  }, [projects, projectFilter, uiI18n.language]);
 
   function startScan(project: Project) {
     setSelectedProject(project);
@@ -721,7 +723,7 @@ function PickProjectStep({
                     data-disabled={disabled ? "true" : "false"}
                   >
                     <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-medium">{project.name}</div>
+                      <div className="truncate text-sm font-medium">{projectDisplayName(project.name)}</div>
                       <div className="mt-0.5 text-xs text-muted-foreground">
                         {t(
                           project.workspaces.length === 1

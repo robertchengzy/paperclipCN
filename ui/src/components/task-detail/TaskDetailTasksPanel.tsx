@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { t as translateCopy, useTranslation } from "@/i18n";
 import type { ReactNode } from "react";
 import type { Issue, Project } from "@paperclipai/shared";
@@ -57,7 +58,7 @@ export function TaskDetailTasksPanel({ ancestors = [], subtasks, createdTasks, p
       ? projects.find((candidate) => candidate.id === item.projectId) ?? item.project
       : null;
     const group = groups.get(key) ?? {
-      name: project?.name ?? (item.projectId ? translateCopy("app.issueUi.taskDetailTasksPanel.project") : translateCopy("app.issueUi.taskDetailTasksPanel.noProject")),
+      name: project ? projectDisplayName(project.name) : (item.projectId ? translateCopy("app.issueUi.taskDetailTasksPanel.project") : translateCopy("app.issueUi.taskDetailTasksPanel.noProject")),
       path: item.projectId ? `/projects/${projectRouteRef(project ?? { id: item.projectId })}/issues` : undefined,
       tasks: [],
     };

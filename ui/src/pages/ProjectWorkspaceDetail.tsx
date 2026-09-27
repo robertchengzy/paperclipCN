@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -333,7 +334,7 @@ export function ProjectWorkspaceDetail() {
     if (!project) return;
     setBreadcrumbs([
       { label: t("app.common.nouns.projects"), href: "/projects" },
-      { label: project.name, href: `/projects/${canonicalProjectRef}` },
+      { label: projectDisplayName(project.name), href: `/projects/${canonicalProjectRef}` },
       { label: t("app.common.nouns.workspaces"), href: `/projects/${canonicalProjectRef}/workspaces` },
       { label: workspace?.name ?? routeWorkspaceId },
     ]);
@@ -687,7 +688,7 @@ export function ProjectWorkspaceDetail() {
             </div>
             <Separator className="my-4" />
             <DetailRow label={t("app.common.nouns.project")}>
-              <Link to={`/projects/${canonicalProjectRef}`} className="hover:underline">{project.name}</Link>
+              <Link to={`/projects/${canonicalProjectRef}`} className="hover:underline">{projectDisplayName(project.name)}</Link>
             </DetailRow>
             <DetailRow label={t("app.workspaces.executionWorkspaceDetail.context.workspaceId")}>
               <span className="break-all font-mono text-xs">{workspace.id}</span>

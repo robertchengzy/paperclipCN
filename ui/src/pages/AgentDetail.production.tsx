@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { Trans } from "react-i18next";
 import { t as translateCopy, useTranslation } from "@/i18n";
 import { AgentCharacter } from "../components/AgentCharacter";
@@ -2219,7 +2220,7 @@ function ConfigurationTab({
         companyId={companyId}
         projectCandidates={(boundaryProjects ?? []).map((project) => ({
           id: project.id,
-          label: project.name,
+          label: projectDisplayName(project.name),
         }))}
         issueCandidates={(boundaryIssues ?? []).map((issue) => ({
           id: issue.id,

@@ -10,7 +10,7 @@ describe("activity formatting", () => {
 
   it.each([
     ["en", "provider trace expired"],
-    ["zh-CN", "提供方 Trace 已过期"],
+    ["zh-CN", "提供方跟踪已过期"],
   ])("labels trace expiry without changing event details in %s", async (language, expected) => {
     await i18n.changeLanguage(language);
     const details = Object.freeze({ traceId: "trace-1", reason: "retention_expired" });
@@ -29,7 +29,7 @@ describe("activity formatting", () => {
 
   it.each([
     ["en", "provider trace metadata listed", "provider trace metadata listed", "instance settings experimental updated"],
-    ["zh-CN", "仅列出了提供方 Trace 元数据", "仅列出了提供方 Trace 元数据", "更新了实例实验设置"],
+    ["zh-CN", "仅列出了提供方跟踪元数据", "仅列出了提供方跟踪元数据", "更新了实例实验设置"],
   ])("labels metadata listing and instance settings events accurately in %s", async (language, metadataRow, metadataDetail, settingsLabel) => {
     await i18n.changeLanguage(language);
     const metadata = Object.freeze({ requestedRunCount: 2, traceCount: 1, payloadLogged: false });

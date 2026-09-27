@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useMemo, useState } from "react";
 import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, Layers, Plus, Pencil, Trash2, Link2, ShieldCheck } from "lucide-react";
@@ -1214,7 +1215,7 @@ export function ProfilesTab({ companyId }: { companyId: string }) {
                 <Select value={targetProjectId} onValueChange={setTargetProjectId}>
                   <SelectTrigger><SelectValue placeholder={t("app.tools.profilesTab.selectProject")} /></SelectTrigger>
                   <SelectContent>
-                    {projectOptions.map((project) => <SelectItem key={project.id} value={project.id}>{project.name}</SelectItem>)}
+                    {projectOptions.map((project) => <SelectItem key={project.id} value={project.id}>{projectDisplayName(project.name)}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>

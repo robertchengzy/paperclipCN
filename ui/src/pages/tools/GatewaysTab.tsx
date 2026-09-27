@@ -76,7 +76,7 @@ function formatOwner(gateway: ToolMcpGatewayWithTokens, agentNames: Map<string, 
     return agentNames.get(gateway.createdByAgentId) ?? translate("app.tools.gatewaysTab.scope.agent", { name: shortId(gateway.createdByAgentId) });
   }
   if (gateway.createdByUserId) return translate("app.tools.gatewaysTab.owner.boardUser", { id: shortId(gateway.createdByUserId) });
-  return translate("app.common.nouns.board");
+  return translate("app.common.nouns.boardMember");
 }
 
 function formatScope(

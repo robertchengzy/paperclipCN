@@ -18,7 +18,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Identity } from "@/components/Identity";
 import { displayLocale, cn, relativeTime } from "@/lib/utils";
 import { queryKeys } from "@/lib/queryKeys";
-import { formatActivityVerb } from "@/lib/activity-format";
+import { formatActivityVerb, formatActivityEntityType } from "@/lib/activity-format";
 import { buildCompanyUserProfileMap, type CompanyUserProfile } from "@/lib/company-members";
 import { auditApi, type AuditActionRecord, type AuditActionFilters } from "@/api/audit";
 import { agentsApi } from "@/api/agents";
@@ -190,7 +190,7 @@ function AuditEntityNode({ record }: { record: AuditActionRecord }) {
     );
   }
   // Non-linkable entities (company, agent, goal, …) — show a plain descriptor.
-  return <span className="text-muted-foreground">{record.entityType}</span>;
+  return <span className="text-muted-foreground">{formatActivityEntityType(record.entityType, record.action)}</span>;
 }
 
 function AuditRow({
@@ -331,7 +331,7 @@ export function AuditFeed({
   );
   const userProfileMap = useMemo(
     () => buildCompanyUserProfileMap(userDirectory.data?.users),
-    [userDirectory.data],
+    [userDirectory.data, t],
   );
 
   // The per-agent tab keeps the legacy privileged scope because it always

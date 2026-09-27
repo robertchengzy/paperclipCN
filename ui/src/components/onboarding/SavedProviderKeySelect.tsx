@@ -1,3 +1,4 @@
+import { ConfigSelect } from "@/components/ConfigSelect";
 import { t, useTranslation } from "@/i18n";
 import { aiConnectionsApi } from "@/api/ai-connections";
 import type { AiProvider } from "@paperclipai/shared";
@@ -94,11 +95,11 @@ export function SavedProviderKeySelect({
       {options.length > 0 && (
         <label className="block space-y-2 text-sm">
           <span>{kind === "api" ? t("app.common.labels.apiKey") : t("app.shell.savedProviderKeySelect.subscription")}</span>
-          <select
+          <ConfigSelect
             aria-label={kind === "api" ? t("app.shell.savedProviderKeySelect.savedApiKey") : t("app.shell.savedProviderKeySelect.savedSubscription")}
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             value={value}
-            onChange={(event) => onChange(event.target.value)}
+            onValueChange={(selectedValue) => onChange(selectedValue)}
             disabled={disabled}
           >
             {options.map((option) => (
@@ -111,7 +112,7 @@ export function SavedProviderKeySelect({
                 ? t("app.shell.savedProviderKeySelect.enterANewApiKey")
                 : t("app.shell.savedProviderKeySelect.signInToAnotherAccount")}
             </option>
-          </select>
+          </ConfigSelect>
         </label>
       )}
       {loading && (

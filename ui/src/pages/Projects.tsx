@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Project } from "@paperclipai/shared";
@@ -223,7 +224,7 @@ export function Projects() {
                       <EntityRow
                         key={project.id}
                         leading={<ProjectTile color={project.color ?? null} icon={project.icon ?? null} size="sm" />}
-                        title={project.name}
+                        title={projectDisplayName(project.name)}
                         subtitle={project.description ?? undefined}
                         reserveSubtitleSpace
                         to={projectUrl(project)}
@@ -251,7 +252,7 @@ export function Projects() {
                               state={state}
                               pending={joinLeavePending}
                               pendingState={joinLeavePending ? membershipMutation.variables?.state : null}
-                              resourceName={project.name}
+                              resourceName={projectDisplayName(project.name)}
                               onJoin={() => membershipMutation.mutate({
                                 resourceType: "project",
                                 resourceId: project.id,
@@ -269,7 +270,7 @@ export function Projects() {
                               size="row"
                               starred={starred}
                               pending={starPending}
-                              resourceName={project.name}
+                              resourceName={projectDisplayName(project.name)}
                               onToggle={(next) => membershipMutation.mutate({
                                 resourceType: "project",
                                 resourceId: project.id,

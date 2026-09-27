@@ -57,7 +57,7 @@ function getPipelineRevisionActor(
     const profile = maps.userProfileMap?.get(revision.createdByUserId);
     return {
       kind: "user",
-      name: profile?.label ?? (revision.createdByUserId === "local-board" ? translate("app.common.nouns.board") : revision.createdByUserId.slice(0, 8)),
+      name: profile?.label ?? (revision.createdByUserId === "local-board" ? translate("app.common.nouns.boardMember") : revision.createdByUserId.slice(0, 8)),
       imageUrl: profile?.image ?? null,
     };
   }

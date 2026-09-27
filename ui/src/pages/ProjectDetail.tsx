@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { Link, useParams, useNavigate, useLocation, Navigate } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -498,7 +499,7 @@ export function ProjectDetail() {
   useEffect(() => {
     setBreadcrumbs([
       { label: t("app.pages.projects"), href: "/projects" },
-      { label: project?.name ?? routeProjectRef ?? t("app.projects.detail.fallbackName") },
+      { label: project ? projectDisplayName(project.name) : routeProjectRef ?? t("app.projects.detail.fallbackName") },
     ]);
   }, [setBreadcrumbs, project, routeProjectRef, t]);
 
@@ -729,7 +730,7 @@ export function ProjectDetail() {
             state="left"
             pending={projectJoinLeavePending}
             pendingState={projectJoinLeavePending ? membershipMutation.variables?.state : null}
-            resourceName={project.name}
+            resourceName={projectDisplayName(project.name)}
             onJoin={() => membershipMutation.mutate({
               resourceType: "project",
               resourceId: project.id,
@@ -765,6 +766,7 @@ export function ProjectDetail() {
         <div className="min-w-0 space-y-2">
           <InlineEditor
             value={project.name}
+            displayValue={projectDisplayName(project.name)}
             onSave={(name) => updateProject.mutate({ name })}
             as="h2"
             className="text-xl font-bold"
@@ -787,7 +789,7 @@ export function ProjectDetail() {
             size="button"
             starred={projectStarred}
             pending={projectStarPending}
-            resourceName={project.name}
+            resourceName={projectDisplayName(project.name)}
             onToggle={(next) => membershipMutation.mutate({
               resourceType: "project",
               resourceId: project.id,

@@ -167,7 +167,7 @@ function getRevisionActor(
     const profile = maps.userProfileMap?.get(revision.createdByUserId);
     return {
       kind: "user",
-      name: profile?.label ?? (revision.createdByUserId === "local-board" ? t("app.common.nouns.board") : revision.createdByUserId.slice(0, 8)),
+      name: profile?.label ?? (revision.createdByUserId === "local-board" ? t("app.common.nouns.boardMember") : revision.createdByUserId.slice(0, 8)),
       imageUrl: profile?.image ?? null,
     };
   }

@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useUserPreferences } from "../hooks/useUserPreferences";
 import { DispositionRecoveryProvider } from "../components/DispositionRecoveryNotice";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -3522,11 +3523,11 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
   }, [agents]);
   const userProfileMap = useMemo(
     () => buildCompanyUserProfileMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, t],
   );
   const userLabelMap = useMemo(
     () => buildCompanyUserLabelMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, t],
   );
   const mentionOptions = useMemo<MentionOption[]>(() => {
     return buildMarkdownMentionOptions({
@@ -3535,7 +3536,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
       members: companyMembers?.users,
       issues: mentionIssues,
     });
-  }, [agents, companyMembers?.users, orderedProjects, mentionIssues]);
+  }, [agents, companyMembers?.users, orderedProjects, mentionIssues, t]);
 
   const resolvedProject = useMemo(
     () =>
@@ -7097,7 +7098,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
               icon={resolvedProject?.icon ?? issue.project?.icon}
             />
             <span className="truncate">
-              {resolvedProject?.name ??
+              {(resolvedProject ? projectDisplayName(resolvedProject.name) : null) ??
                 issue.project?.name ??
                 issue.projectId.slice(0, 8)}
             </span>

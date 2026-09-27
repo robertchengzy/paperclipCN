@@ -1,3 +1,4 @@
+import { i18n as uiI18n } from "@/i18n";
 import { isRetiredComposioConnection, RETIRED_COMPOSIO_MESSAGE } from "@paperclipai/shared";
 import { ManagedAiConnectionRow } from "@/components/ai-connections/ManagedAiConnectionDetails";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
@@ -378,7 +379,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
   });
   const userProfileById = useMemo(
     () => buildCompanyUserProfileMap(userDirectoryQuery.data?.users),
-    [userDirectoryQuery.data],
+    [userDirectoryQuery.data, uiI18n.language],
   );
 
   const rows = useMemo<ConnectorRowModel[]>(() => {

@@ -1,3 +1,4 @@
+import { ConfigSelect } from "@/components/ConfigSelect";
 import { useTranslation } from "@/i18n";
 import { configFieldsForSection } from "../config-sections";
 import { useEffect, useState } from "react";
@@ -183,16 +184,16 @@ export function HermesGatewayConfigFields({
         label={t("app.agentUi.configFields.sessionKeyStrategy")}
         hint={t("app.agentUi.configFields.controlsXHermesSessionKeyIssueScoped")}
       >
-        <select
+        <ConfigSelect
           value={sessionKeyStrategy}
-          onChange={(event) => writeValue("sessionKeyStrategy", event.target.value)}
+          onValueChange={(selectedValue) => writeValue("sessionKeyStrategy", selectedValue)}
           className={inputClass}
         >
           <option value="issue">{t("app.agentUi.configFields.issueScoped")}</option>
           <option value="agent">{t("app.agentUi.configFields.agentScoped")}</option>
           <option value="run">{t("app.agentUi.configFields.runScoped")}</option>
           <option value="none">{t("app.common.labels.none")}</option>
-        </select>
+        </ConfigSelect>
       </Field>
 
       <Field configSection="runPolicy" label={t("app.agentUi.configFields.timeoutSeconds")}>

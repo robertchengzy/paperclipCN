@@ -12,16 +12,16 @@ export function connectionOwnerProfile(
 ): ConnectionOwnerProfile | null {
   if (!connection.createdByUserId) return null;
   return profiles.get(connection.createdByUserId) ?? {
-    label: connection.createdByUserId === "local-board" ? t("app.common.nouns.board") : t("app.apps.connectionOwner.boardMember"),
+    label: connection.createdByUserId === "local-board" ? t("app.common.nouns.boardMember") : t("app.apps.connectionOwner.boardMember"),
     image: null,
   };
 }
 
 function ownerGivenName(label: string): string {
   const trimmed = label.trim();
-  if (!trimmed) return t("app.common.nouns.board");
+  if (!trimmed) return t("app.common.nouns.boardMember");
   const first = trimmed.split(/\s+/)[0] ?? trimmed;
-  return first.includes("@") ? first.split("@")[0] || t("app.common.nouns.board") : first;
+  return first.includes("@") ? first.split("@")[0] || t("app.common.nouns.boardMember") : first;
 }
 
 /**

@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useEffect } from "react";
 import { useParams } from "@/lib/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -215,7 +216,7 @@ export function GoalDetail() {
               {linkedProjects.map((project) => (
                 <EntityRow
                   key={project.id}
-                  title={project.name}
+                  title={projectDisplayName(project.name)}
                   subtitle={project.description ?? undefined}
                   to={projectUrl(project)}
                   trailing={<StatusBadge status={project.status} />}

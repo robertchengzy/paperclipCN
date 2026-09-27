@@ -23,6 +23,24 @@ interface ActivityFormatOptions {
   currentUserId?: string | null;
 }
 
+const ADDITIONAL_ACTIVITY_LABELS: Record<string, string> = {
+  "agent.permissions_updated": "app.lib.activityFormat.extra.agent_permissions_updated",
+  "agent.key_revoked": "app.lib.activityFormat.extra.agent_key_revoked",
+  "agent.skills_synced": "app.lib.activityFormat.extra.agent_skills_synced",
+  "agent.config_rolled_back": "app.lib.activityFormat.extra.agent_config_rolled_back",
+  "instance.settings.updated": "app.lib.activityFormat.extra.instance_settings_updated",
+  "instance.settings.general_updated": "app.lib.activityFormat.extra.instance_settings_general_updated",
+  "user.preferences_updated": "app.lib.activityFormat.extra.user_preferences_updated",
+  "decision_queue.created": "app.lib.activityFormat.extra.decision_queue_created",
+  "decision_queue.updated": "app.lib.activityFormat.extra.decision_queue_updated",
+  "provider_trace.capture_requested": "app.lib.activityFormat.extra.provider_trace_capture_requested",
+  "provider_trace.redacted_viewed": "app.lib.activityFormat.extra.provider_trace_redacted_viewed",
+  "provider_trace.frame_revealed": "app.lib.activityFormat.extra.provider_trace_frame_revealed",
+  "provider_trace.downloaded": "app.lib.activityFormat.extra.provider_trace_downloaded",
+  "provider_trace.deleted": "app.lib.activityFormat.extra.provider_trace_deleted",
+  "provider_trace.workspace_diffs_reprojected": "app.lib.activityFormat.extra.provider_trace_workspace_diffs_reprojected",
+};
+
 /** Action → i18n key of the verb phrase that precedes the entity in an activity row. */
 const ACTIVITY_ROW_VERBS: Record<string, string> = {
   "provider_trace.expired": "app.lib.activityFormat.row.providerTraceExpired",
@@ -287,7 +305,7 @@ function readIssueReferences(details: ActivityDetails, key: string): ActivityIss
 }
 
 function formatUserLabel(userId: string | null | undefined, options: ActivityFormatOptions = {}): string {
-  if (!userId || userId === "local-board") return t("app.common.nouns.board");
+  if (!userId || userId === "local-board") return t("app.common.nouns.boardMember");
   if (options.currentUserId && userId === options.currentUserId) return t("app.common.labels.you");
   const profile = options.userProfileMap?.get(userId);
   if (profile) return profile.label;
@@ -539,7 +557,7 @@ export function formatActivityVerb(
   });
   if (structuredChange) return structuredChange;
 
-  const verbKey = ACTIVITY_ROW_VERBS[action];
+  const verbKey = Object.hasOwn(ACTIVITY_ROW_VERBS, action) ? ACTIVITY_ROW_VERBS[action] : Object.hasOwn(ADDITIONAL_ACTIVITY_LABELS, action) ? ADDITIONAL_ACTIVITY_LABELS[action] : undefined;
   return verbKey ? t(verbKey) : action.replace(/[._]/g, " ");
 }
 
@@ -575,7 +593,7 @@ export function formatIssueActivityAction(
   const outcomeLabelKey = formatInteractionOutcomeLabel(action, details);
   if (outcomeLabelKey) return t(outcomeLabelKey);
 
-  const labelKey = ISSUE_ACTIVITY_LABELS[action];
+  const labelKey = Object.hasOwn(ISSUE_ACTIVITY_LABELS, action) ? ISSUE_ACTIVITY_LABELS[action] : Object.hasOwn(ADDITIONAL_ACTIVITY_LABELS, action) ? ADDITIONAL_ACTIVITY_LABELS[action] : Object.hasOwn(ACTIVITY_ROW_VERBS, action) ? ACTIVITY_ROW_VERBS[action] : undefined;
 
   if (action.startsWith("issue.monitor_") && details) {
     const serviceName = typeof details.serviceName === "string" && details.serviceName.trim()
@@ -603,4 +621,9 @@ export function formatIssueActivityAction(
   }
 
   return labelKey ? t(labelKey) : action.replace(/[._]/g, " ");
+}
+
+export function formatActivityEntityType(entityType: string, action: string): string | null {
+  if (Object.hasOwn(ACTIVITY_ROW_VERBS, action) || Object.hasOwn(ADDITIONAL_ACTIVITY_LABELS, action)) return null;
+  return t(`app.lib.activityFormat.entity.${entityType}`, { defaultValue: entityType });
 }

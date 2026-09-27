@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { Trans } from "react-i18next";
 import { t, useTranslation } from "@/i18n";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
@@ -1283,7 +1284,7 @@ export function Cases() {
                         {(projectsQuery.data ?? []).filter((project) => !project.archivedAt).map((project) => (
                           <FilterCheckboxRow
                             key={project.id}
-                            label={project.name}
+                            label={projectDisplayName(project.name)}
                             checked={viewState.projectFilters.includes(project.id)}
                             onCheckedChange={(checked) => toggleStringFilter("projectFilters", project.id, checked)}
                           />

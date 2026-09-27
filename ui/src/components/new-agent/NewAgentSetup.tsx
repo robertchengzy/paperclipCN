@@ -1,3 +1,4 @@
+import { ConfigSelect } from "@/components/ConfigSelect";
 import { AgentCharacter } from "../AgentCharacter";
 import { useAgentAppearanceDraft } from "../../hooks/useAgentAppearanceDraft";
 import { AiConnectionField, aiProviderForAdapter } from "../ai-connections/AiConnectionField";
@@ -867,12 +868,12 @@ function Setup({
                             )}
                             {efforts.length > 0 && (
                               <Field label={t("app.agentSetup.setup.thinkingEffort")}>
-                                <select
+                                <ConfigSelect
                                   aria-label={t("app.agentSetup.setup.thinkingEffort")}
                                   className={controlClass}
                                   value={effort}
-                                  onChange={(event) => {
-                                    setEffort(event.target.value);
+                                  onValueChange={(selectedValue) => {
+                                    setEffort(selectedValue);
                                     resetTest();
                                   }}
                                 >
@@ -882,7 +883,7 @@ function Setup({
                                       {value}
                                     </option>
                                   ))}
-                                </select>
+                                </ConfigSelect>
                               </Field>
                             )}
                           </div>
@@ -901,12 +902,12 @@ function Setup({
                           <div className="grid gap-5 sm:grid-cols-2">
                             {chooseProvider && (
                               <Field label={t("app.agentSetup.setup.apiKeyProvider")}>
-                                <select
+                                <ConfigSelect
                                   aria-label={t("app.agentSetup.setup.apiKeyProvider")}
                                   className={controlClass}
                                   value={provider}
-                                  onChange={(event) => {
-                                    setProvider(event.target.value);
+                                  onValueChange={(selectedValue) => {
+                                    setProvider(selectedValue);
                                     setModel("");
                                     setApiKey("");
                                     setProviderBinding(null);
@@ -929,7 +930,7 @@ function Setup({
                                               }[key] ?? key)}
                                     </option>
                                   ))}
-                                </select>
+                                </ConfigSelect>
                               </Field>
                             )}
                             <div
@@ -1039,12 +1040,12 @@ function Setup({
                               />
                             </Field>
                             <Field label={t("app.agentSetup.setup.kimiProtocol")}>
-                              <select
+                              <ConfigSelect
                                 aria-label={t("app.agentSetup.setup.kimiProtocol")}
                                 className={controlClass}
                                 value={kimiProtocol}
-                                onChange={(event) => {
-                                  setKimiProtocol(event.target.value);
+                                onValueChange={(selectedValue) => {
+                                  setKimiProtocol(selectedValue);
                                   resetTest();
                                 }}
                               >
@@ -1053,7 +1054,7 @@ function Setup({
                                     <option key={value}>{value}</option>
                                   ),
                                 )}
-                              </select>
+                              </ConfigSelect>
                             </Field>
                             <Field
                               label={t("app.agentSetup.setup.kimiBaseUrl")}
@@ -1103,13 +1104,13 @@ function Setup({
                       ) && (
                         <section className="space-y-5">
                           <h3 className="text-sm font-semibold">{t("app.agents.config.sections.environment")}</h3>
-                          <select
+                          <ConfigSelect
                             aria-label={t("app.agents.config.sections.environment")}
                             className={controlClass}
                             value={environmentOverride}
                             disabled={forced.forced || managedOnly}
-                            onChange={(event) => {
-                              setEnvironmentOverride(event.target.value);
+                            onValueChange={(selectedValue) => {
+                              setEnvironmentOverride(selectedValue);
                               setConnection(null);
                               resetTest();
                               if (connectionAdapter) setScreen("connect");
@@ -1125,7 +1126,7 @@ function Setup({
                                   {environmentDisplayLabel(env)}
                                 </option>
                               ))}
-                          </select>
+                          </ConfigSelect>
                         </section>
                       )}
                     </fieldset>

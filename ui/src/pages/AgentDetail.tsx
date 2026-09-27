@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { t as translateCopy } from "@/i18n";
 import { AgentCharacter } from "../components/AgentCharacter";
 import { characterStateForAgent } from "@paperclipai/shared";
@@ -2182,7 +2183,7 @@ export function ConfigurationTab({
         companyId={companyId}
         projectCandidates={(boundaryProjects ?? []).map((project) => ({
           id: project.id,
-          label: project.name,
+          label: projectDisplayName(project.name),
         }))}
         issueCandidates={(boundaryIssues ?? []).map((issue) => ({
           id: issue.id,

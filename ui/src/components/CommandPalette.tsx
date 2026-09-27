@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { t, useTranslation } from "@/i18n";
 import { Trans } from "react-i18next";
 import { AgentIdentity } from "@/components/AgentIdentity";
@@ -203,7 +204,7 @@ export function CommandPalette() {
       .map((project) => ({
         project,
         score: scoreProjectMatch(
-          project.name.toLowerCase(),
+          `${project.name} ${projectDisplayName(project.name)}`.toLowerCase(),
           (project.description ?? "").toLowerCase(),
           q,
         ),
@@ -297,7 +298,7 @@ export function CommandPalette() {
                   data-testid="command-project-match"
                 >
                   <Hexagon className="mr-2 h-4 w-4 shrink-0" />
-                  <span className="min-w-0 truncate">{project.name}</span>
+                  <span className="min-w-0 truncate">{projectDisplayName(project.name)}</span>
                   {project.description ? (
                     <span className="ml-2 hidden min-w-0 flex-1 truncate text-xs text-muted-foreground sm:inline">
                       {project.description}
@@ -412,7 +413,7 @@ export function CommandPalette() {
               {projects.slice(0, 10).map((project) => (
                 <CommandItem key={project.id} onSelect={() => go(projectUrl(project))}>
                   <Hexagon className="mr-2 h-4 w-4" />
-                  {project.name}
+                  {projectDisplayName(project.name)}
                 </CommandItem>
               ))}
             </CommandGroup>

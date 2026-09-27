@@ -1,3 +1,4 @@
+import { ConfigSelect } from "@/components/ConfigSelect";
 import { t, useTranslation } from "@/i18n";
 import { configFieldsForSection } from "../config-sections";
 import type { AdapterConfigFieldsProps } from "../types";
@@ -100,11 +101,11 @@ export function ClaudeLocalAdvancedFields({
         the same way `runnerManaged` hides them for the Paperclip Runner.
       */}
       {!managedSandboxOnly && <Field label={t("app.agentUi.configFields.executionEngine")} hint={t("app.agentUi.configFields.defaultUsesAcpIfAcpIsUnavailable")}>
-        <select
+        <ConfigSelect
           className={inputClass}
           value={engine}
-          onChange={(e) => {
-            const value = e.target.value === "acp" ? "acp" : e.target.value === "cli" ? "cli" : "auto";
+          onValueChange={(selectedValue) => {
+            const value = selectedValue === "acp" ? "acp" : selectedValue === "cli" ? "cli" : "auto";
             isCreate
               ? set!({ claudeEngine: value })
               : mark("adapterConfig", "engine", value === "auto" ? undefined : value);
@@ -113,7 +114,7 @@ export function ClaudeLocalAdvancedFields({
           <option value="auto">{t("app.agentUi.configFields.defaultAcp")}</option>
           <option value="cli">Claude CLI</option>
           <option value="acp">ACP</option>
-        </select>
+        </ConfigSelect>
       </Field>}
       {acpSelected && (
         <>
@@ -140,15 +141,15 @@ export function ClaudeLocalAdvancedFields({
             </Field>
           )}
           <Field configSection="runPolicy" label={t("app.agentUi.configFields.acpSessionMode")} hint={t("app.agentUi.configFields.persistentKeepsAcpSessionStateBetweenRuns")}>
-            <select
+            <ConfigSelect
               className={inputClass}
               value={
                 isCreate
                   ? values!.claudeAcpMode ?? "persistent"
                   : eff("adapterConfig", "mode", String(config.mode ?? "persistent"))
               }
-              onChange={(e) => {
-                const value = e.target.value === "oneshot" ? "oneshot" : "persistent";
+              onValueChange={(selectedValue) => {
+                const value = selectedValue === "oneshot" ? "oneshot" : "persistent";
                 isCreate
                   ? set!({ claudeAcpMode: value })
                   : mark("adapterConfig", "mode", value);
@@ -156,21 +157,21 @@ export function ClaudeLocalAdvancedFields({
             >
               <option value="persistent">{t("app.agentUi.configFields.persistent")}</option>
               <option value="oneshot">{t("app.agentUi.configFields.oneShot")}</option>
-            </select>
+            </ConfigSelect>
           </Field>
           <Field
             label={t("app.agentUi.configFields.acpNonInteractivePermissions")}
             hint={t("app.agentUi.configFields.fallbackIfTheAcpAgentAsksFor")}
           >
-            <select
+            <ConfigSelect
               className={inputClass}
               value={
                 isCreate
                   ? values!.claudeAcpNonInteractivePermissions ?? "deny"
                   : eff("adapterConfig", "nonInteractivePermissions", String(config.nonInteractivePermissions ?? "deny"))
               }
-              onChange={(e) => {
-                const value = e.target.value === "fail" ? "fail" : "deny";
+              onValueChange={(selectedValue) => {
+                const value = selectedValue === "fail" ? "fail" : "deny";
                 isCreate
                   ? set!({ claudeAcpNonInteractivePermissions: value })
                   : mark("adapterConfig", "nonInteractivePermissions", value);
@@ -178,7 +179,7 @@ export function ClaudeLocalAdvancedFields({
             >
               <option value="deny">{t("app.common.actions.deny")}</option>
               <option value="fail">{t("app.agentUi.configFields.fail")}</option>
-            </select>
+            </ConfigSelect>
           </Field>
           {!managedSandboxOnly && (
             <Field

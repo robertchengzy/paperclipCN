@@ -159,7 +159,7 @@ export function resolveActorLabel(
   if (actorId) {
     const label = userLabelById?.get(actorId);
     if (label) return label;
-    if (actorId === "local-board") return t("app.common.nouns.board");
+    if (actorId === "local-board") return t("app.common.nouns.boardMember");
   }
   return t("app.common.labels.someone");
 }

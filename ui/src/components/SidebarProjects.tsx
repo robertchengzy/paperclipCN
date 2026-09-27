@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { t as translateCopy, useTranslation } from "@/i18n";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { NavLink, useLocation } from "@/lib/router";
@@ -147,7 +148,7 @@ function ProjectItem({
       )}
     >
       <ProjectTile color={project.color ?? null} icon={project.icon ?? null} size="xs" />
-      <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : "flex-1 truncate"}>{project.name}</span>
+      <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : "flex-1 truncate"}>{projectDisplayName(project.name)}</span>
       {!rail ? <ExternalObjectStatusSummary summary={externalObjectsSummary} compact /> : null}
       {!rail && project.pauseReason === "budget" ? <BudgetSidebarMarker title={translateCopy("app.issueUi.sidebarProjects.projectPausedByBudget")} /> : null}
     </NavLink>
@@ -166,7 +167,7 @@ function ProjectItem({
             <TooltipTrigger asChild>
               <div className="min-w-0 flex-1">{link}</div>
             </TooltipTrigger>
-            <TooltipContent side="right">{project.name}</TooltipContent>
+            <TooltipContent side="right">{projectDisplayName(project.name)}</TooltipContent>
           </Tooltip>
         ) : (
           link

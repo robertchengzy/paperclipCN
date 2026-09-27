@@ -1,3 +1,5 @@
+import { projectDisplayName } from "@/lib/project-display";
+import { i18n as uiI18n } from "@/i18n";
 import { IssueListBadge } from "./IssueListBadge";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { startTransition, useDeferredValue, useEffect, useMemo, useState, useCallback, useRef } from "react";
@@ -950,11 +952,11 @@ function StreamlinedIssuesList({
 
   const companyUserLabelMap = useMemo(
     () => buildCompanyUserLabelMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, uiI18n.language],
   );
   const companyUserProfileMap = useMemo(
     () => buildCompanyUserProfileMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, uiI18n.language],
   );
 
   const projectById = useMemo(() => {
@@ -2313,7 +2315,7 @@ function StreamlinedIssuesList({
                             <InboxIssueTrailingColumns
                               issue={issue}
                               columns={visibleTrailingIssueColumns}
-                              projectName={issueProject?.name ?? null}
+                              projectName={issueProject ? projectDisplayName(issueProject.name) : null}
                               projectColor={issueProject?.color ?? null}
                               workspaceId={resolveIssueFilterWorkspaceId(issue, issueFilterWorkspaceContext)}
                               workspaceName={resolveIssueWorkspaceName(issue, {

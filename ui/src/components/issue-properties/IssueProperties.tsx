@@ -1,3 +1,5 @@
+import { i18n as uiI18n } from "@/i18n";
+import { projectDisplayName } from "@/lib/project-display";
 import { useWorkspaceIsolationControls } from "@/hooks/useWorkspaceIsolationControls";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -529,7 +531,7 @@ export function IssueProperties({
   const projectName = (id: string | null) => {
     if (!id) return id?.slice(0, 8) ?? t("app.common.none");
     const project = orderedProjects.find((p) => p.id === id);
-    return project?.name ?? id.slice(0, 8);
+    return project ? projectDisplayName(project.name) : id.slice(0, 8);
   };
   const currentProject = issue.projectId
     ? orderedProjects.find((project) => project.id === issue.projectId) ?? null
@@ -714,15 +716,15 @@ export function IssueProperties({
   const recentProjectIds = useMemo(() => getRecentProjectIds(), [projectOpen]);
   const userLabelMap = useMemo(
     () => buildCompanyUserLabelMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, uiI18n.language],
   );
   const userProfileMap = useMemo(
     () => buildCompanyUserProfileMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, uiI18n.language],
   );
   const otherUserOptions = useMemo(
     () => buildCompanyUserInlineOptions(companyMembers?.users, { excludeUserIds: [currentUserId, issue.createdByUserId] }),
-    [companyMembers?.users, currentUserId, issue.createdByUserId],
+    [companyMembers?.users, currentUserId, issue.createdByUserId, uiI18n.language],
   );
 
   const assignee = issue.assigneeAgentId
@@ -1992,7 +1994,7 @@ export function IssueProperties({
         id: project.id,
         kind: "project" as const,
         project,
-        name: project.name,
+        name: projectDisplayName(project.name),
         color: project.color ?? null,
       })),
     ],

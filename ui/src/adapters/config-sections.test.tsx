@@ -1,6 +1,7 @@
+import type { ComponentProps } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ComponentType } from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { TooltipProvider } from "../components/ui/tooltip";
 import type { AdapterConfigFieldsProps, AdapterConfigSection } from "./types";
 import { CodexLocalConfigFields } from "./codex-local/config-fields";
@@ -125,3 +126,11 @@ describe("adapter configuration sections", () => {
     },
   );
 });
+
+// These tests verify adapter choices and persistence values; the shared themed
+// control has its own interaction coverage.
+vi.mock("@/components/ConfigSelect", () => ({
+  ConfigSelect: ({ onValueChange, ...props }: Omit<ComponentProps<"select">, "onChange"> & { onValueChange: (value: string) => void }) => (
+    <select {...props} onChange={(event) => onValueChange(event.target.value)} />
+  ),
+}));

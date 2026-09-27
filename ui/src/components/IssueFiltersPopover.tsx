@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -511,7 +512,7 @@ export function IssueFiltersPopover({
                           checked={state.projects.includes(project.id)}
                           onCheckedChange={() => onChange({ projects: toggleIssueFilterValue(state.projects, project.id) })}
                         />
-                        <span className="text-sm">{project.name}</span>
+                        <span className="text-sm">{projectDisplayName(project.name)}</span>
                       </label>
                     ))}
                   </div>

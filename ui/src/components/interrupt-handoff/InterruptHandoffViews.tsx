@@ -40,7 +40,7 @@ function agentIcon(agentId: string, resolvers: HandoffChipResolvers): string | n
 
 function userLabel(userId: string, resolvers: HandoffChipResolvers): string {
   const label = resolvers.resolveUserLabel?.(userId) ?? null;
-  const base = label ?? t("app.common.nouns.board");
+  const base = label ?? t("app.common.nouns.boardMember");
   return resolvers.currentUserId && resolvers.currentUserId === userId ? t("app.shell.interruptHandoffViews.you", { name: base }) : base;
 }
 

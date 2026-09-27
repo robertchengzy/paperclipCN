@@ -188,7 +188,7 @@ function resolveActorLabel(
   }
   if (actorType === "system") return t("app.common.labels.system");
   if (actorType === "user" && actorId) {
-    return resolveUserName(queryClient, companyId, actorId) ?? t("app.common.nouns.board");
+    return resolveUserName(queryClient, companyId, actorId) ?? t("app.common.nouns.boardMember");
   }
   return t("app.common.labels.someone");
 }

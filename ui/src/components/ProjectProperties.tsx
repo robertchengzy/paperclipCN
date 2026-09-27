@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { useWorkspaceIsolationControls } from "@/hooks/useWorkspaceIsolationControls";
 import { useState, type ReactNode } from "react";
 import { environmentDisplayLabel, filterManagedSandboxSelectableEnvironments } from "@/lib/managed-sandbox-environment";
@@ -421,7 +422,7 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
               placeholder={t("app.projects.properties.namePlaceholder")}
             />
           ) : (
-            <span className="text-sm">{project.name}</span>
+            <span className="text-sm">{projectDisplayName(project.name)}</span>
           )}
         </PropertyRow>
         <PropertyRow

@@ -1,3 +1,5 @@
+import { i18n as uiI18n } from "@/i18n";
+import { projectDisplayName } from "@/lib/project-display";
 import { useWorkspaceIsolationControls } from "@/hooks/useWorkspaceIsolationControls";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { t as translate, useTranslation } from "@/i18n";
@@ -1557,10 +1559,10 @@ export function PipelineSettings() {
     () =>
       orderedProjects.map((project) => ({
         id: project.id,
-        label: project.name,
+        label: projectDisplayName(project.name),
         searchText: project.description ?? "",
       })),
-    [orderedProjects],
+    [orderedProjects, uiI18n.language],
   );
   const selectedAutomationProject = useMemo(
     () => orderedProjects.find((project) => project.id === stageProjectId) ?? null,
@@ -1619,7 +1621,7 @@ export function PipelineSettings() {
         searchText: `${agent.name} ${agent.role} ${agent.title ?? ""}`,
       })),
     ],
-    [agentsQuery.data, recentAssigneeIds, usersQuery.data?.users],
+    [agentsQuery.data, recentAssigneeIds, usersQuery.data?.users, uiI18n.language],
   );
   const agentById = useMemo(
     () => new Map((agentsQuery.data ?? []).map((agent) => [agent.id, agent])),

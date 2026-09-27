@@ -1,3 +1,5 @@
+import { i18n as uiI18n } from "@/i18n";
+import { projectDisplayName } from "@/lib/project-display";
 import { useTranslation } from "@/i18n";
 import { useWorkspaceIsolationControls } from "@/hooks/useWorkspaceIsolationControls";
 import { AgentAvatar } from "@/components/AgentAvatar";
@@ -238,10 +240,10 @@ export function RoutineRunVariablesDialog({
   const projectOptions = useMemo<InlineEntityOption[]>(
     () => projects.map((project) => ({
       id: project.id,
-      label: project.name,
+      label: projectDisplayName(project.name),
       searchText: project.description ?? "",
     })),
-    [projects],
+    [projects, uiI18n.language],
   );
   const currentAssignee = selection.assigneeAgentId
     ? agents.find((agent) => agent.id === selection.assigneeAgentId) ?? null

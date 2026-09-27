@@ -1,3 +1,5 @@
+import { i18n as uiI18n } from "@/i18n";
+import { projectDisplayName } from "@/lib/project-display";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { startTransition, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -642,10 +644,10 @@ export function Routines() {
     () =>
       (projects ?? []).filter((project) => !project.archivedAt).map((project) => ({
         id: project.id,
-        label: project.name,
+        label: projectDisplayName(project.name),
         searchText: project.description ?? "",
       })),
-    [projects],
+    [projects, uiI18n.language],
   );
   const agentById = useMemo(
     () => new Map((agents ?? []).map((agent) => [agent.id, agent])),

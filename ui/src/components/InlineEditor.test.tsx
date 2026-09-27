@@ -77,6 +77,21 @@ describe("InlineEditor", () => {
     container.remove();
   });
 
+  it("keeps a display alias out of the editable draft and saved name", () => {
+    const onSave = vi.fn();
+    const root = createRoot(container);
+    act(() => root.render(<InlineEditor value="Onboarding" displayValue="入门引导" onSave={onSave} />));
+    const display = container.querySelector("span")!;
+    expect(display.textContent).toBe("入门引导");
+    act(() => display.dispatchEvent(new MouseEvent("click", { bubbles: true })));
+    const textarea = container.querySelector("textarea")!;
+    expect(textarea.value).toBe("Onboarding");
+    act(() => setNativeTextareaValue(textarea, "Custom project"));
+    act(() => textarea.blur());
+    expect(onSave).toHaveBeenCalledWith("Custom project");
+    act(() => root.unmount());
+  });
+
   it("calls onSave with empty string when nullable and the field is cleared (single-line)", () => {
     const onSave = vi.fn().mockResolvedValue(undefined);
     const root = createRoot(container);

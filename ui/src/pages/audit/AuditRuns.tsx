@@ -40,7 +40,7 @@ function runDuration(run: HeartbeatRun) {
 }
 
 function readableSource(source: string) {
-  return source.replaceAll("_", " ");
+  return translate(`app.reports.auditRuns.sources.${source}`, { defaultValue: source.replaceAll("_", " ") });
 }
 
 function routineRunTitle(run: RoutineRunSummary) {

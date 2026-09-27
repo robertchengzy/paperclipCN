@@ -1,3 +1,4 @@
+import { i18n as uiI18n } from "@/i18n";
 import { AgentIdentity } from "../components/AgentIdentity";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "@/i18n";
@@ -208,7 +209,7 @@ export function Dashboard() {
 
   const userProfileMap = useMemo(
     () => buildCompanyUserProfileMap(companyMembers?.users),
-    [companyMembers?.users],
+    [companyMembers?.users, uiI18n.language],
   );
 
   const recentIssues = issues ? getRecentIssues(issues) : [];

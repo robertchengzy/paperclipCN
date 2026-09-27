@@ -1,5 +1,6 @@
+import type { ComponentProps } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -94,3 +95,11 @@ describe("Paperclip Runner Codex configuration", () => {
     expect(turnHtml).not.toContain("Warm idle timeout (ms)");
   });
 });
+
+// These tests verify adapter choices and persistence values; the shared themed
+// control has its own interaction coverage.
+vi.mock("@/components/ConfigSelect", () => ({
+  ConfigSelect: ({ onValueChange, ...props }: Omit<ComponentProps<"select">, "onChange"> & { onValueChange: (value: string) => void }) => (
+    <select {...props} onChange={(event) => onValueChange(event.target.value)} />
+  ),
+}));

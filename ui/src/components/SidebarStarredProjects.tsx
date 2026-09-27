@@ -1,3 +1,4 @@
+import { projectDisplayName } from "@/lib/project-display";
 import { t as translateCopy, useTranslation } from "@/i18n";
 import { useCallback, useMemo } from "react";
 import { NavLink, useLocation } from "@/lib/router";
@@ -131,7 +132,7 @@ export function SidebarStarredProjects() {
             )}
           >
             <ProjectTile color={project.color ?? null} icon={project.icon ?? null} size="xs" />
-            <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : "flex-1 truncate"}>{project.name}</span>
+            <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : "flex-1 truncate"}>{projectDisplayName(project.name)}</span>
             {!rail && project.pauseReason === "budget" ? (
               <BudgetSidebarMarker title={translateCopy("app.issueUi.sidebarStarredProjects.projectPausedByBudget")} />
             ) : null}
@@ -145,7 +146,7 @@ export function SidebarStarredProjects() {
                 <TooltipTrigger asChild>
                   <div className="min-w-0 flex-1">{link}</div>
                 </TooltipTrigger>
-                <TooltipContent side="right">{project.name}</TooltipContent>
+                <TooltipContent side="right">{projectDisplayName(project.name)}</TooltipContent>
               </Tooltip>
             ) : (
               link
@@ -159,7 +160,7 @@ export function SidebarStarredProjects() {
                   quiet
                   starred={starred}
                   pending={unstarPending}
-                  resourceName={project.name}
+                  resourceName={projectDisplayName(project.name)}
                   onToggle={() => unstar(project)}
                   revealClassName={STAR_ROW_REVEAL}
                 />

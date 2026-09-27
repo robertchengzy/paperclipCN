@@ -8,6 +8,8 @@ import { FoldCurtain } from "./FoldCurtain";
 
 interface InlineEditorProps {
   value: string;
+  /** Optional read-only label; editing and saving always use value. */
+  displayValue?: string;
   onSave: (value: string) => void | Promise<unknown>;
   as?: "h1" | "h2" | "p" | "span";
   className?: string;
@@ -58,6 +60,7 @@ export function queueContainedBlurCommit(container: HTMLDivElement, onCommit: ()
 
 export function InlineEditor({
   value,
+  displayValue,
   onSave,
   as: Tag = "span",
   className,
@@ -426,7 +429,7 @@ export function InlineEditor({
       )}
       onClick={() => setEditing(true)}
     >
-      {value || placeholder}
+      {displayValue ?? (value || placeholder)}
     </DisplayTag>
   );
 }

@@ -1,3 +1,4 @@
+import { ConfigSelect } from "@/components/ConfigSelect";
 import { useTranslation } from "@/i18n";
 import { configFieldsForSection } from "../config-sections";
 import { useEffect, useState } from "react";
@@ -207,23 +208,23 @@ export function OpenClawGatewayConfigFields({
       </Field>
 
       <Field label={t("app.agentUi.configFields.sessionStrategy")}>
-        <select
+        <ConfigSelect
           value={
             isCreate
               ? values!.sessionKeyStrategy ?? "fixed"
               : sessionStrategy
           }
-          onChange={(e) =>
+          onValueChange={(selectedValue) =>
             isCreate
-              ? set!({ sessionKeyStrategy: e.target.value })
-              : mark("adapterConfig", "sessionKeyStrategy", e.target.value)
+              ? set!({ sessionKeyStrategy: selectedValue })
+              : mark("adapterConfig", "sessionKeyStrategy", selectedValue)
           }
           className={inputClass}
         >
           <option value="fixed">{t("app.agentUi.configFields.fixed")}</option>
           <option value="issue">{t("app.agentUi.configFields.perIssue")}</option>
           <option value="run">{t("app.agentUi.configFields.perRun")}</option>
-        </select>
+        </ConfigSelect>
       </Field>
 
       {(isCreate ? values!.sessionKeyStrategy ?? "fixed" : sessionStrategy) === "fixed" && (

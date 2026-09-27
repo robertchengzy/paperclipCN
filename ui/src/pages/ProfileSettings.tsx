@@ -143,7 +143,7 @@ export function ProfileSettings() {
     );
   }
 
-  const currentName = name.trim() || sessionQuery.data.user.name || t("app.common.nouns.board");
+  const currentName = name.trim() || sessionQuery.data.user.name || t("app.common.nouns.boardMember");
   const currentImage = image.trim() || null;
   const initials = deriveInitials(currentName);
   const isSavingProfile = updateMutation.isPending || uploadAvatarMutation.isPending || removeAvatarMutation.isPending;
@@ -254,7 +254,7 @@ export function ProfileSettings() {
               value={name}
               onChange={(event) => setName(event.target.value)}
               maxLength={120}
-              placeholder={t("app.common.nouns.board")}
+              placeholder={t("app.common.nouns.boardMember")}
             />
             <p className="text-xs text-muted-foreground">
               {t("app.settings.profileSettings.displayNameHint")}

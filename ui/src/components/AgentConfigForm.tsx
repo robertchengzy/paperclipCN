@@ -1,3 +1,4 @@
+import { ConfigSelect } from "@/components/ConfigSelect";
 import { AiConnectionField } from "./ai-connections/AiConnectionField";
 import { aiConnectionBindingSchema } from "@paperclipai/shared";
 import { testAgentSetup } from "@/lib/test-agent-setup";
@@ -1572,11 +1573,11 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           <div className={cn(cards ? "border border-border rounded-lg p-4 space-y-3" : "px-4 pb-3 space-y-3")}>
             <Field label={t("app.agents.config.environment.override")}>
               <div className="space-y-2">
-                <select
+                <ConfigSelect
                   className={inputClass}
                   value={currentDefaultEnvironmentId}
-                  onChange={(event) => {
-                    const nextValue = event.target.value;
+                  onValueChange={(selectedValue) => {
+                    const nextValue = selectedValue;
                     if (isCreate) {
                       set!({ defaultEnvironmentId: nextValue });
                       return;
@@ -1590,7 +1591,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
                       {environmentDisplayLabel(environment)}
                     </option>
                   ))}
-                </select>
+                </ConfigSelect>
               </div>
             </Field>
           </div>

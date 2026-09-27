@@ -1,3 +1,4 @@
+import { ConfigSelect } from "@/components/ConfigSelect";
 import { t, useTranslation } from "@/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { configFieldsForSection } from "../config-sections";
@@ -165,14 +166,14 @@ export function CodexLocalConfigFields({
           label={t("app.agentUi.configFields.executionEngine")}
           hint={t("app.agentUi.configFields.defaultUsesAcpIfAcpIsUnavailable")}
         >
-          <select
+          <ConfigSelect
             className={inputClass}
             value={engine}
-            onChange={(e) => {
+            onValueChange={(selectedValue) => {
               const value =
-                e.target.value === "acp"
+                selectedValue === "acp"
                   ? "acp"
-                  : e.target.value === "cli"
+                  : selectedValue === "cli"
                     ? "cli"
                     : "auto";
               isCreate
@@ -187,7 +188,7 @@ export function CodexLocalConfigFields({
             <option value="auto">{t("app.agentUi.configFields.defaultAcp")}</option>
             <option value="cli">Codex CLI</option>
             <option value="acp">ACP</option>
-          </select>
+          </ConfigSelect>
         </Field>
       )}
       {runnerManaged && (
@@ -195,12 +196,12 @@ export function CodexLocalConfigFields({
           label={t("app.common.labels.provider")}
           hint={t("app.agentUi.configFields.theRunnerPersistsThisProviderWithEach")}
         >
-          <select
+          <ConfigSelect
             className={inputClass}
             value={runnerProvider}
-            onChange={(event) => {
-              const provider = isPaperclipRunnerProvider(event.target.value)
-                ? event.target.value
+            onValueChange={(selectedValue) => {
+              const provider = isPaperclipRunnerProvider(selectedValue)
+                ? selectedValue
                 : "codex";
               const model =
                 provider === "opencode"
@@ -235,7 +236,7 @@ export function CodexLocalConfigFields({
             <option value="claude_managed">Claude Managed</option>
             <option value="aws_agentcore">AWS AgentCore</option>
             <option value="acpx">ACPX Claude</option>
-          </select>
+          </ConfigSelect>
         </Field>
       )}
       {runnerManaged && runnerProvider === "claude_managed" && (
@@ -432,11 +433,11 @@ export function CodexLocalConfigFields({
           label={t("app.agentUi.configFields.runnerLifecycle")}
           hint={t("app.agentUi.configFields.turnByTurnSuspendsAfterEachRun")}
         >
-          <select
+          <ConfigSelect
             className={inputClass}
             value={runnerLifecycleMode}
-            onChange={(event) => {
-              const value = event.target.value === "warm" ? "warm" : "per_turn";
+            onValueChange={(selectedValue) => {
+              const value = selectedValue === "warm" ? "warm" : "per_turn";
               isCreate
                 ? set!({ paperclipRunnerLifecycleMode: value })
                 : mark("adapterConfig", "lifecycleMode", value);
@@ -444,7 +445,7 @@ export function CodexLocalConfigFields({
           >
             <option value="per_turn">{t("app.agentUi.configFields.turnByTurn")}</option>
             <option value="warm">{t("app.agentUi.configFields.warmSession")}</option>
-          </select>
+          </ConfigSelect>
         </Field>
       )}
       {runnerManaged && runnerLifecycleMode === "warm" && (
@@ -518,7 +519,7 @@ export function CodexLocalConfigFields({
             label={t("app.agentUi.configFields.acpSessionMode")}
             hint={t("app.agentUi.configFields.persistentKeepsAcpSessionStateBetweenRuns")}
           >
-            <select
+            <ConfigSelect
               className={inputClass}
               value={
                 isCreate
@@ -529,9 +530,9 @@ export function CodexLocalConfigFields({
                       String(config.mode ?? "persistent"),
                     )
               }
-              onChange={(e) => {
+              onValueChange={(selectedValue) => {
                 const value =
-                  e.target.value === "oneshot" ? "oneshot" : "persistent";
+                  selectedValue === "oneshot" ? "oneshot" : "persistent";
                 isCreate
                   ? set!({ codexAcpMode: value })
                   : mark("adapterConfig", "mode", value);
@@ -539,13 +540,13 @@ export function CodexLocalConfigFields({
             >
               <option value="persistent">{t("app.agentUi.configFields.persistent")}</option>
               <option value="oneshot">{t("app.agentUi.configFields.oneShot")}</option>
-            </select>
+            </ConfigSelect>
           </Field>
           <Field
             label={t("app.agentUi.configFields.acpNonInteractivePermissions")}
             hint={t("app.agentUi.configFields.fallbackIfTheAcpAgentAsksFor")}
           >
-            <select
+            <ConfigSelect
               className={inputClass}
               value={
                 isCreate
@@ -556,8 +557,8 @@ export function CodexLocalConfigFields({
                       String(config.nonInteractivePermissions ?? "deny"),
                     )
               }
-              onChange={(e) => {
-                const value = e.target.value === "fail" ? "fail" : "deny";
+              onValueChange={(selectedValue) => {
+                const value = selectedValue === "fail" ? "fail" : "deny";
                 isCreate
                   ? set!({ codexAcpNonInteractivePermissions: value })
                   : mark("adapterConfig", "nonInteractivePermissions", value);
@@ -565,7 +566,7 @@ export function CodexLocalConfigFields({
             >
               <option value="deny">{t("app.common.actions.deny")}</option>
               <option value="fail">{t("app.agentUi.configFields.fail")}</option>
-            </select>
+            </ConfigSelect>
           </Field>
           {!managedSandboxOnly && (
             <Field

@@ -530,7 +530,7 @@ function resolveAuthor(
       imageUrl: profile?.image ?? null,
     };
   }
-  return { name: comment.authorType === "agent" ? t("app.common.nouns.agent") : t("app.common.nouns.board"), role: comment.authorType === "agent" ? "agent" : "board" };
+  return { name: comment.authorType === "agent" ? t("app.common.nouns.agent") : t("app.common.nouns.boardMember"), role: comment.authorType === "agent" ? "agent" : "board" };
 }
 
 export function truncate(value: string, limit: number) {

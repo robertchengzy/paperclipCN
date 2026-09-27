@@ -120,7 +120,7 @@ export function SidebarAccountMenu({
 
   const signOutMutation = useSignOut({ onSignedOut: closeNavigationChrome });
 
-  const displayName = session?.user.name?.trim() || t("app.common.nouns.board");
+  const displayName = session?.user.name?.trim() || t("app.common.nouns.boardMember");
   const secondaryLabel =
     session?.user.email?.trim() || (deploymentMode === "authenticated" ? t("app.shell.sidebarAccountMenu.signedIn") : t("app.shell.sidebarAccountMenu.localWorkspaceBoard"));
   const initials = deriveInitials(displayName);

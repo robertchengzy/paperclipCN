@@ -93,7 +93,7 @@ describe("SecretBindingPicker", () => {
     expect(container.textContent).toContain("DAYTONA_API_KEY — Other Team");
     expect(container.textContent).toContain("Owned by the Other Team organization");
     expect(container.textContent).not.toContain("Missing secret");
-    expect(container.querySelector("select")?.className).not.toContain("border-destructive");
+    expect(container.querySelector('[role="combobox"]')?.className.split(' ')).not.toContain("border-destructive");
   });
 
   it("reports a deleted hinted secret as deleted", async () => {
@@ -101,7 +101,7 @@ describe("SecretBindingPicker", () => {
 
     expect(container.textContent).toContain("DAYTONA_API_KEY — Other Team");
     expect(container.textContent).toContain("was deleted");
-    expect(container.querySelector("select")?.className).toContain("border-destructive");
+    expect(container.querySelector('[role="combobox"]')?.className.split(' ')).toContain("border-destructive");
   });
 
   it("does not present a disabled cross-company secret as working", async () => {
@@ -110,7 +110,7 @@ describe("SecretBindingPicker", () => {
     expect(container.textContent).toContain("DAYTONA_API_KEY — Other Team");
     expect(container.textContent).toContain("This secret is disabled");
     expect(container.textContent).not.toContain("keeps working");
-    expect(container.querySelector("select")?.className).toContain("border-destructive");
+    expect(container.querySelector('[role="combobox"]')?.className.split(' ')).toContain("border-destructive");
   });
 
   it.each([
@@ -124,7 +124,7 @@ describe("SecretBindingPicker", () => {
     await act(async () => { await i18n.changeLanguage("zh-CN"); });
     expect(container.textContent).toContain(`此密钥状态为 ${label}`);
     expect(container.textContent).toContain("DAYTONA_API_KEY — Other Team");
-    expect(container.querySelector("select")?.className).toContain("border-destructive");
+    expect(container.querySelector('[role="combobox"]')?.className.split(' ')).toContain("border-destructive");
     expect(context.hints["22222222-2222-2222-2222-222222222222"].status).toBe(status);
     await act(async () => { await i18n.changeLanguage("en"); });
     expect(container.textContent).toContain(`This secret is ${status}`);
@@ -148,7 +148,7 @@ describe("SecretBindingPicker", () => {
 
     expect(container.textContent).toContain("Checking this secret reference");
     expect(container.textContent).not.toContain("Missing secret");
-    expect(container.querySelector("select")?.className).not.toContain("border-destructive");
+    expect(container.querySelector('[role="combobox"]')?.className.split(' ')).not.toContain("border-destructive");
   });
 
   it("stays neutral when the descriptor lookup failed", async () => {
@@ -156,7 +156,7 @@ describe("SecretBindingPicker", () => {
 
     expect(container.textContent).toContain("Could not load this secret reference");
     expect(container.textContent).not.toContain("Missing secret");
-    expect(container.querySelector("select")?.className).not.toContain("border-destructive");
+    expect(container.querySelector('[role="combobox"]')?.className.split(' ')).not.toContain("border-destructive");
   });
 
   it("treats an unknown id as missing once descriptors are ready", async () => {
@@ -164,7 +164,7 @@ describe("SecretBindingPicker", () => {
 
     expect(container.textContent).toContain("Missing secret");
     expect(container.textContent).toContain("no longer available");
-    expect(container.querySelector("select")?.className).toContain("border-destructive");
+    expect(container.querySelector('[role="combobox"]')?.className.split(' ')).toContain("border-destructive");
   });
 
   it("keeps the generic missing-secret treatment when no hint context exists", async () => {
@@ -172,6 +172,6 @@ describe("SecretBindingPicker", () => {
 
     expect(container.textContent).toContain("Missing secret");
     expect(container.textContent).toContain("no longer available");
-    expect(container.querySelector("select")?.className).toContain("border-destructive");
+    expect(container.querySelector('[role="combobox"]')?.className.split(' ')).toContain("border-destructive");
   });
 });

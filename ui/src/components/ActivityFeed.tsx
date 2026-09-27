@@ -264,7 +264,7 @@ function CollapsedFeedGroup({
     : null;
   const actorName = actor?.name
     ?? (group.latestEvent.actorType === "system" ? t("app.common.labels.system")
-      : group.latestEvent.actorType === "user" ? t("app.common.nouns.board")
+      : group.latestEvent.actorType === "user" ? t("app.common.nouns.boardMember")
       : t("app.common.labels.unknown"));
   const entityName = entityNameMap.get(`${group.entityType}:${group.entityId}`);
 
