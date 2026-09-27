@@ -155,24 +155,13 @@ Notes:
 
 ## 7. Verification Before Hand-off
 
-Default local/agent test path:
+Default to verification based on the actual diff and its consumers. Run the smallest relevant checks first; expand only when a failure or an unbounded dependency justifies it. `pnpm test` is an alias for the full suite, not a cheap default.
 
-```sh
-pnpm test
-```
+Use [Verification scope](doc/DEVELOPING.md#verification-scope) to select checks. Documentation-only changes need link checks and `git diff --check`. Copy/theme work normally needs locale/token checks, affected UI tests and a focused browser check. A small upstream sync needs review of the new commits and tests for their affected behavior.
 
-This is the cheap default and only runs the Vitest suite. Browser suites stay opt-in:
+Start repo-wide tests only when the user explicitly requests them, or when a broad shared-contract, core runtime/security, dependency/toolchain, or upstream integration change cannot be covered with a clearly bounded set of affected tests. First explain the concrete reason, scope and expected cost; this is a progress update, not a new approval gate. Merging, pushing, deploying, or having many translated strings does not itself require the full suite.
 
-```sh
-pnpm test:e2e
-pnpm test:release-smoke
-```
-
-Run the browser suites only when your change touches them or when you are explicitly verifying CI/release flows.
-
-For normal issue work, run the smallest relevant verification first. Do not default to repo-wide typecheck/build/test on every heartbeat when a narrower check is enough to prove the change.
-
-Run this full check before claiming repo work done in a PR-ready hand-off, or when the change scope is broad enough that targeted checks are not sufficient:
+When full coverage is justified, use:
 
 ```sh
 pnpm -r typecheck
@@ -180,7 +169,9 @@ pnpm test:run
 pnpm build
 ```
 
-If anything cannot be run, explicitly report what was not run and why.
+A frozen deployment build, migration smoke test and production health checks are separate release requirements. They do not automatically imply repo-wide unit tests. Reuse passing checks for unchanged code; do not rebuild runtime artifacts solely for a documentation-only descendant commit.
+
+Keep test homes, databases, credentials and ports isolated. Exclude the production CLI wrapper from the test PATH while preserving required tools such as Cargo. Avoid competing cold builds that turn module loading into timeout failures. Record unrelated baseline failures; do not change unrelated assertions or deadlines merely to get a green full run. Failed, interrupted or incomplete runs must never be reported as passed. Report the checked scope and any remaining boundary.
 
 ## 8. API and Auth Expectations
 
@@ -219,7 +210,7 @@ When creating a pull request (via `gh pr create` or any other method), you **mus
 A change is done when all are true:
 
 1. Behavior matches `doc/SPEC-implementation.md`
-2. Typecheck, tests, and build pass
+2. The checks applicable to the change under section 7 pass; omitted or incomplete coverage is reported explicitly
 3. Contracts are synced across db/shared/server/ui
 4. Docs updated when behavior or commands change
 5. PR description follows the [PR template](.github/PULL_REQUEST_TEMPLATE.md) with all sections filled in (including Model Used)

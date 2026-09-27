@@ -1,6 +1,6 @@
 # Chinese display follow-up and themed configuration selects
 
-This batch merges upstream `a6c4e7a8d11a2cd87a22d38544076cf9bf5f03e7` and preserves the fork's Chinese UI, sign-out flow and Codex managed gateway headers. Upstream adds migration `0284_petite_genesis` and per-user keyboard shortcut preferences; it also fixes remote Grok cancellation and obsolete execution continuations.
+This batch merges upstream `640dee18029f7651d56ae0f1828d04228f9ab044` and preserves the fork's Chinese UI, sign-out flow and Codex managed gateway headers. Upstream adds migration `0284_petite_genesis` and per-user keyboard shortcut preferences; it also fixes remote Grok cancellation, obsolete execution continuations and reusable warm-session leases, and enables permission-governed Runner API tools by default.
 
 ## Display contract
 

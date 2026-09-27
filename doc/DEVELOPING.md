@@ -54,7 +54,7 @@ from full SHAs on it (see [SELF-HOSTED-DEPLOYMENT.md](SELF-HOSTED-DEPLOYMENT.md)
 | Branch | Purpose |
 |---|---|
 | `master` | Verified, deployable commits only; keep history linear. Docs-only or tiny locally verified fixes may land directly. |
-| `feat/i18n-<batch>`, `feat/<topic>`, `fix/<issue>` | Day-to-day work. Before merging back (fast-forward or squash), run the UI typecheck, `pnpm locales:check`, `pnpm check:token-gates` and the related tests (the full UI suite for large batches). |
+| `feat/i18n-<batch>`, `feat/<topic>`, `fix/<issue>` | Day-to-day work. Before merging back (fast-forward or squash), run the UI typecheck, `pnpm locales:check`, `pnpm check:token-gates` and the related tests (expand to the full UI suite only when the affected UI behavior cannot be bounded). |
 | `sync/upstream-<date>` | Merge `upstream/master` here, resolve conflicts, and re-check the lockfile, the manual-only fork workflows, the localization and fork patches. |
 | `release/cn-<version>` | Marks the commit deployed to the instance; rollback targets it. |
 
@@ -62,6 +62,25 @@ Keep fork-only patches (for example the Codex `http_headers` fix) as separate,
 well-described commits and drop them once upstream ships an equivalent fix.
 Do not rely on PR CI in the fork: the PR caller uses the upstream
 `pr-trusted.yml` and upstream runners; rely on local checks instead.
+
+## Verification scope
+
+Choose checks from the diff and the behavior it can affect. Run targeted checks before considering a broader suite.
+
+| Change | Default verification |
+|---|---|
+| Documentation only | Relative links and `git diff --check`; no application build or tests. |
+| Chinese copy, labels or theme controls | Locale/key/interpolation/tag and design-token checks; affected component/formatting tests; focused browser checks for the changed interaction. |
+| A route, service or adapter | Its unit/integration tests and relevant callers; typecheck the affected package. |
+| A bounded database migration | Migration review, isolated old-schema upgrade, affected reads/writes/authentication, and a verified rollback backup. A migration alone does not mandate every unrelated suite. |
+| Small upstream sync | Review the new commits, retained fork patches, lockfiles and workflows; run tests for the changed behavior. |
+| Deployment | Build a frozen SHA, verify its stamp and database compatibility, then run migration/browser smoke checks as appropriate and production health checks. |
+
+Run repo-wide tests for an explicit user request, or when a broad change to shared contracts, core dispatch/authorization, dependencies/toolchain, or a large upstream integration leaves an impact area that targeted checks cannot bound. Explain that reason and the expected cost before starting. Start with the affected package or layer; do not jump directly from a small UI change to every server suite.
+
+Do not repeat passing checks without new changes or evidence. A documentation-only descendant does not invalidate a frozen runtime build. Keep isolated test state and omit the installed production `paperclipai` wrapper from the test PATH. Preserve Cargo and the normal package-manager tools. Avoid concurrent cold compilation when testing time-bounded initialization.
+
+Record failures and interrupted runs honestly. Investigate failures related to the diff; record unrelated baseline failures separately instead of expanding the task or weakening tests just to make the full suite green. Local validation, frozen artifact verification, deployment health and live business acceptance are different evidence.
 
 ## Trusted PR Workflow
 
@@ -403,13 +422,13 @@ npx paperclipai allowed-hostname dotta-macbook-pro
 
 ## Test Commands
 
-Use the cheap local default unless you are specifically working on browser flows:
+Choose the smallest relevant checks using [Verification scope](#verification-scope). When repo-wide Vitest coverage is warranted, use:
 
 ```sh
 pnpm test
 ```
 
-`pnpm test` runs the Vitest suite only. For interactive Vitest watch mode use:
+`pnpm test` runs the full Vitest suite. It is not the default for a bounded change: select checks using [Verification scope](#verification-scope). For interactive Vitest watch mode use:
 
 ```sh
 pnpm test:watch
