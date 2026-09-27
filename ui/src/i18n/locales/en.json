@@ -11929,7 +11929,10 @@
         "displayNameHint": "Shown in the sidebar account footer and comment author surfaces.",
         "emailHint": "Email is managed by your auth session and is read-only here.",
         "saving": "Saving...",
-        "saveProfile": "Save profile"
+        "saveProfile": "Save profile",
+        "keyboardShortcuts": "Keyboard shortcuts",
+        "keyboardShortcutsDescription": "Enable app keyboard shortcuts, including inbox navigation and global shortcuts like creating tasks or toggling panels. This applies only to your account, across all organizations and devices. Off by default.",
+        "toggleKeyboardShortcuts": "Toggle keyboard shortcuts"
       },
       "statusCardSettingsForm": {
         "triggerStatusTransitions": "Became blocked / needs review / done / cancelled",

@@ -1,4 +1,5 @@
 import { t, useTranslation } from "@/i18n";
+import { useUserPreferences } from "../hooks/useUserPreferences";
 import { ChatSetupSidebarProvider } from "@/context/ChatSetupSidebarContext";
 import { PluginAppShellOverlays } from "./PluginAppShellOverlays";
 import {
@@ -48,7 +49,6 @@ import { useSidebar } from "../context/SidebarContext";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
 import { useCompanyPageMemory } from "../hooks/useCompanyPageMemory";
 import { healthApi } from "../api/health";
-import { instanceSettingsApi } from "../api/instanceSettings";
 import {
   resolveArchivedCompanyBounce,
   shouldSyncCompanySelectionFromRoute,
@@ -254,11 +254,7 @@ export function Layout() {
     },
     refetchIntervalInBackground: false,
   });
-  const keyboardShortcutsEnabled =
-    useQuery({
-      queryKey: queryKeys.instance.generalSettings,
-      queryFn: () => instanceSettingsApi.getGeneral(),
-    }).data?.keyboardShortcuts === true;
+  const keyboardShortcutsEnabled = useUserPreferences().data?.keyboardShortcuts === true;
 
   // A secondary sidebar always collapses the app sidebar to its rail (still
   // peek-able) — a hard invariant that overrides the user pin while the route

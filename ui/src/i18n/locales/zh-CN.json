@@ -11929,7 +11929,10 @@
         "displayNameHint": "显示在侧边栏账号区域和评论作者处。",
         "emailHint": "邮箱由你的认证会话管理，此处为只读。",
         "saving": "保存中…",
-        "saveProfile": "保存个人资料"
+        "saveProfile": "保存个人资料",
+        "keyboardShortcuts": "键盘快捷键",
+        "keyboardShortcutsDescription": "启用应用快捷键，包括收件箱导航、新建任务和切换面板等全局快捷键。此偏好仅适用于你的账户，并在所有组织和设备间同步，默认关闭。",
+        "toggleKeyboardShortcuts": "切换键盘快捷键"
       },
       "statusCardSettingsForm": {
         "triggerStatusTransitions": "变为受阻 / 待审核 / 已完成 / 已取消",
