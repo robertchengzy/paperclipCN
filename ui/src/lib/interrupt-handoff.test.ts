@@ -59,7 +59,7 @@ describe("resolveRunStatusPresentation", () => {
 
   it("localizes the interrupted label and accessible explanation while retaining unknown statuses", async () => {
     await i18n.changeLanguage("zh-CN");
-    expect(resolveRunStatusPresentation("cancelled", { operatorInterrupted: true })).toMatchObject({ label: "已中断", srHint: "因 Board 评论而中断" });
+    expect(resolveRunStatusPresentation("cancelled", { operatorInterrupted: true })).toMatchObject({ label: "已中断", srHint: "因董事会成员评论而中断" });
     expect(resolveRunStatusPresentation("timed_out").label).toBe("超时");
     expect(resolveRunStatusPresentation("succeeded").label).toBe("成功");
     expect(resolveRunStatusPresentation("future_status").label).toBe("future_status");

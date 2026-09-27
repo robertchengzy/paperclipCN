@@ -19,7 +19,7 @@ describe("display-only Chinese labels", () => {
     expect(formatActivityEntityType("future_entity", "unknown.event")).toBe("future_entity");
     await i18n.changeLanguage("en");
     expect(projectDisplayName("Onboarding")).toBe("Onboarding");
-    expect(formatActivityVerb("agent.permissions_updated")).toBe("updated agent permissions");
+    expect(formatActivityVerb("agent.permissions_updated")).toBe("agent permissions updated");
   });
   it("separates a person's fallback name from the governing board", async () => {
     await i18n.changeLanguage("zh-CN");

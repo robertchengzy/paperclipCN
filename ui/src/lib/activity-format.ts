@@ -593,7 +593,7 @@ export function formatIssueActivityAction(
   const outcomeLabelKey = formatInteractionOutcomeLabel(action, details);
   if (outcomeLabelKey) return t(outcomeLabelKey);
 
-  const labelKey = Object.hasOwn(ISSUE_ACTIVITY_LABELS, action) ? ISSUE_ACTIVITY_LABELS[action] : Object.hasOwn(ADDITIONAL_ACTIVITY_LABELS, action) ? ADDITIONAL_ACTIVITY_LABELS[action] : Object.hasOwn(ACTIVITY_ROW_VERBS, action) ? ACTIVITY_ROW_VERBS[action] : undefined;
+  const labelKey = Object.hasOwn(ISSUE_ACTIVITY_LABELS, action) ? ISSUE_ACTIVITY_LABELS[action] : Object.hasOwn(ADDITIONAL_ACTIVITY_LABELS, action) ? ADDITIONAL_ACTIVITY_LABELS[action] : i18n.resolvedLanguage === "zh-CN" && Object.hasOwn(ACTIVITY_ROW_VERBS, action) ? ACTIVITY_ROW_VERBS[action] : undefined;
 
   if (action.startsWith("issue.monitor_") && details) {
     const serviceName = typeof details.serviceName === "string" && details.serviceName.trim()

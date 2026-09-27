@@ -181,7 +181,7 @@ describe("describeInteractionResolutionFailure", () => {
     ["interaction_governed_action_denied", 403, "此交互关联的受管控操作需要单独授权。"],
     ["interaction_run_attribution_required", 422, "回复此交互需要有效且已通过身份验证的智能体运行。"],
     ["interaction_scope_denied", 403, "你没有处理此交互的访问权限。"],
-    ["review_policy_denied", 403, "审核策略不允许你批准或拒绝此请求。"],
+    ["review_policy_denied", 403, "审核策略不允许你同意或拒绝此请求。"],
     ["interaction_not_found", 404, "找不到此交互。"],
     ["interaction_already_resolved", 409, "此交互已处理。"],
     ["interaction_superseded", 409, "此交互已被后续请求或回复取代。"],

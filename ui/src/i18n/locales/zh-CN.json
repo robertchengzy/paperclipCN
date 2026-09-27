@@ -3241,7 +3241,7 @@
           "bearerHint": "Paperclip 会将你的密钥作为 Authorization 请求头发送。",
           "customHeadersHint": "适用于自定义请求头名称的服务器。值会作为 Paperclip 密钥保存，且无法读回。",
           "oauth": "浏览器登录",
-          "oauthHint": "你将在提供方处登录。仅当提供方要求你先注册 Paperclip 时，才需添加客户端 ID 和 secret。"
+          "oauthHint": "你将在提供方处登录。仅当提供方要求你先注册 Paperclip 时，才需添加客户端 ID 和客户端密钥。"
         },
         "whatShouldPaperclipDo": "希望 Paperclip 能做什么？",
         "accessLevelFor": "{{name}} 的访问级别",
