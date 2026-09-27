@@ -1761,9 +1761,9 @@
           "ask": "问答模式"
         },
         "debug": {
-          "captureRawTraces": "捕获原始提供方追踪",
-          "captureRawTracesHint": "为之后的每次运行存储完整的提供方流量，直到关闭。追踪可能包含敏感的提示词和工具参数，仅管理员可见，24 小时后过期。",
-          "rawTracingOn": "已为之后的运行开启原始追踪。Paperclip 每次运行最多保留 64 MiB，并在 24 小时后自动删除。"
+          "captureRawTraces": "捕获原始提供方跟踪",
+          "captureRawTracesHint": "为之后的每次运行存储完整的提供方流量，直到关闭。跟踪可能包含敏感的提示词和工具参数，仅管理员可见，24 小时后过期。",
+          "rawTracingOn": "已为之后的运行开启原始跟踪。Paperclip 每次运行最多保留 64 MiB，并在 24 小时后自动删除。"
         },
         "login": {
           "authenticated": "已认证。该环境现在已有凭据。",
@@ -2597,14 +2597,14 @@
       },
       "runDetail": {
         "resumeSkipped": "恢复请求已被跳过。",
-        "traceRerunSkipped": "追踪重跑已被跳过。",
+        "traceRerunSkipped": "跟踪重跑已被跳过。",
         "cancelling": "正在取消…",
         "resuming": "正在恢复…",
         "resume": "恢复",
         "retrying": "正在重试…",
         "inspectRun": "检查运行",
         "starting": "正在启动…",
-        "rerunWithTrace": "开启提供方追踪重新运行",
+        "rerunWithTrace": "开启提供方跟踪重新运行",
         "onBehalfOf": "代表 <name>{{name}}</name>",
         "identityHistory": "GitHub 身份历史",
         "noResponsiblePerson": "无负责人",
@@ -8266,9 +8266,9 @@
           "falsePositive": "标记为误报"
         },
         "trace": {
-          "skipped": "已跳过追踪重跑。",
-          "notStarted": "追踪重跑未开始",
-          "failed": "Paperclip 无法启动追踪重跑。"
+          "skipped": "已跳过跟踪重跑。",
+          "notStarted": "跟踪重跑未开始",
+          "failed": "Paperclip 无法启动跟踪重跑。"
         },
         "ariaLabel": "任务运行记录",
         "title": "运行记录",
@@ -8654,7 +8654,7 @@
         "progressCount": "{{count}} 个进行中",
         "blockedCount": "{{count}} 个受阻",
         "tokensCount": "{{count}} 个 Token",
-        "runtimeDuration": "运行时间 {{duration}}",
+        "runtimeDuration": "运行时长 {{duration}}",
         "perColumn": "每列 {{count}} 项",
         "oneSubtask": "（{{count}} 个子任务）",
         "manySubtasks": "（{{count}} 个子任务）",
@@ -9512,10 +9512,10 @@
       },
       "runnerInspector": {
         "view": {
-          "trace": "精确追踪"
+          "trace": "精确跟踪"
         },
         "trace": {
-          "enabled": "原始追踪已启用",
+          "enabled": "原始跟踪已启用",
           "incomplete": "不完整",
           "truncated": "已截断",
           "deleted": "已删除",
@@ -9556,16 +9556,16 @@
         "productionSurface": "生产展示位置：{{surface}} · 在 {{container}} 中 {{action}}",
         "inspectionFailed": "执行器检查失败",
         "confirmReveal": "这条提供方原始数据帧可能包含提示词、工具参数、密钥或推理内容。现在显示吗？",
-        "confirmDownload": "下载精确原始追踪吗？其中可能包含敏感提示词、工具参数和仅限提供方的字段。",
-        "confirmDelete": "立即删除此原始追踪吗？此操作无法撤销。",
-        "deleteFailed": "删除原始追踪失败",
+        "confirmDownload": "下载精确原始跟踪吗？其中可能包含敏感提示词、工具参数和仅限提供方的字段。",
+        "confirmDelete": "立即删除此原始跟踪吗？此操作无法撤销。",
+        "deleteFailed": "删除原始跟踪失败",
         "description": "将精确的提供方流量与每个解释阶段、规范 PRP 事件和生产展示位置关联起来。",
         "views": "执行器检查器视图",
-        "adminRequired": "原始提供方追踪需要实例管理员权限。",
+        "adminRequired": "原始提供方跟踪需要实例管理员权限。",
         "adminRequiredBody": "下方仍可检查规范 PRP 事件和展示决策。",
         "captureOff": "此运行未开启原始提供方捕获。",
         "captureOffBody": "下方仍可查看规范 PRP 事件和已保存的展示决策。",
-        "rerunWithTrace": "开启提供方追踪后重新运行",
+        "rerunWithTrace": "开启提供方跟踪后重新运行",
         "loadingPipeline": "正在加载运行流水线…",
         "stat": {
           "prpOnly": "仅 PRP",
@@ -9648,11 +9648,11 @@
         "normalizedCaveats": "规范化的提示和已忽略的请求",
         "selectOperation": "选择一个关联操作以检查其流水线。",
         "noRawFrames": "此运行未捕获原始帧。",
-        "exactTraceFrame": "精确追踪帧 #{{id}}",
-        "selectFrame": "从按时间排列的追踪中选择一个帧。",
+        "exactTraceFrame": "精确跟踪帧 #{{id}}",
+        "selectFrame": "从按时间排列的跟踪中选择一个帧。",
         "footerSummary": "{{count}} 帧 · {{size}} · {{expires}} 过期",
-        "downloadTrace": "下载精确追踪",
-        "deleteTrace": "删除追踪",
+        "downloadTrace": "下载精确跟踪",
+        "deleteTrace": "删除跟踪",
         "runner": "执行器"
       },
       "workspaceAccessCard": {
@@ -12276,7 +12276,7 @@
           },
           "enablePaperclipDeveloperMode": {
             "title": "Paperclip 开发者模式",
-            "description": "显示 Paperclip 内部维护工具和可观测性链接，包括运行页面上的 Honeycomb 追踪查询。",
+            "description": "显示 Paperclip 内部维护工具和可观测性链接，包括运行页面上的 Honeycomb 跟踪查询。",
             "ariaLabel": "切换 Paperclip 开发者模式实验性设置"
           },
           "enableServerInfoDebugView": {
@@ -16440,14 +16440,14 @@
         "resets": "{{date}} 重置"
       },
       "providerTraceStatusBadge": {
-        "traceExpired": "追踪记录已过期",
-        "rawTracingEnabled": "原始追踪记录已启用",
-        "traceCaptured": "已采集追踪记录",
-        "traceIncomplete": "追踪记录不完整",
-        "traceTruncated": "追踪记录已截断",
-        "traceDeleted": "追踪记录已删除",
-        "traceRequested": "已请求追踪记录",
-        "traceOff": "追踪记录已关闭",
+        "traceExpired": "跟踪记录已过期",
+        "rawTracingEnabled": "原始跟踪记录已启用",
+        "traceCaptured": "已采集跟踪记录",
+        "traceIncomplete": "跟踪记录不完整",
+        "traceTruncated": "跟踪记录已截断",
+        "traceDeleted": "跟踪记录已删除",
+        "traceRequested": "已请求跟踪记录",
+        "traceOff": "跟踪记录已关闭",
         "framesBytesExpires": "{{value1}} 帧 · {{value2}} 字节 · {{value3}} 过期",
         "thisRunRequestedSensitiveProviderFrameCapture": "此次运行请求采集敏感的提供商数据帧。",
         "rawProviderFrameCaptureWasDisabledFor": "此次运行已禁用原始提供商数据帧采集。"
@@ -17130,9 +17130,9 @@
         "couldNotDuplicateAgent": "无法复制智能体",
         "duplicateAs": "将 {{value0}} 复制为 {{value1}}？",
         "exactProviderTrafficWillBeCapturedFor": "将为后续运行捕获完整提供方流量，最多保留 24 小时。",
-        "rawTracingOn": "已开启原始追踪",
+        "rawTracingOn": "已开启原始跟踪",
         "captureExactProviderTrafficForThisRun": "捕获此次运行的完整提供方流量（24 小时后过期）",
-        "runWithProviderTrace": "带提供方追踪运行",
+        "runWithProviderTrace": "带提供方跟踪运行",
         "pauseAnyway": "仍然暂停",
         "openActionsFor": "打开 {{value0}} 的操作菜单",
         "duplicateAgent": "复制智能体",
@@ -17140,7 +17140,7 @@
         "resetSessions": "重置会话",
         "terminate": "终止",
         "assignLabel": "分配任务",
-        "traceFailed": "无法启动带追踪的运行",
+        "traceFailed": "无法启动带跟踪的运行",
         "resetFailed": "重置会话失败"
       },
       "agentBubbleActionRow": {

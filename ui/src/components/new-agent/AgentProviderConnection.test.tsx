@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import type { ComponentProps } from "react";
 import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -411,3 +412,10 @@ describe("AgentProviderConnection reuse", () => {
   });
 
 });
+
+// Exercise the credential binding contract independently of the shared popup.
+vi.mock("@/components/ConfigSelect", () => ({
+  ConfigSelect: ({ onValueChange, ...props }: Omit<ComponentProps<"select">, "onChange"> & { onValueChange: (value: string) => void }) => (
+    <select {...props} onChange={(event) => onValueChange(event.target.value)} />
+  ),
+}));

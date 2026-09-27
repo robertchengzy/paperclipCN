@@ -19,3 +19,9 @@ The isolated browser reproduced a white native popup with nearly white option te
 ## Evidence boundary
 
 The deployment repository records the per-key review, source exemptions, test outcomes, frozen release SHA, migration smoke test and production cutover. Source changes and component tests alone do not establish deployment or complete live business acceptance. No real agent/provider task is required by this localization batch.
+
+## Test maintenance found during the full run
+
+The configuration tests now assert the themed control's visible selected label and the API's unchanged credential reference. Tests dedicated to environment/credential binding use a narrow ConfigSelect stub; the real control remains covered by component and live browser checks. The schedule localization expectation follows the existing Chinese 24-hour format.
+
+Three pre-existing chat integration assertions observed asynchronous work too early on this host. The receipt-order test now waits for all eight persisted comments, and the attachment failure test waits for the provider effect to commit. The acknowledgement check remains bounded (2.5 seconds instead of 250 milliseconds) and still verifies that native continuation work has not been invoked. The service implementation is unchanged by these test synchronization adjustments.

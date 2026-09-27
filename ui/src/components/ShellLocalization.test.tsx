@@ -43,6 +43,6 @@ describe("shell localization language changes", () => {
     expect(describeSchedule("0 10 21 * *")).toBe("Monthly on the 21st at 10:00 AM");
     await i18n.changeLanguage("zh-CN");
     expect(ISSUE_THINKING_EFFORT_OPTIONS.claude_local[0].label).toBe("默认");
-    expect(describeSchedule("0 10 21 * *")).toBe("每月 21 日 上午 10:00");
+    expect(describeSchedule("0 10 21 * *")).toBe("每月 21 日 10:00");
   });
 });

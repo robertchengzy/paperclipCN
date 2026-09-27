@@ -890,8 +890,8 @@ describe("OnboardingWizard restore-gate (stale localStorage across accounts)", (
         }]);
       }
       const { root, clickByText } = await openConnectStep();
-      const picker = document.body.querySelector('select[aria-label="Saved API key"]') as HTMLSelectElement;
-      expect(picker.value).toBe(scope === "personal" ? "user:saved-key" : "company:saved-org-key");
+      const picker = document.body.querySelector('[role="combobox"][aria-label="Saved API key"]');
+      expect(picker?.textContent).toContain("Saved key");
       await clickByText((t) => isArcPrimary(t));
       expect((mockAgentsApi.testEnvironment.mock.calls.at(-1) as unknown[])[2]).toMatchObject({ adapterConfig: { env: { [key]: binding } } });
       expect((mockAgentsApi.hire.mock.calls.at(-1) as unknown[])[1]).toMatchObject({ adapterConfig: { env: { [key]: binding } } });

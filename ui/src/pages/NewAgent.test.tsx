@@ -457,7 +457,7 @@ describe("New agent setup", () => {
     }]);
     await render(adapter, runner);
     await click(provider + "API");
-    expect((container.querySelector("select[aria-label='Saved API key']") as HTMLSelectElement).value).toBe("user:existing-key");
+    expect(container.querySelector("[role='combobox'][aria-label='Saved API key']")?.textContent).toContain("Existing key");
     await click("Use saved API key");
     const binding = { type: "user_secret_ref", key, version: "latest" };
     expect(api.testEnvironment.mock.calls[0][2].adapterConfig.env[key]).toEqual(binding);

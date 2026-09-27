@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import type { ComponentProps } from "react";
 
 import { useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -3876,3 +3877,11 @@ describe("subtractPersistedOverlay", () => {
     });
   });
 });
+
+// Keep these tests focused on environment/credential persistence. The themed
+// control itself is covered by ConfigSelect tests and browser regression.
+vi.mock("@/components/ConfigSelect", () => ({
+  ConfigSelect: ({ onValueChange, ...props }: Omit<ComponentProps<"select">, "onChange"> & { onValueChange: (value: string) => void }) => (
+    <select {...props} onChange={(event) => onValueChange(event.target.value)} />
+  ),
+}));
