@@ -4084,6 +4084,32 @@ rl.on("line", (line) => {
     }
   });
 
+  it.each([
+    { configured: 10, explicit: undefined, fails: true },
+    { configured: 10, explicit: 250, fails: false },
+    { configured: 250, explicit: 10, fails: true },
+    { configured: 250, explicit: undefined, fails: false },
+  ])("applies connection default timeout with explicit precedence $configured/$explicit", async (scenario) => {
+    const company = await createCompany(db);
+    const agent = await createAgent(db, company.id);
+    const { run } = await createIssueAndRun(db, company.id, agent.id);
+    const fake = await startFakeRemoteMcpServer(() => ({ delayMs: 60 }));
+    try {
+      await createRemoteMcpTool(db, company.id, {
+        applicationKey: "connection-timeout", toolName: "kv_set", url: fake.url,
+        connectionConfig: { defaultTimeoutMs: scenario.configured },
+      });
+      await allowAllToolsForAgent(db, company.id, agent.id);
+      const gateway = createTestToolGatewayService(db);
+      const session = await gateway.createSession({ companyId: company.id, agentId: agent.id, runId: run.id });
+      const tool = (await gateway.listToolsForSession(session.token)).find((item) => item.providerType === "mcp_remote_http")!;
+      const call = gateway.executeTool({ sessionToken: session.token, tool: tool.name,
+        parameters: { key: "alpha", value: "one" }, timeoutMs: scenario.explicit });
+      if (scenario.fails) await expect(call).rejects.toMatchObject({ reasonCode: "tool_timeout" });
+      else await expect(call).resolves.toBeTruthy();
+    } finally { await fake.close(); }
+  });
+
   const remoteFailureCases = [
     {
       name: "HTTP status",

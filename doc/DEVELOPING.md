@@ -32,6 +32,19 @@ Codex requires `http_headers` for Streamable HTTP MCP authorization in its
 configuration with fake tokens, then test a read-only gateway call separately;
 parsing the configuration alone does not prove end-to-end authorization.
 
+## Connection tool call budgets
+
+`mcp_remote` and `local_stdio` connections may set
+`transportConfig.defaultTimeoutMs` to an integer from 1 to 60,000. Ordinary
+calls and management test calls use it only when the caller omits `timeoutMs`.
+An explicit caller budget wins. Unconfigured connections retain their existing
+provider defaults (including Cognee's 60 seconds and the general 10 seconds).
+Approved executions retain the existing fixed 60-second budget.
+
+A local HTTP facade must return before the host budget and bound its response
+size. Increasing this default does not change connection health classification,
+retry policy, or the local-stdio process lifecycle.
+
 ## Fork workflow policy
 
 In `paperclipCN`, release publication, Docker and agent-runtime image builds,

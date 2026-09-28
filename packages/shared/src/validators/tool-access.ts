@@ -146,7 +146,14 @@ export const mcpConnectionCredentialRefSchema = z.object({
   prefix: z.string().max(120).nullable().optional(),
 });
 
-export const toolTransportConfigSchema = z.record(z.string(), z.unknown()).superRefine(rejectSensitiveConfigKeys);
+export const toolTransportConfigSchema = z.record(z.string(), z.unknown())
+  .superRefine(rejectSensitiveConfigKeys)
+  .superRefine((config, context) => {
+    if (config.defaultTimeoutMs === undefined) return;
+    if (!z.number().int().min(1).max(60_000).safeParse(config.defaultTimeoutMs).success) {
+      context.addIssue({ code: "custom", path: ["defaultTimeoutMs"], message: "defaultTimeoutMs must be an integer from 1 to 60000" });
+    }
+  });
 
 export const toolRedactedValueSummarySchema = z.object({
   summary: z.string().max(4000),

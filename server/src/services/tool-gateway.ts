@@ -1,3 +1,4 @@
+import { connectionToolTimeoutMs } from "./tool-timeout.js";
 import { COGNEE_STDIO_TEMPLATE, cogneeCloudUrl, callCogneeCloud } from "./cognee-connection.js";
 import { HttpError } from "../errors.js";
 import { claimSlackRateLimitRetry } from "./connectors/slack-retry.js";
@@ -5866,6 +5867,7 @@ export function createToolGatewayService(
     if (useDefaultTimeout && isRailwayConnection(connection) && entry.toolName === `${RAILWAY_TOOL_PREFIX}run-command`) {
       ms = railwayCommandBudgetMs(parameters);
     }
+    ms = connectionToolTimeoutMs(connection.config, ms, useDefaultTimeout);
     const grant = await resolveConnectionGrant(session, connection);
     const endpoint = await resolvedRemoteEndpoint(session, connection, grant);
     // Method-defined headers are trusted catalog configuration. Treat them as
@@ -6302,7 +6304,9 @@ export function createToolGatewayService(
       grant,
     );
     const invoke = () => callLocalStdioMcp({ connection, entry, template, env, parameters,
-      timeoutMs: useProviderDefaultTimeout && template.templateId === "paperclip.cognee-cloud" ? 60_000 : ms });
+      timeoutMs: connectionToolTimeoutMs(connection.config,
+        useProviderDefaultTimeout && template.templateId === "paperclip.cognee-cloud" ? 60_000 : ms,
+        useProviderDefaultTimeout) });
     // Cognee is a bundled HTTP client. Provider failures are tool failures, not
     // crashed local processes, and must never consume slots or restart budgets.
     const result = template.templateId === "paperclip.cognee-cloud"
