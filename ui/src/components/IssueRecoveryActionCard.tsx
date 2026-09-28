@@ -957,11 +957,17 @@ function formatTimeAbsolute(value: string | Date | null | undefined): string | n
 }
 
 /**
- * Headline for an action carrying a bounded retry lineage. It names who keeps the task in
- * every phase, because a manager owning the repair must never read as a manager owning
- * the deliverable.
+ * Headline for an action carrying a bounded retry lineage. It describes the recovery
+ * state and next step without implying that a repair owner owns the deliverable.
  */
 function lineageHeadline(lineage: RecoveryRetryLineage): string {
+  if (lineage.lane === "native_run") {
+    if (lineage.liveRunId) return t("app.issueUi.issueRecoveryActionCard.lineage.nativeRecovering");
+    if (lineage.exhausted) return t("app.issueUi.issueRecoveryActionCard.lineage.nativeExhausted");
+    if (lineage.retryExpired) return t("app.issueUi.issueRecoveryActionCard.lineage.nativeRetryExpired");
+    if (lineage.nextRetryAt) return t("app.issueUi.issueRecoveryActionCard.lineage.nativeScheduled");
+    return t("app.issueUi.issueRecoveryActionCard.lineage.nativeNeeded");
+  }
   // An attempt that came due and never ran leaves nobody working on this task, even though
   // attempts remain on paper. Say so before any lane wording that ends in "no action needed".
   if (lineage.retryExpired) {
@@ -1086,7 +1092,7 @@ export function IssueRecoveryActionCard({
   // the budget ran out or the scheduled attempt simply never fired.
   const wakeSummary = lineage?.retryExpired
     ? t("app.issueUi.issueRecoveryActionCard.wake.retryExpired")
-    : lineage?.exhausted && lineage.lane !== "board"
+    : lineage?.exhausted && !lineage.liveRunId && lineage.lane !== "board"
     ? t("app.issueUi.issueRecoveryActionCard.wake.retriesFinished")
     : readWakePolicySummary(action);
   const evidenceSummary = pickEvidenceSummary(action);
@@ -1244,7 +1250,12 @@ export function IssueRecoveryActionCard({
                 className="inline-flex flex-wrap items-center gap-1.5"
                 data-testid="recovery-recovery-owner"
               >
-                {recoveryOwnerIsSourceOwner ? (
+                {lineage.lane === "native_run" && (action.ownerType !== "board" || Boolean(lineage.liveRunId)) ? (
+                  <>
+                    <span className="font-medium">Paperclip</span>
+                    <span className="text-muted-foreground">{t("app.issueUi.issueRecoveryActionCard.recoversExistingRun")}</span>
+                  </>
+                ) : recoveryOwnerIsSourceOwner ? (
                   <span className="font-medium">{t("app.issueUi.issueRecoveryActionCard.originalRetrying")}</span>
                 ) : action.ownerType === "agent" && action.ownerAgentId ? (
                   <>

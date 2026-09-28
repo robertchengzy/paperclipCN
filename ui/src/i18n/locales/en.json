@@ -571,6 +571,11 @@
         "unknownProject": "Unknown project",
         "noAgentsFound": "No agents found.",
         "noProjectsFound": "No projects found."
+      },
+      "entityPicker": {
+        "selectAssignee": "Select assignee",
+        "selectProject": "Select project",
+        "close": "Close selector"
       }
     },
     "mobileNav": {
@@ -8050,11 +8055,16 @@
         "agentFallback": "agent {{id}}",
         "runChip": "run {{id}}",
         "lineage": {
-          "retryExpired": "This task's automatic retry came due and did not run, so nothing is moving it forward right now. Someone must retry it or record the next step. The task stays with its original owner.",
+          "retryExpired": "This task's automatic retry came due and did not run, so nothing is moving it forward right now. Someone must retry it or record the next step.",
           "sourceExhausted": "This task's last run stopped to wait, but nothing was waiting for it. The original owner has used every automatic repair attempt, so the next step needs a decision. The task stays with its owner.",
           "sourceRetrying": "This task's last run stopped to wait, but nothing was waiting for it. Paperclip is retrying the original owner to record a real next step. The task stays with its owner, and no action is needed yet.",
           "recoveryOwner": "The original owner could not record a next step within its retry budget. A recovery owner is now repairing the path only — the task itself still belongs to its original owner.",
-          "board": "Automatic recovery is exhausted, so the board must choose the next step. The task itself still belongs to its original owner."
+          "board": "Automatic recovery is exhausted, so the board must choose the next step. The task itself still belongs to its original owner.",
+          "nativeRecovering": "Paperclip is recovering the existing run.",
+          "nativeExhausted": "Paperclip could not recover the existing run within its retry budget. Review the recorded failure before retrying.",
+          "nativeRetryExpired": "The retry for the existing run came due and did not start. Review the recorded failure and retry when ready.",
+          "nativeScheduled": "Paperclip has scheduled another attempt to resume the existing run.",
+          "nativeNeeded": "The existing run still needs recovery. Review the recorded failure before retrying."
         },
         "resolve": {
           "tryAgain": {
@@ -8138,7 +8148,8 @@
         "footer": {
           "observing": "Recovery is observing without interrupting the live run.",
           "staysOpen": "The card stays open until an explicit decision is recorded."
-        }
+        },
+        "recoversExistingRun": "recovers the existing run"
       },
       "issueReferencePill": {
         "taskAria": "Task {{label}}: {{title}}",

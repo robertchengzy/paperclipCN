@@ -571,6 +571,11 @@
         "unknownProject": "未知项目",
         "noAgentsFound": "未找到智能体。",
         "noProjectsFound": "未找到项目。"
+      },
+      "entityPicker": {
+        "selectAssignee": "选择负责人",
+        "selectProject": "选择项目",
+        "close": "关闭选择器"
       }
     },
     "mobileNav": {
@@ -8050,11 +8055,16 @@
         "agentFallback": "智能体 {{id}}",
         "runChip": "运行 {{id}}",
         "lineage": {
-          "retryExpired": "此任务的自动重试已到期但未执行，任务目前没有继续推进。需要有人重试或记录下一步。任务仍由原负责人负责。",
+          "retryExpired": "此任务的自动重试已到期但未执行，任务目前没有继续推进。需要有人重试或记录下一步。",
           "sourceExhausted": "此任务的上次运行停下来等待，但并没有需要等待的对象。原负责人已用完所有自动修复尝试，下一步需要做出决策。任务仍由其负责人负责。",
           "sourceRetrying": "此任务的上次运行停下来等待，但并没有需要等待的对象。Paperclip 正在让原负责人重新尝试，以记录真正的下一步。任务仍由其负责人负责，目前无需操作。",
           "recoveryOwner": "原负责人未能在重试额度内记录下一步。恢复负责人现在只负责修复路径，任务本身仍属于原负责人。",
-          "board": "自动恢复已用尽，需要董事会选择下一步。任务本身仍属于原负责人。"
+          "board": "自动恢复已用尽，需要董事会选择下一步。任务本身仍属于原负责人。",
+          "nativeRecovering": "Paperclip 正在恢复现有运行。",
+          "nativeExhausted": "Paperclip 未能在重试预算内恢复现有运行。重试前请查看已记录的失败原因。",
+          "nativeRetryExpired": "现有运行的重试已到期但未启动。请查看已记录的失败原因，准备就绪后再重试。",
+          "nativeScheduled": "Paperclip 已安排再次尝试恢复现有运行。",
+          "nativeNeeded": "现有运行仍需恢复。重试前请查看已记录的失败原因。"
         },
         "resolve": {
           "tryAgain": {
@@ -8138,7 +8148,8 @@
         "footer": {
           "observing": "恢复流程正在观察，未中断正在执行的运行。",
           "staysOpen": "在记录明确决策之前，此卡片会保持打开。"
-        }
+        },
+        "recoversExistingRun": "恢复现有运行"
       },
       "issueReferencePill": {
         "taskAria": "任务 {{label}}：{{title}}",

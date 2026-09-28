@@ -1509,6 +1509,7 @@ export function TaskChatComposer({
                 value={assigneeValue}
                 options={reassignOptions ?? []}
                 placeholder={t("app.taskChat.taskChatComposer.assignee.placeholder")}
+                mobileTitle={t("app.common.entityPicker.selectAssignee")}
                 noneLabel={t("app.taskChat.taskChatComposer.assignee.none")}
                 searchPlaceholder={t("app.taskChat.taskChatComposer.assignee.search")}
                 emptyMessage={t("app.taskChat.taskChatComposer.assignee.empty")}
