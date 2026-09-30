@@ -1,5 +1,4 @@
 import { t, useTranslation } from "@/i18n";
-import { useUserPreferences } from "../hooks/useUserPreferences";
 import { ChatSetupSidebarProvider } from "@/context/ChatSetupSidebarContext";
 import { PluginAppShellOverlays } from "./PluginAppShellOverlays";
 import {
@@ -42,7 +41,6 @@ import { SidebarShell } from "./SidebarShell.production";
 import { SecondarySidebar } from "./SecondarySidebar.production";
 import { SidebarAccountMenu } from "./SidebarAccountMenu.production";
 import { useDialogActions } from "../context/DialogContext";
-import { GeneralSettingsProvider } from "../context/GeneralSettingsContext";
 import { usePanel } from "../context/PanelContext";
 import { useCompany } from "../context/CompanyContext";
 import { useSidebar } from "../context/SidebarContext";
@@ -256,7 +254,6 @@ export function Layout() {
     },
     refetchIntervalInBackground: false,
   });
-  const keyboardShortcutsEnabled = useUserPreferences().data?.keyboardShortcuts === true;
 
   // A secondary sidebar always collapses the app sidebar to its rail (still
   // peek-able) — a hard invariant that overrides the user pin while the route
@@ -466,7 +463,6 @@ export function Layout() {
   useCompanyPageMemory();
 
   useKeyboardShortcuts({
-    enabled: keyboardShortcutsEnabled,
     onNewIssue: () => openNewIssue(),
     onSearch: openSearch,
     onToggleSidebar: toggleSidebar,
@@ -637,7 +633,6 @@ export function Layout() {
 
   return (
     <ChatSetupSidebarProvider>
-    <GeneralSettingsProvider value={{ keyboardShortcutsEnabled }}>
       <div
         style={isMobile ? ({
           "--mobile-action-bar-bottom": mobileNavVisible
@@ -793,7 +788,6 @@ export function Layout() {
         <ToastViewport />
         <PluginAppShellOverlays localTrusted={health?.deploymentMode === "local_trusted"} />
       </div>
-    </GeneralSettingsProvider>
     </ChatSetupSidebarProvider>
   );
 }

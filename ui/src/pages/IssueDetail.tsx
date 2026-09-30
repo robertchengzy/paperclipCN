@@ -1,7 +1,6 @@
 import { projectDisplayName } from "@/lib/project-display";
 import { TextAttachmentContext } from "../context/TextAttachmentContext";
 import { WorkspaceExportRecovery } from "../components/WorkspaceExportRecovery";
-import { useUserPreferences } from "../hooks/useUserPreferences";
 import { DispositionRecoveryProvider } from "../components/DispositionRecoveryNotice";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { mergeComposerRunSettings, type ComposerRunSettings } from "@/components/task-chat/composer-run-settings";
@@ -3439,7 +3438,6 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     enabled: !!issueId,
     retry: false,
   });
-  const keyboardShortcutsEnabled = useUserPreferences().data?.keyboardShortcuts === true;
   // Experimental Cases: linkify `PAP-C7` chips in this issue's comment bodies.
   const casesChipsEnabled = instanceExperimentalSettings?.enableCases === true;
   const feedbackDataSharingPreference =
@@ -5817,8 +5815,7 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
 
   const goToInboxShortcutArmedRef = useRef(false);
   const goToInboxShortcutTimeoutRef = useRef<number | null>(null);
-  const canQuickArchiveFromInbox =
-    keyboardShortcutsEnabled && !issue?.hiddenAt;
+  const canQuickArchiveFromInbox = !issue?.hiddenAt;
 
   useEffect(() => {
     if (!issue?.id || !canQuickArchiveFromInbox) return;
@@ -5849,15 +5846,6 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
   }, [archiveFromInbox, canQuickArchiveFromInbox, issue?.id]);
 
   useEffect(() => {
-    if (!keyboardShortcutsEnabled) {
-      goToInboxShortcutArmedRef.current = false;
-      if (goToInboxShortcutTimeoutRef.current !== null) {
-        window.clearTimeout(goToInboxShortcutTimeoutRef.current);
-        goToInboxShortcutTimeoutRef.current = null;
-      }
-      return;
-    }
-
     const clearArmTimeout = () => {
       if (goToInboxShortcutTimeoutRef.current !== null) {
         window.clearTimeout(goToInboxShortcutTimeoutRef.current);
@@ -5946,7 +5934,6 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
     };
   }, [
     fileViewerEnabled,
-    keyboardShortcutsEnabled,
     navigate,
     sourceBreadcrumb.href,
   ]);
