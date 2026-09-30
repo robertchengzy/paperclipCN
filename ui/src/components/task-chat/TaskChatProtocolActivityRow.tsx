@@ -1,3 +1,4 @@
+import { t as translateUpstream } from "@/i18n";
 import { protocolDetailLabel } from "./protocol-detail-labels";
 import { useId, useState, type ReactNode } from "react";
 import {
@@ -296,9 +297,15 @@ export function TaskChatProtocolActivityRow({ item }: { item: TaskChatProtocolIt
       <div className="flex min-w-0 flex-col gap-1.5 py-1 text-xs" data-testid="task-chat-protocol-activity-row" data-activity-family="provider_notice">
         <div className="flex items-center gap-2 text-muted-foreground">
           <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden data-testid="task-chat-protocol-activity-icon" />
-          <span className="font-medium">{item.status === "failed" ? t("app.common.labels.error") : t("app.common.labels.warning")}</span>
+          <span className="font-medium">{item.status === "failed" ? t("app.common.labels.error") : item.details.find(detail => detail.label === "Severity")?.value === "info" ? translateUpstream("app.upstreamSync.providerUpdate") : t("app.common.labels.warning")}</span>
         </div>
         <p className="min-w-0 whitespace-pre-wrap break-words text-foreground">{summary}</p>
+        {item.details.some(detail => detail.label !== "Summary") ? (
+          <details className="text-muted-foreground">
+            <summary className="cursor-pointer">{translateUpstream("app.agentUi.agentDetail.details")}</summary>
+            <DetailList details={item.details.filter(detail => detail.label !== "Summary")} />
+          </details>
+        ) : null}
       </div>
     );
   }

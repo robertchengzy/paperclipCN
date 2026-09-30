@@ -1,3 +1,8 @@
+import { t as translateSync } from "@/i18n";
+import { t as translateUpstream } from "@/i18n";
+import { TextAttachmentContext } from "@/context/TextAttachmentContext";
+import { isTextAttachment } from "@/lib/issue-attachments";
+import { getAttachmentArtifactWorkProductMetadata } from "@paperclipai/shared";
 import { useContext, useState, type CSSProperties } from "react";
 import { IssueGalleryContext } from "@/context/IssueGalleryContext";
 import { ArtifactPreview } from "@/components/artifacts/ArtifactCard";
@@ -187,6 +192,9 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
       break;
   }
 
+  const openText = useContext(TextAttachmentContext);
+  const textMetadata = getAttachmentArtifactWorkProductMetadata(workProduct);
+  const canOpenText = Boolean(openText && textMetadata && isTextAttachment(textMetadata));
   const additions = numberMeta(metadata, "additions");
   const deletions = numberMeta(metadata, "deletions");
   const files = numberMeta(metadata, "files", "changedFiles");
@@ -274,12 +282,22 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
       </div>
       <div className={cn("flex shrink-0 items-center", compact ? "gap-1.5" : "gap-2")}>
         {chip ? <Chip chip={chip} /> : null}
+        {canOpenText ? (
+          <button
+            type="button"
+            onClick={() => openText!(textMetadata!.attachmentId, textMetadata!.originalFilename ?? workProduct.title)}
+            aria-label={translateSync("app.upstreamSync.openInTabValue0", { value0: workProduct.title })}
+            className="inline-flex items-center gap-1 text-xs font-medium text-foreground after:absolute after:inset-0 after:rounded-md focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
+          >
+            {compact ? null : <span className="hidden @sm:inline">{translateUpstream("app.upstreamSync.openInTab")}</span>}<FileText aria-hidden className="h-3 w-3" />
+          </button>
+        ) : null}
         {mediaPath ? (
           <button type="button" onClick={openGallery} aria-label={t("app.taskChat.richWorkProductCard.actionLabel", { action, title: workProduct.title })} className="inline-flex items-center gap-1 text-xs font-medium text-foreground after:absolute after:inset-0 after:rounded-md focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring">
             {compact ? null : <span className="hidden @sm:inline">{action}</span>}<Maximize2 aria-hidden className="h-3 w-3" />
           </button>
         ) : actionHref ? (
-          <a href={actionHref} aria-label={t("app.taskChat.richWorkProductCard.actionLabel", { action, title: workProduct.title })} className="inline-flex items-center gap-1 text-xs font-medium text-foreground after:absolute after:inset-0 after:rounded-md focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring" target={actionHref.startsWith("http") ? "_blank" : undefined} rel={actionHref.startsWith("http") ? "noreferrer" : undefined}>
+          <a href={actionHref} aria-label={t("app.taskChat.richWorkProductCard.actionLabel", { action, title: workProduct.title })} className={cn("inline-flex items-center gap-1 text-xs font-medium text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", canOpenText ? "relative z-10" : "after:absolute after:inset-0 after:rounded-md focus-visible:after:ring-2 focus-visible:after:ring-ring")} target={actionHref.startsWith("http") ? "_blank" : undefined} rel={actionHref.startsWith("http") ? "noreferrer" : undefined}>
             {compact ? null : <span className="hidden @sm:inline">{action}</span>}<ExternalLink aria-hidden className="h-3 w-3" />
           </a>
         ) : null}

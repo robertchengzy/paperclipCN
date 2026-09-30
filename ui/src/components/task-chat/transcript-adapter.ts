@@ -1,3 +1,4 @@
+import { t as translateUpstream } from "@/i18n";
 /**
  * Live adapter: map a run's streaming TranscriptEntry[] (from
  * useLiveRunTranscripts — the same source the current thread consumes) into the
@@ -387,6 +388,15 @@ function providerActivityItem(
       ),
       mono: /(?:id|model|target|reference|url|code|bytes)$/i.test(key),
     });
+  }
+
+  if (entry.family === "provider_notice" && Array.isArray(entry.payload.details)) {
+    for (const raw of entry.payload.details.slice(0, 64)) {
+      const detail = objectRecord(raw);
+      if (typeof detail.name === "string" && typeof detail.value === "string") {
+        details.push({ label: clip(detail.name, 160), value: clip(detail.value, 4000), mono: false });
+      }
+    }
   }
 
   const steps =
@@ -2107,11 +2117,11 @@ export function deriveRunStatusLabel(entries: readonly TranscriptEntry[]): {
         }
       }
       const selfTalk = flattenSelfTalk(parts.join(""));
-      return { label: "Responding", selfTalk: selfTalk || undefined };
+      return { label: translateUpstream("app.taskChat.taskChatStatusPill.labels.responding"), selfTalk: selfTalk || undefined };
     }
-    if (entry.kind === "thinking") return { label: "Thinking" };
+    if (entry.kind === "thinking") return { label: translateUpstream("app.taskChat.taskChatStatusPill.labels.thinking") };
     if (entry.kind === "system" && entry.text === "Reasoning started")
-      return { label: "Thinking" };
+      return { label: translateUpstream("app.taskChat.taskChatStatusPill.labels.thinking") };
   }
-  return { label: "Running" };
+  return { label: translateUpstream("app.taskChat.taskChatStatusPill.labels.running") };
 }

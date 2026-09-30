@@ -34,6 +34,7 @@ export type TaskSidePanelTabPayload =
   | { kind: "properties" }
   | { kind: "subtasks" }
   | { kind: "artifacts" }
+  | { kind: "attachment"; attachmentId: string }
   | { kind: "skill"; skillId: string }
   | { kind: "issue-document"; documentKey: string }
   | {
@@ -92,6 +93,9 @@ function parsePayload(value: unknown): TaskSidePanelTabPayload | null {
   if (kind === "properties") return { kind };
   if (kind === "subtasks") return { kind };
   if (kind === "artifacts") return { kind };
+  if (kind === "attachment") {
+    return typeof input.attachmentId === "string" && input.attachmentId.length > 0 ? { kind, attachmentId: input.attachmentId } : null;
+  }
   if (kind === "skill") {
     return typeof input.skillId === "string" && input.skillId.length > 0 ? { kind, skillId: input.skillId } : null;
   }
@@ -278,4 +282,8 @@ export function taskPanelWorkspaceFileTab(input: {
       column: input.column ?? null,
     },
   };
+}
+
+export function taskPanelAttachmentTab(attachmentId: string, title: string): SidePanelTabRecord<TaskSidePanelTabPayload> {
+  return { id: `attachment:${attachmentId}`, type: "attachment", label: title, closable: true, contentMode: "full-bleed", payload: { kind: "attachment", attachmentId } };
 }

@@ -745,7 +745,7 @@ export function Layout({ sidebarSections }: { sidebarSections?: ReactNode }) {
                 isMobile
                   ? ({
                       "--tc-composer-bottom": mobileNavVisible
-                        ? "var(--sz-calc-14)"
+                        ? "var(--tc-composer-visible-nav-offset)"
                         : "var(--tc-composer-hidden-nav-offset)",
                     } as CSSProperties)
                   : undefined
@@ -760,8 +760,10 @@ export function Layout({ sidebarSections }: { sidebarSections?: ReactNode }) {
                 // changes (e.g. switching skill-detail tabs) don't widen/shift
                 // when the vertical scrollbar appears or disappears (PAP-10907).
                 isMobile
-                  ? isTaskDetailRoute && !mobileNavVisible
-                    ? "overflow-visible pb-(--tc-composer-hidden-nav-offset)"
+                  ? isTaskDetailRoute
+                    ? mobileNavVisible
+                      ? "overflow-visible pb-(--tc-composer-visible-nav-offset)"
+                      : "overflow-visible pb-(--tc-composer-hidden-nav-offset)"
                     : "overflow-visible pb-(--sz-calc-14)"
                   : "overflow-auto [scrollbar-gutter:stable]",
               )}

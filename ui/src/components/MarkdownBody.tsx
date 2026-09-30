@@ -1,3 +1,4 @@
+import { t as translateSync } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import { isValidElement, memo, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -91,6 +92,8 @@ interface MarkdownBodyProps {
   resolveImageSrc?: (src: string) => string | null;
   /** Called when a user clicks an inline image */
   onImageClick?: (src: string) => void;
+  /** Keep untrusted decision media inert: image references and diagram source only. */
+  mediaMode?: "render" | "reference";
   /**
    * Resolver that decides which inline-code workspace file paths may be linked
    * to the issue file viewer. Omitting it (or returning null) leaves every
@@ -725,6 +728,7 @@ function MarkdownBodyImpl({
   externalReferences,
   resolveImageSrc,
   onImageClick,
+  mediaMode = "render",
   resolveWorkspaceFileRef,
 }: MarkdownBodyProps) {
   const { t } = useTranslation();
@@ -810,7 +814,7 @@ function MarkdownBodyImpl({
     ),
     pre: ({ node: _node, children: preChildren, ...preProps }) => {
       const mermaidSource = extractMermaidSource(preChildren);
-      if (mermaidSource) {
+      if (mermaidSource && mediaMode === "render") {
         return <MermaidDiagramBlock source={mermaidSource} darkMode={theme === "dark"} />;
       }
       return <CodeBlock preProps={preProps}>{preChildren}</CodeBlock>;
@@ -921,7 +925,13 @@ function MarkdownBodyImpl({
       );
     },
     };
-    if (resolveImageSrc || onImageClick) {
+    if (mediaMode === "reference") {
+      map.img = ({ src, alt, title }) => (
+        <span data-markdown-image-reference title={title}>
+          {translateSync("app.upstreamSync.image")}: {alt || translateSync("app.upstreamSync.untitledImage")}{src ? ` (${src})` : ""}
+        </span>
+      );
+    } else if (resolveImageSrc || onImageClick) {
       map.img = ({ node: _node, src, alt, ...imgProps }) => {
         const resolved = resolveImageSrc && src ? resolveImageSrc(src) : null;
         const finalSrc = resolved ?? src;
@@ -937,7 +947,7 @@ function MarkdownBodyImpl({
       };
     }
     return map;
-  }, [theme, linkIssueReferences, linkCaseReferences, externalReferenceLookup, resolveImageSrc, onImageClick, t]);
+  }, [theme, linkIssueReferences, linkCaseReferences, externalReferenceLookup, resolveImageSrc, onImageClick, mediaMode, t]);
 
   return (
     <div

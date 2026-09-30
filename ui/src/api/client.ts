@@ -1,6 +1,7 @@
 import { getPageVisibility, getVisibilityHeaderValue } from "@/lib/page-visibility";
 import { tenantSessionRecovery } from "@/lib/tenant-session-recovery";
 import { t } from "@/i18n";
+import { readApiJson } from "./response";
 
 const BASE = "/api";
 
@@ -57,7 +58,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
   });
   if (!res.ok) {
-    const errorBody = await res.json().catch(() => null);
+    const errorBody = await readApiJson(res);
     const recovery = tenantSessionRecovery.recoverIfNeeded(res.status, errorBody);
     if (recovery) return recovery;
     throw new ApiError(
@@ -67,7 +68,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     );
   }
   if (res.status === 204) return undefined as T;
-  return res.json();
+  return readApiJson<T>(res);
 }
 
 // --- In-tab request coalescing for identical safe GETs -----------------------

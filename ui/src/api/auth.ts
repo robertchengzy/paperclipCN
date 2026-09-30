@@ -11,6 +11,7 @@ import {
 import { redactUrlSecrets } from "@/lib/redact-url-secrets";
 import { tenantSessionRecovery } from "@/lib/tenant-session-recovery";
 import { t } from "@/i18n";
+import { readApiJson } from "./response";
 
 type AuthErrorBody =
   | {
@@ -159,13 +160,14 @@ export const authApi = {
     const res = await fetch("/api/auth/get-session", {
       credentials: "include",
       headers: { Accept: "application/json" },
+      cache: "no-store",
     });
-    const payload = await res.json().catch(() => null);
+    const payload = await readApiJson(res);
     if (!res.ok) {
       const recovery = tenantSessionRecovery.recoverIfNeeded(res.status, payload);
       if (recovery) return recovery;
       if (res.status === 401) return null;
-      throw new Error(t("app.lib.auth.loadSessionFailed", { status: res.status }));
+      throw extractAuthError(payload as AuthErrorBody, res.status);
     }
     const direct = toSession(payload);
     if (direct) return direct;

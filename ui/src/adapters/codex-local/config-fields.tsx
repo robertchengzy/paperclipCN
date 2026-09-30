@@ -1,3 +1,4 @@
+import { t as translateUpstream } from "@/i18n";
 import { ConfigSelect } from "@/components/ConfigSelect";
 import { t, useTranslation } from "@/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
@@ -22,6 +23,7 @@ import {
   PAPERCLIP_RUNNER_IDLE_TIMEOUT_DEFAULT_MS,
   PAPERCLIP_RUNNER_IDLE_TIMEOUT_MAX_MS,
   PAPERCLIP_RUNNER_PERMISSION_CAPABILITIES,
+  PAPERCLIP_RUNNER_ACPX_PROFILES,
   isPaperclipRunnerProvider,
   resolvePaperclipRunnerIdleTimeoutMs,
   resolvePaperclipRunnerPermissionMode,
@@ -198,9 +200,10 @@ export function CodexLocalConfigFields({
         >
           <ConfigSelect
             className={inputClass}
-            value={runnerProvider}
+            value={runnerProvider === "acpx" && runnerSchemaValue("acpxAgent", "claude") === "grok" ? "grok" : runnerProvider}
             onValueChange={(selectedValue) => {
-              const provider = isPaperclipRunnerProvider(selectedValue)
+              const grok = selectedValue === "grok";
+              const provider = grok ? "acpx" : isPaperclipRunnerProvider(selectedValue)
                 ? selectedValue
                 : "codex";
               const model =
@@ -211,7 +214,7 @@ export function CodexLocalConfigFields({
                     : provider === "aws_agentcore"
                       ? defaultAwsAgentCoreModel
                       : provider === "acpx"
-                        ? defaultAcpxClaudeModel
+                        ? grok ? "grok-4.7" : defaultAcpxClaudeModel
                         : DEFAULT_CODEX_LOCAL_MODEL;
               if (isCreate) {
                 set!({
@@ -219,14 +222,14 @@ export function CodexLocalConfigFields({
                   adapterSchemaValues: {
                     ...values!.adapterSchemaValues,
                     provider,
-                    ...(provider === "acpx" ? { acpxAgent: "claude" } : {}),
+                    ...(provider === "acpx" ? { acpxAgent: grok ? "grok" : "claude" } : {}),
                   },
                 });
               } else {
                 mark("adapterConfig", "provider", provider);
                 mark("adapterConfig", "model", model);
                 if (provider === "acpx") {
-                  mark("adapterConfig", "acpxAgent", "claude");
+                  mark("adapterConfig", "acpxAgent", grok ? "grok" : "claude");
                 }
               }
             }}
@@ -235,7 +238,25 @@ export function CodexLocalConfigFields({
             <option value="opencode">OpenCode 1.18.32</option>
             <option value="claude_managed">Claude Managed</option>
             <option value="aws_agentcore">AWS AgentCore</option>
-            <option value="acpx">ACPX Claude</option>
+            <option value="acpx">{translateUpstream("app.upstreamSync.acpAgents")}</option>
+            <option value="grok">Grok Build</option>
+          </ConfigSelect>
+        </Field>
+      )}
+      {runnerManaged && runnerProvider === "acpx" && runnerSchemaValue("acpxAgent", "claude") !== "grok" && (
+        <Field configSection="adapter" label={translateUpstream("app.upstreamSync.acpAgent")} hint={translateUpstream("app.upstreamSync.cursorGitHubCopilotAndPiAreAwaitingLocalAnd")}>
+          <ConfigSelect className={inputClass}
+            value={String(isCreate ? values!.adapterSchemaValues?.acpxAgent ?? "claude" : eff("adapterConfig", "acpxAgent", config.acpxAgent ?? "claude"))}
+            onValueChange={(selectedValue) => {
+              const profile = PAPERCLIP_RUNNER_ACPX_PROFILES.find(entry => entry.value === selectedValue);
+              if (!profile?.qualified) return;
+              if (isCreate) set!({ model: profile.value === "claude" ? defaultAcpxClaudeModel : "",
+                adapterSchemaValues: { ...values!.adapterSchemaValues, acpxAgent: profile.value } });
+              else { mark("adapterConfig", "acpxAgent", profile.value); mark("adapterConfig", "model", profile.value === "claude" ? defaultAcpxClaudeModel : ""); }
+            }}>
+            {PAPERCLIP_RUNNER_ACPX_PROFILES.map(profile => <option key={profile.value} value={profile.value} disabled={!profile.qualified}>
+              {profile.label}{profile.qualified ? "" : translateUpstream("app.upstreamSync.qualificationPending")}
+            </option>)}
           </ConfigSelect>
         </Field>
       )}

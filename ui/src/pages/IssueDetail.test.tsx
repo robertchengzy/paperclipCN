@@ -1673,8 +1673,10 @@ describe("IssueDetail", () => {
       if (reassign) {
         expect(mockIssuesApi.update).toHaveBeenCalledWith(issue.identifier, {
           comment: "Inspect the new file",
+          commentClientRequestId: undefined,
           assigneeAgentId: "agent-2",
           assigneeUserId: null,
+          assigneeAdapterOverrides: null,
           attachmentIds: [id],
         });
         expect(mockIssuesApi.addComment).not.toHaveBeenCalled();

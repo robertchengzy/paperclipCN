@@ -115,7 +115,8 @@
       "OpenCode 1.18.32",
       "managed-primary",
       "agentcore-primary",
-      "codex-acp"
+      "codex-acp",
+      "Grok Build"
     ],
     "adapters/cursor-cloud/index.ts": [
       "Cursor Cloud"
@@ -800,6 +801,33 @@
       "rate limited",
       "deferred",
       "hidden"
+    ],
+    "api/response.ts": [
+      "ApiUnavailableError"
+    ],
+    "components/SidebarAccountMenu.production.tsx": [
+      "SHA"
+    ],
+    "components/SidebarAccountMenu.tsx": [
+      "SHA"
+    ],
+    "components/artifacts/RichArtifactCards.tsx": [
+      "CSV ·"
+    ],
+    "components/new-agent/AgentBasicsDialog.tsx": [
+      "Grok Build (ACPX)"
+    ],
+    "components/task-chat/ComposerRunSettingsPicker.tsx": [
+      "Claude Code",
+      "Kimi Code",
+      "Gemini CLI",
+      "Cursor Cloud",
+      "Grok CLI",
+      "Hermes CLI",
+      "Paperclip Runner",
+      "OpenClaw Gateway",
+      "Hermes Gateway",
+      "· OpenRouter"
     ]
   }
 }

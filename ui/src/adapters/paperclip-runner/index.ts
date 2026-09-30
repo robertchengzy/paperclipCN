@@ -1,3 +1,5 @@
+import { t as translateSync } from "@/i18n";
+import { t as translateUpstream } from "@/i18n";
 import { t } from "@/i18n";
 import type { PaperclipQuestion, PaperclipQuestionResponse, PaperclipQuestionSet, TranscriptEntry } from "@paperclipai/adapter-utils";
 import type { UIAdapterModule } from "../types";
@@ -574,7 +576,9 @@ function parseQuestionSet(value: unknown): PaperclipQuestionSet | null {
   return {
     schema: "paperclip.question_set.v1",
     ...(nullableText(input.title) ? { title: text(input.title).slice(0, 1_000) } : {}),
-    ...(nullableText(input.description) ? { description: text(input.description).slice(0, 4_000) } : {}),
+    // Native plan decisions bind to the complete canonical question context.
+    // The event boundary rejects oversized context rather than approving a slice.
+    ...(nullableText(input.description) ? { description: text(input.description) } : {}),
     ...(nullableText(input.submitLabel) ? { submitLabel: text(input.submitLabel).slice(0, 200) } : {}),
     questions,
   };
@@ -704,6 +708,11 @@ function parsePrpEvent(
     return entry ? [entry] : [{ kind: "system", ts, text: t("app.agentUi.index.runnerIgnoredAnUnsafeWorkspaceFileReference") }];
   }
   if (eventType.startsWith("runtime_request.")) {
+    const request = record(payload.request ?? payload);
+    const input = record(request.input);
+    if (typeof input.description === "string" && input.description.length > 100_000) {
+      return [{ kind: "system", ts, get text() { return translateSync("app.upstreamSync.runnerCannotDisplayThisInputRequestBecauseItsComplete"); } }];
+    }
     const entry = runtimeRequestEntry(eventType, payload, event, ts, state);
     return entry ? [entry] : [];
   }
@@ -786,7 +795,7 @@ export function parsePaperclipRunnerStdoutLine(line: string, ts: string): Transc
 
 export const paperclipRunnerUIAdapter: UIAdapterModule = {
   type: "paperclip_runner",
-  label: "Paperclip Runner",
+  label: translateUpstream("app.settings.instanceExperimentalSettings.cards.enableNativeRunner.title"),
   parseStdoutLine: parsePaperclipRunnerStdoutLine,
   createStdoutParser: () => {
     let state = createParserState();

@@ -1,3 +1,4 @@
+import { t as translateUpstream } from "@/i18n";
 import { ConfigSelect } from "@/components/ConfigSelect";
 import { AiConnectionField } from "./ai-connections/AiConnectionField";
 import { aiConnectionBindingSchema } from "@paperclipai/shared";
@@ -276,35 +277,35 @@ function formatArgList(value: unknown): string {
 }
 
 const openCodeThinkingEffortOptions = [
-  { id: "", label: "Auto" },
-  { id: "minimal", label: "Minimal" },
-  { id: "low", label: "Low" },
-  { id: "medium", label: "Medium" },
-  { id: "high", label: "High" },
+  { id: "", label: translateUpstream("app.agentSetup.setup.auto") },
+  { id: "minimal", label: translateUpstream("app.shell.helpers.minimal") },
+  { id: "low", label: translateUpstream("app.issueUi.newIssueDialog.low") },
+  { id: "medium", label: translateUpstream("app.issueUi.newIssueDialog.medium") },
+  { id: "high", label: translateUpstream("app.issueUi.newIssueDialog.high") },
   { id: "xhigh", label: "X-High" },
-  { id: "max", label: "Max" },
+  { id: "max", label: translateUpstream("app.shell.helpers.max") },
 ] as const;
 
 const cursorModeOptions = [
-  { id: "", label: "Auto" },
-  { id: "plan", label: "Plan" },
-  { id: "ask", label: "Ask" },
+  { id: "", label: translateUpstream("app.agentSetup.setup.auto") },
+  { id: "plan", label: translateUpstream("app.agentUi.index.plan") },
+  { id: "ask", label: translateUpstream("app.agents.config.effort.ask") },
 ] as const;
 
 const claudeThinkingEffortOptions = [
-  { id: "", label: "Auto" },
-  { id: "low", label: "Low" },
-  { id: "medium", label: "Medium" },
-  { id: "high", label: "High" },
+  { id: "", label: translateUpstream("app.agentSetup.setup.auto") },
+  { id: "low", label: translateUpstream("app.issueUi.newIssueDialog.low") },
+  { id: "medium", label: translateUpstream("app.issueUi.newIssueDialog.medium") },
+  { id: "high", label: translateUpstream("app.issueUi.newIssueDialog.high") },
 ] as const;
 
 // Kimi exposes low/high/max (no "medium") via each model's support_efforts;
 // the kimi_local adapter maps a legacy "medium" onto "high" at runtime.
 const kimiThinkingEffortOptions = [
-  { id: "", label: "Auto" },
-  { id: "low", label: "Low" },
-  { id: "high", label: "High" },
-  { id: "max", label: "Max" },
+  { id: "", label: translateUpstream("app.agentSetup.setup.auto") },
+  { id: "low", label: translateUpstream("app.issueUi.newIssueDialog.low") },
+  { id: "high", label: translateUpstream("app.issueUi.newIssueDialog.high") },
+  { id: "max", label: translateUpstream("app.shell.helpers.max") },
 ] as const;
 
 function thinkingEffortLabel(t: TFunction, label: string): string {
@@ -1093,6 +1094,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
       if (props.compactTestFeedback) {
         const providerAdapter = adapterType === "paperclip_runner"
           ? adapterConfig.provider === "codex" ? "codex_local"
+            : adapterConfig.provider === "acpx" && adapterConfig.acpxAgent === "grok" ? "grok_local"
             : adapterConfig.provider === "acpx" && adapterConfig.acpxAgent === "claude" ? "claude_local"
               : adapterType
           : adapterType;
@@ -1310,9 +1312,9 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
           : adapterType === "kimi_local"
             ? kimiThinkingEffortOptions
             : adapterType === "pi_local"
-              ? [{ id: "", label: "Auto" }, ...["off", "minimal", "low", "medium", "high", "xhigh"].map(id => ({ id, label: id }))]
+              ? [{ id: "", label: translateUpstream("app.agentSetup.setup.auto") }, ...["off", "minimal", "low", "medium", "high", "xhigh"].map(id => ({ id, label: id }))]
               : adapterType === "claude_local" || adapterType === "grok_local"
-                ? [{ id: "", label: "Auto" }, ...setupEfforts(adapterType, currentModelId).map((id) => ({
+                ? [{ id: "", label: translateUpstream("app.agentSetup.setup.auto") }, ...setupEfforts(adapterType, currentModelId).map((id) => ({
                     id,
                     label: id === "xhigh" ? "X-High" : id[0].toUpperCase() + id.slice(1),
                   }))]
@@ -1685,7 +1687,7 @@ export function AgentConfigForm(props: AgentConfigFormProps) {
             </Field>
           )}
 
-          {!isCreate && selectedCompanyId && <AiConnectionField companyId={selectedCompanyId} agentId={props.agent.id} agentName={props.agent.name} adapterType={adapterType === "paperclip_runner" ? eff("adapterConfig", "provider", config.provider) === "codex" ? "codex_local" : eff("adapterConfig", "provider", config.provider) === "opencode" ? "opencode_local" : eff("adapterConfig", "provider", config.provider) === "acpx" && eff("adapterConfig", "acpxAgent", config.acpxAgent) === "claude" ? "claude_local" : adapterType : adapterType}
+          {!isCreate && selectedCompanyId && <AiConnectionField companyId={selectedCompanyId} agentId={props.agent.id} agentName={props.agent.name} adapterType={adapterType === "paperclip_runner" ? eff("adapterConfig", "provider", config.provider) === "codex" ? "codex_local" : eff("adapterConfig", "provider", config.provider) === "opencode" ? "opencode_local" : eff("adapterConfig", "provider", config.provider) === "acpx" && eff("adapterConfig", "acpxAgent", config.acpxAgent) === "grok" ? "grok_local" : eff("adapterConfig", "provider", config.provider) === "acpx" && eff("adapterConfig", "acpxAgent", config.acpxAgent) === "claude" ? "claude_local" : adapterType : adapterType}
             value={aiConnectionBindingSchema.safeParse((overlay.runtime.runtimeConfig as Record<string, unknown> | undefined)?.aiConnection ?? runtimeConfig.aiConnection).data}
             model={String(eff("adapterConfig", "model", config.model) ?? "")} environmentId={currentDefaultEnvironmentId || undefined} legacy
             onChange={binding => mark("runtime", "runtimeConfig", { ...runtimeConfig, aiConnection: binding })} />}
@@ -2369,6 +2371,12 @@ export function AdapterLoginPanel(props: AdapterLoginPanelProps) {
   return <DisplayedCodeLoginPanel {...props} />;
 }
 
+class AdapterLoginConflictError extends Error {
+  constructor(readonly sessionId: string) {
+    super("Another sign-in attempt is active. Finish or cancel that attempt before starting a new sign-in.");
+  }
+}
+
 function DisplayedCodeLoginPanel({
   companyId,
   adapterType,
@@ -2444,7 +2452,7 @@ function DisplayedCodeLoginPanel({
       try {
         const active = await agentsApi.getActiveAdapterAuthLoginSession(companyId, adapterType);
         if (!active) return null;
-        if ((aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new Error(t("app.agents.config.login.anotherAttemptActive"));
+        if ((aiConnection && active.environmentId !== environmentId) || Boolean(active.aiConnection) !== Boolean(aiConnection) || (aiConnection && (active.aiConnection?.provider !== aiConnection.provider || active.aiConnection?.method !== aiConnection.method || active.aiConnection?.connectionId !== aiConnection.connectionId || active.aiConnection?.ownership !== aiConnection.ownership || active.aiConnection?.allAgents !== aiConnection.allAgents || JSON.stringify(active.aiConnection?.agentIds) !== JSON.stringify(aiConnection.agentIds)))) throw new AdapterLoginConflictError(active.sessionId);
         return active;
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) return null;
@@ -2550,6 +2558,20 @@ function DisplayedCodeLoginPanel({
   // before the session id lands and start a second login the server would
   // count against the per-owner cap.
   const autoStartedRef = useRef(false);
+  const cancelConflictingLogin = useMutation({
+    mutationFn: async () => {
+      const conflict = activeSessionQuery.error;
+      if (!(conflict instanceof AdapterLoginConflictError)) return;
+      await agentsApi.cancelAdapterAuthLogin(companyId, adapterType, conflict.sessionId);
+    },
+    onSuccess: async () => {
+      autoStartedRef.current = false;
+      resumeAttemptedRef.current = false;
+      setStartError(null);
+      await activeSessionQuery.refetch();
+    },
+    onError: () => setStartError(translateUpstream("app.upstreamSync.couldNotCancelThePreviousSignInRetryBefore")),
+  });
   const startLoginRef = useRef(startLogin.mutate);
   startLoginRef.current = startLogin.mutate;
   useEffect(() => {
@@ -2646,9 +2668,14 @@ function DisplayedCodeLoginPanel({
         mode="displayed_code"
       >
         {startError ? (
-          <p role="alert" className="pl-2 text-xs text-destructive">
-            {startError}
-          </p>
+          <div>
+            <p role="alert" className="pl-2 text-xs text-destructive">{startError}</p>
+            {activeSessionQuery.error instanceof AdapterLoginConflictError && (
+              <Button type="button" variant="outline" disabled={cancelConflictingLogin.isPending}
+                onClick={() => cancelConflictingLogin.mutate()}>
+                {translateUpstream("app.upstreamSync.cancelPreviousSignInAndRetry")}</Button>
+            )}
+          </div>
         ) : failed ? (
           <p role="alert" className="pl-2 text-xs text-destructive">
             {status === "timed_out"

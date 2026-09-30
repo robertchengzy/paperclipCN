@@ -1,218 +1,238 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { MemoryRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { focusManager, QueryClient, QueryClientProvider, QueryObserver } from "@tanstack/react-query";
 import { setUiLanguage } from "@/i18n";
-import { queryKeys } from "@/lib/queryKeys";
-import { useStreamlinedUiEnabled } from "@/hooks/useStreamlinedUiEnabled";
-import { useSignOut } from "@/hooks/useSignOut";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CloudAccessGate } from "./CloudAccessGate";
+import { queryKeys } from "@/lib/queryKeys";
+import { ApiUnavailableError } from "@/api/response";
 
-const api = vi.hoisted(() => ({
-  getSession: vi.fn(), signOut: vi.fn(), health: vi.fn(), settings: vi.fn(), access: vi.fn(), claim: vi.fn(),
+vi.mock("@/lib/router", () => ({
+  useLocation: () => ({ pathname: "/CON/agents/conan/instructions", search: "?tab=edit", hash: "#draft" }),
+  Navigate: ({ to }: { to: string }) => <div data-redirect={to} />,
+  Outlet: () => <textarea aria-label="Instructions" defaultValue="Unsaved instructions" />,
 }));
-vi.mock("@/api/auth", () => ({ authApi: { getSession: api.getSession, signOut: api.signOut } }));
-vi.mock("@/api/instanceSettings", () => ({ instanceSettingsApi: { getExperimental: api.settings } }));
-vi.mock("@/api/health", () => ({ healthApi: { get: api.health } }));
-vi.mock("@/api/access", () => ({ accessApi: { getCurrentBoardAccess: api.access, claimBootstrapAdmin: api.claim } }));
-// Keep the real router; company-prefix resolution is unrelated to the gate.
-vi.mock("@/lib/router", async () => await import("react-router-dom"));
-vi.mock("@/components/AnimatedPaperclipIcon", () => ({ PaperclipLoading: () => <p>Loading</p> }));
-vi.mock("@/components/BootstrapPendingPage", () => ({ BootstrapPendingPage: () => <p>Bootstrap pending</p> }));
+vi.mock("@/components/AnimatedPaperclipIcon", () => ({ PaperclipLoading: () => <div>Loading…</div> }));
+vi.mock("@/components/CloudSignIn", () => ({ CloudSignIn: () => <div>Sign in to Cloud</div> }));
+vi.mock("@/components/BootstrapPendingPage", () => ({ BootstrapPendingPage: () => <div>Set up instance</div> }));
 
-(globalThis as unknown as { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+const responses: Record<string, unknown> = {
+  "/api/health": { status: "ok", deploymentMode: "authenticated", bootstrapStatus: "ready" },
+  "/api/auth/get-session": {
+    session: { id: "session", userId: "user" },
+    user: { id: "user", name: "Operator", email: "operator@example.com", image: null },
+    sentryDsn: null,
+  },
+  "/api/cli-auth/me": { isInstanceAdmin: false, companyIds: ["company"] },
+};
+const checks = [
+  ["/api/health", queryKeys.health],
+  ["/api/auth/get-session", queryKeys.auth.session],
+  ["/api/cli-auth/me", queryKeys.access.currentBoardAccess],
+] as const;
 
-type Session = { session: { id: string; userId: string }; user: { id: string; name: string } } | null;
-const accountA: Session = { session: { id: "a", userId: "a" }, user: { id: "a", name: "Account A" } };
-const accountB: Session = { session: { id: "b", userId: "b" }, user: { id: "b", name: "Account B" } };
-const health = { status: "ok", deploymentMode: "authenticated", bootstrapStatus: "ready" };
-const access = { isInstanceAdmin: true, companyIds: ["company-a"] };
-
-function deferred<T>() {
-  let resolve!: (value: T) => void;
-  let reject!: (error: Error) => void;
-  const promise = new Promise<T>((res, rej) => { resolve = res; reject = rej; });
-  return { promise, resolve, reject };
-}
-
-function GateWithLayoutSettings() {
-  const { loaded } = useStreamlinedUiEnabled();
-  return <CloudAccessGate contentReady={loaded} />;
-}
-
-function ProtectedPage() {
-  const signOut = useSignOut();
-  return <><p>Protected content</p><button onClick={() => signOut.mutate()}>Sign out</button>{signOut.error?.message}</>;
-}
-
-function LoginPage() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  return <><p>Login page</p><span>{location.search}</span><button onClick={() => navigate("/ACME/issues?tab=active")}>Return</button></>;
-}
-
-describe("CloudAccessGate sign-out integration", () => {
-  let host: HTMLDivElement;
+describe("CloudAccessGate restart recovery", () => {
   let root: Root;
+  let container: HTMLDivElement;
   let client: QueryClient;
+  let failingPath: string | null;
+  let failure: () => Response;
+  const fetchMock = vi.fn();
 
-  beforeEach(async () => {
-    await setUiLanguage("en");
-    vi.resetAllMocks();
-    host = document.createElement("div");
-    document.body.appendChild(host);
-    root = createRoot(host);
+  beforeEach(() => {
+    vi.useFakeTimers();
+    failingPath = null;
+    failure = () => new Response("<!doctype html><h1>Restarting</h1>", { status: 200 });
+    fetchMock.mockImplementation(async (path: string) => {
+      if (path === failingPath) return failure();
+      if (!(path in responses)) throw new Error(`Unexpected request: ${path}`);
+      return Response.json(responses[path]);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    container = document.createElement("div");
+    document.body.append(container);
+    root = createRoot(container);
     client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } });
-    api.health.mockResolvedValue(health);
-    api.settings.mockResolvedValue({ enableStreamlinedUi: true });
-    client.setQueryData(queryKeys.instance.experimentalSettings, { enableStreamlinedUi: true });
-    api.getSession.mockResolvedValue(accountA);
-    api.access.mockResolvedValue(access);
-    api.signOut.mockResolvedValue({ success: true });
-    client.setQueryData(queryKeys.health, health);
-    client.setQueryData(queryKeys.auth.session, accountA);
-    client.setQueryData(queryKeys.access.currentBoardAccess, access);
-    client.setQueryData(queryKeys.issues.list("company-a"), [{ id: "private-a" }]);
   });
 
-  afterEach(async () => {
-    await act(async () => root.unmount());
+  afterEach(() => {
+    flushSync(() => root.unmount());
     client.clear();
-    host.remove();
+    focusManager.setFocused(undefined);
+    container.remove();
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
   });
+
+  async function flushReact() {
+    await vi.advanceTimersByTimeAsync(20);
+    flushSync(() => {});
+  }
 
   async function render() {
-    await act(async () => root.render(
-      <QueryClientProvider client={client}>
-        <MemoryRouter initialEntries={["/ACME/issues?tab=active"]}>
-          <Routes>
-            <Route path="/auth" element={<LoginPage />} />
-            <Route element={<GateWithLayoutSettings />}>
-              <Route path="/ACME/issues" element={<ProtectedPage />} />
-            </Route>
-          </Routes>
-        </MemoryRouter>
-      </QueryClientProvider>,
-    ));
+    flushSync(() => root.render(<QueryClientProvider client={client}><CloudAccessGate /></QueryClientProvider>));
+    await flushReact();
   }
 
-  async function click(label: string) {
-    const button = Array.from(host.querySelectorAll("button")).find((el) => el.textContent === label);
-    expect(button).toBeDefined();
-    await act(async () => button!.click());
-  }
-
-  async function expectText(text: string) {
-    await vi.waitFor(async () => {
-      // Flush each notification turn before asserting, rather than holding an
-      // act scope open while waiting for a router update that it batches.
-      await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
-      expect(host.textContent).toContain(text);
-    });
-  }
-
-  it.each(["access-first", "session-first"])("reaches login despite a late access failure (%s)", async (order) => {
-    const session = deferred<Session>();
-    const board = deferred<typeof access>();
-    api.getSession.mockReturnValue(session.promise);
-    api.access.mockReturnValue(board.promise);
+  it.each(checks)("recovers from an HTML response on %s without navigating", async (path) => {
+    failingPath = path;
     await render();
-    await click("Sign out");
-    await vi.waitFor(() => expect(api.getSession).toHaveBeenCalledOnce());
-    await vi.waitFor(() => expect(api.access).toHaveBeenCalledOnce());
-    if (order === "access-first") {
-      await act(async () => board.reject(new Error("Board authentication required")));
-      await act(async () => session.resolve(null));
-    } else {
-      await act(async () => session.resolve(null));
-      await expectText("Login page");
-      await act(async () => board.reject(new Error("Board authentication required")));
-    }
-    await expectText("Login page");
-    expect(host.textContent).toContain("?next=%2FACME%2Fissues%3Ftab%3Dactive");
-    expect(host.textContent).not.toContain("Board authentication required");
-    expect(host.textContent).not.toContain("Protected content");
-    expect(client.getQueryData(queryKeys.issues.list("company-a"))).toBeUndefined();
-    expect(client.getQueryData(queryKeys.auth.session)).toBeNull();
+    expect(container.textContent).toContain("Reconnecting to Paperclip");
+    expect(container.textContent).not.toContain("Unexpected token");
+    expect(container.querySelector("[data-redirect]")).toBeNull();
+    expect(container.querySelector("textarea")).toBeNull();
+    const callsBeforeRetry = fetchMock.mock.calls.filter(([url]) => url === path).length;
+    await vi.advanceTimersByTimeAsync(4_000);
+    expect(fetchMock.mock.calls.filter(([url]) => url === path)).toHaveLength(callsBeforeRetry);
 
-    // A new account must not inherit A's permissions, cached data or errors.
-    api.getSession.mockResolvedValue(accountB);
-    api.access.mockResolvedValue({ ...access, companyIds: ["company-b"] });
-    await act(async () => { await client.fetchQuery({ queryKey: queryKeys.auth.session, queryFn: api.getSession, staleTime: 0 }); });
-    await click("Return");
-    await expectText("Protected content");
-    expect(client.getQueryData(queryKeys.auth.session)).toEqual(accountB);
-    expect(client.getQueryData(queryKeys.access.currentBoardAccess)).toEqual({ ...access, companyIds: ["company-b"] });
-    expect(client.getQueryData(queryKeys.issues.list("company-a"))).toBeUndefined();
+    failingPath = null;
+    await vi.advanceTimersByTimeAsync(1_100);
+    await flushReact();
+    expect(container.querySelector("textarea")).not.toBeNull();
+    expect(container.textContent).not.toContain("Reconnecting");
+    const callsAfterRecovery = fetchMock.mock.calls.length;
+    await vi.advanceTimersByTimeAsync(15_000);
+    expect(fetchMock).toHaveBeenCalledTimes(callsAfterRecovery);
+    expect(fetchMock.mock.calls.every(([, init]) => !init.method || init.method === "GET")).toBe(true);
   });
 
-  it("redirects after sign-out while the layout settings refetch stays pending", async () => {
-    api.settings.mockReturnValue(new Promise(() => {}));
-    api.getSession.mockResolvedValue(null);
-    api.access.mockRejectedValue(new Error("Board authentication required"));
+  it.each(checks)("preserves a mounted editor through an outage on %s", async (path, queryKey) => {
     await render();
-    await click("Sign out");
-    await expectText("Login page");
-    expect(api.settings).toHaveBeenCalledOnce();
-    expect(host.textContent).not.toContain("Protected content");
+    const editor = container.querySelector("textarea")!;
+    editor.value = "Keep my unsaved changes";
+    failingPath = path;
+    failure = () => new Response("Bad gateway", { status: 502 });
+    await client.refetchQueries({ queryKey });
+    await flushReact();
+    expect(container.querySelector("textarea")).toBe(editor);
+    expect(editor.value).toBe("Keep my unsaved changes");
+    expect(container.textContent).toContain("Reconnecting automatically");
+
+    failingPath = null;
+    await vi.advanceTimersByTimeAsync(5_100);
+    await flushReact();
+    expect(container.querySelector("textarea")).toBe(editor);
+    expect(editor.value).toBe("Keep my unsaved changes");
+    expect(container.textContent).not.toContain("Reconnecting");
   });
 
-  it("waits for layout settings before mounting authenticated content", async () => {
-    client.removeQueries({ queryKey: queryKeys.instance.experimentalSettings });
-    const settings = deferred<{ enableStreamlinedUi: boolean }>();
-    api.settings.mockReturnValue(settings.promise);
+  it.each(checks)("keeps retrying %s while the tab is hidden", async (path) => {
+    focusManager.setFocused(false);
+    failingPath = path;
     await render();
-    expect(host.textContent).toContain("Loading");
-    expect(host.textContent).not.toContain("Protected content");
-    await act(async () => settings.resolve({ enableStreamlinedUi: false }));
-    await expectText("Protected content");
+    expect(container.textContent).toContain("Reconnecting to Paperclip");
+    failingPath = null;
+    await vi.advanceTimersByTimeAsync(5_100);
+    await flushReact();
+    expect(container.querySelector("textarea")).not.toBeNull();
   });
 
-  it("keeps an authenticated account and its data when sign-out fails", async () => {
-    api.signOut.mockRejectedValue(new Error("Sign-out request failed"));
+  it("waits for ready health before opening the board even when access checks succeed", async () => {
+    failingPath = "/api/health";
+    failure = () => Response.json({ status: "starting", deploymentMode: "authenticated", bootstrapStatus: "ready" });
     await render();
-    await click("Sign out");
-    await expectText("Sign-out request failed");
-    expect(host.textContent).toContain("Protected content");
-    expect(host.textContent).not.toContain("Login page");
-    expect(client.getQueryData(queryKeys.auth.session)).toEqual(accountA);
-    expect(client.getQueryData(queryKeys.issues.list("company-a"))).toEqual([{ id: "private-a" }]);
+    expect(container.querySelector("textarea")).toBeNull();
+    expect(container.textContent).toContain("Reconnecting");
+    expect(fetchMock.mock.calls.map(([path]) => path)).toEqual(checks.map(([path]) => path));
+    await vi.advanceTimersByTimeAsync(5_100);
+    expect(container.querySelector("textarea")).toBeNull();
+    failingPath = null;
+    await vi.advanceTimersByTimeAsync(5_100);
+    await flushReact();
+    expect(container.querySelector("textarea")).not.toBeNull();
+    expect(container.textContent).not.toContain("Reconnecting");
   });
 
-  it("still surfaces access errors for a signed-in account", async () => {
-    client.removeQueries({ queryKey: queryKeys.access.currentBoardAccess });
-    api.access.mockRejectedValue(new Error("Access service unavailable"));
+  it("supports manual retry while startup health is pending", async () => {
+    fetchMock.mockResolvedValueOnce(Response.json({ status: "starting", deploymentMode: "local_trusted" }));
     await render();
-    await expectText("Access service unavailable");
-    expect(host.textContent).not.toContain("Login page");
+    expect(container.querySelector("textarea")).toBeNull();
+    container.querySelector("button")!.click();
+    await flushReact();
+    expect(container.querySelector("textarea")).not.toBeNull();
   });
 
-  it("still shows the no-membership page for a signed-in nonmember", async () => {
-    client.setQueryData(queryKeys.access.currentBoardAccess, { isInstanceAdmin: false, companyIds: [] });
+  it("preserves an open editor while health reports startup recovery", async () => {
     await render();
-    expect(host.textContent).not.toContain("Protected content");
-    expect(host.textContent).not.toContain("Login page");
-    expect(host.textContent).toContain("organization");
+    const editor = container.querySelector("textarea")!;
+    editor.value = "Keep my unsaved changes";
+    fetchMock.mockResolvedValueOnce(Response.json({
+      status: "starting", deploymentMode: "authenticated", bootstrapStatus: "ready",
+    }));
+    await client.refetchQueries({ queryKey: queryKeys.health });
+    await flushReact();
+    expect(container.querySelector("textarea")).toBe(editor);
+    expect(container.textContent).toContain("Reconnecting automatically");
+    await vi.advanceTimersByTimeAsync(5_100);
+    await flushReact();
+    expect(container.querySelector("textarea")).toBe(editor);
+    expect(editor.value).toBe("Keep my unsaved changes");
+    expect(container.textContent).not.toContain("Reconnecting");
   });
 
-  it("keeps bootstrap ahead of login even with an old access error", async () => {
-    client.setQueryData(queryKeys.health, { ...health, bootstrapStatus: "bootstrap_pending" });
-    client.setQueryData(queryKeys.auth.session, null);
-    api.access.mockRejectedValue(new Error("Board authentication required"));
-    await client.fetchQuery({ queryKey: queryKeys.access.currentBoardAccess, queryFn: api.access, staleTime: 0 }).catch(() => {});
+  it("offers immediate retry while waiting for the next automatic check", async () => {
+    failingPath = "/api/health";
     await render();
-    expect(host.textContent).toContain("Bootstrap pending");
-    expect(host.textContent).not.toContain("Board authentication required");
+    failingPath = null;
+    container.querySelector("button")!.click();
+    await flushReact();
+    expect(container.querySelector("textarea")).not.toBeNull();
   });
 
-  it("ignores old account-access errors in local trusted mode", async () => {
-    client.setQueryData(queryKeys.health, { ...health, deploymentMode: "local_trusted" });
-    api.access.mockRejectedValue(new Error("Board authentication required"));
-    await client.fetchQuery({ queryKey: queryKeys.access.currentBoardAccess, queryFn: api.access, staleTime: 0 }).catch(() => {});
+  it("retries a dropped connection and opens the requested page when it returns", async () => {
+    fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"));
     await render();
-    expect(host.textContent).toContain("Protected content");
+    expect(container.textContent).toContain("Reconnecting to Paperclip");
+    await vi.advanceTimersByTimeAsync(5_100);
+    await flushReact();
+    expect(container.querySelector("textarea")).not.toBeNull();
+    expect(container.querySelector("[data-redirect]")).toBeNull();
+  });
+
+  it("refreshes other failed reads after access checks recover", async () => {
+    const read = vi.fn().mockRejectedValueOnce(new ApiUnavailableError(503)).mockResolvedValue([]);
+    const observer = new QueryObserver(client, { queryKey: ["companies", "test"], queryFn: read, retry: false });
+    const unsubscribe = observer.subscribe(() => {});
+    failingPath = "/api/health";
+    await render();
+    expect(read).toHaveBeenCalledTimes(1);
+    failingPath = null;
+    await vi.advanceTimersByTimeAsync(5_100);
+    await flushReact();
+    expect(read).toHaveBeenCalledTimes(2);
+    expect(observer.getCurrentResult().data).toEqual([]);
+    unsubscribe();
+  });
+
+  it("fails closed for access denials even with cached access, and does not poll", async () => {
+    await render();
+    failingPath = "/api/cli-auth/me";
+    failure = () => Response.json({ error: "Forbidden" }, { status: 403 });
+    await client.refetchQueries({ queryKey: queryKeys.access.currentBoardAccess });
+    await flushReact();
+    expect(container.textContent).toContain("Unable to load Paperclip");
+    expect(container.textContent).not.toContain("reconnect automatically");
+    expect(container.querySelector("textarea")).toBeNull();
+    const calls = fetchMock.mock.calls.length;
+    await vi.advanceTimersByTimeAsync(15_000);
+    expect(fetchMock).toHaveBeenCalledTimes(calls);
+    failingPath = null;
+    container.querySelector("button")!.click();
+    await flushReact();
+    expect(container.querySelector("textarea")).not.toBeNull();
+  });
+
+  it("still redirects to sign-in when the session expires", async () => {
+    await render();
+    failingPath = "/api/auth/get-session";
+    failure = () => Response.json({ error: "unauthorized" }, { status: 401 });
+    await client.refetchQueries({ queryKey: queryKeys.auth.session });
+    await flushReact();
+    expect(container.querySelector("textarea")).toBeNull();
+    expect(container.querySelector("[data-redirect]")?.getAttribute("data-redirect"))
+      .toBe("/auth?next=%2FCON%2Fagents%2Fconan%2Finstructions%3Ftab%3Dedit");
   });
 });

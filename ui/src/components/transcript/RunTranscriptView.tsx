@@ -1,3 +1,4 @@
+import { t as translateUpstream } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { TranscriptEntry } from "../../adapters";
 import type { ToolRunDecision } from "@paperclipai/shared";
@@ -606,7 +607,7 @@ export function normalizeTranscript(entries: TranscriptEntry[], streaming: boole
       blocks.push({
         type: "event",
         ts: entry.ts,
-        label: entry.complete ? "workspace diff" : "workspace changes",
+        label: entry.complete ? translateUpstream("app.taskChat.runTranscriptView.workspaceDiffLabel") : translateUpstream("app.taskChat.runTranscriptView.workspaceChangesLabel"),
         tone: "info",
         text: entry.totals.files === 1
           ? translate("app.taskChat.runTranscriptView.oneChangedFile")
@@ -889,6 +890,7 @@ function TranscriptProviderActivity({ block, density }: { block: Extract<Transcr
       {children.length > 0 ? <ul className="space-y-1">{children.map((child, index) => <li key={String(child.childId ?? index)}><strong>{String(child.role ?? t("app.taskChat.runTranscriptView.childAgent"))}</strong> · {String(child.status ?? "unknown")}<div className="text-muted-foreground">{String(child.summary ?? "")}</div></li>)}</ul> : null}
       {sources.length > 0 ? <ul className="space-y-1">{sources.map((source, index) => { const url = typeof source.url === "string" && /^https?:\/\//.test(source.url) ? source.url : null; return <li key={String(source.sourceId ?? index)}>{url ? <a className="underline" href={url} target="_blank" rel="noreferrer">{String(source.title ?? url)}</a> : String(source.title ?? t("app.taskChat.runTranscriptView.unavailableSource"))} <span className="text-muted-foreground">{t("app.taskChat.runTranscriptView.providerReported")}</span></li>; })}</ul> : null}
       {output ? <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded bg-background p-2 font-mono">{output}</pre> : null}
+      {block.family === "provider_notice" && Array.isArray(block.payload.details) ? <dl className="space-y-1">{block.payload.details.slice(0, 64).map((value, index) => { const detail = asRecord(value); return detail && typeof detail.name === "string" && typeof detail.value === "string" ? <div key={index}><dt className="text-muted-foreground">{detail.name}</dt><dd className="whitespace-pre-wrap break-words">{detail.value}</dd></div> : null; })}</dl> : null}
       {block.family === "model_identity" ? <div><span className="text-muted-foreground">{t("app.taskChat.runTranscriptView.requested")}</span> {String(block.payload.requestedModel ?? "—")} · <span className="text-muted-foreground">{t("app.taskChat.runTranscriptView.effective")}</span> {String(block.payload.effectiveModel ?? "—")}</div> : null}
     </div> : null}
   </div>;

@@ -277,6 +277,7 @@ export function AgentBasicsDialog({
                     >
                       <option value="codex">{t("app.agentSetup.basics.runnerCodex")}</option>
                       <option value="claude">{t("app.agentSetup.basics.runnerClaude")}</option>
+                      <option value="grok">Grok Build (ACPX)</option>
                       <option value="opencode">OpenCode</option>
                     </ConfigSelect>
                   </label>

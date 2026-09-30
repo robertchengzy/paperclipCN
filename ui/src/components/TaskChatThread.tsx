@@ -1,3 +1,4 @@
+import { t as translateUpstream } from "@/i18n";
 import { hasWorkspaceRestoreFailure } from "@paperclipai/shared";
 import { workspaceRestoreMarkerDetail } from "@/lib/workspace-restore-marker";
 import type { ActivityEvent } from "@paperclipai/shared";
@@ -87,6 +88,7 @@ import {
   taskChatContentKey,
 } from "@/components/task-chat/TaskChatThreadView";
 import { TaskChatComposer } from "@/components/task-chat/TaskChatComposer";
+import { TaskChatComposerDock } from "@/components/task-chat/TaskChatComposerDock";
 import {
   RunnerGoalWidget,
   useRunnerGoalControl,
@@ -512,6 +514,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
     conversationMode,
     reassignOptions,
     currentAssigneeValue,
+    assigneeAdapterOverrides,
     issueStatus,
     issueAssigneeAgentId = null,
     onAcceptInteraction,
@@ -1486,7 +1489,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             item: {
               id, kind: "marker", variant: "interrupted", tone: "neutral",
-              label: "Waiting to resume",
+              label: translateUpstream("app.reviewMarkers.waitingToResume"),
               detail: translate("app.taskChat.taskChatThread.waitingToResume.detail"),
             },
           });
@@ -1572,16 +1575,16 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             : "native_runner_process_exited");
         const label =
           code === "native_provider_approval_required" && source.status === "failed"
-            ? "Approval required"
+            ? translateUpstream("app.reviewMarkers.approvalRequired")
             : code === "native_provider_usage_limit" && source.status === "failed"
-            ? "Usage limit reached"
+            ? translateUpstream("app.reviewMarkers.usageLimitReached")
             : source.status === "cancelled"
-              ? "Run cancelled"
+              ? translateUpstream("app.reviewMarkers.runCancelled")
               : source.status === "interrupted"
-                ? "Run interrupted"
+                ? translateUpstream("app.reviewMarkers.runInterrupted")
                 : source.status === "timed_out"
-                  ? "Run timed out"
-                  : "Run failed";
+                  ? translateUpstream("app.reviewMarkers.runTimedOut")
+                  : translateUpstream("app.reviewMarkers.runFailed");
         const afterResponse = sourceHasNativeResponse;
         const detail =
           source.status === "cancelled"
@@ -1676,7 +1679,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "interrupted",
-            label: restoreFailed ? translate("app.taskChat.taskChatThread.workspaceRestoreFailed") : source.status === "cancelled" ? (meta?.startedAt ? "Stopped" : "Couldn't start") : "Run failed",
+            label: restoreFailed ? translate("app.taskChat.taskChatThread.workspaceRestoreFailed") : source.status === "cancelled" ? (meta?.startedAt ? translateUpstream("app.dispositionRecovery.details.stopped") : translateUpstream("app.reviewMarkers.couldNotStart")) : translateUpstream("app.reviewMarkers.runFailed"),
             runId: source.status === "cancelled" ? undefined : source.id,
             ...(restoreFailed ? {
               retryable: meta?.resultJson?.workspaceRestoreFailure !== "restore_unsafe_archive",
@@ -1750,7 +1753,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
               id,
               kind: "marker",
               variant: "turn_boundary",
-              label: source.status === "cancelled" ? "Stopped" : "Run completed",
+              label: source.status === "cancelled" ? translateUpstream("app.dispositionRecovery.details.stopped") : translateUpstream("app.reviewMarkers.runCompleted"),
               detail: source.status === "cancelled" ? translate("app.taskChat.taskChatThread.turnCancelled") : translate("app.taskChat.taskChatThread.noUserFacingResponse"),
             },
           });
@@ -1782,7 +1785,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             id,
             kind: "marker",
             variant: "turn_boundary",
-            label: "Run completed",
+            label: translateUpstream("app.reviewMarkers.runCompleted"),
             detail: translate("app.taskChat.taskChatThread.noUserFacingResponse"),
           },
         });
@@ -2990,28 +2993,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
               </div>
             ) : null}
             {showComposer ? (
-              <div
-                data-testid="task-chat-composer-dock"
-                className={cn(
-                  "sticky",
-                  // Mobile mirrors the flag-off thread's dock: lifted above the
-                  // safe-area inset and clear of the auto-hiding bottom nav, above
-                  // page content in the document-flow stacking context. The bottom
-                  // offset (--tc-composer-bottom) tracks the nav: Layout raises it to
-                  // the nav height while the nav is visible so the composer's action
-                  // row is never occluded, and drops it back to the safe-area dock
-                  // when the nav auto-hides (PAP-495). transition-[bottom] rides the
-                  // nav's own 200ms slide; the offset only changes on nav toggles, so
-                  // it never animates mid-scroll.
-                  isMobile
-                    ? "bottom-(--tc-composer-bottom) z-20 transition-[bottom] duration-200 ease-out"
-                    : "bottom-0 z-10",
-                  "mx-auto flex w-full max-w-(--tc-shell-max-w) flex-col gap-2 px-1 pb-1 md:px-4 md:pb-2",
-                  streamlinedUiEnabled && "md:px-0 md:pb-0",
-                  (!streamlinedUiEnabled || isMobile) &&
-                    "bg-background/80 pt-1 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:bg-transparent dark:backdrop-blur-none dark:supports-[backdrop-filter]:bg-transparent",
-                )}
-              >
+              <TaskChatComposerDock mobile={isMobile} streamlined={streamlinedUiEnabled}>
                 {composerAccessory}
                 {tailTurnStatus ? (
                   <TaskChatTurnStatusIsland model={tailTurnStatus} />
@@ -3084,8 +3066,11 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                       conversationMode={conversationMode}
                       reassignOptions={reassignOptions}
                       agentMap={agentMap}
+                      modelAgents={agentMap}
                       userProfileMap={userProfileMap}
                       currentAssigneeValue={currentAssigneeValue}
+                      companyId={companyId}
+                      assigneeAdapterOverrides={assigneeAdapterOverrides}
                       onPendingAssigneeChange={setPendingComposerAssignee}
                       issueStatus={issueStatus}
                       mobile={isMobile}
@@ -3111,7 +3096,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
                   </div>
                 </div>
                 {footer}
-              </div>
+              </TaskChatComposerDock>
             ) : null}
           </div>
         </TaskChatPresentationProvider>
