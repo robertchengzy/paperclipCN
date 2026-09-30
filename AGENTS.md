@@ -157,9 +157,9 @@ Notes:
 
 Default to verification based on the actual diff and its consumers. Run the smallest relevant checks first; expand only when a failure or an unbounded dependency justifies it. `pnpm test` is an alias for the full suite, not a cheap default.
 
-Use [Verification scope](doc/DEVELOPING.md#verification-scope) to select checks. Documentation-only changes need link checks and `git diff --check`. Copy/theme work normally needs locale/token checks, affected UI tests and a focused browser check. A small upstream sync needs review of the new commits and tests for their affected behavior.
+Use [Verification scope](doc/DEVELOPING.md#verification-scope) to select checks. Documentation-only changes need link checks and `git diff --check`. Copy/theme work normally needs locale/token checks, affected UI tests and a focused browser check. Upstream synchronization reuses upstream validation. Test only merge conflict resolutions and fork-specific integration changes; do not rerun tests for unconflicted upstream code.
 
-Start repo-wide tests only when the user explicitly requests them, or when a broad shared-contract, core runtime/security, dependency/toolchain, or upstream integration change cannot be covered with a clearly bounded set of affected tests. First explain the concrete reason, scope and expected cost; this is a progress update, not a new approval gate. Merging, pushing, deploying, or having many translated strings does not itself require the full suite.
+Start repo-wide tests only when the user explicitly requests them, or when a broad local shared-contract, core runtime/security, or dependency/toolchain change cannot be covered with a clearly bounded set of affected tests. First explain the concrete reason, scope and expected cost; this is a progress update, not a new approval gate. Merging, pushing, deploying, or having many translated strings does not itself require the full suite.
 
 When full coverage is justified, use:
 

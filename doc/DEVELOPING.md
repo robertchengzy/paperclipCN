@@ -86,10 +86,10 @@ Choose checks from the diff and the behavior it can affect. Run targeted checks 
 | Chinese copy, labels or theme controls | Locale/key/interpolation/tag and design-token checks; affected component/formatting tests; focused browser checks for the changed interaction. |
 | A route, service or adapter | Its unit/integration tests and relevant callers; typecheck the affected package. |
 | A bounded database migration | Migration review, isolated old-schema upgrade, affected reads/writes/authentication, and a verified rollback backup. A migration alone does not mandate every unrelated suite. |
-| Small upstream sync | Review the new commits, retained fork patches, lockfiles and workflows; run tests for the changed behavior. |
+| Upstream sync | Reuse upstream validation; run targeted checks only for merge conflict resolutions and fork-specific integration changes. Review retained patches, lockfiles and workflow gates without rerunning unconflicted upstream code tests. |
 | Deployment | Build a frozen SHA, verify its stamp and database compatibility, then run migration/browser smoke checks as appropriate and production health checks. |
 
-Run repo-wide tests for an explicit user request, or when a broad change to shared contracts, core dispatch/authorization, dependencies/toolchain, or a large upstream integration leaves an impact area that targeted checks cannot bound. Explain that reason and the expected cost before starting. Start with the affected package or layer; do not jump directly from a small UI change to every server suite.
+Run repo-wide tests for an explicit user request, or when a broad local change to shared contracts, core dispatch/authorization, or dependencies/toolchain leaves an impact area that targeted checks cannot bound. Explain that reason and the expected cost before starting. Start with the affected package or layer; do not jump directly from a small UI change to every server suite.
 
 Do not repeat passing checks without new changes or evidence. A documentation-only descendant does not invalidate a frozen runtime build. Keep isolated test state and omit the installed production `paperclipai` wrapper from the test PATH. Preserve Cargo and the normal package-manager tools. Avoid concurrent cold compilation when testing time-bounded initialization.
 
