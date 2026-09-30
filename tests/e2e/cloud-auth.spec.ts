@@ -1,6 +1,13 @@
 import { randomUUID } from "node:crypto";
 import { expect, test } from "@playwright/test";
 
+// These upstream fixtures use English locators; pin their browser language.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("paperclip.ui.language", "en");
+  });
+});
+
 // The tenant UI and task database are real. Cloud is an external dependency:
 // simulate its entry endpoint and independent session states at the HTTP edge.
 for (const cloudOrigin of ["https://my.paperclip.app", "https://my-staging.paperclip.app"]) {

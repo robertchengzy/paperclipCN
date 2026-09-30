@@ -2,6 +2,13 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import { expect, test, type APIRequestContext } from "@playwright/test";
 
+// These upstream fixtures use English locators; pin their browser language.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("paperclip.ui.language", "en");
+  });
+});
+
 async function json(response: Awaited<ReturnType<APIRequestContext["get"]>>) {
   expect(response.ok(), `${response.status()}: ${await response.text()}`).toBe(true);
   return response.json();
