@@ -1002,7 +1002,7 @@
     "newIssue": {
       "newTask": "New task",
       "newSubTask": "New sub-task",
-      "titlePlaceholder": "Task title",
+      "titlePlaceholder": "Task title (optional)",
       "descriptionPlaceholder": "Add description...",
       "for": "For",
       "in": "in",
@@ -3011,7 +3011,8 @@
         "dialogDescription": "Complete connection setup without leaving this task.",
         "updateFailed": "Couldn’t update this connection request.",
         "externalProviderConnected": "External provider connected",
-        "upstreamServiceAuthorize": "{{agent}} can now verify and authorize {{service}} through this provider. The app is not yet verified."
+        "upstreamServiceAuthorize": "{{agent}} can now verify and authorize {{service}} through this provider. The app is not yet verified.",
+        "authenticationRequired": "{{service}} authentication required"
       },
       "providers": {
         "zapier": {
@@ -14204,7 +14205,7 @@
         "connectChannel": "Connect a channel",
         "loading": "Loading channels…",
         "emptyTitle": "No channels connected",
-        "emptyDescription": "Connect AgentMail, Slack, GitHub, Discord, Microsoft Teams, or Telegram from Connectors.",
+        "emptyDescription": "Connect AgentMail, Slack, GitHub Code Review Bot, Discord, Microsoft Teams, or Telegram from Connectors.",
         "openConnectors": "Open Connectors",
         "providerIdentity": "Provider identity",
         "openConnection": "Open connection"
@@ -15051,7 +15052,9 @@
         "runningNamedTool": "Running {{name}}",
         "ranNamedTool": "Ran {{name}}",
         "failedLabel": "{{label}} · failed",
-        "stoppedLabel": "{{label}} · stopped"
+        "stoppedLabel": "{{label}} · stopped",
+        "namingTheTask": "Naming the task",
+        "namedTheTask": "Named the task"
       },
       "taskChatActivityPresentation": {
         "openingAWebPage": "Opening a web page",

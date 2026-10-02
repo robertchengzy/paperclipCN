@@ -44,7 +44,7 @@ function applyObservabilityHeaders(headers: Headers) {
   }
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+export async function requestResponse(path: string, init?: RequestInit): Promise<Response> {
   const headers = new Headers(init?.headers ?? undefined);
   const body = init?.body;
   if (!(body instanceof FormData) && !headers.has("Content-Type")) {
@@ -53,9 +53,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   applyObservabilityHeaders(headers);
 
   const res = await fetch(`${BASE}${path}`, {
-    headers,
     credentials: "include",
     ...init,
+    headers,
   });
   if (!res.ok) {
     const errorBody = await readApiJson(res);
@@ -67,6 +67,11 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       errorBody,
     );
   }
+  return res;
+}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await requestResponse(path, init);
   if (res.status === 204) return undefined as T;
   return readApiJson<T>(res);
 }

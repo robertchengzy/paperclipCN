@@ -221,6 +221,7 @@ const EXACT_ACTIONS: Record<string, ExactAction> = {
   get_workspace_runtime: { action: "read", running: () => t("app.taskChat.toolTaxonomy.readingWorkspaceStatus"), completed: () => t("app.taskChat.toolTaxonomy.readWorkspaceStatus") },
   control_workspace_service: { action: "run", running: () => t("app.taskChat.toolTaxonomy.controllingAWorkspaceService"), completed: () => t("app.taskChat.toolTaxonomy.controlledAWorkspaceService") },
   set_dependencies: { action: "update", running: () => t("app.taskChat.toolTaxonomy.updatingTaskDependencies"), completed: () => t("app.taskChat.toolTaxonomy.updatedTaskDependencies") },
+  set_task_title: { action: "update", running: () => t("app.taskChat.toolTaxonomy.namingTheTask"), completed: () => t("app.taskChat.toolTaxonomy.namedTheTask") },
   create_task: { action: "create", running: () => t("app.taskChat.toolTaxonomy.creatingATask"), completed: () => t("app.taskChat.toolTaxonomy.createdATask") },
   request_approval: { action: "request", running: () => t("app.taskChat.toolTaxonomy.requestingApproval"), completed: () => t("app.taskChat.toolTaxonomy.requestedApproval") },
   decide_approval: { action: "update", running: () => t("app.taskChat.toolTaxonomy.decidingAnApproval"), completed: () => t("app.taskChat.toolTaxonomy.decidedAnApproval") },

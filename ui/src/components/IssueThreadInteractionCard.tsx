@@ -3944,6 +3944,7 @@ export function IssueThreadInteractionCard({
               interaction={interaction}
               currentUserId={currentUserId}
               addresseeLabel={addresseeLabel ?? t("app.issueUi.issueThreadInteractionCard.addressedPerson")}
+              addresseeName={interaction.addresseeUserId ? userLabelMap?.get(interaction.addresseeUserId) : undefined}
             />
           ) : interaction.kind === "request_item_verdicts" ? (
             <RequestItemVerdictsCard

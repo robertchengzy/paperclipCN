@@ -1958,6 +1958,7 @@ export function TaskChatCompactInteractionCard({
           interaction={interaction}
           currentUserId={currentUserId}
           addresseeLabel={addresseeLabel ?? t("app.taskChat.taskChatCompactInteractionCard.addressedUser")}
+          addresseeName={interaction.addresseeUserId ? userLabelMap?.get(interaction.addresseeUserId) : undefined}
         />
       </InteractionShell>
     );

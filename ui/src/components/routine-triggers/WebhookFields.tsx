@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { useTranslation } from "@/i18n";
+import { AgentSetupPrompt } from "@/components/AgentSetupPrompt";
 
 export function CopyField({
   label,
@@ -67,8 +68,6 @@ export function CopyField({
 
 export function AgentInstructions({ value }: { value: string }) {
   const { t } = useTranslation();
-  const [copied, setCopied] = useState(false);
-  const [error, setError] = useState(false);
   return (
     <section
       aria-label={t("app.routines.webhookFields.agentInstructions")}
@@ -80,41 +79,12 @@ export function AgentInstructions({ value }: { value: string }) {
           {t("app.routines.webhookFields.agentInstructionsDescription")}
         </p>
       </div>
-      <Button
-        variant="outline"
-        size="sm"
-        aria-label={t("app.routines.webhookFields.copyForAgent")}
-        onClick={async () => {
-          try {
-            await copyTextToClipboard(value);
-            setCopied(true);
-            setError(false);
-          } catch {
-            setError(true);
-          }
-        }}
-      >
-        {copied ? (
-          <Check className="h-3.5 w-3.5" />
-        ) : (
-          <Copy className="h-3.5 w-3.5" />
-        )}
-        {copied ? t("app.routines.webhookFields.copiedInstructions") : t("app.routines.webhookFields.copyForAgent")}
-      </Button>
-      {error && (
-        <div className="space-y-2">
-          <p role="alert" className="text-xs text-destructive">
-            {t("app.routines.webhookFields.copyFailedInstructions")}
-          </p>
-          <textarea
-            readOnly
-            aria-label={t("app.routines.webhookFields.agentInstructionsText")}
-            value={value}
-            rows={5}
-            className="w-full rounded-md border border-input bg-background p-3 text-sm"
-          />
-        </div>
-      )}
+      <AgentSetupPrompt
+        prompt={value}
+        label={t("app.routines.webhookFields.copyForAgent")}
+        title="Webhook setup"
+        description="Paste this into your agent to connect this webhook to your routine."
+      />
     </section>
   );
 }

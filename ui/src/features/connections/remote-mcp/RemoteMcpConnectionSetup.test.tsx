@@ -19,7 +19,7 @@ const actions: RemoteMcpSetupActions = {
 
 const state: RemoteMcpSetupState = {
   step: "permissions", grantKind: "user", setupComplete: true, url: "", auth: "none",
-  token: "", headers: [], advanced: false, connectStatus: "idle", connected: true,
+  token: "", headers: [], connectStatus: "idle", connected: true,
   identity: null, allAgents: false, agentIds: [], permissions: {},
   tools: [{ id: "tool-1", broad: true } as RemoteMcpSetupState["tools"][number]],
   notice: null, refreshing: false,
@@ -37,6 +37,7 @@ describe("RemoteMcpConnectionSetup external service names", () => {
         const container = document.createElement("div");
         container.innerHTML = renderToStaticMarkup(
           <RemoteMcpConnectionSetup
+            companyId="company-1"
             provider={{ ...remoteMcpProviders.zapier, name }}
             state={state}
             actions={actions}

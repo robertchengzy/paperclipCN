@@ -1002,7 +1002,7 @@
     "newIssue": {
       "newTask": "新建任务",
       "newSubTask": "新建子任务",
-      "titlePlaceholder": "任务标题",
+      "titlePlaceholder": "任务标题（可选）",
       "descriptionPlaceholder": "添加描述…",
       "for": "给",
       "in": "在",
@@ -3011,7 +3011,8 @@
         "dialogDescription": "无需离开此任务即可完成连接设置。",
         "updateFailed": "无法更新此连接请求。",
         "externalProviderConnected": "外部提供方已连接",
-        "upstreamServiceAuthorize": "{{agent}} 现在可以通过此提供方验证并授权 {{service}}。该应用尚未验证。"
+        "upstreamServiceAuthorize": "{{agent}} 现在可以通过此提供方验证并授权 {{service}}。该应用尚未验证。",
+        "authenticationRequired": "{{service}} 需要认证"
       },
       "providers": {
         "zapier": {
@@ -14204,7 +14205,7 @@
         "connectChannel": "连接频道",
         "loading": "正在加载频道…",
         "emptyTitle": "尚未连接频道",
-        "emptyDescription": "可在连接器中连接 AgentMail、Slack、GitHub、Discord、Microsoft Teams 或 Telegram。",
+        "emptyDescription": "在连接器页面接入 AgentMail、Slack、GitHub 代码审查机器人、Discord、Microsoft Teams 或 Telegram。",
         "openConnectors": "打开连接器",
         "providerIdentity": "提供方身份",
         "openConnection": "打开连接"
@@ -15051,7 +15052,9 @@
         "runningNamedTool": "正在运行 {{name}}",
         "ranNamedTool": "已运行 {{name}}",
         "failedLabel": "{{label}} · 失败",
-        "stoppedLabel": "{{label}} · 已停止"
+        "stoppedLabel": "{{label}} · 已停止",
+        "namingTheTask": "正在命名任务",
+        "namedTheTask": "已命名任务"
       },
       "taskChatActivityPresentation": {
         "openingAWebPage": "正在打开网页",

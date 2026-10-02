@@ -1,4 +1,7 @@
+import { t as tr } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
+import { SkillBinaryFile } from "../components/SkillBinaryFile";
+import { SkillSourceProvenance } from "../components/SkillSourceProvenance";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -1484,14 +1487,14 @@ function SkillPane({
             ariaLabel={t("app.skills.skillStudio.skillFiles")}
           />
         </div>
+        <SkillSourceProvenance skill={skill} />
         {readOnly && (
           <div className="flex items-start gap-3 border-b border-border bg-muted/40 px-3 py-2.5 text-xs text-muted-foreground">
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
             <div className="min-w-0 flex-1">
               <p>
-                {skill.editableReason ?? t("app.skills.skillStudio.thisSkillIsReadonlyBecauseItComesFromAn")}
-                {" "}{t("app.skills.skillStudio.makeAnEditableCopyToChangeItTheOriginal")}
-              </p>
+                {skill.metadata?.skillSourceId ? "This skill is synced from GitHub and is read-only." : skill.editableReason ?? t("app.skills.skillStudio.thisSkillIsReadonlyBecauseItComesFromAn")}
+                {" "}{tr("app.skills.skillStudio.makeAnEditableCopyToChangeItTheOriginal")}</p>
               <Button
                 type="button"
                 size="sm"
@@ -1499,7 +1502,7 @@ function SkillPane({
                 onClick={onEditACopy}
               >
                 <GitFork className="mr-1.5 h-3.5 w-3.5" />
-                {t("app.skills.skillStudio.editACopy")}
+                Make a copy
               </Button>
             </div>
           </div>
@@ -1554,7 +1557,7 @@ function SkillPane({
           onPasteCapture={markBodyInteracted}
           onPointerDownCapture={markBodyInteracted}
         >
-          {isMarkdown && markdownBlock ? (
+          {fileQuery.data?.encoding === "base64" ? <SkillBinaryFile file={fileQuery.data} /> : isMarkdown && markdownBlock ? (
             <MarkdownEditor
               key={`body:${selectedFile}`}
               value={markdownBlock.body}
@@ -3467,7 +3470,7 @@ function VersionHistorySheet({
       // Restore = write each file from the chosen version back, then cut a new
       // head version (immutability: never rewrites history).
       for (const file of version.fileInventory) {
-        await companySkillsApi.updateFile(companyId, skillId, file.path, file.content);
+        await companySkillsApi.updateFile(companyId, skillId, file.path, file.content, { encoding: file.encoding, executable: file.executable ?? false });
       }
       return companySkillsApi.createVersion(companyId, skillId, {
         label: `Restore of v${version.revisionNumber}`,
@@ -3482,8 +3485,8 @@ function VersionHistorySheet({
   const left = versions.find((v) => v.id === leftId) ?? null;
   const right = versions.find((v) => v.id === rightId) ?? null;
   const diff = left && right ? buildLineDiff(
-    left.fileInventory.map((f) => `# ${f.path}\n${f.content}`).join("\n\n"),
-    right.fileInventory.map((f) => `# ${f.path}\n${f.content}`).join("\n\n"),
+    left.fileInventory.map((f) => `# ${f.path}${f.executable ? " (executable)" : ""}\n${f.encoding === "base64" ? "[Binary asset]" : f.content}`).join("\n\n"),
+    right.fileInventory.map((f) => `# ${f.path}${f.executable ? " (executable)" : ""}\n${f.encoding === "base64" ? "[Binary asset]" : f.content}`).join("\n\n"),
   ) : null;
 
   return (
@@ -3519,7 +3522,7 @@ function VersionHistorySheet({
                     <Button
                       variant="outline"
                       size="xs"
-                      disabled={restore.isPending}
+                      disabled={restore.isPending || skill.editable === false}
                       onClick={(e) => {
                         e.stopPropagation();
                         restore.mutate(v);

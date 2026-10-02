@@ -1,5 +1,9 @@
 import { i18n as uiI18n } from "@/i18n";
-import { isRetiredComposioConnection, RETIRED_COMPOSIO_MESSAGE } from "@paperclipai/shared";
+import {
+  connectionSetupVerbForApp,
+  isRetiredComposioConnection,
+  RETIRED_COMPOSIO_MESSAGE,
+} from "@paperclipai/shared";
 import { ManagedAiConnectionRow } from "@/components/ai-connections/ManagedAiConnectionDetails";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -24,6 +28,7 @@ import {
   getAppStoreDefinition,
   isToolConnectionAttentionHealth,
   aiSubscriptionNeedsIsolatedLogin,
+  GOOGLE_WORKSPACE_CONNECTOR_PROFILES,
 } from "@paperclipai/shared";
 import { useNavigate } from "@/lib/router";
 import { useChatConnectorsEnabled } from "@/hooks/useChatConnectorsEnabled";
@@ -65,6 +70,7 @@ import { t as translate, useTranslation } from "@/i18n";
 import { AppLogo } from "./AppLogo";
 import {
   appApplicationSourceSlug,
+  appConnectionSourceSlug,
   appDefinitionDarkLogoUrl,
   appDefinitionDescription,
   appDefinitionLogoUrl,
@@ -112,6 +118,13 @@ type ConnectionRemovalTarget = {
   remainingConnectionCount: number;
 
 };
+
+// Temporary, page-only hold until Google OAuth verification is approved.
+// Keep definitions, direct setup/management routes, and runtime access intact.
+// Remove this filter after approval; reviewer instances stay on their pinned build.
+const GOOGLE_CONNECTOR_SLUGS = new Set(
+  Object.values(GOOGLE_WORKSPACE_CONNECTOR_PROFILES).map((profile) => profile.appSlug),
+);
 
 function chatProviderForSlug(slug: string): ChatProvider | null {
   const method = getAppStoreDefinition(slug)?.methods.find(
@@ -252,7 +265,14 @@ function connectorAction(
     };
   }
   if (chatHref) return { label: translate("app.common.actions.connect"), href: chatHref };
-  if (row.entry) return { label: translate("app.common.actions.connect"), href: connectHrefFor(row.entry) };
+  // PAP-659 C4: the card's verb comes from the same four-state resolver the
+  // connect screen uses, so translate("app.common.actions.connect") never turns out to mean "paste a key".
+  if (row.entry) {
+    return {
+      label: connectionSetupVerbForApp(row.entry),
+      href: connectHrefFor(row.entry),
+    };
+  }
   return {
     label: translate("app.common.actions.connect"),
     href: applicationId ? `/apps/app/${applicationId}/permissions` : null,
@@ -393,9 +413,8 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
     ).filter(
       (application) =>
         application.status !== "archived" &&
-        (chatConnectorsEnabled ||
-          (application.type !== "chat" &&
-            application.metadata?.purpose !== "channel")),
+        application.type !== "chat" &&
+        application.metadata?.purpose !== "channel",
     );
     const connectionsByApplicationId = new Map<string, ToolConnection[]>();
     for (const connection of activeConnections) {
@@ -434,47 +453,43 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
         chatEndpoints: [],
       });
     }
-    const nativeChatProviders = [
-      { provider: "imessage-photon", name: "iMessage Photon", description: t("app.apps.browse.imessageDescription") },
+    const nativeChatApps = [
+      { slug: "imessage-photon", name: "iMessage Photon", description: t("app.apps.browse.imessageDescription") },
       {
-        provider: "slack",
+        slug: "slack",
         name: "Slack",
         description: t("app.apps.browse.slackDescription"),
       },
       {
-        provider: "github",
-        name: "GitHub",
-        description: t("app.apps.browse.githubDescription"),
+        slug: "github-code-review-bot",
+        name: "GitHub Code Review Bot",
+        description:
+          "Have an agent review pull requests and respond to GitHub mentions.",
       },
       {
-        provider: "discord",
+        slug: "discord",
         name: "Discord",
         description: t("app.apps.browse.discordDescription"),
       },
       {
-        provider: "microsoft-teams",
+        slug: "microsoft-teams",
         name: "Microsoft Teams",
         description: t("app.apps.browse.teamsDescription"),
       },
       {
-        provider: "telegram",
+        slug: "telegram",
         name: "Telegram",
         description: t("app.apps.browse.telegramDescription"),
       },
     ] as const;
-    for (const item of chatConnectorsEnabled ? nativeChatProviders : []) {
-      if (
-        [...rowsBySlug.values()].some(
-          (row) => chatProviderForSlug(row.slug) === item.provider,
-        )
-      )
-        continue;
-      rowsBySlug.set(item.provider, {
-        key: `native-chat:${item.provider}`,
-        slug: item.provider,
+    for (const item of chatConnectorsEnabled ? nativeChatApps : []) {
+      if (rowsBySlug.has(item.slug)) continue;
+      rowsBySlug.set(item.slug, {
+        key: `native-chat:${item.slug}`,
+        slug: item.slug,
         name: item.name,
         description: item.description,
-        brandKey: item.provider,
+        brandKey: item.slug,
         entry: null,
         applications: [],
         connections: [],
@@ -484,8 +499,18 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
 
     const customRows: ConnectorRowModel[] = [];
     for (const application of activeApplications) {
-      const appConnections =
+      const applicationSlug = appApplicationSourceSlug(application);
+      const savedAppConnections =
         connectionsByApplicationId.get(application.id) ?? [];
+      const appConnections = savedAppConnections.filter(
+        (connection) => !GOOGLE_CONNECTOR_SLUGS.has(appConnectionSourceSlug(connection) ?? ""),
+      );
+      // Hide source-only Google rows, but keep independently identified connectors.
+      if (
+        (!applicationSlug || applicationSlug === "link") &&
+        savedAppConnections.length > 0 &&
+        appConnections.length === 0
+      ) continue;
       const configuredConnectionSlug = appConnections
         .map(
           (connection) =>
@@ -507,7 +532,6 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
             : null,
         )
         .find((value): value is string => Boolean(value));
-      const applicationSlug = appApplicationSourceSlug(application);
       const resolvedSlug =
         applicationSlug &&
         applicationSlug !== "link" &&
@@ -575,6 +599,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
     }
 
     return [...rowsBySlug.values(), ...customRows]
+      .filter((row) => !GOOGLE_CONNECTOR_SLUGS.has(row.slug))
       .map((row) => ({
         ...row,
         connections: [...row.connections].sort(
@@ -863,17 +888,17 @@ export function ConnectorCard({
           {row.chatEndpoints.map((endpoint) => (
             <div
               key={endpoint.id}
-              className="flex flex-wrap items-center gap-3 px-4 py-3"
+              className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-3"
             >
               <div className="min-w-0 flex-1">
                 <button
                   type="button"
-                  className="truncate text-left text-sm font-medium hover:underline"
+                  className="block max-w-full truncate text-left text-sm font-medium hover:underline"
                   onClick={() =>
                     onNavigate(`/apps/chat/${endpoint.id}/settings`)
                   }
                 >
-                  {endpoint.assignedAgentName} · {endpoint.provider === "agentmail" ? t("app.common.labels.email") : t("app.apps.browse.chat")}
+                  {endpoint.assignedAgentName} · {endpoint.provider === "agentmail" ? t("app.common.labels.email") : endpoint.provider === "github" ? "Code review bot" : t("app.apps.browse.chat")}
                 </button>
                 <p className="truncate text-xs text-muted-foreground">
                   {endpoint.providerAccountLabel ??
@@ -881,10 +906,10 @@ export function ConnectorCard({
                     t("app.apps.browse.providerIdentity")}
                 </p>
               </div>
-              <span className="text-xs text-muted-foreground">
-                {endpoint.status.replace(/_/g, " ")}
-              </span>
               <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">
+                  {endpoint.status.replace(/_/g, " ")}
+                </span>
                 {endpoint.status === "draft" ? (
                   <Button
                     size="sm"

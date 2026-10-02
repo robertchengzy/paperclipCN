@@ -102,7 +102,7 @@ export function TaskChatTurn({
         data-testid="task-chat-turn"
         data-settled={item.settled ? "true" : "false"}
       >
-        <div
+        {item.agentName || !item.historical ? <div
           className="flex min-h-8 w-full min-w-0 items-center gap-2 pb-1 pt-1.5 text-sm text-muted-foreground"
           data-testid="task-chat-turn-summary"
           data-turn-position="identity"
@@ -113,10 +113,10 @@ export function TaskChatTurn({
               agentIcon={item.agentIcon} agent={item.agent}
             />
           ) : null}
-          <span className="min-w-0 truncate">
+          {!item.historical ? <span className="min-w-0 truncate">
             {standaloneStatusLabel}
-          </span>
-        </div>
+          </span> : null}
+        </div> : null}
         {item.items.length > 0 ? (
           <div
             className="flex min-w-0 flex-col gap-2 py-1"
@@ -188,7 +188,8 @@ export function TaskChatTurn({
   const folded = (item.settled || parentRow) && !open;
   const SummaryIcon = item.summary.failed ? X : Check;
 
-  const header = item.settled ? (
+  const showSettledHeader = item.settled && (!item.historical || expandable);
+  const header = showSettledHeader ? (
     <button
       type="button"
       onClick={() => setOpen((o) => !o)}
@@ -210,14 +211,12 @@ export function TaskChatTurn({
           </span>
         </>
       ) : null}
-      {!item.standaloneHeader ? (
+      {!item.standaloneHeader && !item.historical ? (
         <SummaryIcon className="h-3.5 w-3.5 shrink-0" />
       ) : null}
       <span>
-        {item.standaloneHeader && item.summary.durationLabel
-          ? item.summary.failed
-            ? t("app.taskChat.taskChatTurn.stoppedFor", { duration: item.summary.durationLabel })
-            : t("app.taskChat.taskChatTurn.workedFor", { duration: item.summary.durationLabel })
+        {item.historical ? t("app.common.nouns.activity") : item.standaloneHeader && item.summary.durationLabel
+          ? settledStatusLabel
           : item.summary.failed
             ? t("app.common.states.stopped")
             : t("app.issueChat.cot.worked")}

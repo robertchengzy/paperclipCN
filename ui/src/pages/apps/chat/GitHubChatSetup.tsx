@@ -129,7 +129,7 @@ export function GitHubChatSetup() {
   useEffect(() => {
     setBreadcrumbs([
       { label: t("app.common.nouns.connectors"), href: "/apps" },
-      { label: t("app.apps.gitHubChatSetup.connectGithubBot") },
+      { label: "GitHub Code Review Bot" },
     ]);
     return () => setBreadcrumbs([]);
   }, [setBreadcrumbs, t]);

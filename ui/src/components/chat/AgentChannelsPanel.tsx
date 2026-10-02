@@ -10,7 +10,7 @@ import { useTranslation } from "@/i18n";
 
 const providerNames: Record<ChatProvider, string> = {
   slack: "Slack",
-  github: "GitHub",
+  github: "GitHub Code Review Bot",
   discord: "Discord",
   "microsoft-teams": "Microsoft Teams",
   telegram: "Telegram",

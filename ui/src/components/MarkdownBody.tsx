@@ -1,7 +1,7 @@
 import { t as translateSync } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import { isValidElement, memo, useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Copy, ExternalLink, WrapText } from "lucide-react";
 import Markdown, { defaultUrlTransform, type Components, type Options } from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -12,6 +12,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useOptionalCompany } from "../context/CompanyContext";
 import { mentionChipInlineStyle, parseMentionChipHref } from "../lib/mention-chips";
 import { issuesApi } from "../api/issues";
+import { getCachedIssueDetail } from "../lib/issueDetailCache";
 import { queryKeys } from "../lib/queryKeys";
 import { parseIssueReferenceFromHref, remarkLinkIssueReferences } from "../lib/issue-reference";
 import { remarkLinkCaseReferences } from "../lib/case-reference";
@@ -115,8 +116,14 @@ function MarkdownIssueLink({
   children: ReactNode;
 }) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const [engaged, setEngaged] = useState(false);
   const { data } = useQuery({
     queryKey: queryKeys.issues.detail(issuePathId),
+    // A transcript can mention dozens of tasks. Their full detail projections
+    // are hover information, not prerequisites for reading this conversation.
+    enabled: engaged,
+    placeholderData: getCachedIssueDetail(queryClient, issuePathId),
     queryFn: () => issuesApi.get(issuePathId),
     staleTime: 60_000,
   });
@@ -130,6 +137,8 @@ function MarkdownIssueLink({
     <Link
       to={`/issues/${identifier}`}
       data-mention-kind="issue"
+      onPointerEnter={() => setEngaged(true)}
+      onFocus={() => setEngaged(true)}
       // Boxless inline mention: the unified status glyph + a regular-weight
       // underlined link, optically centered with the body text.
       className={cn("paperclip-markdown-issue-ref", "font-normal underline")}
