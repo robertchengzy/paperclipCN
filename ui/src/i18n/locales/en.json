@@ -392,7 +392,8 @@
         "resuming": "Resuming…",
         "working": "Working…",
         "updating": "Updating…",
-        "installing": "Installing…"
+        "installing": "Installing…",
+        "starting": "Starting…"
       },
       "labels": {
         "name": "Name",
@@ -580,7 +581,8 @@
     },
     "mobileNav": {
       "home": "Home",
-      "ariaLabel": "Mobile navigation"
+      "ariaLabel": "Mobile navigation",
+      "chat": "Chat"
     },
     "goals": {
       "list": {
@@ -801,7 +803,8 @@
         "inboxZero": "Inbox zero.",
         "noUnread": "No new inbox items.",
         "noRecent": "No recent inbox items.",
-        "noFilterResults": "No inbox items match these filters."
+        "noFilterResults": "No inbox items match these filters.",
+        "selectOrganizationFor": "Select an organization to view {{surface}}."
       },
       "filterFeedback": {
         "liveOnly": "Live runs only — tasks currently connected to an agent run.",
@@ -812,9 +815,11 @@
         "searchPlaceholder": "Search inbox…",
         "group": "Group",
         "sort": "Sort",
-        "columnsTitle": "Choose which inbox columns stay visible",
+        "columnsTitle": "Choose which columns stay visible",
         "disableNesting": "Disable parent-child nesting",
-        "enableNesting": "Enable parent-child nesting"
+        "enableNesting": "Enable parent-child nesting",
+        "surfaceControls": "{{surface}} controls",
+        "searchSurfacePlaceholder": "Search {{surface}}…"
       },
       "tabs": {
         "mine": "Mine",
@@ -1100,8 +1105,8 @@
       "lowTrustAssigneeNote": "Low-trust review agent. It can only act inside its assigned review boundary; task, project, or run policy defines the concrete scope.",
       "discardDraft": "Discard Draft",
       "creating": "Creating...",
-      "createTask": "Create Task",
-      "createSubTask": "Create Sub-Task",
+      "createTask": "Create task",
+      "createSubTask": "Create sub-task",
       "errors": {
         "createFailed": "Failed to create task. Try again."
       },
@@ -1109,7 +1114,8 @@
         "uploadWarningsTitle": "Created {{issueRef}} with upload warnings",
         "uploadWarningsBodyOne": "{{count}} staged file could not be added.",
         "uploadWarningsBodyMany": "{{count}} staged files could not be added.",
-        "openIssue": "Open {{issueRef}}"
+        "openIssue": "Open {{issueRef}}",
+        "created": "Created {{issueRef}}"
       },
       "properties": {
         "copyToClipboard": "Copy {{value}} to clipboard",
@@ -1352,7 +1358,13 @@
           "run": "Run {{id}}"
         }
       },
-      "pausedAssigneeBudgetNote": "<strong>{{name}}</strong> is paused by a budget limit and will not start work on this task until the budget pause is cleared."
+      "pausedAssigneeBudgetNote": "<strong>{{name}}</strong> is paused by a budget limit and will not start work on this task until the budget pause is cleared.",
+      "describeTask": "Describe a task…",
+      "taskTitle": "Task title",
+      "subTaskWorkspaceChange": "This sub-task will no longer use the parent task workspace.",
+      "subTaskWorkspaceChangeWithLabel": "This sub-task will no longer use the parent task workspace ({{label}}).",
+      "worktreeCheckFailed": "Couldn't check the selected worktree. Retry in Worktrees or choose New worktree.",
+      "worktreeUnavailable": "The selected worktree is no longer available. Choose another worktree or start a new one."
     },
     "issues": {
       "page": {
@@ -1750,7 +1762,8 @@
           "noModelDetectedYet": "No model detected yet. Enter a provider/model manually.",
           "noModelsFound": "No models found.",
           "openCodeDiscoveryLocalOnly": "Live OpenCode model discovery only runs for Local environments. Using the curated list and manual entry for {{name}}.",
-          "codexMinimalSearchWarning": "Codex may reject `minimal` thinking when search is enabled."
+          "codexMinimalSearchWarning": "Codex may reject `minimal` thinking when search is enabled.",
+          "loadingModels": "Loading models…"
         },
         "effort": {
           "label": "Thinking effort",
@@ -2122,7 +2135,9 @@
           "processLost": "Process lost",
           "assignmentRecovery": "Assignment recovery",
           "issueContinuationNeeded": "Continuation needed",
-          "maxTurnsContinuation": "Max-turn continuation"
+          "maxTurnsContinuation": "Max-turn continuation",
+          "nativeProviderOverloaded": "Model at capacity",
+          "aiConnectionPoolWait": "Waiting for pool usage to recover"
         },
         "attempt": "Attempt {{attempt}}",
         "continuationScheduled": "Continuation scheduled",
@@ -2136,7 +2151,8 @@
         "automaticRetriesExhausted": "Automatic retries exhausted",
         "manualInterventionRequired": "{{reason}} Manual intervention required.",
         "continuedRun": "Continued run",
-        "retriedRun": "Retried run"
+        "retriedRun": "Retried run",
+        "poolExhausted": "Pool exhausted"
       },
       "recovery": {
         "needed": "Recovery needed",
@@ -2387,7 +2403,9 @@
         "signIn": "Sign in to {{provider}}",
         "useSavedSubscription": "Use saved subscription",
         "useSavedApiKey": "Use saved API key",
-        "connect": "Connect"
+        "connect": "Connect",
+        "connectionType": "Connection type",
+        "advanced": "Advanced"
       },
       "invite": {
         "promptTitle": "Agent onboarding prompt",
@@ -2532,7 +2550,12 @@
           "runs": "runs",
           "costs": "costs",
           "budgets": "budgets"
-        }
+        },
+        "publicKey": "Public key",
+        "publicKeyLoadFailed": "Could not load public key",
+        "copyPublicKey": "Copy public key",
+        "publicKeyNotCreated": "Not created yet",
+        "publicKeyCreatedOnNextRun": "Created automatically on the next managed run"
       },
       "revisions": {
         "title": "Configuration Revisions",
@@ -2903,7 +2926,8 @@
         "notYourDefault": "Not your default",
         "revokeIdentity": "Revoke identity",
         "revokeDescription": "New runs using this account will be blocked. Existing runs may retain credentials already issued to them. No other account will be selected automatically.",
-        "revokeFailed": "Could not revoke this account. Retry."
+        "revokeFailed": "Could not revoke this account. Retry.",
+        "notDefault": "Not default"
       },
       "aiConnectionAuth": {
         "connectProvider": "Connect {{provider}}",
@@ -2938,11 +2962,18 @@
       "aiConnectionField": {
         "incompatible": "This connection does not support the current harness and model. Choose a compatible connection before saving.",
         "adoptTitle": "Adopt Connections for {{agent}}",
-        "adoptDescription": "Saving tests this account in {{agent}}’s environment before replacing its existing authentication. Other agents keep their current configuration.",
+        "adoptDescription": "Saving validates access to the selected connection. Existing sessions keep their account or require an explicit reset before adoption.",
         "responsibleDefault": "Responsible user’s default. For you: {{name}}. Other users use their own default.",
         "adoptionNote": "After adoption, missing credentials block execution. Previous authentication will not be used as a fallback.",
         "useBinding": "Use this binding when saved",
-        "connectAccount": "Connect account"
+        "connectAccount": "Connect account",
+        "usePoolTitle": "Use {{pool}}?",
+        "thisPool": "this pool",
+        "resetSessionsOutsidePool": "Reset existing sessions that use an account outside this pool.",
+        "usePool": "Use pool",
+        "advancedSetupDescription": "Choose a provider connection for this agent.",
+        "reconnectDescription": "Sign in again to repair your current default account. Its agent access stays the same.",
+        "connectDescription": "This account will become your default for this provider. Your tasks will use it; other users keep their own default."
       },
       "aiConnectionPicker": {
         "aiConnection": "AI connection",
@@ -2951,7 +2982,8 @@
         "responsibleConnection": "Responsible user’s connection",
         "forYou": "For you: {{name}}",
         "otherUsers": "Other users’ tasks use their own {{provider}} connection.",
-        "connectAnother": "Connect another account"
+        "connectAnother": "Connect another account",
+        "reconnectAccount": "Reconnect account"
       },
       "managedAiConnectionDetails": {
         "personal": "Personal",
@@ -3012,7 +3044,14 @@
         "updateFailed": "Couldn’t update this connection request.",
         "externalProviderConnected": "External provider connected",
         "upstreamServiceAuthorize": "{{agent}} can now verify and authorize {{service}} through this provider. The app is not yet verified.",
-        "authenticationRequired": "{{service}} authentication required"
+        "authenticationRequired": "{{service}} authentication required",
+        "accessGranted": "{{service}} access granted",
+        "accessDeclined": "Access declined",
+        "useYourAccount": "Use your {{provider}} account",
+        "connectYourAccount": "Connect your {{provider}} account",
+        "readyForAdoptionDescription": "Your account is connected. Use it for {{agent}} to resume this task.",
+        "needsOwnAiDescription": "{{agent}} needs your own AI connection. Connect here and the task will resume automatically.",
+        "emailDescription": "Connect AgentMail to create an email address for this agent."
       },
       "providers": {
         "zapier": {
@@ -3036,7 +3075,7 @@
           "description": "Discover and use your apps through Composio Connect.",
           "instruction1": "Connect to Composio and sign in with your account.",
           "instruction2": "Connect underlying apps in Composio when prompted.",
-          "urlHelp": "Composio Connect is prefilled. For an externally configured session, replace this with its MCP URL and add its supplied headers under Advanced authentication.",
+          "urlHelp": "Paste the MCP URL from your existing Composio session. If it requires headers, add them under Change.",
           "authHelp": "Session URLs and headers come from your external Composio setup. Direct-tools sessions expose individual actions."
         },
         "executor": {
@@ -3115,7 +3154,10 @@
         "draftKept": "Your access choices and setup progress are kept with this connection.",
         "resumeSetup": "Resume setup",
         "connectThroughProvider": "Connect {{service}} through {{provider}}",
-        "upstreamServiceBoundary": "{{provider}} is an external service that handles the connection and requests to {{service}}. After connecting, the agent will verify the app and guide you through any additional authorization."
+        "upstreamServiceBoundary": "{{provider}} handles the connection and requests to {{service}}.",
+        "composioSignInHint": "After connecting this account, sign in to the app in Composio.",
+        "gatewaySignInHint": "Manage app sign-in in the provider, then refresh your gateway here.",
+        "reuseExistingSession": "Reuse an existing session"
       },
       "remoteMcpProductionSetup": {
         "savedCredentialsNotice": "Saved credentials are retained when these fields are left blank. Enter a replacement only to change them.",
@@ -3330,7 +3372,8 @@
         "authorizationIncompleteWindow": "Authorization did not complete. Finish setup in the sign-in window or try again.",
         "openAuthorizationToContinue": "Open authorization in a new tab to continue.",
         "existingCheckFailed": "Paperclip couldn’t check for an existing connection. Try again.",
-        "enableMemoryConnectors": "Enable memory connectors in Settings → Experimental to set up this connection."
+        "enableMemoryConnectors": "Enable memory connectors in Settings → Experimental to set up this connection.",
+        "change": "Change"
       },
       "remoteMcpAccountChoice": {
         "externalServiceNotice": "{{provider}} is an external service that handles the connection and requests to {{service}}. Reusing this account does not yet verify app access; the agent will check it and guide any additional authorization.",
@@ -4047,8 +4090,8 @@
     },
     "tools": {
       "advancedToolsRoute": {
-        "adminOnlyTitle": "Advanced setup is for administrators",
-        "adminOnlyBody": "This area lets administrators wire up tools that aren't in the gallery. Ask an administrator if you need a new app connected, or head back to <anchor>your apps</anchor>."
+        "adminOnlyTitle": "Advanced setup requires editing access",
+        "adminOnlyBody": "This area lets company editors wire up tools that aren't in the gallery. Ask a company editor if you need a new app connected, or head back to <anchor>your apps</anchor>."
       },
       "agentToolsTab": {
         "github": {
@@ -4846,8 +4889,8 @@
         "openDeveloperTools": "Open developer tools"
       },
       "toolsAdminGate": {
-        "adminOnlyTitle": "Access profiles are for administrators",
-        "adminOnlyBody": "Access profiles decide which tools your agents can use. Ask an administrator to set these up, or head back to <anchor>your apps</anchor>."
+        "adminOnlyTitle": "Access profiles require editing access",
+        "adminOnlyBody": "Access profiles decide which tools your agents can use. Ask a company editor to set these up, or head back to <anchor>your apps</anchor>."
       },
       "wizardToolsStep": {
         "loadingTools": "Loading tools…",
@@ -4906,8 +4949,8 @@
     "lib": {
       "useDateRange": {
         "mtd": "Month to Date",
-        "last7Days": "Last 7 Days",
-        "last30Days": "Last 30 Days",
+        "last7Days": "7 Days",
+        "last30Days": "30 Days",
         "ytd": "Year to Date",
         "allTime": "All Time"
       },
@@ -4998,7 +5041,15 @@
           "tagline": "Look up up-to-date docs for your libraries."
         },
         "generic": "Give your agents access to this app.",
-        "yourKey": "Your {{appName}} key"
+        "yourKey": "Your {{appName}} key",
+        "neon": {
+          "tagline": "Manage Postgres projects, branches, and queries.",
+          "short": "Sign in with Neon. Project pinning and read-only mode are optional."
+        },
+        "superagent": {
+          "tagline": "Review security findings and run red-team checks.",
+          "short": "Connect with a Superagent API key. Billable and destructive tools stay under action policies."
+        }
       },
       "attention": {
         "source": {
@@ -7165,7 +7216,8 @@
           "company": "company",
           "agent": "agent",
           "project": "project"
-        }
+        },
+        "accountingIncomplete": "Accounting is incomplete. Known spend is {{observed}}; review pending or unpriced usage in the budget policy."
       },
       "budgetPolicyCard": {
         "lifetimeBudget": "Lifetime budget",
@@ -7174,8 +7226,8 @@
         "noCapConfigured": "No cap configured",
         "remaining": "Remaining",
         "unlimited": "Unlimited",
-        "executionIsPausedForThisProjectUntilTheBudgetIsRaisedOr": "Execution is paused for this project until the budget is raised or the incident is dismissed.",
-        "heartbeatsArePausedForThisScopeUntilTheBudgetIsRaisedOr": "Heartbeats are paused for this scope until the budget is raised or the incident is dismissed.",
+        "executionIsPausedForThisProjectUntilTheBudgetIsRaisedOr": "Execution is paused for this project until the budget block is resolved.",
+        "heartbeatsArePausedForThisScopeUntilTheBudgetIsRaisedOr": "Heartbeats are paused for this scope until the budget block is resolved.",
         "budgetUSD": "Budget (USD)",
         "saving": "Saving...",
         "updateBudget": "Update budget",
@@ -7289,8 +7341,8 @@
       },
       "financeTimelineCard": {
         "recentFinancialEvents": "Recent financial events",
-        "topupsFeesCreditsCommitmentsAndOtherNonrequestCharges": "Top-ups, fees, credits, commitments, and other non-request charges.",
-        "emptyMessage": "No financial events in this period.",
+        "topupsFeesCreditsCommitmentsAndOtherNonrequestCharges": "Provider charges, subscriptions, fees, and credits. Reported separately from run-cost estimates.",
+        "emptyMessage": "No financial events recorded in this period. Events appear when reported through the API, CLI, or a supported integration.",
         "invoice": "invoice {{value}}",
         "region": "region {{value}}",
         "tier": "tier {{value}}",
@@ -7465,7 +7517,29 @@
         "productionScopecompany": "company budgets",
         "productionScopeagent": "agent budgets",
         "productionScopeproject": "project budgets",
-        "usageLabel": "usage"
+        "usageLabel": "usage",
+        "spendIncomplete": "Spend is incomplete: {{unpriced}} usage events have no reliable price; {{pending}} runs await accounting. Known spend is shown below.",
+        "usdOnlyNotice": "Finance headline totals are USD only. Other currencies are listed separately; no exchange-rate conversion is applied.",
+        "spentOfBudgetThisMonth": "{{spent}} of {{budget}} this month",
+        "monthlyLimit": "Monthly limit",
+        "recordedCharges": "Recorded charges",
+        "debitsAmount": "{{amount}} debits",
+        "creditsAmount": "{{amount}} credits",
+        "financialDataUnavailable": "Financial data unavailable",
+        "budgetLoadFailed": "Budget data could not be loaded. Please try again shortly.",
+        "showingLastLoaded": "Showing the last loaded data. Updates will resume automatically.",
+        "includesEstimated": "Includes {{count}} estimated run charges. Token estimates use published rates and recorded assumptions; provider bills may differ.",
+        "budgetUpdateFailed": "Could not update the budget. Check any pending runs or unpriced usage shown on this page, then try again.",
+        "costLoadFailed": "Cost data could not be loaded. Please try again shortly.",
+        "inputCachedOutput": "in {{input}} ({{cached}} cached) · out {{output}}",
+        "runsByBilling": "runs: {{api}} api · {{subscription}} sub",
+        "userCostsRefreshFailed": "User costs could not be refreshed. Showing the last loaded data.",
+        "userCostsLoadFailed": "User costs could not be loaded. Please try again shortly.",
+        "loadingFinancialEvents": "Loading financial events…",
+        "financialEventsLoadFailed": "Financial events could not be loaded. Please try again shortly.",
+        "budgetPolicyUpdateFailed": "Could not update the budget policy. Review your settings and try again.",
+        "providerReports": "Provider API cost reports: {{amount}}. Report totals overlap invoices and run estimates and are shown separately from recorded charges.",
+        "agentCostsLabel": "{{name}} costs"
       },
       "dashboardLive": {
         "liveRuns": "Live runs",
@@ -7937,7 +8011,9 @@
         "yourTime": "{{time}} (your time)",
         "checkNow": "Check now",
         "keepSending": "You can keep sending instructions while the agent waits.",
-        "replyWakes": "Sending a reply wakes the agent now — before the scheduled check."
+        "replyWakes": "Sending a reply wakes the agent now — before the scheduled check.",
+        "checkStatus": "Check status",
+        "reviewOnGitHub": "Review on GitHub, then check status to have the agent verify the result."
       },
       "issuePlanDecompositionsSection": {
         "inFlight": "In flight",
@@ -8327,7 +8403,8 @@
         "promoting": "Promoting scheduled retry",
         "alreadyPromotedStarting": "Already promoted — run starting",
         "promotedStarting": "Promoted — run starting",
-        "retryFailed": "Couldn't retry now"
+        "retryFailed": "Couldn't retry now",
+        "lastAttemptFailedPunctuated": "Last attempt failed: {{error}} Paperclip will retry automatically."
       },
       "issueSiblingNavigation": {
         "ariaLabel": "Sub-task navigation",
@@ -8923,7 +9000,9 @@
         "recentFilesAreTemporarilyUnavailable": "Recent files are temporarily unavailable.",
         "openANewTab": "Open a new tab",
         "revisionNumber": "Revision {{number}}",
-        "totalTasks": "{{count}} total"
+        "totalTasks": "{{count}} total",
+        "agentTasksDescription": "Tasks this agent worked on",
+        "agentArtifactsDescription": "Files this agent produced"
       },
       "useDocumentAnnotationMutations": {
         "you": "You",
@@ -11128,7 +11207,7 @@
     },
     "settings": {
       "adapterLoginChrome": {
-        "preparingSignIn": "Preparing the sign-in",
+        "preparingSignIn": "Preparing sign-in…",
         "copiedBang": "Copied!",
         "copyTheCode": "Copy the code",
         "authorizationCode": "Authorization code",
@@ -11144,7 +11223,9 @@
         "runInTerminal": "Run this in a terminal on that machine and finish signing in in your browser. We’ll check automatically when you return.",
         "copySignInCommand": "Copy sign-in command",
         "startSignInAgain": "Start sign-in again",
-        "checkAgain": "Check again"
+        "checkAgain": "Check again",
+        "preparingBrowserSignIn": "Preparing browser sign-in…",
+        "submitCode": "Submit code"
       },
       "adapterManager": {
         "builtIn": "Built-in",
@@ -11609,8 +11690,8 @@
           },
           "operator": {
             "label": "Operator",
-            "description": "Recommended for people who need to help run work without managing access.",
-            "gets": "Can assign tasks."
+            "description": "Can edit organization work and invite people.",
+            "gets": "Full editing and audit access. Cannot approve join requests or manage member permissions."
           },
           "admin": {
             "label": "Admin",
@@ -11789,7 +11870,8 @@
         "warnings": "Warnings",
         "hint": "Hint: {{hint}}",
         "gatewayUrl": "Gateway URL",
-        "webhookUrl": "Webhook URL"
+        "webhookUrl": "Webhook URL",
+        "loginRequiredConnectProvider": "If login is required, connect the provider above and retry."
       },
       "pluginAppShellOverlays": {
         "applicationExtensions": "Application extensions"
@@ -12176,7 +12258,7 @@
         "cards": {
           "enableAgentChat": {
             "title": "Agent Chat",
-            "description": "Talk to each agent in one ongoing conversation. Clarify goals and create tasks for execution.",
+            "description": "Talk to each agent in one ongoing conversation. Clarify goals and create tasks for execution. Chat leads the Work group and opens an agent rail beside the nav, and each chat's side panel shows the agent's tasks and artifacts as cards.",
             "footnote": "Turning this off preserves conversations and lets active runs finish, but prevents new messages.",
             "ariaLabel": "Toggle agent chat experimental setting"
           },
@@ -12199,7 +12281,7 @@
           "enableChatConnectors": {
             "title": "Chat connectors",
             "description": "Connect agents to Slack, GitHub, Discord, Microsoft Teams, and Telegram conversations.",
-            "footnote": "Turning this off hides chat setup, channels, and connected-task controls. Existing chat connections keep running. GitHub and other tool connectors stay available.",
+            "footnote": "Turning this off hides experimental chat setup and connected-task controls. Existing chat connections keep running. AgentMail, GitHub tools, and other tool connectors stay available.",
             "ariaLabel": "Toggle chat connectors experimental setting"
           },
           "enableConferenceRoomChat": {
@@ -12322,6 +12404,13 @@
             "description": "Connect Mem0, Zep, Supermemory, Cognee, and Honcho for long-term memory and context.",
             "footnote": "Turning this off hides setup for these connectors. Existing connections keep running.",
             "ariaLabel": "Toggle memory connectors experimental setting"
+          },
+          "enablePublicMcp": {
+            "title": "Assistant connections (MCP)",
+            "description": "Connect Codex, Claude, and other assistants to your Paperclip organization. People sign in, select an organization once, and approve access to review work, delegate tasks, and add feedback.",
+            "footnote": "Requires an authenticated instance with a configured public URL. Takes effect immediately. Turning this off blocks assistant calls and event delivery; work already delegated continues.",
+            "setupLink": "Set up an assistant connection",
+            "ariaLabel": "Toggle assistant connections experimental setting"
           }
         },
         "managedByCloud": "Managed by Paperclip Cloud",
@@ -12728,7 +12817,9 @@
         "retryAnyway": "Retry anyway",
         "markDelivered": "Mark delivered",
         "removeTitle": "Remove this connection?",
-        "removeBody": "{{agent}} will stop receiving new work from {{provider}}. Existing Paperclip tasks remain available."
+        "removeBody": "{{agent}} will stop receiving new work from {{provider}}. Existing Paperclip tasks remain available.",
+        "emailConnection": "Email connection",
+        "noEmailConversations": "No email conversations yet. Send an email to this agent’s address to start one."
       },
       "chatEndpointSetup": {
         "steps": {
@@ -13495,7 +13586,8 @@
         "manyActionsAvailable": "{{count}} actions available",
         "loadingMcpActions": "Loading MCP actions, this may take a minute.",
         "loadingTools": "Loading tools…",
-        "couldNotLoadTools": "Couldn’t load tools for this app."
+        "couldNotLoadTools": "Couldn’t load tools for this app.",
+        "composioPermissions": "These permissions apply to all apps available through this Composio connection. Manage app accounts and sign-in in Composio."
       },
       "connections": {
         "retired": "Retired",
@@ -13593,7 +13685,12 @@
         "connectOwnMcpServer": "Connect your own MCP server",
         "connectOwnMcpServerHint": "Enter the URL for a custom or self-hosted MCP server.",
         "pasteConfig": "Paste a config",
-        "pasteConfigHint": "Paste an existing setup snippet and connect it."
+        "pasteConfigHint": "Paste an existing setup snippet and connect it.",
+        "poolConnectionsKept": "The connections in the pool are kept.",
+        "poolConnectionsKeptThis": "The connections in this pool are kept.",
+        "agentmailDescription": "Give agents email inboxes and handle each conversation as a task.",
+        "clearSearch": "Clear search",
+        "removeAggregatorBody": "This removes the saved {{provider}} connection from Paperclip and agents lose access through it. Your apps and accounts remain connected in {{provider}}."
       },
       "testPanel": {
         "testTitle": "Test {{title}}",
@@ -13964,7 +14061,10 @@
       "connectionOwner": {
         "boardMember": "Board member",
         "ownerAppEndingS": "{{owner}}’ {{applicationName}}",
-        "ownerApp": "{{owner}}’s {{applicationName}}"
+        "ownerApp": "{{owner}}’s {{applicationName}}",
+        "assistantConnection": "{{client}} connection",
+        "assistantConnectionOwner": "{{owner}}’s {{client}} connection",
+        "assistantConnectionOwnerEndingS": "{{owner}}’ {{client}} connection"
       },
       "connectClientDialog": {
         "availableThisSession": "Available this session",
@@ -14208,7 +14308,8 @@
         "emptyDescription": "Connect AgentMail, Slack, GitHub Code Review Bot, Discord, Microsoft Teams, or Telegram from Connectors.",
         "openConnectors": "Open Connectors",
         "providerIdentity": "Provider identity",
-        "openConnection": "Open connection"
+        "openConnection": "Open connection",
+        "emptyDescriptionAgentMail": "Connect AgentMail from Connectors."
       },
       "chatSetupNavigation": {
         "connectProvider": "Connect provider",
@@ -14345,7 +14446,9 @@
         "unhealthy": "Unhealthy",
         "oneFile": "{{count}} file",
         "manyFiles": "{{count}} files",
-        "actionLabel": "{{action}}: {{title}}"
+        "actionLabel": "{{action}}: {{title}}",
+        "branch": "Branch",
+        "branchNoRemote": "Branch · no remote link"
       },
       "runnerGoalWidget": {
         "pending": {
@@ -14791,7 +14894,8 @@
         "goalInConversation": "Create a separate task for work that needs an ongoing execution goal.",
         "goalRemoveAttachments": "Remove attachments before using /goal.",
         "goalSelectAgent": "Select an agent before starting a session goal.",
-        "skipFailed": "This request could not be skipped."
+        "skipFailed": "This request could not be skipped.",
+        "submitShortcut": "{{label}} (⌘+Enter)"
       },
       "taskChatThread": {
         "input": {
@@ -14830,12 +14934,14 @@
           "interruptedAfterResponse": "The run was interrupted after returning a final response.",
           "interruptedBeforeAnswer": "The run was interrupted.",
           "approvalRequiredDetail": "This operation requires approval, but this runner has no interactive approval handler. Review the operation and update the agent's permission setting before retrying.",
-          "modelRejectedDetail": "The provider rejected the selected model. Check the model ID and your account's access, save the agent configuration, then retry. View the run for the provider's full error.",
+          "modelRejectedDetail": "{{error}} Choose a supported model or clear the task's model override, then retry.",
           "usageLimitDetail": "The model provider has reached its current usage limit. Try again after the limit resets.",
           "timedOutAfterResponse": "The runner timed out after returning a final response ({{code}}).",
           "timedOutBeforeAnswer": "The runner timed out ({{code}}).",
           "stoppedAfterResponse": "The runner stopped after returning a final response ({{code}}).",
-          "stoppedBeforeAnswer": "The runner stopped ({{code}})."
+          "stoppedBeforeAnswer": "The runner stopped ({{code}}).",
+          "modelUnavailable": "Model unavailable",
+          "modelRejectedDefault": "The provider rejected the selected model."
         },
         "outputTooLarge": "Provider output exceeded the safe limit.",
         "workspaceSetupFailed": "Workspace setup failed before the agent started.",
@@ -14849,7 +14955,8 @@
           "reconciliationRequired": "The previous execution must be checked before this task can continue. Your message is preserved. View the stopped run for details.",
           "stoppedBeforeAnswer": "Execution was stopped.",
           "runnerStopped": "The run failed ({{code}}).",
-          "couldNotStart": "Couldn't start"
+          "couldNotStart": "Couldn't start",
+          "aiAccountUseCard": "Use the connection card below to continue."
         },
         "runCompleted": "Run completed",
         "turnCancelled": "This turn was cancelled before it returned a response.",
@@ -14863,7 +14970,9 @@
         "workspaceRestoreFailed": "Workspace restore failed",
         "pendingInputCount_one": "{{count}} pending input",
         "pendingInputCount_other": "{{count}} pending inputs",
-        "pendingInputCount": "{{count}} pending inputs"
+        "pendingInputCount": "{{count}} pending inputs",
+        "aiConnectionNeeded": "AI connection needed",
+        "historyStillLoading": "Some task history is still loading."
       },
       "toolTaxonomy": {
         "applyingAPatch": "Applying a patch",
@@ -15742,7 +15851,9 @@
         "useSubscriptionInstead": "Use subscription instead"
       },
       "modelSourceTiles": {
-        "subscription": "Subscription"
+        "subscription": "Subscription",
+        "apiKey": "API key",
+        "customGateway": "Custom Gateway"
       },
       "savedProviderKeySelect": {
         "subscription": "Subscription",
@@ -16042,7 +16153,7 @@
         "providerMany": "{{count}} providers",
         "modelOne": "{{count}} model",
         "modelMany": "{{count}} models",
-        "allocation": "{{percent}}% of allocation",
+        "allocation": "{{percent}}% of company budget",
         "meteredOne": "{{count}} metered run",
         "meteredMany": "{{count}} metered runs",
         "subscriptionOne": "{{count}} subscription run",
@@ -16083,13 +16194,13 @@
       "claudeSubscriptionPanel": {
         "resets": "Resets {{value1}}",
         "anthropicSubscription": "Anthropic subscription",
-        "liveClaudeQuotaWindows": "Live Claude quota windows.",
+        "liveClaudeQuotaWindows": "Quota from the Claude subscription connected to this server.",
         "used": "{{percent}}% used"
       },
       "codexSubscriptionPanel": {
         "resets": "Resets {{value1}}",
         "codexSubscription": "Codex subscription",
-        "liveCodexQuotaWindows": "Live Codex quota windows.",
+        "liveCodexQuotaWindows": "Quota from the Codex subscription connected to this server.",
         "accountWindows": "Account windows",
         "modelWindows": "Model windows",
         "used": "{{percent}}% used"
@@ -16106,7 +16217,8 @@
         "goals": "Goals",
         "emptyHint": "No quick task matches. Press <key>↵</key> to <strong>search all</strong> or keep typing to refine.",
         "openFullSearch": "open full search",
-        "searchAllQuery": "Search all for <query>“{{query}}”</query>"
+        "searchAllQuery": "Search all for <query>“{{query}}”</query>",
+        "myWork": "My work"
       },
       "contextualSidebarFrame": {
         "backFrom": "Back from {{value1}}"
@@ -16169,7 +16281,12 @@
         "taskRecovery": "Task recovery",
         "automaticRecoveryOfThisTaskStopped": "Automatic recovery of this task stopped.",
         "recoveryNeeded": "Recovery needed. ",
-        "inspectRun": "Inspect run"
+        "inspectRun": "Inspect run",
+        "modelUnavailable": "Model unavailable.",
+        "recoveryNeededTitle": "Recovery needed.",
+        "chooseSupportedModel": "Choose a supported model or clear the task's model override, then retry.",
+        "savedMessagesOne": "{{count}} saved message is waiting for recovery.",
+        "savedMessagesMany": "{{count}} saved messages are waiting for recovery."
       },
       "executionParticipantPicker": {
         "reviewers": "Reviewers",
@@ -16444,7 +16561,7 @@
         "apiSubRuns": "~{{api}} api / ~{{sub}} sub runs",
         "apiRuns": "~{{count}} api runs",
         "subRuns": "~{{count}} sub runs",
-        "allocation": "{{percent}}% of allocation",
+        "allocation": "{{percent}}% of company budget",
         "weeklyBudget": "~{{amount}} / wk",
         "tokenShare": "{{percent}}% of provider tokens",
         "costShare": "{{percent}}% of provider cost",
@@ -17056,6 +17173,16 @@
           "approve-paperclip": "Automatic Paperclip actions",
           "approve-reads": "Allow Paperclip reads",
           "deny-all": "Deny all"
+        },
+        "harness": "Harness",
+        "harnessHint": "Choose the agent harness that runs your tasks.",
+        "cursorMode": "Cursor mode",
+        "cursorModeHint": "Select Cursor's session mode. Permissions and company approval rules still apply.",
+        "cursorModeUnsupported": "Unsupported saved mode — select Agent, Plan, or Ask",
+        "cursorModes": {
+          "agent": "Agent",
+          "plan": "Plan",
+          "ask": "Ask"
         }
       },
       "index": {
@@ -17463,7 +17590,7 @@
     "upstreamSync": {
       "acpAgents": "ACP agents",
       "acpAgent": "ACP agent",
-      "cursorGitHubCopilotAndPiAreAwaitingLocalAnd": "Cursor, GitHub Copilot, and Pi are awaiting local and Daytona qualification.",
+      "cursorGitHubCopilotAndPiAreAwaitingLocalAnd": "Cursor uses Paperclip questions; per-run cost is unavailable. GitHub Copilot and Pi await qualification.",
       "qualificationPending": " — qualification pending",
       "couldNotCancelThePreviousSignInRetryBefore": "Could not cancel the previous sign-in. Retry before starting a new one.",
       "cancelPreviousSignInAndRetry": "Cancel previous sign-in and retry",
@@ -17607,7 +17734,7 @@
       "openVideoValue0": "Open video: {{value0}}",
       "openRawValue0": "Open raw {{value0}}",
       "downloadValue0": "Download {{value0}}",
-      "default": "Default:",
+      "default": "Default",
       "removeValue0": "Remove {{value0}}",
       "process": "Process",
       "unassigned": "Unassigned",
@@ -17632,7 +17759,9 @@
       "preservedEditsForValue0": "Preserved edits for {{value0}}",
       "copyPreservedEditsForValue0": "Copy preserved edits for {{value0}}",
       "image": "Image",
-      "source": "Source"
+      "source": "Source",
+      "selectAssignee": "Select assignee",
+      "selectModelAndEffort": "Select model and effort"
     }
   }
 }

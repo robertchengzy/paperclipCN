@@ -10,6 +10,8 @@ interface BillerSpendCardProps {
   row: CostByBiller;
   weekSpendCents: number;
   budgetMonthlyCents: number;
+  /** Only compare a current-month report with the monthly budget. */
+  showBudgetUtilization?: boolean;
   totalCompanySpendCents: number;
   providerRows: CostByProviderModel[];
 }
@@ -18,6 +20,7 @@ export function BillerSpendCard({
   row,
   weekSpendCents,
   budgetMonthlyCents,
+  showBudgetUtilization = true,
   totalCompanySpendCents,
   providerRows,
 }: BillerSpendCardProps) {
@@ -47,10 +50,7 @@ export function BillerSpendCard({
     return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
   }, [providerRows, t]);
 
-  const providerBudgetShare =
-    budgetMonthlyCents > 0 && totalCompanySpendCents > 0
-      ? (row.costCents / totalCompanySpendCents) * budgetMonthlyCents
-      : budgetMonthlyCents;
+  const providerBudgetShare = budgetMonthlyCents;
   const budgetPct =
     providerBudgetShare > 0
       ? Math.min(100, (row.costCents / providerBudgetShare) * 100)
@@ -81,7 +81,7 @@ export function BillerSpendCard({
       </CardHeader>
 
       <CardContent className="px-4 pb-4 pt-3 space-y-4">
-        {budgetMonthlyCents > 0 && (
+        {showBudgetUtilization && budgetMonthlyCents > 0 && (
           <QuotaBar
             label={t("app.shell.billerSpendCard.periodSpend")}
             percentUsed={budgetPct}

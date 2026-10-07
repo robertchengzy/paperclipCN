@@ -1,5 +1,5 @@
 import { displayLocale } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle, FlaskConical, Lock, Play } from "lucide-react";
 import type {
@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useTranslation } from "@/i18n";
 import { Trans } from "react-i18next";
+import { Link } from "@/lib/router";
 
 type WorktreeRunExecutionDisplayState =
   | { kind: "off" }
@@ -85,7 +86,7 @@ function ExperimentalToggleCard({
 }: {
   title: string;
   description: string;
-  footnote?: string;
+  footnote?: ReactNode;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   disabled: boolean;
@@ -310,6 +311,18 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
+          title={t("app.settings.instanceExperimentalSettings.cards.enablePublicMcp.title")}
+          description={t("app.settings.instanceExperimentalSettings.cards.enablePublicMcp.description")}
+          footnote={<>{t("app.settings.instanceExperimentalSettings.cards.enablePublicMcp.footnote")}{experimentalQuery.data?.enablePublicMcp && <> <Link className="underline" to="/apps/assistant-connection">{t("app.settings.instanceExperimentalSettings.cards.enablePublicMcp.setupLink")}</Link></>}</>}
+          checked={experimentalQuery.data?.enablePublicMcp === true}
+          onCheckedChange={(checked) => toggleMutation.mutate({ enablePublicMcp: checked })}
+          disabled={toggleMutation.isPending}
+          settingKey="enablePublicMcp"
+          managed={managedKeys.enablePublicMcp}
+          ariaLabel={t("app.settings.instanceExperimentalSettings.cards.enablePublicMcp.ariaLabel")}
+        />
+
+        <ExperimentalToggleCard
           title={t("app.settings.instanceExperimentalSettings.cards.enableBetaSkills.title")}
           description={t("app.settings.instanceExperimentalSettings.cards.enableBetaSkills.description")}
           checked={enableBetaSkills}
@@ -353,6 +366,18 @@ export function InstanceExperimentalSettings() {
           settingKey="enableChatConnectors"
           managed={managedKeys.enableChatConnectors}
           ariaLabel={t("app.settings.instanceExperimentalSettings.cards.enableChatConnectors.ariaLabel")}
+        />
+
+        <ExperimentalToggleCard
+          title="Combined Inbox + Task List"
+          description="Fold Inbox into Tasks. One Tasks row carries the unread badge, and a Views menu reaches every inbox view (Mine, Unread, Blocked, Recent, Everything) and every task view."
+          footnote="Old Inbox links redirect to the matching view. Turning this off restores the separate Inbox; no data changes."
+          checked={experimentalQuery.data?.enableCombinedInboxTasks ?? false}
+          onCheckedChange={(checked) => toggleMutation.mutate({ enableCombinedInboxTasks: checked })}
+          disabled={toggleMutation.isPending}
+          settingKey="enableCombinedInboxTasks"
+          managed={managedKeys.enableCombinedInboxTasks}
+          ariaLabel="Toggle combined inbox and task list experimental setting"
         />
 
         {SHOW_CONFERENCE_ROOM_EXPERIMENTAL_SETTING ? (

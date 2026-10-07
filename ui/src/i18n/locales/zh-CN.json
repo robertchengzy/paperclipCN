@@ -392,7 +392,8 @@
         "resuming": "恢复中…",
         "working": "处理中…",
         "updating": "更新中…",
-        "installing": "安装中…"
+        "installing": "安装中…",
+        "starting": "正在启动…"
       },
       "labels": {
         "name": "名称",
@@ -580,7 +581,8 @@
     },
     "mobileNav": {
       "home": "首页",
-      "ariaLabel": "移动端导航"
+      "ariaLabel": "移动端导航",
+      "chat": "聊天"
     },
     "goals": {
       "list": {
@@ -801,7 +803,8 @@
         "inboxZero": "收件箱已清空。",
         "noUnread": "没有新的收件箱条目。",
         "noRecent": "没有最近的收件箱条目。",
-        "noFilterResults": "没有符合这些筛选条件的收件箱条目。"
+        "noFilterResults": "没有符合这些筛选条件的收件箱条目。",
+        "selectOrganizationFor": "选择一个组织以查看{{surface}}。"
       },
       "filterFeedback": {
         "liveOnly": "仅限实时运行 — 当前关联到智能体运行的任务。",
@@ -812,9 +815,11 @@
         "searchPlaceholder": "搜索收件箱…",
         "group": "分组",
         "sort": "排序",
-        "columnsTitle": "选择收件箱中要显示的列",
+        "columnsTitle": "选择要显示的列",
         "disableNesting": "关闭父子任务嵌套",
-        "enableNesting": "开启父子任务嵌套"
+        "enableNesting": "开启父子任务嵌套",
+        "surfaceControls": "{{surface}}控件",
+        "searchSurfacePlaceholder": "搜索{{surface}}…"
       },
       "tabs": {
         "mine": "我的",
@@ -1109,7 +1114,8 @@
         "uploadWarningsTitle": "已创建 {{issueRef}}，但上传有警告",
         "uploadWarningsBodyOne": "{{count}} 个暂存文件未能添加。",
         "uploadWarningsBodyMany": "{{count}} 个暂存文件未能添加。",
-        "openIssue": "打开 {{issueRef}}"
+        "openIssue": "打开 {{issueRef}}",
+        "created": "已创建 {{issueRef}}"
       },
       "properties": {
         "copyToClipboard": "复制 {{value}} 到剪贴板",
@@ -1352,7 +1358,13 @@
           "run": "运行 {{id}}"
         }
       },
-      "pausedAssigneeBudgetNote": "<strong>{{name}}</strong> 因预算限制而暂停。预算暂停解除前，不会开始处理此任务。"
+      "pausedAssigneeBudgetNote": "<strong>{{name}}</strong> 因预算限制而暂停。预算暂停解除前，不会开始处理此任务。",
+      "describeTask": "描述任务…",
+      "taskTitle": "任务标题",
+      "subTaskWorkspaceChange": "此子任务将不再使用父任务的工作区。",
+      "subTaskWorkspaceChangeWithLabel": "此子任务将不再使用父任务的工作区（{{label}}）。",
+      "worktreeCheckFailed": "无法检查所选工作树。请在“工作树”中重试，或选择“新建工作树”。",
+      "worktreeUnavailable": "所选工作树已不可用。请选择其他工作树或新建一个。"
     },
     "issues": {
       "page": {
@@ -1750,7 +1762,8 @@
           "noModelDetectedYet": "尚未检测到模型。请手动输入 provider/model。",
           "noModelsFound": "未找到模型。",
           "openCodeDiscoveryLocalOnly": "OpenCode 实时模型发现仅在本地环境中运行。{{name}} 将使用精选列表和手动输入。",
-          "codexMinimalSearchWarning": "启用搜索时，Codex 可能会拒绝 `minimal` 思考强度。"
+          "codexMinimalSearchWarning": "启用搜索时，Codex 可能会拒绝 `minimal` 思考强度。",
+          "loadingModels": "正在加载模型…"
         },
         "effort": {
           "label": "思考强度",
@@ -2122,7 +2135,9 @@
           "processLost": "进程丢失",
           "assignmentRecovery": "分配恢复",
           "issueContinuationNeeded": "需要继续",
-          "maxTurnsContinuation": "达到最大轮次后继续"
+          "maxTurnsContinuation": "达到最大轮次后继续",
+          "nativeProviderOverloaded": "模型容量已满",
+          "aiConnectionPoolWait": "等待连接池用量恢复"
         },
         "attempt": "第 {{attempt}} 次尝试",
         "continuationScheduled": "已计划继续",
@@ -2136,7 +2151,8 @@
         "automaticRetriesExhausted": "自动重试已用尽",
         "manualInterventionRequired": "{{reason}} 需要人工介入。",
         "continuedRun": "继续的运行",
-        "retriedRun": "重试的运行"
+        "retriedRun": "重试的运行",
+        "poolExhausted": "连接池已耗尽"
       },
       "recovery": {
         "needed": "需要恢复",
@@ -2387,7 +2403,9 @@
         "signIn": "登录 {{provider}}",
         "useSavedSubscription": "使用已保存的订阅",
         "useSavedApiKey": "使用已保存的 API 密钥",
-        "connect": "连接"
+        "connect": "连接",
+        "connectionType": "连接类型",
+        "advanced": "高级"
       },
       "invite": {
         "promptTitle": "智能体接入提示词",
@@ -2532,7 +2550,12 @@
           "runs": "运行",
           "costs": "成本",
           "budgets": "预算"
-        }
+        },
+        "publicKey": "公钥",
+        "publicKeyLoadFailed": "无法加载公钥",
+        "copyPublicKey": "复制公钥",
+        "publicKeyNotCreated": "尚未创建",
+        "publicKeyCreatedOnNextRun": "将在下一次托管运行时自动创建"
       },
       "revisions": {
         "title": "配置修订",
@@ -2903,7 +2926,8 @@
         "notYourDefault": "不是你的默认账号",
         "revokeIdentity": "撤销身份授权",
         "revokeDescription": "使用此账号的新运行将被阻止。现有运行可能仍保留已签发给它们的凭据。系统不会自动选择其他账号。",
-        "revokeFailed": "无法撤销此账号的授权，请重试。"
+        "revokeFailed": "无法撤销此账号的授权，请重试。",
+        "notDefault": "非默认"
       },
       "aiConnectionAuth": {
         "connectProvider": "连接 {{provider}}",
@@ -2938,11 +2962,18 @@
       "aiConnectionField": {
         "incompatible": "此连接不支持当前的执行框架和模型。请在保存前选择兼容的连接。",
         "adoptTitle": "为 {{agent}} 采用“连接”",
-        "adoptDescription": "保存时会先在 {{agent}} 的环境中测试此账号，再替换其现有认证。其他智能体保持当前配置。",
+        "adoptDescription": "保存时会验证对所选连接的访问。现有会话保留其账号，或在采用前需要显式重置。",
         "responsibleDefault": "负责人的默认连接。对你而言：{{name}}。其他用户使用各自的默认连接。",
         "adoptionNote": "采用后，缺少凭据将阻止执行。之前的认证不会作为后备使用。",
         "useBinding": "保存时使用此绑定",
-        "connectAccount": "连接账号"
+        "connectAccount": "连接账号",
+        "usePoolTitle": "使用 {{pool}}？",
+        "thisPool": "此连接池",
+        "resetSessionsOutsidePool": "重置使用此连接池之外账号的现有会话。",
+        "usePool": "使用连接池",
+        "advancedSetupDescription": "为该智能体选择提供方连接。",
+        "reconnectDescription": "重新登录以修复当前默认账号。其智能体访问权限保持不变。",
+        "connectDescription": "此账号将成为你在该提供方的默认账号。你的任务会使用它；其他用户保留各自的默认账号。"
       },
       "aiConnectionPicker": {
         "aiConnection": "AI 连接",
@@ -2951,7 +2982,8 @@
         "responsibleConnection": "负责人的连接",
         "forYou": "对你而言：{{name}}",
         "otherUsers": "其他用户的任务使用各自的 {{provider}} 连接。",
-        "connectAnother": "连接其他账号"
+        "connectAnother": "连接其他账号",
+        "reconnectAccount": "重新连接账号"
       },
       "managedAiConnectionDetails": {
         "personal": "个人",
@@ -3012,7 +3044,14 @@
         "updateFailed": "无法更新此连接请求。",
         "externalProviderConnected": "外部提供方已连接",
         "upstreamServiceAuthorize": "{{agent}} 现在可以通过此提供方验证并授权 {{service}}。该应用尚未验证。",
-        "authenticationRequired": "{{service}} 需要认证"
+        "authenticationRequired": "{{service}} 需要认证",
+        "accessGranted": "已授予 {{service}} 访问权限",
+        "accessDeclined": "访问已拒绝",
+        "useYourAccount": "使用你的 {{provider}} 账号",
+        "connectYourAccount": "连接你的 {{provider}} 账号",
+        "readyForAdoptionDescription": "你的账号已连接。将其用于 {{agent}} 即可恢复此任务。",
+        "needsOwnAiDescription": "{{agent}} 需要你自己的 AI 连接。在此连接后任务会自动恢复。",
+        "emailDescription": "连接 AgentMail，为该智能体创建邮箱地址。"
       },
       "providers": {
         "zapier": {
@@ -3036,7 +3075,7 @@
           "description": "通过 Composio Connect 发现并使用你的应用。",
           "instruction1": "连接到 Composio 并使用你的账号登录。",
           "instruction2": "在出现提示时，在 Composio 中连接底层应用。",
-          "urlHelp": "已预填 Composio Connect。对于外部配置的会话，请替换为其 MCP URL，并在“高级认证”下添加其提供的请求头。",
+          "urlHelp": "粘贴现有 Composio 会话的 MCP URL。如需请求头，请在“更改”下添加。",
           "authHelp": "会话 URL 和请求头来自你的外部 Composio 设置。Direct-tools 会话会公开单独的操作。"
         },
         "executor": {
@@ -3115,7 +3154,10 @@
         "draftKept": "你的访问权限选择和设置进度会随此连接保存。",
         "resumeSetup": "继续设置",
         "connectThroughProvider": "通过 {{provider}} 连接 {{service}}",
-        "upstreamServiceBoundary": "{{provider}} 是第三方服务，负责连接 {{service}} 并处理发往它的请求。连接后，智能体会验证应用，并引导你完成所需的额外授权。"
+        "upstreamServiceBoundary": "{{provider}} 负责处理与 {{service}} 的连接和请求。",
+        "composioSignInHint": "连接此账号后，请在 Composio 中登录该应用。",
+        "gatewaySignInHint": "请在提供方处管理应用登录，然后在此刷新网关。",
+        "reuseExistingSession": "复用现有会话"
       },
       "remoteMcpProductionSetup": {
         "savedCredentialsNotice": "这些字段留空时会保留已保存的凭据。仅在需要更改时输入新值。",
@@ -3330,7 +3372,8 @@
         "authorizationIncompleteWindow": "授权未完成。请在登录窗口中完成设置，或重试。",
         "openAuthorizationToContinue": "请在新标签页中打开授权以继续。",
         "existingCheckFailed": "Paperclip 无法检查现有连接，请重试。",
-        "enableMemoryConnectors": "请先在“设置 → 实验性”中启用记忆连接器，再设置此连接。"
+        "enableMemoryConnectors": "请先在“设置 → 实验性”中启用记忆连接器，再设置此连接。",
+        "change": "更改"
       },
       "remoteMcpAccountChoice": {
         "externalServiceNotice": "{{provider}} 是负责处理连接及发往 {{service}} 的请求的外部服务。复用此账号还不能验证应用访问权限，智能体会检查并引导完成其余授权。",
@@ -4047,8 +4090,8 @@
     },
     "tools": {
       "advancedToolsRoute": {
-        "adminOnlyTitle": "高级设置仅供管理员使用",
-        "adminOnlyBody": "管理员可以在这里接入应用库中没有的工具。如需连接新应用，请联系管理员，或返回<anchor>你的应用</anchor>。"
+        "adminOnlyTitle": "高级设置需要编辑权限",
+        "adminOnlyBody": "组织编辑者可以在这里接入应用库中没有的工具。如需连接新应用，请联系组织编辑者，或返回<anchor>你的应用</anchor>。"
       },
       "agentToolsTab": {
         "github": {
@@ -4846,8 +4889,8 @@
         "openDeveloperTools": "打开开发者工具"
       },
       "toolsAdminGate": {
-        "adminOnlyTitle": "访问配置档仅供管理员使用",
-        "adminOnlyBody": "访问配置档决定智能体可以使用哪些工具。请联系管理员进行设置，或返回<anchor>你的应用</anchor>。"
+        "adminOnlyTitle": "访问配置档需要编辑权限",
+        "adminOnlyBody": "访问配置档决定智能体可以使用哪些工具。请联系组织编辑者进行设置，或返回<anchor>你的应用</anchor>。"
       },
       "wizardToolsStep": {
         "loadingTools": "正在加载工具…",
@@ -4906,8 +4949,8 @@
     "lib": {
       "useDateRange": {
         "mtd": "本月至今",
-        "last7Days": "最近 7 天",
-        "last30Days": "最近 30 天",
+        "last7Days": "7 天",
+        "last30Days": "30 天",
         "ytd": "本年至今",
         "allTime": "全部时间"
       },
@@ -4998,7 +5041,15 @@
           "tagline": "查阅所用库的最新文档。"
         },
         "generic": "让智能体访问此应用。",
-        "yourKey": "你的 {{appName}} 密钥"
+        "yourKey": "你的 {{appName}} 密钥",
+        "neon": {
+          "tagline": "管理 Postgres 项目、分支和查询。",
+          "short": "使用 Neon 登录。项目固定和只读模式均为可选。"
+        },
+        "superagent": {
+          "tagline": "查看安全发现并运行红队检查。",
+          "short": "使用 Superagent API 密钥连接。计费和破坏性工具仍受操作策略约束。"
+        }
       },
       "attention": {
         "source": {
@@ -7165,7 +7216,8 @@
           "company": "组织",
           "agent": "智能体",
           "project": "项目"
-        }
+        },
+        "accountingIncomplete": "核算尚未完成。已知支出为 {{observed}}；请在预算策略中检查待处理或未定价的用量。"
       },
       "budgetPolicyCard": {
         "lifetimeBudget": "累计预算",
@@ -7174,8 +7226,8 @@
         "noCapConfigured": "未设置上限",
         "remaining": "剩余",
         "unlimited": "无限制",
-        "executionIsPausedForThisProjectUntilTheBudgetIsRaisedOr": "此项目的执行已暂停。将预算设为高于当前支出，或设为 0（不限额），可解除预算导致的暂停；关闭事件会保持暂停。",
-        "heartbeatsArePausedForThisScopeUntilTheBudgetIsRaisedOr": "此范围的心跳已暂停。将预算设为高于当前支出，或设为 0（不限额），可解除预算导致的暂停；关闭事件会保持暂停。",
+        "executionIsPausedForThisProjectUntilTheBudgetIsRaisedOr": "此项目的执行已暂停，直到预算阻断解除。",
+        "heartbeatsArePausedForThisScopeUntilTheBudgetIsRaisedOr": "此范围的心跳已暂停，直到预算阻断解除。",
         "budgetUSD": "预算（USD）",
         "saving": "保存中…",
         "updateBudget": "更新预算",
@@ -7289,8 +7341,8 @@
       },
       "financeTimelineCard": {
         "recentFinancialEvents": "近期财务事件",
-        "topupsFeesCreditsCommitmentsAndOtherNonrequestCharges": "充值、费用、贷记、承诺支出及其他非请求费用。",
-        "emptyMessage": "此期间没有财务事件。",
+        "topupsFeesCreditsCommitmentsAndOtherNonrequestCharges": "提供方费用、订阅、手续费和贷记。与运行成本估算分开上报。",
+        "emptyMessage": "此期间没有记录财务事件。通过 API、CLI 或受支持的集成上报后会显示在这里。",
         "invoice": "发票 {{value}}",
         "region": "区域 {{value}}",
         "tier": "等级 {{value}}",
@@ -7449,7 +7501,7 @@
         "tokensInRange": "请求级事件共 {{count}} 个 Token",
         "pausedScopes": "{{agents}} 个智能体已暂停 · {{projects}} 个项目已暂停",
         "debitCredit": "借记 {{debit}} · 贷记 {{credit}}",
-        "estimatedInRange": "此范围估算 {{amount}}",
+        "estimatedInRange": "范围内估算 {{amount}}",
         "budgetAmount": "预算 {{amount}}",
         "spentOfBudget": "{{spent}} / {{budget}}",
         "eventCountMany": "此范围共 {{count}} 个事件",
@@ -7465,7 +7517,29 @@
         "productionScopecompany": "组织预算",
         "productionScopeagent": "智能体预算",
         "productionScopeproject": "项目预算",
-        "usageLabel": "用量"
+        "usageLabel": "用量",
+        "spendIncomplete": "支出数据不完整：{{unpriced}} 个用量事件缺少可靠价格；{{pending}} 个运行待核算。下方显示已知支出。",
+        "usdOnlyNotice": "财务汇总仅统计美元。其他币种单独列出，不做汇率换算。",
+        "spentOfBudgetThisMonth": "本月已用 {{spent}} / {{budget}}",
+        "monthlyLimit": "月度上限",
+        "recordedCharges": "已记录费用",
+        "debitsAmount": "借记 {{amount}}",
+        "creditsAmount": "贷记 {{amount}}",
+        "financialDataUnavailable": "财务数据不可用",
+        "budgetLoadFailed": "无法加载预算数据，请稍后重试。",
+        "showingLastLoaded": "正在显示上次加载的数据，更新会自动恢复。",
+        "includesEstimated": "包含 {{count}} 笔估算运行费用。令牌估算基于公开费率和记录的假设，可能与提供方账单不同。",
+        "budgetUpdateFailed": "无法更新预算。请检查本页显示的待核算运行或未定价用量，然后重试。",
+        "costLoadFailed": "无法加载成本数据，请稍后重试。",
+        "inputCachedOutput": "输入 {{input}}（缓存 {{cached}}）· 输出 {{output}}",
+        "runsByBilling": "运行：API {{api}} · 订阅 {{subscription}}",
+        "userCostsRefreshFailed": "无法刷新用户成本，正在显示上次加载的数据。",
+        "userCostsLoadFailed": "无法加载用户成本，请稍后重试。",
+        "loadingFinancialEvents": "正在加载财务事件…",
+        "financialEventsLoadFailed": "无法加载财务事件，请稍后重试。",
+        "budgetPolicyUpdateFailed": "无法更新预算策略。请检查设置后重试。",
+        "providerReports": "提供方 API 成本报告：{{amount}}。报告总额与发票和运行估算存在重叠，因此与已记录费用分开显示。",
+        "agentCostsLabel": "{{name}} 的成本"
       },
       "dashboardLive": {
         "liveRuns": "实时运行",
@@ -7937,7 +8011,9 @@
         "yourTime": "{{time}}（本地时间）",
         "checkNow": "立即检查",
         "keepSending": "智能体等待期间，你仍可以继续发送指令。",
-        "replyWakes": "发送回复会立即唤醒智能体，无需等到计划检查时间。"
+        "replyWakes": "发送回复会立即唤醒智能体，无需等到计划检查时间。",
+        "checkStatus": "检查状态",
+        "reviewOnGitHub": "请在 GitHub 上审查，然后检查状态，让智能体核实结果。"
       },
       "issuePlanDecompositionsSection": {
         "inFlight": "进行中",
@@ -8327,7 +8403,8 @@
         "promoting": "正在提前计划的重试",
         "alreadyPromotedStarting": "已排队或正在运行",
         "promotedStarting": "已加入执行队列",
-        "retryFailed": "无法立即重试"
+        "retryFailed": "无法立即重试",
+        "lastAttemptFailedPunctuated": "上次尝试失败：{{error}} Paperclip 会自动重试。"
       },
       "issueSiblingNavigation": {
         "ariaLabel": "子任务导航",
@@ -8923,7 +9000,9 @@
         "recentFilesAreTemporarilyUnavailable": "最近文件暂时不可用。",
         "openANewTab": "打开新标签页",
         "revisionNumber": "修订版本 {{number}}",
-        "totalTasks": "共 {{count}} 项"
+        "totalTasks": "共 {{count}} 项",
+        "agentTasksDescription": "该智能体处理过的任务",
+        "agentArtifactsDescription": "该智能体产出的文件"
       },
       "useDocumentAnnotationMutations": {
         "you": "你",
@@ -11128,7 +11207,7 @@
     },
     "settings": {
       "adapterLoginChrome": {
-        "preparingSignIn": "正在准备登录",
+        "preparingSignIn": "正在准备登录…",
         "copiedBang": "已复制！",
         "copyTheCode": "复制代码",
         "authorizationCode": "授权码",
@@ -11144,7 +11223,9 @@
         "runInTerminal": "在那台机器的终端中运行以下命令，并在浏览器中完成登录。返回后会自动检查。",
         "copySignInCommand": "复制登录命令",
         "startSignInAgain": "重新开始登录",
-        "checkAgain": "重新检查"
+        "checkAgain": "重新检查",
+        "preparingBrowserSignIn": "正在准备浏览器登录…",
+        "submitCode": "提交代码"
       },
       "adapterManager": {
         "builtIn": "内置",
@@ -11609,8 +11690,8 @@
           },
           "operator": {
             "label": "操作员",
-            "description": "推荐给需要协助推进工作、但不管理访问权限的人。",
-            "gets": "可以分配任务。"
+            "description": "可以编辑组织工作并邀请成员。",
+            "gets": "拥有完整的编辑和审计权限。不能批准加入申请，也不能管理成员权限。"
           },
           "admin": {
             "label": "管理员",
@@ -11789,7 +11870,8 @@
         "warnings": "警告",
         "hint": "提示：{{hint}}",
         "gatewayUrl": "网关 URL",
-        "webhookUrl": "Webhook URL"
+        "webhookUrl": "Webhook URL",
+        "loginRequiredConnectProvider": "如果需要登录，请在上方连接提供方后重试。"
       },
       "pluginAppShellOverlays": {
         "applicationExtensions": "应用扩展"
@@ -12176,7 +12258,7 @@
         "cards": {
           "enableAgentChat": {
             "title": "智能体对话",
-            "description": "在一个持续的对话中与每个智能体交流。澄清目标并创建待执行的任务。",
+            "description": "与每个智能体在同一个持续对话中交流，澄清目标并创建待执行的任务。聊天位于“工作”分组首位，并在导航旁打开智能体侧栏；每个聊天的侧边面板以卡片形式展示该智能体的任务和产物。",
             "footnote": "关闭后会保留对话并让正在进行的运行完成，但无法发送新消息。",
             "ariaLabel": "切换智能体对话实验性设置"
           },
@@ -12199,7 +12281,7 @@
           "enableChatConnectors": {
             "title": "聊天连接器",
             "description": "将智能体连接到 Slack、GitHub、Discord、Microsoft Teams 和 Telegram 对话。",
-            "footnote": "关闭后会隐藏聊天设置、频道和关联任务控件。现有聊天连接会继续运行。GitHub 及其他工具连接器仍然可用。",
+            "footnote": "关闭后会隐藏实验性聊天设置和关联任务控件。现有聊天连接会继续运行。AgentMail、GitHub 工具和其他工具连接器仍可使用。",
             "ariaLabel": "切换聊天连接器实验性设置"
           },
           "enableConferenceRoomChat": {
@@ -12322,6 +12404,13 @@
             "description": "连接 Mem0、Zep、Supermemory、Cognee 和 Honcho，提供长期记忆和上下文。",
             "footnote": "关闭后会隐藏这些连接器的设置。现有连接会继续运行。",
             "ariaLabel": "切换记忆连接器实验性设置"
+          },
+          "enablePublicMcp": {
+            "title": "助手连接（MCP）",
+            "description": "将 Codex、Claude 等助手连接到你的 Paperclip 组织。用户登录后选择一次组织并批准访问，即可审阅工作、委派任务和添加反馈。",
+            "footnote": "需要已启用认证并配置了公开 URL 的实例。立即生效。关闭后会阻止助手调用和事件投递；已委派的工作会继续进行。",
+            "setupLink": "设置助手连接",
+            "ariaLabel": "切换助手连接实验设置"
           }
         },
         "managedByCloud": "由 Paperclip Cloud 管理",
@@ -12728,7 +12817,9 @@
         "retryAnyway": "仍然重试",
         "markDelivered": "标记为已投递",
         "removeTitle": "移除此连接？",
-        "removeBody": "{{agent}} 将不再接收来自 {{provider}} 的新工作。现有的 Paperclip 任务仍然可用。"
+        "removeBody": "{{agent}} 将不再接收来自 {{provider}} 的新工作。现有的 Paperclip 任务仍然可用。",
+        "emailConnection": "邮件连接",
+        "noEmailConversations": "暂无邮件会话。向该智能体的邮箱地址发送邮件即可开始。"
       },
       "chatEndpointSetup": {
         "steps": {
@@ -13495,7 +13586,8 @@
         "manyActionsAvailable": "{{count}} 个可用操作",
         "loadingMcpActions": "正在加载 MCP 操作，可能需要一分钟。",
         "loadingTools": "正在加载工具…",
-        "couldNotLoadTools": "无法加载此应用的工具。"
+        "couldNotLoadTools": "无法加载此应用的工具。",
+        "composioPermissions": "这些权限适用于通过此 Composio 连接可用的所有应用。请在 Composio 中管理应用账号和登录。"
       },
       "connections": {
         "retired": "已停用",
@@ -13593,7 +13685,12 @@
         "connectOwnMcpServer": "连接你自己的 MCP 服务器",
         "connectOwnMcpServerHint": "输入自定义或自托管 MCP 服务器的 URL。",
         "pasteConfig": "粘贴配置",
-        "pasteConfigHint": "粘贴现有的设置片段并连接。"
+        "pasteConfigHint": "粘贴现有的设置片段并连接。",
+        "poolConnectionsKept": "连接池中的连接会保留。",
+        "poolConnectionsKeptThis": "此连接池中的连接会保留。",
+        "agentmailDescription": "为智能体提供邮箱，并将每个会话作为任务处理。",
+        "clearSearch": "清除搜索",
+        "removeAggregatorBody": "这会从 Paperclip 中移除已保存的 {{provider}} 连接，智能体将无法再通过它访问。你的应用和账号在 {{provider}} 中仍保持连接。"
       },
       "testPanel": {
         "testTitle": "测试 {{title}}",
@@ -13964,7 +14061,10 @@
       "connectionOwner": {
         "boardMember": "董事会成员",
         "ownerAppEndingS": "{{owner}} 的 {{applicationName}}",
-        "ownerApp": "{{owner}} 的 {{applicationName}}"
+        "ownerApp": "{{owner}} 的 {{applicationName}}",
+        "assistantConnection": "{{client}} 连接",
+        "assistantConnectionOwner": "{{owner}} 的 {{client}} 连接",
+        "assistantConnectionOwnerEndingS": "{{owner}} 的 {{client}} 连接"
       },
       "connectClientDialog": {
         "availableThisSession": "本次会话可用",
@@ -14208,7 +14308,8 @@
         "emptyDescription": "在连接器页面接入 AgentMail、Slack、GitHub 代码审查机器人、Discord、Microsoft Teams 或 Telegram。",
         "openConnectors": "打开连接器",
         "providerIdentity": "提供方身份",
-        "openConnection": "打开连接"
+        "openConnection": "打开连接",
+        "emptyDescriptionAgentMail": "在连接器页面接入 AgentMail。"
       },
       "chatSetupNavigation": {
         "connectProvider": "连接提供方",
@@ -14345,7 +14446,9 @@
         "unhealthy": "不健康",
         "oneFile": "{{count}} 个文件",
         "manyFiles": "{{count}} 个文件",
-        "actionLabel": "{{action}}：{{title}}"
+        "actionLabel": "{{action}}：{{title}}",
+        "branch": "分支",
+        "branchNoRemote": "分支 · 无远程链接"
       },
       "runnerGoalWidget": {
         "pending": {
@@ -14791,7 +14894,8 @@
         "goalInConversation": "需要持续执行目标的工作，请另建一个任务。",
         "goalRemoveAttachments": "使用 /goal 前请先移除附件。",
         "goalSelectAgent": "开始会话目标前请先选择一个智能体。",
-        "skipFailed": "无法跳过此请求。"
+        "skipFailed": "无法跳过此请求。",
+        "submitShortcut": "{{label}}（⌘+Enter）"
       },
       "taskChatThread": {
         "input": {
@@ -14830,12 +14934,14 @@
           "interruptedAfterResponse": "运行在返回最终回复后被中断。",
           "interruptedBeforeAnswer": "运行已被中断。",
           "approvalRequiredDetail": "此操作需要审批，但该执行器没有交互式审批处理程序。请检查该操作并更新智能体的权限设置后再重试。",
-          "modelRejectedDetail": "提供方拒绝了所选模型。请检查模型 ID 和账号的访问权限，保存智能体配置后重试。完整错误信息请查看该运行。",
+          "modelRejectedDetail": "{{error}} 请选择受支持的模型，或清除任务的模型覆盖设置，然后重试。",
           "usageLimitDetail": "模型提供方已达到当前用量上限，请在额度重置后重试。",
           "timedOutAfterResponse": "执行器在返回最终回复后超时（{{code}}）。",
           "timedOutBeforeAnswer": "执行器超时（{{code}}）。",
           "stoppedAfterResponse": "执行器在返回最终回复后停止（{{code}}）。",
-          "stoppedBeforeAnswer": "执行器已停止（{{code}}）。"
+          "stoppedBeforeAnswer": "执行器已停止（{{code}}）。",
+          "modelUnavailable": "模型不可用",
+          "modelRejectedDefault": "提供方拒绝了所选模型。"
         },
         "outputTooLarge": "提供方输出超出了安全上限。",
         "workspaceSetupFailed": "智能体启动前工作区设置失败。",
@@ -14849,7 +14955,8 @@
           "reconciliationRequired": "此任务继续之前必须检查上一次执行。你的消息已保留。详情请查看已停止的运行。",
           "stoppedBeforeAnswer": "执行已停止。",
           "runnerStopped": "运行失败（{{code}}）。",
-          "couldNotStart": "无法启动"
+          "couldNotStart": "无法启动",
+          "aiAccountUseCard": "请使用下方的连接卡片继续。"
         },
         "runCompleted": "运行已完成",
         "turnCancelled": "此轮次在返回回复前已被取消。",
@@ -14863,7 +14970,9 @@
         "workspaceRestoreFailed": "工作区恢复失败",
         "pendingInputCount_one": "{{count}} 项待处理输入",
         "pendingInputCount_other": "{{count}} 项待处理输入",
-        "pendingInputCount": "{{count}} 项待处理输入"
+        "pendingInputCount": "{{count}} 项待处理输入",
+        "aiConnectionNeeded": "需要 AI 连接",
+        "historyStillLoading": "部分任务历史仍在加载。"
       },
       "toolTaxonomy": {
         "applyingAPatch": "正在应用补丁",
@@ -15742,7 +15851,9 @@
         "useSubscriptionInstead": "改用订阅"
       },
       "modelSourceTiles": {
-        "subscription": "订阅"
+        "subscription": "订阅",
+        "apiKey": "API 密钥",
+        "customGateway": "自定义网关"
       },
       "savedProviderKeySelect": {
         "subscription": "订阅",
@@ -16042,7 +16153,7 @@
         "providerMany": "{{count}} 个提供商",
         "modelOne": "{{count}} 个模型",
         "modelMany": "{{count}} 个模型",
-        "allocation": "占分配额度的 {{percent}}%",
+        "allocation": "占组织预算的 {{percent}}%",
         "meteredOne": "{{count}} 次按量计费运行",
         "meteredMany": "{{count}} 次按量计费运行",
         "subscriptionOne": "{{count}} 次订阅运行",
@@ -16083,13 +16194,13 @@
       "claudeSubscriptionPanel": {
         "resets": "{{value1}} 重置",
         "anthropicSubscription": "Anthropic 订阅",
-        "liveClaudeQuotaWindows": "Claude 实时配额窗口。",
+        "liveClaudeQuotaWindows": "来自此服务器所连接 Claude 订阅的配额。",
         "used": "已使用 {{percent}}%"
       },
       "codexSubscriptionPanel": {
         "resets": "{{value1}} 重置",
         "codexSubscription": "Codex 订阅",
-        "liveCodexQuotaWindows": "Codex 实时配额窗口。",
+        "liveCodexQuotaWindows": "来自此服务器所连接 Codex 订阅的配额。",
         "accountWindows": "账户窗口",
         "modelWindows": "模型窗口",
         "used": "已使用 {{percent}}%"
@@ -16106,7 +16217,8 @@
         "goals": "目标",
         "emptyHint": "没有快速匹配的任务。按 <key>↵</key> <strong>全局搜索</strong>，或继续输入以缩小范围。",
         "openFullSearch": "打开全局搜索",
-        "searchAllQuery": "全局搜索 <query>“{{query}}”</query>"
+        "searchAllQuery": "全局搜索 <query>“{{query}}”</query>",
+        "myWork": "我的工作"
       },
       "contextualSidebarFrame": {
         "backFrom": "从 {{value1}} 返回"
@@ -16169,7 +16281,12 @@
         "taskRecovery": "任务恢复",
         "automaticRecoveryOfThisTaskStopped": "此任务的自动恢复已停止。",
         "recoveryNeeded": "需要恢复。",
-        "inspectRun": "查看运行"
+        "inspectRun": "查看运行",
+        "modelUnavailable": "模型不可用。",
+        "recoveryNeededTitle": "需要恢复。",
+        "chooseSupportedModel": "请选择受支持的模型，或清除任务的模型覆盖设置，然后重试。",
+        "savedMessagesOne": "{{count}} 条已保存消息正在等待恢复。",
+        "savedMessagesMany": "{{count}} 条已保存消息正在等待恢复。"
       },
       "executionParticipantPicker": {
         "reviewers": "审核人",
@@ -16444,7 +16561,7 @@
         "apiSubRuns": "约 {{api}} 次 API / 约 {{sub}} 次订阅运行",
         "apiRuns": "约 {{count}} 次 API 运行",
         "subRuns": "约 {{count}} 次订阅运行",
-        "allocation": "占分配额度的 {{percent}}%",
+        "allocation": "占组织预算的 {{percent}}%",
         "weeklyBudget": "约 {{amount}} / 周",
         "tokenShare": "占提供商 Token 的 {{percent}}%",
         "costShare": "占提供方成本的 {{percent}}%",
@@ -17056,6 +17173,16 @@
           "approve-paperclip": "自动执行 Paperclip 操作",
           "approve-reads": "允许 Paperclip 读取",
           "deny-all": "全部拒绝"
+        },
+        "harness": "运行框架",
+        "harnessHint": "选择运行任务的智能体框架。",
+        "cursorMode": "Cursor 模式",
+        "cursorModeHint": "选择 Cursor 的会话模式。权限和组织审批规则仍然适用。",
+        "cursorModeUnsupported": "已保存的模式不受支持——请选择 Agent、Plan 或 Ask",
+        "cursorModes": {
+          "agent": "Agent",
+          "plan": "Plan",
+          "ask": "Ask"
         }
       },
       "index": {
@@ -17463,7 +17590,7 @@
     "upstreamSync": {
       "acpAgents": "ACP 智能体",
       "acpAgent": "ACP 智能体",
-      "cursorGitHubCopilotAndPiAreAwaitingLocalAnd": "Cursor、GitHub Copilot 和 Pi 尚待本地及 Daytona 验证。",
+      "cursorGitHubCopilotAndPiAreAwaitingLocalAnd": "Cursor 使用 Paperclip 提问；无法获取单次运行成本。GitHub Copilot 和 Pi 仍在等待验证。",
       "qualificationPending": " — 待验证",
       "couldNotCancelThePreviousSignInRetryBefore": "无法取消上一次登录，请重试后再开始新的登录。",
       "cancelPreviousSignInAndRetry": "取消上一次登录并重试",
@@ -17607,7 +17734,7 @@
       "openVideoValue0": "打开视频： {{value0}}",
       "openRawValue0": "打开原始文件 {{value0}}",
       "downloadValue0": "下载 {{value0}}",
-      "default": "默认值：",
+      "default": "默认",
       "removeValue0": "移除 {{value0}}",
       "process": "进程",
       "unassigned": "未分配",
@@ -17632,7 +17759,9 @@
       "preservedEditsForValue0": "已保留的编辑： {{value0}}",
       "copyPreservedEditsForValue0": "复制已保留的编辑： {{value0}}",
       "image": "图片",
-      "source": "来源"
+      "source": "来源",
+      "selectAssignee": "选择负责人",
+      "selectModelAndEffort": "选择模型和推理强度"
     }
   }
 }

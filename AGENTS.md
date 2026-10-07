@@ -152,6 +152,10 @@ Notes:
 
 ## 7. Verification Before Hand-off
 
+[feature-map/README.md](feature-map/README.md) is an optional reference for user
+entry points, verification recipes, and coverage gaps. The map records coverage
+scope, not proof that a live journey passed.
+
 Default to verification based on the actual diff and its consumers. Run the smallest relevant checks first; expand only when a failure or an unbounded dependency justifies it. `pnpm test` is an alias for the full suite, not a cheap default.
 
 Use [Verification scope](doc/DEVELOPING.md#verification-scope) to select checks. Documentation-only changes need link checks and `git diff --check`. Copy/theme work normally needs locale/token checks, affected UI tests and a focused browser check. Upstream synchronization reuses upstream validation. Test only merge conflict resolutions and fork-specific integration changes; do not rerun tests for unconflicted upstream code.

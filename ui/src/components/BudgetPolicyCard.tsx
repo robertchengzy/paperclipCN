@@ -1,5 +1,6 @@
 import { t, useTranslation } from "@/i18n";
-import { useEffect, useState } from "react";
+import { centsToUsd, usdToCents } from "@paperclipai/shared";
+import { useEffect, useId, useState } from "react";
 import type { BudgetPolicySummary } from "@paperclipai/shared";
 import { AlertTriangle, PauseCircle, ShieldAlert, Wallet } from "lucide-react";
 import { cn, formatCents } from "../lib/utils";
@@ -32,12 +33,16 @@ function statusTone(status: BudgetPolicySummary["status"]) {
 export function BudgetPolicyCard({
   summary,
   onSave,
+  onUnpricedUsagePolicyChange,
+  onReservationChange,
   isSaving,
   compact = false,
   variant = "card",
 }: {
   summary: BudgetPolicySummary;
   onSave?: (amountCents: number) => void;
+  onReservationChange?: (cents: string) => void;
+  onUnpricedUsagePolicyChange?: (policy: "block" | "allow") => void;
   isSaving?: boolean;
   compact?: boolean;
   variant?: "card" | "plain";
@@ -48,6 +53,38 @@ export function BudgetPolicyCard({
   useEffect(() => {
     setDraftBudget(centsInputValue(summary.amount));
   }, [summary.amount]);
+
+  const [reservation, setReservation] = useState(centsToUsd(summary.reservationCents ?? 0));
+  const reservationErrorId = useId();
+  useEffect(() => setReservation(centsToUsd(summary.reservationCents ?? 0)), [summary.reservationCents]);
+  let reservationCents: string | null = null;
+  try { if (!reservation.trim().startsWith("-")) reservationCents = usdToCents(reservation.trim()); } catch { /* Shown as invalid input below. */ }
+  const reservationSection = onReservationChange ? <div className="space-y-2">
+    <label className="text-sm">Reserve per run (USD)
+      <Input aria-label="Reserve per run (USD)" aria-invalid={reservationCents === null} aria-describedby={reservationCents === null ? reservationErrorId : undefined}
+        value={reservation} onChange={event => setReservation(event.target.value)} inputMode="decimal" />
+    </label>
+    {reservationCents === null && <p id={reservationErrorId} role="alert" className="text-xs text-destructive">Enter a valid amount of zero or more.</p>}
+    <p className="text-xs text-muted-foreground">An estimate held before each run starts. Zero disables the estimate. Actual provider charges may exceed it.</p>
+    <Button variant="outline" disabled={isSaving || reservationCents === null || reservationCents === (summary.reservationCents ?? "0.0000000")}
+      onClick={() => { if (reservationCents !== null) onReservationChange(reservationCents); }}>Update reservation</Button>
+  </div> : null;
+
+  const advancedSettings = onReservationChange || onUnpricedUsagePolicyChange ? (
+    <details className="space-y-3">
+      <summary className="cursor-pointer text-sm font-medium">Advanced settings</summary>
+      <div className="space-y-4">
+        {onUnpricedUsagePolicyChange && (
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={summary.unpricedUsagePolicy !== "allow"} disabled={isSaving}
+              onChange={(event) => onUnpricedUsagePolicyChange(event.target.checked ? "block" : "allow")} />
+            Block new work when usage has no reliable price
+          </label>
+        )}
+        {reservationSection}
+      </div>
+    </details>
+  ) : null;
 
   const parsedDraft = parseDollarInput(draftBudget);
   const canSave = typeof parsedDraft === "number" && parsedDraft !== summary.amount && Boolean(onSave);
@@ -97,6 +134,10 @@ export function BudgetPolicyCard({
 
   const progressSection = (
     <div className="space-y-2">
+      {summary.pendingRunCount > 0 && <p className="text-sm text-destructive">{summary.pendingRunCount} completed runs await accounting.</p>}
+      {summary.unpricedEventCount > 0 && (
+        <p className="text-sm text-destructive">{summary.unpricedEventCount} usage events are unpriced. Known spend excludes their unknown cost.</p>
+      )}
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>{t("app.reports.budgetPolicyCard.remaining")}</span>
         <span>{summary.amount > 0 ? formatCents(summary.remainingAmount) : t("app.reports.budgetPolicyCard.unlimited")}</span>
@@ -186,6 +227,7 @@ export function BudgetPolicyCard({
         {progressSection}
         {pausedPane}
         {saveSection}
+        {advancedSettings}
         {parsedDraft === null ? (
           <p className="text-xs text-destructive">{t("app.reports.budgetPolicyCard.enterAValidNonnegativeDollarAmount")}</p>
         ) : null}
@@ -215,6 +257,7 @@ export function BudgetPolicyCard({
         {progressSection}
         {pausedPane}
         {saveSection}
+        {advancedSettings}
         {parsedDraft === null ? (
           <p className="text-xs text-destructive">{t("app.reports.budgetPolicyCard.enterAValidNonnegativeDollarAmount")}</p>
         ) : null}

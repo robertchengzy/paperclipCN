@@ -2,6 +2,7 @@ import { projectDisplayName } from "@/lib/project-display";
 import { t, useTranslation } from "@/i18n";
 import { Trans } from "react-i18next";
 import { AgentIdentity } from "@/components/AgentIdentity";
+import { useCombinedInboxTasksEnabled } from "@/hooks/useCombinedInboxTasksEnabled";
 import { useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
@@ -107,6 +108,7 @@ export function CommandPalette() {
     queryFn: () => instanceSettingsApi.getExperimental(),
     retry: false,
   });
+  const { enabled: combinedInboxTasksEnabled } = useCombinedInboxTasksEnabled();
   const fileViewerEnabled = experimentalSettings?.enableExperimentalFileViewer === true;
 
   useEffect(() => {
@@ -346,8 +348,8 @@ export function CommandPalette() {
         <CommandGroup heading={t("app.shell.commandPalette.pages")}>
           <CommandItem onSelect={() => go("/dashboard")}>
             <LayoutDashboard className="mr-2 h-4 w-4" />{t("app.common.nouns.dashboard")}</CommandItem>
-          <CommandItem onSelect={() => go("/inbox")}>
-            <Inbox className="mr-2 h-4 w-4" />{t("app.common.nouns.inbox")}</CommandItem>
+          <CommandItem onSelect={() => go(combinedInboxTasksEnabled ? "/issues?view=mine" : "/inbox")}>
+            <Inbox className="mr-2 h-4 w-4" />{combinedInboxTasksEnabled ? t("app.shell.commandPalette.myWork") : t("app.common.nouns.inbox")}</CommandItem>
           <CommandItem onSelect={() => go("/issues")}>
             <CircleDot className="mr-2 h-4 w-4" />{t("app.common.nouns.tasks")}</CommandItem>
           <CommandItem onSelect={() => go("/projects")}>

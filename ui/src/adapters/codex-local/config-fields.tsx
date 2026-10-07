@@ -2,6 +2,7 @@ import { t as translateUpstream } from "@/i18n";
 import { ConfigSelect } from "@/components/ConfigSelect";
 import { t, useTranslation } from "@/i18n";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { AdapterMark } from "../../components/AdapterMark";
 import { configFieldsForSection } from "../config-sections";
 import type { AdapterConfigFieldsProps } from "../types";
 import {
@@ -39,6 +40,14 @@ const defaultOpenCodeRunnerModel = "openrouter/deepseek/deepseek-v4-flash-0731";
 const defaultAcpxClaudeModel = "claude-sonnet-5";
 const defaultClaudeManagedModel = "claude-sonnet-5";
 const defaultAwsAgentCoreModel = "global.anthropic.claude-sonnet-4-6";
+const runnerHarnessOptions = [
+  { value: "codex", label: "Codex", adapter: "codex_local" },
+  { value: "opencode", label: "OpenCode 1.18.34", adapter: "opencode_local" },
+  { value: "claude_managed", label: "Claude Managed", adapter: "claude_local" },
+  { value: "aws_agentcore", label: "AWS AgentCore", adapter: "aws_agentcore" },
+  { value: "acpx", get label() { return translateUpstream("app.upstreamSync.acpAgents"); }, adapter: "acpx_local" },
+  { value: "grok", label: "Grok Build", adapter: "grok_local" },
+];
 
 export function CodexLocalConfigFields({
   section,
@@ -195,16 +204,15 @@ export function CodexLocalConfigFields({
       )}
       {runnerManaged && (
         <Field configSection="adapter"
-          label={t("app.common.labels.provider")}
-          hint={t("app.agentUi.configFields.theRunnerPersistsThisProviderWithEach")}
+          label={t("app.agentUi.configFields.harness")}
+          hint={t("app.agentUi.configFields.harnessHint")}
         >
-          <ConfigSelect
-            className={inputClass}
+          <Select
             value={runnerProvider === "acpx" && runnerSchemaValue("acpxAgent", "claude") === "grok" ? "grok" : runnerProvider}
-            onValueChange={(selectedValue) => {
-              const grok = selectedValue === "grok";
-              const provider = grok ? "acpx" : isPaperclipRunnerProvider(selectedValue)
-                ? selectedValue
+            onValueChange={(value) => {
+              const grok = value === "grok";
+              const provider = grok ? "acpx" : isPaperclipRunnerProvider(value)
+                ? value
                 : "codex";
               const model =
                 provider === "opencode"
@@ -222,11 +230,13 @@ export function CodexLocalConfigFields({
                   adapterSchemaValues: {
                     ...values!.adapterSchemaValues,
                     provider,
+                    acpxSessionMode: undefined,
                     ...(provider === "acpx" ? { acpxAgent: grok ? "grok" : "claude" } : {}),
                   },
                 });
               } else {
                 mark("adapterConfig", "provider", provider);
+                mark("adapterConfig", "acpxSessionMode", undefined);
                 mark("adapterConfig", "model", model);
                 if (provider === "acpx") {
                   mark("adapterConfig", "acpxAgent", grok ? "grok" : "claude");
@@ -234,29 +244,53 @@ export function CodexLocalConfigFields({
               }
             }}
           >
-            <option value="codex">Codex</option>
-            <option value="opencode">OpenCode 1.18.32</option>
-            <option value="claude_managed">Claude Managed</option>
-            <option value="aws_agentcore">AWS AgentCore</option>
-            <option value="acpx">{translateUpstream("app.upstreamSync.acpAgents")}</option>
-            <option value="grok">Grok Build</option>
-          </ConfigSelect>
+            <SelectTrigger className="w-full" aria-label={t("app.agentUi.configFields.harness")}><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {runnerHarnessOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  <AdapterMark type={option.adapter} className="size-4" />
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </Field>
       )}
       {runnerManaged && runnerProvider === "acpx" && runnerSchemaValue("acpxAgent", "claude") !== "grok" && (
         <Field configSection="adapter" label={translateUpstream("app.upstreamSync.acpAgent")} hint={translateUpstream("app.upstreamSync.cursorGitHubCopilotAndPiAreAwaitingLocalAnd")}>
-          <ConfigSelect className={inputClass}
+          <Select
             value={String(isCreate ? values!.adapterSchemaValues?.acpxAgent ?? "claude" : eff("adapterConfig", "acpxAgent", config.acpxAgent ?? "claude"))}
-            onValueChange={(selectedValue) => {
-              const profile = PAPERCLIP_RUNNER_ACPX_PROFILES.find(entry => entry.value === selectedValue);
+            onValueChange={(value) => {
+              const profile = PAPERCLIP_RUNNER_ACPX_PROFILES.find(entry => entry.value === value);
+              const acpxSessionMode = profile?.value === "cursor" ? "agent" : undefined;
               if (!profile?.qualified) return;
               if (isCreate) set!({ model: profile.value === "claude" ? defaultAcpxClaudeModel : "",
-                adapterSchemaValues: { ...values!.adapterSchemaValues, acpxAgent: profile.value } });
-              else { mark("adapterConfig", "acpxAgent", profile.value); mark("adapterConfig", "model", profile.value === "claude" ? defaultAcpxClaudeModel : ""); }
+                adapterSchemaValues: { ...values!.adapterSchemaValues, acpxAgent: profile.value, acpxSessionMode } });
+              else { mark("adapterConfig", "acpxAgent", profile.value); mark("adapterConfig", "acpxSessionMode", acpxSessionMode); mark("adapterConfig", "model", profile.value === "claude" ? defaultAcpxClaudeModel : ""); }
             }}>
-            {PAPERCLIP_RUNNER_ACPX_PROFILES.map(profile => <option key={profile.value} value={profile.value} disabled={!profile.qualified}>
-              {profile.label}{profile.qualified ? "" : translateUpstream("app.upstreamSync.qualificationPending")}
-            </option>)}
+            <SelectTrigger className="w-full" aria-label={translateUpstream("app.upstreamSync.acpAgent")}><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {PAPERCLIP_RUNNER_ACPX_PROFILES.map(profile => (
+                <SelectItem key={profile.value} value={profile.value} disabled={!profile.qualified}>
+                  <AdapterMark type={profile.value === "cursor" ? "cursor" : `${profile.value}_local`} className="size-4" />
+                  {profile.label}{profile.qualified ? "" : translateUpstream("app.upstreamSync.qualificationPending")}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+      )}
+      {runnerManaged && runnerProvider === "acpx" && runnerSchemaValue("acpxAgent", "claude") === "cursor" && (
+        <Field configSection="adapter" label={t("app.agentUi.configFields.cursorMode")} hint={t("app.agentUi.configFields.cursorModeHint")}>
+          <ConfigSelect className={inputClass} aria-label={t("app.agentUi.configFields.cursorMode")}
+            value={String(runnerSchemaValue("acpxSessionMode", "agent"))}
+            onValueChange={(selectedValue) => updateRunnerSchemaValue("acpxSessionMode", selectedValue)}>
+            {!["agent", "plan", "ask"].includes(String(runnerSchemaValue("acpxSessionMode", "agent"))) && (
+              <option value={String(runnerSchemaValue("acpxSessionMode", "agent"))} disabled>{t("app.agentUi.configFields.cursorModeUnsupported")}</option>
+            )}
+            <option value="agent">{t("app.agentUi.configFields.cursorModes.agent")}</option>
+            <option value="plan">{t("app.agentUi.configFields.cursorModes.plan")}</option>
+            <option value="ask">{t("app.agentUi.configFields.cursorModes.ask")}</option>
           </ConfigSelect>
         </Field>
       )}

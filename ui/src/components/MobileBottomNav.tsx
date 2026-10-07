@@ -5,6 +5,7 @@ import {
   CircleCheck,
   SquarePen,
   Users,
+  MessageCircle,
   Inbox,
 } from "lucide-react";
 import { useCompany } from "../context/CompanyContext";
@@ -12,6 +13,8 @@ import { useDialogActions } from "../context/DialogContext";
 import { SIDEBAR_SCROLL_RESET_STATE } from "../lib/navigation-scroll";
 import { cn } from "../lib/utils";
 import { useInboxBadge } from "../hooks/useInboxBadge";
+import { useAgentChatEnabled } from "@/hooks/useAgentChatEnabled";
+import { useCombinedInboxTasksEnabled } from "@/hooks/useCombinedInboxTasksEnabled";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "@/i18n";
 
@@ -42,9 +45,16 @@ export function MobileBottomNav({ visible }: MobileBottomNavProps) {
   const { openNewIssue } = useDialogActions();
   const inboxBadge = useInboxBadge(selectedCompanyId);
   const { t } = useTranslation();
+  const { enabled: agentChatEnabled } = useAgentChatEnabled();
+  const { enabled: combinedInboxTasksEnabled } = useCombinedInboxTasksEnabled();
 
+  // PAP-670: with both flags off the bar is the original Home · Tasks · + ·
+  // Agents · Inbox. Agent Chat adds Chat in the second slot (Home · Chat · + ·
+  // Tasks · Agents). Combined Inbox + Task List drops Inbox as a destination —
+  // it is a view inside Tasks, so its unread badge rides on Tasks. The grid
+  // tracks the live count, so the bar stays evenly divided in every mix.
   const items = useMemo<MobileNavItem[]>(
-    () => [
+    () => !agentChatEnabled && !combinedInboxTasksEnabled ? [
       { type: "link", to: "/dashboard", label: t("app.mobileNav.home"), icon: House },
       { type: "link", to: "/issues", label: t("app.sidebar.tasks"), icon: CircleCheck },
       { type: "action", label: t("app.sidebar.newTask"), icon: SquarePen, onClick: () => openNewIssue() },
@@ -56,19 +66,40 @@ export function MobileBottomNav({ visible }: MobileBottomNavProps) {
         icon: Inbox,
         badge: inboxBadge.inbox,
       },
+    ] : [
+      { type: "link", to: "/dashboard", label: t("app.mobileNav.home"), icon: House },
+      ...(agentChatEnabled
+        ? [{ type: "link", to: "/chats", label: t("app.mobileNav.chat"), icon: MessageCircle } as MobileNavItem]
+        : []),
+      { type: "action", label: t("app.sidebar.newTask"), icon: SquarePen, onClick: () => openNewIssue() },
+      {
+        type: "link",
+        to: "/issues",
+        label: t("app.sidebar.tasks"),
+        icon: CircleCheck,
+        badge: combinedInboxTasksEnabled ? inboxBadge.inbox : undefined,
+      },
+      { type: "link", to: "/agents/all", label: t("app.sidebar.agents"), icon: Users },
+      ...(!combinedInboxTasksEnabled
+        ? [{ type: "link", to: "/inbox", label: t("app.sidebar.inbox"), icon: Inbox, badge: inboxBadge.inbox } as MobileNavItem]
+        : []),
     ],
-    [openNewIssue, inboxBadge.inbox, t],
+    [openNewIssue, inboxBadge.inbox, agentChatEnabled, combinedInboxTasksEnabled, t],
   );
 
   return (
     <nav
       className={cn(
-        "fixed bottom-0 left-0 right-0 z-30 bg-border/50 transition-transform duration-200 ease-out motion-reduce:transition-none dark:bg-muted md:hidden pb-(--sz-safe-bottom)",
-        visible ? "translate-y-0" : "translate-y-full",
+        "mobile-bottom-nav fixed bottom-0 left-0 right-0 z-30 bg-muted md:hidden pb-(--sz-safe-bottom)",
       )}
+      data-visible={visible}
+      inert={!visible}
       aria-label={t("app.mobileNav.ariaLabel")}
     >
-      <div className="grid h-(--mobile-bottom-nav-content-height) grid-cols-5 px-1">
+      <div
+        className="grid h-(--mobile-bottom-nav-content-height) px-1"
+        style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}
+      >
         {items.map((item) => {
           if (item.type === "action") {
             const Icon = item.icon;

@@ -76,6 +76,14 @@ function appCopyTable(): Record<string, AppCopy> {
       tagline: t("app.lib.appGalleryCopy.posthog.tagline"),
       short: t("app.lib.appGalleryCopy.posthog.short"),
     },
+    neon: {
+      tagline: t("app.lib.appGalleryCopy.neon.tagline"),
+      short: t("app.lib.appGalleryCopy.neon.short"),
+    },
+    superagent: {
+      tagline: t("app.lib.appGalleryCopy.superagent.tagline"),
+      short: t("app.lib.appGalleryCopy.superagent.short"),
+    },
     linear: {
       tagline: t("app.lib.appGalleryCopy.linear.tagline"),
       short: t("app.lib.appGalleryCopy.linear.tagline"),

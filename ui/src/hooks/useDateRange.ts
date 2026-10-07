@@ -18,12 +18,12 @@ export const PRESET_KEYS: DatePreset[] = ["mtd", "7d", "30d", "ytd", "all", "cus
 // note: computeRange is called inside a useMemo that re-evaluates once per minute
 // (driven by minuteTick). this means sliding windows (7d, 30d) advance their upper
 // bound at most once per minute — acceptable for a cost dashboard.
-function computeRange(preset: DatePreset): { from: string; to: string } {
+export function computeRange(preset: DatePreset): { from: string; to: string } {
   const now = new Date();
   const to = now.toISOString();
   switch (preset) {
     case "mtd": {
-      const d = new Date(now.getFullYear(), now.getMonth(), 1);
+      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
       return { from: d.toISOString(), to };
     }
     case "7d": {
@@ -35,7 +35,7 @@ function computeRange(preset: DatePreset): { from: string; to: string } {
       return { from: d.toISOString(), to };
     }
     case "ytd": {
-      const d = new Date(now.getFullYear(), 0, 1);
+      const d = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
       return { from: d.toISOString(), to };
     }
     case "all":

@@ -1,5 +1,5 @@
 import { t, useTranslation } from "@/i18n";
-import type { ToolConnection } from "@paperclipai/shared";
+import type { McpConnection, ToolConnection } from "@paperclipai/shared";
 import { humanizeConnectionDisplayName } from "@paperclipai/shared";
 import { Identity } from "@/components/Identity";
 import type { CompanyUserProfile } from "@/lib/company-members";
@@ -50,6 +50,16 @@ export function connectionDisplayNameForOwner(
   return name.toLowerCase().endsWith("s")
     ? t("app.apps.connectionOwner.ownerAppEndingS", { owner: name, applicationName })
     : t("app.apps.connectionOwner.ownerApp", { owner: name, applicationName });
+}
+
+/** Use the same owner naming as outbound connections, without changing OAuth client identity. */
+export function assistantConnectionDisplayName(connection: McpConnection): string {
+  const clientName = connection.clientName.trim();
+  const owner = connection.user ? ownerGivenName(connection.user.name) : "";
+  if (!owner) return t("app.apps.connectionOwner.assistantConnection", { client: clientName });
+  return owner.toLowerCase().endsWith("s")
+    ? t("app.apps.connectionOwner.assistantConnectionOwnerEndingS", { owner, client: clientName })
+    : t("app.apps.connectionOwner.assistantConnectionOwner", { owner, client: clientName });
 }
 
 export function ConnectionOwnerIdentity({ owner }: { owner: ConnectionOwnerProfile | null }) {

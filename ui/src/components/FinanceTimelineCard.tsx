@@ -38,7 +38,7 @@ export function FinanceTimelineCard({
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary">{financeEventKindDisplayName(row.eventKind)}</Badge>
+                    <Badge variant="secondary">{row.metadataJson?.source === "provider_cost_report" ? "Provider cost report" : financeEventKindDisplayName(row.eventKind)}</Badge>
                     <Badge variant={row.direction === "credit" ? "outline" : "secondary"}>
                       {financeDirectionDisplayName(row.direction)}
                     </Badge>
@@ -59,7 +59,7 @@ export function FinanceTimelineCard({
                   )}
                 </div>
                 <div className="text-right tabular-nums">
-                  <div className="text-sm font-semibold">{formatCents(row.amountCents)}</div>
+                  <div className="text-sm font-semibold">{formatCents(row.amountCents, row.currency)}</div>
                   <div className="text-xs text-muted-foreground">{row.currency}</div>
                   {row.estimated ? <div className="text-(length:--text-micro) uppercase tracking-(--tracking-eyebrow) text-amber-600">{t("app.reports.financeTimelineCard.estimated")}</div> : null}
                 </div>

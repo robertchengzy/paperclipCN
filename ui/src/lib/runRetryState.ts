@@ -20,6 +20,8 @@ export type RunRetryStateSummary = {
 };
 
 const retryReasonLabels = (): Record<string, string> => ({
+  native_provider_overloaded: t("app.shared.retry.reasons.nativeProviderOverloaded"),
+  ai_connection_pool_wait: t("app.shared.retry.reasons.aiConnectionPoolWait"),
   transient_failure: t("app.shared.retry.reasons.transientFailure"),
   missing_issue_comment: t("app.shared.retry.reasons.missingIssueComment"),
   process_lost: t("app.shared.retry.reasons.processLost"),
@@ -66,9 +68,11 @@ export function describeRunRetryState(run: RetryAwareRun): RunRetryStateSummary 
   if (run.status === "scheduled_retry") {
     return {
       kind: "scheduled",
-      badgeLabel: isMaxTurnContinuation
-        ? t("app.shared.retry.continuationScheduled")
-        : t("app.shared.retry.retryScheduled"),
+      badgeLabel: run.scheduledRetryReason === "ai_connection_pool_wait"
+        ? t("app.shared.retry.poolExhausted")
+        : isMaxTurnContinuation
+          ? t("app.shared.retry.continuationScheduled")
+          : t("app.shared.retry.retryScheduled"),
       tone: "border-blue-500/30 bg-blue-500/10 text-blue-700 dark:text-blue-300",
       detail: joinFragments([attemptLabel, reasonLabel]),
       secondary: dueAt

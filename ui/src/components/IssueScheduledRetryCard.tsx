@@ -122,7 +122,9 @@ export function IssueScheduledRetryCard({
           ) : null}
           {scheduledRetry.error ? (
             <div className="mt-1 text-xs text-muted-foreground">
-              {t("app.issueUi.issueScheduledRetryCard.lastAttemptFailed", { error: scheduledRetry.error })}
+              {/[.!?。！？]$/.test(scheduledRetry.error.trim())
+                ? t("app.issueUi.issueScheduledRetryCard.lastAttemptFailedPunctuated", { error: scheduledRetry.error })
+                : t("app.issueUi.issueScheduledRetryCard.lastAttemptFailed", { error: scheduledRetry.error })}
             </div>
           ) : null}
           {isError ? (

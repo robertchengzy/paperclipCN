@@ -1,4 +1,5 @@
 import { i18n as uiI18n } from "@/i18n";
+import { interactionReadinessRefetchInterval } from "@/lib/issue-thread-interactions";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { Trans } from "react-i18next";
 import { t as translate, useTranslation } from "@/i18n";
@@ -2116,6 +2117,7 @@ export function PipelineItemDetailView({ pipelineId, caseId }: { pipelineId: str
     queryKey: conversationIssueId ? queryKeys.issues.interactions(conversationIssueId) : ["pipeline-item", caseId, "missing-conversation-interactions"],
     queryFn: () => issuesApi.listInteractions(conversationIssueId!),
     enabled: Boolean(conversationIssueId),
+    refetchInterval: (query) => interactionReadinessRefetchInterval(query.state.data),
   });
   const { data: agents } = useQuery({
     queryKey: conversationCompanyId ? queryKeys.agents.list(conversationCompanyId) : ["agents", "pipeline-item", "none"],

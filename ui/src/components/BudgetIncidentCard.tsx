@@ -59,7 +59,9 @@ export function BudgetIncidentCard({
             </div>
             <CardTitle className="mt-1 text-base text-red-950 dark:text-red-50">{incident.scopeName}</CardTitle>
             <CardDescription className="mt-1 text-red-900/75 dark:text-red-100/70">
-              {t("app.reports.budgetIncidentCard.spendReached", { observed: formatCents(incident.amountObserved), limit: formatCents(incident.amountLimit) })}
+              {incident.thresholdType === "hard" && incident.amountObserved < incident.amountLimit
+                ? t("app.reports.budgetIncidentCard.accountingIncomplete", { observed: formatCents(incident.amountObserved) })
+                : t("app.reports.budgetIncidentCard.spendReached", { observed: formatCents(incident.amountObserved), limit: formatCents(incident.amountLimit) })}
             </CardDescription>
           </div>
           <div className="rounded-full border border-red-400/30 bg-red-500/10 p-2 text-red-600 dark:text-red-200">

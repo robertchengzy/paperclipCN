@@ -87,9 +87,6 @@ export function AuditHub({ section }: { section: AuditSection }) {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t("app.common.nouns.audit")}</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
-          {t("app.reports.auditHub.description")}
-        </p>
       </div>
 
       <Tabs
