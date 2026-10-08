@@ -1,4 +1,5 @@
 import { t as translateCopy, useTranslation } from "@/i18n";
+import { PrimaryAgentIndicator } from "@/components/primary-agent/PrimaryAgentPresentation";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useState, useEffect, useMemo, lazy, Suspense } from "react";
 import { Link, useNavigate, useLocation } from "@/lib/router";
@@ -375,6 +376,7 @@ export function Agents() {
       <EntityRow
         key={agent.id}
         title={agent.name}
+        titleAccessory={<PrimaryAgentIndicator agentId={agent.id} companyId={agent.companyId} />}
         // Fixed (truncating) title width at xl so the `meta` group starts at a
         // constant x on every row — that's what makes the model + timestamp
         // columns line up vertically. Below xl the meta columns are hidden, so

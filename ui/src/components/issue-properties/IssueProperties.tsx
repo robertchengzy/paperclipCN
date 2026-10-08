@@ -1,5 +1,6 @@
 import { i18n as uiI18n } from "@/i18n";
 import { projectDisplayName } from "@/lib/project-display";
+import { isLockedIssueStub } from "@/components/LockedIssueChip";
 import { IssuePullRequestLinks } from "../IssuePullRequestLinks";
 import { useIssueWorkProducts } from "../../hooks/useIssueWorkProducts";
 import { getIssuePullRequests, pullRequestHref, pullRequestIdentity } from "../../lib/issue-pull-requests";
@@ -1571,9 +1572,11 @@ export function IssueProperties({
               ? retryNow.data?.outcome === "already_promoted"
                 ? t("app.newIssue.properties.retry.alreadyPromotedRunStarting")
                 : t("app.newIssue.properties.retry.promotedRunStarting")
-              : scheduledRetryIsContinuation
-                ? t("app.newIssue.properties.retry.pullsContinuationForward")
-                : t("app.newIssue.properties.retry.pullsRetryForward")}
+              : retryNow.data?.outcome === "waiting" && retryNow.data.scheduledRetry?.runId === scheduledRetry.runId
+                ? retryNow.data.message
+                : scheduledRetryIsContinuation
+                  ? t("app.newIssue.properties.retry.pullsContinuationForward")
+                  : t("app.newIssue.properties.retry.pullsRetryForward")}
         </span>
       </div>
     </div>
@@ -2142,16 +2145,17 @@ export function IssueProperties({
     if (!issue.parentId) return null;
     return allIssues?.find((candidate) => candidate.id === issue.parentId) ?? null;
   }, [allIssues, issue.parentId]);
-  const parentIdentifier = issue.ancestors?.[0]?.identifier ?? currentParentIssue?.identifier;
-  const parentTitle = issue.ancestors?.[0]?.title ?? currentParentIssue?.title ?? issue.parentId?.slice(0, 8);
+  const parentAncestor = issue.ancestors?.find((ancestor) => ancestor.id === issue.parentId);
+  const parentIdentifier = parentAncestor?.identifier ?? currentParentIssue?.identifier;
+  const parentTitle = parentAncestor?.title ?? currentParentIssue?.title ?? issue.parentId?.slice(0, 8);
   const parentTrigger = issue.parentId ? (
     <IssueReferencePill
       variant="property"
-      issue={{
+      issue={isLockedIssueStub(parentAncestor) ? parentAncestor : {
         id: issue.parentId,
         identifier: parentIdentifier ?? issue.parentId,
         title: parentTitle ?? t("app.newIssue.properties.parent.parentTask"),
-        status: issue.ancestors?.[0]?.status ?? currentParentIssue?.status,
+        status: parentAncestor?.status ?? currentParentIssue?.status,
       }}
       className="min-w-0 max-w-full"
     />

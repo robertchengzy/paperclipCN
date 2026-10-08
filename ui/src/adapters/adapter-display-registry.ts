@@ -128,6 +128,13 @@ const adapterDisplayMap: Record<string, AdapterDisplayInfo> = {
     get description() { return t("app.agentUi.adapterDisplayRegistry.cursorCliHarness"); },
     icon: MousePointer2,
   },
+  // Display-only choice: persisted as paperclip_runner with provider openai_dot.
+  openai_dot: {
+    label: "OpenAI Dot",
+    description: "Your Dot in ChatGPT",
+    icon: Bot,
+    experimental: true,
+  },
   cursor_cloud: {
     label: "Cursor Cloud",
     get description() { return t("app.agentUi.adapterDisplayRegistry.managedRemoteCursorAgent"); },

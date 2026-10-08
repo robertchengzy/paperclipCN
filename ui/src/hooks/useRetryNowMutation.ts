@@ -27,6 +27,7 @@ export const RETRY_NOW_OUTCOME_HEADLINE: Record<IssueRetryNowOutcome, string> = 
   get already_promoted() { return t("app.lib.useRetryNowMutation.alreadyPromoted"); },
   get no_scheduled_retry() { return t("app.lib.useRetryNowMutation.noScheduledRetry"); },
   get gate_suppressed() { return t("app.lib.useRetryNowMutation.couldNotRetry"); },
+  get waiting() { return t("app.upstreamOct08.retryWaiting"); },
 };
 
 export function useRetryNowMutation(

@@ -171,7 +171,9 @@ export function IssueScheduledRetryCard({
                 ? retryNow.data?.outcome === "already_promoted"
                   ? t("app.issueUi.issueScheduledRetryCard.alreadyPromotedStarting")
                   : t("app.issueUi.issueScheduledRetryCard.promotedStarting")
-                : helperIdle}
+                : retryNow.data?.outcome === "waiting" && retryNow.data.scheduledRetry?.runId === scheduledRetry.runId
+                  ? retryNow.data.message
+                  : helperIdle}
           </span>
         </div>
       </div>

@@ -281,7 +281,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
           </SidebarSection>
         ) : null}
 
-        {children}
+        {children ?? (streamlinedUiEnabled ? <SidebarAgents streamlined /> : null)}
 
         {streamlinedUiEnabled ? (
           <SidebarRecentTasks companyId={selectedCompanyId} liveIssueIds={liveIssueIds} />

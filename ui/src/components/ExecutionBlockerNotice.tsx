@@ -49,7 +49,7 @@ export function ExecutionBlockerNotice({ companyId, issueId, blocker, onRetried 
           <Link to={`/agents/${blocker.agentId}/runs/${blocker.runId}`}>{t("app.shell.executionBlockerNotice.inspectRun")}</Link>
         </Button>
       )}
-      {(!requiresInspection || blocker.canRetry) && blocker.agentId && blocker.runId &&
+      {!blocker.workspaceRepairRequired && (!requiresInspection || blocker.canRetry) && blocker.agentId && blocker.runId &&
         ((blocker.cause === "legacy_execution_requires_reconciliation" && failedRun) || blocker.canContinue || blocker.canRetry) && (
         <Button variant="outline" size="sm" disabled={retry.isPending} onClick={() => retry.mutate()}>
           {retry.isPending ? t("app.common.progress.starting") : blocker.canContinue ? t("app.common.actions.continue") : t("app.common.actions.retry")}

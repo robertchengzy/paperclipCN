@@ -3,7 +3,7 @@ import { t as translateCopy, useTranslation } from "@/i18n";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { NavLink, useLocation } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
-import { FolderOpen, Loader2, LogOut, MoreHorizontal, Plus } from "lucide-react";
+import { FolderOpen, Lock, Loader2, LogOut, MoreHorizontal, Plus } from "lucide-react";
 import {
   DndContext,
   MouseSensor,
@@ -149,6 +149,7 @@ function ProjectItem({
     >
       <ProjectTile color={project.color ?? null} icon={project.icon ?? null} size="xs" />
       <span className={rail ? SIDEBAR_RAIL_HIDDEN_LABEL : "flex-1 truncate"}>{projectDisplayName(project.name)}</span>
+            {!rail && project.visibility === "private" ? <Lock className="size-3.5 shrink-0 text-muted-foreground" aria-label={translateCopy("app.upstreamOct08.privateProject")} /> : null}
       {!rail ? <ExternalObjectStatusSummary summary={externalObjectsSummary} compact /> : null}
       {!rail && project.pauseReason === "budget" ? <BudgetSidebarMarker title={translateCopy("app.issueUi.sidebarProjects.projectPausedByBudget")} /> : null}
     </NavLink>

@@ -202,8 +202,8 @@ export function ComposerRunSettingsPicker({
       <span className="text-muted-foreground" aria-hidden>·</span>
       <button type="button" disabled={disabled} aria-label={translateUpstream("app.upstreamSync.selectModelAndEffort")} aria-haspopup="dialog" aria-expanded={open && view !== "agents"} onClick={() => { setView("settings"); setOpen(true); }}
         className="flex h-8 min-w-0 max-w-full items-center gap-1.5 rounded-full px-2.5 text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50">
-        <span data-testid="task-chat-composer-model-label" className="min-w-0 truncate">{modelName || translateUpstream("app.upstreamSync.default")}</span>
-        {effort ? <span className="hidden shrink-0 sm:inline">{effortLabel}</span> : null}
+        <span data-testid="task-chat-composer-model-label" className="min-w-0 truncate">{open ? translateUpstream("app.upstreamOct08.selectModel") : modelName || translateUpstream("app.upstreamSync.default")}</span>
+        {!open && effort ? <span className="hidden shrink-0 sm:inline">{effortLabel}</span> : null}
         <ChevronDown className="size-3 shrink-0" aria-hidden />
       </button>
     </> : null}

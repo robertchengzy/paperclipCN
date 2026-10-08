@@ -54,7 +54,7 @@ import {
 } from "@/lib/provider-credential";
 import { defaultCreateValues } from "../agent-config-defaults";
 import { ModelDropdown } from "../AgentConfigForm";
-import { Field } from "../agent-config-primitives";
+import { Field, ToggleField } from "../agent-config-primitives";
 import { SecretPicker } from "../environment-variables-editor/SecretPicker";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -118,7 +118,8 @@ function Setup({
   const { openNewIssue } = useDialogActions();
   const appearanceDraft = useAgentAppearanceDraft(`${companyId}:new-agent`);
   const isRunner = adapterType === "paperclip_runner";
-  const brandType = isRunner
+  const isDot = isRunner && runnerProvider === "openai_dot";
+  const brandType = isDot ? "openai_dot" : isRunner
     ? runnerProvider === "grok"
       ? "grok_local"
       : runnerProvider === "claude"
@@ -137,7 +138,8 @@ function Setup({
   const chooseProvider = multiProvider || brandType === "hermes_local";
   const hasCredentialField =
     chooseProvider || Boolean(SETUP_CREDENTIAL_KEYS[adapterType]);
-  const showModel = !["cursor_cloud", "hermes_gateway"].includes(adapterType);
+  const showModel = !isDot && !["cursor_cloud", "hermes_gateway"].includes(adapterType);
+  const [allowUnmeteredProvider, setAllowUnmeteredProvider] = useState(false);
   const [gatewayUrl, setGatewayUrl] = useState("");
   const [kimiModel, setKimiModel] = useState("");
   const [kimiBaseUrl, setKimiBaseUrl] = useState("");
@@ -315,6 +317,8 @@ function Setup({
     isNewAgentAdapterAllowed(adapterType, {
       cloud,
       nativeRunnerEnabled: experimental.data?.enableNativeRunner === true,
+      openAiDotEnabled: experimental.data?.enableOpenAiDot === true,
+      runnerProvider,
     }) &&
     adapters.data?.some(
       (adapter) =>
@@ -358,6 +362,7 @@ function Setup({
         ? {
             adapterSchemaValues: {
               provider: (runnerProvider === "claude" || runnerProvider === "grok") ? "acpx" : runnerProvider,
+              ...(isDot ? { allowUnmeteredProvider } : {}),
               ...((runnerProvider === "claude" || runnerProvider === "grok") ? { acpxAgent: runnerProvider } : {}),
             },
           }
@@ -398,6 +403,7 @@ function Setup({
     return config;
   }
   function preparedConfig(nextConnection = connection) {
+    if (isDot && !allowUnmeteredProvider) throw new Error("Acknowledge external provider billing before creating your Dot agent.");
     if (multiProvider && (!model.trim() || !model.includes("/")))
       throw new Error(t("app.agentSetup.setup.errors.modelFormat"));
     if (
@@ -653,7 +659,7 @@ function Setup({
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <AdapterMark type={brandType} />
               <span>{getAdapterDisplay(brandType).label}</span>
-              {isRunner && (
+              {isRunner && !isDot && (
                 <span>
                   ·{" "}
                   {runnerProvider === "codex"
@@ -794,11 +800,11 @@ function Setup({
                         <Check className="size-5" />
                         {created.status === "pending_approval"
                           ? t("app.agentSetup.setup.submittedForApproval")
-                          : t("app.agentSetup.setup.ready")}
+                          : isDot ? t("app.upstreamOct08.dotCreated") : t("app.agentSetup.setup.ready")}
                       </h2>
                       <dl className="grid grid-cols-2 gap-4 text-sm">
                         <dt className="text-muted-foreground">{t("app.agents.config.sections.adapter")}</dt>
-                        <dd>{getAdapterDisplay(adapterType).label}</dd>
+                        <dd>{getAdapterDisplay(isDot ? "openai_dot" : adapterType).label}</dd>
                         {showModel && (
                           <>
                             <dt className="text-muted-foreground">{t("app.agents.config.model.label")}</dt>
@@ -813,27 +819,25 @@ function Setup({
                       <p className="text-sm text-muted-foreground">
                         {created.status === "pending_approval"
                           ? t("app.agentSetup.setup.pendingApprovalNote")
-                          : t("app.agentSetup.setup.readyNote")}
+                          : isDot ? t("app.upstreamOct08.dotReadyNote") : t("app.agentSetup.setup.readyNote")}
                       </p>
                     </div>
                     <div className="flex flex-wrap justify-between gap-3">
                       <Button
                         variant="outline"
-                        onClick={() => navigate(`${agentUrl(created)}/runtime`)}
+                        onClick={() => navigate(isDot ? "/agents/all" : `${agentUrl(created)}/runtime`)}
                       >
                         <Settings2 className="size-4" />
-                        {t("app.agentSetup.setup.editConfiguration")}
+                        {isDot ? t("app.upstreamOct08.backToAgents") : t("app.agentSetup.setup.editConfiguration")}
                       </Button>
                       <Button
                         disabled={created.status === "pending_approval"}
-                        onClick={() =>
-                          openNewIssue({
-                            assigneeAgentId: created.id,
-                            status: "todo",
-                          })
+                        onClick={() => isDot
+                          ? navigate(`${agentUrl(created)}/runtime`)
+                          : openNewIssue({ assigneeAgentId: created.id, status: "todo" })
                         }
                       >
-                        {t("app.agentSetup.setup.assignTask", { name: created.name })}
+                        {isDot ? t("app.upstreamOct08.pairDot") : t("app.agentSetup.setup.assignTask", { name: created.name })}
                         <ArrowRight className="size-4" />
                       </Button>
                     </div>
@@ -851,6 +855,12 @@ function Setup({
                     </h2>
                     <fieldset disabled={busy} className="space-y-8">
                       <section className="space-y-5">
+                        {isDot && <>
+                          <p className="text-sm text-muted-foreground">Create this agent, then copy its pairing prompt to your Dot.</p>
+                          {experimental.data?.enablePublicMcp !== true && <p className="text-sm text-muted-foreground">Enable Assistant connections (MCP) in Experimental settings before pairing.</p>}
+                          <ToggleField label="Allow externally billed provider" hint="Dot does not report token usage or cost. Paperclip cannot enforce a provider spend ceiling; known company and agent budget limits still apply."
+                            checked={allowUnmeteredProvider} onChange={value => { setAllowUnmeteredProvider(value); resetTest(); }} />
+                        </>}
                         {!connectionAdapter && aiProviderForAdapter(brandType) && (
                           <AiConnectionField companyId={companyId} agentName={name} adapterType={brandType} model={model} environmentId={environmentId ?? undefined} value={aiBinding}
                             onChange={binding => { binding.mode !== "router" && setRuntimeAiBinding(binding); resetTest(); }} />
@@ -1155,6 +1165,7 @@ function Setup({
                       )}
                     </fieldset>
                     <RuntimeTestCard
+                      variant={isDot ? "prerequisites" : "connection"}
                       state={testState}
                       result={result}
                       error={error}

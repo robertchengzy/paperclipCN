@@ -474,6 +474,18 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
+          title="OpenAI Dot"
+          description="Add OpenAI Dot as a standalone agent choice. Pair your Dot and verify event delivery before assigning work."
+          footnote="Requires Assistant connections (MCP) and an authenticated instance with a public HTTPS URL. Turning this off blocks Dot calls and new work; saved connections are kept."
+          checked={experimentalQuery.data?.enableOpenAiDot === true}
+          onCheckedChange={(checked) => toggleMutation.mutate({ enableOpenAiDot: checked })}
+          disabled={toggleMutation.isPending}
+          settingKey="enableOpenAiDot"
+          managed={managedKeys.enableOpenAiDot}
+          ariaLabel="Toggle OpenAI Dot experimental setting"
+        />
+
+        <ExperimentalToggleCard
           title={t("app.settings.instanceExperimentalSettings.cards.enableNativeRunner.title")}
           description={t("app.settings.instanceExperimentalSettings.cards.enableNativeRunner.description")}
           checked={enableNativeRunner}

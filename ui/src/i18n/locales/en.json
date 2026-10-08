@@ -17762,6 +17762,23 @@
       "source": "Source",
       "selectAssignee": "Select assignee",
       "selectModelAndEffort": "Select model and effort"
+    },
+    "upstreamOct08": {
+      "privateProject": "Private project",
+      "privateTask": "Private task",
+      "selectModel": "Select model",
+      "retryWaiting": "Retry waiting",
+      "paperclipServices": "Paperclip services",
+      "decisions": "Decisions",
+      "previewMode": "{{label}} preview mode",
+      "showRenderedPreview": "Show rendered {{label}}",
+      "renderedPreview": "Rendered {{label}}",
+      "showRawPreview": "Show raw {{label}}",
+      "rawPreview": "Raw {{label}}",
+      "dotCreated": "Your Dot agent has been created",
+      "dotReadyNote": "Pair your Dot and test event delivery in configuration before assigning work.",
+      "backToAgents": "Back to Agents",
+      "pairDot": "Pair Dot"
     }
   }
 }

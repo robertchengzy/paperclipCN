@@ -1,4 +1,6 @@
 import { t, useTranslation } from "@/i18n";
+import { DecisionHistory } from "../components/decision-models/DecisionHistory";
+import { useSearchParams } from "@/lib/router";
 import { CostEstimateLabel } from "../components/CostEstimateLabel";
 import { CostByUserTable } from "../components/CostByUserTable";
 import { AgentIdentity } from "@/components/AgentIdentity";
@@ -40,7 +42,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const NO_COMPANY = "__none__";
-export type CostsMainTab = "overview" | "budgets" | "providers" | "billers" | "finance";
+export type CostsMainTab = "overview" | "budgets" | "providers" | "billers" | "finance" | "decisions";
 
 export interface CostsProps {
   /** Render inside Audit without a second page-level title or breadcrumb. */
@@ -175,6 +177,7 @@ export function Costs({
   const { setBreadcrumbs } = useBreadcrumbs();
   const queryClient = useQueryClient();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [mainTab, setMainTab] = useState<CostsMainTab>(initialTab);
   const [activeProvider, setActiveProvider] = useState("all");
   const [activeBiller, setActiveBiller] = useState("all");
@@ -197,8 +200,9 @@ export function Costs({
   }, [embedded, setBreadcrumbs, t]);
 
   useEffect(() => {
-    setMainTab(initialTab);
-  }, [initialTab]);
+    const tab = searchParams.get("tab");
+    setMainTab(!lockTab && tab && ["overview", "providers", "billers", "finance", "budgets", "decisions"].includes(tab) ? tab as CostsMainTab : initialTab);
+  }, [initialTab, lockTab, searchParams]);
 
   const [today, setToday] = useState(() => new Date().toDateString());
   const todayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -305,12 +309,12 @@ export function Costs({
     refetchInterval: 30_000,
   });
 
-  const [expandedAgents, setExpandedAgents] = useState<Set<string>>(new Set());
+  const [expandedAgents, setExpandedAgents] = useState<Set<string | null>>(new Set());
   useEffect(() => {
     setExpandedAgents(new Set());
   }, [companyId, preset, customFrom, customTo]);
 
-  function toggleAgent(agentId: string) {
+  function toggleAgent(agentId: string | null) {
     setExpandedAgents((prev) => {
       const next = new Set(prev);
       if (next.has(agentId)) next.delete(agentId);
@@ -320,7 +324,7 @@ export function Costs({
   }
 
   const agentModelRows = useMemo(() => {
-    const map = new Map<string, CostByAgentModel[]>();
+    const map = new Map<string | null, CostByAgentModel[]>();
     for (const row of spendData?.byAgentModel ?? []) {
       const rows = map.get(row.agentId) ?? [];
       rows.push(row);
@@ -625,11 +629,7 @@ export function Costs({
             </div>
           ) : null}
 
-          {spendData?.summary.pricingComplete === false && (
-            <p role="status" className="text-sm text-destructive">
-              {t("app.reports.costs.spendIncomplete", { unpriced: spendData.summary.unpricedEventCount, pending: spendData.summary.pendingRunCount })}
-            </p>
-          )}
+
           {financeData?.summary.currencies?.some((row) => row.currency !== "USD") && (
             <p role="status" className="text-sm text-muted-foreground">
               {t("app.reports.costs.usdOnlyNotice")}
@@ -676,6 +676,20 @@ export function Costs({
               icon={ArrowUpRight}
             />
           </div>
+          {spendData?.summary.pricingComplete === false && (
+            <div role="status" className="space-y-1 text-sm text-muted-foreground">
+              {spendData.summary.unpricedEventCount > 0 && (
+                <p>
+                  Costs are unavailable for {spendData.summary.unpricedEventCount} usage {spendData.summary.unpricedEventCount === 1 ? "entry" : "entries"} in this period. Totals include known costs only.
+                </p>
+              )}
+              {spendData.summary.pendingRunCount > 0 && (
+                <p>
+                  {spendData.summary.pendingRunCount} {spendData.summary.pendingRunCount === 1 ? "run is" : "runs are"} awaiting cost data.
+                </p>
+              )}
+            </div>
+          )}
         </div>
       ) : null}
 
@@ -692,7 +706,7 @@ export function Costs({
 
       {!!spendData?.summary.estimatedEventCount && <p role="status" className="text-sm text-muted-foreground">{t("app.reports.costs.includesEstimated", { count: spendData.summary.estimatedEventCount })}</p>}
       {incidentMutation.error && <p role="alert" className="text-sm text-destructive">{t("app.reports.costs.budgetUpdateFailed")}</p>}
-      <Tabs value={mainTab} onValueChange={(value) => setMainTab(value as typeof mainTab)}>
+      <Tabs value={mainTab} onValueChange={(value) => { setMainTab(value as typeof mainTab); setSearchParams(current => { const next = new URLSearchParams(current); next.set("tab", value); return next; }, { replace: true }); }}>
         {!lockTab ? (
           <TabsList variant="line" className="justify-start">
             <TabsTrigger value="overview">{t("app.common.labels.overview")}</TabsTrigger>
@@ -700,9 +714,11 @@ export function Costs({
             <TabsTrigger value="providers">{t("app.reports.costs.providers")}</TabsTrigger>
             <TabsTrigger value="billers">{t("app.reports.costs.billers")}</TabsTrigger>
             <TabsTrigger value="finance">{t("app.reports.costs.finance")}</TabsTrigger>
+            <TabsTrigger value="decisions">{t("app.upstreamOct08.decisions")}</TabsTrigger>
           </TabsList>
         ) : null}
 
+        <TabsContent value="decisions" className="mt-4">{showCustomPrompt ? <p className="text-sm text-muted-foreground">Select a start and end date to load data.</p> : <DecisionHistory companyId={companyId} from={from} to={to} />}</TabsContent>
         <TabsContent value="overview" className="mt-4 space-y-4">
           {showCustomPrompt ? (
             <p className="text-sm text-muted-foreground">{t("app.reports.costs.selectAStartAndEndDateToLoadData")}</p>
@@ -727,7 +743,7 @@ export function Costs({
                           const isExpanded = expandedAgents.has(row.agentId);
                           const hasBreakdown = modelRows.length > 0;
                           return (
-                            <div key={row.agentId} role="group" aria-label={t("app.reports.costs.agentCostsLabel", { name: row.agentName ?? row.agentId })} className="border border-border px-4 py-3">
+                            <div key={row.agentId ?? "services"} role="group" aria-label={t("app.reports.costs.agentCostsLabel", { name: row.agentName ?? row.agentId ?? t("app.upstreamOct08.paperclipServices") })} className="border border-border px-4 py-3">
                               <div
                                 className={cn("flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between", hasBreakdown ? "cursor-pointer select-none" : "")}
                                 onClick={() => hasBreakdown && toggleAgent(row.agentId)}
@@ -740,7 +756,7 @@ export function Costs({
                                   ) : (
                                     <span className="h-3 w-3 shrink-0" />
                                   )}
-                                  <AgentIdentity agent={{ id: row.agentId, name: row.agentName ?? row.agentId, appearance: row.agentAppearance }} size="sm" />
+                                  {row.agentId ? <AgentIdentity agent={{ id: row.agentId, name: row.agentName ?? row.agentId, appearance: row.agentAppearance }} size="sm" /> : <span className="font-medium">Paperclip services</span>}
                                   {row.agentStatus === "terminated" ? <StatusBadge status="terminated" /> : null}
                                 </div>
                                 <div className="text-right text-sm tabular-nums">

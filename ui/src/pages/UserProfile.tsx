@@ -245,7 +245,7 @@ export function UserProfile() {
     () =>
       (data?.topAgents ?? []).map((row) => ({
         key: row.agentId ?? "unknown",
-        label: row.agentName ?? (row.agentId ? row.agentId.slice(0, 8) : t("app.shell.userProfile.unknown")),
+        label: row.agentName ?? (row.agentId ? row.agentId.slice(0, 8) : t("app.upstreamOct08.paperclipServices")),
         sublabel: t("app.shell.userProfile.taskLinkedUsage"),
         costCents: row.costCents,
         inputTokens: row.inputTokens,

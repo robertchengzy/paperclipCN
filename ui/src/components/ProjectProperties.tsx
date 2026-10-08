@@ -1,4 +1,7 @@
 import { projectDisplayName } from "@/lib/project-display";
+import { authApi } from "@/api/auth";
+import { accessApi } from "@/api/access";
+import { canManageProjectPrivacy } from "@/lib/issuePrivacy";
 import { useWorkspaceIsolationControls } from "@/hooks/useWorkspaceIsolationControls";
 import { useState, type ReactNode } from "react";
 import { environmentDisplayLabel, filterManagedSandboxSelectableEnvironments } from "@/lib/managed-sandbox-environment";
@@ -24,6 +27,9 @@ import { InlineEditor } from "./InlineEditor";
 import { EnvironmentVariablesEditor } from "./environment-variables-editor";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "@/i18n";
+import { ProjectAccessMembers } from "./ProjectAccessMembers";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
 
 interface ProjectPropertiesProps {
   project: Project;
@@ -40,6 +46,7 @@ export type ProjectConfigFieldKey =
   | "name"
   | "description"
   | "status"
+  | "visibility"
   | "goals"
   | "env"
   | "execution_workspace_enabled"
@@ -203,7 +210,11 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
     return { value, label: t("app.projects.properties.concurrency.auto"), help: t("app.projects.properties.concurrency.autoHelp") };
   });
   const { selectedCompanyId } = useCompany();
+  const { data: privacySession } = useQuery({ queryKey: queryKeys.auth.session, queryFn: () => authApi.getSession() });
+  const { data: privacyAccess } = useQuery({ queryKey: queryKeys.access.currentBoardAccess, queryFn: () => accessApi.getCurrentBoardAccess() });
+  const canManagePrivacy = canManageProjectPrivacy(project, privacySession?.user?.id ?? privacySession?.session?.userId ?? null, privacyAccess);
   const queryClient = useQueryClient();
+  const [openProjectConfirmation, setOpenProjectConfirmation] = useState(false);
   const [executionWorkspaceAdvancedOpen, setExecutionWorkspaceAdvancedOpen] = useState(false);
   const [workspaceMode, setWorkspaceMode] = useState<"local" | null>(null);
   const [workspaceCwd, setWorkspaceCwd] = useState("");
@@ -414,6 +425,24 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
 
   return (
     <div>
+      <AlertDialog open={openProjectConfirmation} onOpenChange={setOpenProjectConfirmation}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Open this project to the company?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Everyone in the company will be able to discover this project. Its private tasks stay private.
+              Members who only have access through this project will lose access to those tasks.
+              Share tasks directly first if you want them to keep access.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep private</AlertDialogCancel>
+            <AlertDialogAction onClick={() => commitField("visibility", { visibility: "open" })}>
+              Open to company
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div className="space-y-1 pb-4">
         <PropertyRow label={<FieldLabel label={t("app.projects.properties.name")} state={fieldState("name")} />}>
           {onUpdate || onFieldUpdate ? (
@@ -448,6 +477,31 @@ export function ProjectProperties({ project, repositories, onUpdate, onFieldUpda
               {project.description?.trim() || t("app.projects.properties.noDescription")}
             </p>
           )}
+        </PropertyRow>
+        <PropertyRow label={<FieldLabel label="Visibility" state={fieldState("visibility")} />} alignStart>
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm">
+              <ToggleSwitch
+                aria-label="Private project"
+                checked={project.visibility === "private"}
+                onCheckedChange={(checked) => {
+                  if (!checked) {
+                    setOpenProjectConfirmation(true);
+                    return;
+                  }
+                  commitField("visibility", { visibility: "private" });
+                }}
+                disabled={!canManagePrivacy || (!onUpdate && !onFieldUpdate)}
+              />
+              <span>{project.visibility === "private" ? "Private" : "Open to company"}</span>
+            </label>
+            <p className="text-(length:--text-micro) text-muted-foreground">
+              {project.visibility === "private"
+                ? "Only access members can discover this project. Tasks shared directly remain readable on their own."
+                : "Everyone in the company can discover this project. Individually private tasks keep their own access rules."}
+            </p>
+            {project.visibility === "private" ? <ProjectAccessMembers project={project} canManage={canManagePrivacy} /> : null}
+          </div>
         </PropertyRow>
         {repositories ?? <ProjectRepositories key={project.id} project={project} />}
         <PropertyRow

@@ -17762,6 +17762,23 @@
       "source": "来源",
       "selectAssignee": "选择负责人",
       "selectModelAndEffort": "选择模型和推理强度"
+    },
+    "upstreamOct08": {
+      "privateProject": "私有项目",
+      "privateTask": "私有任务",
+      "selectModel": "选择模型",
+      "retryWaiting": "重试等待中",
+      "paperclipServices": "Paperclip 服务",
+      "decisions": "决策",
+      "previewMode": "{{label}} 预览模式",
+      "showRenderedPreview": "显示渲染后的 {{label}}",
+      "renderedPreview": "渲染后的 {{label}}",
+      "showRawPreview": "显示 {{label}} 源码",
+      "rawPreview": "{{label}} 源码",
+      "dotCreated": "Dot Agent 已创建",
+      "dotReadyNote": "分配任务前，请先在配置中配对 Dot 并测试事件投递。",
+      "backToAgents": "返回 Agent 列表",
+      "pairDot": "配对 Dot"
     }
   }
 }
