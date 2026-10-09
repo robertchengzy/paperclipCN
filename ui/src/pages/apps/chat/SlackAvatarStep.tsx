@@ -2,14 +2,11 @@ import { Trans } from "react-i18next";
 import { useTranslation } from "@/i18n";
 import { useId, useState } from "react";
 import {
-  ArrowRight,
-  Check,
   Download,
   ExternalLink,
   Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SetupWizardFooter } from "@/components/SetupWizard";
 
 export interface SlackAvatarProps {
   agentName: string;
@@ -17,7 +14,7 @@ export interface SlackAvatarProps {
   avatarUrl: string;
 }
 
-/** Shared by Slack onboarding and its Settings page. Slack upload is manual. */
+/** Manual fallback shared by Slack onboarding and its Settings page. */
 export function SlackAvatarContent({
   agentName,
   appName,
@@ -126,46 +123,6 @@ export function SlackAvatarContent({
   );
 }
 
-export function SlackAvatarStep({
-  uploaded,
-  onUploaded,
-  onSkip,
-  onSaveExit,
-  ...props
-}: SlackAvatarProps & {
-  uploaded: boolean;
-  onUploaded: () => void;
-  onSkip: () => void;
-  onSaveExit: () => void;
-}) {
-  const { t } = useTranslation();
-  return (
-    <div className="space-y-8">
-      <div className="space-y-2">
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold">{t("app.apps.slackAvatarStep.giveAgentFace", { agentName: props.agentName })}</h1>
-          <span className="text-xs text-muted-foreground">{t("app.common.labels.optional")}</span>
-        </div>
-        <p className="text-sm text-muted-foreground">{t("app.apps.slackAvatarStep.useAgentAvatar", { agentName: props.agentName })}</p>
-      </div>
-      <SlackAvatarContent {...props} />
-      {uploaded && (
-        <p
-          role="status"
-          className="flex items-center gap-2 rounded-lg bg-(--status-task-done)/10 p-3 text-sm"
-        >
-          <Check className="size-4 text-(--status-task-done)" />{t("app.apps.slackAvatarStep.youMarkedTheAvatarAsUploadedIn")}</p>
-      )}
-      <SetupWizardFooter onSaveExit={onSaveExit}>
-        <Button variant="ghost" onClick={onSkip}>{t("app.apps.slackAvatarStep.skipForNow")}</Button>
-        <Button onClick={onUploaded}>
-          {uploaded ? t("app.common.actions.continue") : t("app.apps.slackAvatarStep.iVeUploadedTheAvatar")}
-          <ArrowRight className="size-4" />
-        </Button>
-      </SetupWizardFooter>
-    </div>
-  );
-}
 
 export function SlackAvatarSettings(props: SlackAvatarProps) {
   const { t } = useTranslation();

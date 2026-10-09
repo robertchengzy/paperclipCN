@@ -5049,6 +5049,10 @@
         "superagent": {
           "tagline": "查看安全发现并运行红队检查。",
           "short": "使用 Superagent API 密钥连接。计费和破坏性工具仍受操作策略约束。"
+        },
+        "gauge": {
+          "tagline": "跟踪 AI 回答中的品牌表现，执行内容工作流。",
+          "short": "登录 Gauge 并选择组织；API key 为可选项。"
         }
       },
       "attention": {
@@ -12638,8 +12642,8 @@
       "chatCommunicationInstructions": {
         "saveFailed": "无法保存指令，请重试。",
         "label": "附加沟通指令",
-        "help": "指导此智能体在 Slack 中的沟通方式。可选；在新任务开始时生效。",
-        "placeholder": "例如：使用我们的产品名称，并为非技术受众解释技术术语。",
+        "help": "应用于新对话。",
+        "placeholder": "例如：简短回复，并解释技术术语。",
         "saved": "已保存。将应用于新任务。",
         "save": "保存指令"
       },
@@ -12829,7 +12833,10 @@
           "verifySlack": "验证 Slack 连接",
           "addAvatar": "添加头像",
           "connectSlackAccount": "连接你的 Slack 账号",
-          "tryIt": "试用"
+          "tryIt": "试用",
+          "appConfigurationToken": "应用配置访问 Token",
+          "installSlackApp": "安装 Slack 应用",
+          "sendMessage": "发送消息"
         },
         "chooseConnection": "选择连接方式",
         "purpose": {
@@ -14038,7 +14045,8 @@
         "manageActionPermissions": "管理操作权限",
         "loadingSearchAccess": "正在加载搜索访问权限…",
         "upgradePermissions": "现有连接仍可使用。在 <settingsLink>Slack 应用设置</settingsLink>中选择应用，打开 OAuth 与权限（OAuth & Permissions），添加这些 机器人令牌权限范围（Bot Token Scopes），然后将应用重新安装到工作区。",
-        "configureOauth": "在 Slack 应用设置的 OAuth 与权限（OAuth & Permissions） 下添加此重定向 URL。添加用户权限范围 <code>search:read.public</code>、<code>search:read.private</code> 和 <code>search:read.files</code>。在 基本信息（Basic Information） 下查找 客户端 ID（Client ID） 和 客户端密钥（Client Secret）。"
+        "configureOauth": "在 Slack 应用设置的 OAuth 与权限（OAuth & Permissions） 下添加此重定向 URL。添加用户权限范围 <code>search:read.public</code>、<code>search:read.private</code> 和 <code>search:read.files</code>。在 基本信息（Basic Information） 下查找 客户端 ID（Client ID） 和 客户端密钥（Client Secret）。",
+        "summary": "在 Slack 中读取、搜索和操作；部分操作需要审批。"
       },
       "chatSetupError": {
         "checkTheRequiredValuesAndProviderAccess": "请检查必填值和提供方访问权限，然后重试。"

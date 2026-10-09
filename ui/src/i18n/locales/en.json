@@ -5049,6 +5049,10 @@
         "superagent": {
           "tagline": "Review security findings and run red-team checks.",
           "short": "Connect with a Superagent API key. Billable and destructive tools stay under action policies."
+        },
+        "gauge": {
+          "tagline": "Track your brand in AI answers and run content workflows.",
+          "short": "Sign in with Gauge and pick an organization. API keys are optional."
         }
       },
       "attention": {
@@ -12638,8 +12642,8 @@
       "chatCommunicationInstructions": {
         "saveFailed": "Couldn’t save instructions. Try again.",
         "label": "Additional communication instructions",
-        "help": "Guide how this agent communicates in Slack. Optional; applies when new tasks start.",
-        "placeholder": "For example: Use our product names and explain technical terms for a nontechnical audience.",
+        "help": "Applies to new conversations.",
+        "placeholder": "For example: Keep replies brief and explain technical terms.",
         "saved": "Saved. Applies to new tasks.",
         "save": "Save instructions"
       },
@@ -12829,7 +12833,10 @@
           "verifySlack": "Verify Slack connection",
           "addAvatar": "Add avatar",
           "connectSlackAccount": "Connect your Slack account",
-          "tryIt": "Try it"
+          "tryIt": "Try it",
+          "appConfigurationToken": "App configuration access token",
+          "installSlackApp": "Install Slack app",
+          "sendMessage": "Send a message"
         },
         "chooseConnection": "Choose connection",
         "purpose": {
@@ -14038,7 +14045,8 @@
         "manageActionPermissions": "Manage action permissions",
         "loadingSearchAccess": "Loading search access…",
         "upgradePermissions": "Your existing connection still works. In <settingsLink>Slack app settings</settingsLink>, choose your app, open OAuth & Permissions, add these Bot Token Scopes, then reinstall the app to your workspace.",
-        "configureOauth": "In Slack app settings, add this redirect URL under OAuth & Permissions. Add user scopes <code>search:read.public</code>, <code>search:read.private</code> and <code>search:read.files</code>. Find Client ID and Client Secret under Basic Information."
+        "configureOauth": "In Slack app settings, add this redirect URL under OAuth & Permissions. Add user scopes <code>search:read.public</code>, <code>search:read.private</code> and <code>search:read.files</code>. Find Client ID and Client Secret under Basic Information.",
+        "summary": "Read, search, and act in Slack. Some actions require approval."
       },
       "chatSetupError": {
         "checkTheRequiredValuesAndProviderAccess": "Check the required values and provider access, then try again."

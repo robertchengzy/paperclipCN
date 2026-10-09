@@ -21,9 +21,9 @@ export function SlackCapabilitiesView({
   const { t } = useTranslation();
   return (
     <section className="space-y-3">
-      <h3 className="text-sm font-semibold">{t("app.apps.slackToolSettings.slackTools")}</h3>
-      <p className="text-sm">{t("app.apps.slackToolSettings.inviteTheBotToAChannelThen")}</p>
-      <p className="text-sm text-muted-foreground">{t("app.apps.slackToolSettings.theAgentCanReadChannelsSharedBy")}</p>
+      <p className="text-sm text-muted-foreground">
+        {t("app.apps.slackToolSettings.summary")}
+      </p>
       {error && (
         <p role="alert" className="text-sm text-destructive">
           {error}
@@ -34,11 +34,6 @@ export function SlackCapabilitiesView({
       )}
       {capabilities && (
         <>
-          <ul className="space-y-2 text-sm">
-            <li>{t("app.apps.slackToolSettings.readChannelsThreadsMessagesFilesAndSource")}</li>
-            <li>{t("app.apps.slackToolSettings.sendMessagesAndFilesReactPinBookmark")}</li>
-            <li>{t("app.apps.slackToolSettings.creatingChannelsInvitingPeopleAndDestructiveChanges")}</li>
-          </ul>
           {capabilities.missingScopes.length > 0 && (
             <div className="rounded-lg border border-border bg-muted p-3 space-y-2">
               <p className="text-sm font-medium">{t("app.apps.slackToolSettings.addPermissionsToUnlockMoreTools")}</p>
@@ -48,31 +43,6 @@ export function SlackCapabilitiesView({
               </p>
             </div>
           )}
-          <details className="text-sm">
-            <summary className="cursor-pointer text-muted-foreground">{t("app.apps.slackToolSettings.toolPermissionsAndAvailability")}</summary>
-            <ul className="mt-3 divide-y divide-border">
-              {capabilities.tools.map((tool) => (
-                <li
-                  key={tool.name}
-                  className="flex items-center justify-between gap-3 py-2"
-                >
-                  <span>
-                    {tool.name.replace(/^slack_/, "").replaceAll("_", " ")}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {tool.available === false
-                      ? t("app.apps.slackToolSettings.needsPermissions")
-                      : tool.available === null
-                        ? t("app.apps.slackToolSettings.notVerified")
-                        : tool.risk === "approval"
-                          ? t("app.apps.slackToolSettings.askFirst")
-                          : t("app.apps.slackToolSettings.available")}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </details>
-          <p className="text-xs text-muted-foreground">{t("app.apps.slackToolSettings.slackPlanMembershipAndPerActionPermissions")}</p>
         </>
       )}
     </section>
