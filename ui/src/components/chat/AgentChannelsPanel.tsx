@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/StatusBadge";
 import { queryKeys } from "@/lib/queryKeys";
 import { Link } from "@/lib/router";
-import { useChatConnectorsEnabled } from "@/hooks/useChatConnectorsEnabled";
+import { useChatConnectorsEnabled, chatProviderVisible } from "@/hooks/useChatConnectorsEnabled";
 import { useTranslation } from "@/i18n";
 
 const providerNames: Record<ChatProvider, string> = {
@@ -26,7 +26,7 @@ export function AgentChannelsPanel({
   agentId: string;
 }) {
   const { t } = useTranslation();
-  const { enabled } = useChatConnectorsEnabled();
+  const { enabled, githubEnabled } = useChatConnectorsEnabled();
   const query = useQuery({
     queryKey: queryKeys.chatEndpoints.list(companyId),
     queryFn: () => chatEndpointsApi.list(companyId),
@@ -34,7 +34,7 @@ export function AgentChannelsPanel({
   });
   const endpoints = (query.data ?? []).filter(
     (endpoint) =>
-      endpoint.assignedAgentId === agentId && endpoint.status !== "archived" && (endpoint.provider === "agentmail" || enabled),
+      endpoint.assignedAgentId === agentId && endpoint.status !== "archived" && chatProviderVisible(endpoint.provider, enabled, githubEnabled),
   );
   return (
     <section className="max-w-3xl space-y-5">
@@ -58,7 +58,7 @@ export function AgentChannelsPanel({
         <div className="rounded-lg border border-dashed border-border p-5">
           <p className="text-sm font-medium">{t("app.taskChat.agentChannelsPanel.emptyTitle")}</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            {enabled ? t("app.taskChat.agentChannelsPanel.emptyDescription") : t("app.taskChat.agentChannelsPanel.emptyDescriptionAgentMail")}
+            {enabled || githubEnabled ? t("app.taskChat.agentChannelsPanel.emptyDescription") : t("app.taskChat.agentChannelsPanel.emptyDescriptionAgentMail")}
           </p>
           <Button asChild className="mt-3" variant="outline" size="sm">
             <Link to="/apps">{t("app.taskChat.agentChannelsPanel.openConnectors")}</Link>

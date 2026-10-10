@@ -9,6 +9,7 @@ import {
   FilePenLine,
   FileText,
   GitBranch,
+  Info,
   ListChecks,
   PackageCheck,
   Search,
@@ -40,6 +41,12 @@ export interface TaskChatActivityPresentation {
   failedLabel?: string;
   interruptedLabel?: string;
   detail?: string;
+}
+
+export function providerNoticeSeverity(item: TaskChatProviderActivityItem): "info" | "warning" | "error" {
+  const severity = item.details.find((entry) => entry.label === "Severity")?.value;
+  if (item.status === "failed" || severity === "error") return "error";
+  return severity === "info" ? "info" : "warning";
 }
 
 function providerDetail(item: TaskChatProviderActivityItem, ...labels: string[]): string | undefined {
@@ -137,7 +144,7 @@ export function providerActivityPresentation(item: TaskChatProviderActivityItem)
     case "wait":
       return { icon: Clock3, runningLabel: t("app.taskChat.taskChatActivityPresentation.waiting"), completedLabel: t("app.taskChat.taskChatActivityPresentation.finishedWaiting"), failedLabel: t("app.taskChat.taskChatActivityPresentation.waitFailed"), interruptedLabel: t("app.taskChat.taskChatActivityPresentation.waitStopped"), detail };
     case "provider_notice":
-      return { icon: AlertTriangle, runningLabel: t("app.taskChat.taskChatActivityPresentation.providerNotice"), completedLabel: t("app.taskChat.taskChatActivityPresentation.providerNotice"), failedLabel: t("app.taskChat.taskChatActivityPresentation.providerError"), interruptedLabel: t("app.taskChat.taskChatActivityPresentation.providerNotice"), detail };
+      return { icon: providerNoticeSeverity(item) === "info" ? Info : AlertTriangle, runningLabel: t("app.taskChat.taskChatActivityPresentation.providerNotice"), completedLabel: t("app.taskChat.taskChatActivityPresentation.providerNotice"), failedLabel: t("app.taskChat.taskChatActivityPresentation.providerError"), interruptedLabel: t("app.taskChat.taskChatActivityPresentation.providerNotice"), detail };
   }
 }
 

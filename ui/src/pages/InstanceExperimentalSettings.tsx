@@ -462,6 +462,18 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
+          title={t("app.upstreamOct10.githubReviewBots")}
+          description={t("app.upstreamOct10.githubReviewBotsDescription")}
+          footnote={t("app.upstreamOct10.githubReviewBotsFootnote")}
+          checked={experimentalQuery.data?.enableGitHubReviewBots === true}
+          onCheckedChange={(checked) => toggleMutation.mutate({ enableGitHubReviewBots: checked })}
+          disabled={toggleMutation.isPending}
+          settingKey="enableGitHubReviewBots"
+          managed={managedKeys.enableGitHubReviewBots}
+          ariaLabel={t("app.upstreamOct10.githubReviewBotsAria")}
+        />
+
+        <ExperimentalToggleCard
           title={t("app.settings.instanceExperimentalSettings.cards.enableMemoryConnectors.title")}
           description={t("app.settings.instanceExperimentalSettings.cards.enableMemoryConnectors.description")}
           footnote={t("app.settings.instanceExperimentalSettings.cards.enableMemoryConnectors.footnote")}

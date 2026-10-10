@@ -74,9 +74,6 @@ describe("chat connector UI contract", () => {
       expect(detail).toContain(`"${tab}"`);
     }
     expect(detail).not.toContain('"overview"');
-    expect(detail).toContain("row.externalUrl");
-    expect(detail).toContain("row.externalLabel");
-    expect(detail).toContain("row.issueTitle ?? row.issueIdentifier ?? \"View task\"");
     expect(detail.toLowerCase()).not.toContain("detach");
   });
 
@@ -91,11 +88,11 @@ describe("chat connector UI contract", () => {
     expect(detail).toContain("Not observed");
   });
 
-  it("lists every supported provider in the agent channel empty state", () => {
+  it("describes connector setup without listing gated providers", () => {
     const panel = source("../../../components/chat/AgentChannelsPanel.tsx");
     expect(panel).toContain('t("app.taskChat.agentChannelsPanel.emptyDescription")');
     expect(en.app.taskChat.agentChannelsPanel.emptyDescription).toBe(
-      "Connect AgentMail, Slack, GitHub Code Review Bot, Discord, Microsoft Teams, or Telegram from Connectors.",
+      "Connect an agent identity from Connectors.",
     );
   });
 

@@ -12284,8 +12284,8 @@
           },
           "enableChatConnectors": {
             "title": "聊天连接器",
-            "description": "将智能体连接到 Slack、GitHub、Discord、Microsoft Teams 和 Telegram 对话。",
-            "footnote": "关闭后会隐藏实验性聊天设置和关联任务控件。现有聊天连接会继续运行。AgentMail、GitHub 工具和其他工具连接器仍可使用。",
+            "description": "将 Agent 接入 Slack、Discord、Microsoft Teams 和 Telegram 对话。",
+            "footnote": "关闭后隐藏实验聊天设置和已连接任务的控件，现有聊天连接继续运行。AgentMail、GitHub 评审机器人和工具连接器分别控制。",
             "ariaLabel": "切换聊天连接器实验性设置"
           },
           "enableConferenceRoomChat": {
@@ -14313,7 +14313,7 @@
         "connectChannel": "连接频道",
         "loading": "正在加载频道…",
         "emptyTitle": "尚未连接频道",
-        "emptyDescription": "在连接器页面接入 AgentMail、Slack、GitHub 代码审查机器人、Discord、Microsoft Teams 或 Telegram。",
+        "emptyDescription": "从连接器为 Agent 接入身份。",
         "openConnectors": "打开连接器",
         "providerIdentity": "提供方身份",
         "openConnection": "打开连接",
@@ -17787,6 +17787,21 @@
       "dotReadyNote": "分配任务前，请先在配置中配对 Dot 并测试事件投递。",
       "backToAgents": "返回 Agent 列表",
       "pairDot": "配对 Dot"
+    },
+    "upstreamOct10": {
+      "acpAgentHint": "Cursor 使用 Paperclip 问答，暂不提供单次运行费用。Pi 接受任意提供商和模型 ID。GitHub Copilot 尚待验证。",
+      "startingBranchUnavailable": "起始分支不可用",
+      "userShort": "用户 {{id}}",
+      "unknownActor": "未知操作方",
+      "apiSpend": "API 支出",
+      "apiUsageUnavailable": "API 用量暂不可用",
+      "apiUsageLoading": "正在加载 API 用量",
+      "review": "评审",
+      "aboutLabel": "关于{{label}}",
+      "githubReviewBots": "GitHub 评审机器人",
+      "githubReviewBotsDescription": "使用独立 App 身份将 Agent 接入 GitHub，评审拉取请求并回复任务。",
+      "githubReviewBotsFootnote": "独立于聊天连接器。关闭后隐藏设置和管理入口，现有机器人继续运行；GitHub 工具连接仍然可用。",
+      "githubReviewBotsAria": "切换 GitHub 评审机器人实验设置"
     }
   }
 }

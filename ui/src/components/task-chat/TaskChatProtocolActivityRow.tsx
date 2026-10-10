@@ -2,7 +2,6 @@ import { t as translateUpstream } from "@/i18n";
 import { protocolDetailLabel } from "./protocol-detail-labels";
 import { useId, useState, type ReactNode } from "react";
 import {
-  AlertTriangle,
   Check,
   ChevronRight,
   Circle,
@@ -26,6 +25,7 @@ import {
   protocolActivityIsRunning,
   protocolActivityLabel,
   protocolActivityPresentation,
+  providerNoticeSeverity,
 } from "./task-chat-activity-presentation";
 
 const COMPACT_RESEARCH_RESULT_LIMIT = 5;
@@ -290,14 +290,16 @@ export function TaskChatProtocolActivityRow({ item }: { item: TaskChatProtocolIt
   const presentation = protocolActivityPresentation(item);
   if (!presentation) return null;
   if (item.surface === "provider_activity" && item.family === "provider_notice") {
+    const NoticeIcon = presentation.icon;
+    const severity = providerNoticeSeverity(item);
     const summary = item.summary
       ?? item.details.find((entry) => entry.label === "Summary")?.value
       ?? t("app.taskChat.taskChatProtocolActivityRow.noticeWithoutMessage");
     return (
       <div className="flex min-w-0 flex-col gap-1.5 py-1 text-xs" data-testid="task-chat-protocol-activity-row" data-activity-family="provider_notice">
         <div className="flex items-center gap-2 text-muted-foreground">
-          <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden data-testid="task-chat-protocol-activity-icon" />
-          <span className="font-medium">{item.status === "failed" ? t("app.common.labels.error") : item.details.find(detail => detail.label === "Severity")?.value === "info" ? translateUpstream("app.upstreamSync.providerUpdate") : t("app.common.labels.warning")}</span>
+          <NoticeIcon className="size-(--sz-protocol-notice-icon) shrink-0" aria-hidden data-testid="task-chat-protocol-activity-icon" />
+          <span className="font-medium">{severity === "error" ? t("app.common.labels.error") : severity === "info" ? translateUpstream("app.upstreamSync.providerUpdate") : t("app.common.labels.warning")}</span>
         </div>
         <p className="min-w-0 whitespace-pre-wrap break-words text-foreground">{summary}</p>
         {item.details.some(detail => detail.label !== "Summary") ? (

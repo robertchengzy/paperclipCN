@@ -1,3 +1,5 @@
+import { useWorkspaceBaseRefRecovery } from "@/components/WorkspaceBaseRefRecovery";
+import { WorkspaceBaseRefRecoveryNotice } from "@/components/WorkspaceBaseRefRecoveryNotice";
 import { DispositionRecoveryNotice, useDispositionRecoverySnapshot } from "@/components/DispositionRecoveryNotice";
 import { useId, useState } from "react";
 import {
@@ -58,6 +60,7 @@ export function TaskChatSystemNotice({
 }) {
   const { t } = useTranslation();
   const recoverySnapshot = useDispositionRecoverySnapshot(item.metadata);
+  const branchRecovery = useWorkspaceBaseRefRecovery(item.metadata);
   const streamlined = useStreamlinedTaskChatPresentation();
   const [open, setOpen] = useState(Boolean(item.presentation?.detailsDefaultOpen));
   const detailsId = useId();
@@ -85,6 +88,8 @@ export function TaskChatSystemNotice({
       // The parent mutation owns visible error feedback.
       .catch(() => undefined);
   };
+
+  if (item.author === "system" && branchRecovery) return <WorkspaceBaseRefRecoveryNotice key={`${branchRecovery.actionId}:${branchRecovery.runId}`} {...branchRecovery.props} />;
 
   if (item.author === "system" && recoverySnapshot) {
     return <DispositionRecoveryNotice snapshot={recoverySnapshot} createdAt={item.createdAtIso} defaultExpanded={item.presentation?.detailsDefaultOpen} />;

@@ -93,4 +93,21 @@ describe("MDXEditor translations", () => {
     expect(editable?.textContent).toBe(draft);
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  it("preserves a caller's editor label when translated controls update", async () => {
+    container = document.createElement("div");
+    document.body.append(container);
+    root = createRoot(container);
+    await act(async () => {
+      root!.render(<MarkdownEditor value="Review draft" onChange={vi.fn()} ariaLabel="Review instructions" />);
+    });
+    const editable = container.querySelector('[contenteditable="true"]');
+    expect(editable?.getAttribute("aria-label")).toBe("Review instructions");
+    await act(async () => {
+      await i18n.changeLanguage("zh-CN");
+    });
+    expect(container.querySelector('[contenteditable="true"]')).toBe(editable);
+    expect(editable?.getAttribute("aria-label")).toBe("Review instructions");
+    expect(editable?.textContent).toBe("Review draft");
+  });
 });

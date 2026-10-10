@@ -7,6 +7,7 @@ import { AggregatorAppManager } from "./AggregatorAppManager";
 import {
   aiConnectionRouterPluginKey,
   connectionSetupVerbForApp,
+  getConnectableAppDefinition,
   isRetiredComposioConnection,
   RETIRED_COMPOSIO_MESSAGE,
 } from "@paperclipai/shared";
@@ -41,7 +42,7 @@ import {
   normalizeConnectionQuery,
 } from "@paperclipai/shared";
 import { useNavigate } from "@/lib/router";
-import { useChatConnectorsEnabled } from "@/hooks/useChatConnectorsEnabled";
+import { useChatConnectorsEnabled, chatProviderVisible } from "@/hooks/useChatConnectorsEnabled";
 import { useMemoryConnectorsEnabled } from "@/hooks/useMemoryConnectorsEnabled";
 import { appCopyFor } from "@/lib/app-gallery-copy";
 import { useCompany } from "@/context/CompanyContext";
@@ -317,6 +318,16 @@ function accountActionHref(
   if (connection.status === "draft" && row.entry) {
     return appSourceResumeHref(row.slug, connection.id);
   }
+  // Hidden curated definitions are not included in the gallery, but their
+  // already-saved drafts still need the same exact-provider resume flow.
+  // Keep fresh setup hidden by only using this fallback for an existing draft
+  // whose company row and saved connection identify the same known provider.
+  if (connection.status === "draft") {
+    const sourceSlug = appConnectionSourceSlug(connection);
+    if (sourceSlug && sourceSlug === row.slug && getConnectableAppDefinition(sourceSlug)) {
+      return appSourceResumeHref(sourceSlug, connection.id);
+    }
+  }
   return `/apps/${connection.id}/permissions`;
 }
 
@@ -336,7 +347,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
   const { selectedCompanyId } = useCompany();
   const assistantConnections = useAssistantConnections();
   const { userId: viewingUserId, settled: identitySettled } = useAccountIdentity();
-  const { enabled: chatConnectorsEnabled } = useChatConnectorsEnabled();
+  const { enabled: chatConnectorsEnabled, githubEnabled } = useChatConnectorsEnabled();
   const { enabled: memoryConnectorsEnabled } = useMemoryConnectorsEnabled();
   const { setBreadcrumbs } = useBreadcrumbs();
   const { t } = useTranslation();
@@ -499,7 +510,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
     if (!memoryConnectorsEnabled && isMemoryConnectorId(appDefinitionSlug(entry))) return false;
     const definition = getAppStoreDefinition(appDefinitionSlug(entry));
     return (
-      appDefinitionSlug(entry) === "agentmail" || chatConnectorsEnabled ||
+      chatProviderVisible(appDefinitionSlug(entry), chatConnectorsEnabled, githubEnabled) ||
       !definition?.methods.some((method) => method.purpose === "channel") ||
       appSupportsToolCatalogSetup(definition)
     );
@@ -549,7 +560,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
         slug,
         name: appDefinitionName(entry),
         description:
-          !chatConnectorsEnabled && slug !== "agentmail" && chatProviderForSlug(slug)
+          !chatProviderVisible(slug, chatConnectorsEnabled, githubEnabled) && chatProviderForSlug(slug)
             ? appCopyFor(slug).tagline
             : appDefinitionDescription(entry),
         brandKey: slug,
@@ -591,7 +602,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
         description: t("app.apps.browse.telegramDescription"),
       },
     ] as const;
-    for (const item of nativeChatApps.filter(item => item.slug === "agentmail" || chatConnectorsEnabled)) {
+    for (const item of nativeChatApps.filter(item => chatProviderVisible(item.slug, chatConnectorsEnabled, githubEnabled))) {
       if (rowsBySlug.has(item.slug)) continue;
       rowsBySlug.set(item.slug, {
         key: `native-chat:${item.slug}`,
@@ -688,7 +699,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
       });
     }
 
-    for (const endpoint of (chatEndpointsQuery.data ?? []).filter(endpoint => endpoint.provider === "agentmail" || chatConnectorsEnabled)) {
+    for (const endpoint of (chatEndpointsQuery.data ?? []).filter(endpoint => chatProviderVisible(endpoint.provider, chatConnectorsEnabled, githubEnabled))) {
       if (endpoint.status === "archived") continue;
       let target = [...rowsBySlug.values()].find(
         (row) => chatProviderForSlug(row.slug) === endpoint.provider,
@@ -764,6 +775,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
     applicationsQuery.data,
     chatEndpointsQuery.data,
     chatConnectorsEnabled,
+    githubEnabled,
     connectionsQuery.data,
     gallery,
     t,
@@ -941,6 +953,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
               onRequestRemove={target => void requestConnectionRemoval(target)}
               preselectedAgentId={preselectedChatAgentId}
               chatConnectorsEnabled={chatConnectorsEnabled}
+              githubReviewBotsEnabled={githubEnabled}
               onConnectAggregator={connectAggregator}
               onManageAggregator={(app, connectionId) => setAggregatorToManage({ app, connectionId })}
               onRefreshAggregator={connectionId => refreshAggregator.mutate(connectionId)}
@@ -1042,6 +1055,7 @@ export function ConnectorCard({
   onRequestRemove,
   preselectedAgentId,
   chatConnectorsEnabled,
+  githubReviewBotsEnabled = false,
   onConnectAggregator,
   onManageAggregator,
   onRefreshComposio,
@@ -1061,6 +1075,7 @@ export function ConnectorCard({
   onRequestRemove: (target: ConnectionRemovalTarget) => void;
   preselectedAgentId?: string | null;
   chatConnectorsEnabled: boolean;
+  githubReviewBotsEnabled?: boolean;
   onConnectAggregator?: (app: AggregatorAppCatalogEntry) => void;
   onManageAggregator?: (app: AggregatorAppCatalogEntry, connectionId?: string) => void;
   onRefreshComposio?: (connectionId: string) => void;
@@ -1074,7 +1089,7 @@ export function ConnectorCard({
   const { t } = useTranslation();
   const action = connectorAction(
     row,
-    chatConnectorsEnabled,
+    chatProviderVisible(row.slug, chatConnectorsEnabled, githubReviewBotsEnabled),
     preselectedAgentId,
   );
   const upstreamAccounts = (row.upstreamApps ?? []).flatMap(snapshot => {

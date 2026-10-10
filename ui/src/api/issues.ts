@@ -285,6 +285,7 @@ export const issuesApi = {
     id: string,
     data: {
       executionReconciliation?: ExecutionReconciliation;
+      workspaceBaseRef?: { requestedRef: string; branch: string };
       actionId?: string;
       outcome: "restored" | "false_positive" | "blocked" | "cancelled";
       sourceIssueStatus: "todo" | "done" | "in_review" | "blocked";

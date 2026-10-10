@@ -12284,8 +12284,8 @@
           },
           "enableChatConnectors": {
             "title": "Chat connectors",
-            "description": "Connect agents to Slack, GitHub, Discord, Microsoft Teams, and Telegram conversations.",
-            "footnote": "Turning this off hides experimental chat setup and connected-task controls. Existing chat connections keep running. AgentMail, GitHub tools, and other tool connectors stay available.",
+            "description": "Connect agents to Slack, Discord, Microsoft Teams, and Telegram conversations.",
+            "footnote": "Turning this off hides experimental chat setup and connected-task controls. Existing chat connections keep running. AgentMail, GitHub review bots, and tool connectors are controlled separately.",
             "ariaLabel": "Toggle chat connectors experimental setting"
           },
           "enableConferenceRoomChat": {
@@ -14313,7 +14313,7 @@
         "connectChannel": "Connect a channel",
         "loading": "Loading channels…",
         "emptyTitle": "No channels connected",
-        "emptyDescription": "Connect AgentMail, Slack, GitHub Code Review Bot, Discord, Microsoft Teams, or Telegram from Connectors.",
+        "emptyDescription": "Connect an agent identity from Connectors.",
         "openConnectors": "Open Connectors",
         "providerIdentity": "Provider identity",
         "openConnection": "Open connection",
@@ -17787,6 +17787,21 @@
       "dotReadyNote": "Pair your Dot and test event delivery in configuration before assigning work.",
       "backToAgents": "Back to Agents",
       "pairDot": "Pair Dot"
+    },
+    "upstreamOct10": {
+      "acpAgentHint": "Cursor uses Paperclip questions; per-run cost is unavailable. Pi accepts any provider/model ID. GitHub Copilot awaits qualification.",
+      "startingBranchUnavailable": "Starting branch unavailable",
+      "userShort": "User {{id}}",
+      "unknownActor": "Unknown actor",
+      "apiSpend": "API spend",
+      "apiUsageUnavailable": "API usage is unavailable",
+      "apiUsageLoading": "API usage is loading",
+      "review": "Review",
+      "aboutLabel": "About {{label}}",
+      "githubReviewBots": "GitHub review bots",
+      "githubReviewBotsDescription": "Connect agents to GitHub with their own App identity to review pull requests and respond to issues.",
+      "githubReviewBotsFootnote": "Independent of Chat connectors. Turning this off hides setup and management; existing bots keep running. GitHub tool connections stay available.",
+      "githubReviewBotsAria": "Toggle GitHub review bots experimental setting"
     }
   }
 }

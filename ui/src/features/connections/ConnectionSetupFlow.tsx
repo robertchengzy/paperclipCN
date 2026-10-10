@@ -61,7 +61,7 @@ import { Trans } from "react-i18next";
 import { useCompany } from "@/context/CompanyContext";
 import { useBreadcrumbs } from "@/context/BreadcrumbContext";
 import { useToast } from "@/context/ToastContext";
-import { useChatConnectorsEnabled } from "@/hooks/useChatConnectorsEnabled";
+import { useChatConnectorsEnabled, chatProviderVisible } from "@/hooks/useChatConnectorsEnabled";
 import { queryKeys } from "@/lib/queryKeys";
 import { RadioCardGroup } from "@/components/ui/radio-card";
 import { ApiError } from "@/api/client";
@@ -84,7 +84,7 @@ import { prepareOAuthNavigation, savePendingCloudHandoff } from "@/lib/oauthHand
 import { redactUrlSecrets } from "@/lib/redact-url-secrets";
 import { askFirstCatalogEntryIdsFor } from "./connection-defaults";
 import { AppLogo } from "@/pages/apps/AppLogo";
-import { appApplicationSourceSlug } from "@/pages/apps/app-definition-display";
+import { appApplicationSourceSlug, appConnectionSourceSlug } from "@/pages/apps/app-definition-display";
 import { UnverifiedServerBadge } from "@/pages/apps/UnverifiedServerBadge";
 import {
   appSourceConnectHref,
@@ -212,16 +212,46 @@ export function requestedConnectionEntry(input: {
   requestedAppKey: string;
   galleryApps: readonly AppDefinition[];
   reconnectConnection: ToolConnection | null;
+  resumeConnection: ToolConnection | null;
+  resumeApplication: ToolApplication | null;
+  completedResumeConnectionId: string | null;
   applications: readonly ToolApplication[];
 }): AppDefinition | null {
   const visible = input.galleryApps.find((candidate) => candidate.slug === input.requestedAppKey);
   if (visible) return visible;
+  if (retainedResumeMatches({
+    requestedAppKey: input.requestedAppKey,
+    resumeConnection: input.resumeConnection,
+    resumeApplication: input.resumeApplication,
+    completedResumeConnectionId: input.completedResumeConnectionId,
+  })) return getConnectableAppDefinition(input.requestedAppKey);
   if (!input.reconnectConnection) return null;
   const application = input.applications.find(
     (candidate) => candidate.id === input.reconnectConnection?.applicationId,
   );
   if (appApplicationSourceSlug(application) !== input.requestedAppKey) return null;
   return getConnectableAppDefinition(input.requestedAppKey);
+}
+
+export function retainedResumeMatches(input: {
+  requestedAppKey: string;
+  resumeConnection: ToolConnection | null;
+  resumeApplication: ToolApplication | null;
+  completedResumeConnectionId: string | null;
+}): boolean {
+  const { requestedAppKey, resumeConnection, resumeApplication, completedResumeConnectionId } = input;
+  return Boolean(
+    resumeConnection
+    && (
+      resumeConnection.status === "draft"
+      || (resumeConnection.status === "active" && resumeConnection.id === completedResumeConnectionId)
+    )
+    && resumeApplication
+    && resumeConnection.applicationId === resumeApplication.id
+    && resumeConnection.companyId === resumeApplication.companyId
+    && appApplicationSourceSlug(resumeApplication) === requestedAppKey
+    && appConnectionSourceSlug(resumeConnection) === requestedAppKey,
+  );
 }
 
 export function retainedReconnectMatches(input: {
@@ -608,7 +638,7 @@ function StandardConnectionSetupFlow({
   }, [host, routeNavigate]);
   const routeParams = useParams<{ appKey?: string }>();
   const { selectedCompany, selectedCompanyId } = useCompany();
-  const { enabled: chatConnectorsEnabled } = useChatConnectorsEnabled();
+  const { enabled: chatConnectorsEnabled, githubEnabled } = useChatConnectorsEnabled();
   const { enabled: memoryConnectorsEnabled } = useMemoryConnectorsEnabled();
   const { setBreadcrumbs } = useBreadcrumbs();
   const { pushToast } = useToast();
@@ -733,6 +763,10 @@ function StandardConnectionSetupFlow({
   const customerClientResumeRef = useRef<string | null>(null);
   const hydratedResumeConnectionIdRef = useRef<string | null>(null);
   const [hydratedResumeConnectionId, setHydratedResumeConnectionId] = useState<string | null>(null);
+  // Finishing a resumed unauthenticated/API-key draft activates that exact row.
+  // Permit it through retained-draft validation only after this flow's own
+  // finish request succeeds; an initially active resume remains invalid.
+  const [completedResumeConnectionId, setCompletedResumeConnectionId] = useState<string | null>(null);
   const oauthPopupRef = useRef<Window | null>(null);
   const [dialogOAuthConnectionId, setDialogOAuthConnectionId] = useState<string | null>(null);
   const [authorizationFallbackUrl, setAuthorizationFallbackUrl] = useState<string | null>(null);
@@ -989,15 +1023,19 @@ function StandardConnectionSetupFlow({
     } : data, [connectionIntentId, aiConnection?.provider, aiConnection?.method, aiConnection?.mode]),
     enabled: !!selectedCompanyId,
   });
+  const callbackUrlForSetup = oauthCallbackUrlForBrowser(
+    window.location.origin,
+    galleryQuery.data?.oauthCallbackUrl,
+  );
   // Use the same visible catalog for cards and every branded URL shortcut.
   // Generic custom URLs remain usable without selecting a hidden provider.
   const visibleGalleryApps = useMemo(
     () => (galleryQuery.data?.apps ?? []).filter((app) => memoryConnectorsEnabled || !isMemoryConnectorId(app.slug)).filter((app) =>
-      app.slug === "agentmail" || chatConnectorsEnabled ||
+      chatProviderVisible(app.slug, chatConnectorsEnabled, githubEnabled) ||
       !app.methods.some((method) => method.transport === "chat_sdk") ||
       appSupportsToolCatalogSetup(app),
     ),
-    [galleryQuery.data, chatConnectorsEnabled, memoryConnectorsEnabled],
+    [galleryQuery.data, chatConnectorsEnabled, githubEnabled, memoryConnectorsEnabled],
   );
   const fullRequestedDefinition = requestedAppKey
     ? getConnectableAppDefinition(requestedAppKey)
@@ -1173,6 +1211,26 @@ function StandardConnectionSetupFlow({
       : null,
     [connectionsQuery.data, resumeConnectionId],
   );
+  const resumeApplication = useMemo(
+    () => resumeConnection
+      ? (applicationsQuery.data?.applications ?? []).find(
+        (application) => application.id === resumeConnection.applicationId,
+      ) ?? null
+      : null,
+    [applicationsQuery.data, resumeConnection],
+  );
+  const completedRouteResumeConnectionId = routeStage === "complete"
+    && resumeConnection?.status === "active"
+    ? resumeConnection.id
+    : null;
+  const resumeSourceMatches = requestedAppKey
+    ? retainedResumeMatches({
+      requestedAppKey,
+      resumeConnection,
+      resumeApplication,
+      completedResumeConnectionId: completedResumeConnectionId ?? completedRouteResumeConnectionId,
+    })
+    : false;
   const identityConnection = resumeConnection ?? reconnectConnection;
   const reconnectGrantKind: ConnectionGrantKind | null = identityConnection
     ? identityConnection.credentialPolicy === "per_user"
@@ -1486,15 +1544,33 @@ function StandardConnectionSetupFlow({
   useEffect(() => {
     if (!requestedAppKey || galleryQuery.isLoading || !galleryQuery.data) return;
 
-    if (reconnectConnectionId && (
+    if ((resumeConnectionId || reconnectConnectionId) && (
       !connectionsQuery.isFetchedAfterMount
       || !applicationsQuery.isFetchedAfterMount
     )) return;
+
+    // A resume URL is only a recovery route. Invalid or cross-provider drafts
+    // must remain on the blocked recovery screen instead of falling through to
+    // fresh setup for a hidden provider.
+    if (
+      resumeConnectionId
+      && routeStage === "complete"
+      && resumeConnection?.status === "active"
+      && completedResumeConnectionId !== resumeConnectionId
+      && resumeSourceMatches
+    ) {
+      navigate(`/apps/${resumeConnection.id}/permissions`, { replace: true });
+      return;
+    }
+    if (resumeConnectionId && !resumeSourceMatches) return;
 
     const requestedEntry = requestedConnectionEntry({
       requestedAppKey,
       galleryApps: galleryQuery.data.apps,
       reconnectConnection,
+      resumeConnection,
+      resumeApplication,
+      completedResumeConnectionId,
       applications: applicationsQuery.data?.applications ?? [],
     });
     const requestedEntryAdvertisesManagedConnector = Boolean(
@@ -1639,6 +1715,12 @@ function StandardConnectionSetupFlow({
     reconnectConnection,
     reconnectConnectionId,
     reconnectSourceMatches,
+    resumeConnection,
+    resumeApplication,
+    resumeSourceMatches,
+    completedResumeConnectionId,
+    completedRouteResumeConnectionId,
+    routeStage,
     resumeConnectionId,
     fullRequestedDefinition,
     requestedAppKey,
@@ -1757,6 +1839,9 @@ function StandardConnectionSetupFlow({
       return finished;
     },
     onSuccess: async (_finished, input) => {
+      if (resumeConnectionId && input.result.connectionId === resumeConnectionId) {
+        setCompletedResumeConnectionId(resumeConnectionId);
+      }
       await queryClient.invalidateQueries({ queryKey: ["tools"] });
       await queryClient.invalidateQueries({ queryKey: queryKeys.apps.attention(selectedCompanyId!) });
       setAppStep("success");
@@ -1822,6 +1907,26 @@ function StandardConnectionSetupFlow({
         </p>
         <Button type="button" variant="outline" className="mt-5" onClick={() => navigate("/apps")}>
           {t("app.connections.connectionSetupFlow.backToApps")}
+        </Button>
+      </div>
+    );
+  }
+
+  if (
+    resumeConnectionId
+    && connectionsQuery.isFetchedAfterMount
+    && applicationsQuery.isFetchedAfterMount
+    && resumeConnection
+    && !resumeSourceMatches
+  ) {
+    return (
+      <div className="mx-auto max-w-xl rounded-xl border border-border bg-card p-6">
+        <h2 className="text-lg font-semibold text-foreground">This setup can’t be resumed</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This saved draft does not match the requested provider. The connection was not changed.
+        </p>
+        <Button type="button" variant="outline" className="mt-5" onClick={() => navigate("/apps")}>
+          Back to apps
         </Button>
       </div>
     );
@@ -2030,7 +2135,7 @@ function StandardConnectionSetupFlow({
     <OAuthClientFields
       entry={automaticOAuthEntry}
       method={automaticCustomerClientMethod}
-      callbackUrl={oauthCallbackUrlForBrowser()}
+      callbackUrl={callbackUrlForSetup}
       clientId={curatedOAuthClientId}
       onClientIdChange={setCuratedOAuthClientId}
       clientSecret={curatedOAuthClientSecret}
@@ -2430,6 +2535,7 @@ function StandardConnectionSetupFlow({
           oauthClientId={curatedOAuthClientId}
           onOAuthClientIdChange={setCuratedOAuthClientId}
           oauthClientSecret={curatedOAuthClientSecret}
+          oauthCallbackUrl={callbackUrlForSetup}
           canReuseOAuthClientSecret={Boolean(
             identityConnection?.config?.oauth
             && (identityConnection.config.oauth as Record<string, unknown>).clientId === curatedOAuthClientId.trim()
@@ -2596,7 +2702,11 @@ function StandardConnectionSetupFlow({
             installCount: installAgentIds.size,
             lockedAgentId: requestedAgentId ?? null,
           })}
-          onDone={onCancel ?? (() => navigate("/apps"))}
+          onDone={onCancel ?? (() => navigate(
+            host === "page" && connectResult?.connectionId
+              ? `/apps/${connectResult.connectionId}/permissions`
+              : "/apps",
+          ))}
         />
       )}
     </div>
@@ -3410,6 +3520,7 @@ function KeyStep({
   oauthClientId,
   onOAuthClientIdChange,
   oauthClientSecret,
+  oauthCallbackUrl: serverCallbackUrl,
   canReuseOAuthClientSecret,
   onOAuthClientSecretChange,
   credentialSource,
@@ -3436,6 +3547,7 @@ function KeyStep({
   oauthClientId: string;
   onOAuthClientIdChange: (next: string) => void;
   oauthClientSecret: string;
+  oauthCallbackUrl: string;
   canReuseOAuthClientSecret: boolean;
   onOAuthClientSecretChange: (next: string) => void;
   credentialSource: ToolConnectionCredentialSource;
@@ -3534,7 +3646,7 @@ function KeyStep({
   );
   const vercelConnectorFilled = !usingVercel || vercelConnector.trim().length > 0;
   const oauthCallbackUrl = method?.auth === "oauth" && acceptsCustomerOAuthClient
-    ? oauthCallbackUrlForBrowser()
+    ? serverCallbackUrl
     : null;
   const allConfigFields = [...(method?.tenantFields ?? []), ...(method?.extensionFields ?? [])];
   const configFields = allConfigFields.filter((field) => !field.hidden);

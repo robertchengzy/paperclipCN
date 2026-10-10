@@ -53,7 +53,6 @@ export function ChatDetailSidebar({
               to={`/apps/chat/${endpointId}/reviews`}
               label={t("app.apps.chatEndpointDetail.tabs.reviews")}
               icon={GitPullRequest}
-              end
             />
           )}
           <NavItem
