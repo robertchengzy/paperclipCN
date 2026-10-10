@@ -1,3 +1,4 @@
+import { t as translateUiCopy, i18n as uiCopyI18n, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t as translateCopy, useTranslation } from "@/i18n";
 import { TextAttachmentContext } from "@/context/TextAttachmentContext";
 import { TaskAttachmentPanel } from "./TaskAttachmentPanel";
@@ -160,6 +161,7 @@ function selectorForWorkspaceKind(kind: "execution_workspace" | "project_workspa
  * deliberately lives in this adapter instead of depending on provider ancestry.
  */
 function useTaskSidePanelFileRouting() {
+
   const location = useLocation();
   const navigate = useNavigate();
   const state = useMemo(() => readFileViewerStateFromSearch(location.search), [location.search]);
@@ -561,7 +563,7 @@ export function TaskSidePanel({
   const visualTabs = useMemo<SidePanelTabItem[]>(() => controller.tabs.map((tab) => {
     const document = tab.payload.kind === "issue-document" ? documentByKey.get(tab.payload.documentKey) : null;
     const browserIndex = browsersQuery.data?.findIndex((browser) => tab.payload.kind === "browser" && (browser.id === tab.payload.browserId || browser.sessionId === tab.payload.browserId)) ?? -1;
-    const browserLabel = browserIndex >= 0 && (browsersQuery.data?.length ?? 0) > 1 ? `Browser ${browserIndex + 1}` : null;
+    const browserLabel = browserIndex >= 0 && (browsersQuery.data?.length ?? 0) > 1 ? translateUiCopy("app.uiCopy.componentsTaskChatThread.browserValue0", { value0: String(browserIndex + 1) }) : null;
     return {
       id: tab.id,
       type: tab.type,
@@ -571,7 +573,7 @@ export function TaskSidePanel({
       contentMode: tab.contentMode,
       icon: tabIcon(tab),
     };
-  }), [controller.tabs, documentByKey, taskCount, taskLabel, tasksTab, browsersQuery.data, translateCopy]);
+  }), [controller.tabs, documentByKey, taskCount, taskLabel, tasksTab, browsersQuery.data, translateCopy, uiCopyI18n.language]);
 
   const launcherSections = useMemo<SidePanelLauncherSection[]>(() => {
     const primary: SidePanelLauncherItem[] = conversationAgentId ? [
@@ -584,7 +586,7 @@ export function TaskSidePanel({
       { id: "artifacts", label: translateCopy("app.issueUi.taskSidePanel.artifacts"), icon: <Box />, alreadyOpen: controller.tabs.some((tab) => tab.id === "artifacts") },
     ];
     for (const [index, browser] of (browsersQuery.data ?? []).entries()) {
-      primary.push({ id: `browser:${browser.id}`, label: (browsersQuery.data?.length ?? 0) > 1 ? `Browser ${index + 1}` : "Browser", description: browser.status, icon: <Globe />, alreadyOpen: controller.tabs.some(tab => tab.id === `browser:${browser.id}`) });
+      primary.push({ id: `browser:${browser.id}`, label: (browsersQuery.data?.length ?? 0) > 1 ? translateUiCopy("app.uiCopy.componentsTaskChatThread.browserValue0", { value0: String(index + 1) }) : translateUiCopy("app.uiCopy.componentsTaskChatThread.browser"), description: browser.status, icon: <Globe />, alreadyOpen: controller.tabs.some(tab => tab.id === `browser:${browser.id}`) });
     }
     if (fileTabsEnabled) {
       primary.push({ id: "files", label: translateCopy("app.issueUi.taskSidePanel.files"), icon: <FolderOpen />, shortcut: "G F", alreadyOpen: controller.tabs.some((tab) => tab.id === "files") });
@@ -633,7 +635,7 @@ export function TaskSidePanel({
       });
     }
     return sections;
-  }, [browsersQuery.data, conversationAgentId, taskCount, taskLabel, tasksTab?.hasError, controller.tabs, documents, fileTabsEnabled, planDocument, recentFilesQuery.data, recentFilesQuery.isError, recentFilesQuery.isLoading, subtasksAvailable, translateCopy]);
+  }, [browsersQuery.data, conversationAgentId, taskCount, taskLabel, tasksTab?.hasError, controller.tabs, documents, fileTabsEnabled, planDocument, recentFilesQuery.data, recentFilesQuery.isError, recentFilesQuery.isLoading, subtasksAvailable, translateCopy, uiCopyI18n.language]);
 
   function selectLauncherItem(item: SidePanelLauncherItem) {
     markInteracted();
@@ -824,7 +826,7 @@ export function TaskSidePanel({
           {tabStrip}
           {onRequestClose ? (
             mobile ? (
-              <Button variant="ghost" size="icon" className="size-(--sz-44px) shrink-0" aria-label="Close side panel" onClick={onRequestClose}>
+              <Button variant="ghost" size="icon" className="size-(--sz-44px) shrink-0" aria-label={translateUiCopy("app.shell.sidePanelFrame.closeSidePanel")} onClick={onRequestClose}>
                 <X aria-hidden />
               </Button>
             ) : <SidePanelToggleButton open onToggle={onRequestClose} />

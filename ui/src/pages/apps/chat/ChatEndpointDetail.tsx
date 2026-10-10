@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { Identity } from "@/components/Identity";
 import { SlackSetupAdvanced } from "./SlackAppDetails";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -366,7 +367,7 @@ export function ChatEndpointDetail() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {slackUrl && <Button asChild variant="outline"><a href={slackUrl} target="_blank" rel="noopener noreferrer">Open Slack <ExternalLink className="size-4" /></a></Button>}
+          {slackUrl && <Button asChild variant="outline"><a href={slackUrl} target="_blank" rel="noopener noreferrer">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.openSlack")} <ExternalLink className="size-4" /></a></Button>}
           {setupIncomplete ? (
             <Button
               variant="outline"
@@ -419,6 +420,7 @@ export function ChatEndpointDetail() {
 }
 
 function EmailAccess({ endpoint }: { endpoint: ChatEndpoint }) {
+  useUiCopyTranslation();
   const connection = useQuery({
     queryKey: queryKeys.tools.connection(endpoint.connectionId ?? ""),
     queryFn: () => toolsApi.getConnection(endpoint.connectionId!),
@@ -430,16 +432,16 @@ function EmailAccess({ endpoint }: { endpoint: ChatEndpoint }) {
   });
   if (!endpoint.connectionId || agents.isError || connection.isError) return (
     <div className="space-y-3">
-      <p role="alert" className="text-sm text-destructive">Connection access could not be loaded.</p>
-      <Button variant="outline" onClick={() => { void agents.refetch(); void connection.refetch(); }}>Try again</Button>
+      <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.connections.emailConnectionAccess.loadFailed")}</p>
+      <Button variant="outline" onClick={() => { void agents.refetch(); void connection.refetch(); }}>{translateUiCopy("app.common.actions.tryAgain")}</Button>
     </div>
   );
-  if (agents.isPending || connection.isPending) return <p role="status" className="text-sm text-muted-foreground">Loading access…</p>;
+  if (agents.isPending || connection.isPending) return <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.projects.projectAccessMembers.loadingAccess")}</p>;
   const sourceId = connection.data.config?.credentialConnectionId;
   const credentialId = typeof sourceId === "string" ? sourceId : endpoint.connectionId;
   return <section className="max-w-3xl space-y-4">
-    <h2 className="text-lg font-semibold">Access</h2>
-    {credentialId !== endpoint.connectionId && <p className="text-sm text-muted-foreground">These settings apply to the saved AgentMail account and all inboxes using it.</p>}
+    <h2 className="text-lg font-semibold">{translateUiCopy("app.common.nouns.access")}</h2>
+    {credentialId !== endpoint.connectionId && <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.theseSettingsApplyToTheSavedAgentMailAccountAnd")}</p>}
     <EmailConnectionAccess key={credentialId} companyId={endpoint.companyId} connectionId={credentialId} agents={agents.data} />
   </section>;
 }
@@ -522,11 +524,11 @@ function Settings({
       )}
       <div className="space-y-2">
         <h3 className="text-sm font-semibold">{endpoint.provider === "slack" ? t("app.apps.chatEndpointDetail.allowedChannels") : t("app.apps.chatEndpointDetail.destinations")}</h3>
-        {resourcesQuery.isError ? <p role="alert" className="text-sm text-destructive">Couldn't load channels. <button className="underline" onClick={() => void resourcesQuery.refetch()}>Try again</button></p> : resourcesQuery.isLoading ? (
+        {resourcesQuery.isError ? <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.couldnTLoadChannels")} <button className="underline" onClick={() => void resourcesQuery.refetch()}>{translateUiCopy("app.common.actions.tryAgain")}</button></p> : resourcesQuery.isLoading ? (
           <p className="text-sm text-muted-foreground">{t("app.apps.chatEndpointDetail.loadingDestinations")}</p>
         ) : destinationResources.length === 0 && endpoint.provider !== "slack" ? (
           <p className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
-            No destinations yet.
+            {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.noDestinationsYet")}
           </p>
         ) : (
           <div className="divide-y divide-border border-y border-border">
@@ -558,9 +560,7 @@ function Settings({
               </div>
             ))}
             {endpoint.provider === "slack" && (
-              <p className="py-3 text-sm text-muted-foreground">
-                Invite {endpoint.assignedAgentName} to a channel to add it
-              </p>
+              <p className="py-3 text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatChatEndpointDetail.message71" components={{ part0: <>{""}{endpoint.assignedAgentName}</> }} /></p>
             )}
           </div>
         )}
@@ -582,7 +582,7 @@ function Settings({
           />
           {endpoint.provider === "slack" && (
             <SettingToggle
-              label="Require at-mention"
+              label={translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.requireAtMention")}
               detail="Only respond to messages that @mention this bot, including thread replies and direct messages. Direct messages must also be allowed above."
               checked={endpoint.requireAtMention ?? false}
               pending={updateEndpoint.isPending}
@@ -613,26 +613,26 @@ function Settings({
         }}
       />}
       {endpoint.provider === "slack" && (
-        <SlackSetupAdvanced label="Message in a channel"><div className="space-y-2 text-sm">
-          <p>Invite the bot to a channel, then mention it to start a conversation.</p>
+        <SlackSetupAdvanced label={translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.messageInAChannel")}><div className="space-y-2 text-sm">
+          <p>{translateUiCopy("app.apps.chatEndpointDetail.chatInSlackHelp")}</p>
           <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
             <code>{mentionMessage}</code>
-            <Button size="icon" variant="ghost" aria-label={messageCopied ? "Message copied" : "Copy message"} onClick={() => {
-              void copyTextToClipboard(mentionMessage).then(() => setMessageCopied(true), () => pushToast({ title: "Couldn’t copy the message", body: "Select and copy it manually.", tone: "error" }));
+            <Button size="icon" variant="ghost" aria-label={messageCopied ? translateUiCopy("app.apps.chatEndpointDetail.messageCopied") : translateUiCopy("app.apps.chatEndpointDetail.copyMessage")} onClick={() => {
+              void copyTextToClipboard(mentionMessage).then(() => setMessageCopied(true), () => pushToast({ title: translateUiCopy("app.apps.chatEndpointDetail.copyMessageFailed"), body: translateUiCopy("app.apps.chatEndpointDetail.copyManually"), tone: "error" }));
             }}>{messageCopied ? <Check className="size-4" /> : <Copy className="size-4" />}</Button>
           </div>
         </div></SlackSetupAdvanced>
       )}
-      {endpoint.provider === "slack" && <SlackSetupAdvanced label="Agent avatar">
-        {avatarAgent.isPending ? <p role="status" className="text-sm text-muted-foreground">Loading agent avatar…</p>
-          : avatarAgent.isError ? <p role="alert" className="text-sm text-destructive">Couldn’t load the agent’s avatar. <button className="underline" onClick={() => void avatarAgent.refetch()}>Try again</button></p>
+      {endpoint.provider === "slack" && <SlackSetupAdvanced label={translateUiCopy("app.apps.slackAvatarStep.agentAvatar")}>
+        {avatarAgent.isPending ? <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.apps.chatEndpointDetail.loadingAvatar")}</p>
+          : avatarAgent.isError ? <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.apps.chatEndpointDetail.avatarLoadFailed")} <button className="underline" onClick={() => void avatarAgent.refetch()}>{translateUiCopy("app.common.actions.tryAgain")}</button></p>
           : <SlackAvatarSettings
               agentName={avatarAgent.data?.name ?? endpoint.assignedAgentName}
               appName={endpoint.setup?.slackApp?.appName ?? defaultSlackAppName(avatarAgent.data?.name ?? endpoint.assignedAgentName)}
               avatarUrl={agentAvatarUrl(resolveAgentAppearance(avatarAgent.data?.appearance, endpoint.assignedAgentId), 512, 1, "rest", false, "paperclip-dark")}
             />}
       </SlackSetupAdvanced>}
-      {endpoint.provider === "slack" && <SlackSetupAdvanced label="Slack tools"><SlackToolsSettings companyId={endpoint.companyId} endpointId={endpointId} connectionId={endpoint.connectionId} /></SlackSetupAdvanced>}
+      {endpoint.provider === "slack" && <SlackSetupAdvanced label={translateUiCopy("app.apps.slackToolSettings.slackTools")}><SlackToolsSettings companyId={endpoint.companyId} endpointId={endpointId} connectionId={endpoint.connectionId} /></SlackSetupAdvanced>}
     </section>
   );
 }
@@ -650,6 +650,7 @@ function SettingToggle({
   pending: boolean;
   onChange: (value: boolean) => void;
 }) {
+  useUiCopyTranslation();
   return (
     <div className="flex items-center gap-3 border-y border-border py-3">
       <div className="min-w-0 flex-1">
@@ -718,45 +719,45 @@ function Access({
     mutationFn: (principalId: string) =>
       chatEndpointsApi.revokeLink(endpointId, principalId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.chatEndpoints.principals(endpointId) }),
-    onError: (error) => pushToast({ title: "Couldn't disconnect account", body: error instanceof Error ? error.message : "Try again.", tone: "error" }),
+    onError: (error) => pushToast({ title: translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.couldnTDisconnectAccount"), body: error instanceof Error ? error.message : translateUiCopy("app.common.messages.tryAgain"), tone: "error" }),
   });
   const links = linksQuery.data ?? [];
   return (
     <section className="max-w-3xl space-y-7">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold">People</h2>
+        <h2 className="text-lg font-semibold">{translateUiCopy("app.projects.projectAccessMembers.people")}</h2>
         {endpoint.provider === "slack" && <Dialog>
-          <DialogTrigger asChild><Button>Invite people</Button></DialogTrigger>
+          <DialogTrigger asChild><Button>{translateUiCopy("app.settings.companyAccess.invitePeople")}</Button></DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Invite people to talk to {endpoint.assignedAgentName}</DialogTitle>
-              <DialogDescription>Share these instructions with someone in your Slack workspace.</DialogDescription>
+              <DialogTitle><Trans i18nKey="app.uiCopy.pagesAppsChatChatEndpointDetail.message72" components={{ part0: <>{""}{endpoint.assignedAgentName}</> }} /></DialogTitle>
+              <DialogDescription>{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.shareTheseInstructionsWithSomeoneInYourSlackWorkspace")}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 text-sm">
               <ol className="list-decimal space-y-3 pl-5">
-                <li>Send <code className="font-mono">{joinCommand}</code> in Slack.</li>
-                <li>Open the bot’s private link and sign in to Paperclip to confirm your Slack account.</li>
-                <li>If you’re new to this organization, request access and wait for an admin to approve.</li>
+                <li>{translateUiCopy("app.issueChat.composer.send")} <code className="font-mono">{joinCommand}</code> {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.inSlack")}</li>
+                <li>{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.openTheBotSPrivateLinkAndSignIn")}</li>
+                <li>{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.ifYouReNewToThisOrganizationRequestAccess")}</li>
               </ol>
-              <p className="text-muted-foreground">The confirmation link is personal and expires after 15 minutes.</p>
+              <p className="text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.theConfirmationLinkIsPersonalAndExpiresAfter15")}</p>
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <Button variant="ghost" onClick={() => {
                   void copyTextToClipboard(joinCommand).then(() => setJoinCommandCopied(true), () => pushToast({ title: t("app.apps.chatEndpointDetail.copyCommandFailed"), tone: "error" }));
                 }}>{joinCommandCopied ? <Check className="size-4" /> : <Copy className="size-4" />}{joinCommandCopied ? t("app.common.actions.copied") : t("app.apps.chatEndpointDetail.copyCommand")}</Button>
                 <Button onClick={() => {
                   const workspace = endpoint.providerAccountId ? `https://app.slack.com/client/${encodeURIComponent(endpoint.providerAccountId)}` : "https://app.slack.com/";
-                  void copyTextToClipboard(`Talk to ${endpoint.assignedAgentName} in Slack: ${workspace}\nSend ${joinCommand}, then open the bot’s private link and sign in to Paperclip to confirm your account. If you’re new to the organization, request access for an admin to approve.`).then(() => setInviteCopied(true), () => pushToast({ title: "Couldn't copy invitation", tone: "error" }));
-                }}>{inviteCopied ? <Check className="size-4" /> : <Copy className="size-4" />}{inviteCopied ? "Invitation copied" : "Copy invitation"}</Button>
+                  void copyTextToClipboard(`Talk to ${endpoint.assignedAgentName} in Slack: ${workspace}\nSend ${joinCommand}, then open the bot’s private link and sign in to Paperclip to confirm your account. If you’re new to the organization, request access for an admin to approve.`).then(() => setInviteCopied(true), () => pushToast({ title: translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.couldnTCopyInvitation"), tone: "error" }));
+                }}>{inviteCopied ? <Check className="size-4" /> : <Copy className="size-4" />}{inviteCopied ? translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.invitationCopied") : translateUiCopy("app.uiCopy.pagesAppsAssistantConnection.copyInvitation")}</Button>
               </div>
             </div>
           </DialogContent>
         </Dialog>}
       </div>
-      <p className="text-sm text-muted-foreground">People with linked accounts use their own Paperclip permissions. <Link className="underline underline-offset-4" to="/company/settings/members">Manage members</Link></p>
+      <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatChatEndpointDetail.message73" components={{ part0: <Link className="underline underline-offset-4" to="/company/settings/members">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.manageMembers")}</Link> }} /></p>
       {confirmationUrl && (
         <div className="space-y-2 border-y border-border py-3">
-          <p className="text-sm font-medium">Confirm {confirmationFor ?? "this account"}</p>
-          <p className="text-xs text-muted-foreground">Share only with this person. They must sign in and confirm their own account.</p>
+          <p className="text-sm font-medium"><Trans i18nKey="app.uiCopy.pagesAppsChatChatEndpointDetail.message74" components={{ part0: <>{""}{confirmationFor ?? translateUiCopy("app.settings.inviteLanding.thisAccount")}</> }} /></p>
+          <p className="text-xs text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.shareOnlyWithThisPersonTheyMustSignIn")}</p>
           <p className="break-all text-xs text-muted-foreground">
             {confirmationUrl}
           </p>
@@ -785,12 +786,12 @@ function Access({
         </div>
       )}
       <div className="space-y-2">
-        {linksQuery.isPending ? <p role="status" className="text-sm text-muted-foreground">Loading people…</p> : linksQuery.isError ? <p role="alert" className="text-sm text-destructive">Couldn't load people. <button className="underline" onClick={() => void linksQuery.refetch()}>Try again</button></p> : links.length === 0 ? (
+        {linksQuery.isPending ? <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.loadingPeople")}</p> : linksQuery.isError ? <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.couldnTLoadPeople")} <button className="underline" onClick={() => void linksQuery.refetch()}>{translateUiCopy("app.common.actions.tryAgain")}</button></p> : links.length === 0 ? (
           <p className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
-            No linked accounts yet. Invite someone to connect.
+            {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.noLinkedAccountsYetInviteSomeoneToConnect")}
           </p>
         ) : (
-          <div role="list" aria-label="People" className="divide-y divide-border border-y border-border">
+          <div role="list" aria-label={translateUiCopy("app.projects.projectAccessMembers.people")} className="divide-y divide-border border-y border-border">
             {links.map((link) => (
               <div
                 key={link.id}
@@ -800,9 +801,9 @@ function Access({
                 <div className="min-w-0 flex-1">
                   <Identity name={link.paperclipUserLabel ?? link.externalLabel} size="default" className="gap-2" />
                   {(link.status !== "linked" || link.externalLabel !== link.paperclipUserLabel) && <p className="pl-10 text-xs text-muted-foreground">
-                    {link.status === "revoked" ? "Disconnected" : link.status === "linked"
+                    {link.status === "revoked" ? translateUiCopy("app.connections.remoteMcpConnectionSetup.disconnected") : link.status === "linked"
                       ? link.externalLabel
-                      : "Waiting for account confirmation"}
+                      : translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.waitingForAccountConfirmation")}
                   </p>}
                 </div>
                 {link.status === "linked" ? (
@@ -813,7 +814,7 @@ function Access({
                     onClick={() => revoke.mutate(link.principalId)}
                   >
                     <Unlink />
-                    Disconnect
+                    {translateUiCopy("app.common.actions.disconnect")}
                   </Button>
                 ) : (
                   <Button
@@ -822,7 +823,7 @@ function Access({
                     disabled={createIntent.isPending}
                     onClick={() => { setConfirmationUrl(null); setConfirmationFor(link.externalLabel); createIntent.mutate(link.principalId); }}
                   >
-                    Create confirmation link
+                    {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.createConfirmationLink")}
                   </Button>
                 )}
               </div>
@@ -830,12 +831,12 @@ function Access({
           </div>
         )}
       </div>
-      <SlackSetupAdvanced label="Guest access">
-        <SettingToggle label="Allow unlinked people"
+      <SlackSetupAdvanced label={translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.guestAccess")}>
+        <SettingToggle label={translateUiCopy("app.apps.chatEndpointDetail.allowUnlinked")}
           detail="People without linked accounts can start isolated tasks. They cannot approve actions, spend, or manage access. Requests are refused when isolation is unavailable."
           checked={allowUnlinked} pending={updatePolicy.isPending} onChange={value => updatePolicy.mutate(value)} />
       </SlackSetupAdvanced>
-      {endpoint.provider === "slack" && <SlackSetupAdvanced label="Personal Slack search"><SlackSearchAccess companyId={endpoint.companyId} endpointId={endpointId} /></SlackSetupAdvanced>}
+      {endpoint.provider === "slack" && <SlackSetupAdvanced label={translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.personalSlackSearch")}><SlackSearchAccess companyId={endpoint.companyId} endpointId={endpointId} /></SlackSetupAdvanced>}
     </section>
   );
 }
@@ -855,10 +856,10 @@ function Conversations({
   });
   return (
     <section className="space-y-4">
-      {query.isPending ? <p role="status" className="text-sm text-muted-foreground">Loading conversations…</p> : query.isError ? (
+      {query.isPending ? <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.loadingConversations")}</p> : query.isError ? (
         <div className="space-y-3">
-          <p role="alert" className="text-sm text-destructive">Conversations could not be loaded.</p>
-          <Button variant="outline" onClick={() => void query.refetch()}>Try again</Button>
+          <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.conversationsCouldNotBeLoaded")}</p>
+          <Button variant="outline" onClick={() => void query.refetch()}>{translateUiCopy("app.common.actions.tryAgain")}</Button>
         </div>
       ) : <ChatConversationList rows={query.data} provider={provider} />}
     </section>
@@ -1171,10 +1172,7 @@ function Activity({
           {t("app.apps.chatEndpointDetail.recentActivity")}
         </h3>
         {endpoint.provider === "agentmail" && rows.some((item) => item.kind === "publication" && item.status === "delivery_unknown") && (
-          <p className="text-sm text-muted-foreground">
-            Review unconfirmed email delivery in the{" "}
-            <Link to={`/apps/chat/${endpointId}/conversations`} className="underline underline-offset-4">conversation’s task</Link>.
-          </p>
+          <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatChatEndpointDetail.message75" components={{ part0: <Link to={`/apps/chat/${endpointId}/conversations`} className="underline underline-offset-4">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.conversationSTask")}</Link> }} /></p>
         )}
         <div className="divide-y divide-border border-y border-border">
           {query.isLoading && (
@@ -1379,7 +1377,7 @@ function Activity({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline underline-offset-4"
-                >Open Slack app settings</a> to manage or delete the Slack app.</>
+                >{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.openSlackAppSettings")}</a> {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.toManageOrDeleteTheSlackApp")}</>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>

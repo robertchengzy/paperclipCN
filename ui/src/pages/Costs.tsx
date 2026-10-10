@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import { DecisionHistory } from "../components/decision-models/DecisionHistory";
 import { SubscriptionCostCard, SubscriptionTokenUsage } from "../components/SubscriptionCostCard";
@@ -133,6 +135,7 @@ function FinanceSummaryCard({
   estimatedDebitCents: number;
   eventCount: number;
 }) {
+  useUiCopyTranslation();
   return (
     <Card>
       <CardHeader className="px-5 pt-5 pb-2">
@@ -694,25 +697,21 @@ export function Costs({
               icon={ArrowUpRight}
             />
           </div>
-          {subscriptions && Number(subscriptions.subscription.costCents) > 0 && <p className="text-sm text-muted-foreground">Subscription accounts also have {formatCents(Number(subscriptions.subscription.costCents))} in recorded usage charges for this period, separate from monthly fees.</p>}
-          {subscriptions && subscriptions.unknown.eventCount > 0 && <p className="text-sm text-muted-foreground">{formatTokens(subscriptions.unknown.inputTokens + subscriptions.unknown.cachedInputTokens + subscriptions.unknown.outputTokens)} tokens have other or unknown billing types{Number(subscriptions.unknown.costCents) > 0 ? `, with ${formatCents(Number(subscriptions.unknown.costCents))} in recorded charges` : ""}. They remain in the inference ledger.</p>}
-          {subscriptionError && subscriptions && <p role="status" className="text-sm text-muted-foreground">Showing the last loaded API and subscription usage. Updates will resume automatically.</p>}
+          {subscriptions && Number(subscriptions.subscription.costCents) > 0 && <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesCosts.message32" components={{ part0: <>{""}{formatCents(Number(subscriptions.subscription.costCents))}</> }} /></p>}
+          {subscriptions && subscriptions.unknown.eventCount > 0 && <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesCosts.message33" components={{ part0: <>{""}{formatTokens(subscriptions.unknown.inputTokens + subscriptions.unknown.cachedInputTokens + subscriptions.unknown.outputTokens)}</>, part1: <>{""}{Number(subscriptions.unknown.costCents) > 0 ? translateUiCopy("app.uiCopy.pagesCosts.withValue0InRecordedCharges", { value0: String(formatCents(Number(subscriptions.unknown.costCents))) }) : ""}</> }} /></p>}
+          {subscriptionError && subscriptions && <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesCosts.showingTheLastLoadedAPIAndSubscriptionUsageUpdates")}</p>}
           {discoverSubscriptions.error && <div role="status" className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-            <p>Connected accounts could not be checked. Existing subscription estimates are still shown.</p>
+            <p>{translateUiCopy("app.uiCopy.pagesCosts.connectedAccountsCouldNotBeCheckedExistingSubscriptionEstimates")}</p>
             {subscriptions?.canRefresh && <Button variant="outline" size="sm" disabled={discoverSubscriptions.isPending}
-              onClick={() => discoverSubscriptions.mutate(companyId)}>Retry account check</Button>}
+              onClick={() => discoverSubscriptions.mutate(companyId)}>{translateUiCopy("app.uiCopy.pagesCosts.retryAccountCheck")}</Button>}
           </div>}
           {spendData?.summary.pricingComplete === false && (
             <div role="status" className="space-y-1 text-sm text-muted-foreground">
               {spendData.summary.unpricedEventCount > 0 && (
-                <p>
-                  Costs are unavailable for {spendData.summary.unpricedEventCount} usage {spendData.summary.unpricedEventCount === 1 ? "entry" : "entries"} in this period. Totals include known costs only.
-                </p>
+                <p><Trans i18nKey="app.uiCopy.pagesCosts.message34" components={{ part0: <>{""}{spendData.summary.unpricedEventCount}</>, part1: <>{""}{spendData.summary.unpricedEventCount === 1 ? translateUiCopy("app.agentDetail.instructions.entryBadge") : translateUiCopy("app.uiCopy.pagesCosts.entries")}</> }} /></p>
               )}
               {spendData.summary.pendingRunCount > 0 && (
-                <p>
-                  {spendData.summary.pendingRunCount} {spendData.summary.pendingRunCount === 1 ? "run is" : "runs are"} awaiting cost data.
-                </p>
+                <p><Trans i18nKey="app.uiCopy.pagesCosts.message35" components={{ part0: <>{""}{spendData.summary.pendingRunCount}</>, part1: <>{""}{spendData.summary.pendingRunCount === 1 ? translateUiCopy("app.uiCopy.pagesCosts.runIs") : translateUiCopy("app.uiCopy.pagesCosts.runsAre")}</> }} /></p>
               )}
             </div>
           )}
@@ -746,7 +745,7 @@ export function Costs({
           </div>
         ) : null}
 
-        <TabsContent value="decisions" className="mt-4">{showCustomPrompt ? <p className="text-sm text-muted-foreground">Select a start and end date to load data.</p> : <DecisionHistory companyId={companyId} from={from} to={to} />}</TabsContent>
+        <TabsContent value="decisions" className="mt-4">{showCustomPrompt ? <p className="text-sm text-muted-foreground">{translateUiCopy("app.reports.costs.selectAStartAndEndDateToLoadData")}</p> : <DecisionHistory companyId={companyId} from={from} to={to} />}</TabsContent>
         <TabsContent value="overview" className="mt-4 space-y-4">
           {showCustomPrompt ? (
             <p className="text-sm text-muted-foreground">{t("app.reports.costs.selectAStartAndEndDateToLoadData")}</p>
@@ -784,7 +783,7 @@ export function Costs({
                                   ) : (
                                     <span className="h-3 w-3 shrink-0" />
                                   )}
-                                  {row.agentId ? <AgentIdentity agent={{ id: row.agentId, name: row.agentName ?? row.agentId, appearance: row.agentAppearance }} size="sm" /> : <span className="font-medium">Paperclip services</span>}
+                                  {row.agentId ? <AgentIdentity agent={{ id: row.agentId, name: row.agentName ?? row.agentId, appearance: row.agentAppearance }} size="sm" /> : <span className="font-medium">{translateUiCopy("app.upstreamOct08.paperclipServices")}</span>}
                                   {row.agentStatus === "terminated" ? <StatusBadge status="terminated" /> : null}
                                 </div>
                                 <div className="text-right text-sm tabular-nums">

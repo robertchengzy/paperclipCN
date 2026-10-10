@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import type {
   IssueBlockerAttention,
   IssueRecoveryAction,
@@ -210,6 +211,7 @@ function WaitingChipLink({
 }
 
 function WaitingStepGlyph({ status }: { status: WaitingBlockerStatus }) {
+  useUiCopyTranslation();
   if (status === "done") {
     return <CheckCircle2 className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400" aria-hidden />;
   }
@@ -589,7 +591,7 @@ export function IssueBlockedNotice({
         <span key={blocker.id} className="inline-flex max-w-full items-center gap-1.5">
           <LockedIssueChip identifier={blocker.identifier} />
           <span className="text-(length:--text-micro) text-muted-foreground">
-            Private — you don't have access
+            {translateUiCopy("app.uiCopy.componentsIssueBlockedNotice.privateYouDonTHaveAccess")}
           </span>
         </span>
       );

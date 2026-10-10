@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useCallback, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Agent, Issue } from "@paperclipai/shared";
@@ -12,6 +13,7 @@ import { agentRouteRef } from "@/lib/utils";
 import { useAgentChatEnabled } from "./useAgentChatEnabled";
 
 export function useAgentChatNavigation() {
+
   const { selectedCompanyId: companyId } = useCompany();
   const { enabled, loaded } = useAgentChatEnabled();
   const session = useQuery({ queryKey: queryKeys.auth.session, queryFn: () => authApi.getSession() });
@@ -29,6 +31,7 @@ export function useAgentChatNavigation() {
 
 /** Explicitly adding a chat uses the existing atomic, one-per-agent resolver. */
 export function useOpenAgentChat(companyId: string | null, userId: string | null) {
+
   const client = useQueryClient();
   const navigate = useNavigate();
   const { isMobile, setSidebarOpen } = useSidebar();
@@ -39,7 +42,7 @@ export function useOpenAgentChat(companyId: string | null, userId: string | null
     return () => { current.mounted = false; };
   }, [companyId, userId]);
   return useCallback(async (agent: Agent, signal?: AbortSignal) => {
-    if (!companyId || agent.companyId !== companyId) throw new Error("Choose an agent from this company.");
+    if (!companyId || agent.companyId !== companyId) throw new Error(translateUiCopy("app.uiCopy.hooksUseAgentChatNavigation.chooseAnAgentFromThisCompany"));
     const current = scope.current;
     const chat = await agentChatsApi.ensure(companyId, agent.id);
     client.setQueryData(queryKeys.agentChats.detail(companyId, userId, agent.id), chat);

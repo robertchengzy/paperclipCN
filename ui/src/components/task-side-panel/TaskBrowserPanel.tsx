@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type BrowserUseControl, type TaskBrowser } from "@paperclipai/shared";
@@ -20,6 +21,7 @@ export function TaskBrowserPanel({
   active?: boolean;
   onOpenActiveBrowser?: () => void;
 }) {
+  useUiCopyTranslation();
   const cache = useQueryClient();
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -73,7 +75,7 @@ export function TaskBrowserPanel({
           if (!disposed) {
             setUrl(null);
             setError(
-              "The live view disconnected. Use Reconnect view in Browser options to try again.",
+              translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.theLiveViewDisconnectedUseReconnectViewInBrowser"),
             );
           }
         });
@@ -153,26 +155,26 @@ export function TaskBrowserPanel({
     onSuccess: () => {
       void cache.invalidateQueries({ queryKey: ["task-browsers", issueId] });
     },
-    onError: () => setError("The browser action failed. Try again."),
+    onError: () => setError(translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.theBrowserActionFailedTryAgain")),
   });
   const message = accessError
-    ? "You no longer have access to this browser."
+    ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.youNoLongerHaveAccessToThisBrowser")
     : (browser?.error ?? error);
   const heading = accessError
-    ? "Browser access unavailable"
+    ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.browserAccessUnavailable")
     : browser?.status === "starting"
-      ? "Starting browser…"
+      ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.startingBrowser")
       : browser?.status === "stopping"
-        ? "Closing browser…"
+        ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.closingBrowser")
         : browser?.status === "closed"
-          ? "Browser closed"
+          ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.browserClosed")
           : browser?.status === "failed"
-            ? "Browser could not start"
+            ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.browserCouldNotStart")
             : error
-              ? "Live view disconnected"
+              ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.liveViewDisconnected")
               : viewable
-                ? "Connecting to browser…"
-                : "No browser open";
+                ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.connectingToBrowser")
+                : translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.noBrowserOpen");
   const waiting =
     !message &&
     (browser?.status === "starting" ||
@@ -185,7 +187,7 @@ export function TaskBrowserPanel({
           <iframe
             ref={frameRef}
             key={refresh}
-            title="Live Browser Use browser"
+            title={translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.liveBrowserUseBrowser")}
             src={url}
             onLoad={() => setViewerLoad("loaded")}
             referrerPolicy="no-referrer"
@@ -203,23 +205,22 @@ export function TaskBrowserPanel({
                     className="size-5 animate-spin text-muted-foreground motion-reduce:animate-none"
                     aria-hidden="true"
                   />
-                  <p className="text-sm">Connecting to browser…</p>
+                  <p className="text-sm">{translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.connectingToBrowser")}</p>
                 </>
               ) : (
                 <>
                   <p className="text-sm font-medium">
-                    The live view did not load
+                    {translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.theLiveViewDidNotLoad")}
                   </p>
                   <p className="max-w-sm text-sm text-muted-foreground">
-                    Reconnect the view or open this task in another browser. The
-                    remote browser is still running.
+                    {translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.reconnectTheViewOrOpenThisTaskInAnother")}
                   </p>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={reconnect}
                   >
-                    Reconnect view
+                    {translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserFooter.reconnectView")}
                   </Button>
                 </>
               )}
@@ -248,20 +249,20 @@ export function TaskBrowserPanel({
               {message ??
                 (browser?.status === "closed"
                   ? onOpenActiveBrowser
-                    ? "Another browser is still open on this task."
-                    : "Send a task message to ask the agent to open another browser."
+                    ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.anotherBrowserIsStillOpenOnThisTask")
+                    : translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.sendATaskMessageToAskTheAgentTo")
                   : browser?.status === "starting"
-                    ? "The live view will appear here when it is ready."
+                    ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.theLiveViewWillAppearHereWhenItIs")
                     : browser?.status === "stopping"
-                      ? "Waiting for Browser Use to confirm shutdown."
+                      ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.waitingForBrowserUseToConfirmShutdown")
                       : !viewable
-                        ? "Ask the agent to browse a website in a task message."
+                        ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.askTheAgentToBrowseAWebsiteInA")
                         : null)}
             </p>
           </div>
           {browser?.status === "closed" && !accessError && onOpenActiveBrowser && (
             <Button variant="outline" size="sm" onClick={onOpenActiveBrowser}>
-              Open active browser
+              {translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.openActiveBrowser")}
             </Button>
           )}
         </div>
@@ -273,8 +274,7 @@ export function TaskBrowserPanel({
       )}
       {viewable && presenceError && (
         <p role="alert" className="px-3 py-2 text-xs text-destructive">
-          Could not keep this browser open. Check your connection before the
-          timer runs out.
+          {translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskBrowserPanel.couldNotKeepThisBrowserOpenCheckYourConnection")}
         </p>
       )}
       {viewable && viewport.error && (

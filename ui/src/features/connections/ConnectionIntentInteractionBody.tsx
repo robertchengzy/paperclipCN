@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy } from "@/i18n";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -211,7 +213,7 @@ export function ConnectionIntentInteractionBody({
           const agent = await agentsApi.get(interaction.payload.requestingAgentId, interaction.companyId);
           const current = agent.runtimeConfig.aiConnection;
           if (!current || current.mode === "responsible_user" || current.mode === "router" || current.connectionId !== previous.id || current.grantId !== previous.grantId) {
-            throw new Error("The agent’s AI connection changed. Reload the task and try again.");
+            throw new Error(translateUiCopy("app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.theAgentSAIConnectionChangedReloadTheTask"));
           }
           if (result.generation !== setupGeneration.current) return;
           await agentsApi.update(agent.id, {
@@ -327,22 +329,22 @@ export function ConnectionIntentInteractionBody({
         <div className="flex items-center gap-3">
           <AgentAvatar agent={agentQuery.data ?? { id: interaction.payload.requestingAgentId, name: interaction.payload.requestingAgentName }} size={32} label={interaction.payload.requestingAgentName} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-foreground">Grant {interaction.payload.requestingAgentName} access to “{accessRequest.connectionName}”?</p>
+            <p className="text-sm font-medium text-foreground"><Trans i18nKey="app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.message28" components={{ part0: <>{""}{interaction.payload.requestingAgentName}</>, part1: <>{""}{accessRequest.connectionName}</> }} /></p>
           </div>
           <AppLogo name={interaction.payload.serviceName} logoUrl={interaction.payload.serviceLogoUrl} darkLogoUrl={interaction.payload.serviceDarkLogoUrl} size={32} />
         </div>
-        <ul aria-label="Tool permissions" className="max-h-48 space-y-2 overflow-y-auto text-xs">
+        <ul aria-label={translateUiCopy("app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.toolPermissions")} className="max-h-48 space-y-2 overflow-y-auto text-xs">
           {accessRequest.tools.map(tool => <li key={tool.catalogEntryId} className="flex items-start justify-between gap-3">
             <span className="min-w-0 break-all font-mono text-foreground">{tool.toolName}</span>
-            <span className="shrink-0 text-muted-foreground">{tool.permission === "allowed" ? "Allowed" : "Ask first"}</span>
+            <span className="shrink-0 text-muted-foreground">{tool.permission === "allowed" ? translateUiCopy("app.apps.permissionsPanel.allowed") : translateUiCopy("app.apps.permissionsPanel.askFirst")}</span>
           </li>)}
         </ul>
-        {setupQuery.isError || completeMutation.isError || declineMutation.isError ? <p role="alert" className="text-sm text-destructive">{(completeMutation.error ?? declineMutation.error ?? setupQuery.error)?.message ?? "Couldn’t update this access request."}</p> : null}
-        {setupQuery.data?.canGrantAccess === false ? <p role="status" className="text-sm text-muted-foreground">Connection manager required.</p> : null}
+        {setupQuery.isError || completeMutation.isError || declineMutation.isError ? <p role="alert" className="text-sm text-destructive">{(completeMutation.error ?? declineMutation.error ?? setupQuery.error)?.message ?? translateUiCopy("app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.couldnTUpdateThisAccessRequest")}</p> : null}
+        {setupQuery.data?.canGrantAccess === false ? <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.connectionManagerRequired")}</p> : null}
         <div className="flex items-center justify-between gap-2">
-          <Button size="sm" variant="ghost" disabled={busy} onClick={() => declineMutation.mutate()}>Not now</Button>
+          <Button size="sm" variant="ghost" disabled={busy} onClick={() => declineMutation.mutate()}>{translateUiCopy("app.connections.connectionIntentInteractionBody.notNow")}</Button>
           <Button size="sm" disabled={busy || !setupQuery.data?.canGrantAccess} onClick={() => completeMutation.mutate(accessRequest.connectionId)}>
-            {completeMutation.isPending ? "Granting access…" : "Grant access"}
+            {completeMutation.isPending ? translateUiCopy("app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.grantingAccess") : translateUiCopy("app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.grantAccess")}
           </Button>
         </div>
       </div>
@@ -384,12 +386,9 @@ export function ConnectionIntentInteractionBody({
   const aiProviderName = aiConnection ? AI_CONNECTION_CAPABILITIES[aiConnection.provider].name : serviceName;
   const inlineContent = setupQuery.isLoading || setupQuery.isError ? setupContent
     : readyForAdoption ? <div className="space-y-3">
-        <p className="text-sm">
-          Use your {aiProviderName} connection for {interaction.payload.requestingAgentName}? This replaces the agent’s existing authentication
-          with each responsible person’s own account. The model stays the same.
-        </p>
+        <p className="text-sm"><Trans i18nKey="app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.message29" components={{ part0: <>{""}{aiProviderName}</>, part1: <>{""}{interaction.payload.requestingAgentName}</> }} /></p>
         <Button disabled={adoptMutation.isPending} onClick={() => adoptMutation.mutate(readyForAdoption)}>
-          {adoptMutation.isPending ? "Checking connection…" : "Use connection and continue"}
+          {adoptMutation.isPending ? translateUiCopy("app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.checkingConnection") : translateUiCopy("app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.useConnectionAndContinue")}
         </Button>
       </div>
     : selectedReady ? <div className="space-y-3">
@@ -480,7 +479,7 @@ export function ConnectionIntentInteractionBody({
 
         {isEmail ? setupQuery.isLoading || setupQuery.isError ? <>
           {setupContent}
-          <Button type="button" variant="ghost" disabled={declineMutation.isPending} onClick={() => declineMutation.mutate()}>Not now</Button>
+          <Button type="button" variant="ghost" disabled={declineMutation.isPending} onClick={() => declineMutation.mutate()}>{translateUiCopy("app.connections.connectionIntentInteractionBody.notNow")}</Button>
         </> : <AgentMailIntentSetup
           companyId={interaction.companyId}
           agentId={interaction.payload.requestingAgentId}
@@ -561,7 +560,7 @@ export function ConnectionIntentInteractionBody({
         ) : null}
         {selectAiAccountMutation.isError && selectAiAccountMutation.variables?.generation === generation && (
           <Button className="mt-3" onClick={() => selectAiAccountMutation.mutate(selectAiAccountMutation.variables!)}>
-            Retry using this connection
+            {translateUiCopy("app.uiCopy.featuresConnectionsConnectionIntentInteractionBody.retryUsingThisConnection")}
           </Button>
         )}
       </div>

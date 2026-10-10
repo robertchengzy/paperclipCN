@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useMemo, useState } from "react";
 import { Clock, X } from "lucide-react";
 import type { Issue, IssueWorkProduct } from "@paperclipai/shared";
@@ -98,8 +99,8 @@ export function buildMonitorSurfaceCopy(
   const absolute = formatMonitorAbsolute(derived.nextCheckAt, {}, now); // local time, e.g. "Today, 4:08 PM"
   if (derived.source === "monitor" && derived.serviceName?.toLowerCase() === "github" && pendingPullRequestReviews > 0) {
     return {
-      bannerTitle: "Pull request review requested",
-      stripTitle: "Pull request review requested",
+      bannerTitle: translateUiCopy("app.uiCopy.componentsIssueMonitorBanner.pullRequestReviewRequested"),
+      stripTitle: translateUiCopy("app.uiCopy.componentsIssueMonitorBanner.pullRequestReviewRequested"),
       bannerMeta: [`Next check ${eta} · ${absolute} (your time)`],
       stripMeta: [`Next check ${eta} · ${absolute}`],
       tone: derived.state === "overdue" ? "warning" : "info",
@@ -108,8 +109,8 @@ export function buildMonitorSurfaceCopy(
   }
   if (derived.source === "scheduled-retry" && scheduledRetryReason === "ai_connection_pool_wait") {
     return {
-      bannerTitle: "Pool exhausted",
-      stripTitle: "Pool exhausted",
+      bannerTitle: translateUiCopy("app.shared.retry.poolExhausted"),
+      stripTitle: translateUiCopy("app.shared.retry.poolExhausted"),
       bannerMeta: [`Usage recheck ${eta} · ${absolute} (your time)`, "Tasks with a selected account keep it while waiting. Work resumes when usage permits."],
       stripMeta: [`Usage recheck ${eta} · ${absolute}`, "Tasks with a selected account keep it while waiting."],
       tone: "info",
@@ -160,6 +161,7 @@ export function buildMonitorSurfaceCopy(
 }
 
 function useMonitorSurfaceCopy(issue: Issue, pendingPullRequestReviews: number): MonitorSurfaceCopy | null {
+
   // `nextCheckAt` is stable for a given issue; derive once to seed the ticking
   // countdown cadence, then re-derive against the live clock so the surfaces
   // roll scheduled → due → overdue on their own.
@@ -193,6 +195,7 @@ function CheckNowButton({
 }
 
 function CancelMonitorButton({ onCancel }: { onCancel: () => Promise<unknown> }) {
+  useUiCopyTranslation();
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -203,7 +206,7 @@ function CancelMonitorButton({ onCancel }: { onCancel: () => Promise<unknown> })
       await onCancel();
       setOpen(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to cancel the monitor. Try again.");
+      setError(err instanceof Error ? err.message : translateUiCopy("app.uiCopy.componentsIssueMonitorBanner.unableToCancelTheMonitorTryAgain"));
     } finally {
       setPending(false);
     }
@@ -211,19 +214,19 @@ function CancelMonitorButton({ onCancel }: { onCancel: () => Promise<unknown> })
   return (
     <AlertDialog open={open} onOpenChange={(next) => { if (!pending) { setOpen(next); setError(null); } }}>
       <AlertDialogTrigger asChild>
-        <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-2" aria-label="Cancel monitor" title="Cancel monitor">
+        <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-2" aria-label={translateUiCopy("app.uiCopy.componentsIssueMonitorBanner.cancelMonitor")} title={translateUiCopy("app.uiCopy.componentsIssueMonitorBanner.cancelMonitor")}>
           <X className="h-4 w-4" aria-hidden="true" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Cancel monitor?</AlertDialogTitle>
-          <AlertDialogDescription>This removes the scheduled monitor check. The agent will no longer resume from this monitor. You can send a message to continue the task.</AlertDialogDescription>
+          <AlertDialogTitle>{translateUiCopy("app.uiCopy.componentsIssueMonitorBanner.cancelMonitor2")}</AlertDialogTitle>
+          <AlertDialogDescription>{translateUiCopy("app.uiCopy.componentsIssueMonitorBanner.thisRemovesTheScheduledMonitorCheckTheAgentWill")}</AlertDialogDescription>
         </AlertDialogHeader>
         {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={pending}>Keep monitor</AlertDialogCancel>
-          <Button type="button" variant="destructive" disabled={pending} onClick={() => void cancel()}>{pending ? "Cancelling…" : "Cancel monitor"}</Button>
+          <AlertDialogCancel disabled={pending}>{translateUiCopy("app.uiCopy.componentsIssueMonitorBanner.keepMonitor")}</AlertDialogCancel>
+          <Button type="button" variant="destructive" disabled={pending} onClick={() => void cancel()}>{pending ? translateUiCopy("app.apps.testPanel.cancelling") : translateUiCopy("app.uiCopy.componentsIssueMonitorBanner.cancelMonitor")}</Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -252,6 +255,7 @@ export function IssueMonitorBanner({
   checkError,
   onCancelMonitor,
 }: IssueMonitorSurfaceProps) {
+  useUiCopyTranslation();
   const reviews = getIssuePullRequests(workProducts).filter(pullRequestNeedsReview);
   const copy = useMonitorSurfaceCopy(issue, reviews.length);
   if (!copy) return null;

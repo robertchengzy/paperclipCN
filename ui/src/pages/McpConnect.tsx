@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Globe, Paperclip } from "lucide-react";
@@ -15,6 +17,7 @@ import { api } from "../api/client";
 // Bundle known-origin icons so opening consent never contacts a client-selected site.
 // Client-supplied names never select branding.
 function ClientOrigin({ origin }: { origin: string }) {
+  useUiCopyTranslation();
   const [failed, setFailed] = useState(false);
   let favicon: string | undefined;
   try {
@@ -29,23 +32,26 @@ function ClientOrigin({ origin }: { origin: string }) {
 }
 
 export function McpConnectPage({ agentPairingOnly = false }: { agentPairingOnly?: boolean } = {}) {
+  useUiCopyTranslation();
   const { id = "" } = useParams();
   return <McpConnectRequest key={id} id={id} agentPairingOnly={agentPairingOnly} />;
 }
 
 export function McpDevicePage({ initialCode }: { initialCode?: string } = {}) {
+  useUiCopyTranslation();
   const [code, setCode] = useState(initialCode ?? new URLSearchParams(window.location.search).get("user_code") ?? "");
   const [submitted, setSubmitted] = useState(code);
   if (submitted) return <McpConnectRequest key={submitted} id={submitted} device onEditCode={() => setSubmitted("")} />;
-  return <div className="mx-auto max-w-xl py-10"><Card className="space-y-4 p-6"><div className="flex items-center gap-3"><Paperclip className="size-8 shrink-0" /><h1 className="min-w-0 text-xl font-semibold">Connect your assistant to Paperclip</h1></div>
+  return <div className="mx-auto max-w-xl py-10"><Card className="space-y-4 p-6"><div className="flex items-center gap-3"><Paperclip className="size-8 shrink-0" /><h1 className="min-w-0 text-xl font-semibold">{translateUiCopy("app.uiCopy.pagesMcpConnect.connectYourAssistantToPaperclip")}</h1></div>
     <form className="space-y-4" onSubmit={event => { event.preventDefault(); setSubmitted(code.trim()); }}>
-      <label htmlFor="device-code" className="text-sm">Enter the code shown by your assistant</label>
+      <label htmlFor="device-code" className="text-sm">{translateUiCopy("app.uiCopy.pagesMcpConnect.enterTheCodeShownByYourAssistant")}</label>
       <Input id="device-code" autoComplete="off" value={code} onChange={event => setCode(event.target.value)} required maxLength={12} />
-      <div className="flex justify-end"><Button type="submit">Continue</Button></div>
+      <div className="flex justify-end"><Button type="submit">{translateUiCopy("app.common.actions.continue")}</Button></div>
     </form></Card></div>;
 }
 
 function McpConnectRequest({ id, device = false, agentPairingOnly = false, onEditCode }: { id: string; device?: boolean; agentPairingOnly?: boolean; onEditCode?: () => void }) {
+  useUiCopyTranslation();
   const requestPrefix = agentPairingOnly ? "/dot-mcp/requests" : "/mcp/requests";
   const [companyId, setCompanyId] = useState("");
   const [pairingCode, setPairingCode] = useState("");
@@ -84,63 +90,63 @@ function McpConnectRequest({ id, device = false, agentPairingOnly = false, onEdi
     mutationFn: () => api.post<{ redirectUrl: string }>(`${requestPrefix}/${encodeURIComponent(id)}/dot-pairing`, { pairingCode: pairingCode.trim() }),
     onSuccess: ({ redirectUrl }) => { setPairingCode(""); window.location.assign(redirectUrl); },
   });
-  if (deviceResult) return <div className="mx-auto max-w-xl py-10"><Card className="block space-y-4 p-6"><Paperclip className="size-8" /><h1 className="text-xl font-semibold">{deviceResult === "approved" ? "Access approved" : "Connection declined"}</h1><p className="text-sm">{deviceResult === "approved" ? "Return to your assistant. It will finish connecting automatically." : "No access was granted. You can start a new connection from your assistant."}</p><Button variant="outline" asChild><Link to="/">Back to Paperclip</Link></Button></Card></div>;
+  if (deviceResult) return <div className="mx-auto max-w-xl py-10"><Card className="block space-y-4 p-6"><Paperclip className="size-8" /><h1 className="text-xl font-semibold">{deviceResult === "approved" ? translateUiCopy("app.uiCopy.pagesMcpConnect.accessApproved") : translateUiCopy("app.connections.connectionIntentInteractionBody.declined")}</h1><p className="text-sm">{deviceResult === "approved" ? translateUiCopy("app.uiCopy.pagesMcpConnect.returnToYourAssistantItWillFinishConnectingAutomatically") : translateUiCopy("app.uiCopy.pagesMcpConnect.noAccessWasGrantedYouCanStartANew")}</p><Button variant="outline" asChild><Link to="/">{translateUiCopy("app.uiCopy.pagesMcpConnect.backToPaperclip")}</Link></Button></Card></div>;
   const returnPath = device ? `/mcp-device?user_code=${encodeURIComponent(id)}` : `${agentPairingOnly ? "/dot-connect" : "/mcp-connect"}/${id}`;
   return <div className="mx-auto max-w-xl py-10">
     <Card className="block space-y-4 p-6">
       <div className="flex items-center gap-3">
         <Paperclip className="size-8 shrink-0 text-foreground" role="img" aria-label="Paperclip" />
-        <h1 className="min-w-0 break-words text-xl font-semibold">Connect <bdi>{assistantName}</bdi> to Paperclip</h1>
+        <h1 className="min-w-0 break-words text-xl font-semibold">{translateUiCopy("app.common.actions.connect")} <bdi>{assistantName}</bdi> {translateUiCopy("app.uiCopy.pagesMcpConnect.toPaperclip")}</h1>
       </div>
       {clientOrigin && <ClientOrigin key={clientOrigin} origin={clientOrigin} />}
       {!device && data?.redirectOrigin && data.redirectOrigin !== clientOrigin && <ClientOrigin key={data.redirectOrigin} origin={data.redirectOrigin} />}
-      {device && <p className="text-sm">Confirm this matches the code shown by your assistant: <strong className="font-mono">{id.toUpperCase()}</strong></p>}
-      {request.isPending && <p className="text-sm text-muted-foreground">Loading connection request…</p>}
-      {request.error && <p className="text-sm text-destructive">{request.error.message} Start a new connection from your assistant.</p>}
-      {device && request.error && <Button variant="outline" onClick={onEditCode}>Enter a different code</Button>}
+      {device && <p className="text-sm"><Trans i18nKey="app.uiCopy.pagesMcpConnect.message36" components={{ part0: <strong className="font-mono">{id.toUpperCase()}</strong> }} /></p>}
+      {request.isPending && <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesMcpConnect.loadingConnectionRequest")}</p>}
+      {request.error && <p className="text-sm text-destructive"><Trans i18nKey="app.uiCopy.pagesMcpConnect.message37" components={{ part0: <>{""}{request.error.message}</> }} /></p>}
+      {device && request.error && <Button variant="outline" onClick={onEditCode}>{translateUiCopy("app.uiCopy.pagesMcpConnect.enterADifferentCode")}</Button>}
       {data?.agentConnection && !device && <form className="space-y-3" onSubmit={event => { event.preventDefault(); pairDot.mutate(); }}>
-        <p className="text-sm">Enter the one-use code from your Dot setup prompt to review this agent’s access. Access is granted when you click “Connect Dot with pairing code”.</p>
-        <label htmlFor="dot-pairing-code" className="text-sm">Pairing code</label>
+        <p className="text-sm">{translateUiCopy("app.uiCopy.pagesMcpConnect.enterTheOneUseCodeFromYourDotSetup")}</p>
+        <label htmlFor="dot-pairing-code" className="text-sm">{translateUiCopy("app.uiCopy.pagesMcpConnect.pairingCode")}</label>
         <Input id="dot-pairing-code" type="password" autoComplete="off" value={pairingCode} onChange={event => { setPairingPreview(null); setPairingPreviewError(""); setPairingCode(event.target.value); }} required maxLength={32} />
         {pairingPreview && <dl className="space-y-2 rounded-md border border-border p-3 text-sm">
-          <div><dt className="text-muted-foreground">Company</dt><dd>{pairingPreview.company.name} <span className="text-xs text-muted-foreground">({pairingPreview.company.id})</span></dd></div>
-          <div><dt className="text-muted-foreground">Agent</dt><dd>{pairingPreview.agent.name} <span className="text-xs text-muted-foreground">({pairingPreview.agent.id})</span></dd></div>
-          <div><dt className="text-muted-foreground">Permissions</dt><dd>{pairingPreview.permissions}</dd></div>
-          <div><dt className="text-muted-foreground">Access duration</dt><dd>{pairingPreview.accessDuration}</dd></div>
+          <div><dt className="text-muted-foreground">{translateUiCopy("app.sidebar.company")}</dt><dd>{pairingPreview.company.name} <span className="text-xs text-muted-foreground">({pairingPreview.company.id})</span></dd></div>
+          <div><dt className="text-muted-foreground">{translateUiCopy("app.common.nouns.agent")}</dt><dd>{pairingPreview.agent.name} <span className="text-xs text-muted-foreground">({pairingPreview.agent.id})</span></dd></div>
+          <div><dt className="text-muted-foreground">{translateUiCopy("app.common.labels.permissions")}</dt><dd>{pairingPreview.permissions}</dd></div>
+          <div><dt className="text-muted-foreground">{translateUiCopy("app.uiCopy.pagesMcpConnect.accessDuration")}</dt><dd>{pairingPreview.accessDuration}</dd></div>
         </dl>}
         {pairingPreviewError && <p role="alert" className="text-sm text-destructive">{pairingPreviewError}</p>}
         {pairDot.error && <p role="alert" className="text-sm text-destructive">{pairDot.error.message}</p>}
-        <div className="flex justify-end"><Button type="submit" disabled={!pairingPreview || !/^[A-Za-z0-9_-]{32}$/.test(pairingCode.trim()) || pairDot.isPending}>{pairDot.isPending ? "Connecting…" : "Connect Dot with pairing code"}</Button></div>
+        <div className="flex justify-end"><Button type="submit" disabled={!pairingPreview || !/^[A-Za-z0-9_-]{32}$/.test(pairingCode.trim()) || pairDot.isPending}>{pairDot.isPending ? translateUiCopy("app.common.progress.connecting") : translateUiCopy("app.uiCopy.pagesMcpConnect.connectDotWithPairingCode")}</Button></div>
       </form>}
       {data && <>
-        {data.requiresSignIn ? <Button asChild><Link to={`/auth?next=${encodeURIComponent(returnPath)}`}>Sign in / Create account</Link></Button> : <>
+        {data.requiresSignIn ? <Button asChild><Link to={`/auth?next=${encodeURIComponent(returnPath)}`}>{translateUiCopy("app.shell.cliAuth.signInCreateAccount")}</Link></Button> : <>
           {data.requestedCompanyId ? <div className="flex items-center gap-4 rounded-md border border-border p-4">
             {company && <CompanyPatternIcon companyName={company.name} logoUrl={company.logoUrl} className="size-14 shrink-0 rounded-lg text-xl" />}
             <div className="min-w-0 space-y-1">
-              <p className="text-xs text-muted-foreground">Organization</p>
-              {company ? <p className="break-words text-lg font-semibold">{company.name}</p> : <p className="text-sm text-destructive">The selected organization is no longer available to this account. Cancel and reconnect from your assistant to choose an organization you can access.</p>}
+              <p className="text-xs text-muted-foreground">{translateUiCopy("app.common.nouns.organization")}</p>
+              {company ? <p className="break-words text-lg font-semibold">{company.name}</p> : <p className="text-sm text-destructive">{translateUiCopy("app.uiCopy.pagesMcpConnect.theSelectedOrganizationIsNoLongerAvailableToThis")}</p>}
             </div>
           </div> : <fieldset className="space-y-2" disabled={consent.isPending}>
-            <legend className="mb-2 text-sm font-medium">Organization</legend>
+            <legend className="mb-2 text-sm font-medium">{translateUiCopy("app.common.nouns.organization")}</legend>
             {data.companies.map((item) => <label key={item.id} className="flex items-center gap-3 rounded-md border border-border p-3 text-sm">
               <input type="radio" name="company" aria-label={item.name} value={item.id} checked={selectedCompanyId === item.id} onChange={() => setCompanyId(item.id)} />
               <CompanyPatternIcon companyName={item.name} logoUrl={item.logoUrl} className="size-12 shrink-0 rounded-lg" />
               <span className="min-w-0 break-words font-medium">{item.name}</span>
             </label>)}
-            {!data.companies.length && <p className="text-sm text-muted-foreground">This account has no available organizations. Ask an organization owner to add you, then reconnect from your assistant.</p>}
+            {!data.companies.length && <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesMcpConnect.thisAccountHasNoAvailableOrganizationsAskAnOrganization")}</p>}
           </fieldset>}
-          <p className="text-sm">{data.agentConnection ? "Connect Dot as a Paperclip agent. Pair it with an agent after connecting; assigned work uses that agent’s permissions." : "Read all of your Paperclip data"}</p>
+          <p className="text-sm">{data.agentConnection ? translateUiCopy("app.uiCopy.pagesMcpConnect.connectDotAsAPaperclipAgentPairItWith") : translateUiCopy("app.uiCopy.pagesMcpConnect.readAllOfYourPaperclipData")}</p>
           {(data.requestedWrite || data.requestedConfigure) && !data.agentConnection && <label htmlFor="mcp-allow-writes" className="flex items-start gap-3 text-sm leading-6">
             <span className="flex h-6 shrink-0 items-center">
               <Checkbox id="mcp-allow-writes" checked={canApproveWrites} disabled={!company?.canWrite || consent.isPending} onCheckedChange={(checked) => setWriteEnabled(checked === true)} />
             </span>
-            <span>Write all of your Paperclip data</span>
+            <span>{translateUiCopy("app.uiCopy.pagesMcpConnect.writeAllOfYourPaperclipData")}</span>
           </label>}
-          {company && !company.canWrite && <p className="text-sm text-muted-foreground">Your role in this organization is read-only.</p>}
+          {company && !company.canWrite && <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesMcpConnect.yourRoleInThisOrganizationIsReadOnly")}</p>}
           {consent.error && <p className="text-sm text-destructive">{consent.error.message}</p>}
           <div className="flex items-center justify-between gap-3">
-            <Button variant="outline" disabled={consent.isPending} onClick={() => consent.mutate("deny")}>Cancel</Button>
-            <Button className="h-auto min-h-10 min-w-0 shrink whitespace-normal" disabled={!company || (data.agentConnection && !company.canWrite) || consent.isPending} onClick={() => consent.mutate("approve")}>{consent.isPending ? "Connecting…" : data.agentConnection ? "Connect Dot agent" : "Connect organization"}</Button>
+            <Button variant="outline" disabled={consent.isPending} onClick={() => consent.mutate("deny")}>{translateUiCopy("app.common.actions.cancel")}</Button>
+            <Button className="h-auto min-h-10 min-w-0 shrink whitespace-normal" disabled={!company || (data.agentConnection && !company.canWrite) || consent.isPending} onClick={() => consent.mutate("approve")}>{consent.isPending ? translateUiCopy("app.common.progress.connecting") : data.agentConnection ? translateUiCopy("app.uiCopy.pagesMcpConnect.connectDotAgent") : translateUiCopy("app.uiCopy.pagesMcpConnect.connectOrganization")}</Button>
           </div>
         </>}
       </>}
@@ -149,6 +155,7 @@ function McpConnectRequest({ id, device = false, agentPairingOnly = false, onEdi
 }
 
 export function AssistantConnectionsPage() {
+  useUiCopyTranslation();
   const client = useQueryClient();
   const connections = useQuery({ queryKey: ["mcp-connections"], queryFn: () => api.get<McpConnection[]>("/mcp/connections"), retry: false });
   const active = connections.data?.filter(connection => !connection.revokedAt);
@@ -157,18 +164,18 @@ export function AssistantConnectionsPage() {
     return client.invalidateQueries({ queryKey: ["mcp-connections"] });
   } });
   return <div className="mx-auto max-w-xl space-y-4 py-10">
-    <h1 className="text-xl font-semibold">Assistant connections</h1>
-    <p className="text-sm text-muted-foreground">Revoking a connection stops its future tool calls. Work already delegated continues under your organization’s normal controls.</p>
-    {connections.isPending && <p className="text-sm">Loading connections…</p>}
+    <h1 className="text-xl font-semibold">{translateUiCopy("app.uiCopy.pagesMcpConnect.assistantConnections")}</h1>
+    <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesMcpConnect.revokingAConnectionStopsItsFutureToolCallsWork")}</p>
+    {connections.isPending && <p className="text-sm">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionPoolConnector.loadingConnections")}</p>}
     {(connections.error || revoke.error) && <p className="text-sm text-destructive">{(connections.error ?? revoke.error)?.message}</p>}
-    {active?.length === 0 && <p className="text-sm">No assistant connections.</p>}
+    {active?.length === 0 && <p className="text-sm">{translateUiCopy("app.uiCopy.pagesMcpConnect.noAssistantConnections")}</p>}
     {active?.map((connection) => <Card key={connection.id} className="block space-y-2 p-4">
       <h2 className="font-medium"><Identity name={assistantConnectionDisplayName(connection)} avatarUrl={connection.user?.image} initials={deriveInitials(connection.user?.name ?? "You")} /></h2>
-      <p className="text-sm text-muted-foreground">Organization: {connection.companyName}</p>
-      <p className="text-sm">{connection.scopes.includes("paperclip:agent") ? "Dot agent connection" : connection.scopes.includes("paperclip:write") ? "Read and edit work" : "Read only"}</p>
-      {connection.scopes.includes("paperclip:configure") && <p className="text-sm">Configure agents, projects and skills</p>}
-      <Button variant="outline" disabled={revoke.isPending} onClick={() => revoke.mutate(connection.id)}>Revoke connection</Button>
+      <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesMcpConnect.message38" components={{ part0: <>{""}{connection.companyName}</> }} /></p>
+      <p className="text-sm">{connection.scopes.includes("paperclip:agent") ? translateUiCopy("app.uiCopy.pagesMcpConnect.dotAgentConnection") : connection.scopes.includes("paperclip:write") ? translateUiCopy("app.uiCopy.pagesMcpConnect.readAndEditWork") : translateUiCopy("app.settings.pluginSettings.readOnly")}</p>
+      {connection.scopes.includes("paperclip:configure") && <p className="text-sm">{translateUiCopy("app.uiCopy.pagesMcpConnect.configureAgentsProjectsAndSkills")}</p>}
+      <Button variant="outline" disabled={revoke.isPending} onClick={() => revoke.mutate(connection.id)}>{translateUiCopy("app.uiCopy.componentsDotRunnerConnection.revokeConnection")}</Button>
     </Card>)}
-    <Link className="text-sm underline" to="/">Back to Paperclip</Link>
+    <Link className="text-sm underline" to="/">{translateUiCopy("app.uiCopy.pagesMcpConnect.backToPaperclip")}</Link>
   </div>;
 }

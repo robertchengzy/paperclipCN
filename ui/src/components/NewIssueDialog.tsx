@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { Trans } from "react-i18next";
 import { projectDisplayName } from "@/lib/project-display";
 import { t as translateCopy, useTranslation } from "@/i18n";
@@ -84,6 +85,7 @@ function readVisualViewportLayout(): VisualViewportLayout | null {
 }
 
 function useVisualViewportLayout(enabled: boolean) {
+
   const [layout, setLayout] = useState<VisualViewportLayout | null>(() =>
     enabled ? readVisualViewportLayout() : null,
   );
@@ -408,8 +410,8 @@ export function NewIssueDialog() {
   const privateParentProject = privacyParent?.project?.visibility === "private" ? privacyParent.project : null;
   const inheritedPrivateProject = privateParentProject ?? (!isPrivate && currentProject?.visibility === "private" ? currentProject : null);
   const inheritedPrivacyReason = privacyParent?.visibility === "private"
-    ? `Subtask of private task ${privacyParent.title || newIssueDefaults.parentTitle || parentIssueLabel}`
-    : inheritedPrivateProject ? `In private project ${inheritedPrivateProject.name}` : undefined;
+    ? translateUiCopy("app.uiCopy.componentsNewIssueDialog.subtaskOfPrivateTaskValue0", { value0: String(privacyParent.title || newIssueDefaults.parentTitle || parentIssueLabel) })
+    : inheritedPrivateProject ? translateUiCopy("app.uiCopy.componentsNewIssueDialog.inPrivateProjectValue0", { value0: String(inheritedPrivateProject.name) }) : undefined;
   const effectivePrivate = isPrivate || inheritsPrivateAccess
     || orderedProjects.some(project => project.id === projectId && project.visibility === "private");
 
@@ -1243,8 +1245,8 @@ export function NewIssueDialog() {
                   <>
                     {parentPrivacyUnresolved ? (
                       <div role={parentPrivacyError ? "alert" : "status"} className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{parentPrivacyError ? "Couldn't check parent access." : "Checking parent access…"}</span>
-                        {parentPrivacyError ? <Button variant="ghost" size="sm" onClick={() => void refetchParentPrivacy()}>Retry</Button> : null}
+                        <span>{parentPrivacyError ? translateUiCopy("app.uiCopy.componentsNewIssueDialog.couldnTCheckParentAccess") : translateUiCopy("app.uiCopy.componentsNewIssueDialog.checkingParentAccess")}</span>
+                        {parentPrivacyError ? <Button variant="ghost" size="sm" onClick={() => void refetchParentPrivacy()}>{translateUiCopy("app.common.actions.retry")}</Button> : null}
                       </div>
                     ) : null}
                     {worktreeSelectionIncomplete && !worktreesLoading ? (
@@ -1423,7 +1425,7 @@ export function NewIssueDialog() {
                           <>
                             <Folder className="size-3.5 shrink-0" style={{ color: currentProject.color ?? "var(--project-seed)" }} aria-hidden />
                             <span className="truncate">{option.label}</span>
-                            {currentProject.visibility === "private" ? <Lock className="size-3 shrink-0 text-muted-foreground" aria-label="Private project" /> : null}
+                            {currentProject.visibility === "private" ? <Lock className="size-3 shrink-0 text-muted-foreground" aria-label={translateUiCopy("app.upstreamOct08.privateProject")} /> : null}
                             <ChevronDown className="size-3 shrink-0 text-muted-foreground" aria-hidden />
                           </>
                         ) : (
@@ -1441,7 +1443,7 @@ export function NewIssueDialog() {
                           <>
                             <Folder className="size-4 shrink-0" style={{ color: project?.color ?? "var(--project-seed)" }} aria-hidden />
                             <span className="min-w-0 flex-1 truncate">{option.label}</span>
-                            {project?.visibility === "private" ? <Lock className="size-3.5 shrink-0 text-muted-foreground" aria-label="Private project" /> : null}
+                            {project?.visibility === "private" ? <Lock className="size-3.5 shrink-0 text-muted-foreground" aria-label={translateUiCopy("app.upstreamOct08.privateProject")} /> : null}
                           </>
                         );
                       }}

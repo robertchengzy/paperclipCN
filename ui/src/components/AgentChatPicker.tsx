@@ -25,7 +25,7 @@ export function AgentChatPicker({ open, onOpenChange, ...props }: AgentChatPicke
       <DialogContent aria-describedby={undefined} className="gap-0 overflow-hidden p-0 sm:max-w-md">
         <div className="px-4 pt-4 pb-3">
           <DialogTitle>{t("app.agentUi.agentChatPicker.chatWithAnAgent")}</DialogTitle>
-          {props.existingChatAgentIds && <p className="mt-2 text-sm text-muted-foreground">One conversation per agent. Pick up where you left off.</p>}
+          {props.existingChatAgentIds && <p className="mt-2 text-sm text-muted-foreground">{t("app.agentUi.agentChatPicker.oneConversationPerAgentPickUpWhereYouLeft")}</p>}
         </div>
         {/* The dialog unmounts its content on close, so each search starts empty. */}
         <AgentChatPickerResults key={String(open)} {...props} onComplete={() => onOpenChange(false)} />
@@ -55,7 +55,7 @@ function AgentChatPickerResults({ agents, onSelect, onComplete, loading, error, 
       await onSelect(agent, request.signal);
       if (mounted.current) onComplete();
     } catch (error) {
-      setSelectionError(error instanceof Error ? error.message : "Couldn’t open chat. Try again.");
+      setSelectionError(error instanceof Error ? error.message : t("app.agentUi.agentChatPicker.couldnTOpenChatTryAgain"));
     } finally {
       setOpeningId(null);
     }
@@ -69,7 +69,7 @@ function AgentChatPickerResults({ agents, onSelect, onComplete, loading, error, 
         onValueChange={setSearch}
       />
       {selectionError && <p role="alert" className="px-4 py-3 text-sm text-destructive">{selectionError}</p>}
-      {openingId && <p role="status" className="sr-only">Opening conversation…</p>}
+      {openingId && <p role="status" className="sr-only">{t("app.agentUi.agentChatPicker.openingConversation")}</p>}
       {error ? (
         <div role="alert" className="flex flex-col items-start gap-2 p-4 text-sm">
           <p>{t("app.agentUi.agentChatPicker.couldnTLoadAgentsTryAgain")}</p>
@@ -103,7 +103,7 @@ function AgentChatPickerResults({ agents, onSelect, onComplete, loading, error, 
                   <span className="truncate font-medium">{agent.name}</span>
                   <span className="truncate text-xs text-muted-foreground">{agent.title ?? t(`app.agents.roles.${agent.role}`, { defaultValue: agent.role })}</span>
                 </span>
-                {existingChatAgentIds && <span className="shrink-0 text-xs text-muted-foreground">{existingChatAgentIds.includes(agent.id) ? "Open chat" : "New chat"}</span>}
+                {existingChatAgentIds && <span className="shrink-0 text-xs text-muted-foreground">{existingChatAgentIds.includes(agent.id) ? t("app.agentUi.agentChatPicker.openChat") : t("app.agentUi.agentChatPicker.newChat")}</span>}
                 {agent.status === "paused" && <span className="text-xs text-(--status-agent-paused)">{t("app.common.states.paused")}</span>}
                 {agent.status === "terminated" && <span className="text-xs text-muted-foreground">{t("app.agentUi.agentChatPicker.terminated")}</span>}
                 {agent.status === "pending_approval" && <span className="text-xs text-muted-foreground">{t("app.agentUi.agentChatPicker.awaitingApproval")}</span>}

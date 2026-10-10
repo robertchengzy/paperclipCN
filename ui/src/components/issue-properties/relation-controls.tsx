@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useState, type MouseEvent } from "react";
 import type { Issue, IssueLockedStub } from "@paperclipai/shared";
 import { Link } from "@/lib/router";
@@ -36,10 +37,10 @@ export function RemovableIssueReferencePill({
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const locked = isLockedIssueStub(issue);
   const issueLabel = locked
-    ? issue.identifier ?? "Private task"
+    ? issue.identifier ?? translateUiCopy("app.upstreamOct08.privateTask")
     : issue.identifier ?? issue.title;
   const confirmLabel = locked
-    ? issue.identifier ?? "this private task"
+    ? issue.identifier ?? translateUiCopy("app.uiCopy.componentsIssuePropertiesRelationControls.privateTaskFallback")
     : issue.identifier
       ? `${issue.identifier}: ${issue.title}`
       : issue.title;

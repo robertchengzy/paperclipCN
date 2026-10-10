@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useMemo } from "react";
 import { htmlPreviewDocument } from "@/lib/html-preview";
 
@@ -5,7 +6,7 @@ export function HtmlArtifactPreview({ html, title }: { html: string; title: stri
   const srcDoc = useMemo(() => htmlPreviewDocument(html), [html]);
   return (
     <iframe
-      title={`${title} rendered HTML`}
+      title={translateUiCopy("app.uiCopy.componentsHtmlArtifactPreview.value0RenderedHTML", { value0: String(title) })}
       srcDoc={srcDoc}
       // Never add allow-same-origin: the opaque origin is the cookie/storage
       // and parent-DOM security boundary, including after frame navigation.

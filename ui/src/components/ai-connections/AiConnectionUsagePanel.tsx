@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useMutation } from "@tanstack/react-query";
 import type { AiConnectionUsage, AiConnectionUsageLimit, AiManagedConnectionSummary } from "@paperclipai/shared";
 import { supportsAiConnectionUsage } from "@paperclipai/shared";
@@ -15,7 +16,7 @@ function limitLabel(window: AiConnectionUsageLimit) {
   const label = window.label.replace(/\b(\d+(?:\.\d+)?) hour limit\b/i, "$1h").replace(/\bweekly limit\b/i, "Weekly");
   if (window.windowDurationSeconds == null) return label;
   const hours = window.windowDurationSeconds / 3600;
-  const period = hours === 168 ? "Weekly" : `${usageNumber(hours)}h`;
+  const period = hours === 168 ? translateUiCopy("app.shell.scheduleEditor.weekly") : `${usageNumber(hours)}h`;
   if (/\b(?:Primary|Secondary)$/.test(label)) return `${label} · ${period}`;
   if ((hours === 168 && /weekly/i.test(label)) || label.split(/[\s·()]+/).includes(period)) return label;
   return `${label} · ${period}`;
@@ -27,7 +28,7 @@ function limitValue(window: AiConnectionUsageLimit) {
   if (window.usedPercent != null) return `${usageNumber(window.usedPercent)}% used`;
   if (window.used != null) return `${amount(window.used, window.unit)} used`;
   if (window.remainingPercent != null) return `${usageNumber(window.remainingPercent)}% left`;
-  return "Not reported";
+  return translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.notReported");
 }
 
 function limitDetails(window: AiConnectionUsageLimit) {
@@ -61,38 +62,39 @@ function overageSummary(usage: AiConnectionUsage) {
 
 function usageError(usage: AiConnectionUsage) {
   switch (usage.errorCode) {
-    case "authentication_required": return "Sign in again to check usage.";
-    case "permission_denied": return "Usage access denied.";
-    case "rate_limited": return "Too many checks. Try again later.";
-    case "provider_unavailable": return "Provider unavailable. Try again.";
-    case "invalid_response": return "Couldn’t read usage. Try again.";
-    case "connection_unavailable": return "Reconnect to check usage.";
-    case "unsupported": return "Usage unavailable.";
-    default: return usage.message ?? "Usage unavailable.";
+    case "authentication_required": return translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.signInAgainToCheckUsage");
+    case "permission_denied": return translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.usageAccessDenied");
+    case "rate_limited": return translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.tooManyChecksTryAgainLater");
+    case "provider_unavailable": return translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.providerUnavailableTryAgain");
+    case "invalid_response": return translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.couldnTReadUsageTryAgain");
+    case "connection_unavailable": return translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.reconnectToCheckUsage");
+    case "unsupported": return translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.usageUnavailable");
+    default: return usage.message ?? translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.usageUnavailable");
   }
 }
 
 export function AiConnectionUsagePanel({ account, observation, cachedOnly = false }: { account: AiManagedConnectionSummary; observation?: AiConnectionUsage; cachedOnly?: boolean }) {
+  useUiCopyTranslation();
   const probe = useMutation({
     mutationFn: () => aiConnectionsApi.probeUsage(account.companyId, account.id, account.grantId),
   });
   const supported = supportsAiConnectionUsage(account.provider, account.method);
   const usage = cachedOnly ? observation : probe.isSuccess ? probe.data : undefined;
   return (
-    <section aria-label="Account usage limits" className="space-y-3">
+    <section aria-label={translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.accountUsageLimits")} className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold">Usage</h3>
+        <h3 className="text-sm font-semibold">{translateUiCopy("app.secrets.secrets.tabUsage")}</h3>
         {supported && !cachedOnly && <Button variant="outline" size="sm" disabled={probe.isPending || account.status !== "connected"} onClick={() => probe.mutate()}>
-          {probe.isPending ? "Checking…" : usage?.status === "ok" ? "Refresh" : "Check usage"}
+          {probe.isPending ? translateUiCopy("app.common.progress.checking") : usage?.status === "ok" ? translateUiCopy("app.common.actions.refresh") : translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.checkUsage")}
         </Button>}
       </div>
-      {cachedOnly && !usage && <p className="text-xs text-muted-foreground">Usage not observed.</p>}
-      {!supported && <p className="text-xs text-muted-foreground">Unavailable for this sign-in method.</p>}
+      {cachedOnly && !usage && <p className="text-xs text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.usageNotObserved")}</p>}
+      {!supported && <p className="text-xs text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.unavailableForThisSignInMethod")}</p>}
       {probe.error && <p role="alert" className="text-sm text-destructive">{probe.error.message}</p>}
       {usage && usage.status !== "ok" && <p role={usage.status === "unsupported" ? "status" : "alert"} className="text-sm text-muted-foreground">{usageError(usage)}</p>}
       {usage?.status === "ok" && (
         <div className="space-y-3" aria-live="polite">
-          {usage.limits.length === 0 && <p className="text-xs text-muted-foreground">Usage not reported.</p>}
+          {usage.limits.length === 0 && <p className="text-xs text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.usageNotReported")}</p>}
           {usage.limits.map((window) => {
             const details = limitDetails(window);
             return <div key={window.id} className="space-y-1.5">
@@ -105,10 +107,10 @@ export function AiConnectionUsagePanel({ account, observation, cachedOnly = fals
             </div>;
           })}
           {usage.overage && <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span className="text-muted-foreground">Overage</span>
+            <span className="text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionUsagePanel.overage")}</span>
             <span className="font-mono">{overageSummary(usage)}</span>
           </div>}
-          <p className="text-xs text-muted-foreground">Updated <time className="font-mono" dateTime={usage.checkedAt} title={formatDateTime(usage.checkedAt)}>{formatDateTime(usage.checkedAt, { includeYear: false })}</time>{usage.planType ? ` · ${usage.planType}` : ""}</p>
+          <p className="text-xs text-muted-foreground">{translateUiCopy("app.common.labels.updated")} <time className="font-mono" dateTime={usage.checkedAt} title={formatDateTime(usage.checkedAt)}>{formatDateTime(usage.checkedAt, { includeYear: false })}</time>{usage.planType ? ` · ${usage.planType}` : ""}</p>
         </div>
       )}
     </section>

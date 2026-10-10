@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 /** Redacted presentation contracts shared with the production API. */
 import type { AiProvider, AiAuthMethod, AiManagedConnectionSummary, AiConnectionBinding } from "@paperclipai/shared";
 export type { AiProvider, AiAuthMethod, AiConnectionBinding } from "@paperclipai/shared";
@@ -45,7 +46,7 @@ export const AI_CONNECTION_STATUS: Record<AiConnectionStatus, string> = {
 
 export function defaultAiConnectionName(ownerName: string | undefined, provider: AiProvider, method: AiAuthMethod) {
   const owner = ownerName?.trim();
-  const prefix = owner && owner !== "You" ? `${owner}'s` : "My";
+  const prefix = owner && owner !== "You" ? `${owner}'s` : translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.my");
   const providerName = method === "subscription"
     ? AI_PROVIDERS[provider].subscriptionName ?? AI_PROVIDERS[provider].name
     : `${AI_PROVIDERS[provider].name} API`;

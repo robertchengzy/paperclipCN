@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useEffect, useMemo, useRef } from "react";
 import { readExecutionPolicy } from "../lib/issue-execution-policy";
 import { captureBrowserException } from "../lib/sentry";
@@ -17,7 +18,7 @@ export function useExecutionPolicy(value: unknown) {
         : field === "authorizationPolicy" ? "authorization"
           : field === "reviewPreset" ? "review_preset"
             : "policy";
-    captureBrowserException(new Error(`Invalid task execution policy (${category})`));
+    captureBrowserException(new Error(translateUiCopy("app.uiCopy.hooksUseExecutionPolicy.invalidTaskExecutionPolicyValue0", { value0: String(category) })));
   }, [result]);
   return result;
 }

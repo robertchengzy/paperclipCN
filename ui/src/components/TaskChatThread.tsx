@@ -1,3 +1,4 @@
+import { t as translateUiCopy, i18n as uiCopyI18n } from "@/i18n";
 import { t as translateUpstream } from "@/i18n";
 import {
   ISSUE_DETAIL_CONTENT_PAINT_MARK,
@@ -1386,7 +1387,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
           id,
           kind: "browser",
           browser,
-          label: browsers.length > 1 ? `Browser ${index + 1}` : "Browser",
+          label: browsers.length > 1 ? translateUiCopy("app.uiCopy.componentsTaskChatThread.browserValue0", { value0: String(index + 1) }) : translateUiCopy("app.uiCopy.componentsTaskChatThread.browser"),
           timestamp: browser.createdAt,
         },
       });
@@ -1415,7 +1416,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
     heldPaperclipRunnerStartedAtMs,
     heldPaperclipRunnerFinalText,
     queuedCommentIds,
-  ]);
+  , uiCopyI18n.language]);
 
   const legacyTimelineAnchorsByRun = useMemo(() => {
     const windows = new Map<
@@ -1738,7 +1739,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
         )));
         const aiRequest = interactions?.find((interaction) => interaction.kind === "connection_intent" && interaction.payload.purpose === "ai" && interaction.sourceRunId === source.id);
         const detail = branchUnavailable
-          ? "Repair the starting branch below before retrying."
+          ? translateUiCopy("app.uiCopy.componentsTaskChatThread.repairTheStartingBranchBelowBeforeRetrying")
           : restoreFailed
           ? workspaceRestoreMarkerDetail({ result: meta?.resultJson, savedPlan, hasResponse: sourceHasPresentationComment || Boolean(acceptedSummary) })
           : aiRequest
@@ -2178,7 +2179,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
     agentMap,
     currentUserId,
     userLabelMap,
-  ]);
+  , uiCopyI18n.language]);
 
   // Hand off once the settled turn or its reply comment is in the thread; a
   // stopped run that yields neither is released by the backstop timeout so the

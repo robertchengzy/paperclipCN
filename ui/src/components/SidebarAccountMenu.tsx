@@ -239,7 +239,7 @@ export function SidebarAccountMenu({
               />
               {showInvite && inviteHref ? (
                 <MenuAction
-                  label="Invite"
+                  label={t("app.sidebarAccountMenu.invite")}
                   icon={UserPlus}
                   href={inviteHref}
                   topLevel={isCloud}

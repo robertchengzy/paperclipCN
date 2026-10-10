@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { CsvPreview } from "./CsvPreview";
 import { isCsvFile } from "@/lib/csv-preview";
 import {
@@ -186,6 +187,7 @@ function FileViewerStateView({
   secondary?: ReactNode;
   actions?: ReactNode;
 }) {
+  useUiCopyTranslation();
   return (
     <div className="flex flex-col items-start gap-3 p-6 text-sm">
       <div className="flex items-start gap-3">
@@ -795,7 +797,7 @@ export function FileViewerSheet({
               ) : null}
               {contentQuery.data?.resource.previewKind === "text" && contentQuery.data.content.encoding === "utf8"
                 && isHtmlPreview(contentQuery.data.resource.contentType, contentQuery.data.resource.displayPath || contentQuery.data.resource.title) ? (
-                  <FilePreviewModeToggle mode={htmlMode} onChange={setHtmlMode} label="HTML view" />
+                  <FilePreviewModeToggle mode={htmlMode} onChange={setHtmlMode} label={translateUiCopy("app.uiCopy.componentsFileViewerSheet.hTMLView")} />
                 ) : null}
               {state ? (
                 downloadUrl ? (

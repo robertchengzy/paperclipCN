@@ -131,7 +131,7 @@ function describeEnvironment(
   const detail = isPlatformManagedEnvironment(environment)
     ? translateCopy("app.agentUi.agents.managedByPaperclip")
     : environment.driver === "sandbox"
-      ? `${getSandboxProviderLabel(environment, capabilities)} sandbox provider`
+      ? translateCopy("app.uiCopy.pagesAgentsProduction.sandboxProvider", { provider: getSandboxProviderLabel(environment, capabilities) })
       : environment.driver === "local"
         ? translateCopy("app.agentUi.agents.paperclipHost")
         : formatEnvironmentDriver(environment.driver);

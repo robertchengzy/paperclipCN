@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { Brain, CirclePause, Gauge, Layers3 } from "lucide-react";
 import type { TaskChatActivityPhaseItem } from "./task-chat-model";
 import {
@@ -112,12 +113,12 @@ export function completedActivitySummary(items: Activity[]) {
       ?? notices.find((notice) => notice.severity === "warning")
       ?? notices[0]!;
     const label = notices.length === 1
-      ? strongest.summary || "Received a provider update"
+      ? strongest.summary || translateUiCopy("app.taskChat.completedActivitySummary.receivedAProviderUpdate")
       : strongest.severity === "error"
-        ? "Provider error reported"
+        ? translateUiCopy("app.uiCopy.componentsTaskChatCompletedActivitySummary.providerErrorReported")
         : strongest.severity === "warning"
-          ? "Provider warning reported"
-          : "Received provider updates";
+          ? translateUiCopy("app.uiCopy.componentsTaskChatCompletedActivitySummary.providerWarningReported")
+          : translateUiCopy("app.uiCopy.componentsTaskChatCompletedActivitySummary.receivedProviderUpdates");
     // One notice category leaves room for actual work. Keep warnings and errors
     // visible when the compact label truncates other activity categories.
     add(label, strongest.icon, strongest.severity === "info" ? notices[0]!.order : -1);

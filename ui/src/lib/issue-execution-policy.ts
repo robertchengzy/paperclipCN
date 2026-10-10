@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import type { IssueExecutionPolicy, IssueExecutionStageParticipant, IssueExecutionStagePrincipal } from "@paperclipai/shared";
 import { issueExecutionPolicySchema } from "@paperclipai/shared";
 import { parseAssigneeValue } from "./assignees";
@@ -64,7 +65,7 @@ export function buildExecutionPolicy(input: {
   approverValues: string[];
 }): IssueExecutionPolicy | null {
   const parsed = readExecutionPolicy(input.existingPolicy);
-  if (!parsed.success) throw new Error("Execution policy is unavailable");
+  if (!parsed.success) throw new Error(translateUiCopy("app.uiCopy.libIssueExecutionPolicy.executionPolicyIsUnavailable"));
   const existingPolicy = parsed.data;
   const mode = existingPolicy?.mode ?? "normal";
   const stages: IssueExecutionPolicy["stages"] = [];

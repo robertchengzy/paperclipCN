@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { t } from "@/i18n";
 /**
  * Single source of truth for adapter display metadata.
@@ -131,7 +132,7 @@ const adapterDisplayMap: Record<string, AdapterDisplayInfo> = {
   // Display-only choice: persisted as paperclip_runner with provider openai_dot.
   openai_dot: {
     label: "OpenAI Dot",
-    description: "Your Dot in ChatGPT",
+    get description() { return translateUiCopy("app.uiCopy.adaptersAdapterDisplayRegistry.yourDotInChatGPT"); },
     icon: Bot,
     experimental: true,
   },

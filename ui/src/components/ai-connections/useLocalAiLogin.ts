@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import type { AiConnectionLoginIntent, LocalAiLoginAttempt, LocalAiLoginStatus } from "@paperclipai/shared";
 import { aiConnectionsApi } from "@/api/ai-connections";
@@ -5,6 +6,7 @@ import { t } from "@/i18n";
 
 /** Every authentication host uses the same local credential check and login lifecycle. */
 export function useLocalAiLogin(companyId: string | null, intent: AiConnectionLoginIntent, enabled: boolean) {
+
   const isolated = true;
   const active = Boolean(companyId && enabled);
   const [attempt, setAttempt] = useState<LocalAiLoginAttempt | null>(null);
@@ -92,11 +94,11 @@ export function useLocalAiLogin(companyId: string | null, intent: AiConnectionLo
     error,
     retry: () => { restartRequested.current = true; cancelCurrent(); setGeneration((value) => value + 1); },
     submitCode: async (browserCode: string) => {
-      if (!companyId || !attempt) throw new Error("Start sign-in before submitting a code.");
+      if (!companyId || !attempt) throw new Error(translateUiCopy("app.uiCopy.componentsAiConnectionsUseLocalAiLogin.startSignInBeforeSubmittingACode"));
       try {
         await aiConnectionsApi.submitLocalLoginCode(companyId, attempt.sessionId, browserCode);
       } catch (cause) {
-        setError("Could not submit the authorization code. Start sign-in again.");
+        setError(translateUiCopy("app.uiCopy.componentsAiConnectionsUseLocalAiLogin.couldNotSubmitTheAuthorizationCodeStartSignIn"));
         throw cause;
       }
     },

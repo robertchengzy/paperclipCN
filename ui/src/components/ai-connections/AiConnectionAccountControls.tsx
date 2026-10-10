@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useState, type ReactNode } from "react";
 import { RefreshCw, Star, Unplug } from "lucide-react";
 import type { ConnectionGrant } from "@paperclipai/shared";
@@ -45,7 +46,7 @@ export function AiConnectionAccountControls({
       )}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0 text-sm">
-          <p className="break-words text-xs text-muted-foreground">{account.method === "subscription" ? "Subscription" : "API key"}{account.accountLabel ? ` · ${account.accountLabel}` : ""}</p>
+          <p className="break-words text-xs text-muted-foreground">{account.method === "subscription" ? translateUiCopy("app.lib.utils.billingSubscription") : translateUiCopy("app.common.labels.apiKey")}{account.accountLabel ? ` · ${account.accountLabel}` : ""}</p>
         </div>
         {!readOnly && grant.capabilities?.canRevoke && (
           <div className="flex flex-wrap items-center gap-2">

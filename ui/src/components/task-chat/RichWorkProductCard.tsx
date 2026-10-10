@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t as translateSync } from "@/i18n";
 import { t as translateUpstream } from "@/i18n";
 import { TextAttachmentContext } from "@/context/TextAttachmentContext";
@@ -108,6 +110,7 @@ function urlLabel(url: string | null): string | null {
 }
 
 function Chip({ chip }: { chip: StateChip }) {
+  useUiCopyTranslation();
   const cssVar = chip.tone === "failure"
     ? "--status-task-blocked"
     : chip.tone === "success"
@@ -287,11 +290,11 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
         {!compact && summary && !linklessBranch ? <p className={cn("mt-1 text-xs text-muted-foreground", detailsOpen ? "whitespace-pre-wrap break-words" : "line-clamp-2")}>{summary}</p> : null}
         {expandable && detailsOpen ? (
           <div className="mt-2 flex flex-col gap-1 text-xs text-muted-foreground">
-            {workProduct.type !== "branch" ? <p>No link was provided for this work product.</p> : null}
-            <p>{workProduct.provider} · {workProduct.status.replaceAll("_", " ")} · Updated {formatDateTime(workProduct.updatedAt)}</p>
+            {workProduct.type !== "branch" ? <p>{translateUiCopy("app.uiCopy.componentsTaskChatRichWorkProductCard.noLinkWasProvidedForThisWorkProduct")}</p> : null}
+            <p><Trans i18nKey="app.uiCopy.componentsTaskChatRichWorkProductCard.message25" components={{ part0: <>{""}{workProduct.provider}</>, part1: <>{""}{translateUiCopy(`app.uiCopy.componentsTaskChatRichWorkProductCard.workProductStatus.${workProduct.status}`, { defaultValue: workProduct.status.replaceAll("_", " ") })}</>, part2: <>{""}{formatDateTime(workProduct.updatedAt)}</> }} /></p>
             {linklessBranch && summary ? (
               <details className="relative z-10 mt-1">
-                <summary className="w-fit cursor-pointer font-medium text-foreground">Saved description</summary>
+                <summary className="w-fit cursor-pointer font-medium text-foreground">{translateUiCopy("app.uiCopy.componentsTaskChatRichWorkProductCard.savedDescription")}</summary>
                 <p className="mt-1 whitespace-pre-wrap break-words">{summary}</p>
               </details>
             ) : null}
@@ -322,11 +325,11 @@ export function RichWorkProductCard({ workProduct, href, variant = "card" }: Ric
           <button
             type="button"
             onClick={() => setDetailsOpen((open) => !open)}
-            aria-label={`${detailsOpen ? "Hide" : "Show"} details: ${workProduct.title}`}
+            aria-label={translateUiCopy("app.uiCopy.componentsTaskChatRichWorkProductCard.value0DetailsValue1", { value0: String(detailsOpen ? translateUiCopy("app.common.actions.hide") : translateUiCopy("app.common.actions.show")), value1: String(workProduct.title) })}
             aria-expanded={detailsOpen}
             className="inline-flex cursor-pointer items-center gap-1 text-xs font-medium text-foreground after:absolute after:inset-0 after:rounded-md focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
           >
-            <span>{detailsOpen ? "Hide details" : "Show details"}</span>
+            <span>{detailsOpen ? translateUiCopy("app.shell.systemNotice.hideDetails") : translateUiCopy("app.uiCopy.componentsTaskChatRichWorkProductCard.showDetails")}</span>
             <ChevronDown aria-hidden className={cn("h-4 w-4", detailsOpen && "rotate-180")} />
           </button>
         ) : null}

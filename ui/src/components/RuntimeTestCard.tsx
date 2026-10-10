@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import {
   CircleCheck,
@@ -40,11 +41,11 @@ const copy = {
 } as const;
 
 const prerequisiteCopy = {
-  idle: { title: "Check prerequisites", description: "Check instance settings and public connection configuration.", action: "Check setup" },
-  running: { title: "Checking prerequisites", description: "Checking instance settings and public connection configuration…", action: "Checking…" },
-  pass: { title: "Setup checks passed", description: "Review the setup details before assigning work.", action: "Check again" },
-  warn: { title: "Pairing required", description: "Create this agent, then pair it and verify event delivery.", action: "Check again" },
-  fail: { title: "Prerequisite check failed", description: "Review the setup details and retry.", action: "Retry check" },
+  idle: { get title() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.checkPrerequisites"); }, get description() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.checkInstanceSettingsAndPublicConnectionConfiguration"); }, get action() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.checkSetup"); } },
+  running: { get title() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.checkingPrerequisites"); }, get description() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.checkingInstanceSettingsAndPublicConnectionConfiguration"); }, get action() { return translateUiCopy("app.common.progress.checking"); } },
+  pass: { get title() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.setupChecksPassed"); }, get description() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.reviewTheSetupDetailsBeforeAssigningWork"); }, get action() { return translateUiCopy("app.apps.advancedPanel.checkAgain"); } },
+  warn: { get title() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.pairingRequired"); }, get description() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.createThisAgentThenPairItAndVerifyEvent"); }, get action() { return translateUiCopy("app.apps.advancedPanel.checkAgain"); } },
+  fail: { get title() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.prerequisiteCheckFailed"); }, get description() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.reviewTheSetupDetailsAndRetry"); }, get action() { return translateUiCopy("app.uiCopy.componentsRuntimeTestCard.retryCheck"); } },
 } as const;
 
 export function RuntimeTestCard({

@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t as translateSync } from "@/i18n";
 import { t as translateUpstream } from "@/i18n";
 import { useEffect, useState } from "react";
@@ -49,6 +50,7 @@ export function TextAttachmentPreview({ title, text, markdown, html = false, csv
   csv?: boolean;
   downloadUrl: string;
 }) {
+  useUiCopyTranslation();
   const [mode, setMode] = useState<FilePreviewMode>("rendered");
   useEffect(() => setMode("rendered"), [title]);
   const renderCsv = csv && mode === "rendered" && text.length > 0;
@@ -57,13 +59,13 @@ export function TextAttachmentPreview({ title, text, markdown, html = false, csv
     <div className="flex h-full min-h-0 flex-col">
       <header className="flex items-center gap-2 border-b border-border px-3 py-2">
         <h2 className="min-w-0 flex-1 truncate text-sm font-medium" title={title}>{title}</h2>
-        {markdown || html || csv ? <FilePreviewModeToggle mode={mode} onChange={setMode} label={html ? "HTML view" : csv ? "CSV view" : "Markdown view"} /> : null}
+        {markdown || html || csv ? <FilePreviewModeToggle mode={mode} onChange={setMode} label={html ? translateUiCopy("app.uiCopy.componentsFileViewerSheet.hTMLView") : csv ? translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskAttachmentPanel.cSVView") : translateUiCopy("app.upstreamSync.markdownView")} /> : null}
         <Button asChild variant="ghost" size="icon-sm">
           <a href={downloadUrl} download aria-label={translateSync("app.upstreamSync.downloadValue0", { value0: title })} title={translateSync("app.upstreamSync.downloadValue0", { value0: title })}><Download aria-hidden /></a>
         </Button>
       </header>
       <div className={renderHtml || renderCsv ? "flex min-h-0 flex-1 flex-col overflow-hidden" : "min-h-0 flex-1 overflow-auto p-4"}>
-        {text.length === 0 ? <p className="text-sm text-muted-foreground">File is empty.</p>
+        {text.length === 0 ? <p className="text-sm text-muted-foreground">{translateUiCopy("app.upstreamSync.fileIsEmpty")}</p>
           : renderCsv ? <CsvPreview text={text} title={title} />
           : renderHtml ? <HtmlArtifactPreview html={text} title={title} />
           : markdown && mode === "rendered" ? <MarkdownBody mediaMode="reference">{text}</MarkdownBody>
@@ -74,6 +76,7 @@ export function TextAttachmentPreview({ title, text, markdown, html = false, csv
 }
 
 export function TaskAttachmentPanel({ issueId, attachmentId }: { issueId: string; attachmentId: string }) {
+  useUiCopyTranslation();
   const attachments = useQuery({
     queryKey: queryKeys.issues.attachments(issueId),
     queryFn: () => issuesApi.listAttachments(issueId),
@@ -103,6 +106,6 @@ export function TaskAttachmentPanel({ issueId, attachmentId }: { issueId: string
       </div>
     );
   }
-  if (content.data === undefined) return <p className="p-4 text-sm" role="status">Loading file…</p>;
+  if (content.data === undefined) return <p className="p-4 text-sm" role="status">{translateUiCopy("app.upstreamSync.loadingFile")}</p>;
   return <TextAttachmentPreview key={attachment.id} title={attachment.originalFilename ?? attachment.id} text={content.data} csv={isCsvFile(attachment.originalFilename ?? "", attachment.contentType)} markdown={isMarkdownAttachment(attachment)} html={isHtmlPreview(attachment.contentType, attachment.originalFilename)} downloadUrl={downloadUrl} />;
 }

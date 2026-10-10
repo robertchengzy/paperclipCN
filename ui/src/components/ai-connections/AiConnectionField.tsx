@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -131,16 +132,16 @@ export function AiConnectionField({
         </p>
       )}
       {(compatiblePools.length > 0 || value?.mode === "router") && <label className="block space-y-1 text-sm">
-        AI connection
+        {translateUiCopy("app.connections.aiConnectionPicker.aiConnection")}
         <select className="block w-full rounded-md border bg-background px-3 py-2" disabled={readOnly} value={value?.mode === "router" ? value.connectionId : ""} onChange={event => {
           if (event.target.value) changeBinding({ mode: "router", connectionId: event.target.value });
           else changeBinding({ mode: "responsible_user", provider, method });
         }}>
-          <option value="">Individual account</option>
-          {compatiblePools.map(pool => <option key={pool.id} value={pool.id}>{pool.name} · Experimental pool</option>)}
-          {value?.mode === "router" && !compatiblePools.some(pool => pool.id === value.connectionId) && <option value={value.connectionId}>Pool unavailable — enable routing and the pool</option>}
+          <option value="">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.individualAccount")}</option>
+          {compatiblePools.map(pool => <option key={pool.id} value={pool.id}>{pool.name} {translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.experimentalPool")}</option>)}
+          {value?.mode === "router" && !compatiblePools.some(pool => pool.id === value.connectionId) && <option value={value.connectionId}>{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.poolUnavailableEnableRoutingAndThePool")}</option>}
         </select>
-        {value?.mode === "router" && <span className="text-muted-foreground">New tasks rotate. Existing tasks keep their account.</span>}
+        {value?.mode === "router" && <span className="text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.newTasksRotateExistingTasksKeepTheirAccount")}</span>}
       </label>}
       {value?.mode !== "router" && <AiConnectionSelect
         adapterType={adapterType}
@@ -222,13 +223,13 @@ export function AiConnectionField({
           /> : <>
           {!reconnecting && !savedAccount && <label className="flex items-center gap-2 text-sm">
             <Checkbox checked={allAgents} disabled={!accounts.data?.canManageConnections} onCheckedChange={(checked) => setAllAgents(checked === true)} />
-            Allow all agents in this company to use this account for my tasks
+            {translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.allowAllAgentsInThisCompanyToUseThis")}
           </label>}
           {savedAccount ? <div className="space-y-4">
             {selectDefault.error ? <>
               <p role="alert" className="text-sm text-destructive">{selectDefault.error.message}</p>
-              <Button onClick={() => selectDefault.mutate(savedAccount)}>Retry default selection</Button>
-            </> : <p role="status" className="text-sm text-muted-foreground">Selecting your default account…</p>}
+              <Button onClick={() => selectDefault.mutate(savedAccount)}>{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.retryDefaultSelection")}</Button>
+            </> : <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.selectingYourDefaultAccount")}</p>}
           </div> :
           <AiConnectionCredentialStep
             companyId={companyId}
@@ -248,8 +249,8 @@ export function AiConnectionField({
             }}
           />}
           {!reconnecting && !savedAccount && <details>
-            <summary className="cursor-pointer text-sm text-muted-foreground">Advanced providers</summary>
-            <Button type="button" variant="ghost" onClick={() => setAdvancedSetup(true)}>Choose another provider or gateway</Button>
+            <summary className="cursor-pointer text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.advancedProviders")}</summary>
+            <Button type="button" variant="ghost" onClick={() => setAdvancedSetup(true)}>{translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.chooseAnotherProviderOrGateway")}</Button>
           </details>}
           </>}
         </DialogContent>

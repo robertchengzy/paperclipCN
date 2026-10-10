@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import {
   Inbox,
   ListChecks,
@@ -188,7 +189,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
               alert={inboxBadge.failedRuns > 0}
             />
           ) : null}
-          {agentChatEnabled && !chatRail ? <SidebarNavItem to="/chats" label="Chat" icon={MessageCircle} /> : null}
+          {agentChatEnabled && !chatRail ? <SidebarNavItem to="/chats" label={translateUiCopy("app.mobileNav.chat")} icon={MessageCircle} /> : null}
           {showDecisions ? (
             <SidebarNavItem
               to="/decisions"
@@ -211,7 +212,7 @@ export function Sidebar({ children }: { children?: ReactNode }) {
               agents you talk to live in the Chat surface's own secondary rail
               (ChatContextualSidebar), not in the primary nav. */}
           {chatRail ? (
-            <SidebarNavItem to="/chats" label="Chat" icon={MessageCircle} />
+            <SidebarNavItem to="/chats" label={translateUiCopy("app.mobileNav.chat")} icon={MessageCircle} />
           ) : null}
           {/* Combined Inbox + Task List: Inbox is a view inside Tasks, so the
               unread/failed-run badge rides on Tasks. */}

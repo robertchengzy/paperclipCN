@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { HelpCircle } from "lucide-react";
 import { AgentSetupPrompt } from "@/components/AgentSetupPrompt";
 import { Button } from "@/components/ui/button";
@@ -68,9 +69,9 @@ export function McpConfigHelpDialog() {
         <div>
           <AgentSetupPrompt
             prompt={MCP_CONFIG_HELP_PROMPT}
-            label="Get a config with an agent"
-            title="MCP configuration"
-            description="Paste this into your agent to create an MCP config, then paste its JSON reply back into Paperclip."
+            label={translateUiCopy("app.uiCopy.pagesToolsMcpConfigHelpDialog.getAConfigWithAnAgent")}
+            title={translateUiCopy("app.uiCopy.pagesToolsMcpConfigHelpDialog.mCPConfiguration")}
+            description={translateUiCopy("app.uiCopy.pagesToolsMcpConfigHelpDialog.pasteThisIntoYourAgentToCreateAnMCP")}
           />
         </div>
       </DialogContent>

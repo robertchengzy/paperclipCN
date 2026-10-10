@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { healthApi } from "@/api/health";
 import { aiConnectionsApi } from "@/api/ai-connections";
 import { useLocalAiLogin } from "../ai-connections/useLocalAiLogin";
@@ -283,7 +284,7 @@ export function AgentProviderConnection({
         <div className="pt-5">{advancedConnection.content}</div>
         <FooterNav
           onBack={onBack}
-          primaryLabel="Use connection"
+          primaryLabel={translateUiCopy("app.connections.aiConnectionAuth.useConnection")}
           primaryDisabled={!advancedConnection.value}
           onPrimary={() => {
             if (advancedConnection.value) onConnected({ env: {}, aiConnection: advancedConnection.value });

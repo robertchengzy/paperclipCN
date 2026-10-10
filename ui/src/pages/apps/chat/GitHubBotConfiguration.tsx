@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import { copyTextToClipboard } from "@/lib/clipboard";
 import { useEffect, useId, useRef, useState } from "react";
@@ -189,7 +191,7 @@ function GitHubPassingScore({
   useEffect(() => { onValidityChange?.(valid); }, [valid, onValidityChange]);
   return (
     <div className="space-y-3 py-3">
-      <Label htmlFor={id}>Passing score</Label>
+      <Label htmlFor={id}>{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.passingScore")}</Label>
       <div className="flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">
           <Input id={id} type="number" min={1} max={5} step={1} required
@@ -202,7 +204,7 @@ function GitHubPassingScore({
               if (next.trim() && Number.isInteger(score) && score >= 1 && score <= 5)
                 onChange(score as 1 | 2 | 3 | 4 | 5);
             }} />
-          <span className="text-sm text-muted-foreground">out of 5</span>
+          <span className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.outOf5")}</span>
         </div>
         <Label className="flex items-center gap-2 text-sm font-normal">
           <Checkbox aria-label={t("app.apps.gitHubBotConfiguration.policy.reportOnly")} checked={value === null}
@@ -210,18 +212,15 @@ function GitHubPassingScore({
           {t("app.apps.gitHubBotConfiguration.policy.reportOnly")}
         </Label>
       </div>
-      {!valid && <p id={`${id}-error`} role="alert" className="text-xs text-destructive">Enter a whole number from 1 to 5.</p>}
+      {!valid && <p id={`${id}-error`} role="alert" className="text-xs text-destructive">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.enterAWholeNumberFrom1To5")}</p>}
       <p id={`${id}-help`} className="text-xs text-muted-foreground">
         {value === null
-          ? "Publishes a neutral check without a score requirement. GitHub can accept neutral checks for merging."
-          : "Paperclip passes the check when a complete review of the latest commit meets this score. Lower scores fail. This does not approve the PR."}
+          ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.publishesANeutralCheckWithoutAScoreRequirementGitHub")
+          : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.paperclipPassesTheCheckWhenACompleteReviewOf")}
       </p>
-      <p className="text-xs text-muted-foreground">
-        To block merging, require the <strong>Paperclip Review</strong> check from this App in your GitHub branch rules.{" "}
-        <a className="underline hover:text-foreground"
+      <p className="text-xs text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatGitHubBotConfiguration.message85" components={{ part0: <strong>{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.paperclipReview")}</strong>, part1: <a className="underline hover:text-foreground"
           href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/creating-rulesets-for-a-repository"
-          target="_blank" rel="noreferrer">{t("app.apps.gitHubBotManagement.configureOnGithub")}</a>
-      </p>
+          target="_blank" rel="noreferrer">{t("app.apps.gitHubBotManagement.configureOnGithub")}</a> }} /></p>
     </div>
   );
 }
@@ -295,17 +294,16 @@ export function GitHubPolicyEditor({
         </h2>
         <MarkdownEditor
           readOnly={readOnly}
-          ariaLabel="Agent instructions"
+          ariaLabel={translateUiCopy("app.routines.webhookFields.agentInstructions")}
           contentClassName="min-h-32"
           value={policy.instructions}
-          placeholder="What should this agent do on GitHub?"
+          placeholder={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.whatShouldThisAgentDoOnGitHub")}
           onChange={(value) => set("instructions", value)}
         />
         <p className="text-xs text-muted-foreground">
-          Included in every GitHub task. Type / to select a skill for the agent
-          to use.
+          {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.includedInEveryGitHubTaskTypeToSelectA")}
         </p>
-        <GitHubSettingsDisclosure title="Event-specific instructions">
+        <GitHubSettingsDisclosure title={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.eventSpecificInstructions")}>
           <div className="grid gap-3 pt-3">
             <Label htmlFor={`${id}-github-prompt-event`} className="sr-only">
               {t("app.reviewProtocolLabels.event")}
@@ -321,12 +319,12 @@ export function GitHubPolicyEditor({
                   {eventLabel(event)}
                 </option>
               ))}
-              <option value="issue_opened">New issue</option>
+              <option value="issue_opened">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.newIssue")}</option>
             </select>
             <MarkdownEditor
               key={prompt}
               readOnly={readOnly}
-              ariaLabel={`${prompt === "issue_opened" ? "New issue" : eventLabel(prompt)} instructions`}
+              ariaLabel={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.value0Instructions", { value0: String(prompt === "issue_opened" ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.newIssue") : eventLabel(prompt)) })}
               contentClassName="min-h-32"
               value={
                 prompt === "issue_opened"
@@ -343,7 +341,7 @@ export function GitHubPolicyEditor({
               }
             />
             <p className="text-xs text-muted-foreground">
-              Added to the main instructions for this event. Type / to select a skill for the agent to use.
+              {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.addedToTheMainInstructionsForThisEventType")}
             </p>
           </div>
         </GitHubSettingsDisclosure>
@@ -356,25 +354,22 @@ export function GitHubPolicyEditor({
           id={`${id}-github-triggers-heading`}
           className="text-base font-semibold"
         >
-          When to run
+          {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.whenToRun")}
         </h2>
         <div className="flex items-start gap-3 py-2">
           <AtSign className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
           <div className="space-y-1">
-            <p className="text-sm font-medium">When mentioned</p>
-            <p className="text-xs text-muted-foreground">
-              Authorized people can always @mention this bot.{" "}
-              {accessHref && (
+            <p className="text-sm font-medium">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.whenMentioned")}</p>
+            <p className="text-xs text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatGitHubBotConfiguration.message86" components={{ part0: <>{""}{accessHref && (
                 <Link className="underline underline-offset-4" to={accessHref}>
-                  Manage people in Access
+                  {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.managePeopleInAccess")}
                 </Link>
-              )}
-            </p>
+              )}</> }} /></p>
           </div>
         </div>
         <GitHubToggle
-          label="Run automatically"
-          description="Start work without a mention when an allowed person creates an issue or updates a pull request."
+          label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.runAutomatically")}
+          description={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.startWorkWithoutAMentionWhenAnAllowedPerson")}
           checked={policy.invocation !== "mentions_only"}
           onChange={(enabled) =>
             set("invocation", enabled ? (rememberedAutomaticMode ?? automaticMode.current) : "mentions_only")
@@ -384,7 +379,7 @@ export function GitHubPolicyEditor({
           <div className="space-y-4">
             <div
               className="grid gap-x-6 gap-y-3 sm:grid-cols-2"
-              aria-label="Automatic events"
+              aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.automaticEvents")}
             >
               {GITHUB_REVIEW_EVENTS.slice(0, 4).map((event) => (
                 <Label
@@ -412,13 +407,13 @@ export function GitHubPolicyEditor({
                     set("issueOpened", enabled === true)
                   }
                 />
-                New issues
+                {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.newIssues")}
               </Label>
             </div>
             <p className="text-xs text-muted-foreground">
-              Runs for authorized authors in Access. Use the author filters below to limit whose issues and PRs start work.
+              {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.runsForAuthorizedAuthorsInAccessUseTheAuthor")}
             </p>
-            <GitHubSettingsDisclosure title="Automatic review filters">
+            <GitHubSettingsDisclosure title={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.automaticReviewFilters")}>
               <div>
                 <GitHubToggle
                   label={t("app.apps.gitHubBotConfiguration.policy.drafts")}
@@ -427,12 +422,12 @@ export function GitHubPolicyEditor({
                 />
                 <GitHubToggle
                   label={t("app.apps.gitHubBotConfiguration.policy.botAuthors")}
-                  description="The account also needs a sponsor and external-contributor automatic runs enabled in Access."
+                  description={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.theAccountAlsoNeedsASponsorAndExternalContributor")}
                   checked={policy.reviewBotAuthors}
                   onChange={(value) => set("reviewBotAuthors", value)}
                 />
               </div>
-              <GitHubSettingsDisclosure title="Authors">
+              <GitHubSettingsDisclosure title={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.authors")}>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {filterField(
                     "includeAuthors",
@@ -446,7 +441,7 @@ export function GitHubPolicyEditor({
                   )}
                 </div>
               </GitHubSettingsDisclosure>
-              <GitHubSettingsDisclosure title="Branches">
+              <GitHubSettingsDisclosure title={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.branches")}>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {filterField(
                     "targetBranches",
@@ -475,8 +470,7 @@ export function GitHubPolicyEditor({
                 </div>
               </GitHubSettingsDisclosure>
               <p className="text-xs text-muted-foreground">
-                Reviews requested by @mention bypass these scheduling filters.
-                Repository access and ignored files still apply.
+                {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.reviewsRequestedByMentionBypassTheseSchedulingFiltersRepository")}
               </p>
             </GitHubSettingsDisclosure>
           </div>
@@ -490,16 +484,16 @@ export function GitHubPolicyEditor({
           id={`${id}-github-results-heading`}
           className="text-base font-semibold"
         >
-          Review results
+          {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.reviewResults")}
         </h2>
         <div className="grid gap-x-8 sm:grid-cols-2">
           <GitHubToggle
-            label="Post a review summary"
+            label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.postAReviewSummary")}
             checked={policy.publishSummary}
             onChange={(value) => set("publishSummary", value)}
           />
           <GitHubToggle
-            label="Post inline findings"
+            label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.postInlineFindings")}
             checked={policy.publishInline}
             onChange={(value) => set("publishInline", value)}
           />
@@ -508,14 +502,14 @@ export function GitHubPolicyEditor({
           onChange={(value) => set("ratingThreshold", value)} onValidityChange={onValidityChange} />
       </section>
       <div className="divide-y divide-border">
-        <GitHubSettingsDisclosure title="Ignored files">
+        <GitHubSettingsDisclosure title={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.ignoredFiles")}>
           {filterField(
             "ignoredPaths",
             "File patterns",
             "Excluded from all reviews, including @mentions. One pattern per line; supports * and **.",
           )}
         </GitHubSettingsDisclosure>
-        <GitHubSettingsDisclosure title="Inline comment options">
+        <GitHubSettingsDisclosure title={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.inlineCommentOptions")}>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor={`${id}-github-categories`}>
@@ -530,7 +524,7 @@ export function GitHubPolicyEditor({
             </div>
             <div className="space-y-2">
               <Label htmlFor={`${id}-github-severity`}>
-                Minimum inline severity
+                {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.minimumInlineSeverity")}
               </Label>
               <select
                 id={`${id}-github-severity`}
@@ -549,25 +543,24 @@ export function GitHubPolicyEditor({
                 <option value="error">{t("app.agentUi.agents.error")}</option>
               </select>
               <p className="text-xs text-muted-foreground">
-                Hidden findings still count in the assessment.
+                {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.hiddenFindingsStillCountInTheAssessment")}
               </p>
             </div>
           </div>
         </GitHubSettingsDisclosure>
-        <GitHubSettingsDisclosure title="Approvals and change requests">
+        <GitHubSettingsDisclosure title={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.approvalsAndChangeRequests")}>
           <p className="text-xs text-muted-foreground">
-            Optional formal decisions on GitHub. Scores, comments, and checks
-            still work when these are off.
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.optionalFormalDecisionsOnGitHubScoresCommentsAndChecks")}
           </p>
           <div>
             <GitHubToggle
-              label="Allow approvals"
+              label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.allowApprovals")}
               help="Lets the agent submit an Approve review on GitHub after a complete assessment. The agent must explicitly choose it; a 5/5 score or passing check does not approve the PR. Off still allows scores, comments, and checks."
               checked={policy.allowApprove}
               onChange={(value) => set("allowApprove", value)}
             />
             <GitHubToggle
-              label="Allow request changes"
+              label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.allowRequestChanges")}
               help="Lets the agent submit a Request changes review on GitHub after a complete assessment. This is a formal review decision and may prevent merging under your repository rules. Off still allows findings, comments, and a failing check."
               checked={policy.allowRequestChanges}
               onChange={(value) => set("allowRequestChanges", value)}
@@ -706,32 +699,32 @@ export function GitHubAccessEditor({
               <p className="break-words text-sm font-medium">@{person.login}</p>
               <p className="text-xs text-muted-foreground">
                 {person.kind === "guest"
-                  ? `Sponsored by ${memberName(person.sponsorUserId)}`
-                  : (identity?.paperclipUserLabel ?? "Company member")}
+                  ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.sponsoredByValue0", { value0: String(memberName(person.sponsorUserId)) })
+                  : (identity?.paperclipUserLabel ?? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.companyMember"))}
               </p>
               {!linked && (
                 <p className="mt-1 text-xs text-destructive">
-                  GitHub account needs linking.
+                  {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.gitHubAccountNeedsLinking")}
                 </p>
               )}
             </div>
             <div className="flex items-center gap-5">
               <div className="flex flex-col items-center gap-2">
-                <span className="text-xs text-muted-foreground">Mentions</span>
+                <span className="text-xs text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.mentions")}</span>
                 {person.kind === "guest" ||
                 configuration.memberAccess === "all_linked" ? (
                   <span
                     className="flex h-5 items-center gap-1 text-xs"
-                    aria-label={`Mentions ${linked ? "allowed" : "unavailable"} for @${person.login}`}
+                    aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.mentionsValue0ForValue1", { value0: String(linked ? translateUiCopy("app.tools.shared.decision.allow") : translateUiCopy("app.settings.adapterManager.versionUnavailable")), value1: String(person.login) })}
                   >
                     {linked && (
                       <Check className="size-3.5 text-muted-foreground" />
                     )}
-                    {linked ? t("app.taskChat.runTranscriptView.allowed") : "Unlinked"}
+                    {linked ? t("app.taskChat.runTranscriptView.allowed") : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.unlinked")}
                   </span>
                 ) : (
                   <ToggleSwitch
-                    aria-label={`Allow mentions from @${person.login}`}
+                    aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.allowMentionsFromValue0", { value0: String(person.login) })}
                     checked={mentions}
                     disabled={!linked}
                     onCheckedChange={(enabled) =>
@@ -745,7 +738,7 @@ export function GitHubAccessEditor({
                   <Button
                     size="icon"
                     variant="ghost"
-                    aria-label={`Manage @${person.login}`}
+                    aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.manageValue0", { value0: String(person.login) })}
                   >
                     <MoreHorizontal className="size-4" />
                   </Button>
@@ -753,7 +746,7 @@ export function GitHubAccessEditor({
                 <DropdownMenuContent align="end">
                   {removable && (
                     <DropdownMenuItem onClick={() => removePerson(person)}>
-                      Remove access
+                      {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.removeAccess")}
                     </DropdownMenuItem>
                   )}
                   {identity && (
@@ -761,7 +754,7 @@ export function GitHubAccessEditor({
                       disabled={busy}
                       onClick={() => void unlink(identity.principalId)}
                     >
-                      Unlink GitHub account
+                      {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.unlinkGitHubAccount")}
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuContent>
@@ -773,17 +766,16 @@ export function GitHubAccessEditor({
     </div>
   );
   return (
-    <section className="space-y-6" aria-label="People">
+    <section className="space-y-6" aria-label={translateUiCopy("app.projects.projectAccessMembers.people")}>
       <div className="space-y-1">
-        <h2 className="text-base font-semibold">People</h2>
+        <h2 className="text-base font-semibold">{translateUiCopy("app.projects.projectAccessMembers.people")}</h2>
         <p className="text-sm text-muted-foreground">
-          Choose who can mention this bot and whose activity can start work
-          automatically.
+          {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.chooseWhoCanMentionThisBotAndWhoseActivity")}
         </p>
       </div>
-      <section className="space-y-2" aria-label="Company members">
+      <section className="space-y-2" aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.companyMembers")}>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-sm font-semibold">Company members</h3>
+          <h3 className="text-sm font-semibold">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.companyMembers")}</h3>
           <Button
             variant="outline"
             size="sm"
@@ -794,15 +786,15 @@ export function GitHubAccessEditor({
             }}
           >
             <Plus className="size-4" />
-            Link a member
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.linkAMember")}
           </Button>
         </div>
         <GitHubToggle
-          label="Allow mentions from all linked members"
+          label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.allowMentionsFromAllLinkedMembers")}
           description={
             configuration.memberAccess === "all_linked"
-              ? `Includes members from ${company?.name ?? "this company"} who link their GitHub account later.`
-              : "Only members you enable below can mention this bot."
+              ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.includesMembersFromValue0WhoLinkTheirGitHubAccountLater", { value0: String(company?.name ?? translateUiCopy("app.uiCopy.pagesSkillSources.thisCompany")) })
+              : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.onlyMembersYouEnableBelowCanMentionThisBot")
           }
           checked={configuration.memberAccess === "all_linked"}
           onChange={(enabled) =>
@@ -815,18 +807,18 @@ export function GitHubAccessEditor({
         {peopleRows(memberRows)}
         {links.isPending && (
           <p role="status" className="py-4 text-sm text-muted-foreground">
-            Loading linked accounts…
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.loadingLinkedAccounts")}
           </p>
         )}
         {!links.isPending && !links.isError && memberRows.length === 0 && (
           <p className="py-4 text-sm text-muted-foreground">
-            No members linked yet. Link an account to get started.
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.noMembersLinkedYetLinkAnAccountToGet")}
           </p>
         )}
         <p className="text-xs text-muted-foreground">
           {automatic ? (
             <>
-              Automatic runs use the events and author filters in{" "}
+              {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.automaticRunsUseTheEventsAndAuthorFiltersIn")}{" "}
               <Link
                 className="underline underline-offset-4"
                 to={`/apps/chat/${endpointId}/settings`}
@@ -837,24 +829,24 @@ export function GitHubAccessEditor({
             </>
           ) : (
             <>
-              Automatic runs are off in{" "}
+              {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.automaticRunsAreOffIn")}{" "}
               <Link
                 className="underline underline-offset-4"
                 to={`/apps/chat/${endpointId}/settings`}
               >
                 {t("app.common.nouns.settings")}
               </Link>
-              . Authorized @mentions still work.
+              {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.authorizedMentionsStillWork")}
             </>
           )}
         </p>
       </section>
       <section
         className="space-y-2 border-t border-border pt-6"
-        aria-label="External contributors"
+        aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.externalContributors")}
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-sm font-semibold">External contributors</h3>
+          <h3 className="text-sm font-semibold">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.externalContributors")}</h3>
           <Button
             variant="outline"
             size="sm"
@@ -864,22 +856,20 @@ export function GitHubAccessEditor({
             }}
           >
             <Plus className="size-4" />
-            Add external contributor
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.addExternalContributor")}
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          Allow specific GitHub users with a member as their sponsor. They
-          receive restricted access, without company membership or the sponsor’s
-          personal credentials.
+          {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.allowSpecificGitHubUsersWithAMemberAsTheir")}
         </p>
         {peopleRows(guests)}
         {guests.length > 0 && (
           <GitHubToggle
-            label="Allow automatic runs for external contributors"
+            label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.allowAutomaticRunsForExternalContributors")}
             description={
               automatic
-                ? "Authorized contributors can trigger the events and author filters configured in Settings."
-                : "Turn on automatic runs in Settings first. Mentions remain available."
+                ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.authorizedContributorsCanTriggerTheEventsAndAuthorFilters")
+                : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.turnOnAutomaticRunsInSettingsFirstMentionsRemain")
             }
             checked={guestsAutomatic}
             disabled={!automatic}
@@ -895,15 +885,13 @@ export function GitHubAccessEditor({
           />
         )}
       </section>
-      <GitHubSettingsDisclosure title="Automatic task responsibility">
+      <GitHubSettingsDisclosure title={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.automaticTaskResponsibility")}>
         <div className="space-y-2">
           {activeMembers.length === 1 && responsible ? (
-            <p className="text-sm">
-              Responsible member: {memberName(configuration.responsibleUserId)}
-            </p>
+            <p className="text-sm"><Trans i18nKey="app.uiCopy.pagesAppsChatGitHubBotConfiguration.message87" components={{ part0: <>{""}{memberName(configuration.responsibleUserId)}</> }} /></p>
           ) : (
             <>
-              <Label htmlFor="github-responsible">Responsible member</Label>
+              <Label htmlFor="github-responsible">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.responsibleMember2")}</Label>
               <select
                 id="github-responsible"
                 className={githubSelectClass}
@@ -917,7 +905,7 @@ export function GitHubAccessEditor({
               >
                 {!responsible && (
                   <option value={configuration.responsibleUserId}>
-                    {configuration.responsibleUserId || "Select a member"}
+                    {configuration.responsibleUserId || translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.selectAMember")}
                   </option>
                 )}
                 {activeMembers.map((member) => (
@@ -931,9 +919,7 @@ export function GitHubAccessEditor({
             </>
           )}
           <p className="text-xs text-muted-foreground">
-            The member accountable for automatically created Paperclip tasks.
-            GitHub authors remain recorded separately. This grants no access to
-            the member’s personal credentials.
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.theMemberAccountableForAutomaticallyCreatedPaperclipTasksGitHub")}
           </p>
         </div>
       </GitHubSettingsDisclosure>
@@ -945,7 +931,7 @@ export function GitHubAccessEditor({
       {(members.error || links.error) && (
         <div className="flex flex-wrap items-center gap-2">
           <p role="alert" className="text-sm text-destructive">
-            Could not load members or linked accounts.
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.couldNotLoadMembersOrLinkedAccounts")}
           </p>
           <Button
             variant="link"
@@ -969,20 +955,20 @@ export function GitHubAccessEditor({
           <DialogHeader>
             <DialogTitle>
               {dialog === "member"
-                ? "Link a company member"
-                : "Add external contributor"}
+                ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.linkACompanyMember")
+                : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.addExternalContributor")}
             </DialogTitle>
             <DialogDescription>
               {dialog === "member"
-                ? "Each member confirms their own GitHub identity. Share this link with an existing company member, or link your own account."
-                : "Allow a GitHub user to mention this bot. A company member must sponsor their restricted access."}
+                ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.eachMemberConfirmsTheirOwnGitHubIdentityShareThis")
+                : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.allowAGitHubUserToMentionThisBotA")}
             </DialogDescription>
           </DialogHeader>
           {dialog === "member" ? (
             <>
               <Button
                 variant="outline"
-                aria-label="Copy account linking URL"
+                aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.copyAccountLinkingURL")}
                 onClick={() => {
                   if (accountLink.current)
                     void copyTextToClipboard(accountLink.current.href).then(
@@ -995,14 +981,14 @@ export function GitHubAccessEditor({
                 }}
               >
                 <Copy className="size-4" />
-                {linkCopied ? t("app.agentUi.agentDetail.copied") : "Copy invitation link"}
+                {linkCopied ? t("app.agentUi.agentDetail.copied") : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.copyInvitationLink")}
               </Button>
               <Link
                 ref={accountLink}
                 to={`/apps/chat/connect?provider=github&resume=${endpointId}&stage=identity`}
                 className="text-sm underline underline-offset-4"
               >
-                Link your account
+                {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.linkYourAccount")}
               </Link>
               {error && (
                 <p role="alert" className="text-sm text-destructive">
@@ -1046,7 +1032,7 @@ export function GitHubAccessEditor({
                       }
                     }}
                   >
-                    {busy ? "Looking up…" : t("app.apps.gitHubBotConfiguration.access.lookUp")}
+                    {busy ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.lookingUp") : t("app.apps.gitHubBotConfiguration.access.lookUp")}
                   </Button>
                 </div>
               </div>
@@ -1060,7 +1046,7 @@ export function GitHubAccessEditor({
                 >
                   {!activeMembers.some(
                     (member) => member.principalId === sponsor,
-                  ) && <option value={sponsor}>Select a member</option>}
+                  ) && <option value={sponsor}>{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.selectAMember")}</option>}
                   {activeMembers.map((member) => (
                     <option key={member.principalId} value={member.principalId}>
                       {member.user?.name ?? member.principalId}
@@ -1076,8 +1062,8 @@ export function GitHubAccessEditor({
                   linkedAccounts.some(
                     (link) => link.githubUserId === candidate.githubUserId,
                   )
-                    ? `@${candidate.login} is already listed in People.`
-                    : `Found @${candidate.login}. They will be able to mention the bot after you save.`}
+                    ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.value0IsAlreadyListedInPeople", { value0: String(candidate.login) })
+                    : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.foundValue0TheyWillBeAbleToMentionTheBot", { value0: String(candidate.login) })}
                 </p>
               )}
               {lookupError && (
@@ -1116,7 +1102,7 @@ export function GitHubAccessEditor({
                     }
                   }}
                 >
-                  Add contributor
+                  {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotConfiguration.addContributor")}
                 </Button>
               </DialogFooter>
             </>

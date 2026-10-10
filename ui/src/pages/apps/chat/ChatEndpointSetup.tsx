@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { buildSlackAppManifest, defaultSlackAppConfiguration } from "@paperclipai/shared";
 import { SlackAppDetails, SlackSetupAdvanced } from "./SlackAppDetails";
 import { SlackAutomaticSetup } from "./SlackAutomaticSetup";
@@ -181,6 +182,7 @@ export function ChatConnectionPurpose({ provider, onChat, onTools }: {
 }
 
 export function ChatEndpointSetup() {
+  useUiCopyTranslation();
   const [params] = useSearchParams();
   if (params.get("provider") === "github") return <GitHubChatSetup />;
   return params.get("provider") === "agentmail" ? <EmailEndpointSetup /> : <ChatSdkEndpointSetup />;
@@ -456,11 +458,11 @@ function ChatSdkEndpointSetup() {
     },
     onError: (error) =>
       pushToast({
-        title: provider === "slack" ? "Couldn't finish setup" : t("app.apps.chatEndpointSetup.toast.testIncomplete"),
+        title: provider === "slack" ? translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.couldnTFinishSetup") : t("app.apps.chatEndpointSetup.toast.testIncomplete"),
         body:
           error instanceof Error
             ? error.message
-            : provider === "slack" ? "Try finishing setup again." : t("app.apps.chatEndpointSetup.toast.testIncompleteBody"),
+            : provider === "slack" ? translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.tryFinishingSetupAgain") : t("app.apps.chatEndpointSetup.toast.testIncompleteBody"),
         tone: "error",
       }),
   });
@@ -560,7 +562,7 @@ function ChatSdkEndpointSetup() {
               <SlackAppDetails value={slackDetails} readOnly={!slackDetailsEditable || createEndpoint.isPending}
                 onChange={app => setSlackDraft({ agentId, app })}
                 onBlur={() => void persistSlackDetails().catch(() => {})} />
-              {saveSlackDetails.isError && <p role="alert" className="text-sm text-destructive">Couldn&apos;t save the Slack app details. Try again before continuing.</p>}
+              {saveSlackDetails.isError && <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.couldnTSaveTheSlackAppDetailsTryAgain")}</p>}
             </SlackSetupAdvanced>}
             {provider === "github" && <GitHubAgentTrustWarning agent={selectedAgent} />}
             <SetupWizardFooter disabled={createEndpoint.isPending || saveSlackDetails.isPending} onSaveExit={() => void continueFromAgent(true)}>
@@ -636,20 +638,20 @@ function ChatSdkEndpointSetup() {
             <AgentCharacter
               agent={selectedAgent ?? { id: endpoint.assignedAgentId, name: endpoint.assignedAgentName }}
               size={256} state="success" trackingScope="page"
-              label={`${selectedAgent?.name ?? endpoint.assignedAgentName} avatar`}
+              label={translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.value0Avatar", { value0: String(selectedAgent?.name ?? endpoint.assignedAgentName) })}
             />
             <div className="flex flex-col items-center gap-3">
               <h1 className="flex items-center gap-2 text-2xl font-bold">
                 <CheckCircle2 aria-hidden="true" className="size-6 text-(--status-task-done)" />
-                Success
+                {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.success")}
               </h1>
               <p className="flex flex-wrap items-center justify-center gap-2 text-base text-muted-foreground">
-                <span>You can now talk to {selectedAgent?.name ?? endpoint.assignedAgentName} in Slack</span>
+                <span><Trans i18nKey="app.uiCopy.pagesAppsChatChatEndpointSetup.message76" components={{ part0: <>{""}{selectedAgent?.name ?? endpoint.assignedAgentName}</> }} /></span>
                 <img src="/brands/apps/slack.svg" alt="" aria-hidden="true" className="size-6" />
               </p>
             </div>
             <Button disabled={testConnection.isPending} onClick={() => testConnection.mutate()}>
-              {testConnection.isPending && <Loader2 className="size-4 animate-spin" />}Done
+              {testConnection.isPending && <Loader2 className="size-4 animate-spin" />}{translateUiCopy("app.common.actions.done")}
             </Button>
           </div> : <TryStep
             endpointId={endpoint.id}
@@ -1411,31 +1413,31 @@ function ProviderConnectStep({
       </div>
     );
   const slackRequestUrlInstructions = <ol className="list-decimal space-y-2 pl-5 text-sm">
-      <li><a className="underline underline-offset-4" href={endpoint.setup?.slackRegistration?.appId ? `https://api.slack.com/apps/${encodeURIComponent(endpoint.setup.slackRegistration.appId)}/event-subscriptions` : "https://api.slack.com/apps"} target="_blank" rel="noopener noreferrer">Open Slack app Settings <ExternalLink className="inline size-3" /></a> and choose <strong>{slackApp.appName}</strong>.</li>
-      <li>Choose <strong>Event Subscriptions</strong>.</li>
-      <li>Beside the prefilled <strong>Request URL</strong>, click <strong>Retry</strong> if it isn&apos;t verified. Save changes if Slack asks.</li>
+      <li><a className="underline underline-offset-4" href={endpoint.setup?.slackRegistration?.appId ? `https://api.slack.com/apps/${encodeURIComponent(endpoint.setup.slackRegistration.appId)}/event-subscriptions` : "https://api.slack.com/apps"} target="_blank" rel="noopener noreferrer">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.openSlackAppSettings")} <ExternalLink className="inline size-3" /></a> {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.andChoose")} <strong>{slackApp.appName}</strong>.</li>
+      <li>{translateUiCopy("app.common.actions.choose")} <strong>{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.eventSubscriptions")}</strong>.</li>
+      <li>{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.besideThePrefilled")} <strong>{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.requestURL")}</strong>{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.click")} <strong>{translateUiCopy("app.common.actions.retry")}</strong> {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.ifItIsnTVerifiedSaveChangesIfSlack")}</li>
     </ol>;
   if (slackStage === "finish")
     return (
       <div className="space-y-5">
         <div>
-          <h1 className="text-xl font-bold">{automaticSlack ? "Send a message to your agent" : t("app.apps.chatEndpointSetup.steps.verifySlack")}</h1>
+          <h1 className="text-xl font-bold">{automaticSlack ? translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.sendAMessageToYourAgent") : t("app.apps.chatEndpointSetup.steps.verifySlack")}</h1>
           {!automaticSlack && <p className="mt-1 text-sm text-muted-foreground">{t("app.apps.chatEndpointSetup.slack.verifyHelp")}</p>}
         </div>
-        {automaticSlack ? <Button asChild variant="outline"><a href={endpoint.setup?.slackAccount?.dmChannelId && endpoint.providerAccountId ? `https://app.slack.com/client/${encodeURIComponent(endpoint.providerAccountId)}/${encodeURIComponent(endpoint.setup.slackAccount.dmChannelId)}` : endpoint.setup?.providerUrl ?? "https://app.slack.com"} target="_blank" rel="noopener noreferrer">Open Slack <ExternalLink className="size-4" /></a></Button> : slackRequestUrlInstructions}
+        {automaticSlack ? <Button asChild variant="outline"><a href={endpoint.setup?.slackAccount?.dmChannelId && endpoint.providerAccountId ? `https://app.slack.com/client/${encodeURIComponent(endpoint.providerAccountId)}/${encodeURIComponent(endpoint.setup.slackAccount.dmChannelId)}` : endpoint.setup?.providerUrl ?? "https://app.slack.com"} target="_blank" rel="noopener noreferrer">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.openSlack")} <ExternalLink className="size-4" /></a></Button> : slackRequestUrlInstructions}
         {endpoint.setup?.webhookVerifiedAt ? (
           <p role="status" className="flex items-center gap-2 text-sm">
             <CheckCircle2 className="size-4 text-(--status-task-done)" />
-            Your Slack connection is working.{pending ? automaticSlack ? " Finishing setup…" : " Opening the message test…" : ""}
+            {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.yourSlackConnectionIsWorking")}{pending ? automaticSlack ? translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.finishingSetup") : translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.openingTheMessageTest") : ""}
           </p>
         ) : slackVerificationError ? (
           <p role="alert" className="text-sm text-destructive">{t("app.apps.chatEndpointSetup.slack.verifyCheckFailed")}</p>
         ) : (
           <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="size-4 animate-spin" /> {automaticSlack ? "Waiting for your message…" : "Waiting for Slack. We’ll continue automatically."}
+            <Loader2 className="size-4 animate-spin" /> {automaticSlack ? translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.waitingForYourMessage") : translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.waitingForSlackWeLlContinueAutomatically")}
           </p>
         )}
-        <SlackSetupAdvanced label={automaticSlack ? "Didn’t work?" : t("app.apps.chatEndpointSetup.slack.troubleshooting")}>
+        <SlackSetupAdvanced label={automaticSlack ? translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.didnTWork") : t("app.apps.chatEndpointSetup.slack.troubleshooting")}>
           {automaticSlack && slackRequestUrlInstructions}
           <p className="text-muted-foreground">{t("app.apps.chatEndpointSetup.slack.troubleshootingHelp")}</p>
           {endpointValue(t("app.apps.chatEndpointSetup.webhookUrl"), endpoint.setup?.webhookUrl)}
@@ -1446,7 +1448,7 @@ function ProviderConnectStep({
             endpoint.setup?.step === "provider_setup" ? onAction("verify") : onSlackVerificationContinue()
           }>
             {pending && <Loader2 className="size-4 animate-spin" />}
-            Continue
+            {translateUiCopy("app.common.actions.continue")}
           </Button>}
         </div>
       </div>
@@ -1474,7 +1476,7 @@ function ProviderConnectStep({
         </div>
       )}
       <div>
-        <h1 className="text-xl font-bold">{slackStage === "app" ? automaticSlack ? "App configuration access token" : t("app.apps.chatEndpointSetup.slack.createTitle") : automaticSlack ? "Install Slack app" : t("app.apps.chatEndpointSetup.slack.credentialsTitle")}</h1>
+        <h1 className="text-xl font-bold">{slackStage === "app" ? automaticSlack ? translateUiCopy("app.apps.chatEndpointSetup.steps.appConfigurationToken") : t("app.apps.chatEndpointSetup.slack.createTitle") : automaticSlack ? translateUiCopy("app.apps.chatEndpointSetup.steps.installSlackApp") : t("app.apps.chatEndpointSetup.slack.credentialsTitle")}</h1>
         {repairing && !automaticSlack && (
           <p className="mt-1 text-sm text-muted-foreground">
             {t("app.apps.chatEndpointSetup.slack.reconnectHelp")}
@@ -1527,7 +1529,7 @@ function ProviderConnectStep({
           </Button>
           <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
             <Button variant="outline" disabled={openingSlackApp || !endpoint.setup?.webhookUrl || !slackValidation.success} onClick={onSlackAppCreated}>
-              I already created the app
+              {translateUiCopy("app.apps.chatEndpointSetup.slack.alreadyCreated")}
             </Button>
             {!repairing && (
               <Button
@@ -1837,7 +1839,7 @@ function TryStep({
       {provider === "slack" ? (
         <>
           <ol className="list-decimal space-y-4 pl-5 text-sm">
-            <li>{slackAccount?.status === "linked" ? <Button asChild variant="outline"><a href={providerUrl ?? "https://app.slack.com"} target="_blank" rel="noopener noreferrer">{slackAccount.dmChannelId ? "Open your Slack DM" : "Open Slack"}<ExternalLink /></a></Button> : <>{t("app.apps.chatEndpointSetup.try.slack.invite", { mention: botMention })}</>}</li>
+            <li>{slackAccount?.status === "linked" ? <Button asChild variant="outline"><a href={providerUrl ?? "https://app.slack.com"} target="_blank" rel="noopener noreferrer">{slackAccount.dmChannelId ? translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointSetup.openYourSlackDM") : translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.openSlack")}<ExternalLink /></a></Button> : <>{t("app.apps.chatEndpointSetup.try.slack.invite", { mention: botMention })}</>}</li>
             <li>
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-3">
                 <code>{slackTestMessage}</code>
@@ -1849,9 +1851,9 @@ function TryStep({
             </li>
             <li>{t("app.apps.chatEndpointSetup.try.slack.continue")}</li>
           </ol>
-          {commandCopyError && <p role="alert" className="text-sm text-destructive">Couldn&apos;t copy. Select and copy the command above.</p>}
+          {commandCopyError && <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.apps.chatEndpointSetup.try.slack.copyFailed")}</p>}
           <SetupWizardFooter onSaveExit={onSaveExit} disabled={pending}>
-            <Button disabled={pending} onClick={onTest}>{pending && <Loader2 className="size-4 animate-spin" />}Done</Button>
+            <Button disabled={pending} onClick={onTest}>{pending && <Loader2 className="size-4 animate-spin" />}{translateUiCopy("app.common.actions.done")}</Button>
           </SetupWizardFooter>
         </>
       ) : <>

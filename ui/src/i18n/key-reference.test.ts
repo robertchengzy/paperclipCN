@@ -36,7 +36,7 @@ function collectTsxFiles(dir: string): string[] {
 const srcDir = path.resolve(__dirname, "..");
 const files = collectTsxFiles(srcDir);
 
-const staticKeyRe = /(?<![A-Za-z0-9_.])t\(\s*"([A-Za-z0-9_.-]+)"\s*(?:,|\))/g;
+const staticKeyRe = /(?<![A-Za-z0-9_.])(?:t|translateUiCopy)\(\s*"([A-Za-z0-9_.-]+)"\s*(?:,|\))/g;
 const transKeyRe = /i18nKey="([A-Za-z0-9_.-]+)"/g;
 
 function getByPath(obj: unknown, keyPath: string): unknown {

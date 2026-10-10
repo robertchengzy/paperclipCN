@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Network, Monitor } from "lucide-react";
@@ -29,37 +30,37 @@ const providers = [
   {
     id: "openai",
     name: "OpenAI",
-    description: "ChatGPT subscription or API key",
+    get description() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.chatGPTSubscriptionOrAPIKey"); },
   },
   {
     id: "anthropic",
     name: "Anthropic",
-    description: "Claude subscription or API key",
+    get description() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.claudeSubscriptionOrAPIKey"); },
   },
-  { id: "google", name: "Google", description: "Gemini API key" },
-  { id: "xai", name: "xAI", description: "Grok subscription or API key" },
+  { id: "google", name: "Google", get description() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.geminiAPIKey"); } },
+  { id: "xai", name: "xAI", get description() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.grokSubscriptionOrAPIKey"); } },
   {
     id: "openrouter",
     name: "OpenRouter",
-    description: "Models through one API key",
+    get description() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.modelsThroughOneAPIKey"); },
     advanced: true,
   },
   {
     id: "bedrock",
     name: "Amazon Bedrock",
-    description: "Bedrock API key and AWS region",
+    get description() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.bedrockAPIKeyAndAWSRegion"); },
     advanced: true,
   },
   {
     id: "gateway",
-    name: "Custom gateway",
-    description: "Emissary or another compatible endpoint",
+    get name() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.customGateway"); },
+    get description() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.emissaryOrAnotherCompatibleEndpoint"); },
     advanced: true,
   },
   {
     id: "local",
-    name: "Local endpoint",
-    description: "A model server in the agent’s environment",
+    get name() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.localEndpoint"); },
+    get description() { return translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.aModelServerInTheAgentSEnvironment"); },
     advanced: true,
   },
 ] as const;
@@ -90,6 +91,7 @@ export function AiProviderSetup({
     binding: Exclude<AiConnectionBinding, { mode: "responsible_user" }>,
   ) => void;
 }) {
+  useUiCopyTranslation();
   const [provider, setProvider] = useState<ProviderChoice | undefined>(
     reconnect
       ? reconnect.routing?.kind === "gateway" ||
@@ -131,7 +133,7 @@ export function AiProviderSetup({
     queryKey: ["agents", companyId, "provider-access"],
     queryFn: () => agentsApi.list(companyId),
   });
-  const label = providerLabel ?? providers.find((p) => p.id === provider)?.name ?? "provider";
+  const label = providerLabel ?? providers.find((p) => p.id === provider)?.name ?? translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.providerFallback");
   const advanced = reconnect ? Boolean(reconnect.routing) : ["openrouter", "bedrock", "gateway", "local"].includes(provider ?? "");
   const nativeProvider: AiProvider =
     provider === "bedrock"
@@ -143,7 +145,7 @@ export function AiProviderSetup({
         : (provider ?? "openai");
   const name =
     reconnect?.name ??
-    `${ownership === "personal" ? "My" : "Company"} ${
+    `${ownership === "personal" ? translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.my") : translateUiCopy("app.sidebar.company")} ${
       provider === "gateway" && baseUrl
         ? (() => {
             try {
@@ -237,16 +239,15 @@ export function AiProviderSetup({
   );
   const modelSettings = (
     <label className="block space-y-2 text-xs text-muted-foreground">
-      Model IDs (comma separated)
+      {translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.modelIDsCommaSeparated")}
       <Input
-        aria-label="Model IDs"
+        aria-label={translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.modelIDs")}
         value={models}
         onChange={(e) => setModels(e.target.value)}
         disabled={Boolean(reconnect)}
       />
       <span className="block">
-        Use the provider’s model ID or your gateway’s alias. You can
-        also enter one on the agent.
+        {translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.useTheProviderSModelIDOrYourGateway")}
       </span>
     </label>
   );
@@ -270,31 +271,31 @@ export function AiProviderSetup({
     />
   ) : undefined;
   const cancel = () => reconnect || initialProvider ? onCancel() : setStep("provider");
-  if (!reconnect && accounts.isPending) return <p role="status">Loading connection permissions…</p>;
-  if (!reconnect && accounts.isError) return <p role="alert">Could not load connection permissions. <Button type="button" variant="ghost" onClick={() => void accounts.refetch()}>Retry</Button></p>;
+  if (!reconnect && accounts.isPending) return <p role="status">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.loadingConnectionPermissions")}</p>;
+  if (!reconnect && accounts.isError) return <p role="alert">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.couldNotLoadConnectionPermissions")} <Button type="button" variant="ghost" onClick={() => void accounts.refetch()}>{translateUiCopy("app.common.actions.retry")}</Button></p>;
   return (
     <div className="mx-auto w-full max-w-2xl space-y-6" onSubmit={(event) => event.stopPropagation()}>
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">
           {step === "provider"
-            ? "Connect a model provider"
-            : `${reconnect ? "Reconnect" : "Connect"} ${label}`}
+            ? translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.connectAModelProvider")
+            : `${reconnect ? translateUiCopy("app.common.actions.reconnect") : translateUiCopy("app.common.actions.connect")} ${label}`}
         </h2>
       </div>
-      {agents.isError && <p role="alert" className="text-sm text-destructive">Could not load agents. <Button type="button" variant="ghost" onClick={() => void agents.refetch()}>Retry</Button></p>}
+      {agents.isError && <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.couldNotLoadAgents")} <Button type="button" variant="ghost" onClick={() => void agents.refetch()}>{translateUiCopy("app.common.actions.retry")}</Button></p>}
       {step === "provider" ? (
         <>
           {advancedOnly ? choices(true) : <>
           {choices(false)}
           <details>
             <summary className="cursor-pointer text-sm text-muted-foreground">
-              Advanced providers
+              {translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionField.advancedProviders")}
             </summary>
             <div className="pt-4">{choices(true)}</div>
           </details>
           </>}
           <Button type="button" variant="ghost" onClick={onCancel}>
-            Cancel
+            {translateUiCopy("app.common.actions.cancel")}
           </Button>
         </>
       ) : !advanced ? (
@@ -326,9 +327,9 @@ export function AiProviderSetup({
           {(provider === "gateway" || provider === "local") && (
             <>
               <label className="block space-y-2 text-xs text-muted-foreground">
-                Provider URL
+                {translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.providerURL")}
                 <Input
-                  aria-label="Provider URL"
+                  aria-label={translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.providerURL")}
                   placeholder={
                     provider === "local"
                       ? "http://localhost:11434/v1"
@@ -340,7 +341,7 @@ export function AiProviderSetup({
                 />
               </label>
               <label className="block space-y-2 text-xs text-muted-foreground">
-                API format
+                {translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.aPIFormat")}
                 <Select
                   value={protocol}
                   onValueChange={(v) => {
@@ -350,18 +351,18 @@ export function AiProviderSetup({
                   }}
                   disabled={Boolean(reconnect) || Boolean(initialProtocol)}
                 >
-                  <SelectTrigger aria-label="API format" className="w-full">
+                  <SelectTrigger aria-label={translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.aPIFormat")} className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="responses">
-                      OpenAI Responses · Codex
+                      {translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.openAIResponsesCodex")}
                     </SelectItem>
                     <SelectItem value="messages">
-                      Anthropic Messages · Claude
+                      {translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.anthropicMessagesClaude")}
                     </SelectItem>
                     <SelectItem value="chat">
-                      Chat Completions · OpenCode, Hermes
+                      {translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.chatCompletionsOpenCodeHermes")}
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -370,9 +371,9 @@ export function AiProviderSetup({
           )}
           {provider === "bedrock" && (
             <label className="block space-y-2 text-xs text-muted-foreground">
-              AWS region
+              {translateUiCopy("app.secrets.secrets.fieldAwsRegion")}
               <Input
-                aria-label="AWS region"
+                aria-label={translateUiCopy("app.secrets.secrets.fieldAwsRegion")}
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
                 disabled={Boolean(reconnect)}
@@ -381,29 +382,29 @@ export function AiProviderSetup({
           )}
           {provider !== "openrouter" && (
             <label className="block space-y-2 text-xs text-muted-foreground">
-              Authentication
+              {translateUiCopy("app.apps.gatewayAdvancedPanel.authentication")}
               <Select
                 value={auth}
                 onValueChange={(v) => setAuth(v as typeof auth)}
                 disabled={Boolean(reconnect)}
               >
-                <SelectTrigger aria-label="Authentication" className="w-full">
+                <SelectTrigger aria-label={translateUiCopy("app.apps.gatewayAdvancedPanel.authentication")} className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="bearer">
                     {provider === "bedrock"
-                      ? "Bedrock API key"
-                      : "Bearer token"}
+                      ? translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.bedrockAPIKey")
+                      : translateUiCopy("app.connections.remoteMcpConnectionSetup.bearerToken")}
                   </SelectItem>
                   {provider !== "bedrock" && (
                     <>
                       {protocol === "messages" && (
                         <SelectItem value="api_key">
-                          API key · x-api-key
+                          {translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.aPIKeyXApiKey")}
                         </SelectItem>
                       )}
-                      <SelectItem value="none">No authentication</SelectItem>
+                      <SelectItem value="none">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.noAuthentication")}</SelectItem>
                     </>
                   )}
                 </SelectContent>
@@ -413,9 +414,9 @@ export function AiProviderSetup({
           {
             auth !== "none" && (
               <label className="block space-y-2 text-xs text-muted-foreground">
-                API key
+                {translateUiCopy("app.common.labels.apiKey")}
                 <Input
-                  aria-label="API key"
+                  aria-label={translateUiCopy("app.common.labels.apiKey")}
                   type="password"
                   autoComplete="new-password"
                   value={apiKey}
@@ -424,15 +425,14 @@ export function AiProviderSetup({
               </label>
             )
           }
-          {reconnect && <details><summary className="cursor-pointer text-sm text-muted-foreground">Model settings</summary>{modelSettings}</details>}
+          {reconnect && <details><summary className="cursor-pointer text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.modelSettings")}</summary>{modelSettings}</details>}
           <p className="text-xs text-muted-foreground">
-            Test the connection with your chosen model in the agent’s execution
-            environment after connecting.
+            {translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.testTheConnectionWithYourChosenModelInThe")}
           </p>
           {save.error && (
             <p role="alert" className="text-sm text-destructive">
               {save.error instanceof Error && save.error.name === "ZodError"
-                ? "Check the URL, API format, and authentication fields."
+                ? translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.checkTheURLAPIFormatAndAuthenticationFields")
                 : save.error.message}
             </p>
           )}
@@ -444,7 +444,7 @@ export function AiProviderSetup({
               onClick={cancel}
               disabled={save.isPending}
             >
-              Back
+              {translateUiCopy("app.common.actions.back")}
             </Button>
             <Button
               type="submit"
@@ -455,10 +455,10 @@ export function AiProviderSetup({
               }
             >
               {save.isPending
-                ? "Connecting…"
+                ? translateUiCopy("app.common.progress.connecting")
                 : reconnect
-                  ? "Reconnect"
-                  : "Connect"}
+                  ? translateUiCopy("app.common.actions.reconnect")
+                  : translateUiCopy("app.common.actions.connect")}
             </Button>
           </div>
         </form>

@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t as translateSync } from "@/i18n";
 import { t as translateUpstream } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
@@ -34,6 +35,7 @@ interface ComposerAddMenuProps {
 export function ComposerAddMenu({
   mode, onModeChange, onAttachFile, attachDisabled, onGoal, privacy, disabled, mobile: mobileProp, triggerTestId, menuTestId,
 }: ComposerAddMenuProps) {
+  useUiCopyTranslation();
   const [open, setOpen] = useState(false);
   const mobileViewportStyle = useMobileEntityPickerViewportStyle();
   const goalFocusRef = useRef(false);
@@ -103,6 +105,7 @@ interface ComposerModeChipProps {
 }
 
 export function ComposerModeChip({ mode, onRemove, disabled, testId, mobile = false }: ComposerModeChipProps) {
+  useUiCopyTranslation();
   if (mode === "standard") return null;
   const meta = workModeMetaFor(mode);
   const Icon = meta.icon;
@@ -116,8 +119,9 @@ export function ComposerModeChip({ mode, onRemove, disabled, testId, mobile = fa
 }
 
 export function ComposerPrivacyChip({ inherited, onRemove, disabled }: { inherited?: string; onRemove: () => void; disabled?: boolean }) {
+  useUiCopyTranslation();
   const [hintOpen, setHintOpen] = useState(false);
-  const explanation = inherited ?? "Only you and people you share with can read this task";
+  const explanation = inherited ?? translateUiCopy("app.uiCopy.componentsTaskChatComposerAddMenu.onlyYouAndPeopleYouShareWithCanRead");
   return <TooltipProvider><Tooltip open={hintOpen} onOpenChange={setHintOpen}>
     <TooltipTrigger asChild>
       <span className="inline-flex shrink-0" role={inherited ? "button" : undefined}
@@ -126,12 +130,12 @@ export function ComposerPrivacyChip({ inherited, onRemove, disabled }: { inherit
         onKeyDown={inherited ? (event) => {
           if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setHintOpen(true); }
         } : undefined}>
-        <button type="button" onClick={onRemove} aria-label={inherited ? "Private task" : "Remove private task"}
+        <button type="button" onClick={onRemove} aria-label={inherited ? translateUiCopy("app.upstreamOct08.privateTask") : translateUiCopy("app.uiCopy.componentsTaskChatComposerAddMenu.removePrivateTask")}
           title={explanation}
           disabled={disabled || Boolean(inherited)} data-testid="composer-private-chip"
           className="inline-flex h-8 shrink-0 items-center gap-1 rounded-full border border-border bg-muted px-2 text-xs font-medium text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
           <Lock className="size-3.5" aria-hidden />
-          <span className="max-sm:sr-only">Private</span>
+          <span className="max-sm:sr-only">{translateUiCopy("app.common.labels.private")}</span>
           {!inherited ? <X className="size-3.5" aria-hidden /> : null}
         </button>
       </span>

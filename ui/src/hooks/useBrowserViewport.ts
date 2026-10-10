@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import {
   useCallback,
   useEffect,
@@ -44,6 +45,7 @@ export function useBrowserViewport({
   active: boolean;
   frameRef: RefObject<HTMLIFrameElement | null>;
 }) {
+
   const [viewerId] = useState(() => crypto.randomUUID());
   const [state, setState] = useState<BrowserUseViewportState>({
     preset: "fit",
@@ -134,7 +136,7 @@ export function useBrowserViewport({
                 desiredMode = stateRef.current.preset;
                 pending = null;
                 setError(
-                  "Browser size could not be changed. Choose a size in Browser options to try again.",
+                  translateUiCopy("app.uiCopy.hooksUseBrowserViewport.browserSizeCouldNotBeChangedChooseASize"),
                 );
               }
             } finally {

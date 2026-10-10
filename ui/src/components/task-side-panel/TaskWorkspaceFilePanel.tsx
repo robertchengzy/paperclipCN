@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { isCsvFile } from "@/lib/csv-preview";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -81,7 +82,7 @@ export function TaskWorkspaceFilePanel({
               {copied ? <Check aria-hidden /> : <Copy aria-hidden />}
             </Button>
           ) : null}
-          {renderedPreview && contentQuery.data ? <FilePreviewModeToggle mode={previewMode} onChange={setPreviewMode} label="File preview mode" /> : null}
+          {renderedPreview && contentQuery.data ? <FilePreviewModeToggle mode={previewMode} onChange={setPreviewMode} label={translateUiCopy("app.uiCopy.componentsTaskSidePanelTaskWorkspaceFilePanel.filePreviewMode")} /> : null}
           {downloadUrl ? (
             <Button asChild variant="ghost" size="icon-sm">
               <a href={downloadUrl} download={resource?.title} aria-label={t("app.workspaces.fileViewerSheet.downloadFile")} title={t("app.workspaces.fileViewerSheet.downloadFile")}>

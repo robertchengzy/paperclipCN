@@ -206,7 +206,11 @@ function classifyLiteral(
     case "ArrowFunctionExpression":
       return sink.body === child && copy(true) ? { kind: "return", text } : null;
     case "VariableDeclarator":
-      return sink.init === child && copy(true) ? { kind: "var", text } : null;
+      return sink.init === child && copy(
+        !/^(title|detail|description|label|[a-z][A-Za-z]*(Title|Label|Description|Caption|Heading))$/.test(
+          (sink.id as AstNode)?.name as string ?? "",
+        ),
+      ) ? { kind: "var", text } : null;
     case "AssignmentExpression":
       return sink.right === child && copy(true) ? { kind: "var", text } : null;
     case "CallExpression": {

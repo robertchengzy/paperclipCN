@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { ConnectionInstructionsEditor } from "../ConnectionInstructions";
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -154,7 +155,7 @@ export function RemoteMcpProductionSetup({ providerId, connection, host = "page"
       }
       const managementUrl = providerId === "executor" && state.managementUrl?.trim()
         ? aggregatorManagementUrl("executor", state.managementUrl.trim()) : null;
-      if (providerId === "executor" && state.managementUrl?.trim() && !managementUrl) throw new Error("Use an HTTPS console URL without credentials.");
+      if (providerId === "executor" && state.managementUrl?.trim() && !managementUrl) throw new Error(translateUiCopy("app.uiCopy.featuresConnectionsRemoteMcpRemoteMcpProductionSetup.useAnHTTPSConsoleURLWithoutCredentials"));
       const prior = savedConnection.current;
       const result = await toolsApi.connectApp(selectedCompanyId, {
         galleryKey: providerId, connectionMethodKey: REMOTE_MCP_CONNECTOR_METHODS[providerId],
@@ -190,14 +191,14 @@ export function RemoteMcpProductionSetup({ providerId, connection, host = "page"
         edit({ connectStatus: "sign_in", token: "", headers: [] });
         try {
           if (host === "dialog") {
-            if (!popup.current || popup.current.closed) throw new Error("Sign-in window unavailable");
+            if (!popup.current || popup.current.closed) throw new Error(translateUiCopy("app.uiCopy.featuresConnectionsRemoteMcpRemoteMcpProductionSetup.signInWindowUnavailable"));
             popup.current.location.assign(target.url);
             popup.current.focus();
           } else navigateTopLevel(target.url);
         } catch {
           // The connection and OAuth session already exist. Preserve them and
           // let the native sign-in link recover a blocked browser handoff.
-          edit({ notice: "Paperclip couldn’t open sign-in. Use the sign-in link below to continue." });
+          edit({ notice: translateUiCopy("app.uiCopy.featuresConnectionsRemoteMcpRemoteMcpProductionSetup.paperclipCouldnTOpenSignInUseTheSign") });
           onPhaseChange?.("needs_retry");
         }
         return;

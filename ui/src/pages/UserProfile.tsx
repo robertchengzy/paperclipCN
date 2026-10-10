@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import { useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -311,7 +312,7 @@ export function UserProfile() {
             <Button asChild variant="outline" size="sm">
               <Link to={PROFILE_SETTINGS_PATH}>
                 <UserRoundPen />
-                Edit profile
+                {translateUiCopy("app.sidebarAccountMenu.editProfile")}
               </Link>
             </Button>
           ) : null}

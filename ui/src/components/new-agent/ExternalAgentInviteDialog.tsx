@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { accessApi } from "@/api/access";
@@ -17,6 +18,7 @@ export function ExternalAgentInviteDialog({ companyId, onClose, onBack }: {
   onClose: () => void;
   onBack: () => void;
 }) {
+  useUiCopyTranslation();
   const cache = useQueryClient();
   const { selectedCompany } = useCompany();
   const [preset, setPreset] = useState<ExternalAgentPreset | null>(null);
@@ -26,10 +28,10 @@ export function ExternalAgentInviteDialog({ companyId, onClose, onBack }: {
   const [genericPrompt, setGenericPrompt] = useState("");
   const attemptedAutomaticPairing = useRef(false);
   const experimental = useQuery({ queryKey: queryKeys.instance.experimentalSettings, queryFn: instanceSettingsApi.getExperimental });
-  const dotDisabledReason = experimental.isPending ? "Loading available agents…"
-    : experimental.error ? "Unable to load experimental settings. Try again after refreshing."
+  const dotDisabledReason = experimental.isPending ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteDialog.loadingAvailableAgents")
+    : experimental.error ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteDialog.unableToLoadExperimentalSettingsTryAgainAfterRefreshing")
     : !experimental.data?.enableOpenAiDot || !experimental.data.enablePublicMcp
-      ? "Enable OpenAI Dot and Assistant connections (MCP) in experimental settings." : undefined;
+      ? translateUiCopy("app.uiCopy.componentsDotRunnerConnection.enableOpenAIDotAndAssistantConnectionsMCPInExperimental") : undefined;
   const key = ["dot-binding", companyId, invitation?.agent.id];
   const state = useQuery({ queryKey: key,
     queryFn: ({ signal }) => dotInvitationsApi.connection(companyId, invitation!.agent.id, signal),

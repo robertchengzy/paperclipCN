@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy } from "@/i18n";
 import { taskChatMarkerLabel } from "./marker-label";
 import { useId, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -51,16 +53,18 @@ export function TaskChatMarker({
         className="tc-enter-marker flex w-full items-start gap-3 rounded-lg border border-destructive/40 bg-destructive/10 p-4 text-sm">
         <KeyRound className="mt-0.5 size-5 shrink-0 text-destructive" aria-hidden />
         <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <p className="font-semibold text-destructive">{agentName} couldn’t start</p>
+          <p className="font-semibold text-destructive"><Trans i18nKey="app.uiCopy.componentsTaskChatTaskChatMarker.message26" components={{ part0: <>{""}{agentName}</> }} /></p>
           <p className="break-words font-medium text-foreground">
-            {agentName} is configured to use {credentialName || "an AI credential"}, but {deniedUser === "you" ? "you don’t" : `${deniedUser} doesn’t`} have access to that credential.
+            {translateUiCopy(deniedUser === "you" ? "app.uiCopy.componentsTaskChatTaskChatMarker.credentialDeniedSelf" : "app.uiCopy.componentsTaskChatTaskChatMarker.credentialDeniedOther", {
+              agent: agentName, credential: credentialName || translateUiCopy("app.uiCopy.componentsTaskChatTaskChatMarker.anAICredential"), user: deniedUser,
+            })}
           </p>
           <p className="text-muted-foreground">
-            Choose an AI connection {deniedUser === "you" ? "you can" : `${deniedUser} can`} use, or ask an administrator to update {agentName}’s connection. Then try again.
+            {translateUiCopy(deniedUser === "you" ? "app.uiCopy.componentsTaskChatTaskChatMarker.credentialRepairSelf" : "app.uiCopy.componentsTaskChatTaskChatMarker.credentialRepairOther", { agent: agentName, user: deniedUser })}
           </p>
           <div className="flex flex-wrap items-center gap-2 pt-1">
-            <Button asChild variant="outline" size="sm"><Link to={settingsHref}>Change AI connection</Link></Button>
-            {item.runHref && <Button asChild variant="ghost" size="sm"><Link to={item.runHref}>View run</Link></Button>}
+            <Button asChild variant="outline" size="sm"><Link to={settingsHref}>{translateUiCopy("app.uiCopy.componentsTaskChatTaskChatMarker.changeAIConnection")}</Link></Button>
+            {item.runHref && <Button asChild variant="ghost" size="sm"><Link to={item.runHref}>{translateUiCopy("app.issueChat.run.viewRun")}</Link></Button>}
           </div>
         </div>
       </div>

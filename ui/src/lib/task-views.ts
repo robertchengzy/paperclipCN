@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import type { InboxTab } from "./inbox";
 
 /**
@@ -49,22 +50,22 @@ export interface TaskViewGroup {
 
 export const TASK_VIEW_GROUPS: TaskViewGroup[] = [
   {
-    label: "My work",
+    get label() { return translateUiCopy("app.shell.commandPalette.myWork"); },
     views: [
-      { key: "mine", label: "Mine", surface: "inbox", inboxTab: "mine", hint: "Assigned to you or waiting on you" },
-      { key: "unread", label: "Unread", surface: "inbox", inboxTab: "unread", hint: "Tasks you touched with new activity" },
-      { key: "blocked", label: "Blocked", surface: "inbox", inboxTab: "blocked", hint: "Blocked tasks, grouped by blocker" },
-      { key: "recent", label: "Recent", surface: "inbox", inboxTab: "recent", hint: "Everything you touched lately" },
-      { key: "everything", label: "Everything", surface: "inbox", inboxTab: "all", hint: "Tasks, approvals, failed runs and join requests" },
+      { key: "mine", get label() { return translateUiCopy("app.inbox.tabs.mine"); }, surface: "inbox", inboxTab: "mine", get hint() { return translateUiCopy("app.uiCopy.libTaskViews.assignedToYouOrWaitingOnYou"); } },
+      { key: "unread", get label() { return translateUiCopy("app.inbox.tabs.unread"); }, surface: "inbox", inboxTab: "unread", get hint() { return translateUiCopy("app.uiCopy.libTaskViews.tasksYouTouchedWithNewActivity"); } },
+      { key: "blocked", get label() { return translateUiCopy("app.common.blocked.base"); }, surface: "inbox", inboxTab: "blocked", get hint() { return translateUiCopy("app.uiCopy.libTaskViews.blockedTasksGroupedByBlocker"); } },
+      { key: "recent", get label() { return translateUiCopy("app.common.labels.recent"); }, surface: "inbox", inboxTab: "recent", get hint() { return translateUiCopy("app.uiCopy.libTaskViews.everythingYouTouchedLately"); } },
+      { key: "everything", get label() { return translateUiCopy("app.uiCopy.libTaskViews.everything"); }, surface: "inbox", inboxTab: "all", get hint() { return translateUiCopy("app.uiCopy.libTaskViews.tasksApprovalsFailedRunsAndJoinRequests"); } },
     ],
   },
   {
-    label: "Organization",
+    get label() { return translateUiCopy("app.common.nouns.organization"); },
     views: [
-      { key: "all", label: "All tasks", surface: "issues", statuses: [], hint: "Every task in the organization" },
-      { key: "active", label: "Active", surface: "issues", statuses: ["todo", "in_progress", "in_review", "blocked"], hint: "Open tasks, running or not" },
-      { key: "backlog", label: "Backlog", surface: "issues", statuses: ["backlog"], hint: "Not started yet" },
-      { key: "done", label: "Done", surface: "issues", statuses: ["done", "cancelled"], hint: "Completed and cancelled" },
+      { key: "all", get label() { return translateUiCopy("app.uiCopy.libTaskViews.allTasks"); }, surface: "issues", statuses: [], get hint() { return translateUiCopy("app.uiCopy.libTaskViews.everyTaskInTheOrganization"); } },
+      { key: "active", get label() { return translateUiCopy("app.common.states.active"); }, surface: "issues", statuses: ["todo", "in_progress", "in_review", "blocked"], get hint() { return translateUiCopy("app.uiCopy.libTaskViews.openTasksRunningOrNot"); } },
+      { key: "backlog", get label() { return translateUiCopy("app.common.issueStatus.backlog"); }, surface: "issues", statuses: ["backlog"], get hint() { return translateUiCopy("app.uiCopy.libTaskViews.notStartedYet"); } },
+      { key: "done", get label() { return translateUiCopy("app.common.actions.done"); }, surface: "issues", statuses: ["done", "cancelled"], get hint() { return translateUiCopy("app.uiCopy.libTaskViews.completedAndCancelled"); } },
     ],
   },
 ];

@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t as tr } from "@/i18n";
 import { StepHeader } from "./ConnectionSetupHeader";
 export { StepHeader } from "./ConnectionSetupHeader";
@@ -942,6 +943,7 @@ function StandardConnectionSetupFlow({
    * definition — the generic path stays available either way.
    */
   const useMatchedGalleryEntry = (picked: AppDefinition) => {
+
     if (host === "page" && !connectionIntentId && credentialSource === "paperclip_vault" && isRemoteMcpConnectorId(picked.slug)) {
       navigate(`/apps/connect?source=${picked.slug}`);
       return;
@@ -1921,12 +1923,12 @@ function StandardConnectionSetupFlow({
   ) {
     return (
       <div className="mx-auto max-w-xl rounded-xl border border-border bg-card p-6">
-        <h2 className="text-lg font-semibold text-foreground">This setup can’t be resumed</h2>
+        <h2 className="text-lg font-semibold text-foreground">{translateUiCopy("app.connections.connectionSetupFlow.cannotResume")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          This saved draft does not match the requested provider. The connection was not changed.
+          {translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.thisSavedDraftDoesNotMatchTheRequestedProvider")}
         </p>
         <Button type="button" variant="outline" className="mt-5" onClick={() => navigate("/apps")}>
-          Back to apps
+          {translateUiCopy("app.connections.connectionSetupFlow.backToApps")}
         </Button>
       </div>
     );
@@ -2453,7 +2455,7 @@ function StandardConnectionSetupFlow({
           </p>
           {customOAuthMethod ? (
             <Button type="button" variant="link" className="mt-4 h-auto p-0 text-xs" onClick={() => setConnectionMethodKey(customOAuthMethod.key)}>
-              Use your own {entry.name} OAuth app
+              {translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.useYourOwn")} {entry.name} {translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.oAuthApp")}
             </Button>
           ) : null}
           <div className="mt-6 flex items-center justify-between gap-3">
@@ -2483,7 +2485,7 @@ function StandardConnectionSetupFlow({
 
             {customOAuthMethod ? (
               <Button type="button" variant="link" className="mt-4 h-auto p-0 text-xs" onClick={() => setConnectionMethodKey(customOAuthMethod.key)}>
-                Use your own {entry.name} OAuth app
+                {translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.useYourOwn")} {entry.name} {translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.oAuthApp")}
               </Button>
             ) : null}
 
@@ -2625,7 +2627,7 @@ function StandardConnectionSetupFlow({
           The Access step used to carry that wait; without it the connect screen
           has to show the wait itself rather than render nothing. */}
       {step === "key" && !entry && !linkUrl && !zapierSource && requestedAppKey && (
-        <div className="mx-auto max-w-xl" aria-busy="true" aria-label={`Loading ${requestedAppKey} setup`}>
+        <div className="mx-auto max-w-xl" aria-busy="true" aria-label={translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.loadingValue0Setup", { value0: String(requestedAppKey) })}>
           <Skeleton className="h-6 w-2/3 rounded-md" />
           <Skeleton className="mt-3 h-4 w-full rounded-md" />
           <Skeleton className="mt-8 h-11 w-40 rounded-md" />
@@ -3323,7 +3325,7 @@ function LinkConnectStep({
                 className="mt-2 h-11 font-mono"
               />
               <p className="mt-2 text-xs text-muted-foreground">
-                Grant this key read and write access to the resources your agents need. Paperclip cannot increase its permissions.
+                {translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.grantThisKeyReadAndWriteAccessToThe")}
               </p>
             </div>
           </div>
@@ -3494,6 +3496,7 @@ function SegmentedOption({
   selected: boolean;
   onClick: () => void;
 }) {
+  useUiCopyTranslation();
   return (
     <button
       type="button"
@@ -3712,7 +3715,7 @@ function KeyStep({
       disabled={submitting}
       onClick={() => onMethodChange(usingCustomOAuth ? managedOAuthMethod : customerOAuthMethod)}
     >
-      {usingCustomOAuth ? t("app.connections.connectionSetupFlow.usePaperclipInstead") : `Use your own ${isGoogleWorkspaceConnectorProfileId(managedOAuthMethod.connectorProfile ?? "") ? "Google" : entry.name} OAuth app`}
+      {usingCustomOAuth ? t("app.connections.connectionSetupFlow.usePaperclipInstead") : translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.useYourOwnValue0OAuthApp", { value0: String(isGoogleWorkspaceConnectorProfileId(managedOAuthMethod.connectorProfile ?? "") ? "Google" : entry.name) })}
     </Button>
   ) : capabilityMethods.length > 1 ? (
     // PAP-659 C1: the ranked default is already selected. This stays as the
@@ -3855,7 +3858,7 @@ function KeyStep({
 
       <div className="space-y-6">
         {managedAsana ? (
-          <p className="text-sm text-muted-foreground">Sign in with Asana to choose your workspace and connect it to Paperclip.</p>
+          <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.signInWithAsanaToChooseYourWorkspaceAnd")}</p>
         ) : null}
         {method?.capabilityProfile && (
           <p className="text-sm text-muted-foreground">
@@ -4027,7 +4030,7 @@ function OAuthClientFields({
     <div className="space-y-4 rounded-lg border border-border p-4">
       <div>
         <div className="text-sm font-medium text-foreground">
-          {required ? method.oauthClientSecretRequired ? t("app.connections.connectionSetupFlow.yourOAuthApp") : `${entry.name} needs its own OAuth app` : t("app.connections.connectionSetupFlow.useOwnOAuthApp")}
+          {required ? method.oauthClientSecretRequired ? t("app.connections.connectionSetupFlow.yourOAuthApp") : translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.value0NeedsItsOwnOAuthApp", { value0: String(entry.name) }) : t("app.connections.connectionSetupFlow.useOwnOAuthApp")}
         </div>
         {/*
           When these fields are required it is a provider limitation, not a step
@@ -4036,8 +4039,8 @@ function OAuthClientFields({
         */}
         <p className="mt-1 text-xs text-muted-foreground">
           {method.oauthClientSecretRequired ? method.guidanceMd : required
-            ? `${entry.name} does not let Paperclip register itself automatically, so this connector needs an OAuth app you create. Add the callback URL below in ${entry.name}, then paste the client details back here.`
-            : `Register Paperclip's callback URI in ${entry.name}, then enter the customer-owned client details.`}
+            ? translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.value0DoesNotLetPaperclipRegisterItselfAutomaticallySoThis", { value0: String(entry.name), value1: String(entry.name) })
+            : translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.registerPaperclipSCallbackURIInValue0ThenEnterThe", { value0: String(entry.name) })}
         </p>
         {method.consoleLinks?.register ? (
           <a
@@ -4149,7 +4152,7 @@ function MethodConfigField({
           className="mt-2 h-11"
         />
       )}
-      {field.required && (typeof value !== "string" || !value.trim()) && <p className="mt-2 text-xs text-muted-foreground">{field.label} is required.</p>}
+      {field.required && (typeof value !== "string" || !value.trim()) && <p className="mt-2 text-xs text-muted-foreground"><Trans i18nKey="app.uiCopy.featuresConnectionsConnectionSetupFlow.message31" components={{ part0: <>{""}{field.label}</> }} /></p>}
       {field.helperMd && <p className="mt-2 text-xs text-muted-foreground">{field.helperMd}</p>}
     </div>
   );
@@ -4163,6 +4166,7 @@ function MethodConfigField({
  * get. Hick's Law: two choices, not a matrix. Both use full-row radio targets.
  */
 export function AccessStep({ companyId, ...props }: Omit<Parameters<typeof AccessStepContent>[0], "agents" | "agentsLoading"> & { companyId: string }) {
+  useUiCopyTranslation();
   const agentsQuery = useQuery({
     queryKey: queryKeys.agents.list(companyId),
     queryFn: () => agentsApi.list(companyId),
@@ -4489,10 +4493,10 @@ export function connectionDefaultSummarySentence(input: {
   const identity = input.authKind === "none"
     ? tr("app.connections.connectionSetupFlow.authMode.none")
     : input.grantKind === "user"
-      ? "Connects as you"
+      ? translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.connectsAsYou")
       : input.grantKind === "agent"
-        ? "Connects as a dedicated agent account"
-        : "Connects for everyone in your organization";
+        ? translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.connectsAsADedicatedAgentAccount")
+        : translateUiCopy("app.uiCopy.featuresConnectionsConnectionSetupFlow.connectsForEveryoneInYourOrganization");
   const reach = input.preserveAgentAccess
     ? "agent access stays as it is"
     : input.lockedAgentId
@@ -4541,6 +4545,7 @@ export function ConnectionAccessDefaults({
   forceOpen?: boolean;
   disabled?: boolean;
 }) {
+  useUiCopyTranslation();
   const [open, setOpen] = useState(false);
   const expanded = open || forceOpen;
   return (
@@ -4572,6 +4577,7 @@ export function ConnectionAccessDefaults({
 }
 
 function BotGroupIcon() {
+  useUiCopyTranslation();
   return (
     <span className="relative block h-4 w-5" aria-hidden="true">
       <Bot className="absolute left-0 top-0 h-3.5 w-3.5" />
@@ -4616,6 +4622,7 @@ export function accessSummaryLines(input: {
 }
 
 function Radio({ selected }: { selected: boolean }) {
+  useUiCopyTranslation();
   return (
     <span
       className={cn(

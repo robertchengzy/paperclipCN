@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -82,8 +83,8 @@ export function AgentInstructions({ value }: { value: string }) {
       <AgentSetupPrompt
         prompt={value}
         label={t("app.routines.webhookFields.copyForAgent")}
-        title="Webhook setup"
-        description="Paste this into your agent to connect this webhook to your routine."
+        title={translateUiCopy("app.uiCopy.componentsRoutineTriggersWebhookFields.webhookSetup")}
+        description={translateUiCopy("app.uiCopy.componentsRoutineTriggersWebhookFields.pasteThisIntoYourAgentToConnectThisWebhook")}
       />
     </section>
   );

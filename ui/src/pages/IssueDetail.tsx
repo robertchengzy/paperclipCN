@@ -3664,11 +3664,11 @@ export function TaskDetailSurface({ conversation, tasksTab }: { tasksTab?: TaskS
         roleLabel,
       });
     };
-    pushUser(issue.responsibleUserId, "Owner");
-    pushAgent(issue.assigneeAgentId, "Assignee");
-    pushUser(issue.assigneeUserId, "Assignee");
+    pushUser(issue.responsibleUserId, t("app.common.nouns.owner"));
+    pushAgent(issue.assigneeAgentId, t("app.common.nouns.assignee"));
+    pushUser(issue.assigneeUserId, t("app.common.nouns.assignee"));
     return list;
-  }, [issue, userProfileMap, agentMap]);
+  }, [issue, userProfileMap, agentMap, t]);
   const mentionOptions = useMemo<MentionOption[]>(() => {
     return buildMarkdownMentionOptions({
       agents,

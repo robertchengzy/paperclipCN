@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Ban, Check, FlaskConical, Loader2, RefreshCw, Search, ShieldQuestion } from "lucide-react";
@@ -66,6 +67,7 @@ export function PermissionsPanel({
   /** Supplemental agent settings share the existing connection configuration page. */
   afterAgentAccess?: ReactNode;
 }) {
+  useUiCopyTranslation();
   const [searchParams] = useSearchParams();
   return (
     <div className="space-y-10">
@@ -352,6 +354,7 @@ export function ActionsSection({
 }
 
 function FilterChip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  useUiCopyTranslation();
   return (
     <button
       type="button"
@@ -409,9 +412,9 @@ function ActionGroup({
           // connection's writes is one choice rather than one per action;
           // per-row overrides stay underneath.
           <label className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="sr-only">{`Set every action in ${title}`}</span>
+            <span className="sr-only">{translateUiCopy("app.uiCopy.pagesAppsAppDetailPermissionsPanel.setEveryActionInValue0", { value0: String(title) })}</span>
             <select
-              aria-label={`Set every action in ${title}`}
+              aria-label={translateUiCopy("app.uiCopy.pagesAppsAppDetailPermissionsPanel.setEveryActionInValue0", { value0: String(title) })}
               value={groupValue}
               disabled={disabled}
               onChange={(event) => {
@@ -422,9 +425,9 @@ function ActionGroup({
               }}
               className="h-7 rounded-md border border-input bg-background px-2 text-xs text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
             >
-              {groupValue === "" ? <option value="">Mixed</option> : null}
+              {groupValue === "" ? <option value="">{translateUiCopy("app.uiCopy.pagesAppsAppDetailPermissionsPanel.mixed")}</option> : null}
               {PERMISSION_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>{`Set all: ${t(option.labelKey)}`}</option>
+                <option key={option.value} value={option.value}>{translateUiCopy("app.uiCopy.pagesAppsAppDetailPermissionsPanel.setAllValue0", { value0: String(t(option.labelKey)) })}</option>
               ))}
             </select>
           </label>
@@ -506,7 +509,7 @@ function ActionRow({
                 glance to spot and one click to move. */}
             <span
               className="rounded-full border border-border px-1.5 py-px text-xs font-medium uppercase tracking-wide text-muted-foreground"
-              title={`Paperclip classified this action as ${action.riskLevel}`}
+              title={translateUiCopy("app.uiCopy.pagesAppsAppDetailPermissionsPanel.paperclipClassifiedThisActionAsValue0", { value0: String(action.riskLevel) })}
             >
               {action.riskLevel}
             </span>

@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowUpRight, ChevronRight, Loader2, Lock } from "lucide-react";
@@ -61,6 +62,7 @@ export function AdvancedPanel({
   onReconnectIdentity?: () => void;
   onRevokeIdentity?: (grant: ConnectionGrant) => void;
 }) {
+  useUiCopyTranslation();
   return (
     <div className="space-y-4 border-t border-border pt-8">
       <TechnicalDetails connection={connection} />
@@ -306,7 +308,7 @@ function ReconnectForm({
     .filter((ref) => ref.placement === "header" || ref.placement === "url")
     .map((ref) => ({
       configPath: connectionCredentialConfigPath(ref),
-      label: ref.placement === "url" ? "MCP server URL" : ref.prefix === "Bearer " ? "App key" : ref.key ?? ref.name,
+      label: ref.placement === "url" ? translateUiCopy("app.connections.remoteMcpConnectionSetup.serverUrl") : ref.prefix === "Bearer " ? translateUiCopy("app.connections.connectionSetupFlow.appKey") : ref.key ?? ref.name,
       helpUrl: "",
       required: true,
     }));
@@ -389,7 +391,7 @@ function ReconnectForm({
       ) : (
         <Input
           type="password"
-          aria-label="App key"
+          aria-label={translateUiCopy("app.connections.connectionSetupFlow.appKey")}
           autoComplete="off"
           value={single}
           onChange={(e) => setSingle(e.target.value)}

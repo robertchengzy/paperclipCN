@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { CheckCircle2, ExternalLink, HelpCircle, Loader2, Plus, Trash2 } from "lucide-react";
 import { InlineBanner } from "@/components/InlineBanner";
@@ -39,6 +40,7 @@ function FieldHelp({ label, children }: { label: string; children: ReactNode }) 
 }
 
 function ExternalAction({ onOpen, children }: { onOpen: () => void; children?: ReactNode }) {
+  useUiCopyTranslation();
   return <Button type="button" variant="link" className="h-auto p-0 text-sm text-current underline" onClick={onOpen}>{children}<ExternalLink className="size-3.5" aria-hidden="true" /></Button>;
 }
 
@@ -130,8 +132,8 @@ export function RemoteMcpConnectionSetup({ provider, state: s, actions: a, agent
     <div className="flex items-center gap-2"><Label htmlFor={`${uid}-url`}>{t("app.connections.remoteMcpConnectionSetup.serverUrl")}</Label><FieldHelp label={t("app.connections.remoteMcpConnectionSetup.serverUrl")}>{provider.urlHelp}</FieldHelp></div>
     <Input id={`${uid}-url`} type="password" autoComplete="off" spellCheck={false} placeholder={provider.placeholder} value={s.url} aria-invalid={s.connectStatus === "invalid_url"} aria-describedby={`${uid}-url-help`} onChange={(event) => change({ url: event.target.value })} />
     <p id={`${uid}-url-help`} className="text-xs text-muted-foreground">{provider.urlHelp}</p>
-    {provider.id === "executor" ? <div className="space-y-2"><div className="flex items-center gap-2"><Label htmlFor={`${uid}-management`}>Console URL (optional)</Label>
-      <FieldHelp label="Executor console URL">The URL of your Executor organization’s integrations page. Used to open and manage imported accounts.</FieldHelp></div>
+    {provider.id === "executor" ? <div className="space-y-2"><div className="flex items-center gap-2"><Label htmlFor={`${uid}-management`}>{translateUiCopy("app.uiCopy.featuresConnectionsRemoteMcpRemoteMcpConnectionSetup.consoleURLOptional")}</Label>
+      <FieldHelp label={translateUiCopy("app.uiCopy.featuresConnectionsRemoteMcpRemoteMcpConnectionSetup.executorConsoleURL")}>{translateUiCopy("app.uiCopy.featuresConnectionsRemoteMcpRemoteMcpConnectionSetup.theURLOfYourExecutorOrganizationSIntegrationsPage")}</FieldHelp></div>
       <Input id={`${uid}-management`} type="url" value={s.managementUrl ?? ""} placeholder="https://executor.sh/your-organization/integrations" onChange={event => change({ managementUrl: event.target.value })} />
     </div> : null}
   </div>;
@@ -139,7 +141,7 @@ export function RemoteMcpConnectionSetup({ provider, state: s, actions: a, agent
   return <div className={host === "dialog" ? "min-w-0 text-foreground" : "mx-auto max-w-6xl p-4 text-foreground sm:p-8"} data-remote-mcp-provider={provider.id}>
     <StepHeader headingRef={heading} appIdentity={{ name: provider.name, logoUrl: null }}
       title={upstreamServiceName ? t("app.connections.remoteMcpConnectionSetup.connectThroughProvider", { service: upstreamServiceName, provider: provider.name }) : s.step === "draft" ? t("app.connections.remoteMcpConnectionSetup.continueYourSetup") : s.setupComplete ? s.step === "access" ? t("app.connections.remoteMcpConnectionSetup.whoCanUse") : s.step === "connect" ? t("app.connections.remoteMcpConnectionSetup.reconnectProvider", { provider: provider.name }) : provider.name : undefined}
-      subtitle={currentStep >= 0 && !s.setupComplete ? `Paperclip will use ${provider.name} on your behalf.` : s.step === "draft" ? t("app.connections.remoteMcpConnectionSetup.readyToResume", { provider: provider.name }) : s.step === "permissions" ? (s.identity ? t("app.connections.remoteMcpConnectionSetup.connectedAsActions", { identity: s.identity, count: s.tools.length }) : t("app.connections.remoteMcpConnectionSetup.connectedActions", { count: s.tools.length })) : t("app.connections.remoteMcpConnectionSetup.manageProvider", { provider: provider.name })}
+      subtitle={currentStep >= 0 && !s.setupComplete ? translateUiCopy("app.uiCopy.featuresConnectionsRemoteMcpRemoteMcpConnectionSetup.paperclipWillUseValue0OnYourBehalf", { value0: String(provider.name) }) : s.step === "draft" ? t("app.connections.remoteMcpConnectionSetup.readyToResume", { provider: provider.name }) : s.step === "permissions" ? (s.identity ? t("app.connections.remoteMcpConnectionSetup.connectedAsActions", { identity: s.identity, count: s.tools.length }) : t("app.connections.remoteMcpConnectionSetup.connectedActions", { count: s.tools.length })) : t("app.connections.remoteMcpConnectionSetup.manageProvider", { provider: provider.name })}
       step={currentStep >= 0 && !s.setupComplete ? "key" : "gallery"} activeIndex={currentStep} labels={steps.map(() => t("app.common.actions.connect"))} onCancel={busy || s.step === "management" || s.step === "permissions" || s.step === "draft" ? undefined : onCancel ?? a.saveExit} />
     <main className="space-y-6">
         {upstreamServiceName && <InlineBanner compact>{t("app.connections.remoteMcpConnectionSetup.upstreamServiceBoundary", { provider: provider.name, service: upstreamServiceName })} {provider.id === "composio" ? t("app.connections.remoteMcpConnectionSetup.composioSignInHint") : t("app.connections.remoteMcpConnectionSetup.gatewaySignInHint")}</InlineBanner>}
@@ -183,7 +185,7 @@ export function RemoteMcpConnectionSetup({ provider, state: s, actions: a, agent
               {defaults(<div className="space-y-4">
                   <p className="text-sm font-medium text-foreground">{t("app.connections.remoteMcpConnectionSetup.authentication")}</p>
                   <p className="text-sm text-muted-foreground">{provider.authHelp}</p>
-                  <div className="space-y-2"><Label htmlFor={`${uid}-auth`}>Sign-in method</Label><select id={`${uid}-auth`} className={selectClass} value={s.auth} onChange={(event) => change({ auth: event.target.value as RemoteMcpSetupState["auth"] })}>
+                  <div className="space-y-2"><Label htmlFor={`${uid}-auth`}>{translateUiCopy("app.uiCopy.featuresConnectionsRemoteMcpRemoteMcpConnectionSetup.signInMethod")}</Label><select id={`${uid}-auth`} className={selectClass} value={s.auth} onChange={(event) => change({ auth: event.target.value as RemoteMcpSetupState["auth"] })}>
                     {provider.supportsBrowserAuth && <option value="auto">{t("app.connections.remoteMcpConnectionSetup.authAuto")}</option>}<option value="bearer">{t("app.connections.remoteMcpConnectionSetup.bearerToken")}</option><option value="headers">{t("app.connections.remoteMcpConnectionSetup.customHeaders")}</option><option value="none">{t("app.connections.remoteMcpConnectionSetup.authNone")}</option>
                   </select></div>
                   {s.auth === "bearer" && <div className="space-y-2"><div className="flex items-center gap-2"><Label htmlFor={`${uid}-token`}>{t("app.connections.remoteMcpConnectionSetup.bearerToken")}</Label><FieldHelp label={t("app.connections.remoteMcpConnectionSetup.bearerTokenLower")}>{t("app.connections.remoteMcpConnectionSetup.bearerHelp")}</FieldHelp></div><Input id={`${uid}-token`} type="password" autoComplete="off" value={s.token} onChange={(event) => change({ token: event.target.value })} /></div>}
@@ -200,7 +202,7 @@ export function RemoteMcpConnectionSetup({ provider, state: s, actions: a, agent
             </fieldset>
             {additionalSettings}
             {busy && <p role="status" className="flex items-center gap-2 text-sm"><Loader2 className="size-4 animate-spin motion-reduce:animate-none" />{t("app.connections.remoteMcpConnectionSetup.discovering")}</p>}
-            {footer(<>{s.setupComplete ? <Button type="button" variant="outline" disabled={busy} onClick={a.finish}>{t("app.common.actions.back")}</Button> : <span />}<Button type="submit" disabled={busy || !s.url.trim() || !settingsValid}>{busy ? t("app.common.progress.connecting") : error || s.connectStatus === "cancelled" ? t("app.common.actions.tryAgain") : `Connect ${provider.name}`}</Button></>)}
+            {footer(<>{s.setupComplete ? <Button type="button" variant="outline" disabled={busy} onClick={a.finish}>{t("app.common.actions.back")}</Button> : <span />}<Button type="submit" disabled={busy || !s.url.trim() || !settingsValid}>{busy ? t("app.common.progress.connecting") : error || s.connectStatus === "cancelled" ? t("app.common.actions.tryAgain") : translateUiCopy("app.uiCopy.featuresConnectionsRemoteMcpRemoteMcpConnectionSetup.connectValue0", { value0: String(provider.name) })}</Button></>)}
           </form>}
         </>}
 

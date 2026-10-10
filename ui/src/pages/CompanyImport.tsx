@@ -1,3 +1,4 @@
+import { t as translateUiCopy, i18n as uiCopyI18n, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
@@ -140,6 +141,7 @@ function importActionLabel(action: string) {
 }
 
 function FrontmatterCard({ data }: { data: FrontmatterData }) {
+  useUiCopyTranslation();
   return (
     <div className="rounded-md border border-border bg-accent/20 px-4 py-3 mb-4">
       <dl className="grid grid-cols-(--gtc-5) gap-x-4 gap-y-1.5 text-sm">
@@ -571,7 +573,7 @@ const IMPORT_ADAPTER_OPTIONS: { value: string; label: string }[] = [
     value: adapter.type,
     label: adapterLabels[adapter.type] ?? getAdapterLabel(adapter.type),
   })),
-  { value: "openai_dot", label: "OpenAI Dot (experimental)" },
+  { value: "openai_dot", get label() { return translateUiCopy("app.uiCopy.pagesCompanyImport.openAIDotExperimental"); } },
 ];
 
 // Dot is a picker choice backed by the shared Runner API adapter.
@@ -1085,7 +1087,7 @@ export function CompanyImport() {
       option.value === "paperclip_runner" ? nativeRunnerAvailable
         : option.value === "openai_dot" ? dotAvailable : true,
     ),
-    [nativeRunnerAvailable, dotAvailable],
+    [nativeRunnerAvailable, dotAvailable, uiCopyI18n.language],
   );
 
   const localZipHelpText =
@@ -1701,7 +1703,7 @@ export function CompanyImport() {
       const override: CompanyPortabilityAdapterOverride = { adapterType: apiType };
       if (configVals) {
         if (selectedType === "openai_dot" && configVals.adapterSchemaValues?.allowUnmeteredProvider !== true) {
-          throw new Error("OpenAI Dot requires acknowledgement of external billing. Configure the Dot adapter and enable Allow externally billed provider.");
+          throw new Error(translateUiCopy("app.uiCopy.pagesCompanyImport.openAIDotRequiresAcknowledgementOfExternalBillingConfigureThe"));
         }
         override.adapterConfig = getUIAdapter(apiType).buildAdapterConfig(configVals);
       }

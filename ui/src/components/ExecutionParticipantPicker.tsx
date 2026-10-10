@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import { AgentAvatar } from "@/components/AgentAvatar";
 import { useMemo, useState } from "react";
@@ -98,7 +99,7 @@ export function ExecutionParticipantPicker({
   const Icon = stageType === "review" ? Eye : ShieldCheck;
 
   if (!policyAvailable) {
-    return <span role="status" className="text-xs text-muted-foreground">Execution policy unavailable. Refresh to try again.</span>;
+    return <span role="status" className="text-xs text-muted-foreground">{translateUiCopy("app.uiCopy.componentsExecutionParticipantPicker.executionPolicyUnavailableRefreshToTryAgain")}</span>;
   }
 
   return (

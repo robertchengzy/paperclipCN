@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { healthApi } from "@/api/health";
 import { LocalProviderLoginInstructions } from "./AdapterLoginChrome";
 import { useLocalAiLogin } from "./ai-connections/useLocalAiLogin";
@@ -228,6 +229,7 @@ const MODEL_SOURCE_BRAND_MARKS: Record<string, string> = {
  * `currentColor` and be legible in both, which an `<img>` cannot do.
  */
 function OpenAiBlossom({ className }: { className?: string }) {
+  useUiCopyTranslation();
   return (
     <svg viewBox="0 0 716 716" className={className} fill="none" aria-hidden>
       <path
@@ -266,6 +268,7 @@ function ModelSourceMark({
   type: string;
   Fallback: ComponentType<{ className?: string }>;
 }) {
+  useUiCopyTranslation();
   const Inline = MODEL_SOURCE_INLINE_MARKS[type];
   if (Inline) return <Inline className="size-full" />;
   const brand = MODEL_SOURCE_BRAND_MARKS[type];
@@ -332,6 +335,7 @@ function incompleteOnboardingStateMessage() {
  * clear before computing `saved` and mounting the inner component at all.
  */
 export function OnboardingWizard() {
+  useUiCopyTranslation();
   // Deliberately does not call `useCompany()`. The list it exposes is the
   // shared cache, which is what this gate must not trust - see below.
 
@@ -3000,7 +3004,7 @@ function OnboardingWizardInner({
                           </p>
                           {adapterType === "claude_local" || adapterType === "codex_local" ? (
                             <p className="text-muted-foreground">
-                              If authentication fails, connect your subscription in the browser above or use an API key.
+                              {translateUiCopy("app.uiCopy.componentsOnboardingWizard.ifAuthenticationFailsConnectYourSubscriptionInTheBrowser")}
                             </p>
                           ) : adapterType === "cursor" ||
                           adapterType === "gemini_local" ||

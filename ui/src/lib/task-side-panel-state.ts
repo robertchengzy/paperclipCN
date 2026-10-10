@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { t as translateCopy } from "@/i18n";
 import type { WorkspaceFileSelector } from "@paperclipai/shared";
 import type { SidePanelTabRecord, SidePanelTabsState } from "@/components/side-panel";
@@ -230,7 +231,7 @@ export function taskPanelSubtasksTab(): SidePanelTabRecord<TaskSidePanelTabPaylo
 
 /** Agent chats only: every task the conversation's agent has worked on. */
 export function taskPanelAgentTasksTab(): SidePanelTabRecord<TaskSidePanelTabPayload> {
-  return { id: "agent-tasks", type: "agent-tasks", label: "Tasks", closable: true, contentMode: "padded", payload: { kind: "agent-tasks" } };
+  return { id: "agent-tasks", type: "agent-tasks", label: translateUiCopy("app.common.nouns.tasks"), closable: true, contentMode: "padded", payload: { kind: "agent-tasks" } };
 }
 
 export function taskPanelArtifactsTab(): SidePanelTabRecord<TaskSidePanelTabPayload> {
@@ -298,5 +299,5 @@ export function taskPanelAttachmentTab(attachmentId: string, title: string): Sid
 }
 
 export function taskPanelBrowserTab(browserId: string): SidePanelTabRecord<TaskSidePanelTabPayload> {
-  return { id: `browser:${browserId}`, type: "browser", label: "Browser", closable: true, contentMode: "full-bleed", payload: { kind: "browser", browserId } };
+  return { id: `browser:${browserId}`, type: "browser", label: translateUiCopy("app.uiCopy.componentsTaskChatThread.browser"), closable: true, contentMode: "full-bleed", payload: { kind: "browser", browserId } };
 }

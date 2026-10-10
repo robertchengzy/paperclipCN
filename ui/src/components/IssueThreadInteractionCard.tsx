@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Agent } from "@paperclipai/shared";
 import { AlertTriangle, ArrowUpRight, Bot, Check, CheckCircle2, ChevronDown, ChevronRight, CircleDashed, Clock, ExternalLink, FileText, GitBranch, ImagePlus, KeyRound, Loader2, MessageSquareQuote, MinusCircle, ShieldAlert, ThumbsUp, TriangleAlert, Wrench, X, XCircle } from "lucide-react";
@@ -66,6 +67,7 @@ const InteractionAudienceContext = createContext<InteractionAudienceDescription 
  * audience refusal. Never invites a retry that policy will refuse again.
  */
 function useResolutionErrorMessage() {
+
   const audience = useContext(InteractionAudienceContext);
   return (error: unknown) => interactionResolutionErrorMessage(error, audience);
 }
@@ -83,6 +85,7 @@ function useResolutionErrorMessage() {
  * the same denial twice (PAP-17289).
  */
 function InteractionActionError({ message }: { message: string | null }) {
+  useUiCopyTranslation();
   return (
     <div aria-live="assertive" data-testid="interaction-action-error">
       {message ? (
@@ -1006,6 +1009,7 @@ function QuestionOptionButton({
   selectionMode: "single" | "multi";
   onClick: () => void;
 }) {
+  useUiCopyTranslation();
   return (
     <button
       type="button"
@@ -1525,6 +1529,7 @@ function RequestConfirmationTargetChip({
   target: RequestConfirmationTarget | null | undefined;
   tone?: "default" | "subtle";
 }) {
+  useUiCopyTranslation();
   if (!target) return null;
 
   const href = requestConfirmationTargetHref({ interaction, target });
@@ -2583,6 +2588,7 @@ function ConnectionAuthorizationStatusLine({
   headline: string;
   detail: ReactNode;
 }) {
+  useUiCopyTranslation();
   return (
     <div
       data-testid={testId}
@@ -2906,6 +2912,7 @@ function CheckboxOptionRow({
   disabled: boolean;
   onToggle: (checked: boolean) => void;
 }) {
+  useUiCopyTranslation();
   return (
     <label
       htmlFor={id}
@@ -3818,7 +3825,7 @@ export function IssueThreadInteractionCard({
         <ConnectionIntentInteractionBody
           interaction={interaction}
           currentUserId={currentUserId}
-          addresseeLabel={addresseeLabel ?? "the addressed person"}
+          addresseeLabel={addresseeLabel ?? translateUiCopy("app.issueUi.issueThreadInteractionCard.addressedPerson")}
         />
       </div>
     );

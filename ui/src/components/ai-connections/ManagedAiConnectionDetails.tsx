@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { heartbeatsApi } from "@/api/heartbeats";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -20,7 +21,7 @@ export function ManagedAiConnectionRow({
   if (!metadata) return null;
   return (
     <p className="text-xs text-muted-foreground">
-      {metadata.routing ? metadata.routing.kind === "bedrock" ? `Bedrock · ${metadata.routing.region}` : metadata.routing.kind === "openrouter" ? "OpenRouter" : metadata.routing.baseUrl : aiMethodLabel(metadata.provider, metadata.method)} ·{" "}
+      {metadata.routing ? metadata.routing.kind === "bedrock" ? translateUiCopy("app.uiCopy.componentsAiConnectionsManagedAiConnectionDetails.bedrockValue0", { value0: String(metadata.routing.region) }) : metadata.routing.kind === "openrouter" ? "OpenRouter" : metadata.routing.baseUrl : aiMethodLabel(metadata.provider, metadata.method)} ·{" "}
       {connection.credentialPolicy === "per_user"
         ? t("app.connections.managedAiConnectionDetails.personal")
         : t("app.connections.aiConnectionIdentity.companyShared")}
@@ -88,7 +89,7 @@ export function ManagedAiConnectionDetails({
     );
   return (
     <div className="space-y-4">
-      {account.routing && <details className="rounded-lg border border-border p-4"><summary className="cursor-pointer text-sm font-medium">Provider settings</summary><dl className="mt-4 grid grid-cols-2 gap-3 text-sm"><dt className="text-muted-foreground">Destination</dt><dd className="break-all">{account.routing.baseUrl ?? (account.routing.kind === "bedrock" ? account.routing.region : "OpenRouter")}</dd><dt className="text-muted-foreground">API format</dt><dd>{account.routing.kind === "openrouter" ? "Selected by harness" : account.routing.protocol}</dd><dt className="text-muted-foreground">Authentication</dt><dd>{account.routing.auth}</dd><dt className="text-muted-foreground">Models</dt><dd>{account.routing.models.map(m => m.label ?? m.id).join(", ") || "Enter a model ID on the agent"}</dd></dl></details>}
+      {account.routing && <details className="rounded-lg border border-border p-4"><summary className="cursor-pointer text-sm font-medium">{translateUiCopy("app.uiCopy.componentsAiConnectionsManagedAiConnectionDetails.providerSettings")}</summary><dl className="mt-4 grid grid-cols-2 gap-3 text-sm"><dt className="text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsManagedAiConnectionDetails.destination")}</dt><dd className="break-all">{account.routing.baseUrl ?? (account.routing.kind === "bedrock" ? account.routing.region : "OpenRouter")}</dd><dt className="text-muted-foreground">{translateUiCopy("app.uiCopy.componentsAiConnectionsAiProviderSetup.aPIFormat")}</dt><dd>{account.routing.kind === "openrouter" ? translateUiCopy("app.uiCopy.componentsAiConnectionsManagedAiConnectionDetails.selectedByHarness") : account.routing.protocol}</dd><dt className="text-muted-foreground">{translateUiCopy("app.apps.gatewayAdvancedPanel.authentication")}</dt><dd>{account.routing.auth}</dd><dt className="text-muted-foreground">{translateUiCopy("app.upstreamSync.models")}</dt><dd>{account.routing.models.map(m => m.label ?? m.id).join(", ") || translateUiCopy("app.uiCopy.componentsAiConnectionsManagedAiConnectionDetails.enterAModelIDOnTheAgent")}</dd></dl></details>}
       <AiConnectionAccountControls
         account={account}
         grant={grant}

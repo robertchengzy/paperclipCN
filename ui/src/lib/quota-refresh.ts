@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import type { ProviderQuotaResult } from "@paperclipai/shared";
 
 const invalidCredentials = new Set([
@@ -25,6 +26,6 @@ export function retainQuotaWindows(
 // Never render adapter diagnostics, even when talking to an older server.
 export function quotaUnavailableMessage(hasPreviousWindows: boolean): string {
   return hasPreviousWindows
-    ? "Showing the last available quota. Updates will resume automatically."
-    : "Subscription quota is currently unavailable. Check usage with your provider.";
+    ? translateUiCopy("app.uiCopy.libQuotaRefresh.showingTheLastAvailableQuotaUpdatesWillResumeAutomatically")
+    : translateUiCopy("app.uiCopy.libQuotaRefresh.subscriptionQuotaIsCurrentlyUnavailableCheckUsageWithYour");
 }

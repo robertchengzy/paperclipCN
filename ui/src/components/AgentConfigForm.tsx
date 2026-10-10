@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t as translateUpstream } from "@/i18n";
 import { ConfigSelect } from "@/components/ConfigSelect";
 import { useConnectionModels } from "./ai-connections/useConnectionModels";
@@ -352,6 +353,7 @@ function ConfigSections({ order, className, children }: {
   className: string;
   children: ReactNode;
 }) {
+  useUiCopyTranslation();
   if (!order) return <div className={className}>{children}</div>;
   const rank = (child: ReactNode) => {
     const key = isValidElement<{ "data-config-section"?: string }>(child)
@@ -2226,6 +2228,7 @@ const ADAPTER_LOGIN_POLL_INTERVAL_MS = 2000;
 // A copy-to-clipboard button. It mirrors the workspace service control bar: a
 // short "copied" flash, then it returns to the copy icon.
 function AdapterLoginCopyButton({ value, label }: { value: string; label: string }) {
+  useUiCopyTranslation();
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(
@@ -2394,6 +2397,7 @@ function adapterLoginTitle(t: TFunction, adapterType: string): string {
 }
 
 export function AdapterLoginPanel(props: AdapterLoginPanelProps) {
+  useUiCopyTranslation();
   const getCapabilities = useAdapterCapabilities();
   const panelMode = getCapabilities(props.adapterType).login?.panelMode;
   if (panelMode === "submitted_browser_code") {
@@ -3903,9 +3907,9 @@ export function ModelDropdown({
     const customOption = "__paperclip_custom_model__";
     const extraModels = [...new Set([value, ...promotedModelIds])].filter(id => id && (!models.some(model => model.id === id) || promotedModelIds.has(id)));
     return (
-      <Field label="Model" hint={help.model}>
+      <Field label={translateUiCopy("app.newIssue.model")} hint={help.model}>
         <NativeSelect
-          aria-label="Model"
+          aria-label={translateUiCopy("app.newIssue.model")}
           aria-busy={loadingModels || refreshingModels}
           value={enteringCustomModel ? customOption : value}
           required={required && !enteringCustomModel}
@@ -3916,7 +3920,7 @@ export function ModelDropdown({
           }}
         >
           <option value="" disabled={!allowDefault}>
-            {allowDefault ? (defaultLabel ?? "Default") : loadingModels ? "Loading models…" : required ? "Select model (required)" : "Select model"}
+            {allowDefault ? (defaultLabel ?? translateUiCopy("app.common.labels.default")) : loadingModels ? translateUiCopy("app.upstreamSync.loadingModels") : required ? translateUiCopy("app.agents.config.model.selectRequired") : translateUiCopy("app.upstreamOct08.selectModel")}
           </option>
           {extraModels.map(id => <option key={id} value={id}>{models.find(model => model.id === id)?.label ?? id}</option>)}
           {groupedModels.map(({ provider, entries }) => groupByProvider ? (
@@ -3924,18 +3928,18 @@ export function ModelDropdown({
               {entries.map(model => <option key={model.id} value={model.id}>{model.label}</option>)}
             </optgroup>
           ) : entries.map(model => <option key={model.id} value={model.id}>{model.label}</option>))}
-          {creatable && <option value={customOption}>Enter custom model…</option>}
+          {creatable && <option value={customOption}>{translateUiCopy("app.uiCopy.componentsAgentConfigForm.enterCustomModel")}</option>}
         </NativeSelect>
         {enteringCustomModel && (
           <label className="mt-3 block space-y-1 text-xs text-muted-foreground">
-            Model ID
-            <Input aria-label="Model ID" value={value} onChange={event => onChange(event.target.value)}
-              placeholder="Enter model ID or alias" autoFocus required={required} />
+            {translateUiCopy("app.uiCopy.componentsAgentConfigForm.modelID")}
+            <Input aria-label={translateUiCopy("app.uiCopy.componentsAgentConfigForm.modelID")} value={value} onChange={event => onChange(event.target.value)}
+              placeholder={translateUiCopy("app.uiCopy.componentsAgentConfigForm.enterModelIDOrAlias")} autoFocus required={required} />
           </label>
         )}
-        {loadingModels && <p role="status" className="mt-2 text-xs text-muted-foreground">Loading models…</p>}
+        {loadingModels && <p role="status" className="mt-2 text-xs text-muted-foreground">{translateUiCopy("app.upstreamSync.loadingModels")}</p>}
         {onRefreshModels && <Button type="button" variant="ghost" size="sm" disabled={refreshingModels}
-          onClick={() => void onRefreshModels()}>{refreshingModels ? "Refreshing…" : "Refresh models"}</Button>}
+          onClick={() => void onRefreshModels()}>{refreshingModels ? translateUiCopy("app.reports.statusCardDetailDrawer.refreshing") : translateUiCopy("app.agents.config.model.refresh")}</Button>}
       </Field>
     );
   }

@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import type { IssueChatLinkedRun } from "./issue-chat-messages";
 import type { TaskChatMarkerItem } from "../components/task-chat/task-chat-model";
 
@@ -20,7 +21,7 @@ export function credentialAccessNotice(
   const responsibleUserId = typeof configuration.responsibleUserId === "string"
     ? configuration.responsibleUserId : run.responsibleUserId;
   return {
-    agentName: run.agentName?.trim() || "This agent",
+    agentName: run.agentName?.trim() || translateUiCopy("app.issueUi.commentAttributionChip.thisAgent"),
     credentialName: typeof credential.connectionName === "string" && credential.connectionName.trim()
       ? credential.connectionName : undefined,
     deniedUser: responsibleUserId && responsibleUserId === currentUserId

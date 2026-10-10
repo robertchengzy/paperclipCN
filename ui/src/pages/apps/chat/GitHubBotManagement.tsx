@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -86,7 +88,7 @@ export function GitHubRepositoryAccess({
             <Button
               variant="ghost"
               size="icon"
-              aria-label="Manage repositories"
+              aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.manageRepositories")}
             >
               <MoreHorizontal className="size-4" />
             </Button>
@@ -94,38 +96,35 @@ export function GitHubRepositoryAccess({
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
               <a href={managementUrl} target="_blank" rel="noreferrer">
-                Manage on GitHub
+                {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.manageOnGitHub")}
                 <ExternalLink className="size-4" />
               </a>
             </DropdownMenuItem>
             <DropdownMenuItem disabled={pending} onClick={onRefresh}>
               <RefreshCw className="size-4" />
-              Refresh repositories
+              {translateUiCopy("app.uiCopy.pagesSkillSources.refreshRepositories")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
       <p className="text-xs text-muted-foreground">
-        Choose where the bot can receive messages and use tools. Repository
-        changes save immediately.
+        {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.chooseWhereTheBotCanReceiveMessagesAndUse")}
       </p>
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative min-w-0 flex-1 basis-48">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input aria-label="Search repositories" placeholder="Search repositories" className="pl-9"
+          <Input aria-label={translateUiCopy("app.uiCopy.pagesSkillSources.searchRepositories2")} placeholder={translateUiCopy("app.uiCopy.pagesSkillSources.searchRepositories2")} className="pl-9"
             value={search} maxLength={200} onChange={(event) => setSearch(event.target.value)} />
         </div>
         <Button variant="outline" size="sm" disabled={pending || list.isFetching || !summary || !summary.totalCount || (!disableAll && !summary.availableCount)}
-          aria-label={`${disableAll ? t("app.issueUi.decisionQueuePage.disable") : t("app.issueUi.decisionQueuePage.enable")} all repositories`}
+          aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.value0AllRepositories", { value0: String(disableAll ? t("app.issueUi.decisionQueuePage.disable") : t("app.issueUi.decisionQueuePage.enable")) })}
           onClick={() => onToggleAll(!disableAll)}>
-          {disableAll ? "Disable all" : "Enable all"}
+          {disableAll ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.disableAll") : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.enableAll")}
         </Button>
       </div>
-      {summary && <p className="text-xs text-muted-foreground">
-        {summary.enabledCount} of {summary.totalCount} repositories enabled. Toggle all applies across the entire connection.
-      </p>}
+      {summary && <p className="text-xs text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatGitHubBotManagement.message88" components={{ part0: <>{""}{summary.enabledCount}</>, part1: <>{""}{summary.totalCount}</> }} /></p>}
       {list.isError && <p role="alert" className="text-sm text-destructive">
-        Could not load repositories. <Button variant="link" size="sm" onClick={() => void list.refetch()}>{t("app.issueUi.projectRepositoryInput.tryAgain")}</Button>
+        {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.couldNotLoadRepositories")} <Button variant="link" size="sm" onClick={() => void list.refetch()}>{t("app.issueUi.projectRepositoryInput.tryAgain")}</Button>
       </p>}
       <div ref={scroller} role="region" aria-label={t("app.apps.identitiesSection.repositories")} tabIndex={0}
         className="max-h-96 overflow-y-auto overscroll-contain border-y border-border">
@@ -142,22 +141,22 @@ export function GitHubRepositoryAccess({
               description={
                 resource.availability === "available"
                   ? undefined
-                  : "Unavailable on GitHub. Update the App’s installation access, then refresh."
+                  : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.unavailableOnGitHubUpdateTheAppSInstallationAccess")
               }
               onChange={(enabled) => onChange(resource.id, enabled)}
             />
           </div>
         ))}
         </div>
-        {list.isPending ? <p role="status" className="py-4 text-sm text-muted-foreground">Loading repositories…</p> : rows.length === 0 && !list.isError && (
+        {list.isPending ? <p role="status" className="py-4 text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.loadingRepositories")}</p> : rows.length === 0 && !list.isError && (
           <p className="py-4 text-sm text-muted-foreground">
-            {search ? "No repositories match your search." : "No repositories available. Add repository access on GitHub, then refresh."}
+            {search ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.noRepositoriesMatchYourSearch") : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.noRepositoriesAvailableAddRepositoryAccessOnGitHubThen")}
           </p>
         )}
         {list.hasNextPage && <div ref={more} className="flex justify-center py-2">
           <Button variant="ghost" size="sm" disabled={pending || list.isFetching}
             onClick={() => void list.fetchNextPage({ cancelRefetch: false })}>
-            {list.isFetchingNextPage ? "Loading repositories…" : "Load more repositories"}
+            {list.isFetchingNextPage ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.loadingRepositories") : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.loadMoreRepositories")}
           </Button>
         </div>}
       </div>
@@ -284,14 +283,13 @@ export function GitHubBotManagement({
             {!config.toolsEnabled && (
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">
-                  This saved bot has GitHub tools disabled, so it cannot start
-                  work or respond.
+                  {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.thisSavedBotHasGitHubToolsDisabledSoIt")}
                 </p>
                 <Button
                   variant="outline"
                   onClick={() => edit({ ...config, toolsEnabled: true })}
                 >
-                  Enable bot tools
+                  {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.enableBotTools")}
                 </Button>
               </div>
             )}
@@ -300,7 +298,7 @@ export function GitHubBotManagement({
                 className="text-xs text-muted-foreground underline underline-offset-4"
                 to={`/apps/${endpoint.connectionId}`}
               >
-                Manage tool permissions
+                {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.manageToolPermissions")}
               </Link>
             )}
           </>
@@ -359,7 +357,7 @@ export function GitHubBotManagement({
                 setDraft(null);
                 setScoreText(null);
                 setAutomaticMode(null);
-                setNotice("Changes saved.");
+                setNotice(translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.changesSaved"));
               })
             }
           >
@@ -382,34 +380,32 @@ export function gitHubReviewResultLabel(review: GitHubTaskReview) {
   const conclusion = review.conclusion
     ? {
         success: t("app.settings.onboardingWizard.passed"),
-        failure: "Below threshold",
+        failure: translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.belowThreshold"),
         neutral: t("app.apps.gitHubBotConfiguration.policy.reportOnly"),
         action_required: t("app.issueUi.issueThreadInteractionCard.connection.actionRequired"),
       }[review.conclusion]
-    : "Awaiting check";
+    : translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.awaitingCheck");
   const state = {
     queued: t("app.taskChat.taskChatStatusPill.labels.queued"),
-    running: "Reviewing",
+    running: translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.reviewing"),
     completed: t("app.workspaces.runnerInspector.trace.incomplete"),
     incomplete: t("app.workspaces.runnerInspector.trace.incomplete"),
-    error: "Review failed",
-    superseded: "Superseded",
+    error: translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.reviewFailed"),
+    superseded: translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.superseded"),
     manual_required: t("app.issueUi.issueThreadInteractionCard.connection.actionRequired"),
   }[review.state];
   return completed ? `${review.assessment!.score}/5 · ${conclusion}` : state;
 }
 
 function ReviewResult({ review }: { review: GitHubTaskReview }) {
+  useUiCopyTranslation();
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <span className="text-sm font-medium">
           {gitHubReviewResultLabel(review)}
         </span>
-        <span className="text-xs text-muted-foreground">
-          {t("app.upstreamSync.commit")} <code>{review.headSha.slice(0, 7)}</code> ·{" "}
-          {formatDateTime(review.updatedAt)}
-        </span>
+        <span className="text-xs text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatGitHubBotManagement.message89" components={{ part0: <code>{review.headSha.slice(0, 7)}</code>, part1: <>{""}{formatDateTime(review.updatedAt)}</> }} /></span>
       </div>
       {review.assessment ? (
         <MarkdownBody className="text-sm">
@@ -417,7 +413,7 @@ function ReviewResult({ review }: { review: GitHubTaskReview }) {
         </MarkdownBody>
       ) : (
         <p className="text-sm text-muted-foreground">
-          No assessment has been submitted yet.
+          {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.noAssessmentHasBeenSubmittedYet")}
         </p>
       )}
       <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
@@ -434,7 +430,7 @@ function ReviewResult({ review }: { review: GitHubTaskReview }) {
             target="_blank"
             rel="noreferrer"
           >
-            GitHub comment
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.gitHubComment")}
           </a>
         )}
         {review.checkUrl && (
@@ -448,23 +444,23 @@ function ReviewResult({ review }: { review: GitHubTaskReview }) {
           </a>
         )}
       </div>
-      <section className="space-y-4 text-sm" aria-label="Review evidence">
+      <section className="space-y-4 text-sm" aria-label={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.reviewEvidence")}>
         <div className="space-y-3">
           {review.runId && (
             <Link
               className="text-xs underline underline-offset-4"
               to={`/issues/${review.issueId}?runId=${review.runId}`}
             >
-              Agent run
+              {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.agentRun")}
             </Link>
           )}
           {review.assessment && (
             <>
-              <h3 className="font-medium">Rationale</h3>
+              <h3 className="font-medium">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.rationale")}</h3>
               <MarkdownBody>{review.assessment.rationale}</MarkdownBody>
               {review.assessment.findings.length > 0 && (
                 <section className="space-y-3">
-                  <h3 className="font-medium">Findings</h3>
+                  <h3 className="font-medium">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.findings")}</h3>
                   {review.assessment.findings.map((finding) => (
                     <div
                       key={finding.key}
@@ -479,10 +475,7 @@ function ReviewResult({ review }: { review: GitHubTaskReview }) {
                 </section>
               )}
               <h3 className="font-medium">{t("app.secrets.secrets.tabCoverage")}</h3>
-              <p className="text-xs text-muted-foreground">
-                {review.assessment.coverage.reviewedPaths.length} files reviewed
-                · {review.assessment.coverage.omittedPaths.length} omitted
-              </p>
+              <p className="text-xs text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatGitHubBotManagement.message90" components={{ part0: <>{""}{review.assessment.coverage.reviewedPaths.length}</>, part1: <>{""}{review.assessment.coverage.omittedPaths.length}</> }} /></p>
               {review.assessment.coverage.limitations.map((limit, index) => (
                 <p key={index} className="text-xs text-muted-foreground">
                   {limit}
@@ -508,8 +501,8 @@ export function GitHubReviewList({
     return (
       <EmptyState
         icon={GitPullRequest}
-        message="No reviews yet"
-        description="Mention the bot on a pull request, or enable automatic events in Settings."
+        message={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.noReviewsYet")}
+        description={translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.mentionTheBotOnAPullRequestOrEnable")}
       />
     );
   return (
@@ -525,7 +518,7 @@ export function GitHubReviewList({
           >
             <div className="min-w-0 flex-1 basis-48 space-y-1">
               <p className="break-words font-medium">
-                {review.event.title || `Pull request #${review.pullNumber}`}
+                {review.event.title || translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.pullRequestValue0", { value0: String(review.pullNumber) })}
               </p>
               <p className="break-all text-xs text-muted-foreground">
                 {review.repository} #{review.pullNumber} ·{" "}
@@ -562,11 +555,11 @@ export function GitHubReviewDetail({
         className="text-sm text-muted-foreground hover:underline"
         to={`/apps/chat/${endpointId}/reviews`}
       >
-        ← All reviews
+        {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.allReviews2")}
       </Link>
       <header className="space-y-2">
         <h2 className="text-lg font-semibold">
-          {review.event.title || `Pull request #${review.pullNumber}`}
+          {review.event.title || translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.pullRequestValue0", { value0: String(review.pullNumber) })}
         </h2>
         <a
           className="break-all text-sm text-muted-foreground hover:underline"
@@ -598,7 +591,7 @@ export function GitHubReviews({
   if (query.isError)
     return (
       <p role="alert" className="text-sm text-destructive">
-        {reviewId ? "This review could not be loaded or was not found in this connection." : t("app.apps.gitHubBotManagement.reviewsCouldNotBeLoaded")}{" "}
+        {reviewId ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.thisReviewCouldNotBeLoadedOrWasNot") : t("app.apps.gitHubBotManagement.reviewsCouldNotBeLoaded")}{" "}
         <Button variant="link" onClick={() => void query.refetch()}>
           {t("app.issueUi.projectRepositoryInput.tryAgain")}
         </Button>
@@ -617,13 +610,13 @@ export function GitHubReviews({
     ) : (
       <div className="space-y-3">
         <p role="alert" className="text-sm text-muted-foreground">
-          This review was not found in this connection.
+          {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.thisReviewWasNotFoundInThisConnection")}
         </p>
         <Link
           to={`/apps/chat/${endpointId}/reviews`}
           className="text-sm underline"
         >
-          All reviews
+          {translateUiCopy("app.uiCopy.pagesAppsChatGitHubBotManagement.allReviews")}
         </Link>
       </div>
     );

@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, i18n as uiCopyI18n } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -38,7 +40,7 @@ export function gitHubAppManifestAction(
       url.pathname,
     )
   )
-    throw new Error("GitHub returned an invalid registration address");
+    throw new Error(translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.gitHubReturnedAnInvalidRegistrationAddress"));
   return url.toString();
 }
 function GitHubAppManifestForm({
@@ -69,7 +71,7 @@ function GitHubAppManifestForm({
     >
       <input type="hidden" name="manifest" value={JSON.stringify(registration.manifest)} />
       <SetupWizardFooter onSaveExit={onSaveExit} disabled={disabled}>
-        <Button type="submit" disabled={disabled}>Continue to GitHub</Button>
+        <Button type="submit" disabled={disabled}>{translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.continueToGitHub")}</Button>
       </SetupWizardFooter>
     </form>
   );
@@ -192,10 +194,10 @@ export function GitHubChatSetup() {
   useEffect(() => {
     setBreadcrumbs([
       { label: t("app.common.nouns.connectors"), href: "/apps" },
-      { label: "GitHub Code Review Bot" },
+      { label: translateUiCopy("app.uiCopy.componentsChatAgentChannelsPanel.gitHubCodeReviewBot") },
     ]);
     return () => setBreadcrumbs([]);
-  }, [setBreadcrumbs]);
+  }, [setBreadcrumbs, uiCopyI18n.language]);
   useEffect(() => {
     if (bot) {
       setAgentId(bot.assignedAgentId);
@@ -220,7 +222,7 @@ export function GitHubChatSetup() {
       setError(
         error instanceof Error
           ? error.message
-          : "Could not connect GitHub. Try again.",
+          : translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.couldNotConnectGitHubTryAgain"),
       );
     } finally {
       setBusy(false);
@@ -271,14 +273,14 @@ export function GitHubChatSetup() {
   if (resume && !bot)
     return (
       <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-6 sm:px-6">
-        <h1 className="text-2xl font-semibold">Resume GitHub setup</h1>
+        <h1 className="text-2xl font-semibold">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.resumeGitHubSetup")}</h1>
         {current.error ? (
           <p role="alert" className="text-sm text-destructive">
-            Could not load this connection. Try again to resume your draft.
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.couldNotLoadThisConnectionTryAgainToResume")}
           </p>
         ) : (
           <p role="status" className="text-sm text-muted-foreground">
-            Loading your draft…
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.loadingYourDraft")}
           </p>
         )}
         {footer(current.error ? t("app.issueUi.projectRepositoryInput.tryAgain") : undefined, async () => {
@@ -314,7 +316,7 @@ export function GitHubChatSetup() {
               : undefined) ||
             (progress.error instanceof Error
               ? progress.error.message
-              : "Could not check GitHub setup. Try again.")}
+              : translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.couldNotCheckGitHubSetupTryAgain"))}
         </p>
       )}
       {!bot ? (
@@ -374,7 +376,7 @@ export function GitHubChatSetup() {
       ) : !identityOnly && !existing && progress.isPending ? (
         <>
           <p role="status" className="text-sm text-muted-foreground">
-            Checking your GitHub connection…
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.checkingYourGitHubConnection")}
           </p>
           {footer()}
         </>
@@ -382,8 +384,8 @@ export function GitHubChatSetup() {
         <>
           <p className="text-sm text-muted-foreground">
             {reconnect
-              ? "Leave these blank to reuse this App’s stored credentials, or enter both fields to repair them."
-              : "Use the credentials from this App’s GitHub settings."}
+              ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.leaveTheseBlankToReuseThisAppSStored")
+              : translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.useTheCredentialsFromThisAppSGitHubSettings")}
           </p>
           <Label htmlFor="github-app-id">{t("app.apps.gitHubChatSetup.appId")}</Label>
           <Input
@@ -454,18 +456,12 @@ export function GitHubChatSetup() {
         <>
           {identityOnly && identityLinked ? (
             <>
-              <p role="status" className="text-sm">
-                {t("app.apps.identitiesSection.githubAccount")} <strong>{legacyIdentity?.login}</strong>{" "}
-                connected. You can now mention this bot on GitHub.
-              </p>
+              <p role="status" className="text-sm"><Trans i18nKey="app.uiCopy.pagesAppsChatGitHubChatSetup.message91" components={{ part0: <strong>{legacyIdentity?.login}</strong> }} /></p>
               {footer()}
             </>
           ) : state?.identity ? (
             <>
-              <p className="text-sm">
-                Connect GitHub account <strong>{state.identity.login}</strong>{" "}
-                to your Paperclip account.
-              </p>
+              <p className="text-sm"><Trans i18nKey="app.uiCopy.pagesAppsChatGitHubChatSetup.message92" components={{ part0: <strong>{state.identity.login}</strong> }} /></p>
               {footer("Confirm my account", async () => {
                 await githubChatApi.confirmIdentity(
                   bot.id,
@@ -477,13 +473,12 @@ export function GitHubChatSetup() {
           ) : (
             <>
               <p className="text-sm text-muted-foreground">
-                Link your GitHub account so your mentions use your Paperclip
-                permissions.
+                {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.linkYourGitHubAccountSoYourMentionsUseYour")}
               </p>
               {(accounts.data?.length ?? 0) > 0 && (
                 <>
                   <Label htmlFor="github-personal-account">
-                    Existing GitHub connection
+                    {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.existingGitHubConnection")}
                   </Label>
                   <select
                     id="github-personal-account"
@@ -495,7 +490,7 @@ export function GitHubChatSetup() {
                       setIdentityLinked(false);
                     }}
                   >
-                    <option value="">Choose an account</option>
+                    <option value="">{translateUiCopy("app.finance.subscriptionCostCard.chooseAnAccount")}</option>
                     {accounts.data
                       ?.filter(
                         (account) =>
@@ -511,9 +506,7 @@ export function GitHubChatSetup() {
                       ))}
                   </select>
                   {legacyIdentity && (
-                    <p className="text-sm">
-                      GitHub account: <strong>{legacyIdentity.login}</strong>
-                    </p>
+                    <p className="text-sm"><Trans i18nKey="app.uiCopy.pagesAppsChatGitHubChatSetup.message93" components={{ part0: <strong>{legacyIdentity.login}</strong> }} /></p>
                   )}
                 </>
               )}
@@ -522,7 +515,7 @@ export function GitHubChatSetup() {
                   className="text-sm underline"
                   to="/apps/connect?source=github"
                 >
-                  Add a personal GitHub connection, then return to this draft
+                  {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.addAPersonalGitHubConnectionThenReturnToThis")}
                 </Link>
               )}
               {footer(
@@ -556,14 +549,14 @@ export function GitHubChatSetup() {
       ) : state?.state === "install" ? (
         <>
           <p role="status" className="text-sm text-muted-foreground">
-            Waiting for GitHub installation or administrator approval…
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.waitingForGitHubInstallationOrAdministratorApproval")}
           </p>
           {state.installationUrl && (
             <a
               className="inline-flex items-center gap-1 text-sm underline"
               href={state.installationUrl}
             >
-              Continue installation on GitHub
+              {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.continueInstallationOnGitHub")}
               <ExternalLink className="size-3" />
             </a>
           )}
@@ -572,8 +565,7 @@ export function GitHubChatSetup() {
       ) : state?.state === "enrollment" ? (
         <>
           <p className="text-sm">
-            Paperclip Cloud receives GitHub events and securely delivers them to
-            this instance.
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.paperclipCloudReceivesGitHubEventsAndSecurelyDeliversThem")}
           </p>
           {footer("Connect Paperclip Cloud", async () => {
             const result = await toolsApi.startCloudConnectorEnrollment(
@@ -582,7 +574,7 @@ export function GitHubChatSetup() {
               `/apps/chat/connect${window.location.search}`,
             );
             if (!result.verificationUrl)
-              throw new Error("Cloud enrollment could not be started");
+              throw new Error(translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.cloudEnrollmentCouldNotBeStarted"));
             window.location.assign(result.verificationUrl);
           })}
         </>
@@ -592,13 +584,13 @@ export function GitHubChatSetup() {
             {state.message}
           </p>
           <Button variant="ghost" onClick={() => setExisting(true)}>
-            Use existing App credentials
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.useExistingAppCredentials")}
           </Button>
           {state.restartableRegistrationId && (
             <div className="flex items-center gap-2">
               <Checkbox id="github-app-not-created" checked={appNotCreated} disabled={busy}
                 onCheckedChange={(checked) => setAppNotCreated(checked === true)} />
-              <Label htmlFor="github-app-not-created">I haven't created this App on GitHub.</Label>
+              <Label htmlFor="github-app-not-created">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.iHavenTCreatedThisAppOnGitHub")}</Label>
             </div>
           )}
           {state.restartableRegistrationId
@@ -614,8 +606,8 @@ export function GitHubChatSetup() {
         <>
           <p role="status" className="text-sm text-muted-foreground">
             {deliveryVerifiedWhileChecking
-              ? "GitHub delivery verified. Checking App and repository access…"
-              : state.message ?? "Checking GitHub access…"}
+              ? translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.gitHubDeliveryVerifiedCheckingAppAndRepositoryAccess")
+              : state.message ?? translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.checkingGitHubAccess")}
           </p>
           {state.verification?.checks
             .filter(
@@ -657,11 +649,11 @@ export function GitHubChatSetup() {
               {knownOrganizations.map((login) => (
                 <option key={login.toLowerCase()} value={`organization:${login}`}>{login}</option>
               ))}
-              <option value="organization">Another organization</option>
+              <option value="organization">{translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.anotherOrganization")}</option>
             </select>
             {(repositories.isError || connectedBots.isError) && (
               <p role="alert" className="text-sm text-destructive">
-                Could not load some connected GitHub accounts. Choose Another organization to enter a name.
+                {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.couldNotLoadSomeConnectedGitHubAccountsChooseAnother")}
               </p>
             )}
           </div>
@@ -673,7 +665,7 @@ export function GitHubChatSetup() {
                 disabled={busy || !!state?.registration}
                 value={ownerLogin}
                 onChange={(event) => setOwnerLogin(event.target.value)}
-                placeholder="GitHub organization name"
+                placeholder={translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.gitHubOrganizationName")}
               />
             </div>
           )}
@@ -696,7 +688,7 @@ export function GitHubChatSetup() {
             className="text-sm text-muted-foreground underline"
             onClick={() => setExisting(true)}
           >
-            I already have an App
+            {translateUiCopy("app.uiCopy.pagesAppsChatGitHubChatSetup.iAlreadyHaveAnApp")}
           </button>
           {state?.registration ? (
             <GitHubAppManifestForm registration={state.registration} onSaveExit={exit}

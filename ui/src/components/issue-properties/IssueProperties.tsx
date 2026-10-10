@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { i18n as uiI18n } from "@/i18n";
 import { projectDisplayName } from "@/lib/project-display";
 import { isLockedIssueStub } from "@/components/LockedIssueChip";
@@ -2632,12 +2633,12 @@ export function IssueProperties({
         ) : null}
 
         {pullRequests.length > 0 || workProductsError ? (
-          <PropertyRow label="Pull requests" wrap>
+          <PropertyRow label={translateUiCopy("app.uiCopy.componentsIssuePropertiesIssueProperties.pullRequests")} wrap>
             <div className="flex min-w-0 flex-col gap-2">
               <IssuePullRequestLinks products={pullRequests} externalObjects={externalObjects?.map((entry) => entry.pill)} />
               {workProductsError ? (
                 <span className="text-xs text-muted-foreground">
-                  Couldn’t load pull requests. <button type="button" className="text-primary hover:underline" onClick={() => void refetchWorkProducts()}>Retry</button>
+                  {translateUiCopy("app.uiCopy.componentsIssuePropertiesIssueProperties.couldnTLoadPullRequests")} <button type="button" className="text-primary hover:underline" onClick={() => void refetchWorkProducts()}>{translateUiCopy("app.common.actions.retry")}</button>
                 </span>
               ) : null}
             </div>
@@ -2663,8 +2664,8 @@ export function IssueProperties({
         ) : null}
 
         {!policyAvailable ? (
-          <PropertyRow label="Execution policy" wrap>
-            <span role="status" className="text-sm text-muted-foreground">Execution policy unavailable. Refresh to try again.</span>
+          <PropertyRow label={translateUiCopy("app.lib.issueChangeReceipt.field.executionPolicy")} wrap>
+            <span role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.componentsExecutionParticipantPicker.executionPolicyUnavailableRefreshToTryAgain")}</span>
           </PropertyRow>
         ) : (<>
         <PropertyPicker

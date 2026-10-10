@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t as translateSync } from "@/i18n";
 import { AgentAvatar } from "../AgentAvatar";
 import {
@@ -257,6 +258,7 @@ function AssigneeIdentityAvatar({
     | undefined;
   placement: "trigger" | "option";
 }) {
+  useUiCopyTranslation();
   if (assigneeValue.startsWith("agent:")) {
     const agentId = assigneeValue.slice("agent:".length);
     const icon = agentMap?.get(agentId)?.icon ?? "bot";
@@ -1259,7 +1261,7 @@ export function TaskChatComposer({
           className="flex h-11 min-w-0 items-center gap-2 px-2.5"
           data-testid="task-chat-composer-context"
           role="group"
-          aria-label="Task project and worktrees"
+          aria-label={translateUiCopy("app.uiCopy.componentsTaskChatTaskChatComposer.taskProjectAndWorktrees")}
         >
           {creation.contextBar}
         </TaskChatComposerBar>

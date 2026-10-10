@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { displayLocale } from "@/lib/utils";
 import { t } from "@/i18n";
 import { isUuidLike } from "@paperclipai/shared";
@@ -90,11 +92,12 @@ export function EmailEndpointSetup() {
   const { t } = useTranslation();
   const { selectedCompanyId } = useCompany();
   const [params] = useSearchParams();
-  if (!selectedCompanyId) return <p role="status" className="p-6 text-sm text-muted-foreground">Loading email setup…</p>;
+  if (!selectedCompanyId) return <p role="status" className="p-6 text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.loadingEmailSetup")}</p>;
   return <EmailEndpointSetupForm key={`${selectedCompanyId}:${params.get("resume") ?? params.get("setupId") ?? params.get("connectionId") ?? "new"}:${params.get("agentId") ?? "choose"}`} companyId={selectedCompanyId} />;
 }
 
 function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
+  useUiCopyTranslation();
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const cache = useQueryClient();
@@ -299,8 +302,8 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
       .map(suffix => `${username.slice(0, 64 - suffix.length)}${suffix}`)
       .filter(name => !knownAddresses.has(`${name}@${domain}`)) : [];
   const assignedInbox = addressMode === "existing" && inboxes.data?.some(i => i.id !== requestId && i.address === address && i.status !== "archived");
-  const addressError = addressTaken ? "This email address is already in use. Choose a different address."
-    : assignedInbox ? "This inbox is already assigned to an agent." : null;
+  const addressError = addressTaken ? translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.thisEmailAddressIsAlreadyInUseChooseA")
+    : assignedInbox ? translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.thisInboxIsAlreadyAssignedToAnAgent") : null;
   const error = connect.error ?? (!addressTaken ? setup.error : null) ?? resumeAccount.error ?? inspected.error ?? agents.error;
   const busy = connect.isPending || setup.isPending;
   const identityReady = inboxes.isSuccess && (!resumeId || requestId !== resumeId || !!pendingEndpoint) && (!pendingEndpoint || pendingEndpoint.assignedAgentId === agentId);
@@ -332,12 +335,12 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
       <h1 className="text-xl font-bold">{step === 2 ? t("app.apps.emailEndpointSetup.ready") : t("app.apps.emailEndpointSetup.giveAddress")}</h1>
     </header>
     {step < 2 && inboxes.isError && <div role="alert" className="space-y-2 text-sm">
-      <p className="text-destructive">Could not load email setup progress. {inboxes.error.message}</p>
+      <p className="text-destructive"><Trans i18nKey="app.uiCopy.pagesAppsChatEmailEndpointSetup.message77" components={{ part0: <>{""}{inboxes.error.message}</> }} /></p>
       <Button type="button" variant="outline" size="sm" disabled={busy || inboxes.isFetching} onClick={() => { void inboxes.refetch(); }}>
-        {inboxes.isFetching ? t("app.common.loading") : "Retry loading inboxes"}
+        {inboxes.isFetching ? t("app.common.loading") : translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.retryLoadingInboxes")}
       </Button>
     </div>}
-    {step < 2 && resumeId === requestId && inboxes.isSuccess && !pendingEndpoint && <p role="alert" className="text-sm text-destructive">This email setup could not be found. Return to Connectors and start a new connection.</p>}
+    {step < 2 && resumeId === requestId && inboxes.isSuccess && !pendingEndpoint && <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.thisEmailSetupCouldNotBeFoundReturnTo")}</p>}
     {step < 2 && <ChatSetupNavigation labels={["Agent", "Email address"]} step={step}
       availableStep={step} disabled={busy} onSelect={index => { setup.reset(); setStep(index as 0 | 1); }} />}
     {step === 0 && <form className="space-y-6" onSubmit={event => { event.preventDefault(); if (canContinue) connect.mutate(); }}>
@@ -351,13 +354,13 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
       {!pendingAddress && <AgentMailCredentialField companyId={companyId} connectionId={selectedCredentialId}
         onConnectionChange={selectCredential} value={apiKey} onChange={value => { setApiKey(value); connect.reset(); }} disabled={busy} />}
       {restrictedInbox && <div className="space-y-2 text-sm">
-        <p className="text-muted-foreground">That key only connects {restrictedInbox}. Choose a saved account key or enter one to create a new address.</p>
+        <p className="text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatEmailEndpointSetup.message78" components={{ part0: <>{""}{restrictedInbox}</> }} /></p>
         <Button type="button" variant="link" size="sm" className="h-auto p-0" disabled={busy || !(selectedCredentialId || apiKey.trim())}
-          onClick={() => { setAllowInboxKey(true); setRestrictedInbox(""); connect.reset(); }}>Use the existing inbox instead</Button>
+          onClick={() => { setAllowInboxKey(true); setRestrictedInbox(""); connect.reset(); }}>{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.useTheExistingInboxInstead")}</Button>
       </div>}
       {lowTrust && !scoped && <div role="alert" className="space-y-2 text-sm">
-        <p>This agent needs a work boundary before it can receive email.</p>
-        <Button type="button" variant="outline" size="sm" onClick={openTrust}>Configure work boundary</Button>
+        <p>{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.thisAgentNeedsAWorkBoundaryBeforeItCan")}</p>
+        <Button type="button" variant="outline" size="sm" onClick={openTrust}>{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.configureWorkBoundary")}</Button>
       </div>}
       {error && <p role="alert" className="text-sm text-destructive">{error.message}</p>}
       <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
@@ -367,17 +370,17 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
     </form>}
     {step === 1 && <form className="space-y-6" onSubmit={event => { event.preventDefault(); if (canCreate) setup.mutate(); }}>
       <div className="space-y-2">
-        <Label htmlFor={addressMode === "new" ? "email-name" : "email-existing"}>{chosen?.name}’s email address</Label>
+        <Label htmlFor={addressMode === "new" ? "email-name" : "email-existing"}>{chosen?.name}{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.sEmailAddress")}</Label>
         {pendingAddress ? <>
           <p className="text-sm font-medium">{pendingAddress}</p>
-          <p className="text-sm text-muted-foreground">This address was created in AgentMail. Finish connecting it to {chosen?.name}{scopedKey ? "." : ", or choose a different address. The original inbox will stay in AgentMail."}</p>
-          {!scopedKey && <Button type="button" variant="link" size="sm" className="h-auto p-0" disabled={busy} onClick={chooseAnotherAddress}>Choose a different address</Button>}
+          <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatEmailEndpointSetup.message79" components={{ part0: <>{""}{chosen?.name}</>, part1: <>{""}{scopedKey ? "." : translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.orChooseADifferentAddressTheOriginalInboxWill")}</> }} /></p>
+          {!scopedKey && <Button type="button" variant="link" size="sm" className="h-auto p-0" disabled={busy} onClick={chooseAnotherAddress}>{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.chooseADifferentAddress")}</Button>}
         </> : addressMode === "new" ? <>
           <div className="flex items-center gap-2">
             <Input id="email-name" className="min-w-0" value={username} maxLength={64} autoComplete="off" spellCheck={false} disabled={busy}
               aria-invalid={!!addressError} aria-describedby={addressError ? "email-address-error" : "email-address-status"}
               onChange={event => { setUsername(event.target.value.toLowerCase()); setup.reset(); }} />
-            <select id="email-domain" aria-label="Email domain" className={`${selectClass} max-w-1/2 shrink-0`} value={domain}
+            <select id="email-domain" aria-label={translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.emailDomain")} className={`${selectClass} max-w-1/2 shrink-0`} value={domain}
               disabled={busy || !inspected.data} onChange={event => { setDomainSelected(true); setDomain(event.target.value); setup.reset(); }}>
               {[...new Set([...customDomains, "agentmail.to", domain])]
                 .map(value => <option key={value} value={value}>@{value}</option>)}
@@ -389,18 +392,18 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
           <option value="">{t("app.apps.emailEndpointSetup.addressStep.chooseInbox")}</option>
           {inspected.data?.inboxes.map(i => {
             const assigned = inboxes.data?.some(e => e.id !== requestId && e.address === i.inbox_id && e.status !== "archived");
-            return <option key={i.inbox_id} value={i.inbox_id} disabled={assigned}>{i.inbox_id}{assigned ? " — already assigned" : ""}</option>;
+            return <option key={i.inbox_id} value={i.inbox_id} disabled={assigned}>{i.inbox_id}{assigned ? translateUiCopy("app.apps.emailEndpointSetup.addressStep.alreadyAssigned") : ""}</option>;
           })}
         </select>}
         {scopedKey && !pendingAddress && <Button type="button" variant="link" size="sm" className="h-auto p-0" disabled={busy}
-          onClick={() => { setAllowInboxKey(false); setStep(0); }}>Choose a key for a new address</Button>}
+          onClick={() => { setAllowInboxKey(false); setStep(0); }}>{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.chooseAKeyForANewAddress")}</Button>}
         {addressError && <p id="email-address-error" role="alert" className="text-sm text-destructive">{addressError}</p>}
         {checkingNewAddress && !addressError && <p id="email-address-status" role="status" className="text-sm text-muted-foreground">
-          {addressCheck.checking ? "Checking address…" : addressCheck.error ? `Could not check this address. ${addressCheck.error}`
-            : addressCheck.result?.status === "unknown" ? "AgentMail confirms availability when you create the address." : null}
+          {addressCheck.checking ? translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.checkingAddress") : addressCheck.error ? translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.couldNotCheckThisAddressValue0", { value0: String(addressCheck.error) })
+            : addressCheck.result?.status === "unknown" ? translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.agentMailConfirmsAvailabilityWhenYouCreateTheAddress") : null}
         </p>}
-        {suggestions.length > 0 && <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm" aria-label="Suggested email addresses">
-          <span className="text-muted-foreground">Try:</span>
+        {suggestions.length > 0 && <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm" aria-label={translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.suggestedEmailAddresses")}>
+          <span className="text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.try")}</span>
           {suggestions.map(name => <Button key={name} type="button" variant="link" size="sm" className="h-auto p-0" disabled={busy}
             onClick={() => { setUsername(name); setup.reset(); }}>{name}@{domain}</Button>)}
         </div>}
@@ -411,15 +414,15 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
       </div>
       <Card className="py-4">
         <CardHeader className="px-4">
-          <h2 className="text-sm font-medium">How it Works</h2>
-          <CardDescription>Incoming email creates tasks for {chosen?.name}. Replies stay in the same task.</CardDescription>
+          <h2 className="text-sm font-medium">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.howItWorks")}</h2>
+          <CardDescription>{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.incomingEmailCreatesTasksFor")} {chosen?.name}{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.repliesStayInTheSameTask")}</CardDescription>
         </CardHeader>
       </Card>
       <details className="space-y-4">
         <summary className="cursor-pointer text-sm text-muted-foreground">{t("app.apps.emailEndpointSetup.addressStep.advanced")}</summary>
         <div className="space-y-4">
           {addressMode === "new" && <div className="space-y-2">
-            <a className="text-sm underline" href="https://docs.agentmail.to/custom-domains" target="_blank" rel="noreferrer">Set up a custom domain ↗</a>
+            <a className="text-sm underline" href="https://docs.agentmail.to/custom-domains" target="_blank" rel="noreferrer">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.setUpACustomDomain")}</a>
           </div>}
           <div className="space-y-2">
             <Label htmlFor="email-mode">{t("app.apps.emailEndpointSetup.addressStep.receiving")}</Label>
@@ -429,25 +432,25 @@ function EmailEndpointSetupForm({ companyId }: { companyId: string }) {
           </div>
           <EmailSafetyNotice />
           <div className="space-y-2 text-sm">
-            <p>{lowTrust && scoped ? t("app.apps.emailEndpointSetup.trust.configured") : "Manage which tasks and tools this agent can access."}</p>
+            <p>{lowTrust && scoped ? t("app.apps.emailEndpointSetup.trust.configured") : translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.manageWhichTasksAndToolsThisAgentCanAccess")}</p>
             <Button type="button" variant="outline" size="sm" onClick={openTrust}>{t("app.apps.emailEndpointSetup.trust.review")}</Button>
           </div>
         </div>
       </details>
       {error && <p role="alert" className="text-sm text-destructive">{error.message}</p>}
-      {inspected.isPending && <p role="status" className="text-sm text-muted-foreground">Loading email options…</p>}
+      {inspected.isPending && <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.loadingEmailOptions")}</p>}
       <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
         <Button type="button" variant="ghost" disabled={busy} onClick={() => { setup.reset(); setStep(0); }}><ArrowLeft className="size-4" />{t("app.common.actions.back")}</Button>
         <Button disabled={!canCreate}>
-          {setup.isPending ? t("app.common.progress.connecting") : pendingAddress ? "Finish connecting" : addressMode === "new" ? t("app.apps.emailEndpointSetup.createAddress") : t("app.apps.emailEndpointSetup.connectAddress")}<ArrowRight className="size-4" />
+          {setup.isPending ? t("app.common.progress.connecting") : pendingAddress ? translateUiCopy("app.uiCopy.pagesAppsComposioAppSetup.finishConnecting") : addressMode === "new" ? t("app.apps.emailEndpointSetup.createAddress") : t("app.apps.emailEndpointSetup.connectAddress")}<ArrowRight className="size-4" />
         </Button>
       </div>
     </form>}
     {step === 2 && <div className="space-y-6">
       <div className="space-y-2"><p className="flex items-center gap-2 font-medium"><Check className="size-4" />{setup.data?.address}</p>
-        <p className="text-sm text-muted-foreground">{chosen?.name} can now receive email at this address.</p></div>
+        <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatEmailEndpointSetup.message80" components={{ part0: <>{""}{chosen?.name}</> }} /></p></div>
       <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
-        <Button variant="ghost" onClick={leave}>Email settings</Button><Button onClick={() => navigate("/apps")}>{t("app.common.actions.done")}</Button>
+        <Button variant="ghost" onClick={leave}>{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.emailSettings")}</Button><Button onClick={() => navigate("/apps")}>{t("app.common.actions.done")}</Button>
       </div>
     </div>}
       <Dialog open={trustOpen} onOpenChange={setTrustOpen}>
@@ -639,16 +642,16 @@ export function EmailEndpointSettings({
   return (
     <div className="max-w-2xl space-y-8 pb-8">
       <header className="space-y-2">
-        <p className="text-sm text-muted-foreground">{assignedAgentName}’s email address</p>
+        <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatEmailEndpointSetup.message81" components={{ part0: <>{""}{assignedAgentName}</> }} /></p>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <h1 aria-label={inbox.address ?? undefined} className="min-w-0 break-all text-xl font-bold">
             {inbox.address ? (
-              <CopyText text={inbox.address} ariaLabel="Copy email address" title="Copy email address"
+              <CopyText text={inbox.address} ariaLabel={translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.copyEmailAddress")} title={translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.copyEmailAddress")}
                 containerClassName="max-w-full" className="flex min-w-0 items-center gap-2 rounded-md text-left">
                 <span className="min-w-0 break-all">{inbox.address}</span>
                 <Copy aria-hidden="true" className="size-4 shrink-0 text-muted-foreground" />
               </CopyText>
-            ) : "Email inbox"}
+            ) : translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.emailInbox")}
           </h1>
           {inbox.address && (
             <a href={`https://console.agentmail.to/dashboard/inboxes/${encodeURIComponent(inbox.address)}`}
@@ -659,18 +662,13 @@ export function EmailEndpointSettings({
           )}
         </div>
         {inbox.status === "active" && inbox.address && (
-          <p className="text-sm text-muted-foreground">
-            Send an email to this address to start a task with {assignedAgentName}.
-          </p>
+          <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatEmailEndpointSetup.message82" components={{ part0: <>{""}{assignedAgentName}</> }} /></p>
         )}
       </header>
 
       <Card className="gap-2 p-4">
-        <h2 className="text-sm font-semibold">How it Works</h2>
-        <p className="text-sm text-muted-foreground">
-          Incoming email creates tasks for {assignedAgentName}. Replies stay in the same task.
-          Task comments stay internal; use Email reply to send an email.
-        </p>
+        <h2 className="text-sm font-semibold">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.howItWorks")}</h2>
+        <p className="text-sm text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsChatEmailEndpointSetup.message83" components={{ part0: <>{""}{assignedAgentName}</> }} /></p>
       </Card>
 
       <section aria-labelledby="email-receiving-heading" className="space-y-4">
@@ -679,7 +677,7 @@ export function EmailEndpointSettings({
             <h2 id="email-receiving-heading" className="text-sm font-semibold">{t("app.apps.emailEndpointSetup.inboxes.receiving")}</h2>
             {(inbox.status !== "active" || inbox.lastError) && (
               <StatusBadge status={inbox.status === "active" ? "attention" : inbox.status}
-                label={inbox.status === "active" ? "Needs attention" : inbox.status === "revoked" ? "Access revoked" : undefined} />
+                label={inbox.status === "active" ? translateUiCopy("app.common.states.needsAttention") : inbox.status === "revoked" ? translateUiCopy("app.issueUi.issueShareSheet.accessRevoked") : undefined} />
             )}
           </div>
           {["active", "paused"].includes(inbox.status) && (
@@ -690,7 +688,7 @@ export function EmailEndpointSettings({
           )}
         </div>
         {inbox.status === "paused" && (
-          <p className="text-sm text-muted-foreground">Receiving is paused. Resume to receive new email.</p>
+          <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.receivingIsPausedResumeToReceiveNewEmail")}</p>
         )}
         <dl className="grid gap-3 sm:grid-cols-2">
           <div className="space-y-1">
@@ -698,7 +696,7 @@ export function EmailEndpointSettings({
             <dd className="text-sm">{inbox.receiveMode === "websocket" ? t("app.apps.emailEndpointSetup.liveConnection") : t("app.common.nouns.webhook")}</dd>
           </div>
           <div className="space-y-1">
-            <dt className="text-xs text-muted-foreground">Last mail check</dt>
+            <dt className="text-xs text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.lastMailCheck")}</dt>
             <dd className="font-mono text-xs">{inbox.lastSyncAt ? formatDateTime(inbox.lastSyncAt) : t("app.apps.emailEndpointSetup.settings.notChecked")}</dd>
           </div>
         </dl>
@@ -712,9 +710,9 @@ export function EmailEndpointSettings({
         <summary className="cursor-pointer text-sm font-medium">{t("app.apps.emailEndpointSetup.settings.reconnect")}</summary>
         <div className="space-y-4 pt-4">
           <p className="text-sm text-muted-foreground">
-            Replace the API key or change how this inbox receives email. The email address and task history stay the same.
+            {translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.replaceTheAPIKeyOrChangeHowThisInbox")}
           </p>
-          <AgentMailApiKeyField label="New API key" value={replacementKey} onChange={setReplacementKey} disabled={reconnect.isPending} />
+          <AgentMailApiKeyField label={translateUiCopy("app.uiCopy.featuresConnectionsApiKeyCredentialField.newAPIKey")} value={replacementKey} onChange={setReplacementKey} disabled={reconnect.isPending} />
           <div className="space-y-2">
             <Label htmlFor="email-reconnect-mode">{t("app.apps.emailEndpointSetup.settings.receivingMode")}</Label>
             <select id="email-reconnect-mode" className={selectClass}
@@ -725,10 +723,10 @@ export function EmailEndpointSettings({
             </select>
           </div>
           {reconnect.error && <p role="alert" className="text-sm text-destructive">{reconnect.error.message}</p>}
-          {reconnect.isSuccess && <p role="status" className="text-sm">Inbox reconnected.</p>}
+          {reconnect.isSuccess && <p role="status" className="text-sm">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.inboxReconnected")}</p>}
           <div className="flex justify-end">
             <Button variant="outline" disabled={!replacementKey || reconnect.isPending} onClick={() => reconnect.mutate()}>
-              {reconnect.isPending ? "Reconnecting…" : t("app.apps.emailEndpointSetup.settings.reconnect")}
+              {reconnect.isPending ? translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.reconnecting") : t("app.apps.emailEndpointSetup.settings.reconnect")}
             </Button>
           </div>
         </div>
@@ -738,7 +736,7 @@ export function EmailEndpointSettings({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="space-y-1">
             <h2 id="email-disconnect-heading" className="text-sm font-semibold">{t("app.apps.emailEndpointSetup.settings.disconnect")}</h2>
-            <p className="text-sm text-muted-foreground">Stop receiving email in Paperclip. The inbox stays in AgentMail.</p>
+            <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.pagesAppsChatEmailEndpointSetup.stopReceivingEmailInPaperclipTheInboxStaysIn")}</p>
           </div>
           <Button variant="outline" size="sm" disabled={control.isPending}
             onClick={() => control.mutate("remove")}>

@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import type { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { chatEndpointsApi } from "@/api/chatEndpoints";
@@ -16,6 +17,7 @@ function ProviderEndpointGate({
   endpointId: string;
   children: ReactNode;
 }) {
+  useUiCopyTranslation();
   const endpoint = useQuery({
     queryKey: queryKeys.chatEndpoints.detail(endpointId),
     queryFn: () => chatEndpointsApi.get(endpointId),
@@ -28,7 +30,7 @@ function ProviderEndpointGate({
           {endpoint.error.message}
         </p>
         <Button variant="outline" onClick={() => void endpoint.refetch()}>
-          Retry
+          {translateUiCopy("app.common.actions.retry")}
         </Button>
       </div>
     );
@@ -45,6 +47,7 @@ export function ChatConnectorsExperimentalGate({
 }: {
   children: ReactNode;
 }) {
+  useUiCopyTranslation();
   const { enabled, githubEnabled, loaded } = useChatConnectorsEnabled();
   const [params] = useSearchParams();
   const { endpointId } = useParams<{ endpointId: string }>();

@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t as tr } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
 import { interactionReadinessRefetchInterval } from "@/lib/issue-thread-interactions";
@@ -192,6 +194,7 @@ const EMPTY_RUN_TEMPLATES: CompanySkillTestRunTemplate[] = [];
  * read-only, …) never get silently swallowed (PAP-13001).
  */
 function useMutationErrorToast() {
+
   const toast = useOptionalToastActions();
   return useCallback(
     (title: string) => (error: unknown) => {
@@ -259,6 +262,7 @@ function persistRunTemplateSelection(companyId: string, selection: RunTemplateSe
 }
 
 function useIsMobile() {
+
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth < MOBILE_BREAKPOINT,
   );
@@ -707,6 +711,7 @@ function StudioNewSkillPanel({
 }
 
 function StudioMessage({ message }: { message: string }) {
+  useUiCopyTranslation();
   return (
     <div className="flex h-full min-h-(--sz-60vh) items-center justify-center text-sm text-muted-foreground">
       {message}
@@ -846,6 +851,7 @@ function StudioLandingSection({
   skills: CompanySkillListItem[];
   onSelectSkill: (skillId: string) => void;
 }) {
+  useUiCopyTranslation();
   if (skills.length === 0) return null;
   return (
     <section className="space-y-2">
@@ -872,6 +878,7 @@ function StudioLandingRow({
   skill: CompanySkillListItem;
   onSelect: () => void;
 }) {
+  useUiCopyTranslation();
   const editor = skillEditorAvatar(skill.lastEditor);
   return (
     <button
@@ -907,6 +914,7 @@ function StudioLandingRow({
 }
 
 function SkillLandingIcon({ skill }: { skill: CompanySkillListItem }) {
+  useUiCopyTranslation();
   if (skill.iconUrl) {
     return (
       <img
@@ -944,6 +952,7 @@ function StudioShell({
   skills: CompanySkillListItem[];
   skillsLoading: boolean;
 }) {
+  useUiCopyTranslation();
   const skillId = skill.id;
   const isMobile = useIsMobile();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -1493,9 +1502,7 @@ function SkillPane({
           <div className="flex items-start gap-3 border-b border-border bg-muted/40 px-3 py-2.5 text-xs text-muted-foreground">
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
             <div className="min-w-0 flex-1">
-              <p>
-                {skill.metadata?.skillSourceId ? "This skill is synced from GitHub and is read-only." : skill.editableReason ?? t("app.skills.skillStudio.thisSkillIsReadonlyBecauseItComesFromAn")}
-                {" "}{tr("app.skills.skillStudio.makeAnEditableCopyToChangeItTheOriginal")}</p>
+              <p><Trans i18nKey="app.uiCopy.pagesSkillStudio.message42" components={{ part0: <>{""}{skill.metadata?.skillSourceId ? translateUiCopy("app.uiCopy.pagesSkillStudio.thisSkillIsSyncedFromGitHubAndIsRead") : skill.editableReason ?? t("app.skills.skillStudio.thisSkillIsReadonlyBecauseItComesFromAn")}</> }} /></p>
               <Button
                 type="button"
                 size="sm"
@@ -1503,7 +1510,7 @@ function SkillPane({
                 onClick={onEditACopy}
               >
                 <GitFork className="mr-1.5 h-3.5 w-3.5" />
-                Make a copy
+                {translateUiCopy("app.uiCopy.pagesCompanySkillsProduction.makeACopy")}
               </Button>
             </div>
           </div>
@@ -1634,6 +1641,7 @@ function folderSeedContent(folderPath: string) {
 }
 
 function SkillPaneTitle({ skillName, folder }: { skillName: string; folder: string }) {
+  useUiCopyTranslation();
   return (
     <span className="flex min-w-0 items-center gap-1.5">
       <span className="truncate">{skillName}</span>
@@ -3299,6 +3307,7 @@ function RunHarnessUnavailableNotice({
 }: {
   copy: NonNullable<ReturnType<typeof runHarnessUnavailableCopy>>;
 }) {
+  useUiCopyTranslation();
   return (
     <div className="flex items-start gap-2 rounded-md border border-border bg-muted/30 p-3 text-xs">
       <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
@@ -3577,6 +3586,7 @@ function PaneScaffold({
   action?: React.ReactNode;
   children: React.ReactNode;
 }) {
+  useUiCopyTranslation();
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2">
@@ -3591,6 +3601,7 @@ function PaneScaffold({
 }
 
 function PropRow({ label, value }: { label: string; value: string }) {
+  useUiCopyTranslation();
   return (
     <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-1.5 last:border-b-0">
       <span className="text-muted-foreground">{label}</span>

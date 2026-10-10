@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useState } from "react";
 import { Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ export function AgentAvatarDownload({
   name: string;
   iconOnly?: boolean;
 }) {
+  useUiCopyTranslation();
   const [downloading, setDownloading] = useState(false);
   const [failed, setFailed] = useState(false);
   const download = async () => {
@@ -28,7 +30,7 @@ export function AgentAvatarDownload({
         !response.ok ||
         !response.headers.get("content-type")?.startsWith("image/png")
       )
-        throw new Error("Avatar unavailable");
+        throw new Error(translateUiCopy("app.apps.slackAvatarStep.avatarUnavailable"));
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement("a");
       link.href = url;
@@ -51,8 +53,8 @@ export function AgentAvatarDownload({
         asChild
       >
         <a
-          aria-label="Download avatar"
-          title="Download avatar"
+          aria-label={translateUiCopy("app.apps.slackAvatarStep.downloadAvatar")}
+          title={translateUiCopy("app.apps.slackAvatarStep.downloadAvatar")}
           href={avatarUrl}
           download={agentAvatarFilename(name)}
           aria-disabled={downloading}
@@ -66,12 +68,12 @@ export function AgentAvatarDownload({
           ) : (
             <Download className="size-4" />
           )}
-          {!iconOnly && "Download avatar"}
+          {!iconOnly && translateUiCopy("app.apps.slackAvatarStep.downloadAvatar")}
         </a>
       </Button>
       {failed && (
         <p role="alert" className="text-sm text-destructive">
-          Couldn’t download the avatar. Try downloading it again.
+          {translateUiCopy("app.apps.slackAvatarStep.couldnTDownloadTheAvatarTryDownloading")}
         </p>
       )}
     </div>

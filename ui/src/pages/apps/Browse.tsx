@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, i18n as uiCopyI18n, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { i18n as uiI18n } from "@/i18n";
 import { AGGREGATOR_NAMES, aggregatorManagementUrl, isAppAggregator, type AggregatorAppSnapshot, type AggregatorAppsResponse } from "@paperclipai/shared/aggregator-apps";
 import { CatalogSourceFilters, type CatalogSource } from "./CatalogSourceFilters";
@@ -263,7 +265,7 @@ function connectorAction(
   href: string | null;
   title?: string;
 } {
-  if (row.entry?.aiConnectionRouter) return { label: "Add connection pool", href: row.entry.availability?.available === false ? null : connectHrefFor(row.entry), title: row.entry.availability?.reason };
+  if (row.entry?.aiConnectionRouter) return { label: translateUiCopy("app.uiCopy.pagesAppsBrowse.addConnectionPool"), href: row.entry.availability?.available === false ? null : connectHrefFor(row.entry), title: row.entry.availability?.reason };
   if (row.aggregatorApp && isInstalled(row)) return { label: translate("app.common.actions.manage"), href: null };
   const applicationId = row.applications[0]?.id ?? null;
   const chatHref = (row.slug === "agentmail" || chatConnectorsEnabled)
@@ -301,7 +303,7 @@ function connectorAction(
   // Tool connectors retain their capability-specific setup verbs.
   if (row.entry) {
     return {
-      label: row.entry.methods?.some(method => method.purpose === "ai") ? "Connect" : connectionSetupVerbForApp(row.entry),
+      label: row.entry.methods?.some(method => method.purpose === "ai") ? translateUiCopy("app.common.actions.connect") : connectionSetupVerbForApp(row.entry),
       href: connectHrefFor(row.entry),
     };
   }
@@ -449,7 +451,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
           await chatEndpointsApi.setup(target.id, { action: "remove" });
         }
       } else if (target.pool) {
-        if (!target.poolRevision) throw new Error("Open the confirmation again before removing this pool.");
+        if (!target.poolRevision) throw new Error(translateUiCopy("app.uiCopy.pagesAppsBrowse.openTheConfirmationAgainBeforeRemovingThisPool"));
         await aiConnectionPoolsApi.remove(selectedCompanyId!, target.id, target.poolRevision);
       } else {
         await toolsApi.archiveConnection(target.id);
@@ -495,12 +497,12 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
     if (!target.pool) { setConnectionToRemove(target); return; }
     try {
       const pool = (await aiConnectionPoolsApi.list(selectedCompanyId!)).find(pool => pool.id === target.id);
-      if (!pool) throw new Error("This connection pool is no longer available.");
+      if (!pool) throw new Error(translateUiCopy("app.uiCopy.componentsAiConnectionsAiConnectionPoolConnector.thisConnectionPoolIsNoLongerAvailable"));
       // Capture the revision when presenting the confirmation. Never replace
       // it at submission time: concurrent edits must invalidate this consent.
       setConnectionToRemove({ ...target, accountName: pool.name, poolRevision: pool.revision });
     } catch (error) {
-      pushToast({ title: "Couldn't open the connection pool", body: error instanceof Error ? error.message : "Please try again.", tone: "error" });
+      pushToast({ title: translateUiCopy("app.uiCopy.pagesAppsBrowse.couldnTOpenTheConnectionPool"), body: error instanceof Error ? error.message : translateUiCopy("app.common.messages.pleaseTryAgain"), tone: "error" });
     }
   }
 
@@ -582,9 +584,9 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
       },
       {
         slug: "github-code-review-bot",
-        name: "GitHub Code Review Bot",
+        name: translateUiCopy("app.uiCopy.componentsChatAgentChannelsPanel.gitHubCodeReviewBot"),
         description:
-          "Have an agent review pull requests and respond to GitHub mentions.",
+          translateUiCopy("app.uiCopy.pagesAppsBrowse.haveAnAgentReviewPullRequestsAndRespondTo"),
       },
       {
         slug: "discord",
@@ -744,7 +746,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
       ![app.name, app.slug, ...app.aliases].some((alias) => nativeIdentities.has(aggregatorAppIdentity(alias))))
       .map((app) => ({
         key: `aggregator:${app.slug}`, slug: app.slug, name: app.name,
-        description: `Connect through ${app.routes.map((route) => AGGREGATOR_NAMES[route.provider]).join(" or ")}.`,
+        description: translateUiCopy("app.uiCopy.pagesAppsBrowse.connectThroughValue0", { value0: String(app.routes.map((route) => AGGREGATOR_NAMES[route.provider]).join(" or ")) }),
         brandKey: app.slug, logoUrl: app.routes[0]?.logoUrl, entry: null,
         applications: [], connections: [], chatEndpoints: [], aggregatorApp: app,
         upstreamApps: upstreamAppsBySlug.get(app.slug) ?? [], upstreamCatalogApp: app,
@@ -781,7 +783,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
     t,
     galleryQuery.data,
     upstreamAppsBySlug,
-  ]);
+  , uiCopyI18n.language]);
 
   const trimmed = query.trim().toLocaleLowerCase();
   const visibleRows = useMemo(() => {
@@ -925,7 +927,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
         </div>
       ) : null}
 
-      {refreshAggregator.isError ? <p role="alert" className="text-sm text-destructive">Couldn’t refresh the gateway. Last known accounts are shown.</p> : null}
+      {refreshAggregator.isError ? <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.uiCopy.pagesAppsBrowse.couldnTRefreshTheGatewayLastKnownAccountsAre")}</p> : null}
 
       {loading ? (
         <div className="space-y-3" aria-label={t("app.apps.browse.loadingConnectors")}>
@@ -969,13 +971,13 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
         </div>
       )}
 
-      {accountLoadErrors.length ? <p role="alert" className="text-sm text-destructive">Couldn’t load {Array.from(new Set(accountLoadErrors)).join(" or ")} accounts. Use Refresh in the connection’s menu to try again.</p> : null}
+      {accountLoadErrors.length ? <p role="alert" className="text-sm text-destructive"><Trans i18nKey="app.uiCopy.pagesAppsBrowse.message53" components={{ part0: <>{""}{Array.from(new Set(accountLoadErrors)).join(" or ")}</> }} /></p> : null}
 
-      {!loading && catalogRows.length > 0 ? <nav aria-label="Connector catalog pages" className="flex flex-wrap items-center justify-between gap-3 text-sm">
-        <p className="text-muted-foreground" role="status">{pageStart + 1}–{Math.min(pageStart + CATALOG_PAGE_SIZE, catalogRows.length)} of {catalogRows.length.toLocaleString()} connectors</p>
+      {!loading && catalogRows.length > 0 ? <nav aria-label={translateUiCopy("app.uiCopy.pagesAppsBrowse.connectorCatalogPages")} className="flex flex-wrap items-center justify-between gap-3 text-sm">
+        <p className="text-muted-foreground" role="status"><Trans i18nKey="app.uiCopy.pagesAppsBrowse.message54" components={{ part0: <>{""}{pageStart + 1}</>, part1: <>{""}{Math.min(pageStart + CATALOG_PAGE_SIZE, catalogRows.length)}</>, part2: <>{""}{catalogRows.length.toLocaleString()}</> }} /></p>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" disabled={currentPage === 1} onClick={() => { setPage(currentPage - 1); catalogTop.current?.scrollIntoView?.({ block: "start" }); }}>{t("app.apps.chatEndpointDetail.previous")}</Button>
-          <span className="text-xs text-muted-foreground">Page {currentPage} of {pageCount}</span>
+          <span className="text-xs text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsBrowse.message55" components={{ part0: <>{""}{currentPage}</>, part1: <>{""}{pageCount}</> }} /></span>
           <Button variant="outline" size="sm" disabled={currentPage === pageCount} onClick={() => { setPage(currentPage + 1); catalogTop.current?.scrollIntoView?.({ block: "start" }); }}>{t("app.apps.chatEndpointDetail.next")}</Button>
         </div>
       </nav> : null}
@@ -1016,7 +1018,7 @@ export function Browse({ renderAccountDetails = (connection) => connection.conne
             </AlertDialogDescription>
           </AlertDialogHeader>
           {removeConnection.isError ? <p role="alert" className="text-sm text-destructive">
-            {removeConnection.error instanceof Error ? removeConnection.error.message : "Couldn’t remove the connection. Please try again."}
+            {removeConnection.error instanceof Error ? removeConnection.error.message : translateUiCopy("app.uiCopy.pagesAppsBrowse.couldnTRemoveTheConnectionPleaseTryAgain")}
           </p> : null}
           <AlertDialogFooter className="sm:justify-between">
             <AlertDialogCancel disabled={removeConnection.isPending}>
@@ -1123,7 +1125,7 @@ export function ConnectorCard({
               const providerName = AGGREGATOR_NAMES[route.provider];
               const managedSnapshot = row.upstreamApps?.find(app => (app.provider ?? "composio") === route.provider && app.accounts.length > 0);
               const managed = Boolean(managedSnapshot);
-              const label = `${managed ? "Manage" : "Connect"} ${row.name} through ${providerName}, a third-party service`;
+              const label = translateUiCopy("app.uiCopy.pagesAppsBrowse.value0Value1ThroughValue2AThirdPartyService", { value0: String(managed ? translateUiCopy("app.common.actions.manage") : translateUiCopy("app.common.actions.connect")), value1: String(row.name), value2: String(providerName) });
               return <Tooltip key={route.provider}><TooltipTrigger asChild>
                 <button type="button" aria-label={label} onClick={() => managed ? onManageAggregator?.(row.aggregatorApp!, managedSnapshot?.connectionId) : onConnectAggregator?.(row.aggregatorApp!)} className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <AppLogo name={providerName} brandKey={route.provider} size={16} compact />
@@ -1132,7 +1134,7 @@ export function ConnectorCard({
             })}
           </div>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            {row.aggregatorApp && row.upstreamApps?.some(app => app.accounts.length > 0) ? `Accounts managed in ${[...new Set(row.upstreamApps?.map(app => AGGREGATOR_NAMES[app.provider ?? "composio"]))].join(" and ")}.` : row.description}
+            {row.aggregatorApp && row.upstreamApps?.some(app => app.accounts.length > 0) ? translateUiCopy("app.uiCopy.pagesAppsBrowse.accountsManagedInValue0", { value0: String([...new Set(row.upstreamApps?.map(app => AGGREGATOR_NAMES[app.provider ?? "composio"]))].join(" and ")) }) : row.description}
           </p>
         </div>
         <Button
@@ -1197,22 +1199,22 @@ export function ConnectorCard({
           const gatewayState = connectionState(connection);
           const state: ConnectionState = gatewayState.kind !== "connected" ? gatewayState
             : snapshot.freshness === "stale" || snapshot.errorAt || Date.now() - new Date(snapshot.checkedAt).getTime() > 5 * 60_000
-              ? { kind: "attention", label: t("app.apps.slackToolSettings.notVerified"), message: "Last known account · Refresh to verify" }
-            : account.status === "UNVERIFIED" ? { kind: "attention", label: t("app.apps.slackToolSettings.notVerified"), message: "Account found upstream · Authorization not verified" }
+              ? { kind: "attention", label: t("app.apps.slackToolSettings.notVerified"), message: translateUiCopy("app.uiCopy.pagesAppsBrowse.lastKnownAccountRefreshToVerify") }
+            : account.status === "UNVERIFIED" ? { kind: "attention", label: t("app.apps.slackToolSettings.notVerified"), message: translateUiCopy("app.uiCopy.pagesAppsBrowse.accountFoundUpstreamAuthorizationNotVerified") }
             : account.status === "ACTIVE" ? { kind: "connected", label: t("app.common.states.connected"), message: null }
-            : account.status === "INITIATED" ? { kind: "draft", label: t("app.connections.remoteMcpConnectionSetup.waitingForSignIn"), message: "Finish connecting this account." }
-            : { kind: "attention", label: "Needs sign-in", message: t("app.apps.browse.signInAgainHint") };
+            : account.status === "INITIATED" ? { kind: "draft", label: t("app.connections.remoteMcpConnectionSetup.waitingForSignIn"), message: translateUiCopy("app.uiCopy.pagesAppsBrowse.finishConnectingThisAccount") }
+            : { kind: "attention", label: translateUiCopy("app.uiCopy.pagesAppsAggregatorAppManager.needsSignIn"), message: t("app.apps.browse.signInAgainHint") };
           const provider = snapshot.provider ?? (isAppAggregator(connection.config?.sourceTemplateKey) ? connection.config?.sourceTemplateKey : "composio");
           const providerName = AGGREGATOR_NAMES[provider];
           const managementUrl = aggregatorManagementUrl(provider, account.managementUrl ?? (typeof connection.config?.managementUrl === "string" ? connection.config?.managementUrl : null));
           const manage = () => onManageAggregator?.(row.upstreamCatalogApp!, connection.id);
           return <ConnectionAccountRowLayout key={`${connection.id}:${snapshot.toolkit}:${account.id}`} state={state} accountName={name}
-            source={<><AppLogo name={providerName} brandKey={provider} size={16} compact /><span>Managed by {providerName} ·</span><button type="button" className="max-w-full truncate hover:underline" onClick={() => onNavigate(`/apps/${connection.id}/permissions`)}>“{connection.name}”</button></>}
-            onOpen={manage} openLabel={`Manage ${name}`}>
-            <DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon-sm" aria-label={`Manage ${name} connection`}><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+            source={<><AppLogo name={providerName} brandKey={provider} size={16} compact /><span><Trans i18nKey="app.uiCopy.pagesAppsBrowse.message56" components={{ part0: <>{""}{providerName}</> }} /></span><button type="button" className="max-w-full truncate hover:underline" onClick={() => onNavigate(`/apps/${connection.id}/permissions`)}>“{connection.name}”</button></>}
+            onOpen={manage} openLabel={translateUiCopy("app.uiCopy.pagesAppsBrowse.manageValue0", { value0: String(name) })}>
+            <DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon-sm" aria-label={translateUiCopy("app.uiCopy.pagesAppsBrowse.manageValue0Connection", { value0: String(name) })}><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                {managementUrl ? <DropdownMenuItem asChild><a href={managementUrl} target="_blank" rel="noopener noreferrer">Open in {providerName}<ExternalLink className="size-4" /></a></DropdownMenuItem>
-                  : <DropdownMenuItem disabled title="Set the management URL on this gateway to open its console">Open in {providerName}<ExternalLink className="size-4" /></DropdownMenuItem>}
+                {managementUrl ? <DropdownMenuItem asChild><a href={managementUrl} target="_blank" rel="noopener noreferrer">{translateUiCopy("app.uiCopy.pagesAppsAggregatorAppManager.openIn")} {providerName}<ExternalLink className="size-4" /></a></DropdownMenuItem>
+                  : <DropdownMenuItem disabled title={translateUiCopy("app.uiCopy.pagesAppsBrowse.setTheManagementURLOnThisGatewayToOpen")}>{translateUiCopy("app.uiCopy.pagesAppsAggregatorAppManager.openIn")} {providerName}<ExternalLink className="size-4" /></DropdownMenuItem>}
               </DropdownMenuContent>
             </DropdownMenu>
           </ConnectionAccountRowLayout>;
@@ -1227,7 +1229,7 @@ export function ConnectorCard({
             >
               <div className="flex min-w-0 flex-1 items-center gap-3">
                 <AgentAvatar agent={chatAgentById?.get(endpoint.assignedAgentId) ?? { id: endpoint.assignedAgentId, name: endpoint.assignedAgentName }}
-                  size={40} label={`${endpoint.assignedAgentName} avatar`} />
+                  size={40} label={translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.value0Avatar", { value0: String(endpoint.assignedAgentName) })} />
                 <div className="min-w-0">
                   <button
                     type="button"
@@ -1236,7 +1238,7 @@ export function ConnectorCard({
                       onNavigate(`/apps/chat/${endpoint.id}/settings`)
                     }
                   >
-                    {endpoint.assignedAgentName} · {endpoint.provider === "agentmail" ? t("app.common.labels.email") : endpoint.provider === "github" ? "Code review bot" : t("app.apps.browse.chat")}
+                    {endpoint.assignedAgentName} · {endpoint.provider === "agentmail" ? t("app.common.labels.email") : endpoint.provider === "github" ? translateUiCopy("app.uiCopy.pagesAppsBrowse.codeReviewBot") : t("app.apps.browse.chat")}
                   </button>
                   <p className="truncate text-xs text-muted-foreground">
                     {endpoint.providerAccountLabel ??
@@ -1250,7 +1252,7 @@ export function ConnectorCard({
                   { createdByUserId: (endpoint.connectionId ? connectionById?.get(endpoint.connectionId)?.createdByUserId : null) ?? endpoint.sponsorUserId ?? null }, userProfileById,
                 )} />
                 {["paused", "attention", "revoked"].includes(endpoint.status) && <span className="text-xs text-muted-foreground">
-                  {endpoint.status === "attention" ? "Needs attention" : endpoint.status === "revoked" ? "Access revoked" : "Paused"}
+                  {endpoint.status === "attention" ? translateUiCopy("app.common.states.needsAttention") : endpoint.status === "revoked" ? translateUiCopy("app.issueUi.issueShareSheet.accessRevoked") : translateUiCopy("app.common.states.paused")}
                 </span>}
                 {endpoint.status === "draft" ? (
                   <Button
@@ -1372,10 +1374,10 @@ function ConnectionAccountRow({
             </DropdownMenuItem>
             {onRefreshComposio ? <DropdownMenuItem disabled={refreshingComposio} onSelect={onRefreshComposio}>
               {refreshingComposio ? <Loader2 className="animate-spin" /> : null}
-              Refresh {isAppAggregator(row.slug) ? AGGREGATOR_NAMES[row.slug] : "Composio"}
+              {translateUiCopy("app.common.actions.refresh")} {isAppAggregator(row.slug) ? AGGREGATOR_NAMES[row.slug] : "Composio"}
             </DropdownMenuItem> : null}
-            {row.slug === "arcade" && onConfigureArcade ? <DropdownMenuItem onSelect={onConfigureArcade}>{discovery?.discovery.availability === "setup_required" ? "Set up account sync" : "Account sync settings"}</DropdownMenuItem> : null}
-            {row.slug === "executor" && onConfigureExecutor ? <DropdownMenuItem onSelect={onConfigureExecutor}>Console URL</DropdownMenuItem> : null}
+            {row.slug === "arcade" && onConfigureArcade ? <DropdownMenuItem onSelect={onConfigureArcade}>{discovery?.discovery.availability === "setup_required" ? translateUiCopy("app.uiCopy.pagesAppsBrowse.setUpAccountSync") : translateUiCopy("app.uiCopy.pagesAppsBrowse.accountSyncSettings")}</DropdownMenuItem> : null}
+            {row.slug === "executor" && onConfigureExecutor ? <DropdownMenuItem onSelect={onConfigureExecutor}>{translateUiCopy("app.uiCopy.pagesAppsBrowse.consoleURL")}</DropdownMenuItem> : null}
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive" onSelect={onRemove}>
               <Trash2 />
@@ -1392,6 +1394,7 @@ function ConnectionAccountRowLayout({ state, accountName, owner, source, details
   state: ConnectionState; accountName: string; owner?: ConnectionOwnerProfile | null; source?: ReactNode; details?: ReactNode;
   openLabel: string; onOpen: () => void; children: ReactNode;
 }) {
+  useUiCopyTranslation();
   return (
     <div className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center">
       <div className="flex min-w-0 flex-1 items-start gap-2.5">
@@ -1431,6 +1434,7 @@ function ConnectionAccountRowLayout({ state, accountName, owner, source, details
 }
 
 function ConnectionStatusIcon({ state }: { state: ConnectionState }) {
+  useUiCopyTranslation();
   if (state.kind === "connected") {
     return (
       <span
@@ -1541,6 +1545,7 @@ function CustomConnectorOption({
   description: string;
   onClick: () => void;
 }) {
+  useUiCopyTranslation();
   return (
     <button
       type="button"

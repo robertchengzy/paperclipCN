@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t as tr } from "@/i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -837,12 +838,12 @@ function resultPreview(value: unknown): { items: Array<{ label: string | null; v
         items.push({ label: (blocks?.length ?? 0) > 1 || (structured !== null && structured !== undefined) ? tr("app.common.labels.text") : null, value: parsed });
       }
     } else if (content.type === "image" || content.type === "audio") {
-      items.push({ label: content.type === "image" ? tr("app.taskChat.richWorkProductCard.image") : tr("app.taskChat.taskChatAttachments.audio"), value: typeof content.mimeType === "string" ? content.mimeType : "Media attachment" });
+      items.push({ label: content.type === "image" ? tr("app.taskChat.richWorkProductCard.image") : tr("app.taskChat.taskChatAttachments.audio"), value: typeof content.mimeType === "string" ? content.mimeType : translateUiCopy("app.uiCopy.pagesAppsAppDetailActionTestDialog.mediaAttachment") });
     } else if (content.type === "resource_link") {
-      items.push({ label: "Resource", value: content.title ?? content.name ?? content.uri ?? "Resource link" });
+      items.push({ label: translateUiCopy("app.uiCopy.pagesAppsAppDetailActionTestDialog.resource"), value: content.title ?? content.name ?? content.uri ?? translateUiCopy("app.uiCopy.pagesAppsAppDetailActionTestDialog.resourceLink") });
     } else if (content.type === "resource" && content.resource && typeof content.resource === "object") {
       const resource = content.resource as Record<string, unknown>;
-      items.push({ label: "Resource", value: typeof resource.text === "string" ? parseText(resource.text) : resource.uri ?? "Embedded resource" });
+      items.push({ label: translateUiCopy("app.uiCopy.pagesAppsAppDetailActionTestDialog.resource"), value: typeof resource.text === "string" ? parseText(resource.text) : resource.uri ?? translateUiCopy("app.uiCopy.pagesAppsAppDetailActionTestDialog.embeddedResource") });
     } else {
       return { items: [{ label: null, value }], summary: value, rawFallback: true };
     }
@@ -949,7 +950,7 @@ function PrettyPreview({ value }: { value: unknown }) {
         <div className="space-y-2">
           {shown.map((row, index) => <PreviewRowCard key={index} row={row} index={index} />)}
           {rows.length > shown.length && (
-            <p className="text-(length:--text-micro) text-muted-foreground">… {rows.length - shown.length} more rows in the raw response</p>
+            <p className="text-(length:--text-micro) text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsAppDetailActionTestDialog.message65" components={{ part0: <>{""}{rows.length - shown.length}</> }} /></p>
           )}
         </div>
       );
@@ -1003,6 +1004,7 @@ function PrettyPreview({ value }: { value: unknown }) {
 }
 
 function PreviewRowCard({ row, index }: { row: Record<string, unknown>; index: number }) {
+  useUiCopyTranslation();
   const titleKey = ["title", "name", "label"].find((key) => typeof row[key] === "string" && row[key] !== "");
   const summaryKey = ["highlight", "description", "summary"].find((key) => typeof row[key] === "string" && row[key] !== "");
   const url = typeof row.url === "string" && /^https?:\/\//i.test(row.url) ? row.url : null;
@@ -1018,7 +1020,7 @@ function PreviewRowCard({ row, index }: { row: Record<string, unknown>; index: n
     <div className="min-w-0 rounded-md border border-border bg-background p-3 text-xs">
       <div className="flex min-w-0 items-start justify-between gap-3">
         <p className="min-w-0 break-words text-sm font-medium text-foreground">
-          {titleKey ? cellText(row[titleKey]) : `Result ${index + 1}`}
+          {titleKey ? cellText(row[titleKey]) : translateUiCopy("app.uiCopy.pagesAppsAppDetailActionTestDialog.resultValue0", { value0: String(index + 1) })}
         </p>
         {url && <a className="shrink-0 text-primary hover:underline" href={url} target="_blank" rel="noopener noreferrer">{tr("app.upstreamSync.openLink")}</a>}
       </div>
@@ -1033,7 +1035,7 @@ function PreviewRowCard({ row, index }: { row: Record<string, unknown>; index: n
           ))}
         </dl>
       )}
-      {details.length > 3 && <p className="mt-2 text-muted-foreground">{details.length - 3} more {details.length === 4 ? "field" : "fields"} in the raw response</p>}
+      {details.length > 3 && <p className="mt-2 text-muted-foreground"><Trans i18nKey="app.uiCopy.pagesAppsAppDetailActionTestDialog.message66" components={{ part0: <>{""}{details.length - 3}</>, part1: <>{""}{details.length === 4 ? translateUiCopy("app.uiCopy.pagesAppsAppDetailActionTestDialog.field") : translateUiCopy("app.uiCopy.pagesAppsAppDetailActionTestDialog.fields")}</> }} /></p>}
     </div>
   );
 }
@@ -1119,7 +1121,7 @@ function ErrorResult({
       </div>
       {outcome.result.result !== undefined && <RawResponseDisclosure value={outcome.result.result} initiallyOpen />}
       <p className="mt-3 text-xs text-muted-foreground">
-        {needsReconnect ? "After reconnecting, run this action again." : t("app.apps.testPanel.adjustInput")}
+        {needsReconnect ? translateUiCopy("app.uiCopy.pagesAppsAppDetailActionTestDialog.afterReconnectingRunThisActionAgain") : t("app.apps.testPanel.adjustInput")}
       </p>
       <p className="mt-1 text-xs text-muted-foreground">
         <Trans

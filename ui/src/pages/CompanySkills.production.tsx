@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { SkillBinaryFile } from "../components/SkillBinaryFile";
 import { SkillSourceProvenance } from "../components/SkillSourceProvenance";
 import { AgentIdentity } from "@/components/AgentIdentity";
@@ -185,6 +186,7 @@ const SKILL_TREE_STEP_INDENT = 24;
 const SKILL_TREE_ROW_HEIGHT_CLASS = "min-h-9";
 
 function VercelMark(props: SVGProps<SVGSVGElement>) {
+  useUiCopyTranslation();
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
       <path d="M12 4 21 19H3z" />
@@ -800,6 +802,7 @@ function discoveryMatchesSearch(card: DiscoveryCard, query: string): boolean {
 }
 
 function SkillStat({ icon: Icon, value }: { icon: typeof Star; value: string }) {
+  useUiCopyTranslation();
   return (
     <span className="inline-flex items-center gap-1">
       <Icon className="h-3 w-3" aria-hidden="true" />
@@ -809,6 +812,7 @@ function SkillStat({ icon: Icon, value }: { icon: typeof Star; value: string }) 
 }
 
 function SkillCategoryChip({ label }: { label: string }) {
+  useUiCopyTranslation();
   return (
     <Badge variant="outline" className="border-border bg-muted/40 text-(length:--text-nano) capitalize text-muted-foreground">
       {label}
@@ -1298,8 +1302,8 @@ export function DiscoveryGrid({
                 <Boxes className="mr-2 h-4 w-4" />
                 {t("app.skills.companySkills.browseCatalog")}
               </DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/skills/sources/new"><GithubIcon className="mr-2 h-4 w-4" />Import from GitHub</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/skills/sources">Manage sources</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/skills/sources/new"><GithubIcon className="mr-2 h-4 w-4" />{translateUiCopy("app.uiCopy.pagesCompanySkillsProduction.importFromGitHub")}</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/skills/sources">{translateUiCopy("app.uiCopy.pagesCompanySkillsProduction.manageSources")}</Link></DropdownMenuItem>
               <DropdownMenuItem onSelect={onImport}>
                 <Globe className="mr-2 h-4 w-4" />
                 {t("app.skills.companySkills.importFromPath")}
@@ -1382,7 +1386,7 @@ export function DiscoveryGrid({
               </TabsTrigger>
             </TabsList>
           </Tabs>
-          <Button variant="ghost" size="sm" asChild><Link to="/skills/sources">Sources</Link></Button>
+          <Button variant="ghost" size="sm" asChild><Link to="/skills/sources">{translateUiCopy("app.uiCopy.componentsSkillsContextualSidebar.sources")}</Link></Button>
         </div>
 
         {/* Grid body */}
@@ -1446,7 +1450,7 @@ export function DiscoveryGrid({
                   <Button size="sm" onClick={onBrowseCatalog}>
                     <Boxes className="mr-1.5 h-3.5 w-3.5" /> {t("app.skills.companySkills.browseCatalog")}
                   </Button>
-                  <Button size="sm" variant="outline" asChild><Link to="/skills/sources/new">Import from GitHub</Link></Button>
+                  <Button size="sm" variant="outline" asChild><Link to="/skills/sources/new">{translateUiCopy("app.uiCopy.pagesCompanySkillsProduction.importFromGitHub")}</Link></Button>
                   <Button size="sm" variant="ghost" onClick={onCreate}>
                     {t("app.skills.companySkills.createASkill")}
                   </Button>
@@ -2395,6 +2399,7 @@ function SkillTree({
   fileHref?: (skillId: string, path?: string | null) => string;
   depth?: number;
 }) {
+  useUiCopyTranslation();
   return (
     <div>
       {nodes.map((node) => {
@@ -3121,7 +3126,7 @@ export function SkillDetailPage({
                   title={skill.editableReason ?? t("app.skills.companySkills.detail.forkToEdit")}
                 >
                   <GitFork className="mr-1.5 h-3.5 w-3.5" />
-                  {skill.sourceType === "github" ? "Make a copy" : t("app.common.actions.fork")}
+                  {skill.sourceType === "github" ? translateUiCopy("app.uiCopy.pagesCompanySkillsProduction.makeACopy") : t("app.common.actions.fork")}
                 </Button>
               ) : null}
             </div>
@@ -3188,7 +3193,7 @@ export function SkillDetailPage({
                   <span>{t("app.skills.companySkills.detail.readOnly")}</span>
                   <Button type="button" variant="outline" size="xs" onClick={onFork}>
                     <GitFork className="mr-1 h-3 w-3" />
-                    {skill.sourceType === "github" ? "Make a copy" : t("app.common.actions.fork")}
+                    {skill.sourceType === "github" ? translateUiCopy("app.uiCopy.pagesCompanySkillsProduction.makeACopy") : t("app.common.actions.fork")}
                   </Button>
                 </>
               )}
@@ -3439,7 +3444,7 @@ export function SkillDetailPage({
                 title={t("app.skills.companySkills.detail.forkThis")}
               >
                 <GitFork className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">{skill.sourceType === "github" ? "Make a copy" : t("app.common.actions.fork")}</span>
+                <span className="hidden sm:inline">{skill.sourceType === "github" ? translateUiCopy("app.uiCopy.pagesCompanySkillsProduction.makeACopy") : t("app.common.actions.fork")}</span>
                 <span className="font-medium text-foreground">{detail.forkCount}</span>
               </button>
             </div>

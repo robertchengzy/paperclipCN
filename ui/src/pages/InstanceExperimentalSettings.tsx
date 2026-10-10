@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { displayLocale } from "@/lib/utils";
 import { useEffect, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -95,6 +96,7 @@ function ExperimentalToggleCard({
   managed?: ManagedSettingMetadata;
   ariaLabel: string;
 }) {
+  useUiCopyTranslation();
   const { hidden: hiddenSettings } = useHiddenSettings();
   const isManaged = managed?.managed === true;
   if (hiddenSettings.has(experimentalSettingKey(settingKey))) return null;
@@ -369,15 +371,15 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
-          title="Combined Inbox + Task List"
-          description="Fold Inbox into Tasks. One Tasks row carries the unread badge, and a Views menu reaches every inbox view (Mine, Unread, Blocked, Recent, Everything) and every task view."
+          title={translateUiCopy("app.uiCopy.pagesInstanceExperimentalSettings.combinedInboxTaskList")}
+          description={translateUiCopy("app.uiCopy.pagesInstanceExperimentalSettings.foldInboxIntoTasksOneTasksRowCarriesThe")}
           footnote="Old Inbox links redirect to the matching view. Turning this off restores the separate Inbox; no data changes."
           checked={experimentalQuery.data?.enableCombinedInboxTasks ?? false}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableCombinedInboxTasks: checked })}
           disabled={toggleMutation.isPending}
           settingKey="enableCombinedInboxTasks"
           managed={managedKeys.enableCombinedInboxTasks}
-          ariaLabel="Toggle combined inbox and task list experimental setting"
+          ariaLabel={translateUiCopy("app.uiCopy.pagesInstanceExperimentalSettings.toggleCombinedInboxAndTaskListExperimentalSetting")}
         />
 
         {SHOW_CONFERENCE_ROOM_EXPERIMENTAL_SETTING ? (
@@ -487,14 +489,14 @@ export function InstanceExperimentalSettings() {
 
         <ExperimentalToggleCard
           title="OpenAI Dot"
-          description="Add OpenAI Dot as a standalone agent choice. Pair your Dot and verify event delivery before assigning work."
+          description={translateUiCopy("app.uiCopy.pagesInstanceExperimentalSettings.addOpenAIDotAsAStandaloneAgentChoicePair")}
           footnote="Requires Assistant connections (MCP) and an authenticated instance with a public HTTPS URL. Turning this off blocks Dot calls and new work; saved connections are kept."
           checked={experimentalQuery.data?.enableOpenAiDot === true}
           onCheckedChange={(checked) => toggleMutation.mutate({ enableOpenAiDot: checked })}
           disabled={toggleMutation.isPending}
           settingKey="enableOpenAiDot"
           managed={managedKeys.enableOpenAiDot}
-          ariaLabel="Toggle OpenAI Dot experimental setting"
+          ariaLabel={translateUiCopy("app.uiCopy.pagesInstanceExperimentalSettings.toggleOpenAIDotExperimentalSetting")}
         />
 
         <ExperimentalToggleCard

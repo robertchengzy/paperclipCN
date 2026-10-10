@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { i18n as uiI18n } from "@/i18n";
 import { AiConnectionPoolConnector } from "@/components/ai-connections/AiConnectionPoolConnector";
 import { aiConnectionRouterPluginKey } from "@paperclipai/shared";
@@ -79,9 +80,10 @@ import {
 export { connectionAddress, connectionTransportLabel };
 
 export function AppDetail(props: { renderActions?: (connection: ToolConnection) => ReactNode; renderAgentSettings?: (connection: ToolConnection) => ReactNode; renderConnectionSettings?: (connection: ToolConnection) => ReactNode; onReconnect?: (connection: ToolConnection) => void } = {}) {
+  useUiCopyTranslation();
   const { connectionId = "" } = useParams<{ connectionId: string }>();
   const connection = useQuery({ queryKey: queryKeys.tools.connection(connectionId), queryFn: () => toolsApi.getConnection(connectionId), enabled: !!connectionId });
-  if (connection.isPending) return <p role="status">Loading connection…</p>;
+  if (connection.isPending) return <p role="status">{translateUiCopy("app.apps.chatEndpointDetail.loadingConnection")}</p>;
   if (connection.error) return <p role="alert">{connection.error.message}</p>;
   const pluginKey = connection.data && aiConnectionRouterPluginKey(connection.data);
   return pluginKey ? <AiConnectionPoolConnector pluginKey={pluginKey} connection={connection.data} /> : <StandardAppDetail {...props} />;
@@ -245,7 +247,7 @@ function StandardAppDetail({ renderActions, renderAgentSettings, renderConnectio
       : null;
     pushToast({
       title: t("app.apps.appDetail.appConnected", { app: appName }),
-      body: skillSourcePath ? "Choose a repository to import your skills." : t("app.apps.appDetail.connectionReady"),
+      body: skillSourcePath ? translateUiCopy("app.uiCopy.pagesAppsAppDetail.chooseARepositoryToImportYourSkills") : t("app.apps.appDetail.connectionReady"),
       tone: "success",
     });
     navigate(skillSourcePath ?? appTabHref(connection.id, "permissions"), { replace: true });
@@ -907,6 +909,7 @@ function statusFor(connection: ToolConnection): StatusInfo {
 }
 
 function StatusBadge({ status }: { status: StatusInfo }) {
+  useUiCopyTranslation();
   const klass: Record<StatusInfo["tone"], string> = {
     connected: "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
     attention: "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",

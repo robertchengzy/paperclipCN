@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import type { ProjectRepositoryOptions, SkillSourceFilePreview, SkillSourcePreviewRequest, SkillSource, SkillSourceCreateRequest, SkillSourceDiscovery, SkillSourceDiscoveryRequest, SkillSourceRefreshResult, SkillSourceSelectionRequest, SkillSourceScanUpdate, SkillSourceDiscoveryEvent } from '@paperclipai/shared';
 import { api, ApiError, requestResponse } from './client';
 const base = (companyId: string) => `/companies/${companyId}/skill-sources`;
@@ -9,7 +10,7 @@ export const skillSourcesApi = {
     const response = await requestResponse(`${base(companyId)}/discover`, {
       method: 'POST', body: JSON.stringify(input), headers: { Accept: 'application/x-ndjson' }, signal,
     });
-    if (!response.body || !response.headers.get('Content-Type')?.includes('application/x-ndjson')) throw new Error('Live scan unavailable. Refresh the page and try again.');
+    if (!response.body || !response.headers.get('Content-Type')?.includes('application/x-ndjson')) throw new Error(translateUiCopy("app.uiCopy.apiSkillSources.liveScanUnavailableRefreshThePageAndTryAgain"));
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
@@ -28,9 +29,9 @@ export const skillSourcesApi = {
           if (event.type === 'error') throw new ApiError(event.error, event.status, event);
           if (event.type === 'complete') return event.discovery;
           if (event.type === 'progress' || event.type === 'candidate') onProgress(event);
-          else throw new Error('Unexpected repository scan response. Try again.');
+          else throw new Error(translateUiCopy("app.uiCopy.apiSkillSources.unexpectedRepositoryScanResponseTryAgain"));
         }
-        if (done) throw new Error('Repository scan interrupted. Try again.');
+        if (done) throw new Error(translateUiCopy("app.uiCopy.apiSkillSources.repositoryScanInterruptedTryAgain"));
       }
     } finally {
       await reader.cancel().catch(() => {});

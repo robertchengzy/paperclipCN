@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useTranslation } from "@/i18n";
 import { AlertTriangle, ExternalLink } from "lucide-react";
 import type { AgentPermissions } from "@paperclipai/shared";
@@ -37,7 +38,7 @@ export function GitHubAgentTrustWarning({
       </p>
       {onChangeToLowTrust && (
         <Button variant="outline" className="h-auto whitespace-normal" disabled={disabled} onClick={onChangeToLowTrust}>
-          Change {agent.name} to a low trust agent
+          {translateUiCopy("app.connections.connectionSetupFlow.change")} {agent.name} {translateUiCopy("app.uiCopy.componentsGitHubAgentTrustWarning.toALowTrustAgent")}
         </Button>
       )}
       <a

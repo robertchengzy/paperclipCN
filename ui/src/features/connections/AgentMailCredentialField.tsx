@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { emailApi } from "@/api/email";
@@ -24,7 +25,7 @@ export function AgentMailCredentialField({ companyId, connectionId, onConnection
   }, [connectionId, value, saved.isSuccess, saved.data, onConnectionChange]);
   return <ApiKeyCredentialField providerName="AgentMail" keysUrl={AGENTMAIL_API_KEYS_URL}
     options={(saved.data ?? []).map(option => ({ id: option.id, disabled: option.scope === "unavailable",
-      label: `${option.label} · saved ${formatDateTime(option.createdAt)}` }))}
+      label: translateUiCopy("app.uiCopy.featuresConnectionsAgentMailCredentialField.value0SavedValue1", { value0: String(option.label), value1: String(formatDateTime(option.createdAt)) }) }))}
     connectionId={connectionId} onConnectionChange={onConnectionChange} value={value} onChange={onChange}
     disabled={disabled} loading={saved.isFetching} error={saved.error?.message} />;
 }

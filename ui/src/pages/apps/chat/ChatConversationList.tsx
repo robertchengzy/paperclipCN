@@ -1,3 +1,4 @@
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { MessageSquare } from "lucide-react";
 import type { ChatConversation, ChatProvider } from "@/api/chatEndpoints";
 import { EmptyState } from "@/components/EmptyState";
@@ -34,21 +35,22 @@ export function ChatConversationList({
   rows: ChatConversation[];
   provider: ChatProvider;
 }) {
+  useUiCopyTranslation();
   if (!rows.length)
     return (
       <EmptyState
         icon={MessageSquare}
-        message="No conversations yet"
+        message={translateUiCopy("app.uiCopy.pagesAppsChatChatConversationList.noConversationsYet")}
         description={
           provider === "agentmail"
-            ? "Send an email to this agent’s address to start one."
-            : "Mention the agent in an enabled destination to start one."
+            ? translateUiCopy("app.uiCopy.pagesAppsChatChatConversationList.sendAnEmailToThisAgentSAddressTo")
+            : translateUiCopy("app.uiCopy.pagesAppsChatChatConversationList.mentionTheAgentInAnEnabledDestinationToStart")
         }
       />
     );
   return (
     <ul
-      aria-label="Conversations"
+      aria-label={translateUiCopy("app.apps.chatEndpointDetail.tabs.conversations")}
       className="divide-y divide-border border-y border-border"
     >
       {rows.map((row) => (
@@ -71,11 +73,11 @@ export function ChatConversationList({
                   className="break-words font-medium hover:underline"
                   to={`/issues/${row.issueId}`}
                 >
-                  {row.issueTitle ?? row.issueIdentifier ?? "Paperclip task"}
+                  {row.issueTitle ?? row.issueIdentifier ?? translateUiCopy("app.apps.gitHubBotManagement.paperclipTask")}
                 </Link>
               ) : (
                 <span className="font-medium">
-                  {row.issueTitle ?? "Waiting for task"}
+                  {row.issueTitle ?? translateUiCopy("app.apps.chatEndpointDetail.waitingForTask")}
                 </span>
               )}
             </div>
@@ -97,7 +99,7 @@ export function ChatConversationList({
                   {formatDateTime(row.updatedAt)}
                 </time>
               )}
-              {row.state === "completed" && <span>Completed</span>}
+              {row.state === "completed" && <span>{translateUiCopy("app.common.states.completed")}</span>}
             </div>
           </div>
           {row.state !== "active" && row.state !== "completed" && (

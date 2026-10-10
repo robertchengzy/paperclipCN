@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { useTranslation } from "@/i18n";
 import { Link } from "@/lib/router";
 import { ArrowLeft, Check, Circle, CircleAlert, Loader2 } from "lucide-react";
@@ -14,12 +16,13 @@ export type DotConnectionState = {
 };
 
 const presets = [
-  { id: "dot", name: "Dot", adapter: "openai_dot", description: "Your Dot in ChatGPT" },
-  { id: "hermes", name: "Hermes", adapter: "hermes_gateway", description: "An existing Hermes agent" },
-  { id: "other", name: "Other", adapter: "http", description: "Any agent that can connect to Paperclip" },
+  { id: "dot", name: "Dot", adapter: "openai_dot", get description() { return translateUiCopy("app.uiCopy.adaptersAdapterDisplayRegistry.yourDotInChatGPT"); } },
+  { id: "hermes", name: "Hermes", adapter: "hermes_gateway", get description() { return translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.anExistingHermesAgent"); } },
+  { id: "other", get name() { return translateUiCopy("app.taskChat.questionForm.other"); }, adapter: "http", get description() { return translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.anyAgentThatCanConnectToPaperclip"); } },
 ] as const;
 
 export function ExternalAgentPresetPicker({ onSelect, dotDisabledReason }: { onSelect: (preset: ExternalAgentPreset) => void; dotDisabledReason?: string }) {
+  useUiCopyTranslation();
   return <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
     {presets.map(preset => <button
       key={preset.id}
@@ -37,24 +40,25 @@ export function ExternalAgentPresetPicker({ onSelect, dotDisabledReason }: { onS
 }
 
 const checks = [
-  { title: "Connected to Paperclip", description: "Your Dot has connected to this agent." },
-  { title: "Task updates enabled", description: "Your Dot is subscribed to new assignments and messages." },
-  { title: "Test event confirmed", description: "Your Dot received our test and replied to Paperclip." },
+  { get title() { return translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.connectedToPaperclip"); }, get description() { return translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotHasConnectedToThisAgent"); } },
+  { get title() { return translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.taskUpdatesEnabled"); }, get description() { return translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotIsSubscribedToNewAssignmentsAndMessages"); } },
+  { get title() { return translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.testEventConfirmed"); }, get description() { return translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotReceivedOurTestAndRepliedToPaperclip"); } },
 ];
 
 /** Controlled by server evidence in the invite controller, never by copying a prompt. */
 export function DotConnectionChecks({ state }: { state: DotConnectionState }) {
+  useUiCopyTranslation();
   const completed = { waiting: 0, connected: 1, subscribed: 2, testing: 2, finishing: 3, ready: 3 }[state.phase];
-  const message = state.problem === "agent_unavailable" ? "Connection checks passed, but this agent cannot receive tasks. Resolve the agent’s setup blocker in Paperclip."
-    : state.problem === "offline" ? "Connection updates paused. Reconnect to check the latest status."
-    : state.problem === "prompt_unavailable" ? "This setup prompt was replaced in another window. Create a fresh prompt to continue."
-    : state.problem === "event_timeout" ? "Your Dot connected, but hasn’t confirmed the test event. Ask it to check Paperclip, then retry."
-    : state.phase === "finishing" ? "Your Dot confirmed the test event. Paperclip is finishing agent setup."
-    : state.phase === "ready" ? "Your Dot is ready for tasks. Messages can travel both ways."
-    : state.phase === "waiting" ? "Watching for your Dot. Updates will appear here automatically."
-    : state.phase === "connected" ? "Your Dot connected. Waiting for it to enable task updates."
-    : "Waiting for your Dot to confirm a test event. No task will be created.";
-  return <section aria-label="Dot connection checks" className="space-y-4">
+  const message = state.problem === "agent_unavailable" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.connectionChecksPassedButThisAgentCannotReceiveTasks")
+    : state.problem === "offline" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.connectionUpdatesPausedReconnectToCheckTheLatestStatus")
+    : state.problem === "prompt_unavailable" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.thisSetupPromptWasReplacedInAnotherWindowCreate")
+    : state.problem === "event_timeout" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotConnectedButHasnTConfirmedTheTest")
+    : state.phase === "finishing" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotConfirmedTheTestEventPaperclipIsFinishing")
+    : state.phase === "ready" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotIsReadyForTasksMessagesCanTravel")
+    : state.phase === "waiting" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.watchingForYourDotUpdatesWillAppearHereAutomatically")
+    : state.phase === "connected" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotConnectedWaitingForItToEnableTask")
+    : translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.waitingForYourDotToConfirmATestEvent");
+  return <section aria-label={translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.dotConnectionChecks")} className="space-y-4">
     <ol className="space-y-4">
       {checks.map((check, index) => {
         const done = index < completed;
@@ -67,7 +71,7 @@ export function DotConnectionChecks({ state }: { state: DotConnectionState }) {
           </span>
           <div className="min-w-0 pt-0.5">
             <p className={cn("text-sm", done || active || failed ? "font-medium" : "text-muted-foreground")}>
-              {check.title}<span className="sr-only">{done ? ": complete" : failed ? ": needs attention" : active ? ": in progress" : ": waiting"}</span>
+              {check.title}<span className="sr-only">{done ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.complete") : failed ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.needsAttention") : active ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.inProgress") : translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.waiting")}</span>
             </p>
             {done && <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{check.description}</p>}
           </div>
@@ -103,59 +107,59 @@ export function ExternalAgentInviteContent({
   const dot = preset === "dot";
   const ready = dot && connection.phase === "ready" && !connection.problem;
   const connecting = dot && connection.phase !== "waiting";
-  const progressLabel = connection.problem === "agent_unavailable" ? "Agent unavailable"
-    : connection.problem === "offline" ? "Updates paused"
-    : connection.problem === "event_timeout" ? "Needs attention"
-    : connection.phase === "finishing" ? "Finishing setup…"
-    : connection.phase === "connected" ? "Connecting…" : "Confirming connection…";
+  const progressLabel = connection.problem === "agent_unavailable" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.agentUnavailable")
+    : connection.problem === "offline" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.updatesPaused")
+    : connection.problem === "event_timeout" ? translateUiCopy("app.common.states.needsAttention")
+    : connection.phase === "finishing" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.finishingSetup")
+    : connection.phase === "connected" ? translateUiCopy("app.common.progress.connecting") : translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.confirmingConnection");
   return <>
     <div className="min-h-0 space-y-6 overflow-y-auto px-6 pb-6 pt-8 sm:px-8">
       <div className="space-y-3 pr-5">
         {provider && <AdapterMark type={provider.adapter} className="size-10" />}
         <div className="space-y-2">
           <DialogTitle className="text-xl font-semibold tracking-tight">
-            {!provider ? t("app.agentSetup.basics.invite") : dot ? ready ? "Your Dot is connected" : "Connect your Dot" : preset === "hermes" ? "Invite your Hermes agent" : "Invite your agent"}
+            {!provider ? t("app.agentSetup.basics.invite") : dot ? ready ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotIsConnected") : translateUiCopy("app.uiCopy.componentsDotRunnerConnection.connectYourDot") : preset === "hermes" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.inviteYourHermesAgent") : translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.inviteYourAgent")}
           </DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
-            {!provider ? `Bring an agent you already use into ${companyName}.`
-              : ready ? `Your Dot can now receive assignments and work with ${companyName}.`
-              : connection.problem === "agent_unavailable" ? "Your Dot is connected. This agent must be available in Paperclip before it can receive assignments."
-              : connection.phase === "finishing" ? "Your Dot has connected and confirmed task updates. Paperclip is preparing it for assignments."
-              : connecting ? "Your Dot has connected. We’re checking that task updates can travel both ways."
-              : dot ? "Copy the setup prompt and send it to your Dot in ChatGPT. Your Dot will connect itself; we’ll watch for it here."
-              : `Copy the invitation prompt and send it to your ${preset === "hermes" ? "Hermes " : ""}agent. Approve its join request in Paperclip when it’s ready.`}
+            {!provider ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.bringAnAgentYouAlreadyUseIntoValue0", { value0: String(companyName) })
+              : ready ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotCanNowReceiveAssignmentsAndWorkWithValue0", { value0: String(companyName) })
+              : connection.problem === "agent_unavailable" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotIsConnectedThisAgentMustBeAvailable")
+              : connection.phase === "finishing" ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotHasConnectedAndConfirmedTaskUpdatesPaperclip")
+              : connecting ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.yourDotHasConnectedWeReCheckingThatTask")
+              : dot ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.copyTheSetupPromptAndSendItToYour")
+              : translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.copyTheInvitationPromptAndSendItToYourValue0", { value0: String(preset === "hermes" ? "Hermes " : "") })}
           </DialogDescription>
         </div>
       </div>
-      {error && <div role="alert" className="space-y-3 text-sm text-destructive"><p>{error}</p><Button variant="outline" disabled={busy} onClick={onRetry}>Try again</Button></div>}
+      {error && <div role="alert" className="space-y-3 text-sm text-destructive"><p>{error}</p><Button variant="outline" disabled={busy} onClick={onRetry}>{translateUiCopy("app.common.actions.tryAgain")}</Button></div>}
       {!provider ? <><ExternalAgentPresetPicker onSelect={onSelect} dotDisabledReason={dotDisabledReason} />
         {dotDisabledReason && <p className="text-sm text-muted-foreground">{dotDisabledReason}</p>}</>
-        : approvalHref ? <p className="text-sm text-muted-foreground">An organization admin needs to approve this agent before Dot can connect. This page will update after approval.</p>
-        : busy && !prompt && connection.phase === "waiting" ? <p role="status" className="text-sm text-muted-foreground">Preparing your invitation…</p> : dot ? <>
+        : approvalHref ? <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.anOrganizationAdminNeedsToApproveThisAgentBefore")}</p>
+        : busy && !prompt && connection.phase === "waiting" ? <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.preparingYourInvitation")}</p> : dot ? <>
         <div className="border-t pt-6"><DotConnectionChecks state={connection} />
-          {connection.phase === "waiting" && <p className="mt-4 text-xs text-muted-foreground">Dot uses your OpenAI account. Provider usage and cost aren’t reported to Paperclip.</p>}</div>
-        {connection.problem === "event_timeout" && <Button variant="outline" disabled={busy} onClick={onRetry}>Retry test event</Button>}
-        {connection.problem === "offline" && <Button variant="outline" disabled={busy} onClick={onRetry}>Reconnect updates</Button>}
-      </> : <p className="text-sm leading-relaxed text-muted-foreground">The invitation includes everything your agent needs to join {companyName}. You can review its request before granting access.</p>}
+          {connection.phase === "waiting" && <p className="mt-4 text-xs text-muted-foreground">{translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.dotUsesYourOpenAIAccountProviderUsageAndCost")}</p>}</div>
+        {connection.problem === "event_timeout" && <Button variant="outline" disabled={busy} onClick={onRetry}>{translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.retryTestEvent")}</Button>}
+        {connection.problem === "offline" && <Button variant="outline" disabled={busy} onClick={onRetry}>{translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.reconnectUpdates")}</Button>}
+      </> : <p className="text-sm leading-relaxed text-muted-foreground"><Trans i18nKey="app.uiCopy.componentsNewAgentExternalAgentInviteContent.message23" components={{ part0: <>{""}{companyName}</> }} /></p>}
     </div>
     <div className="flex items-center justify-between gap-3 border-t px-6 py-4 sm:px-8">
       <Button variant="ghost" onClick={provider ? onBack : onClose}>
         {provider && <ArrowLeft className="size-4" />}{provider ? t("app.common.actions.back") : t("app.common.actions.cancel")}
       </Button>
-      {provider && (approvalHref ? <Button asChild><Link to={approvalHref} onClick={onClose}>Review approval</Link></Button>
+      {provider && (approvalHref ? <Button asChild><Link to={approvalHref} onClick={onClose}>{translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.reviewApproval")}</Link></Button>
         : ready ? <Button onClick={onClose}>{t("app.common.actions.done")}</Button>
         : connecting ? <Button disabled aria-live="polite">
           {!connection.problem && <Loader2 className="size-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />}
           {progressLabel}
         </Button>
-        : dot && connection.problem === "prompt_unavailable" ? <Button disabled={busy} onClick={onNewPrompt}>Create a new prompt</Button>
-        : !prompt || busy ? <Button disabled>{busy ? "Preparing…" : "Waiting for Dot…"}</Button>
+        : dot && connection.problem === "prompt_unavailable" ? <Button disabled={busy} onClick={onNewPrompt}>{translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.createANewPrompt")}</Button>
+        : !prompt || busy ? <Button disabled>{busy ? translateUiCopy("app.connections.connectionSetupFlow.preparing") : translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.waitingForDot")}</Button>
         : <AgentSetupPrompt
           key={preset}
           prompt={prompt}
-          label={dot ? "Copy setup prompt" : "Copy invitation prompt"}
-          title={dot ? "Connect your Dot" : "Invite your agent"}
-          description={dot ? "Send this whole prompt to your Dot in ChatGPT." : "Send this whole prompt to your agent."}
+          label={dot ? translateUiCopy("app.apps.gitHubSetupPrompt.copySetupPrompt") : translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.copyInvitationPrompt")}
+          title={dot ? translateUiCopy("app.uiCopy.componentsDotRunnerConnection.connectYourDot") : translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.inviteYourAgent")}
+          description={dot ? translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.sendThisWholePromptToYourDotInChatGPT") : translateUiCopy("app.uiCopy.componentsNewAgentExternalAgentInviteContent.sendThisWholePromptToYourAgent")}
           agent={dot ? { name: "Dot", src: "/brands/adapters/openai-dot.svg" } : undefined}
           align="end"
           className="min-w-0 shrink"

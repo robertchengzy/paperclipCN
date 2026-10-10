@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { t as translateUpstream } from "@/i18n";
 import { ConfigSelect } from "@/components/ConfigSelect";
 import { t, useTranslation } from "@/i18n";
@@ -43,7 +44,7 @@ const defaultClaudeManagedModel = "claude-sonnet-5";
 const defaultAwsAgentCoreModel = "global.anthropic.claude-sonnet-4-6";
 const runnerHarnessOptions = [
   { value: "codex", label: "Codex", adapter: "codex_local" },
-  { value: "opencode", label: "OpenCode 1.18.34", adapter: "opencode_local" },
+  { value: "opencode", get label() { return translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.openCode11834"); }, adapter: "opencode_local" },
   { value: "claude_managed", label: "Claude Managed", adapter: "claude_local" },
   { value: "aws_agentcore", label: "AWS AgentCore", adapter: "aws_agentcore" },
   { value: "acpx", get label() { return translateUpstream("app.upstreamSync.acpAgents"); }, adapter: "acpx_local" },
@@ -268,14 +269,14 @@ export function CodexLocalConfigFields({
         </Field>
       )}
       {runnerManaged && runnerProvider === "openai_dot" && <>
-        <Field configSection="adapter" label="Dot connection" hint="A verified event round trip is required before assigning work.">
+        <Field configSection="adapter" label={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.dotConnection")} hint={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.aVerifiedEventRoundTripIsRequiredBeforeAssigning")}>
           <DotRunnerConnection companyId={companyId} agentId={agentId} bindingId={String(runnerSchemaValue("dotBindingId", ""))} onBinding={id => updateRunnerSchemaValue("dotBindingId", id)} />
         </Field>
-        <ToggleField label="Read task attachments" hint="Let Dot read files attached to its current assigned task. File contents are sent to OpenAI. Does not require workspace command access; off by default."
+        <ToggleField label={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.readTaskAttachments")} hint={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.letDotReadFilesAttachedToItsCurrentAssigned")}
           checked={runnerSchemaValue("dotAttachmentAccess", false) === true} onChange={value => updateRunnerSchemaValue("dotAttachmentAccess", value)} />
-        <ToggleField label="Workspace files and commands" hint="Let Dot read and write its assigned workspace and publish files. Requires a local Runner. Commands are available only on Linux with bubblewrap; they cannot read your home directory or use injected credentials."
+        <ToggleField label={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.workspaceFilesAndCommands")} hint={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.letDotReadAndWriteItsAssignedWorkspaceAnd")}
           checked={runnerSchemaValue("dotWorkspaceAccess", false) === true} onChange={value => updateRunnerSchemaValue("dotWorkspaceAccess", value)} />
-        <ToggleField label="Allow externally billed provider" hint="Dot does not report token usage or cost. Paperclip cannot enforce a provider spend ceiling; known company and agent budget limits still apply."
+        <ToggleField label={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.allowExternallyBilledProvider")} hint={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.dotDoesNotReportTokenUsageOrCostPaperclip")}
           checked={runnerSchemaValue("allowUnmeteredProvider", false) === true} onChange={value => updateRunnerSchemaValue("allowUnmeteredProvider", value)} />
       </>}
       {runnerManaged && runnerProvider === "acpx" && runnerSchemaValue("acpxAgent", "claude") !== "grok" && (
@@ -318,11 +319,11 @@ export function CodexLocalConfigFields({
         </Field>
       )}
       {runnerManaged && runnerProvider === "acpx" && runnerSchemaValue("acpxAgent", "claude") === "pi" && (
-        <Field configSection="adapter" label="Pi thinking level" hint="The runner verifies this exact level before each session can prompt. Changing it starts a new session.">
-          <select className={inputClass} aria-label="Pi thinking level" value={String(runnerSchemaValue("piThinkingLevel", "low"))}
+        <Field configSection="adapter" label={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.piThinkingLevel")} hint={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.theRunnerVerifiesThisExactLevelBeforeEachSession")}>
+          <select className={inputClass} aria-label={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.piThinkingLevel")} value={String(runnerSchemaValue("piThinkingLevel", "low"))}
             onChange={(event) => updateRunnerSchemaValue("piThinkingLevel", event.target.value)}>
-            {!["off", "low", "high", "max"].includes(String(runnerSchemaValue("piThinkingLevel", "low"))) && <option value={String(runnerSchemaValue("piThinkingLevel", "low"))} disabled>Unsupported saved thinking level</option>}
-            <option value="off">Off</option><option value="low">Low</option><option value="high">High</option><option value="max">Max</option>
+            {!["off", "low", "high", "max"].includes(String(runnerSchemaValue("piThinkingLevel", "low"))) && <option value={String(runnerSchemaValue("piThinkingLevel", "low"))} disabled>{translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.unsupportedSavedThinkingLevel")}</option>}
+            <option value="off">{translateUiCopy("app.common.labels.off")}</option><option value="low">{translateUiCopy("app.common.labels.low")}</option><option value="high">{translateUiCopy("app.common.labels.high")}</option><option value="max">{translateUiCopy("app.upstreamSync.max")}</option>
           </select>
         </Field>
       )}

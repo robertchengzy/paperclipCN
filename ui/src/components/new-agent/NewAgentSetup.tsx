@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { t as translateSync } from "@/i18n";
 import { t as translateUpstream } from "@/i18n";
 import { ConfigSelect } from "@/components/ConfigSelect";
@@ -403,7 +404,7 @@ function Setup({
     return config;
   }
   function preparedConfig(nextConnection = connection) {
-    if (isDot && !allowUnmeteredProvider) throw new Error("Acknowledge external provider billing before creating your Dot agent.");
+    if (isDot && !allowUnmeteredProvider) throw new Error(translateUiCopy("app.uiCopy.componentsNewAgentNewAgentSetup.acknowledgeExternalProviderBillingBeforeCreatingYourDotAgent"));
     if (multiProvider && (!model.trim() || !model.includes("/")))
       throw new Error(t("app.agentSetup.setup.errors.modelFormat"));
     if (
@@ -791,7 +792,7 @@ function Setup({
                         resetTest();
                         setScreen("runtime");
                       }}
-                    /> : <p role="status" className="text-sm text-muted-foreground">Loading connection settings…</p>}
+                    /> : <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.connections.connectionSetupFlow.loadingSettings")}</p>}
                   </OnboardingCard>
                 ) : screen === "saved" && created ? (
                   <div className="space-y-6">
@@ -856,9 +857,9 @@ function Setup({
                     <fieldset disabled={busy} className="space-y-8">
                       <section className="space-y-5">
                         {isDot && <>
-                          <p className="text-sm text-muted-foreground">Create this agent, then copy its pairing prompt to your Dot.</p>
-                          {experimental.data?.enablePublicMcp !== true && <p className="text-sm text-muted-foreground">Enable Assistant connections (MCP) in Experimental settings before pairing.</p>}
-                          <ToggleField label="Allow externally billed provider" hint="Dot does not report token usage or cost. Paperclip cannot enforce a provider spend ceiling; known company and agent budget limits still apply."
+                          <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.componentsNewAgentNewAgentSetup.createThisAgentThenCopyItsPairingPromptTo")}</p>
+                          {experimental.data?.enablePublicMcp !== true && <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.componentsNewAgentNewAgentSetup.enableAssistantConnectionsMCPInExperimentalSettingsBeforePairing")}</p>}
+                          <ToggleField label={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.allowExternallyBilledProvider")} hint={translateUiCopy("app.uiCopy.adaptersCodexLocalConfigFields.dotDoesNotReportTokenUsageOrCostPaperclip")}
                             checked={allowUnmeteredProvider} onChange={value => { setAllowUnmeteredProvider(value); resetTest(); }} />
                         </>}
                         {!connectionAdapter && aiProviderForAdapter(brandType) && (
@@ -1196,7 +1197,7 @@ function Setup({
                         disabled={!ready || busy}
                         onClick={() => setScreen("connect")}
                       >
-                        Connect model
+                        {translateUiCopy("app.uiCopy.componentsNewAgentNewAgentSetup.connectModel")}
                         <ArrowRight className="size-4" />
                       </Button> : <Button
                         type="submit"

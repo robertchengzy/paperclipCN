@@ -25,7 +25,7 @@
 | Logo | 标志 | 组织标志图片 |
 | Workspace | 工作区 | Execution workspace → 执行工作区，与 Git Worktree 区分 |
 | Teardown command / Cleanup command | 拆除命令 / 清理命令 | 两个独立配置字段分别命名，不将归档工作区等同于删除磁盘文件 |
-| Worktree | Worktree | Git Worktree；命令 `git worktree` 原样保留 |
+| Worktree | 工作树 | 产品内工作区选择与说明使用“工作树”；Git 命令 `git worktree`、模式值与仓库分支名原样保留 |
 | Harness | Harness | Runtime → 运行时 |
 | Token | Token | 认证与模型计量按上下文区分；完整外部字段名保留原样 |
 | Watchdog | Watchdog | 任务核验与恢复职责，不等同于 Board 权限 |
@@ -37,7 +37,10 @@
 | Plugin | 插件 | |
 | Adapter | 适配器 | |
 | Tool | 工具 | Tool profile → 工具配置档 |
-| Profile | 配置档 | 指用户或个人资料时译为“个人资料” |
+| Profile | 配置档 / 资料 | 用户或个人资料显示为“资料”；工具和运行配置仍为“配置档” |
+| Access | 权限 | 产品内页面和设置入口使用“权限”；普通说明按具体访问语义翻译 |
+| Light mode / Dark mode | 浅色 / 深色 | 主题切换显示目标外观，不加“模式” |
+| Cursor Agent / Plan / Ask mode | 智能体模式 / 计划模式 / 问答模式 | 仅翻译模式的显示名称；`agent`、`plan`、`ask` 选项值不变 |
 | Budget | 预算 | |
 | Cost / Spend | 成本 / 支出 | Biller → 计费方，Finance event → 财务事件 |
 | Activity | 活动 | Audit → 审计 |
@@ -98,7 +101,7 @@
 
 - 产品和第三方名称：Paperclip、Claude、Codex、Cursor、OpenCode、Hermes、Pi、GitHub、Slack、Google Sheets、Railway、Zapier、Arcade、Composio 等。
 - 技术缩写与格式：API、MCP、ACP、JSON、YAML、CSV、TSV、XML、HTML、CSS、SQL、HTTP(S)、SSH、URL、PDF、ZIP、WASM、PID、ID。
-- 技术对象：Token、Worktree、Harness、Watchdog、Webhook、OAuth。Agent/Skill 作为产品对象译为智能体/技能；Agent Skills 格式名保留英文。推理强度的技术级别（如 Ultra）与 Ask 等运行模式名称保留英文，后台枚举值不变。
+- 技术对象：计量 Token、Webhook、OAuth；认证 Token 按语义译为“令牌”。Worktree 的产品显示使用“工作树”；Agent/Skill 作为产品对象译为智能体/技能；Agent Skills 格式名保留英文。推理强度的技术级别（如 Ultra）保留英文；Cursor 的模式名称按上表翻译，后台枚举值不变。其他术语遵循实例部署文档中的既有约定。
 - 外部控制台的正式字段名：如 `Bot User OAuth Token`、`Signing Secret`、`Application / Client ID`，保持原样以便对照。
 - 文件名、命令、环境变量、代码标识、示例值（如 `SKILL.md`、`PAPERCLIP_*`、`PAP-123`）。
 - 键盘按键名（Esc、Enter、Tab、Shift、Cmd、Ctrl）。

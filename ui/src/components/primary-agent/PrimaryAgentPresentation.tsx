@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { createContext, useContext } from "react";
 import { ArrowRight, Crown, Loader2 } from "lucide-react";
 import type { Agent } from "@paperclipai/shared";
@@ -22,30 +24,33 @@ const PrimaryAgentContext = createContext<PrimaryAgentPresentation | null>(null)
 export const PrimaryAgentPresentationProvider = PrimaryAgentContext.Provider;
 
 export function usePrimaryAgentPresentation(companyId?: string | null) {
+
   const value = useContext(PrimaryAgentContext);
   return value && (!companyId || value.companyId === companyId) ? value : null;
 }
 
 export function PrimaryAgentIndicator({ agentId, companyId }: { agentId: string; companyId?: string }) {
+  useUiCopyTranslation();
   const primary = usePrimaryAgentPresentation(companyId);
   if (!primary || primary.loading || primary.primaryAgentId !== agentId) return null;
   return <Tooltip>
     <TooltipTrigger asChild>
-      <span role="img" aria-label="My primary agent" className="inline-flex shrink-0 text-primary">
+      <span role="img" aria-label={translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.myPrimaryAgent")} className="inline-flex shrink-0 text-primary">
         <Crown aria-hidden="true" className="size-3.5" />
       </span>
     </TooltipTrigger>
-    <TooltipContent>My primary agent</TooltipContent>
+    <TooltipContent>{translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.myPrimaryAgent")}</TooltipContent>
   </Tooltip>;
 }
 
 export function SetPrimaryAgentButton({ agent }: {
   agent: Agent;
 }) {
+  useUiCopyTranslation();
   const primary = usePrimaryAgentPresentation(agent.companyId);
   if (!primary || agent.status === "terminated" || agent.status === "pending_approval") return null;
   if (primary.error) return <Button type="button" variant="link" size="sm" onClick={primary.onRetry}
-    className="h-auto justify-start p-0 text-xs text-destructive">Retry loading primary agent</Button>;
+    className="h-auto justify-start p-0 text-xs text-destructive">{translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.retryLoadingPrimaryAgent")}</Button>;
   const selected = primary.primaryAgentId === agent.id;
   const pending = primary.pendingAgentId === agent.id;
   if (selected && !pending && !primary.loading) return null;
@@ -56,7 +61,7 @@ export function SetPrimaryAgentButton({ agent }: {
     onClick={primary.primaryAgentId ? undefined : () => primary.onChange(agent.id)}
     className="h-auto justify-start p-0 text-xs text-muted-foreground hover:text-foreground">
     {pending || loading ? <Loader2 aria-hidden="true" className="size-3 motion-safe:animate-spin" /> : null}
-    {loading ? "Loading primary…" : pending ? "Setting primary…" : "Set as my primary"}
+    {loading ? translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.loadingPrimary") : pending ? translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.settingPrimary") : translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.setAsMyPrimary")}
   </Button>;
   if (!previous) return button;
   return <AlertDialog key={previous.id}>
@@ -64,30 +69,28 @@ export function SetPrimaryAgentButton({ agent }: {
     <AlertDialogContent>
       <div className="flex items-start justify-center gap-5 pt-2">
         <div className="flex min-w-0 flex-1 flex-col items-center gap-2 text-center">
-          <AgentAvatar agent={previous} size={64} label={`${previous.name} avatar`} />
+          <AgentAvatar agent={previous} size={64} label={translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.value0Avatar", { value0: String(previous.name) })} />
           <span className="max-w-full break-words text-sm font-medium">{previous.name}</span>
         </div>
         <ArrowRight aria-hidden="true" className="mt-5 size-6 shrink-0 text-muted-foreground" />
         <div className="flex min-w-0 flex-1 flex-col items-center gap-2 text-center">
-          <AgentAvatar agent={agent} size={64} label={`${agent.name} avatar`}
+          <AgentAvatar agent={agent} size={64} label={translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.value0Avatar", { value0: String(agent.name) })}
             className="rounded-xl ring-1 ring-primary ring-offset-2 ring-offset-background" />
           <span className="flex max-w-full items-center justify-center gap-1.5 text-sm font-medium">
             <span className="min-w-0 break-words">{agent.name}</span>
-            <span role="img" aria-label="New primary agent" className="inline-flex shrink-0 text-primary">
+            <span role="img" aria-label={translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.newPrimaryAgent")} className="inline-flex shrink-0 text-primary">
               <Crown aria-hidden="true" className="size-3.5" />
             </span>
           </span>
         </div>
       </div>
       <AlertDialogHeader>
-        <AlertDialogTitle>Change your primary agent?</AlertDialogTitle>
-        <AlertDialogDescription className="break-words">
-          This will make {agent.name} your primary agent, do you want to do this?
-        </AlertDialogDescription>
+        <AlertDialogTitle>{translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.changeYourPrimaryAgent")}</AlertDialogTitle>
+        <AlertDialogDescription className="break-words"><Trans i18nKey="app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.message24" components={{ part0: <>{""}{agent.name}</> }} /></AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter className="flex-row justify-between sm:justify-between">
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction disabled={disabled} onClick={() => primary.onChange(agent.id)}>Set as my primary</AlertDialogAction>
+        <AlertDialogCancel>{translateUiCopy("app.common.actions.cancel")}</AlertDialogCancel>
+        <AlertDialogAction disabled={disabled} onClick={() => primary.onChange(agent.id)}>{translateUiCopy("app.uiCopy.componentsPrimaryAgentPrimaryAgentPresentation.setAsMyPrimary")}</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>;

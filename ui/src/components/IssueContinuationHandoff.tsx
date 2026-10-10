@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useEffect, useRef, useState } from "react";
 import type { IssueDocument } from "@paperclipai/shared";
 import { ISSUE_CONTINUATION_SUMMARY_DOCUMENT_KEY } from "@paperclipai/shared";
@@ -73,9 +74,9 @@ export function IssueContinuationHandoff({
         </div>
         <AgentSetupPrompt
           prompt={document.body}
-          label="Continue with an agent"
-          title="Task handoff"
-          description="Paste this into your agent to continue from this handoff."
+          label={translateUiCopy("app.uiCopy.componentsIssueContinuationHandoff.continueWithAnAgent")}
+          title={translateUiCopy("app.uiCopy.componentsIssueContinuationHandoff.taskHandoff")}
+          description={translateUiCopy("app.uiCopy.componentsIssueContinuationHandoff.pasteThisIntoYourAgentToContinueFromThis")}
           align="end"
         />
       </div>

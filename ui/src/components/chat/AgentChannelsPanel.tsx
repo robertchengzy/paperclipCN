@@ -1,3 +1,4 @@
+import { t as translateUiCopy } from "@/i18n";
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, MessageSquarePlus } from "lucide-react";
 import { chatEndpointsApi, type ChatProvider } from "@/api/chatEndpoints";
@@ -10,7 +11,7 @@ import { useTranslation } from "@/i18n";
 
 const providerNames: Record<ChatProvider, string> = {
   slack: "Slack",
-  github: "GitHub Code Review Bot",
+  get github() { return translateUiCopy("app.uiCopy.componentsChatAgentChannelsPanel.gitHubCodeReviewBot"); },
   discord: "Discord",
   "microsoft-teams": "Microsoft Teams",
   telegram: "Telegram",

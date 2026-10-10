@@ -15,6 +15,19 @@ import { scanSource, scanUi } from "./hardcoded-strings";
 const srcDir = path.resolve(__dirname, "..");
 
 describe("hardcoded UI strings", () => {
+  it("flags lowercase template copy assigned to display variables", () => {
+    const source = `
+      export function Progress() {
+        const title = checking ? \`\${count} skills found\` : "Ready";
+        const detail = \`\${checked} of \${total} checked\`;
+        return <><h1>{title}</h1><p>{detail}</p></>;
+      }
+    `;
+    expect(scanSource("x.tsx", source, new Set()).map((item) => item.text)).toEqual([
+      "skills found", "Ready", "of checked",
+    ]);
+  });
+
   it("flags JSX text, copy attributes, copy properties and toast calls", () => {
     const source = `
       const columns = [{ key: "name", label: "Name" }];

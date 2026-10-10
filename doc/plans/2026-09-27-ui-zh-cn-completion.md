@@ -8,7 +8,7 @@ This batch merges upstream `640dee18029f7651d56ae0f1828d04228f9ab044` and preser
 - Board governance uses 董事会. A missing human display name uses the separate 董事会成员 key. User names, agent output, raw logs, routes, configuration fields and enum values remain unchanged.
 - `projectDisplayName` aliases the exact project name `Onboarding` to 入门引导 in Chinese read-only labels. Callers must use the original name for editing, saving and route generation. `InlineEditor.displayValue` does not change its draft or saved value.
 - Both audit feeds use the shared activity mappings. Known non-linkable events omit a redundant entity descriptor; unknown actions and entity types retain diagnostic fallbacks. Language-sensitive memoized labels depend on the current language.
-- Theme toggle labels in Chinese name the target mode: 浅色模式 / 深色模式.
+- Theme toggle labels in Chinese name the target appearance: 浅色 / 深色 (shortened on 2026-10-10).
 
 ## Configuration controls
 
