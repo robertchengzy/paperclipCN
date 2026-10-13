@@ -249,4 +249,3 @@ jobs:
 
           echo "full_ci=$full_ci" >> "$GITHUB_OUTPUT"
           echo "::notice title=Stacked PR CI scope::$reason; full_ci=$full_ci"
-
