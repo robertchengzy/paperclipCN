@@ -875,18 +875,7 @@ describe("CompanyEnvironments — test provider button", () => {
       adapters: [],
       drivers: { local: "supported", ssh: "supported", sandbox: "supported", plugin: "unsupported" },
       sandboxProviders: {
-        daytona: {
-          status: "supported",
-          supportsSavedProbe: true,
-          supportsUnsavedProbe: true,
-          supportsRunExecution: true,
-          supportsReusableLeases: true,
-          supportsInteractiveSetup: true,
-          interactiveSetupConnectionTypes: ["ssh"],
-          supportsTemplateCapture: true,
-          supportsTemplateDelete: true,
-          displayName: "Daytona",
-        },
+        daytona: supportedDaytonaCapabilities().sandboxProviders.daytona,
         e2b: {
           status: "supported",
           supportsSavedProbe: true,
@@ -954,24 +943,7 @@ describe("CompanyEnvironments — test provider button", () => {
     mockEnvironmentsApi.list.mockResolvedValue([
       { id: "env-1", name: "Daytona", driver: "sandbox", description: null, config: { provider: "daytona" } },
     ]);
-    mockEnvironmentsApi.capabilities.mockResolvedValue({
-      adapters: [],
-      drivers: { local: "supported", ssh: "supported", sandbox: "supported", plugin: "unsupported" },
-      sandboxProviders: {
-        daytona: {
-          status: "supported",
-          supportsSavedProbe: true,
-          supportsUnsavedProbe: true,
-          supportsRunExecution: true,
-          supportsReusableLeases: true,
-          supportsInteractiveSetup: true,
-          interactiveSetupConnectionTypes: ["ssh"],
-          supportsTemplateCapture: true,
-          supportsTemplateDelete: true,
-          displayName: "Daytona",
-        },
-      },
-    });
+    mockEnvironmentsApi.capabilities.mockResolvedValue(supportedDaytonaCapabilities());
     mockEnvironmentsApi.customImageTemplate.mockImplementation(async () => ({
       activeTemplate: null,
       activeSession,
@@ -1139,24 +1111,7 @@ describe("CompanyEnvironments — test provider button", () => {
     mockEnvironmentsApi.list.mockResolvedValue([
       { id: "env-1", name: "Daytona", driver: "sandbox", description: null, config: { provider: "daytona" } },
     ]);
-    mockEnvironmentsApi.capabilities.mockResolvedValue({
-      adapters: [],
-      drivers: { local: "supported", ssh: "supported", sandbox: "supported", plugin: "unsupported" },
-      sandboxProviders: {
-        daytona: {
-          status: "supported",
-          supportsSavedProbe: true,
-          supportsUnsavedProbe: true,
-          supportsRunExecution: true,
-          supportsReusableLeases: true,
-          supportsInteractiveSetup: true,
-          interactiveSetupConnectionTypes: ["ssh"],
-          supportsTemplateCapture: true,
-          supportsTemplateDelete: true,
-          displayName: "Daytona",
-        },
-      },
-    });
+    mockEnvironmentsApi.capabilities.mockResolvedValue(supportedDaytonaCapabilities());
     mockEnvironmentsApi.customImageTemplate.mockResolvedValue({
       activeTemplate: null,
       activeSession: createSession(),
@@ -1252,24 +1207,7 @@ describe("CompanyEnvironments — test provider button", () => {
     mockEnvironmentsApi.list.mockResolvedValue([
       { id: "env-1", name: "Daytona", driver: "sandbox", description: null, config: { provider: "daytona" } },
     ]);
-    mockEnvironmentsApi.capabilities.mockResolvedValue({
-      adapters: [],
-      drivers: { local: "supported", ssh: "supported", sandbox: "supported", plugin: "unsupported" },
-      sandboxProviders: {
-        daytona: {
-          status: "supported",
-          supportsSavedProbe: true,
-          supportsUnsavedProbe: true,
-          supportsRunExecution: true,
-          supportsReusableLeases: true,
-          supportsInteractiveSetup: true,
-          interactiveSetupConnectionTypes: ["ssh"],
-          supportsTemplateCapture: true,
-          supportsTemplateDelete: true,
-          displayName: "Daytona",
-        },
-      },
-    });
+    mockEnvironmentsApi.capabilities.mockResolvedValue(supportedDaytonaCapabilities());
     mockEnvironmentsApi.customImageTemplate.mockResolvedValue({
       activeTemplate: createTemplate({ id: activeTemplateId }),
       activeSession: null,
@@ -1484,24 +1422,7 @@ describe("CompanyEnvironments — test provider button", () => {
     mockEnvironmentsApi.list.mockResolvedValue([
       { id: "env-1", name: "Daytona", driver: "sandbox", description: null, config: { provider: "daytona" } },
     ]);
-    mockEnvironmentsApi.capabilities.mockResolvedValue({
-      adapters: [],
-      drivers: { local: "supported", ssh: "supported", sandbox: "supported", plugin: "unsupported" },
-      sandboxProviders: {
-        daytona: {
-          status: "supported",
-          supportsSavedProbe: true,
-          supportsUnsavedProbe: true,
-          supportsRunExecution: true,
-          supportsReusableLeases: true,
-          supportsInteractiveSetup: true,
-          interactiveSetupConnectionTypes: ["ssh"],
-          supportsTemplateCapture: true,
-          supportsTemplateDelete: true,
-          displayName: "Daytona",
-        },
-      },
-    });
+    mockEnvironmentsApi.capabilities.mockResolvedValue(supportedDaytonaCapabilities());
     mockEnvironmentsApi.customImageTemplate.mockResolvedValue({
       activeTemplate: createTemplate({ id: "template-active" }),
       activeSession: null,
@@ -1536,24 +1457,7 @@ describe("CompanyEnvironments — test provider button", () => {
     mockEnvironmentsApi.list.mockResolvedValue([
       { id: "env-1", name: "Daytona", driver: "sandbox", description: null, config: { provider: "daytona" } },
     ]);
-    mockEnvironmentsApi.capabilities.mockResolvedValue({
-      adapters: [],
-      drivers: { local: "supported", ssh: "supported", sandbox: "supported", plugin: "unsupported" },
-      sandboxProviders: {
-        daytona: {
-          status: "supported",
-          supportsSavedProbe: true,
-          supportsUnsavedProbe: true,
-          supportsRunExecution: true,
-          supportsReusableLeases: true,
-          supportsInteractiveSetup: true,
-          interactiveSetupConnectionTypes: ["ssh"],
-          supportsTemplateCapture: true,
-          supportsTemplateDelete: true,
-          displayName: "Daytona",
-        },
-      },
-    });
+    mockEnvironmentsApi.capabilities.mockResolvedValue(supportedDaytonaCapabilities());
     mockEnvironmentsApi.customImageTemplate.mockResolvedValue({
       activeTemplate: createTemplate({ id: "template-active" }),
       activeTemplateMatchesConfig: false,

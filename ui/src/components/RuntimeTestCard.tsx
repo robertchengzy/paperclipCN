@@ -64,7 +64,12 @@ export function RuntimeTestCard({
   variant?: "connection" | "prerequisites";
 }) {
   const { t } = useTranslation();
-  const content = (variant === "prerequisites" ? prerequisiteCopy : copy)[state];
+  const missingRuntime = state === "fail"
+    ? result?.checks.find(check => check.code === "acpx_runtime_package_missing")
+    : undefined;
+  const content = missingRuntime
+    ? { ...copy.fail, title: t("app.upstreamOct13.runtimeMissing"), description: missingRuntime.message }
+    : (variant === "prerequisites" ? prerequisiteCopy : copy)[state];
   const Icon =
     state === "running"
       ? Loader2

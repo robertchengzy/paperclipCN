@@ -18272,7 +18272,7 @@
         "couldNotLoadDecisionRequests": "Could not load decision requests.",
         "formerUser": "Former user",
         "loadingDecisionRequests": "Loading decision requests…",
-        "recentRequestsInputsAndAnswersAreNotRetained": "Recent requests. Inputs and answers are not retained.",
+        "recentRequestsInputsAndAnswersAreNotRetained": "Recent requests. Inputs are not retained.",
         "setupTest": "Setup test",
         "unresolved": "Unresolved",
         "reported": "Reported",
@@ -18523,9 +18523,9 @@
         "entries": "entries",
         "runIs": "run is",
         "runsAre": "runs are",
-        "withValue0InRecordedCharges": ", with {{value0}} in recorded charges",
+        "withValue0InRecordedCharges": " · {{value0}} in recorded charges",
         "message32": "Subscription accounts also have <part0/> in recorded usage charges for this period, separate from monthly fees.",
-        "message33": "<part0/> tokens have other or unknown billing types<part1/>. They remain in the inference ledger.",
+        "message33": "Other billing usage: <part0/> tokens<part1/>, included in the inference ledger.",
         "message34": "Costs are unavailable for <part0/> usage <part1/> in this period. Totals include known costs only.",
         "message35": "<part0/> <part1/> awaiting cost data."
       },
@@ -19454,6 +19454,11 @@
       "pagesAppsChatSlackSetupPrompt": {
         "pasteSetupPrompt": "Paste this into your agent to configure your Slack bot."
       }
+    },
+    "upstreamOct13": {
+      "runtimeMissing": "Runtime missing",
+      "filesNotIncluded": "Files not included",
+      "uncheckedSkillsStayInstalled": "Unchecked skills stay installed."
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Trans } from "react-i18next";
 import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { t, useTranslation } from "@/i18n";
+import { FastResponseHistory } from "../components/fast-responses/FastResponseHistory";
 import { DecisionHistory } from "../components/decision-models/DecisionHistory";
 import { SubscriptionCostCard, SubscriptionTokenUsage } from "../components/SubscriptionCostCard";
 import { subscriptionsApi } from "../api/subscriptions";
@@ -8,6 +9,7 @@ import { useSearchParams } from "@/lib/router";
 import { CostEstimateLabel } from "../components/CostEstimateLabel";
 import { CostAmount } from "../components/CostAmount";
 import { CostByUserTable } from "../components/CostByUserTable";
+import { CostDataQualityNotice } from "../components/CostDataQualityNotice";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -47,7 +49,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const NO_COMPANY = "__none__";
-export type CostsMainTab = "overview" | "budgets" | "providers" | "billers" | "finance" | "decisions";
+export type CostsMainTab = "overview" | "budgets" | "providers" | "billers" | "finance" | "decisions" | "fast-responses";
 
 export interface CostsProps {
   /** Render inside Audit without a second page-level title or breadcrumb. */
@@ -207,7 +209,7 @@ export function Costs({
 
   useEffect(() => {
     const tab = searchParams.get("tab");
-    setMainTab(!lockTab && tab && ["overview", "providers", "billers", "finance", "budgets", "decisions"].includes(tab) ? tab as CostsMainTab : initialTab);
+    setMainTab(!lockTab && tab && ["overview", "providers", "billers", "finance", "budgets", "decisions", "fast-responses"].includes(tab) ? tab as CostsMainTab : initialTab);
   }, [initialTab, lockTab, searchParams]);
 
   const [today, setToday] = useState(() => new Date().toDateString());
@@ -705,15 +707,11 @@ export function Costs({
             {subscriptions?.canRefresh && <Button variant="outline" size="sm" disabled={discoverSubscriptions.isPending}
               onClick={() => discoverSubscriptions.mutate(companyId)}>{translateUiCopy("app.uiCopy.pagesCosts.retryAccountCheck")}</Button>}
           </div>}
-          {spendData?.summary.pricingComplete === false && (
-            <div role="status" className="space-y-1 text-sm text-muted-foreground">
-              {spendData.summary.unpricedEventCount > 0 && (
-                <p><Trans i18nKey="app.uiCopy.pagesCosts.message34" components={{ part0: <>{""}{spendData.summary.unpricedEventCount}</>, part1: <>{""}{spendData.summary.unpricedEventCount === 1 ? translateUiCopy("app.agentDetail.instructions.entryBadge") : translateUiCopy("app.uiCopy.pagesCosts.entries")}</> }} /></p>
-              )}
-              {spendData.summary.pendingRunCount > 0 && (
-                <p><Trans i18nKey="app.uiCopy.pagesCosts.message35" components={{ part0: <>{""}{spendData.summary.pendingRunCount}</>, part1: <>{""}{spendData.summary.pendingRunCount === 1 ? translateUiCopy("app.uiCopy.pagesCosts.runIs") : translateUiCopy("app.uiCopy.pagesCosts.runsAre")}</> }} /></p>
-              )}
-            </div>
+          {mainTab === "overview" && spendData && (spendData.summary.unpricedEventCount > 0 || spendData.summary.pendingRunCount > 0 || (spendData.summary.unknownBillingEventCount ?? 0) > 0) && (
+            <CostDataQualityNotice key={`${companyId}:${reportQueryFrom}:${reportQueryTo}`} companyId={companyId}
+              from={from || undefined} to={to || undefined} reportKey={queryKeys.costs(companyId, reportQueryFrom, reportQueryTo)}
+              unpricedCount={spendData.summary.unpricedEventCount} pendingCount={spendData.summary.pendingRunCount}
+              unknownBillingCount={spendData.summary.unknownBillingEventCount ?? 0} />
           )}
         </div>
       ) : null}
@@ -729,22 +727,23 @@ export function Costs({
         </p>
       ) : null}
 
-      {!!spendData?.summary.estimatedEventCount && <p role="status" className="text-sm text-muted-foreground">{t("app.reports.costs.includesEstimated", { count: spendData.summary.estimatedEventCount })}</p>}
       {incidentMutation.error && <p role="alert" className="text-sm text-destructive">{t("app.reports.costs.budgetUpdateFailed")}</p>}
       <Tabs value={mainTab} onValueChange={(value) => { setMainTab(value as typeof mainTab); setSearchParams(current => { const next = new URLSearchParams(current); next.set("tab", value); return next; }, { replace: true }); }}>
         {!lockTab ? (
           <div className="max-w-full overflow-x-auto pb-2">
-          <TabsList variant="line" className="justify-start">
-            <TabsTrigger value="overview">{t("app.common.labels.overview")}</TabsTrigger>
-            {!hideBudgetsTab ? <TabsTrigger value="budgets">{t("app.reports.costs.budgets")}</TabsTrigger> : null}
-            <TabsTrigger value="providers">{t("app.reports.costs.providers")}</TabsTrigger>
-            <TabsTrigger value="billers">{t("app.reports.costs.billers")}</TabsTrigger>
-            <TabsTrigger value="finance">{t("app.reports.costs.finance")}</TabsTrigger>
-            <TabsTrigger value="decisions">{t("app.upstreamOct08.decisions")}</TabsTrigger>
-          </TabsList>
+            <TabsList variant="line" className="justify-start">
+              <TabsTrigger value="overview">{t("app.common.labels.overview")}</TabsTrigger>
+              {!hideBudgetsTab ? <TabsTrigger value="budgets">{t("app.reports.costs.budgets")}</TabsTrigger> : null}
+              <TabsTrigger value="providers">{t("app.reports.costs.providers")}</TabsTrigger>
+              <TabsTrigger value="billers">{t("app.reports.costs.billers")}</TabsTrigger>
+              <TabsTrigger value="finance">{t("app.reports.costs.finance")}</TabsTrigger>
+              <TabsTrigger value="decisions">{t("app.upstreamOct08.decisions")}</TabsTrigger>
+              <TabsTrigger value="fast-responses">Fast responses</TabsTrigger>
+            </TabsList>
           </div>
         ) : null}
 
+        <TabsContent value="fast-responses" className="mt-4">{showCustomPrompt ? <p className="text-sm text-muted-foreground">{translateUiCopy("app.reports.costs.selectAStartAndEndDateToLoadData")}</p> : <FastResponseHistory companyId={companyId} from={from} to={to} />}</TabsContent>
         <TabsContent value="decisions" className="mt-4">{showCustomPrompt ? <p className="text-sm text-muted-foreground">{translateUiCopy("app.reports.costs.selectAStartAndEndDateToLoadData")}</p> : <DecisionHistory companyId={companyId} from={from} to={to} />}</TabsContent>
         <TabsContent value="overview" className="mt-4 space-y-4">
           {showCustomPrompt ? (

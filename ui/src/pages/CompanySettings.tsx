@@ -1,4 +1,3 @@
-import { DecisionModelSettingsSection } from "../components/decision-models/DecisionModelSettings";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -31,6 +30,8 @@ import {
 } from "../components/agent-config-primitives";
 import { InstanceGeneralSettings } from "./InstanceGeneralSettings";
 import { useTranslation } from "@/i18n";
+import { DecisionModelSettingsSection } from "../components/decision-models/DecisionModelSettings";
+import { useFastResponsesEnabled } from "../hooks/useFastResponsesEnabled";
 
 export function CompanySettings() {
   const {
@@ -45,6 +46,7 @@ export function CompanySettings() {
   const navigate = useNavigate();
   const toastActions = useOptionalToastActions();
   const cloud = useCloudInstance();
+  const fastResponses = useFastResponsesEnabled();
   // Managed instances derive the task ID prefix from the company name, so a
   // rename here also renumbers the existing task IDs.
   const isCloudManaged = Boolean(cloud);
@@ -357,8 +359,6 @@ export function CompanySettings() {
       </div>
 
       {/* Interaction governance */}
-      {selectedCompanyId && <DecisionModelSettingsSection key={selectedCompanyId} companyId={selectedCompanyId} />}
-
       <InteractionGovernancePanel
         governance={governance}
         onChange={handleGovernanceChange}
@@ -371,6 +371,10 @@ export function CompanySettings() {
             : null
         }
       />
+
+      {fastResponses.loaded && !fastResponses.enabled && (
+        <DecisionModelSettingsSection key={selectedCompanyId} companyId={selectedCompanyId!} />
+      )}
 
       <InstanceGeneralSettings embedded />
 

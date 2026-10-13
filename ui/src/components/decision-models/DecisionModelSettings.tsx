@@ -45,7 +45,7 @@ export function DecisionModelSettingsView({ settings, choices, saving, testing, 
   const unavailable = result && result.status !== "succeeded" ? failureMessages[result.status === "unavailable" ? result.reason : result.errorCode] ?? translateUiCopy("app.uiCopy.componentsDecisionModelsDecisionModelSettings.theDecisionCouldNotBeCompletedReviewItsEntry") : null;
   return <section aria-labelledby="decision-model-heading" className="max-w-2xl space-y-4">
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <h2 id="decision-model-heading" className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{translateUiCopy("app.uiCopy.componentsDecisionModelsDecisionModelSettings.decisionModel")}</h2>
+      <h2 id="decision-model-heading" className="text-lg font-semibold">{translateUiCopy("app.uiCopy.componentsDecisionModelsDecisionModelSettings.decisionModel")}</h2>
       <Link to="/activity/costs?tab=decisions" className="text-sm underline underline-offset-4">{translateUiCopy("app.uiCopy.componentsDecisionModelsDecisionModelSettings.viewUsage")}</Link>
     </div>
     <p className="text-sm text-muted-foreground">{translateUiCopy("app.uiCopy.componentsDecisionModelsDecisionModelSettings.chooseTheSharedConnectionPaperclipUsesForOptionalDecision")}</p>

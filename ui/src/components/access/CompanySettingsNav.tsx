@@ -2,6 +2,7 @@ import { PageTabBar } from "@/components/PageTabBar";
 import { Tabs } from "@/components/ui/tabs";
 import { useCloudInstance } from "@/hooks/useCloudInstance";
 import { useHiddenSettings } from "@/hooks/useHiddenSettings";
+import { useFastResponsesEnabled } from "@/hooks/useFastResponsesEnabled";
 import { INSTANCE_SETTINGS_PATH_PREFIX } from "@/lib/instance-settings";
 import { useLocation, useNavigate } from "@/lib/router";
 import { useTranslation } from "@/i18n";
@@ -14,6 +15,7 @@ const items = [
   { value: "secrets", labelKey: "app.common.nouns.secrets", href: "/company/settings/secrets" },
   { value: "instance-profile", labelKey: "app.settings.companySettingsNav.profile", href: `${INSTANCE_SETTINGS_PATH_PREFIX}/profile` },
   { value: "instance-environments", labelKey: "app.common.nouns.environments", href: `${INSTANCE_SETTINGS_PATH_PREFIX}/environments` },
+  { value: "connections", labelKey: "app.apps.connections.title", href: "/company/settings/connections" },
   { value: "instance-access", labelKey: "app.common.nouns.access", href: `${INSTANCE_SETTINGS_PATH_PREFIX}/access` },
   { value: "instance-experimental", labelKey: "app.common.labels.experimental", href: `${INSTANCE_SETTINGS_PATH_PREFIX}/experimental` },
   { value: "instance-plugins", labelKey: "app.common.nouns.plugins", href: `${INSTANCE_SETTINGS_PATH_PREFIX}/plugins` },
@@ -37,6 +39,10 @@ const hiddenSettingKeyByTab: Partial<Record<CompanySettingsTab, string>> = {
 };
 
 export function getCompanySettingsTab(pathname: string): CompanySettingsTab {
+  if (pathname.includes("/company/settings/connections")) {
+    return "connections";
+  }
+
   if (pathname.includes(`${INSTANCE_SETTINGS_PATH_PREFIX}/profile`)) {
     return "instance-profile";
   }
@@ -98,11 +104,13 @@ export function CompanySettingsNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const { hidden: hiddenSettings } = useHiddenSettings();
+  const { enabled: fastResponsesEnabled } = useFastResponsesEnabled();
   // Import is floored server-side on cloud-managed instances (403 cloud_managed), so the
   // tab is suppressed there rather than dead-ending.
   const isCloud = Boolean(useCloudInstance());
   const activeTab = getCompanySettingsTab(location.pathname);
   const visibleItems = items.filter((item) => {
+    if (item.value === "connections" && !fastResponsesEnabled) return false;
     if (item.value === "import" && isCloud) return false;
     const hiddenKey = hiddenSettingKeyByTab[item.value];
     return !hiddenKey || !hiddenSettings.has(hiddenKey);

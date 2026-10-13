@@ -38,6 +38,7 @@ export function EmailTaskActivity({
       )}
       {messages.map((m) => (
         <EmailMessageCard
+          contextNotice
           key={m.id}
           issueId={issueId}
           message={m}
@@ -81,7 +82,7 @@ function EmailDelivery({
       {p.request && !p.providerMessageId && (
         <article
           aria-label={t("app.reports.emailTaskActivity.emailSendIntent")}
-          className="space-y-3 rounded-lg border border-border p-4"
+          className="task-context-notice space-y-3"
         >
           <p className="font-semibold">{p.request.subject ?? t("app.reports.emailTaskActivity.emailReply")}</p>
           {p.request.to && <p>{t("app.reports.emailTaskActivity.to", { recipients: p.request.to.join(", ") })}</p>}

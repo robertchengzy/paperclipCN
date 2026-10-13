@@ -11,6 +11,7 @@ import { useTranslation } from "@/i18n";
 import { Trans } from "react-i18next";
 
 const providerNames: Record<ChatProvider, string> = {
+  speko: "Speko",
   slack: "Slack",
   github: "GitHub",
   discord: "Discord",

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import type { CostByBiller, CostByProviderModel } from "@paperclipai/shared";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { QuotaBar } from "./QuotaBar";
+import { CostAmount } from "./CostAmount";
 import { billingTypeDisplayName, formatCents, formatTokens, providerDisplayName } from "@/lib/utils";
 
 interface BillerSpendCardProps {
@@ -74,9 +75,10 @@ export function BillerSpendCard({
               {row.modelCount === 1 ? t("app.shell.billerSpendCard.modelOne", { count: row.modelCount }) : t("app.shell.billerSpendCard.modelMany", { count: row.modelCount })}
             </CardDescription>
           </div>
-          <span className="text-xl font-bold tabular-nums shrink-0">
-            {formatCents(row.costCents)}
-          </span>
+          <div className="text-xl shrink-0">
+            <CostAmount costCents={row.costCents} eventCount={row.eventCount}
+              estimatedEventCount={row.estimatedEventCount} unpricedEventCount={row.unpricedEventCount} showUnavailableCount />
+          </div>
         </div>
       </CardHeader>
 

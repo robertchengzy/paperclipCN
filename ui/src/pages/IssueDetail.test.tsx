@@ -1302,6 +1302,12 @@ describe("IssueDetail", () => {
   let queryClient: QueryClient;
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
+  function renderIssueView(children: ReactNode = <IssueDetail />) {
+    root.render(
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>,
+    );
+  }
+
   beforeEach(() => {
     localStorage.clear();
     sessionStorage.clear();
@@ -1430,7 +1436,7 @@ describe("IssueDetail", () => {
       mockIssuesApi.get.mockResolvedValue(cleared);
       return cleared;
     });
-    await act(async () => root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>));
+    await act(async () => renderIssueView());
     await waitForAssertion(() => expect(container.querySelector('[aria-label="Cancel monitor"]')).not.toBeNull());
     await act(async () => (container.querySelector('[aria-label="Cancel monitor"]') as HTMLButtonElement).click());
     expect(mockIssuesApi.update).not.toHaveBeenCalled();
@@ -1444,7 +1450,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue({ status: "in_progress", executionState: monitor }));
     const check = createDeferred<never>();
     mockIssuesApi.checkMonitorNow.mockReturnValue(check.promise);
-    await act(async () => root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>));
+    await act(async () => renderIssueView());
     let button: HTMLButtonElement | undefined;
     await waitForAssertion(() => {
       button = Array.from(container.querySelectorAll("button")).find((entry) => entry.textContent === "Check now");
@@ -1460,7 +1466,7 @@ describe("IssueDetail", () => {
     queryClient.setQueryData(queryKeys.issues.detail("PAP-2"), second);
     mockRouteParams.issueId = "PAP-2";
     mockLocation.pathname = "/issues/PAP-2";
-    await act(async () => root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>));
+    await act(async () => renderIssueView());
     if (lateResponse) check.reject(new Error("First task monitor failed"));
     await flushReact();
     await waitForAssertion(() => {
@@ -1490,7 +1496,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(issue);
     mockIssuesApi.update.mockClear();
     mockIssuesApi.update.mockReturnValueOnce(failedUpdate.promise).mockReturnValueOnce(successfulUpdate.promise);
-    await act(async () => root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>));
+    await act(async () => renderIssueView());
     let properties!: { onUpdate: (data: Record<string, unknown>) => void };
     await waitForAssertion(() => {
       properties = mockOpenPanel.mock.calls.at(-1)?.[0]?.props.children?.props;
@@ -1515,7 +1521,7 @@ describe("IssueDetail", () => {
     const canonical = createIssue({ conversationAgentId: agent.id, conversationUserId: "user-1", conversationState: "waiting", status: "in_review" });
     mockIssuesApi.get.mockResolvedValue(canonical);
     await act(async () => {
-      root.render(<QueryClientProvider client={queryClient}><TaskDetailSurface conversation={{ agent, issue: canonical, ensureIssue: async () => canonical }} /></QueryClientProvider>);
+      renderIssueView(<TaskDetailSurface conversation={{ agent, issue: canonical, ensureIssue: async () => canonical }} />);
     });
     await flushReact();
     expect(mockNavigate).not.toHaveBeenCalled();
@@ -1526,7 +1532,7 @@ describe("IssueDetail", () => {
     expect(breadcrumbs[0].leadingKey).toBe(`agent:${agent.id}:${JSON.stringify(agent.appearance)}`);
     const updatedAgent = { ...agent, appearance: { schemaVersion: 1, characterVersion: "cap-v1", paletteId: "deep-tide" } } as Agent;
     await act(async () => {
-      root.render(<QueryClientProvider client={queryClient}><TaskDetailSurface conversation={{ agent: updatedAgent, issue: canonical, ensureIssue: async () => canonical }} /></QueryClientProvider>);
+      renderIssueView(<TaskDetailSurface conversation={{ agent: updatedAgent, issue: canonical, ensureIssue: async () => canonical }} />);
     });
     await flushReact();
     const [updatedBreadcrumbs] = mockSetBreadcrumbs.mock.calls.at(-1)!;
@@ -1544,7 +1550,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.addComment.mockResolvedValue(createIssueComment({ body: "Clarify this goal" }));
     mockIssuesApi.uploadAttachment.mockResolvedValue(createAttachment({ id: "first-upload" }));
     await act(async () => {
-      root.render(<QueryClientProvider client={queryClient}><TaskDetailSurface conversation={{ agent, issue: null, ensureIssue }} /></QueryClientProvider>);
+      renderIssueView(<TaskDetailSurface conversation={{ agent, issue: null, ensureIssue }} />);
     });
     await flushReact();
     expect(ensureIssue).not.toHaveBeenCalled();
@@ -1576,7 +1582,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.update.mockRejectedValueOnce(new Error("Mode save failed")).mockResolvedValue({ ...canonical, workMode: "ask" });
     mockIssuesApi.addComment.mockResolvedValue(createIssueComment({ body: "Research only" }));
     const renderChat = async (issue: Issue | null) => {
-      await act(async () => root.render(<QueryClientProvider client={queryClient}><TaskDetailSurface conversation={{ agent, issue, ensureIssue }} /></QueryClientProvider>));
+      await act(async () => renderIssueView(<TaskDetailSurface conversation={{ agent, issue, ensureIssue }} />));
       await flushReact();
       return mockIssueChatThreadRender.mock.calls.at(-1)?.[0] as { onWorkModeChange: (mode: string) => Promise<void>; onAdd: (body: string) => Promise<void> };
     };
@@ -1621,11 +1627,7 @@ describe("IssueDetail", () => {
     ]);
     const windowOpen = vi.spyOn(window, "open").mockImplementation(() => null);
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await waitForAssertion(() => {
       expect(
@@ -1676,7 +1678,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.listWorkProducts.mockReturnValue(history.promise);
 
     await act(async () => {
-      root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>);
+      renderIssueView();
     });
     await waitForAssertion(() => {
       expect(mockIssueChatThreadRender.mock.calls.at(-1)?.[0]).toMatchObject({
@@ -1695,11 +1697,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockReturnValueOnce(issueRequest.promise);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     // The task response may need slow workspace/recovery enrichment. The
@@ -1762,11 +1760,7 @@ describe("IssueDetail", () => {
         .mockClear()
         .mockResolvedValue({ ...issue, comment: createIssueComment() });
       await act(async () =>
-        root.render(
-          <QueryClientProvider client={queryClient}>
-            <IssueDetail />
-          </QueryClientProvider>,
-        ),
+        renderIssueView(),
       );
       await waitForAssertion(() =>
         expect(mockIssueChatThreadRender).toHaveBeenCalled(),
@@ -1853,11 +1847,7 @@ describe("IssueDetail", () => {
     );
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -1899,11 +1889,7 @@ describe("IssueDetail", () => {
     );
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -1921,11 +1907,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await waitForAssertion(() => {
       const content = container.querySelector(
@@ -1942,11 +1924,7 @@ describe("IssueDetail", () => {
     mockPanelState.panelVisible = false;
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     expect(
@@ -1965,11 +1943,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -1997,11 +1971,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(issue);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -2060,11 +2030,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -2090,11 +2056,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -2113,11 +2075,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await waitForAssertion(() => {
       const panel = mockOpenPanel.mock.calls.at(-1)?.[0]?.props.children as
@@ -2129,11 +2087,7 @@ describe("IssueDetail", () => {
 
     mockLocation.hash = "#work-product-1";
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -2149,11 +2103,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await waitForAssertion(() => {
       const panel = mockOpenPanel.mock.calls.at(-1)?.[0]?.props.children as
@@ -2167,11 +2117,7 @@ describe("IssueDetail", () => {
     mockSetPanelVisible.mockClear();
     mockLocation.hash = "#document-continuation-summary";
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     expect(mockSetPanelVisible).not.toHaveBeenCalled();
     await waitForAssertion(() => {
@@ -2186,7 +2132,7 @@ describe("IssueDetail", () => {
     mockLocation.state = { from: "inbox" };
     mockIssuesApi.get.mockResolvedValue(createIssue());
     await act(async () => {
-      root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>);
+      renderIssueView();
     });
     await waitForAssertion(() => expect(queryClient.getQueryData(queryKeys.issues.detail("PAP-1"))).toBeDefined());
     const getCalls = mockIssuesApi.get.mock.calls.length;
@@ -2209,7 +2155,7 @@ describe("IssueDetail", () => {
   it.each(["modifier", "new-tab", "download"])("preserves native document-link behavior for %s", async (kind) => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
     await act(async () => {
-      root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>);
+      renderIssueView();
     });
     const link = document.createElement("a");
     link.href = "#document-plan";
@@ -2228,11 +2174,7 @@ describe("IssueDetail", () => {
     mockLocation.hash = "#document-qa-evidence";
     mockIssuesApi.get.mockResolvedValue(createIssue());
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await waitForAssertion(() => {
       const panel = mockOpenPanel.mock.calls.at(-1)?.[0]?.props.children as
@@ -2265,11 +2207,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -2289,11 +2227,7 @@ describe("IssueDetail", () => {
     // Ending the deep link drops the pending request and re-arms the guard.
     mockLocation.hash = "";
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await waitForAssertion(() => {
       expect(mockClearPanelMaximizeRequest).toHaveBeenCalled();
@@ -2306,11 +2240,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -2325,11 +2255,7 @@ describe("IssueDetail", () => {
       createIssue({ id: "issue-2", identifier: "PAP-2" }),
     );
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -2351,7 +2277,7 @@ describe("IssueDetail", () => {
       }],
     }));
     await act(async () => {
-      root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>);
+      renderIssueView();
     });
     await waitForAssertion(() => {
       const props = mockOpenPanel.mock.calls.at(-1)?.[0]?.props.children?.props;
@@ -2366,7 +2292,7 @@ describe("IssueDetail", () => {
     mockPanelState.panelVisible = false;
     mockIssuesApi.get.mockResolvedValue(createIssue());
     await act(async () => {
-      root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>);
+      renderIssueView();
     });
     await waitForAssertion(() => {
       expect(queryClient.getQueryData(queryKeys.issues.attachments("PAP-1"))).toEqual([]);
@@ -2408,11 +2334,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -2435,11 +2357,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -2467,21 +2385,27 @@ describe("IssueDetail", () => {
 
   it("loads ancestors, subtask membership and created work independently and refreshes on issue activity", async () => {
     const ancestors = [{ id: "parent-task", identifier: "PAP-0", title: "Parent task", status: "in_progress" }] as Issue["ancestors"];
-    const source = createIssue({ ancestors });
+    const createdFrom: Issue["createdFrom"] = {
+      issue: { id: "origin-task", identifier: "PAP-168", title: "Origin task", status: "in_progress" },
+      run: { id: "run-1", agentId: "qa-agent" },
+      agent: { id: "qa-agent", name: "Paperclip QA" },
+    };
+    const source = createIssue({ ancestors, createdFrom });
     const child = createIssue({ id: "manual-child", parentId: source.id, title: "Manual child" });
     const created = createIssue({ id: "created-task", parentId: null, title: "Created elsewhere" });
     mockIssuesApi.get.mockResolvedValue(source);
     mockIssuesApi.list.mockImplementation((_companyId, filters?: { descendantOf?: string; createdFromIssueId?: string }) =>
       Promise.resolve(filters?.descendantOf === source.id ? [child] : filters?.createdFromIssueId === source.id ? [created] : []),
     );
-    await act(async () => { root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>); });
+    await act(async () => { renderIssueView(); });
     await flushReact();
     await flushReact();
     const taskProjection = () => mockOpenPanel.mock.calls.at(-1)?.[0]?.props.children?.props.tasksTab;
     expect(taskProjection()?.content.props.subtasks.map((row: Issue) => row.id)).toEqual([child.id]);
     expect(taskProjection()?.content.props.createdTasks.map((row: Issue) => row.id)).toEqual([created.id]);
     expect(taskProjection()?.content.props.ancestors).toEqual(ancestors);
-    expect(taskProjection()?.count).toBe(3);
+    expect(taskProjection()?.content.props.createdFrom).toEqual(createdFrom);
+    expect(taskProjection()?.count).toBe(4);
 
     const next = createIssue({ id: "new-created-task", parentId: source.id });
     mockIssuesApi.list.mockImplementation((_companyId, filters?: { descendantOf?: string; createdFromIssueId?: string }) =>
@@ -2489,7 +2413,7 @@ describe("IssueDetail", () => {
     );
     await act(async () => { await queryClient.invalidateQueries({ queryKey: queryKeys.issues.list(source.companyId) }); });
     await flushReact();
-    expect(taskProjection()?.count).toBe(4);
+    expect(taskProjection()?.count).toBe(5);
     expect(taskProjection()?.content.props.createdTasks.map((row: Issue) => row.id)).toContain(next.id);
   });
 
@@ -2506,11 +2430,7 @@ describe("IssueDetail", () => {
     ]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -2530,11 +2450,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.list.mockResolvedValue([]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -2634,11 +2550,7 @@ describe("IssueDetail", () => {
     );
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -2661,11 +2573,7 @@ describe("IssueDetail", () => {
     );
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -2715,11 +2623,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -2762,7 +2666,7 @@ describe("IssueDetail", () => {
     if (outcome === "pending question") mockIssuesApi.listInteractions.mockResolvedValue([{ id: "question-1", kind: "ask_user_questions", status: "pending", payload: { version: 1, questions: [] } }]);
     if (fail) mockIssuesApi.resolveRecoveryAction.mockRejectedValue(new Error("The task is now paused."));
     else mockIssuesApi.resolveRecoveryAction.mockResolvedValue({ issue: { ...issue, status: "todo", activeRecoveryAction: null }, recoveryAction: { ...issue.activeRecoveryAction, status: "resolved" } });
-    await act(async () => root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>));
+    await act(async () => renderIssueView());
     await flushReact(); await flushReact();
     const retry = Array.from(container.querySelectorAll("button")).find(b => b.textContent === "Retry agent");
     expect(retry).toBeDefined();
@@ -2826,11 +2730,7 @@ describe("IssueDetail", () => {
     queryClient.setQueryData<Issue[]>(unreadKey, [issue, otherIssue]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -2956,11 +2856,7 @@ describe("IssueDetail", () => {
     queryClient.setQueryData<Issue[]>(mineKey, [issue]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3017,11 +2913,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3057,11 +2949,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3093,11 +2981,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3129,11 +3013,7 @@ describe("IssueDetail", () => {
     mockLocation.search = "?from=inbox&fromHref=%2Finbox%2Fmine";
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3190,11 +3070,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3291,11 +3167,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3375,11 +3247,7 @@ describe("IssueDetail", () => {
     ]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3450,11 +3318,7 @@ describe("IssueDetail", () => {
       }
 
       await act(async () => {
-        root.render(
-          <QueryClientProvider client={queryClient}>
-            <IssueDetail />
-          </QueryClientProvider>,
-        );
+        renderIssueView();
       });
       await flushReact();
       await flushReact();
@@ -3522,11 +3386,7 @@ describe("IssueDetail", () => {
     ]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3586,11 +3446,7 @@ describe("IssueDetail", () => {
     ]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3665,11 +3521,7 @@ describe("IssueDetail", () => {
     ]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3784,11 +3636,7 @@ describe("IssueDetail", () => {
     ]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -3889,11 +3737,7 @@ describe("IssueDetail", () => {
       mockHeartbeatsApi.liveRunsForIssue.mockResolvedValue([activeRun]);
 
       await act(async () => {
-        root.render(
-          <QueryClientProvider client={queryClient}>
-            <IssueDetail />
-          </QueryClientProvider>,
-        );
+        renderIssueView();
       });
       await flushReact();
       await flushReact();
@@ -3959,11 +3803,7 @@ describe("IssueDetail", () => {
     ]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -4093,11 +3933,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.addComment.mockReturnValue(postedComment.promise);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -4180,11 +4016,7 @@ describe("IssueDetail", () => {
     ]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -4289,11 +4121,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -4352,11 +4180,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await flushReact();
@@ -4370,11 +4194,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await flushReact();
@@ -4393,11 +4213,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await flushReact();
@@ -4421,11 +4237,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.getDocument.mockResolvedValue(null);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await flushReact();
@@ -4454,11 +4266,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.getDocument.mockResolvedValue(null);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await flushReact();
@@ -4496,11 +4304,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.getDocument.mockResolvedValue({ id: "doc-1", key: "plan" });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -4523,11 +4327,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.getDocument.mockResolvedValue(null);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await flushReact();
@@ -4571,11 +4371,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.getDocument.mockResolvedValue({ id: "doc-1", key: "plan" });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -4592,11 +4388,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue({ originKind: "manual" }));
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     await waitForAssertion(() => {
@@ -4622,11 +4414,7 @@ describe("IssueDetail", () => {
     );
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -4708,11 +4496,7 @@ describe("IssueDetail", () => {
       });
 
       await act(async () => {
-        root.render(
-          <QueryClientProvider client={queryClient}>
-            <IssueDetail />
-          </QueryClientProvider>,
-        );
+        renderIssueView();
       });
       await flushReact();
       await flushReact();
@@ -4814,11 +4598,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -4909,11 +4689,7 @@ describe("IssueDetail", () => {
       });
 
       await act(async () => {
-        root.render(
-          <QueryClientProvider client={queryClient}>
-            <IssueDetail />
-          </QueryClientProvider>,
-        );
+        renderIssueView();
       });
       await flushReact();
       await flushReact();
@@ -5016,11 +4792,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -5078,11 +4850,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -5109,11 +4877,7 @@ describe("IssueDetail", () => {
   it("passes planning work mode to the issue chat thread", async () => {
     mockIssuesApi.get.mockResolvedValue(createIssue({ workMode: "planning" }));
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -5166,11 +4930,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.rejectInteraction.mockResolvedValue(rejectedInteraction);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -5200,11 +4960,7 @@ describe("IssueDetail", () => {
   it("passes ask work mode to the issue chat thread", async () => {
     mockIssuesApi.get.mockResolvedValue(createIssue({ workMode: "ask" }));
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -5252,11 +5008,7 @@ describe("IssueDetail", () => {
 
     try {
       await act(async () => {
-        root.render(
-          <QueryClientProvider client={queryClient}>
-            <IssueDetail />
-          </QueryClientProvider>,
-        );
+        renderIssueView();
       });
       await flushReact();
 
@@ -5308,11 +5060,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
 
@@ -5362,11 +5110,7 @@ describe("IssueDetail", () => {
     ]);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -5399,11 +5143,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -5427,11 +5167,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -5460,11 +5196,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.get.mockResolvedValue(createIssue());
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -5507,11 +5239,7 @@ describe("IssueDetail", () => {
     );
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -5660,11 +5388,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -5760,11 +5484,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -5840,11 +5560,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await flushReact();
     await flushReact();
@@ -5924,11 +5640,7 @@ describe("IssueDetail", () => {
     );
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await waitForAssertion(() => {
       const props = mockIssueChatThreadRender.mock.calls.at(-1)?.[0] as
@@ -5979,11 +5691,7 @@ describe("IssueDetail", () => {
       mockIssuesApi.getQueuedComments.mockClear();
 
       await act(async () => {
-        root.render(
-          <QueryClientProvider client={queryClient}>
-            <IssueDetail />
-          </QueryClientProvider>,
-        );
+        renderIssueView();
       });
       await flushReact();
       await flushReact();
@@ -6015,7 +5723,7 @@ describe("IssueDetail", () => {
     });
     let rejectSteer!: (error: Error) => void;
     mockIssuesApi.steerQueuedComment.mockReturnValue(new Promise((_, reject) => { rejectSteer = reject; }));
-    await act(async () => { root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>); });
+    await act(async () => { renderIssueView(); });
     type Props = { onSteerQueuedComment: (id: string, revision: string) => Promise<void>; queuedCommentQueue: IssueQueuedCommentQueue | null };
     let props!: Props;
     await waitForAssertion(() => {
@@ -6080,11 +5788,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.steerQueuedComment.mockResolvedValue(steeredQueue);
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     let steer!: (commentId: string, revision: string) => Promise<void>;
@@ -6194,7 +5898,7 @@ describe("IssueDetail", () => {
     });
     const delivery = createDeferred<IssueQueuedCommentQueue>();
     mockIssuesApi.interruptQueuedComments.mockReturnValue(delivery.promise);
-    await act(async () => { root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>); });
+    await act(async () => { renderIssueView(); });
     type Props = { onInterruptQueued: (runId: string | null) => Promise<void>; queuedCommentQueue: IssueQueuedCommentQueue | null; comments: Array<{ id: string; queueState?: string; conversationAnchorAt?: string }> };
     let props!: Props;
     await waitForAssertion(() => {
@@ -6235,7 +5939,7 @@ describe("IssueDetail", () => {
     mockIssuesApi.getQueuedComments.mockResolvedValue(createQueuedCommentQueue({ protocol: "legacy", steeringDisposition: "unsupported" }));
     const delivery = createDeferred<IssueQueuedCommentQueue>();
     mockIssuesApi.interruptQueuedComments.mockReturnValue(delivery.promise);
-    await act(async () => { root.render(<QueryClientProvider client={queryClient}><IssueDetail /></QueryClientProvider>); });
+    await act(async () => { renderIssueView(); });
     type Props = { onInterruptQueued: (runId: string | null) => Promise<void>; comments: Array<{ id: string; queueState?: string }> };
     let props!: Props;
     await waitForAssertion(() => {
@@ -6272,11 +5976,7 @@ describe("IssueDetail", () => {
     );
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     await waitForAssertion(() => {
       const props = mockIssueChatThreadRender.mock.calls.at(-1)?.[0] as
@@ -6338,11 +6038,7 @@ describe("IssueDetail", () => {
     });
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
 
     let discard!: (commentId: string, revision: string) => Promise<void>;
@@ -6396,11 +6092,7 @@ describe("IssueDetail", () => {
     );
 
     await act(async () => {
-      root.render(
-        <QueryClientProvider client={queryClient}>
-          <IssueDetail />
-        </QueryClientProvider>,
-      );
+      renderIssueView();
     });
     let discard!: (commentId: string, revision: string) => Promise<void>;
     await waitForAssertion(() => {

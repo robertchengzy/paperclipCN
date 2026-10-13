@@ -440,6 +440,17 @@ export function InstanceExperimentalSettings() {
         />
 
         <ExperimentalToggleCard
+          title="Experimental fast responses"
+          description="Show Connections in company settings and allow short acknowledgements while agents begin work."
+          checked={experimentalQuery.data?.enableFastResponses ?? false}
+          onCheckedChange={(checked) => toggleMutation.mutate({ enableFastResponses: checked })}
+          disabled={toggleMutation.isPending}
+          settingKey="enableFastResponses"
+          managed={managedKeys.enableFastResponses}
+          ariaLabel="Toggle fast responses experimental setting"
+        />
+
+        <ExperimentalToggleCard
           title={t("app.settings.instanceExperimentalSettings.cards.enableExperimentalFileViewer.title")}
           description={t("app.settings.instanceExperimentalSettings.cards.enableExperimentalFileViewer.description")}
           checked={enableExperimentalFileViewer}

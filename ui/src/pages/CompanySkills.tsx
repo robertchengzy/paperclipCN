@@ -1,9 +1,10 @@
 import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
 import { SkillBinaryFile } from "../components/SkillBinaryFile";
+import { skillFileLinkHref } from "@/lib/skill-file-links";
 import { SkillSourceProvenance } from "../components/SkillSourceProvenance";
 import { AgentIdentity } from "@/components/AgentIdentity";
 import { AgentAvatar } from "@/components/AgentAvatar";
-import { useEffect, useMemo, useRef, useState, type SVGProps } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type SVGProps } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { Trans } from "react-i18next";
 import { t as translate, useTranslation } from "@/i18n";
@@ -3038,6 +3039,11 @@ export function SkillDetailPage({
     return () => window.removeEventListener("beforeunload", handler);
   }, [isDirty]);
 
+  const resolveFileLinkHref = useCallback(
+    (href: string) => detail ? skillFileLinkHref(detail, selectedPath, href, routeSkills ?? [detail]) : null,
+    [detail, selectedPath, routeSkills],
+  );
+
   if (!detail) {
     return loading ? <PageSkeleton variant="detail" /> : <EmptyState icon={Boxes} message={t("app.skills.companySkills.detail.notFound")} />;
   }
@@ -3164,7 +3170,13 @@ export function SkillDetailPage({
               />
             )
           ) : file.markdown && viewMode === "preview" ? (
-            <MarkdownBody softBreaks={false} linkIssueReferences={false}>{body}</MarkdownBody>
+            <MarkdownBody
+              softBreaks={false}
+              linkIssueReferences={false}
+              resolveLinkHref={resolveFileLinkHref}
+            >
+              {body}
+            </MarkdownBody>
           ) : (
             <pre className="overflow-x-auto whitespace-pre-wrap wrap-break-word border-0 bg-transparent p-0 font-mono text-sm text-foreground">
               <code>{file.content}</code>

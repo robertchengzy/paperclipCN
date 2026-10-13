@@ -201,6 +201,7 @@ function getViewState(key: string): IssueViewState {
         ...defaultViewState,
         ...parsed,
         ...normalizeIssueFilterState(parsed),
+        workspaces: [],
         boardCardDensity: normalizeBoardCardDensity(parsed.boardCardDensity),
         boardColdLaneMode: normalizeBoardColdLaneMode(parsed.boardColdLaneMode),
         boardColumnPageSize: normalizeBoardColumnPageSize(parsed.boardColumnPageSize),
@@ -968,16 +969,6 @@ export function IssuesList({
     }
     return map;
   }, [defaultProjectWorkspaceIds, executionWorkspaceById, projectWorkspaceById]);
-
-  const workspaceOptions = useMemo(() => {
-    const options = new Map<string, string>();
-    for (const [workspaceId, workspaceName] of workspaceNameMap) {
-      options.set(workspaceId, workspaceName);
-    }
-    return [...options.entries()]
-      .sort((a, b) => a[1].localeCompare(b[1]))
-      .map(([id, name]) => ({ id, name }));
-  }, [workspaceNameMap]);
 
   const creatorOptions = useMemo<CreatorOption[]>(() => {
     const options = new Map<string, CreatorOption>();
@@ -1818,7 +1809,6 @@ export function IssuesList({
             enableExternalObjectFilters={externalObjectsEnabled}
             enableRoutineVisibilityFilter={enableRoutineVisibilityFilter}
             iconOnly
-            workspaces={isolatedWorkspacesEnabled ? workspaceOptions : undefined}
           />
 
           {/* Sort (list view only) */}

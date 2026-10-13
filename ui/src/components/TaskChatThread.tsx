@@ -1651,7 +1651,9 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             ? "native_runner_timed_out"
             : "native_runner_process_exited");
         const label =
-          code === "native_provider_model_rejected" && source.status === "failed"
+          code === "native_provider_runtime_missing" && source.status === "failed"
+            ? translate("app.upstreamOct13.runtimeMissing")
+            : code === "native_provider_model_rejected" && source.status === "failed"
             ? translate("app.taskChat.taskChatThread.nativeStop.modelUnavailable")
             : code === "native_provider_approval_required" && source.status === "failed"
             ? translateUpstream("app.reviewMarkers.approvalRequired")
@@ -1670,6 +1672,8 @@ export function TaskChatThread(props: TaskChatThreadProps) {
             ? afterResponse ? translate("app.taskChat.taskChatThread.nativeStop.cancelledAfterResponse") : translate("app.taskChat.taskChatThread.nativeStop.cancelledBeforeAnswer")
             : source.status === "interrupted"
               ? afterResponse ? translate("app.taskChat.taskChatThread.nativeStop.interruptedAfterResponse") : translate("app.taskChat.taskChatThread.nativeStop.interruptedBeforeAnswer")
+              : code === "native_provider_runtime_missing"
+                ? "The selected provider runtime is missing a required package. Reinstall or rebuild Paperclip with its bundled provider dependencies, restart the server, then test the agent's runtime before retrying."
               : code === "native_provider_approval_required"
                 ? translate("app.taskChat.taskChatThread.nativeStop.approvalRequiredDetail")
                 : code === "native_provider_model_rejected"
@@ -2663,6 +2667,7 @@ export function TaskChatThread(props: TaskChatThreadProps) {
       return (
         <TaskChatBubbleActions
           copyText={item.text}
+          fastResponse={item.origin === "fast_response"}
           feedback={
             onVote
               ? {

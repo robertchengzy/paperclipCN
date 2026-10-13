@@ -18272,7 +18272,7 @@
         "couldNotLoadDecisionRequests": "无法加载决策请求。",
         "formerUser": "已离开的用户",
         "loadingDecisionRequests": "正在加载决策请求…",
-        "recentRequestsInputsAndAnswersAreNotRetained": "最近的请求。输入和答案不会保留。",
+        "recentRequestsInputsAndAnswersAreNotRetained": "最近的请求；不保留输入内容。",
         "setupTest": "设置测试",
         "unresolved": "未解决",
         "reported": "已报告",
@@ -18523,9 +18523,9 @@
         "entries": "条记录",
         "runIs": "次运行处于",
         "runsAre": "次运行处于",
-        "withValue0InRecordedCharges": "，已记录的费用为 {{value0}}",
+        "withValue0InRecordedCharges": " · 已记录费用 {{value0}}",
         "message32": "订阅账号在此时间段内还产生了 <part0/> 的已记录使用费用，与月费分开统计。",
-        "message33": "<part0/> 个 Token 归属其他或未知计费类型<part1/>。它们仍保留在推理台账中。",
+        "message33": "其他计费用量：<part0/> 个 Token<part1/>，已包含在推理台账中。",
         "message34": "此时间段内 <part0/> 条用量<part1/>的费用不可用。合计仅包括已知费用。",
         "message35": "<part0/> <part1/>等待费用数据。"
       },
@@ -19454,6 +19454,11 @@
       "pagesAppsChatSlackSetupPrompt": {
         "pasteSetupPrompt": "粘贴到智能体中，以配置 Slack 机器人。"
       }
+    },
+    "upstreamOct13": {
+      "runtimeMissing": "缺少运行环境",
+      "filesNotIncluded": "未包含的文件",
+      "uncheckedSkillsStayInstalled": "未勾选的技能仍保留安装。"
     }
   }
 }

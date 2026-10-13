@@ -433,6 +433,14 @@ run/turn ids, payload digest, attempt/acknowledgement state, and one of `steered
 `issue_thread_interactions.result`. Deleting the interaction cascades its receipt,
 while deleting a referenced run clears that run pointer without deleting history.
 
+The question-history index covers `(company_id, idempotency_key)` for every
+`question-response:` wake state, including failed, cancelled, and skipped
+receipts excluded from the delivery-idempotency fence. Migration `0332` creates
+this nonunique index concurrently through the standard migration executor.
+Apply it with `pnpm db:migrate` on a direct connection before enabling the new
+sleep guard. The executor retries interrupted invalid builds and records history
+only after the index is valid. It does not delete delivery or wake records.
+
 ## Plugin database namespaces
 
 The plugin runtime tracks plugin-owned database namespaces and migrations in `plugin_database_namespaces` and `plugin_migrations`. Hosted deployments that separate runtime and migration connections should set `DATABASE_MIGRATION_URL`; plugin namespace migration work uses the migration connection when present.
@@ -693,6 +701,18 @@ this non-secret binding for this namespace; Slack bot installation does not use
 PKCE. Removal and manual recovery invalidate outstanding attempts under the same
 credential-mutation lease used by configuration.
 
+### Slack manager workspace grants
+
+`chat_slack_manager_grants` stores a personal workspace authorization, scoped by
+company, Paperclip user, Slack user, workspace and manager app. Access/refresh
+credentials are references to user-scoped vault entries, never plaintext columns.
+Revision fencing protects reauthorization from concurrent revocation. Per-method
+rate-limit deadlines retain Slack's Retry-After across setup retries.
+
+`chat_slack_registrations.manager_grant_id` is optional, with a composite company
+foreign key. Existing registrations remain customer owned with a null reference.
+Deleting one endpoint removes its registration credentials and attempts, but does
+not revoke grants used by other bots. See [Slack setup](connections/slack-setup.md).
 
 ## Transaction-aware delivery work signals
 

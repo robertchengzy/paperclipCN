@@ -1,15 +1,14 @@
 import { t as translateUiCopy, useTranslation as useUiCopyTranslation } from "@/i18n";
+import { agentAvatarUrl } from "@/lib/agent-avatar-url";
+import { resolveAgentAppearance } from "@paperclipai/shared";
+import { SlackTestMessageButton } from "./SlackTestMessageButton";
+import { AgentAvatar } from "@/components/AgentAvatar";
 import { Identity } from "@/components/Identity";
 import { SlackSetupAdvanced } from "./SlackAppDetails";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { SlackToolsSettings, SlackSearchAccess } from "./SlackToolSettings";
-import { defaultSlackAppName } from "./slack-app-name";
 import { ChatCommunicationInstructions } from "./ChatCommunicationInstructions";
-import { SlackAvatarSettings } from "./SlackAvatarStep";
 import { agentsApi } from "@/api/agents";
-import { agentAvatarUrl } from "@/lib/agent-avatar-url";
-import { resolveAgentAppearance } from "@paperclipai/shared";
-import { AgentAvatar } from "@/components/AgentAvatar";
 import { ChatConversationList } from "./ChatConversationList";
 import { GitHubBotManagement, GitHubReviews } from "./GitHubBotManagement";
 import { GitHubBotMention, GitHubAppIdentityActions } from "./GitHubAppIdentity";
@@ -83,6 +82,7 @@ function chatTabLabel(value: ChatTab): string {
   }
 }
 const providerNames: Record<ChatProvider, string> = {
+  speko: "Speko",
   agentmail: "AgentMail",
   slack: "Slack",
   github: "GitHub",
@@ -97,6 +97,8 @@ function providerLifecycleGuidance(provider: ChatProvider): {
   remove: string;
 } {
   switch (provider) {
+    case "speko":
+      return { reconnect: "Reverify this voice persona and update its signed session tools. Existing task assignments stay attached to their history.", remove: "Stop this connection from accepting voice requests. Accepted work and task history remain in Paperclip." };
     case "agentmail":
       return {
         reconnect: translate("app.apps.chatEndpointDetail.lifecycle.agentmail.reconnect"),
@@ -334,8 +336,9 @@ export function ChatEndpointDetail() {
     endpoint.setup?.step !== "complete" &&
     !(endpoint.provider === "slack" && endpoint.setup?.step === "test") &&
     ["draft", "verifying", "attention", "revoked"].includes(endpoint.status);
-  const slackUrl = endpoint.provider === "slack" && endpoint.providerAccountId && endpoint.botExternalId
-    ? `https://app.slack.com/client/${encodeURIComponent(endpoint.providerAccountId)}/user/${encodeURIComponent(endpoint.botExternalId)}`
+  const slackAppId = endpoint.setup?.slackRegistration?.appId;
+  const slackUrl = endpoint.provider === "slack"
+    ? slackAppId ? `https://api.slack.com/apps/${encodeURIComponent(slackAppId)}/oauth` : "https://api.slack.com/apps"
     : null;
 
   return (
@@ -366,8 +369,8 @@ export function ChatEndpointDetail() {
           )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {slackUrl && <Button asChild variant="outline"><a href={slackUrl} target="_blank" rel="noopener noreferrer">{translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.openSlack")} <ExternalLink className="size-4" /></a></Button>}
+        <div className="flex flex-wrap items-center gap-2">
+          {slackUrl && <Button asChild variant="outline"><a href={slackUrl} target="_blank" rel="noopener noreferrer">Open Slack configuration <ExternalLink className="size-4" /></a></Button>}
           {setupIncomplete ? (
             <Button
               variant="outline"
@@ -383,6 +386,7 @@ export function ChatEndpointDetail() {
           {["paused", "attention", "revoked"].includes(endpoint.status) && <StatusBadge status={endpoint.status} />}
         </div>
       </header>
+      {endpoint.provider === "slack" && <SlackTestMessageButton key={endpoint.id} endpointId={endpoint.id} />}
       {endpoint.provider === "github" && <div hidden={activeTab !== "settings" && activeTab !== "access"}>
         <GitHubBotManagement key={endpoint.id} endpoint={endpoint} view={activeTab === "access" ? "access" : "settings"} />
       </div>}
@@ -456,13 +460,6 @@ function Settings({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { pushToast } = useToast();
-  const [messageCopied, setMessageCopied] = useState(false);
-  const avatarAgent = useQuery({
-    queryKey: queryKeys.agents.detail(endpoint.assignedAgentId),
-    queryFn: () => agentsApi.get(endpoint.assignedAgentId, endpoint.companyId),
-    enabled: endpoint.provider === "slack",
-  });
-  const mentionMessage = `@${(endpoint.botUsername ?? endpoint.botLabel ?? endpoint.assignedAgentName).replace(/^@/, "")} you there?`;
   const resourcesQuery = useQuery({
     queryKey: queryKeys.chatEndpoints.resources(endpointId),
     queryFn: () => chatEndpointsApi.listResources(endpointId),
@@ -531,7 +528,7 @@ function Settings({
             {translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.noDestinationsYet")}
           </p>
         ) : (
-          <div className="divide-y divide-border border-y border-border">
+          <div className={endpoint.provider === "slack" ? "space-y-1" : "divide-y divide-border border-y border-border"}>
             {destinationResources.map((resource) => (
               <div key={resource.id} className="flex items-center gap-3 py-3">
                 <div className="min-w-0 flex-1">
@@ -612,27 +609,7 @@ function Settings({
           queryClient.setQueryData(queryKeys.chatEndpoints.detail(endpointId), next);
         }}
       />}
-      {endpoint.provider === "slack" && (
-        <SlackSetupAdvanced label={translateUiCopy("app.uiCopy.pagesAppsChatChatEndpointDetail.messageInAChannel")}><div className="space-y-2 text-sm">
-          <p>{translateUiCopy("app.apps.chatEndpointDetail.chatInSlackHelp")}</p>
-          <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
-            <code>{mentionMessage}</code>
-            <Button size="icon" variant="ghost" aria-label={messageCopied ? translateUiCopy("app.apps.chatEndpointDetail.messageCopied") : translateUiCopy("app.apps.chatEndpointDetail.copyMessage")} onClick={() => {
-              void copyTextToClipboard(mentionMessage).then(() => setMessageCopied(true), () => pushToast({ title: translateUiCopy("app.apps.chatEndpointDetail.copyMessageFailed"), body: translateUiCopy("app.apps.chatEndpointDetail.copyManually"), tone: "error" }));
-            }}>{messageCopied ? <Check className="size-4" /> : <Copy className="size-4" />}</Button>
-          </div>
-        </div></SlackSetupAdvanced>
-      )}
-      {endpoint.provider === "slack" && <SlackSetupAdvanced label={translateUiCopy("app.apps.slackAvatarStep.agentAvatar")}>
-        {avatarAgent.isPending ? <p role="status" className="text-sm text-muted-foreground">{translateUiCopy("app.apps.chatEndpointDetail.loadingAvatar")}</p>
-          : avatarAgent.isError ? <p role="alert" className="text-sm text-destructive">{translateUiCopy("app.apps.chatEndpointDetail.avatarLoadFailed")} <button className="underline" onClick={() => void avatarAgent.refetch()}>{translateUiCopy("app.common.actions.tryAgain")}</button></p>
-          : <SlackAvatarSettings
-              agentName={avatarAgent.data?.name ?? endpoint.assignedAgentName}
-              appName={endpoint.setup?.slackApp?.appName ?? defaultSlackAppName(avatarAgent.data?.name ?? endpoint.assignedAgentName)}
-              avatarUrl={agentAvatarUrl(resolveAgentAppearance(avatarAgent.data?.appearance, endpoint.assignedAgentId), 512, 1, "rest", false, "paperclip-dark")}
-            />}
-      </SlackSetupAdvanced>}
-      {endpoint.provider === "slack" && <SlackSetupAdvanced label={translateUiCopy("app.apps.slackToolSettings.slackTools")}><SlackToolsSettings companyId={endpoint.companyId} endpointId={endpointId} connectionId={endpoint.connectionId} /></SlackSetupAdvanced>}
+      {endpoint.provider === "slack" && <SlackSetupAdvanced label={translateUiCopy("app.apps.slackToolSettings.slackTools")}><SlackToolsSettings companyId={endpoint.companyId} endpointId={endpointId} /></SlackSetupAdvanced>}
     </section>
   );
 }
@@ -652,7 +629,7 @@ function SettingToggle({
 }) {
   useUiCopyTranslation();
   return (
-    <div className="flex items-center gap-3 border-y border-border py-3">
+    <div className="flex items-center gap-3 py-3">
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium">{label}</p>
         {detail && <p className="text-xs text-muted-foreground">{detail}</p>}

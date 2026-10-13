@@ -10,6 +10,7 @@ import { useChatConnectorsEnabled, chatProviderVisible } from "@/hooks/useChatCo
 import { useTranslation } from "@/i18n";
 
 const providerNames: Record<ChatProvider, string> = {
+  speko: "Speko",
   slack: "Slack",
   get github() { return translateUiCopy("app.uiCopy.componentsChatAgentChannelsPanel.gitHubCodeReviewBot"); },
   discord: "Discord",

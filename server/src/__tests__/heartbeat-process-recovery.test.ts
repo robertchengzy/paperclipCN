@@ -8455,12 +8455,10 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
           .set({ status: "paused" })
           .where(eq(agents.id, agentId));
         release();
-        if (next!)
-          await vi.waitFor(async () =>
-            expect((await heartbeat.getRun(next!.id))?.status).not.toBe(
-              "running",
-            ),
-          );
+        // Wait for the released executor and its cleanup, not the default
+        // one-second polling window. The next case must not inherit live work.
+        await heartbeat.drainActiveRunExecutions();
+        if (next!) expect((await heartbeat.getRun(next!.id))?.status).not.toBe("running");
       }
     },
   );
@@ -10827,158 +10825,42 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
     },
   );
 
-  it("requeues accepted interaction continuations stranded in_review without execution state", async () => {
-    const companyId = randomUUID();
-    const agentId = randomUUID();
-    const issueId = randomUUID();
-    const interactionId = randomUUID();
+
+  async function seedResolvedInteractionRecoveryFixture(input: {
+    title: string;
+    kind?: "request_confirmation" | "ask_user_questions";
+    issueStatus?: "in_review" | "in_progress";
+    agentName?: string;
+  }) {
+    const companyId = randomUUID(), agentId = randomUUID(), issueId = randomUUID(), interactionId = randomUUID();
     const resolvedAt = new Date("2026-03-19T00:05:00.000Z");
     const issuePrefix = `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`;
-
     await db.insert(companies).values({
-      id: companyId,
-      name: "Paperclip",
-      issuePrefix,
-      defaultResponsibleUserId: "responsible-user",
-      requireBoardApprovalForNewAgents: false,
+      id: companyId, name: "Paperclip", issuePrefix, defaultResponsibleUserId: "responsible-user", requireBoardApprovalForNewAgents: false,
     });
     await db.insert(agents).values({
-      id: agentId,
-      companyId,
-      name: "CodexCoder",
-      role: "engineer",
-      status: "idle",
-      adapterType: "codex_local",
-      adapterConfig: {},
-      runtimeConfig: {
-        heartbeat: { wakeOnDemand: true, maxConcurrentRuns: 1 },
-      },
-      permissions: {},
+      id: agentId, companyId, name: input.agentName ?? "CodexCoder", role: "engineer", status: "idle", adapterType: "codex_local", adapterConfig: {},
+      runtimeConfig: { heartbeat: { wakeOnDemand: true, maxConcurrentRuns: 1 } }, permissions: {},
     });
     await db.insert(issues).values({
-      id: issueId,
-      companyId,
-      title: "Accepted plan never resumed",
-      status: "in_review",
-      priority: "medium",
-      assigneeAgentId: agentId,
-      responsibleUserId: "responsible-user",
-      issueNumber: 1,
-      identifier: `${issuePrefix}-1`,
+      id: issueId, companyId, title: input.title, status: input.issueStatus ?? "in_review", priority: "medium", assigneeAgentId: agentId,
+      responsibleUserId: "responsible-user", issueNumber: 1, identifier: `${issuePrefix}-1`,
     });
+    const kind = input.kind ?? "request_confirmation";
     await db.insert(issueThreadInteractions).values({
-      id: interactionId,
-      companyId,
-      issueId,
-      kind: "request_confirmation",
-      status: "accepted",
-      continuationPolicy: "wake_assignee_on_accept",
-      createdByAgentId: agentId,
-      resolvedByUserId: "responsible-user",
-      resolvedAt,
-      updatedAt: resolvedAt,
-      payload: { version: 1, prompt: "Approve the plan?" },
-      result: { outcome: "accepted" },
+      id: interactionId, companyId, issueId, kind, status: kind === "ask_user_questions" ? "answered" : "accepted",
+      continuationPolicy: "wake_assignee_on_accept", createdByAgentId: agentId, resolvedByUserId: "responsible-user", resolvedAt, updatedAt: resolvedAt,
+      payload: kind === "ask_user_questions" ? { version: 1, questions: [{
+        id: "format", prompt: "Choose a format", selectionMode: "single", required: true, options: [{ id: "markdown", label: "Markdown" }],
+      }] } : { version: 1, prompt: "Approve the plan?" },
+      result: kind === "ask_user_questions" ? { version: 1, answers: [{ questionId: "format", optionIds: ["markdown"] }] } : { outcome: "accepted" },
     });
-
-    const heartbeat = heartbeatService(db);
-    const result = await heartbeat.reconcileStrandedAssignedIssues();
-
-    expect(result.continuationRequeued).toBe(1);
-    expect(result.issueIds).toEqual([issueId]);
-
-    const run = await db
-      .select({
-        agentId: heartbeatRuns.agentId,
-        contextSnapshot: heartbeatRuns.contextSnapshot,
-        retryOfRunId: heartbeatRuns.retryOfRunId,
-      })
-      .from(heartbeatRuns)
-      .where(eq(heartbeatRuns.agentId, agentId))
-      .then((rows) => rows[0] ?? null);
-    expect(run?.agentId).toBe(agentId);
-    expect(run?.retryOfRunId).toBeNull();
-    expect(run?.contextSnapshot).toMatchObject({
-      issueId,
-      taskId: issueId,
-      wakeReason: "issue_continuation_needed",
-      retryReason: "issue_continuation_needed",
-      source: "issue.interaction_continuation_recovery",
-      interactionId,
-      interactionKind: "request_confirmation",
-      interactionStatus: "accepted",
-      interactionContinuationPolicy: "wake_assignee_on_accept",
-      interactionResolvedAt: resolvedAt.toISOString(),
-    });
-  });
+    return { companyId, agentId, issueId, interactionId, resolvedAt };
+  }
 
   it("recovers an answered question with its interaction-specific continuation context", async () => {
-    const companyId = randomUUID();
-    const agentId = randomUUID();
-    const issueId = randomUUID();
-    const interactionId = randomUUID();
-    const resolvedAt = new Date("2026-03-19T00:05:00.000Z");
-    const issuePrefix = `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`;
-
-    await db.insert(companies).values({
-      id: companyId,
-      name: "Paperclip",
-      issuePrefix,
-      defaultResponsibleUserId: "responsible-user",
-      requireBoardApprovalForNewAgents: false,
-    });
-    await db.insert(agents).values({
-      id: agentId,
-      companyId,
-      name: "OpenCodeCoder",
-      role: "engineer",
-      status: "idle",
-      adapterType: "codex_local",
-      adapterConfig: {},
-      runtimeConfig: {
-        heartbeat: { wakeOnDemand: true, maxConcurrentRuns: 1 },
-      },
-      permissions: {},
-    });
-    await db.insert(issues).values({
-      id: issueId,
-      companyId,
-      title: "Answered question never resumed",
-      status: "in_progress",
-      priority: "medium",
-      assigneeAgentId: agentId,
-      responsibleUserId: "responsible-user",
-      issueNumber: 1,
-      identifier: `${issuePrefix}-1`,
-    });
-    await db.insert(issueThreadInteractions).values({
-      id: interactionId,
-      companyId,
-      issueId,
-      kind: "ask_user_questions",
-      status: "answered",
-      continuationPolicy: "wake_assignee_on_accept",
-      createdByAgentId: agentId,
-      resolvedByUserId: "responsible-user",
-      resolvedAt,
-      updatedAt: resolvedAt,
-      payload: {
-        version: 1,
-        questions: [
-          {
-            id: "format",
-            prompt: "Choose a format",
-            selectionMode: "single",
-            required: true,
-            options: [{ id: "markdown", label: "Markdown" }],
-          },
-        ],
-      },
-      result: {
-        version: 1,
-        answers: [{ questionId: "format", optionIds: ["markdown"] }],
-      },
-    });
+    const { companyId, agentId, issueId, interactionId, resolvedAt } =
+      await seedResolvedInteractionRecoveryFixture({ title: "Answered question never resumed", kind: "ask_user_questions", issueStatus: "in_progress", agentName: "OpenCodeCoder" });
 
     const heartbeat = heartbeatService(db);
     const result = await heartbeat.reconcileStrandedAssignedIssues();
@@ -11087,58 +10969,8 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
   });
 
   it("counts five historical review-park cancellations against the upgraded disposition-repair ceiling", async () => {
-    const companyId = randomUUID();
-    const agentId = randomUUID();
-    const issueId = randomUUID();
-    const interactionId = randomUUID();
-    const resolvedAt = new Date("2026-03-19T00:05:00.000Z");
-    const issuePrefix = `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`;
-
-    await db.insert(companies).values({
-      id: companyId,
-      name: "Paperclip",
-      issuePrefix,
-      defaultResponsibleUserId: "responsible-user",
-      requireBoardApprovalForNewAgents: false,
-    });
-    await db.insert(agents).values({
-      id: agentId,
-      companyId,
-      name: "CodexCoder",
-      role: "engineer",
-      status: "idle",
-      adapterType: "codex_local",
-      adapterConfig: {},
-      runtimeConfig: {
-        heartbeat: { wakeOnDemand: true, maxConcurrentRuns: 1 },
-      },
-      permissions: {},
-    });
-    await db.insert(issues).values({
-      id: issueId,
-      companyId,
-      title: "Accepted plan cancellation loop",
-      status: "in_review",
-      priority: "medium",
-      assigneeAgentId: agentId,
-      responsibleUserId: "responsible-user",
-      issueNumber: 1,
-      identifier: `${issuePrefix}-1`,
-    });
-    await db.insert(issueThreadInteractions).values({
-      id: interactionId,
-      companyId,
-      issueId,
-      kind: "request_confirmation",
-      status: "accepted",
-      continuationPolicy: "wake_assignee_on_accept",
-      createdByAgentId: agentId,
-      resolvedByUserId: "responsible-user",
-      resolvedAt,
-      updatedAt: resolvedAt,
-      payload: { version: 1, prompt: "Approve the plan?" },
-      result: { outcome: "accepted" },
-    });
+    const { companyId, agentId, issueId, interactionId, resolvedAt } =
+      await seedResolvedInteractionRecoveryFixture({ title: "Accepted plan cancellation loop" });
     for (let attempt = 1; attempt <= 5; attempt += 1) {
       const finishedAt = new Date(resolvedAt.getTime() + attempt * 60_000);
       await db.insert(heartbeatRuns).values({
@@ -11229,59 +11061,9 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
   });
 
   it("skips accepted interaction recovery after its continuation succeeds", async () => {
-    const companyId = randomUUID();
-    const agentId = randomUUID();
-    const issueId = randomUUID();
-    const interactionId = randomUUID();
-    const resolvedAt = new Date("2026-03-19T00:05:00.000Z");
+    const { companyId, agentId, issueId, interactionId, resolvedAt } =
+      await seedResolvedInteractionRecoveryFixture({ title: "Accepted plan already resumed" });
     const succeededAt = new Date("2026-03-19T00:06:00.000Z");
-    const issuePrefix = `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`;
-
-    await db.insert(companies).values({
-      id: companyId,
-      name: "Paperclip",
-      issuePrefix,
-      defaultResponsibleUserId: "responsible-user",
-      requireBoardApprovalForNewAgents: false,
-    });
-    await db.insert(agents).values({
-      id: agentId,
-      companyId,
-      name: "CodexCoder",
-      role: "engineer",
-      status: "idle",
-      adapterType: "codex_local",
-      adapterConfig: {},
-      runtimeConfig: {
-        heartbeat: { wakeOnDemand: true, maxConcurrentRuns: 1 },
-      },
-      permissions: {},
-    });
-    await db.insert(issues).values({
-      id: issueId,
-      companyId,
-      title: "Accepted plan already resumed",
-      status: "in_review",
-      priority: "medium",
-      assigneeAgentId: agentId,
-      responsibleUserId: "responsible-user",
-      issueNumber: 1,
-      identifier: `${issuePrefix}-1`,
-    });
-    await db.insert(issueThreadInteractions).values({
-      id: interactionId,
-      companyId,
-      issueId,
-      kind: "request_confirmation",
-      status: "accepted",
-      continuationPolicy: "wake_assignee_on_accept",
-      createdByAgentId: agentId,
-      resolvedByUserId: "responsible-user",
-      resolvedAt,
-      updatedAt: resolvedAt,
-      payload: { version: 1, prompt: "Approve the plan?" },
-      result: { outcome: "accepted" },
-    });
     await db.insert(heartbeatRuns).values({
       id: randomUUID(),
       companyId,
@@ -11318,59 +11100,9 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
   });
 
   it("requeues accepted interaction continuations even when a later successful run is unrelated", async () => {
-    const companyId = randomUUID();
-    const agentId = randomUUID();
-    const issueId = randomUUID();
-    const interactionId = randomUUID();
-    const resolvedAt = new Date("2026-03-19T00:05:00.000Z");
+    const { companyId, agentId, issueId, interactionId, resolvedAt } =
+      await seedResolvedInteractionRecoveryFixture({ title: "Accepted plan masked by unrelated run" });
     const unrelatedRunAt = new Date("2026-03-19T00:06:00.000Z");
-    const issuePrefix = `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`;
-
-    await db.insert(companies).values({
-      id: companyId,
-      name: "Paperclip",
-      issuePrefix,
-      defaultResponsibleUserId: "responsible-user",
-      requireBoardApprovalForNewAgents: false,
-    });
-    await db.insert(agents).values({
-      id: agentId,
-      companyId,
-      name: "CodexCoder",
-      role: "engineer",
-      status: "idle",
-      adapterType: "codex_local",
-      adapterConfig: {},
-      runtimeConfig: {
-        heartbeat: { wakeOnDemand: true, maxConcurrentRuns: 1 },
-      },
-      permissions: {},
-    });
-    await db.insert(issues).values({
-      id: issueId,
-      companyId,
-      title: "Accepted plan masked by unrelated run",
-      status: "in_review",
-      priority: "medium",
-      assigneeAgentId: agentId,
-      responsibleUserId: "responsible-user",
-      issueNumber: 1,
-      identifier: `${issuePrefix}-1`,
-    });
-    await db.insert(issueThreadInteractions).values({
-      id: interactionId,
-      companyId,
-      issueId,
-      kind: "request_confirmation",
-      status: "accepted",
-      continuationPolicy: "wake_assignee_on_accept",
-      createdByAgentId: agentId,
-      resolvedByUserId: "responsible-user",
-      resolvedAt,
-      updatedAt: resolvedAt,
-      payload: { version: 1, prompt: "Approve the plan?" },
-      result: { outcome: "accepted" },
-    });
     await db.insert(heartbeatRuns).values({
       id: randomUUID(),
       companyId,
@@ -11419,58 +11151,8 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
   // *no* wake request and *no* run at all. Pre-P1 the recovery sweep skipped in_review issues
   // lacking an execution policy, so this limbo persisted forever. The sweep now requeues it.
   it("recovers a plan approval whose accept-time continuation wake enqueue was silently dropped", async () => {
-    const companyId = randomUUID();
-    const agentId = randomUUID();
-    const issueId = randomUUID();
-    const interactionId = randomUUID();
-    const resolvedAt = new Date("2026-03-19T00:05:00.000Z");
-    const issuePrefix = `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`;
-
-    await db.insert(companies).values({
-      id: companyId,
-      name: "Paperclip",
-      issuePrefix,
-      defaultResponsibleUserId: "responsible-user",
-      requireBoardApprovalForNewAgents: false,
-    });
-    await db.insert(agents).values({
-      id: agentId,
-      companyId,
-      name: "CodexCoder",
-      role: "engineer",
-      status: "idle",
-      adapterType: "codex_local",
-      adapterConfig: {},
-      runtimeConfig: {
-        heartbeat: { wakeOnDemand: true, maxConcurrentRuns: 1 },
-      },
-      permissions: {},
-    });
-    await db.insert(issues).values({
-      id: issueId,
-      companyId,
-      title: "Approved plan whose wake enqueue was dropped",
-      status: "in_review",
-      priority: "medium",
-      assigneeAgentId: agentId,
-      responsibleUserId: "responsible-user",
-      issueNumber: 1,
-      identifier: `${issuePrefix}-1`,
-    });
-    await db.insert(issueThreadInteractions).values({
-      id: interactionId,
-      companyId,
-      issueId,
-      kind: "request_confirmation",
-      status: "accepted",
-      continuationPolicy: "wake_assignee_on_accept",
-      createdByAgentId: agentId,
-      resolvedByUserId: "responsible-user",
-      resolvedAt,
-      updatedAt: resolvedAt,
-      payload: { version: 1, prompt: "Approve the plan?" },
-      result: { outcome: "accepted" },
-    });
+    const { companyId, agentId, issueId, interactionId, resolvedAt } =
+      await seedResolvedInteractionRecoveryFixture({ title: "Approved plan whose wake enqueue was dropped" });
 
     // Precondition of the silent-enqueue-drop bug: the accept produced no wake and no run.
     const priorWakeups = await db
@@ -11494,15 +11176,23 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
       .select({
         agentId: heartbeatRuns.agentId,
         contextSnapshot: heartbeatRuns.contextSnapshot,
+        retryOfRunId: heartbeatRuns.retryOfRunId,
       })
       .from(heartbeatRuns)
       .where(eq(heartbeatRuns.agentId, agentId))
       .then((rows) => rows[0] ?? null);
     expect(run?.agentId).toBe(agentId);
+    expect(run?.retryOfRunId).toBeNull();
     expect(run?.contextSnapshot).toMatchObject({
       issueId,
+      taskId: issueId,
+      wakeReason: "issue_continuation_needed",
+      retryReason: "issue_continuation_needed",
       interactionId,
+      interactionKind: "request_confirmation",
       interactionStatus: "accepted",
+      interactionContinuationPolicy: "wake_assignee_on_accept",
+      interactionResolvedAt: resolvedAt.toISOString(),
       source: "issue.interaction_continuation_recovery",
     });
 
@@ -12100,7 +11790,9 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
     const legacyReviewBefore = withLegacyReview
       ? await db.select().from(issues).where(eq(issues.id, legacyReviewId))
       : [];
-    mockAdapterExecute.mockImplementationOnce(async () => {
+    let planOnlyRunId = "";
+    mockAdapterExecute.mockImplementationOnce(async (input?: unknown) => {
+      planOnlyRunId = (input as { runId: string }).runId;
       if (withLegacyReview) {
         // These pre-dispatch cancellations used to satisfy both the no-comment
         // and churn thresholds and suppress an otherwise valid continuation.
@@ -12124,17 +11816,23 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
     await heartbeat.reconcileStrandedAssignedIssues();
     await heartbeat.promoteDueScheduledRetries(new Date(Date.now() + 31_000));
     await heartbeat.resumeQueuedRuns();
+    // The continuation is produced by completion; wait for that durable boundary.
+    await heartbeat.drainActiveRunExecutions();
 
-    const livenessWake = await waitForValue(async () => {
+    expect(planOnlyRunId).not.toBe("");
+    const livenessWakes = await waitForValue(async () => {
       const rows = await db
         .select()
         .from(agentWakeupRequests)
         .where(eq(agentWakeupRequests.agentId, agentId));
-      return (
-        rows.find((row) => row.reason === "issue_disposition_repair") ?? null
-      );
+      // Follow-up repairs can already exist. Match this plan-only result,
+      // rather than relying on the database's unordered row order.
+      const matching = rows.filter((row) => row.reason === "issue_disposition_repair"
+        && row.payload?.retryOfRunId === planOnlyRunId);
+      return matching.length > 0 ? matching : null;
     });
-    expect(livenessWake).toBeTruthy();
+    expect(livenessWakes).toHaveLength(1);
+    const livenessWake = livenessWakes![0]!;
     expect(livenessWake?.payload).toMatchObject({
       issueId,
       dispositionRepairAttempt: 1,
@@ -12143,7 +11841,7 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
     const sourceRunId = (
       livenessWake?.payload as Record<string, unknown> | null
     )?.retryOfRunId;
-    expect(sourceRunId).toBeTruthy();
+    expect(sourceRunId).toBe(planOnlyRunId);
     const sourceRun = await db
       .select()
       .from(heartbeatRuns)
@@ -17025,6 +16723,5 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
   });
 
   });
-
 
 });

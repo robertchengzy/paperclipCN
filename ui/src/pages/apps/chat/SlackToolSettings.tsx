@@ -1,6 +1,5 @@
 import { Trans } from "react-i18next";
 import { useTranslation } from "@/i18n";
-import { Link } from "react-router-dom";
 import { useId, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type {
@@ -168,11 +167,9 @@ export function SlackSearchView({
 export function SlackToolsSettings({
   companyId,
   endpointId,
-  connectionId,
 }: {
   companyId: string;
   endpointId: string;
-  connectionId?: string | null;
 }) {
   const { t } = useTranslation();
   const query = useQuery({
@@ -186,12 +183,7 @@ export function SlackToolsSettings({
         capabilities={query.data}
         error={query.error?.message}
       />
-      {connectionId && (
-        <Link
-          className="text-sm underline underline-offset-4"
-          to={`/apps/${connectionId}/permissions`}
-        >{t("app.apps.slackToolSettings.manageActionPermissions")}</Link>
-      )}
+
     </div>
   );
 }

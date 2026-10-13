@@ -52,30 +52,12 @@ export type WorkspaceRuntimeControlSections = {
   otherServices: WorkspaceRuntimeControlItem[];
 };
 
-type LegacyWorkspaceRuntimeControlItem = WorkspaceRuntimeControlItem & {
-  status?: string | null;
-};
-
 type WorkspaceRuntimeControlsProps = {
   sections: WorkspaceRuntimeControlSections;
-  items?: never;
   isPending?: boolean;
   pendingRequest?: WorkspaceRuntimeControlRequest | null;
   serviceEmptyMessage?: string;
   jobEmptyMessage?: string;
-  emptyMessage?: never;
-  disabledHint?: string | null;
-  onAction: (request: WorkspaceRuntimeControlRequest) => void;
-  className?: string;
-  square?: boolean;
-} | {
-  sections?: never;
-  items: LegacyWorkspaceRuntimeControlItem[];
-  isPending?: boolean;
-  pendingRequest?: WorkspaceRuntimeControlRequest | null;
-  serviceEmptyMessage?: never;
-  jobEmptyMessage?: never;
-  emptyMessage?: string;
   disabledHint?: string | null;
   onAction: (request: WorkspaceRuntimeControlRequest) => void;
   className?: string;
@@ -193,18 +175,6 @@ export function buildWorkspaceRuntimeControlSections(input: {
     jobs,
     otherServices,
   };
-}
-
-export function buildWorkspaceRuntimeControlItems(input: {
-  runtimeConfig: Record<string, unknown> | null | undefined;
-  runtimeServices: WorkspaceRuntimeService[] | null | undefined;
-  canStartServices: boolean;
-  canRunJobs?: boolean;
-}): LegacyWorkspaceRuntimeControlItem[] {
-  return buildWorkspaceRuntimeControlSections(input).services.map((item) => ({
-    ...item,
-    status: item.statusLabel,
-  }));
 }
 
 export function getRunningRuntimeServiceUrl(
@@ -544,29 +514,19 @@ function CommandSection({
 
 export function WorkspaceRuntimeControls({
   sections,
-  items,
   isPending = false,
   pendingRequest = null,
   serviceEmptyMessage,
   jobEmptyMessage,
-  emptyMessage,
   disabledHint = null,
   onAction,
   className,
   square,
 }: WorkspaceRuntimeControlsProps) {
   const { t } = useTranslation();
-  const resolvedSections = sections ?? {
-    services: (items ?? []).map((item) => ({
-      ...item,
-      statusLabel: item.statusLabel ?? item.status ?? "stopped",
-    })),
-    jobs: [],
-    otherServices: [],
-  };
-  const resolvedServiceEmptyMessage = emptyMessage ?? serviceEmptyMessage ?? t("app.workspaces.workspaceRuntimeControls.noServicesConfigured");
+  const resolvedServiceEmptyMessage = serviceEmptyMessage ?? t("app.workspaces.workspaceRuntimeControls.noServicesConfigured");
   const resolvedJobEmptyMessage = jobEmptyMessage ?? t("app.workspaces.workspaceRuntimeControls.noJobsConfigured");
-  const runningCount = [...resolvedSections.services, ...resolvedSections.otherServices].filter(
+  const runningCount = [...sections.services, ...sections.otherServices].filter(
     (item) => item.statusLabel === "running" || item.statusLabel === "starting",
   ).length;
   const visibleDisabledHint = runningCount > 0 || disabledHint === null ? null : disabledHint;
@@ -589,10 +549,10 @@ export function WorkspaceRuntimeControls({
               {runningCount > 0 ? t("app.workspaces.workspaceRuntimeControls.servicesRunning", { count: runningCount }) : t("app.workspaces.workspaceRuntimeControls.noServicesRunning")}
             </Badge>
             <span className="text-xs text-muted-foreground">
-              {resolvedSections.jobs.length > 0
-                ? resolvedSections.jobs.length === 1
+              {sections.jobs.length > 0
+                ? sections.jobs.length === 1
                   ? t("app.workspaces.workspaceRuntimeControls.oneJobAvailable")
-                  : t("app.workspaces.workspaceRuntimeControls.jobsAvailable", { count: resolvedSections.jobs.length })
+                  : t("app.workspaces.workspaceRuntimeControls.jobsAvailable", { count: sections.jobs.length })
                 : t("app.workspaces.workspaceRuntimeControls.independentControl")}
             </span>
           </div>
@@ -603,7 +563,7 @@ export function WorkspaceRuntimeControls({
       <CommandSection
         title={t("app.workspaces.workspaceRuntimeControls.services")}
         description={t("app.workspaces.workspaceRuntimeControls.servicesDescription")}
-        items={resolvedSections.services}
+        items={sections.services}
         emptyMessage={resolvedServiceEmptyMessage}
         disabledHint={visibleDisabledHint}
         isPending={isPending}
@@ -615,7 +575,7 @@ export function WorkspaceRuntimeControls({
       <CommandSection
         title={t("app.workspaces.workspaceRuntimeControls.jobs")}
         description={t("app.workspaces.workspaceRuntimeControls.jobsDescription")}
-        items={resolvedSections.jobs}
+        items={sections.jobs}
         emptyMessage={resolvedJobEmptyMessage}
         isPending={isPending}
         pendingRequest={pendingRequest}
@@ -623,11 +583,11 @@ export function WorkspaceRuntimeControls({
         square={square}
       />
 
-      {resolvedSections.otherServices.length > 0 ? (
+      {sections.otherServices.length > 0 ? (
         <CommandSection
           title={t("app.workspaces.workspaceRuntimeControls.untrackedServices")}
           description={t("app.workspaces.workspaceRuntimeControls.untrackedDescription")}
-          items={resolvedSections.otherServices}
+          items={sections.otherServices}
           emptyMessage=""
           isPending={isPending}
           pendingRequest={pendingRequest}
